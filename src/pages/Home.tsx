@@ -58,9 +58,9 @@ export default function Home() {
               <button
                 key={index}
                 aria-label={`Go to slide ${index + 1}`}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ease-in-out transform
+                className={`w-2 h-2 rounded-full transition-all duration-500 ease-in-out transform
                   ${activeIndex === index 
-                    ? "bg-[#9b87f5] scale-125 shadow-lg" 
+                    ? "bg-[#9b87f5] scale-125 shadow-lg animate-scale-in" 
                     : "bg-white/60 hover:bg-white/80 hover:scale-110"
                   }`}
                 onClick={() => {
