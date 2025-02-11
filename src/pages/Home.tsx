@@ -1,3 +1,4 @@
+
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Carousel,
@@ -223,7 +224,7 @@ export default function Home() {
                   key={tournament.id}
                   className="group flex-none w-[300px] animate-fade-in"
                 >
-                  <div className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:translate-y-[-2px]">
+                  <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:translate-y-[-2px] group-hover:border-gray-200">
                     <div className="relative h-[150px]">
                       <img
                         src={tournament.banner}
@@ -251,8 +252,7 @@ export default function Home() {
                           </div>
                           <Progress 
                             value={progressPercentage} 
-                            className="h-1.5 bg-gray-100"
-                            indicatorClassName={getProgressColor(tournament.status)}
+                            className={`h-1.5 bg-gray-100 ${getProgressColor(tournament.status)}`}
                           />
                         </div>
                         <div className="flex items-center gap-2 text-gray-600">
