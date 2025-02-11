@@ -28,23 +28,23 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
   
   return (
-    <div className="min-h-screen animate-fade-in pt-[76px]">
-      <section className="relative w-full aspect-video overflow-hidden">
+    <div className="min-h-screen animate-fade-in pt-[60px]">
+      <section className="relative w-full h-[300px] overflow-hidden">
         <Carousel
           opts={{
             align: "start",
             loop: true,
           }}
           className="w-full h-full"
-          onSelect={(carousel: UseEmblaCarouselType[1]) => {
-            if (carousel) {
-              setActiveIndex(carousel.selectedScrollSnap());
+          onSelect={(api) => {
+            if (api) {
+              setActiveIndex(api.selectedScrollSnap());
             }
           }}
         >
           <CarouselContent>
             {slides.map((slide) => (
-              <CarouselItem key={slide.id} className="relative w-full aspect-video">
+              <CarouselItem key={slide.id} className="relative w-full h-[300px]">
                 <img
                   src={slide.image}
                   alt=""
