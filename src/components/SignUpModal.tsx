@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -6,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { check, x, eye, eyeOff, github, twitter, facebook, apple, info } from "lucide-react";
+import { Check, X, Eye, EyeOff, Github, Twitter, Facebook, Apple, Info } from "lucide-react";
 import zxcvbn from "zxcvbn";
 
 interface SignUpModalProps {
@@ -98,7 +99,7 @@ export function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                   onClick={() => handleSocialSignUp("Google")}
                   disabled={isLoading}
                 >
-                  <github className="h-4 w-4" /> {/* Updated icon */}
+                  <Github className="h-4 w-4" />
                   Google
                 </Button>
                 <Button
@@ -107,7 +108,7 @@ export function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                   onClick={() => handleSocialSignUp("Apple")}
                   disabled={isLoading}
                 >
-                  <apple className="h-4 w-4" />
+                  <Apple className="h-4 w-4" />
                   Apple
                 </Button>
               </div>
@@ -119,7 +120,7 @@ export function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                   onClick={() => handleSocialSignUp("Github")}
                   disabled={isLoading}
                 >
-                  <github className="h-4 w-4" />
+                  <Github className="h-4 w-4" />
                   Github
                 </Button>
                 <Button
@@ -128,7 +129,7 @@ export function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                   onClick={() => handleSocialSignUp("Twitter")}
                   disabled={isLoading}
                 >
-                  <twitter className="h-4 w-4" />
+                  <Twitter className="h-4 w-4" />
                   Twitter
                 </Button>
                 <Button
@@ -137,7 +138,7 @@ export function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                   onClick={() => handleSocialSignUp("Facebook")}
                   disabled={isLoading}
                 >
-                  <facebook className="h-4 w-4" />
+                  <Facebook className="h-4 w-4" />
                   Facebook
                 </Button>
               </div>
@@ -186,7 +187,7 @@ export function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                       onClick={() => setShowPassword(!showPassword)}
                       disabled={isLoading}
                     >
-                      {showPassword ? <eyeOff className="h-4 w-4" /> : <eye className="h-4 w-4" />}
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </Button>
                   </div>
                   {password && (
@@ -196,7 +197,7 @@ export function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                         className={`h-1 ${strengthColor[passwordStrength.score as keyof typeof strengthColor]}`}
                       />
                       <p className="text-xs text-muted-foreground flex items-center gap-1">
-                        <info className="h-3 w-3" />
+                        <Info className="h-3 w-3" />
                         Password strength: {getPasswordStrengthText()}
                       </p>
                     </div>
@@ -222,7 +223,7 @@ export function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       disabled={isLoading}
                     >
-                      {showConfirmPassword ? <eyeOff className="h-4 w-4" /> : <eye className="h-4 w-4" />}
+                      {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </Button>
                   </div>
                 </div>
