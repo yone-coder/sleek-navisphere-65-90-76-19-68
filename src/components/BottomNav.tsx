@@ -2,19 +2,21 @@
 import { Home, Search, Users, Rss, User, Wallet } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
-
-const navItems = [
-  { icon: Home, label: 'Home', path: '/' },
-  { icon: Search, label: 'Explore', path: '/explore' },
-  { icon: Users, label: 'Matches', path: '/matches' },
-  { icon: Rss, label: 'Feeds', path: '/feeds' },
-  { icon: User, label: 'Profile', path: '/profile' },
-  { icon: Wallet, label: 'Wallet', path: '/wallet' },
-];
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export const BottomNav = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
+  const { t } = useLanguage();
+
+  const navItems = [
+    { icon: Home, label: t('nav.home'), path: '/' },
+    { icon: Search, label: t('nav.products'), path: '/explore' },
+    { icon: Users, label: t('nav.matches'), path: '/matches' },
+    { icon: Rss, label: t('nav.feeds'), path: '/feeds' },
+    { icon: User, label: t('nav.profile'), path: '/profile' },
+    { icon: Wallet, label: t('nav.wallet'), path: '/wallet' },
+  ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-nav-bg backdrop-blur-lg shadow-lg border-t border-white/10">
@@ -38,4 +40,4 @@ export const BottomNav = () => {
       </ul>
     </nav>
   );
-};
+}
