@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Eye, EyeOff, Github, Twitter, Facebook, Apple, Info, Mail, ArrowLeft, Check } from "lucide-react";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import zxcvbn from "zxcvbn";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function SignUp() {
   const { t } = useLanguage();
@@ -82,15 +83,6 @@ export default function SignUp() {
     }, 1500);
   };
 
-  const handleSocialSignUp = (provider: string) => {
-    setIsLoading(true);
-    toast({
-      title: "Connecting to " + provider,
-      description: "Redirecting to " + provider + " authentication...",
-    });
-    setTimeout(() => setIsLoading(false), 1500);
-  };
-
   const handleEmailSignUp = async () => {
     if (password !== confirmPassword) {
       toast({
@@ -102,14 +94,70 @@ export default function SignUp() {
     }
 
     setIsLoading(true);
-    toast({
-      title: "Account created",
-      description: "Your account has been created successfully.",
-    });
-    setTimeout(() => {
+    
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            username,
+          },
+        },
+      });
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (data.user) {
+        toast({
+          title: "Success",
+          description: "Please check your email to verify your account.",
+        });
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-      navigate('/');
-    }, 1500);
+    }
+  };
+
+  const handleSocialSignUp = async (provider: 'github' | 'google' | 'twitter' | 'facebook' | 'apple') => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/`,
+        },
+      });
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Social signup error:', error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const getPasswordStrengthText = () => {
