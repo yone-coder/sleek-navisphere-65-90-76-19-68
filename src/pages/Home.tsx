@@ -6,6 +6,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { useState } from "react";
+import type { EmblaCarouselType } from 'embla-carousel-react';
 
 const slides = [
   {
@@ -35,8 +36,8 @@ export default function Home() {
             loop: true,
           }}
           className="w-full h-full"
-          onSelect={(api: any) => {
-            const selectedScrollSnap = api?.selectedScrollSnap();
+          onSelect={(api: EmblaCarouselType) => {
+            const selectedScrollSnap = api.selectedScrollSnap();
             if (selectedScrollSnap !== undefined) {
               setActiveIndex(selectedScrollSnap);
             }
