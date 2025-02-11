@@ -9,7 +9,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Search, Globe } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -73,14 +73,6 @@ export const Header = () => {
 
         {/* Right section */}
         <div className="flex items-center gap-2 md:gap-4">
-          <Button 
-            variant="ghost" 
-            size="icon"
-            className="hidden md:flex h-8 w-8 md:h-10 md:w-10"
-          >
-            <Search className="h-4 w-4" />
-          </Button>
-
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button 
@@ -100,7 +92,7 @@ export const Header = () => {
 
           <Button 
             variant="ghost" 
-            className="hidden md:flex text-sm font-medium hover:bg-gray-100/50"
+            className="text-sm font-medium h-8 md:h-10"
             asChild
           >
             <Link to="/login">Sign In</Link>
@@ -116,4 +108,3 @@ export const Header = () => {
     </header>
   );
 };
-
