@@ -6,8 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Eye, EyeOff, Github, Twitter, Facebook, Apple, Info, Mail, ArrowLeft, Check, X } from "lucide-react";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp"
+import { Eye, EyeOff, Github, Twitter, Facebook, Apple, Info, Mail, ArrowLeft } from "lucide-react";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import zxcvbn from "zxcvbn";
 
 export default function SignUp() {
@@ -27,6 +27,9 @@ export default function SignUp() {
   const [username, setUsername] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
 
+  // Mock verification code for testing
+  const [mockVerificationCode] = useState("123456");
+
   const passwordStrength = zxcvbn(password);
   const strengthColor = {
     0: "bg-red-500",
@@ -38,30 +41,44 @@ export default function SignUp() {
 
   const handleSendVerification = () => {
     setIsLoading(true);
-    if (signupMethod === 'email') {
-      toast({
-        title: "Verification email sent",
-        description: `We've sent a verification code to ${email}`,
-      });
-    } else {
-      toast({
-        title: "Verification code sent",
-        description: `We've sent a verification code to ${phoneNumber}`,
-      });
-    }
-    setStep(2);
-    setIsLoading(false);
+    
+    // Simulate API call delay
+    setTimeout(() => {
+      if (signupMethod === 'email') {
+        toast({
+          title: "Verification code sent",
+          description: `We've sent a verification code to ${email}. For testing, use: ${mockVerificationCode}`,
+        });
+      } else {
+        toast({
+          title: "Verification code sent",
+          description: `We've sent a verification code to ${phoneNumber}. For testing, use: ${mockVerificationCode}`,
+        });
+      }
+      setStep(2);
+      setIsLoading(false);
+    }, 1500);
   };
 
   const handleVerifyCode = () => {
     setIsLoading(true);
-    toast({
-      title: "Verification successful",
-      description: "Your contact information has been verified.",
-    });
+    
+    // Simulate verification check
     setTimeout(() => {
+      if (verificationCode === mockVerificationCode) {
+        toast({
+          title: "Verification successful",
+          description: "Your contact information has been verified.",
+        });
+        setStep(3);
+      } else {
+        toast({
+          title: "Verification failed",
+          description: "Invalid verification code. Please try again.",
+          variant: "destructive",
+        });
+      }
       setIsLoading(false);
-      setStep(3);
     }, 1500);
   };
 
