@@ -343,15 +343,15 @@ export default function Home() {
 
       <section className="py-6 px-6">
         <h2 className="text-2xl font-bold mb-6 px-6">Recent Winners</h2>
-        <div className="relative">
-          <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-background to-transparent pointer-events-none z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-background to-transparent pointer-events-none z-10" />
-          <ScrollArea className="w-full whitespace-nowrap px-6">
-            <div className="flex space-x-4 pb-4 -mx-6 px-6">
+        <div className="relative w-full">
+          <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-background to-transparent pointer-events-none z-10 shrink-0" />
+          <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-background to-transparent pointer-events-none z-10 shrink-0" />
+          <div className="overflow-x-auto px-6 no-scrollbar">
+            <div className="flex gap-4 pb-4 w-max">
               {recentWinners.map((winner) => (
                 <div
                   key={winner.id}
-                  className="flex-none w-[220px] animate-fade-in"
+                  className="flex-none w-[220px] shrink-0 animate-fade-in"
                 >
                   <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-gray-200">
                     <div className="p-3">
@@ -382,8 +382,7 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
+          </div>
         </div>
       </section>
 
