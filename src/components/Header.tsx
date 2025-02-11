@@ -76,7 +76,7 @@ export const Header = () => {
           <Button 
             variant="ghost" 
             size="icon"
-            className="h-8 w-8 md:h-10 md:w-10"
+            className="hidden md:flex h-8 w-8 md:h-10 md:w-10"
           >
             <Search className="h-4 w-4" />
           </Button>
@@ -109,10 +109,11 @@ export const Header = () => {
             className="text-sm font-medium bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 transition-opacity h-8 md:h-10"
             asChild
           >
-            <Link to="/register">Get Started</Link>
+            <Link to="/register">Sign Up</Link>
           </Button>
         </div>
       </div>
     </header>
   );
 };
+
