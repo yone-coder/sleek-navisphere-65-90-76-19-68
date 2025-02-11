@@ -342,45 +342,49 @@ export default function Home() {
       </section>
 
       <section className="py-6 px-6">
-        <h2 className="text-2xl font-bold mb-6 px-2">Recent Winners</h2>
-        <ScrollArea className="w-full whitespace-nowrap">
-          <div className="flex space-x-4 pb-4">
-            {recentWinners.map((winner) => (
-              <div
-                key={winner.id}
-                className="flex-none w-[220px] animate-fade-in"
-              >
-                <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-gray-200">
-                  <div className="p-3">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Avatar className="h-10 w-10 border-2 border-[#9b87f5]">
-                        <AvatarImage src={winner.profileImage} alt={winner.playerName} />
-                        <AvatarFallback>
-                          <User className="w-5 h-5 text-gray-400" />
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-sm text-gray-900 truncate">{winner.playerName}</span>
-                        <span className="text-xs text-gray-500">{winner.date}</span>
+        <h2 className="text-2xl font-bold mb-6 px-6">Recent Winners</h2>
+        <div className="relative">
+          <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-background to-transparent pointer-events-none z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-background to-transparent pointer-events-none z-10" />
+          <ScrollArea className="w-full whitespace-nowrap px-6">
+            <div className="flex space-x-4 pb-4 -mx-6 px-6">
+              {recentWinners.map((winner) => (
+                <div
+                  key={winner.id}
+                  className="flex-none w-[220px] animate-fade-in"
+                >
+                  <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-gray-200">
+                    <div className="p-3">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Avatar className="h-10 w-10 border-2 border-[#9b87f5]">
+                          <AvatarImage src={winner.profileImage} alt={winner.playerName} />
+                          <AvatarFallback>
+                            <User className="w-5 h-5 text-gray-400" />
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col">
+                          <span className="font-semibold text-sm text-gray-900 truncate">{winner.playerName}</span>
+                          <span className="text-xs text-gray-500">{winner.date}</span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-gray-600">
-                        <Trophy className="w-4 h-4 text-[#9b87f5]" />
-                        <span className="text-xs truncate">{winner.tournamentTitle}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-gray-600">
-                        <Award className="w-4 h-4 text-[#9b87f5]" />
-                        <span className="text-xs font-medium text-[#7E69AB]">{winner.prize}</span>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <Trophy className="w-4 h-4 text-[#9b87f5]" />
+                          <span className="text-xs truncate">{winner.tournamentTitle}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <Award className="w-4 h-4 text-[#9b87f5]" />
+                          <span className="text-xs font-medium text-[#7E69AB]">{winner.prize}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
+              ))}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </div>
       </section>
 
       <section className="py-6 px-6">
