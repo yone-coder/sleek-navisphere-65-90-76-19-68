@@ -2,6 +2,20 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import { Search, Globe } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -21,14 +35,63 @@ export const Header = () => {
       ${scrolled ? 'bg-white/80 backdrop-blur-lg shadow-sm' : 'bg-transparent'}`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link 
-          to="/" 
-          className="text-xl font-semibold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
-        >
-          Lovable
-        </Link>
-        
+        <div className="flex items-center gap-8">
+          <Link 
+            to="/" 
+            className="text-xl font-semibold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+          >
+            Lovable
+          </Link>
+
+          <NavigationMenu className="hidden md:flex">
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="text-sm">Products</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="grid gap-3 p-4 w-[400px]">
+                    <Link to="/features" className="block p-3 space-y-1 hover:bg-accent rounded-md">
+                      <div className="font-medium">Features</div>
+                      <div className="text-sm text-muted-foreground">Discover what makes us unique</div>
+                    </Link>
+                    <Link to="/pricing" className="block p-3 space-y-1 hover:bg-accent rounded-md">
+                      <div className="font-medium">Pricing</div>
+                      <div className="text-sm text-muted-foreground">Plans that fit your needs</div>
+                    </Link>
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link to="/about" className="px-4 py-2 text-sm">About</Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link to="/contact" className="px-4 py-2 text-sm">Contact</Link>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+
         <div className="flex items-center gap-4">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            className="hidden md:flex"
+          >
+            <Search className="h-4 w-4" />
+          </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="hidden md:flex">
+                <Globe className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>English</DropdownMenuItem>
+              <DropdownMenuItem>Español</DropdownMenuItem>
+              <DropdownMenuItem>Français</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <Button 
             variant="ghost" 
             className="text-sm font-medium hover:bg-gray-100/50"
