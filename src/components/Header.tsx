@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -20,6 +19,7 @@ import {
 import { useLanguage, Language } from '@/contexts/LanguageContext';
 import { Input } from "@/components/ui/input";
 import { LoginModal } from './LoginModal';
+import { SignUpModal } from './SignUpModal';
 
 const languageDetails = {
   en: {
@@ -50,6 +50,7 @@ export const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -178,13 +179,18 @@ export const Header = () => {
             </Button>
             <Button 
               className="text-sm font-medium bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 transition-opacity h-8 md:h-10 truncate max-w-[100px]"
-              asChild
+              onClick={() => setIsSignUpModalOpen(true)}
             >
-              <Link to="/register">{t('btn.signup')}</Link>
+              {t('btn.signup')}
             </Button>
           </div>
         </div>
       </header>
+
+      <SignUpModal 
+        isOpen={isSignUpModalOpen}
+        onClose={() => setIsSignUpModalOpen(false)}
+      />
 
       <LoginModal 
         isOpen={isLoginModalOpen}
