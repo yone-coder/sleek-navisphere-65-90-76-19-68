@@ -1,3 +1,4 @@
+
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Carousel,
@@ -312,9 +313,9 @@ export default function Home() {
             {recentWinners.map((winner) => (
               <div
                 key={winner.id}
-                className="group flex-none w-[280px] animate-fade-in"
+                className="flex-none w-[280px] animate-fade-in"
               >
-                <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:translate-y-[-2px] group-hover:border-gray-200">
+                <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-gray-200">
                   <div className="p-4">
                     <div className="flex items-center gap-3 mb-4">
                       <Avatar className="h-12 w-12 border-2 border-[#9b87f5]">
