@@ -24,6 +24,9 @@ serve(async (req) => {
     const { email } = await req.json()
     const verificationCode = generateVerificationCode()
     
+    console.log('Generating verification code for email:', email);
+    console.log('Generated code:', verificationCode);
+    
     // Create verification code record that expires in 10 minutes
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
@@ -31,22 +34,28 @@ serve(async (req) => {
     )
 
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString() // 10 minutes from now
+    console.log('Expiration time:', expiresAt);
 
-    const { error: dbError } = await supabaseClient
+    const { data: insertData, error: dbError } = await supabaseClient
       .from('verification_codes')
       .insert({
         email,
         code: verificationCode,
         expires_at: expiresAt
       })
+      .select()
+      .single();
 
     if (dbError) {
-      throw new Error(`Database error: ${dbError.message}`)
+      console.error('Database insertion error:', dbError);
+      throw new Error(`Database error: ${dbError.message}`);
     }
+
+    console.log('Verification code stored successfully:', insertData);
 
     // Send email with verification code
     const { data: emailData, error: emailError } = await resend.emails.send({
-      from: 'onboarding@resend.dev', // Using Resend's default testing domain
+      from: 'onboarding@resend.dev',
       to: email,
       subject: 'Your Verification Code',
       html: `
@@ -63,8 +72,11 @@ serve(async (req) => {
     });
 
     if (emailError) {
-      throw new Error(`Email error: ${emailError.message}`)
+      console.error('Email sending error:', emailError);
+      throw new Error(`Email error: ${emailError.message}`);
     }
+
+    console.log('Email sent successfully:', emailData);
 
     return new Response(
       JSON.stringify({ message: 'Verification code sent successfully' }),
@@ -75,7 +87,7 @@ serve(async (req) => {
     )
 
   } catch (error) {
-    console.error('Error:', error)
+    console.error('Error in send-verification function:', error);
     return new Response(
       JSON.stringify({ error: error.message }),
       { 

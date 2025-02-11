@@ -75,14 +75,21 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
+      const contactMethod = signupMethod === 'email' ? email : phoneNumber;
+      console.log('Verifying code for:', contactMethod);
+      console.log('Verification code entered:', verificationCode);
+      
+      // First, fetch all matching codes and handle the response manually
       const { data, error } = await supabase
         .from('verification_codes')
         .select('*')
-        .eq('email', signupMethod === 'email' ? email : phoneNumber)
+        .eq('email', contactMethod)
         .eq('code', verificationCode.trim())
         .gt('expires_at', new Date().toISOString())
         .is('verified', false)
         .maybeSingle();
+
+      console.log('Verification query result:', { data, error });
 
       if (error) {
         console.error('Database error:', error);
@@ -95,6 +102,7 @@ export default function SignUp() {
       }
 
       if (!data) {
+        console.log('No matching verification code found');
         toast({
           title: "Verification failed",
           description: "Invalid or expired verification code. Please try again.",
@@ -102,6 +110,8 @@ export default function SignUp() {
         });
         return;
       }
+
+      console.log('Valid verification code found:', data);
 
       // Mark code as verified
       const { error: updateError } = await supabase
@@ -119,6 +129,7 @@ export default function SignUp() {
         return;
       }
 
+      console.log('Verification code marked as verified');
       toast({
         title: "Verification successful",
         description: "Your contact information has been verified.",
