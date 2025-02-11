@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/carousel";
 import { useState } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
-import { Trophy, Users, Radio, MoreHorizontal } from "lucide-react";
+import { Trophy, Users, Radio, Gamepad, Video, List, MoreHorizontal } from "lucide-react";
 
 const slides = [
   {
@@ -26,9 +26,13 @@ const slides = [
 
 const quickActions = [
   { icon: Trophy, label: "Tournaments", color: "#9b87f5" },
-  { icon: Users, label: "Matches", color: "#9b87f5" },
+  { icon: Users, label: "Teams", color: "#9b87f5" },
+  { icon: Gamepad, label: "Games", color: "#9b87f5" },
+  { icon: Video, label: "Streams", color: "#9b87f5" },
   { icon: Radio, label: "Lives", color: "#9b87f5" },
-  { icon: MoreHorizontal, label: "More", color: "#9b87f5" },
+  { icon: Users, label: "Friends", color: "#9b87f5" },
+  { icon: List, label: "Rankings", color: "#9b87f5" },
+  { icon: MoreHorizontal, label: "More", color: "#7E69AB" },
 ];
 
 export default function Home() {
@@ -88,17 +92,26 @@ export default function Home() {
       </section>
 
       <section className="py-6 px-6">
-        <div className="grid grid-cols-4 gap-4 max-w-md mx-auto">
+        <div className="grid grid-cols-4 gap-4 max-w-xl mx-auto">
           {quickActions.map((action, index) => {
             const Icon = action.icon;
+            const isMoreButton = index === quickActions.length - 1;
             return (
               <button
                 key={index}
-                className="group flex flex-col items-center gap-2"
+                className={`group flex flex-col items-center gap-2 ${
+                  index >= 4 ? 'mt-4' : ''
+                }`}
               >
-                <div className="w-16 h-16 rounded-full flex items-center justify-center bg-white shadow-lg transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 group-active:scale-95">
+                <div 
+                  className={`w-16 h-16 rounded-full flex items-center justify-center bg-white shadow-lg transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 group-active:scale-95 ${
+                    isMoreButton ? 'bg-[#7E69AB]' : ''
+                  }`}
+                >
                   <Icon 
-                    className="w-6 h-6 text-[#9b87f5] transition-transform duration-300 group-hover:scale-110" 
+                    className={`w-6 h-6 transition-transform duration-300 group-hover:scale-110 ${
+                      isMoreButton ? 'text-white' : 'text-[#9b87f5]'
+                    }`}
                     strokeWidth={1.5} 
                   />
                 </div>
