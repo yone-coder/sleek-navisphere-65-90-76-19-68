@@ -74,14 +74,13 @@ export const Header = () => {
           <Button 
             variant="ghost" 
             size="icon"
-            className="hidden md:flex"
           >
             <Search className="h-4 w-4" />
           </Button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="hidden md:flex">
+              <Button variant="ghost" size="icon">
                 <Globe className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -110,3 +109,4 @@ export const Header = () => {
     </header>
   );
 };
+
