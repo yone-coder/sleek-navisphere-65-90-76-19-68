@@ -174,7 +174,7 @@ export default function SignUp() {
               <Button
                 variant="outline"
                 className="w-full gap-2"
-                onClick={() => handleSocialSignUp("Google")}
+                onClick={() => handleSocialSignUp("google")}
                 disabled={isLoading}
               >
                 <Mail className="h-4 w-4" />
@@ -183,7 +183,7 @@ export default function SignUp() {
               <Button
                 variant="outline"
                 className="w-full gap-2"
-                onClick={() => handleSocialSignUp("Apple")}
+                onClick={() => handleSocialSignUp("apple")}
                 disabled={isLoading}
               >
                 <Apple className="h-4 w-4" />
@@ -195,7 +195,7 @@ export default function SignUp() {
               <Button
                 variant="outline"
                 className="w-full gap-2"
-                onClick={() => handleSocialSignUp("Github")}
+                onClick={() => handleSocialSignUp("github")}
                 disabled={isLoading}
               >
                 <Github className="h-4 w-4" />
@@ -204,7 +204,7 @@ export default function SignUp() {
               <Button
                 variant="outline"
                 className="w-full gap-2"
-                onClick={() => handleSocialSignUp("Twitter")}
+                onClick={() => handleSocialSignUp("twitter")}
                 disabled={isLoading}
               >
                 <Twitter className="h-4 w-4" />
@@ -213,7 +213,7 @@ export default function SignUp() {
               <Button
                 variant="outline"
                 className="w-full gap-2"
-                onClick={() => handleSocialSignUp("Facebook")}
+                onClick={() => handleSocialSignUp("facebook")}
                 disabled={isLoading}
               >
                 <Facebook className="h-4 w-4" />
