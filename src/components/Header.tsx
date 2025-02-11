@@ -81,25 +81,25 @@ export const Header = () => {
           <NavigationMenu className="hidden md:flex">
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-sm">{t('nav.products')}</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="text-sm truncate max-w-[150px]">{t('nav.products')}</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <div className="grid gap-3 p-4 w-[400px]">
                     <Link to="/features" className="block p-3 space-y-1 hover:bg-accent rounded-md">
-                      <div className="font-medium">{t('nav.features')}</div>
-                      <div className="text-sm text-muted-foreground">{t('features.discover')}</div>
+                      <div className="font-medium truncate">{t('nav.features')}</div>
+                      <div className="text-sm text-muted-foreground truncate">{t('features.discover')}</div>
                     </Link>
                     <Link to="/pricing" className="block p-3 space-y-1 hover:bg-accent rounded-md">
-                      <div className="font-medium">{t('nav.pricing')}</div>
-                      <div className="text-sm text-muted-foreground">{t('pricing.plans')}</div>
+                      <div className="font-medium truncate">{t('nav.pricing')}</div>
+                      <div className="text-sm text-muted-foreground truncate">{t('pricing.plans')}</div>
                     </Link>
                   </div>
                 </NavigationMenuContent>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link to="/about" className="px-4 py-2 text-sm">{t('nav.about')}</Link>
+                <Link to="/about" className="px-4 py-2 text-sm truncate block max-w-[120px]">{t('nav.about')}</Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link to="/contact" className="px-4 py-2 text-sm">{t('nav.contact')}</Link>
+                <Link to="/contact" className="px-4 py-2 text-sm truncate block max-w-[120px]">{t('nav.contact')}</Link>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
@@ -145,15 +145,15 @@ export const Header = () => {
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-lg">{details.flag}</span>
-                      <div>
-                        <p className="font-medium">{details.nativeName}</p>
-                        <p className="text-sm text-muted-foreground">
+                      <div className="max-w-[180px]">
+                        <p className="font-medium truncate">{details.nativeName}</p>
+                        <p className="text-sm text-muted-foreground truncate">
                           {details.languageInNative}
                         </p>
                       </div>
                     </div>
                     {language === code && (
-                      <Check className="h-4 w-4 text-green-500" />
+                      <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
                     )}
                   </DropdownMenuItem>
                 ))}
@@ -163,13 +163,13 @@ export const Header = () => {
 
           <Button 
             variant="ghost" 
-            className="text-sm font-medium h-8 md:h-10"
+            className="text-sm font-medium h-8 md:h-10 truncate max-w-[100px]"
             asChild
           >
             <Link to="/login">{t('btn.signin')}</Link>
           </Button>
           <Button 
-            className="text-sm font-medium bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 transition-opacity h-8 md:h-10"
+            className="text-sm font-medium bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 transition-opacity h-8 md:h-10 truncate max-w-[100px]"
             asChild
           >
             <Link to="/register">{t('btn.signup')}</Link>
@@ -179,3 +179,4 @@ export const Header = () => {
     </header>
   );
 };
+
