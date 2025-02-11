@@ -36,10 +36,12 @@ export default function Home() {
             loop: true,
           }}
           className="w-full h-full"
-          onSelect={(api: UseEmblaCarouselType[1]) => {
-            const selectedScrollSnap = api.selectedScrollSnap();
-            if (selectedScrollSnap !== undefined) {
-              setActiveIndex(selectedScrollSnap);
+          onSelect={(api) => {
+            if (api) {
+              const selectedScrollSnap = api.selectedScrollSnap();
+              if (selectedScrollSnap !== undefined) {
+                setActiveIndex(selectedScrollSnap);
+              }
             }
           }}
         >
