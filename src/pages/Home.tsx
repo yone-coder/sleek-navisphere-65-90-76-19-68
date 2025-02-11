@@ -1,4 +1,3 @@
-
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Carousel,
@@ -7,10 +6,11 @@ import {
 } from "@/components/ui/carousel";
 import { useState } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
-import { Trophy, Users, Radio, Gamepad, Video, List, MoreHorizontal, Calendar, Award, CheckCircle, XCircle, Clock, User } from "lucide-react";
+import { Trophy, Users, Radio, Gamepad, Video, List, MoreHorizontal, Calendar, Award, CheckCircle, XCircle, Clock, User, ArrowUpRight } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 
 const slides = [
   {
@@ -117,6 +117,41 @@ const recentWinners = [
     tournamentTitle: "Summer League Finals",
     prize: "$4,000",
     date: "1 week ago"
+  }
+];
+
+const newsItems = [
+  {
+    id: 1,
+    title: "Major Update to Tournament System",
+    excerpt: "New features include real-time matchmaking and enhanced team management",
+    category: "Updates",
+    date: "2h ago",
+    image: "https://images.unsplash.com/photo-1560253023-3ec5d502959f?auto=format&fit=crop&w=400&h=250&q=80"
+  },
+  {
+    id: 2,
+    title: "Spring Championship Registration Open",
+    excerpt: "Register now for the biggest tournament of the season with $50,000 prize pool",
+    category: "Tournaments",
+    date: "4h ago",
+    image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&h=250&q=80"
+  },
+  {
+    id: 3,
+    title: "New Partnership Announcement",
+    excerpt: "Strategic collaboration with major gaming peripherals manufacturer",
+    category: "Business",
+    date: "6h ago",
+    image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&h=250&q=80"
+  },
+  {
+    id: 4,
+    title: "Community Spotlight: Team Phoenix",
+    excerpt: "Rising stars showcase exceptional performance in recent tournaments",
+    category: "Community",
+    date: "12h ago",
+    image: "https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=400&h=250&q=80"
   }
 ];
 
@@ -337,6 +372,62 @@ export default function Home() {
                       <div className="flex items-center gap-2 text-gray-600">
                         <Award className="w-4 h-4 text-[#9b87f5]" />
                         <span className="text-sm font-medium text-[#7E69AB]">{winner.prize}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </section>
+
+      <section className="py-6 px-6">
+        <div className="flex justify-between items-center mb-6 px-2">
+          <h2 className="text-2xl font-bold">Latest News</h2>
+          <button className="text-[#9b87f5] hover:text-[#7E69AB] flex items-center gap-1 text-sm font-medium transition-colors">
+            View all <ArrowUpRight className="w-4 h-4" />
+          </button>
+        </div>
+        <ScrollArea className="w-full whitespace-nowrap">
+          <div className="flex space-x-4 pb-4">
+            {newsItems.map((news) => (
+              <div
+                key={news.id}
+                className="flex-none w-[350px] animate-fade-in"
+              >
+                <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg">
+                  <div className="relative h-[200px] overflow-hidden">
+                    <img
+                      src={news.image}
+                      alt=""
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                    />
+                    <div className="absolute top-3 left-3">
+                      <Badge 
+                        variant="secondary" 
+                        className="bg-white/90 hover:bg-white/95 text-[#7E69AB] backdrop-blur-sm"
+                      >
+                        {news.category}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <div className="space-y-3">
+                      <div className="space-y-2">
+                        <h3 className="font-semibold text-lg text-left line-clamp-2 leading-tight">
+                          {news.title}
+                        </h3>
+                        <p className="text-sm text-gray-600 text-left line-clamp-2">
+                          {news.excerpt}
+                        </p>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-500">{news.date}</span>
+                        <button className="text-[#9b87f5] hover:text-[#7E69AB] flex items-center gap-1 text-sm transition-colors">
+                          Read more <ArrowUpRight className="w-3 h-3" />
+                        </button>
                       </div>
                     </div>
                   </div>
