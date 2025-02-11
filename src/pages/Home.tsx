@@ -8,6 +8,7 @@ import { useState } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
 import { Trophy, Users, Radio, Gamepad, Video, List, MoreHorizontal, Calendar, Award, CheckCircle, XCircle, Clock } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Progress } from "@/components/ui/progress";
 
 const slides = [
   {
@@ -43,6 +44,8 @@ const tournaments = [
     status: "ongoing",
     date: "Apr 15 - May 1",
     participants: 128,
+    currentParticipants: 84,
+    maxParticipants: 128,
     prizePool: "$10,000",
   },
   {
@@ -52,6 +55,8 @@ const tournaments = [
     status: "upcoming",
     date: "May 5 - May 20",
     participants: 256,
+    currentParticipants: 156,
+    maxParticipants: 256,
     prizePool: "$15,000",
   },
   {
@@ -61,6 +66,8 @@ const tournaments = [
     status: "closed",
     date: "Mar 1 - Mar 15",
     participants: 64,
+    currentParticipants: 64,
+    maxParticipants: 64,
     prizePool: "$5,000",
   },
   {
@@ -70,6 +77,8 @@ const tournaments = [
     status: "upcoming",
     date: "May 25 - Jun 10",
     participants: 32,
+    currentParticipants: 12,
+    maxParticipants: 32,
     prizePool: "$8,000",
   },
 ];
@@ -102,6 +111,19 @@ export default function Home() {
         return XCircle;
       default:
         return CheckCircle;
+    }
+  };
+
+  const getProgressColor = (status: string) => {
+    switch (status) {
+      case "ongoing":
+        return "bg-green-500";
+      case "upcoming":
+        return "bg-yellow-500";
+      case "closed":
+        return "bg-orange-500";
+      default:
+        return "bg-gray-500";
     }
   };
   
@@ -195,6 +217,7 @@ export default function Home() {
           <div className="flex space-x-4 pb-4">
             {tournaments.map((tournament) => {
               const StatusIcon = getStatusIcon(tournament.status);
+              const progressPercentage = (tournament.currentParticipants / tournament.maxParticipants) * 100;
               return (
                 <div
                   key={tournament.id}
@@ -205,7 +228,7 @@ export default function Home() {
                       <img
                         src={tournament.banner}
                         alt=""
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover brightness-[0.95] group-hover:brightness-100 transition-all duration-300"
                       />
                       <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${getStatusColor(tournament.status)}`}>
                         <StatusIcon className="w-3 h-3" />
@@ -213,15 +236,24 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="p-4">
-                      <h3 className="font-semibold text-lg mb-3 text-left">{tournament.title}</h3>
-                      <div className="flex flex-col gap-2 text-sm text-left">
+                      <h3 className="font-semibold text-lg mb-3 text-left truncate">{tournament.title}</h3>
+                      <div className="flex flex-col gap-3 text-sm text-left">
                         <div className="flex items-center gap-2 text-gray-600">
                           <Calendar className="w-4 h-4" />
                           <span>{tournament.date}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-gray-600">
-                          <Users className="w-4 h-4" />
-                          <span>{tournament.participants} Participants</span>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between text-gray-600">
+                            <div className="flex items-center gap-2">
+                              <Users className="w-4 h-4" />
+                              <span>{tournament.currentParticipants}/{tournament.maxParticipants} Participants</span>
+                            </div>
+                          </div>
+                          <Progress 
+                            value={progressPercentage} 
+                            className="h-1.5 bg-gray-100"
+                            indicatorClassName={getProgressColor(tournament.status)}
+                          />
                         </div>
                         <div className="flex items-center gap-2 text-gray-600">
                           <Award className="w-4 h-4" />
