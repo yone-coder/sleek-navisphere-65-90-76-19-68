@@ -251,6 +251,7 @@ export default function SignUp() {
                         <InputOTPSlot 
                           key={idx} 
                           {...slot} 
+                          index={idx}
                           className="w-10 h-12 text-center text-lg border-2"
                         />
                       ))} 
