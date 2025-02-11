@@ -53,9 +53,13 @@ export default function Home() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
-            <div className="flex gap-3 transition-transform duration-500 ease-in-out" 
-                 style={{ transform: `translateX(${activeIndex * -24}px)` }}>
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+            <div 
+              className="flex gap-3 relative transition-transform duration-500 ease-in-out"
+              style={{ 
+                transform: `translateX(${activeIndex === slides.length - 1 ? 0 : activeIndex * -12}px)`
+              }}
+            >
               {slides.map((_, index) => (
                 <button
                   key={index}
