@@ -53,15 +53,16 @@ export default function Home() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
             {slides.map((_, index) => (
               <button
                 key={index}
-                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                  activeIndex === index 
-                    ? "bg-white w-4 scale-100" 
-                    : "bg-white/50 hover:bg-white/75 scale-90 hover:scale-100"
-                }`}
+                aria-label={`Go to slide ${index + 1}`}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ease-in-out transform
+                  ${activeIndex === index 
+                    ? "bg-[#9b87f5] scale-125 shadow-lg" 
+                    : "bg-white/60 hover:bg-white/80 hover:scale-110"
+                  }`}
                 onClick={() => {
                   api?.scrollTo(index);
                 }}
