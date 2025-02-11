@@ -79,12 +79,20 @@ export default function SignUp() {
         .from('verification_codes')
         .select('*')
         .eq('email', signupMethod === 'email' ? email : phoneNumber)
-        .eq('code', verificationCode)
+        .eq('code', verificationCode.trim())
         .gt('expires_at', new Date().toISOString())
         .is('verified', false)
-        .single();
+        .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Database error:', error);
+        toast({
+          title: "Verification failed",
+          description: "An error occurred while verifying the code. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
 
       if (!data) {
         toast({
@@ -101,7 +109,15 @@ export default function SignUp() {
         .update({ verified: true })
         .eq('id', data.id);
 
-      if (updateError) throw updateError;
+      if (updateError) {
+        console.error('Update error:', updateError);
+        toast({
+          title: "Verification failed",
+          description: "An error occurred while verifying the code. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
 
       toast({
         title: "Verification successful",
@@ -112,7 +128,7 @@ export default function SignUp() {
       console.error('Verification error:', error);
       toast({
         title: "Verification failed",
-        description: "Invalid or expired verification code. Please try again.",
+        description: "An error occurred while verifying the code. Please try again.",
         variant: "destructive",
       });
     } finally {
