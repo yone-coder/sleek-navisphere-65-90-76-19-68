@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -248,8 +247,8 @@ export default function SignUp() {
                   maxLength={6}
                   render={({ slots }) => (
                     <InputOTPGroup className="gap-2">
-                      {slots.map((slot, index) => (
-                        <InputOTPSlot key={index} {...slot} />
+                      {slots.map((slot, idx) => (
+                        <InputOTPSlot key={idx} {...slot} index={idx} />
                       ))}
                     </InputOTPGroup>
                   )}
