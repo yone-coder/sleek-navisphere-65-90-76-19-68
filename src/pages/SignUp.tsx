@@ -42,7 +42,11 @@ export default function SignUp() {
     
     try {
       const { error } = await supabase.functions.invoke('send-verification', {
-        body: { email: signupMethod === 'email' ? email : phoneNumber }
+        body: { 
+          email: signupMethod === 'email' ? email : undefined,
+          phoneNumber: signupMethod === 'phone' ? phoneNumber : undefined,
+          method: signupMethod
+        }
       });
 
       if (error) throw error;
