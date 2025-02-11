@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
@@ -51,6 +51,7 @@ export const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -173,29 +174,19 @@ export const Header = () => {
             <Button 
               variant="ghost" 
               className="text-sm font-medium h-8 md:h-10 truncate max-w-[100px]"
-              onClick={() => setIsLoginModalOpen(true)}
+              onClick={() => navigate('/login')}
             >
               {t('btn.signin')}
             </Button>
             <Button 
               className="text-sm font-medium bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 transition-opacity h-8 md:h-10 truncate max-w-[100px]"
-              onClick={() => setIsSignUpModalOpen(true)}
+              onClick={() => navigate('/signup')}
             >
               {t('btn.signup')}
             </Button>
           </div>
         </div>
       </header>
-
-      <SignUpModal 
-        isOpen={isSignUpModalOpen}
-        onClose={() => setIsSignUpModalOpen(false)}
-      />
-
-      <LoginModal 
-        isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
-      />
     </>
   );
 };
