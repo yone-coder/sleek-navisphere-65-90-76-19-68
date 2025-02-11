@@ -15,15 +15,24 @@ import { Badge } from "@/components/ui/badge";
 const slides = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=1500&h=500&q=80",
+    image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1500&h=500&q=80",
+    title: "Winter Gaming Finals",
+    subtitle: "Join us for the ultimate championship",
+    highlight: "$50,000 Prize Pool",
   },
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?auto=format&fit=crop&w=1500&h=500&q=80",
+    image: "https://images.unsplash.com/photo-1439337153520-7082a56a81f4?auto=format&fit=crop&w=1500&h=500&q=80",
+    title: "Pro Series Tournament",
+    subtitle: "Register now for the biggest event of the year",
+    highlight: "256 Teams",
   },
   {
     id: 3,
-    image: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?auto=format&fit=crop&w=1500&h=500&q=80",
+    image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1500&h=500&q=80",
+    title: "Summer Championships",
+    subtitle: "Rise to the challenge this summer",
+    highlight: "Global Event",
   },
 ];
 
@@ -53,7 +62,7 @@ const tournaments = [
   {
     id: 2,
     title: "Spring Tournament",
-    banner: "https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=400&h=200&q=80",
+    banner: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&h=200&q=80",
     status: "upcoming",
     date: "May 5 - May 20",
     participants: 256,
@@ -216,11 +225,37 @@ export default function Home() {
           <CarouselContent>
             {slides.map((slide) => (
               <CarouselItem key={slide.id} className="relative w-full h-full">
-                <img
-                  src={slide.image}
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
+                <div className="relative w-full h-full group">
+                  <img
+                    src={slide.image}
+                    alt=""
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent">
+                    <div className="max-w-3xl mx-auto">
+                      <div className="flex flex-col gap-2">
+                        <h2 className="text-4xl font-bold text-white tracking-tight">
+                          {slide.title}
+                        </h2>
+                        <p className="text-lg text-white/90">
+                          {slide.subtitle}
+                        </p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <Badge 
+                            variant="secondary" 
+                            className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white border-none px-3 py-1"
+                          >
+                            {slide.highlight}
+                          </Badge>
+                          <button className="inline-flex items-center gap-2 text-white hover:text-[#9b87f5] transition-colors">
+                            Learn More <ArrowUpRight className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </CarouselItem>
             ))}
           </CarouselContent>
