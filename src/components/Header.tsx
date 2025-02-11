@@ -9,18 +9,40 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Globe } from 'lucide-react';
+import { Globe, Check, Search } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { useLanguage, Language } from '@/contexts/LanguageContext';
+import { Input } from "@/components/ui/input";
+
+const languageDetails = {
+  en: {
+    nativeName: 'English',
+    languageInNative: 'English',
+    flag: '🇬🇧'
+  },
+  es: {
+    nativeName: 'Spanish',
+    languageInNative: 'Español',
+    flag: '🇪🇸'
+  },
+  fr: {
+    nativeName: 'French',
+    languageInNative: 'Français',
+    flag: '🇫🇷'
+  }
+};
 
 export const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const { language, setLanguage, t } = useLanguage();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,7 +55,13 @@ export const Header = () => {
 
   const handleLanguageChange = (lang: Language) => {
     setLanguage(lang);
+    setIsDropdownOpen(false);
   };
+
+  const filteredLanguages = Object.entries(languageDetails).filter(([code, details]) =>
+    details.nativeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    details.languageInNative.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <header
@@ -79,26 +107,57 @@ export const Header = () => {
 
         {/* Right section */}
         <div className="flex items-center gap-2 md:gap-4">
-          <DropdownMenu>
+          <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
             <DropdownMenuTrigger asChild>
               <Button 
                 variant="ghost" 
                 size="icon"
-                className="h-8 w-8 md:h-10 md:w-10"
+                className="h-8 w-8 md:h-10 md:w-10 relative group"
               >
-                <Globe className="h-4 w-4" />
+                <Globe className="h-4 w-4 transition-transform group-hover:scale-110" />
+                <span className="absolute -bottom-1 -right-1 text-xs">
+                  {languageDetails[language].flag}
+                </span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
-                English {language === 'en' && '✓'}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleLanguageChange('es')}>
-                Español {language === 'es' && '✓'}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleLanguageChange('fr')}>
-                Français {language === 'fr' && '✓'}
-              </DropdownMenuItem>
+            <DropdownMenuContent 
+              align="end" 
+              className="w-[280px] p-2 animate-in fade-in-0 zoom-in-95"
+            >
+              <div className="px-2 py-2">
+                <div className="relative">
+                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search language..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-8 h-9"
+                  />
+                </div>
+              </div>
+              <DropdownMenuSeparator />
+              <div className="max-h-[300px] overflow-y-auto">
+                {filteredLanguages.map(([code, details]) => (
+                  <DropdownMenuItem
+                    key={code}
+                    onClick={() => handleLanguageChange(code as Language)}
+                    className="flex items-center justify-between px-2 py-2 cursor-pointer hover:bg-accent rounded-md"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">{details.flag}</span>
+                      <div>
+                        <p className="font-medium">{details.nativeName}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {details.languageInNative}
+                        </p>
+                      </div>
+                    </div>
+                    {language === code && (
+                      <Check className="h-4 w-4 text-green-500" />
+                    )}
+                  </DropdownMenuItem>
+                ))}
+              </div>
             </DropdownMenuContent>
           </DropdownMenu>
 
