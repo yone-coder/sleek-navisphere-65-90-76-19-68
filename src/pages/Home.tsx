@@ -1,4 +1,3 @@
-
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Carousel,
@@ -7,9 +6,10 @@ import {
 } from "@/components/ui/carousel";
 import { useState } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
-import { Trophy, Users, Radio, Gamepad, Video, List, MoreHorizontal, Calendar, Award, CheckCircle, XCircle, Clock } from "lucide-react";
+import { Trophy, Users, Radio, Gamepad, Video, List, MoreHorizontal, Calendar, Award, CheckCircle, XCircle, Clock, User } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const slides = [
   {
@@ -84,6 +84,41 @@ const tournaments = [
   },
 ];
 
+const recentWinners = [
+  {
+    id: 1,
+    playerName: "Alex Chen",
+    profileImage: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&h=100&q=80",
+    tournamentTitle: "Winter Championship 2024",
+    prize: "$5,000",
+    date: "2 days ago"
+  },
+  {
+    id: 2,
+    playerName: "Sarah Williams",
+    profileImage: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80",
+    tournamentTitle: "Spring Tournament Elite",
+    prize: "$3,500",
+    date: "3 days ago"
+  },
+  {
+    id: 3,
+    playerName: "Michael Rodriguez",
+    profileImage: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&h=100&q=80",
+    tournamentTitle: "Regional Masters",
+    prize: "$2,000",
+    date: "5 days ago"
+  },
+  {
+    id: 4,
+    playerName: "Emma Watson",
+    profileImage: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&h=100&q=80",
+    tournamentTitle: "Summer League Finals",
+    prize: "$4,000",
+    date: "1 week ago"
+  }
+];
+
 export default function Home() {
   const { t } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -127,7 +162,7 @@ export default function Home() {
         return "bg-gray-500";
     }
   };
-  
+
   return (
     <div className="min-h-screen animate-fade-in pt-[60px]">
       <section className="relative w-full h-[calc(100vw*500/1500)] max-h-[500px] overflow-hidden">
@@ -265,6 +300,48 @@ export default function Home() {
                 </div>
               );
             })}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </section>
+
+      <section className="py-6 px-6">
+        <h2 className="text-2xl font-bold mb-6 px-2">Recent Winners</h2>
+        <ScrollArea className="w-full whitespace-nowrap">
+          <div className="flex space-x-4 pb-4">
+            {recentWinners.map((winner) => (
+              <div
+                key={winner.id}
+                className="group flex-none w-[280px] animate-fade-in"
+              >
+                <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:translate-y-[-2px] group-hover:border-gray-200">
+                  <div className="p-4">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Avatar className="h-12 w-12 border-2 border-[#9b87f5]">
+                        <AvatarImage src={winner.profileImage} alt={winner.playerName} />
+                        <AvatarFallback>
+                          <User className="w-6 h-6 text-gray-400" />
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-gray-900">{winner.playerName}</span>
+                        <span className="text-sm text-gray-500">{winner.date}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <Trophy className="w-4 h-4 text-[#9b87f5]" />
+                        <span className="text-sm truncate">{winner.tournamentTitle}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <Award className="w-4 h-4 text-[#9b87f5]" />
+                        <span className="text-sm font-medium text-[#7E69AB]">{winner.prize}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
