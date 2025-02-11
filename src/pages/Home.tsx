@@ -53,18 +53,21 @@ export default function Home() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
             {slides.map((_, index) => (
               <button
                 key={index}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
                   activeIndex === index 
-                    ? "bg-white w-6" 
-                    : "bg-white/50 hover:bg-white/75"
+                    ? "bg-white w-4 scale-100" 
+                    : "bg-white/50 hover:bg-white/75 scale-90 hover:scale-100"
                 }`}
                 onClick={() => {
-                  const api = (document.querySelector('[role="region"]') as any)?.__embla__;
-                  api?.scrollTo(index);
+                  const carousel = document.querySelector('[role="region"]') as HTMLElement;
+                  const api = carousel?.__embla__;
+                  if (api) {
+                    api.scrollTo(index);
+                  }
                 }}
               />
             ))}
