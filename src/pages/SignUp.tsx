@@ -16,7 +16,9 @@ export default function SignUp() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [signupMethod, setSignupMethod] = useState<'email' | 'phone'>('email');
   const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -63,6 +65,18 @@ export default function SignUp() {
     }, 1500);
   };
 
+  const handlePhoneSignUp = async () => {
+    setIsLoading(true);
+    toast({
+      title: "Verification code sent",
+      description: "Please check your phone for the verification code.",
+    });
+    setTimeout(() => {
+      setIsLoading(false);
+      navigate('/');
+    }, 1500);
+  };
+
   const getPasswordStrengthText = () => {
     const texts = ["Very Weak", "Weak", "Fair", "Good", "Strong"];
     return texts[passwordStrength.score];
@@ -75,83 +89,126 @@ export default function SignUp() {
           <div className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <Button
-                variant="outline"
+                variant={signupMethod === 'email' ? 'default' : 'outline'}
                 className="w-full gap-2"
-                onClick={() => handleSocialSignUp("Google")}
-                disabled={isLoading}
+                onClick={() => setSignupMethod('email')}
               >
                 <Mail className="h-4 w-4" />
-                Google
+                Email
               </Button>
               <Button
-                variant="outline"
+                variant={signupMethod === 'phone' ? 'default' : 'outline'}
                 className="w-full gap-2"
-                onClick={() => handleSocialSignUp("Apple")}
-                disabled={isLoading}
+                onClick={() => setSignupMethod('phone')}
               >
-                <Apple className="h-4 w-4" />
-                Apple
+                <svg 
+                  className="h-4 w-4" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                Phone
               </Button>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
-              <Button
-                variant="outline"
-                className="w-full gap-2"
-                onClick={() => handleSocialSignUp("Github")}
-                disabled={isLoading}
-              >
-                <Github className="h-4 w-4" />
-                Github
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full gap-2"
-                onClick={() => handleSocialSignUp("Twitter")}
-                disabled={isLoading}
-              >
-                <Twitter className="h-4 w-4" />
-                Twitter
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full gap-2"
-                onClick={() => handleSocialSignUp("Facebook")}
-                disabled={isLoading}
-              >
-                <Facebook className="h-4 w-4" />
-                Facebook
-              </Button>
-            </div>
+            {signupMethod === 'email' ? (
+              <>
+                <div className="grid grid-cols-2 gap-4">
+                  <Button
+                    variant="outline"
+                    className="w-full gap-2"
+                    onClick={() => handleSocialSignUp("Google")}
+                    disabled={isLoading}
+                  >
+                    <Mail className="h-4 w-4" />
+                    Google
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full gap-2"
+                    onClick={() => handleSocialSignUp("Apple")}
+                    disabled={isLoading}
+                  >
+                    <Apple className="h-4 w-4" />
+                    Apple
+                  </Button>
+                </div>
 
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
+                <div className="grid grid-cols-3 gap-4">
+                  <Button
+                    variant="outline"
+                    className="w-full gap-2"
+                    onClick={() => handleSocialSignUp("Github")}
+                    disabled={isLoading}
+                  >
+                    <Github className="h-4 w-4" />
+                    Github
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full gap-2"
+                    onClick={() => handleSocialSignUp("Twitter")}
+                    disabled={isLoading}
+                  >
+                    <Twitter className="h-4 w-4" />
+                    Twitter
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full gap-2"
+                    onClick={() => handleSocialSignUp("Facebook")}
+                    disabled={isLoading}
+                  >
+                    <Facebook className="h-4 w-4" />
+                    Facebook
+                  </Button>
+                </div>
+
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">
+                      Or continue with email
+                    </span>
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="name@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={isLoading}
+                    className="mt-1"
+                  />
+                </div>
+              </>
+            ) : (
+              <div>
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="+1 (555) 000-0000"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  disabled={isLoading}
+                  className="mt-1"
+                />
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or continue with email
-                </span>
-              </div>
-            </div>
-
-            <div>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={isLoading}
-                className="mt-1"
-              />
-            </div>
+            )}
 
             <Button
               onClick={() => setStep(2)}
               className="w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90"
-              disabled={!email || isLoading}
+              disabled={(!email && !phoneNumber) || isLoading}
             >
               Continue
             </Button>
