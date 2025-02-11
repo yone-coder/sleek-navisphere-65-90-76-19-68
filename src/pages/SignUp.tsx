@@ -242,14 +242,18 @@ export default function SignUp() {
               </Label>
               <div className="flex justify-center">
                 <InputOTP
+                  maxLength={6}
                   value={verificationCode}
                   onChange={setVerificationCode}
-                  maxLength={6}
                   render={({ slots }) => (
-                    <InputOTPGroup className="gap-2">
+                    <InputOTPGroup>
                       {slots.map((slot, idx) => (
-                        <InputOTPSlot key={idx} {...slot} index={idx} />
-                      ))}
+                        <InputOTPSlot 
+                          key={idx} 
+                          {...slot} 
+                          className="w-10 h-12 text-center text-lg border-2"
+                        />
+                      ))} 
                     </InputOTPGroup>
                   )}
                 />
