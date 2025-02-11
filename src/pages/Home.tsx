@@ -54,20 +54,23 @@ export default function Home() {
             ))}
           </CarouselContent>
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                aria-label={`Go to slide ${index + 1}`}
-                className={`w-2 h-2 rounded-full transition-all duration-500 ease-in-out transform
-                  ${activeIndex === index 
-                    ? "bg-[#9b87f5] scale-125 shadow-lg animate-scale-in" 
-                    : "bg-white/60 hover:bg-white/80 hover:scale-110"
-                  }`}
-                onClick={() => {
-                  api?.scrollTo(index);
-                }}
-              />
-            ))}
+            <div className="flex gap-3 transition-transform duration-500 ease-in-out" 
+                 style={{ transform: `translateX(${activeIndex * -24}px)` }}>
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  aria-label={`Go to slide ${index + 1}`}
+                  className={`w-2 h-2 rounded-full transition-all duration-500 ease-in-out transform
+                    ${activeIndex === index 
+                      ? "bg-[#9b87f5] scale-125 shadow-lg animate-scale-in" 
+                      : "bg-white/60 hover:bg-white/80 hover:scale-110"
+                    }`}
+                  onClick={() => {
+                    api?.scrollTo(index);
+                  }}
+                />
+              ))}
+            </div>
           </div>
         </Carousel>
       </section>
