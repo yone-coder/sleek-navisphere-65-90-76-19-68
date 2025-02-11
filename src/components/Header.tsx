@@ -16,9 +16,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useLanguage, Language } from '@/contexts/LanguageContext';
 
 export const Header = () => {
   const [scrolled, setScrolled] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,6 +30,10 @@ export const Header = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleLanguageChange = (lang: Language) => {
+    setLanguage(lang);
+  };
 
   return (
     <header
@@ -47,25 +53,25 @@ export const Header = () => {
           <NavigationMenu className="hidden md:flex">
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-sm">Products</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="text-sm">{t('nav.products')}</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <div className="grid gap-3 p-4 w-[400px]">
                     <Link to="/features" className="block p-3 space-y-1 hover:bg-accent rounded-md">
-                      <div className="font-medium">Features</div>
-                      <div className="text-sm text-muted-foreground">Discover what makes us unique</div>
+                      <div className="font-medium">{t('nav.features')}</div>
+                      <div className="text-sm text-muted-foreground">{t('features.discover')}</div>
                     </Link>
                     <Link to="/pricing" className="block p-3 space-y-1 hover:bg-accent rounded-md">
-                      <div className="font-medium">Pricing</div>
-                      <div className="text-sm text-muted-foreground">Plans that fit your needs</div>
+                      <div className="font-medium">{t('nav.pricing')}</div>
+                      <div className="text-sm text-muted-foreground">{t('pricing.plans')}</div>
                     </Link>
                   </div>
                 </NavigationMenuContent>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link to="/about" className="px-4 py-2 text-sm">About</Link>
+                <Link to="/about" className="px-4 py-2 text-sm">{t('nav.about')}</Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link to="/contact" className="px-4 py-2 text-sm">Contact</Link>
+                <Link to="/contact" className="px-4 py-2 text-sm">{t('nav.contact')}</Link>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
@@ -84,9 +90,15 @@ export const Header = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>English</DropdownMenuItem>
-              <DropdownMenuItem>Español</DropdownMenuItem>
-              <DropdownMenuItem>Français</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
+                English {language === 'en' && '✓'}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleLanguageChange('es')}>
+                Español {language === 'es' && '✓'}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleLanguageChange('fr')}>
+                Français {language === 'fr' && '✓'}
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -95,13 +107,13 @@ export const Header = () => {
             className="text-sm font-medium h-8 md:h-10"
             asChild
           >
-            <Link to="/login">Sign In</Link>
+            <Link to="/login">{t('btn.signin')}</Link>
           </Button>
           <Button 
             className="text-sm font-medium bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 transition-opacity h-8 md:h-10"
             asChild
           >
-            <Link to="/register">Sign Up</Link>
+            <Link to="/register">{t('btn.signup')}</Link>
           </Button>
         </div>
       </div>
