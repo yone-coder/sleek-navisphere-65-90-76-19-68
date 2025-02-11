@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/carousel";
 import { useState } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
+import { Trophy, Users, Radio, MoreHorizontal } from "lucide-react";
 
 const slides = [
   {
@@ -21,6 +22,13 @@ const slides = [
     id: 3,
     image: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?auto=format&fit=crop&w=1500&h=500&q=80",
   },
+];
+
+const quickActions = [
+  { icon: Trophy, label: "Tournaments", color: "#9b87f5" },
+  { icon: Users, label: "Matches", color: "#9b87f5" },
+  { icon: Radio, label: "Lives", color: "#9b87f5" },
+  { icon: MoreHorizontal, label: "More", color: "#9b87f5" },
 ];
 
 export default function Home() {
@@ -77,6 +85,30 @@ export default function Home() {
             </div>
           </div>
         </Carousel>
+      </section>
+
+      <section className="py-6 px-6">
+        <div className="grid grid-cols-4 gap-4 max-w-md mx-auto">
+          {quickActions.map((action, index) => {
+            const Icon = action.icon;
+            return (
+              <button
+                key={index}
+                className="group flex flex-col items-center gap-2"
+              >
+                <div className="w-16 h-16 rounded-full flex items-center justify-center bg-white shadow-lg transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 group-active:scale-95">
+                  <Icon 
+                    className="w-6 h-6 text-[#9b87f5] transition-transform duration-300 group-hover:scale-110" 
+                    strokeWidth={1.5} 
+                  />
+                </div>
+                <span className="text-sm font-medium text-gray-700">
+                  {action.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </section>
 
       <div className="pt-20 px-6">
