@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Eye, EyeOff, Github, Twitter, Facebook, Apple, Info, Mail, ArrowLeft, Check, X } from "lucide-react";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp"
 import zxcvbn from "zxcvbn";
 
 export default function SignUp() {
@@ -15,10 +16,11 @@ export default function SignUp() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [signupMethod, setSignupMethod] = useState<'email' | 'phone'>('email');
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -33,6 +35,35 @@ export default function SignUp() {
     2: "bg-yellow-500",
     3: "bg-blue-500",
     4: "bg-green-500"
+  };
+
+  const handleSendVerification = () => {
+    setIsLoading(true);
+    if (signupMethod === 'email') {
+      toast({
+        title: "Verification email sent",
+        description: `We've sent a verification code to ${email}`,
+      });
+    } else {
+      toast({
+        title: "Verification code sent",
+        description: `We've sent a verification code to ${phoneNumber}`,
+      });
+    }
+    setStep(2);
+    setIsLoading(false);
+  };
+
+  const handleVerifyCode = () => {
+    setIsLoading(true);
+    toast({
+      title: "Verification successful",
+      description: "Your contact information has been verified.",
+    });
+    setTimeout(() => {
+      setIsLoading(false);
+      setStep(3);
+    }, 1500);
   };
 
   const handleSocialSignUp = (provider: string) => {
@@ -56,20 +87,8 @@ export default function SignUp() {
 
     setIsLoading(true);
     toast({
-      title: "Verification email sent",
-      description: "Please check your inbox to verify your email address.",
-    });
-    setTimeout(() => {
-      setIsLoading(false);
-      navigate('/');
-    }, 1500);
-  };
-
-  const handlePhoneSignUp = async () => {
-    setIsLoading(true);
-    toast({
-      title: "Verification code sent",
-      description: "Please check your phone for the verification code.",
+      title: "Account created",
+      description: "Your account has been created successfully.",
     });
     setTimeout(() => {
       setIsLoading(false);
@@ -206,16 +225,70 @@ export default function SignUp() {
             )}
 
             <Button
-              onClick={() => setStep(2)}
+              onClick={handleSendVerification}
               className="w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90"
               disabled={(!email && !phoneNumber) || isLoading}
             >
-              Continue
+              Send Verification Code
             </Button>
           </div>
         );
 
       case 2:
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label className="text-center block mb-4">
+                Enter the verification code sent to {signupMethod === 'email' ? email : phoneNumber}
+              </Label>
+              <div className="flex justify-center">
+                <InputOTP
+                  value={verificationCode}
+                  onChange={setVerificationCode}
+                  maxLength={6}
+                  render={({ slots }) => (
+                    <InputOTPGroup className="gap-2">
+                      {slots.map((slot, index) => (
+                        <InputOTPSlot key={index} {...slot} />
+                      ))}
+                    </InputOTPGroup>
+                  )}
+                />
+              </div>
+              <p className="text-center text-sm text-muted-foreground mt-4">
+                Didn't receive the code?{' '}
+                <Button 
+                  variant="link" 
+                  className="p-0 h-auto font-semibold" 
+                  onClick={handleSendVerification}
+                  disabled={isLoading}
+                >
+                  Resend
+                </Button>
+              </p>
+            </div>
+
+            <div className="flex gap-4">
+              <Button
+                variant="outline"
+                onClick={() => setStep(1)}
+                className="flex-1"
+                disabled={isLoading}
+              >
+                Back
+              </Button>
+              <Button
+                onClick={handleVerifyCode}
+                className="flex-1 bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90"
+                disabled={verificationCode.length !== 6 || isLoading}
+              >
+                Verify
+              </Button>
+            </div>
+          </div>
+        );
+
+      case 3:
         return (
           <div className="space-y-6">
             <div>
@@ -281,14 +354,14 @@ export default function SignUp() {
             <div className="flex gap-4">
               <Button
                 variant="outline"
-                onClick={() => setStep(1)}
+                onClick={() => setStep(2)}
                 className="flex-1"
                 disabled={isLoading}
               >
                 Back
               </Button>
               <Button
-                onClick={() => setStep(3)}
+                onClick={() => setStep(4)}
                 className="flex-1 bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90"
                 disabled={!password || !confirmPassword || password !== confirmPassword || isLoading}
               >
@@ -298,7 +371,7 @@ export default function SignUp() {
           </div>
         );
 
-      case 3:
+      case 4:
         return (
           <div className="space-y-6">
             <div>
@@ -330,7 +403,7 @@ export default function SignUp() {
             <div className="flex gap-4">
               <Button
                 variant="outline"
-                onClick={() => setStep(2)}
+                onClick={() => setStep(3)}
                 className="flex-1"
                 disabled={isLoading}
               >
@@ -346,6 +419,36 @@ export default function SignUp() {
             </div>
           </div>
         );
+    }
+  };
+
+  const getStepTitle = () => {
+    switch (step) {
+      case 1:
+        return "Get Started";
+      case 2:
+        return "Verify Your " + (signupMethod === 'email' ? 'Email' : 'Phone');
+      case 3:
+        return "Create Password";
+      case 4:
+        return "Complete Profile";
+      default:
+        return "";
+    }
+  };
+
+  const getStepDescription = () => {
+    switch (step) {
+      case 1:
+        return "Join our community and start your journey";
+      case 2:
+        return "Enter the verification code we sent you";
+      case 3:
+        return "Choose a strong password to secure your account";
+      case 4:
+        return "Just a few more details to get started";
+      default:
+        return "";
     }
   };
 
@@ -369,19 +472,15 @@ export default function SignUp() {
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
-              {step === 1 && "Get Started"}
-              {step === 2 && "Create Password"}
-              {step === 3 && "Complete Profile"}
+              {getStepTitle()}
             </h2>
             <p className="mt-2 text-muted-foreground">
-              {step === 1 && "Join our community and start your journey"}
-              {step === 2 && "Choose a strong password to secure your account"}
-              {step === 3 && "Just a few more details to get started"}
+              {getStepDescription()}
             </p>
           </div>
 
           <div className="flex items-center justify-between mb-8">
-            {[1, 2, 3].map((s) => (
+            {[1, 2, 3, 4].map((s) => (
               <div key={s} className="flex items-center">
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center ${
@@ -398,9 +497,9 @@ export default function SignUp() {
                     s
                   )}
                 </div>
-                {s < 3 && (
+                {s < 4 && (
                   <div
-                    className={`w-24 h-1 ${
+                    className={`w-16 h-1 ${
                       s < step ? "bg-green-500" : "bg-gray-200"
                     }`}
                   />
