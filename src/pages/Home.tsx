@@ -5,20 +5,20 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const slides = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=2000&q=80",
+    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=2560&h=1440&q=80",
   },
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?auto=format&fit=crop&w=2000&q=80",
+    image: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?auto=format&fit=crop&w=2560&h=1440&q=80",
   },
   {
     id: 3,
-    image: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?auto=format&fit=crop&w=2000&q=80",
+    image: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?auto=format&fit=crop&w=2560&h=1440&q=80",
   },
 ];
 
@@ -27,15 +27,15 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
   
   return (
-    <div className="min-h-screen animate-fade-in">
-      <section className="relative w-full h-[40vh] overflow-hidden">
+    <div className="min-h-screen animate-fade-in pt-[76px]">
+      <section className="relative w-full aspect-video overflow-hidden">
         <Carousel
           opts={{
             align: "start",
             loop: true,
           }}
           className="w-full h-full"
-          onSelect={(api) => {
+          onSelect={(api: any) => {
             const selectedScrollSnap = api?.selectedScrollSnap();
             if (selectedScrollSnap !== undefined) {
               setActiveIndex(selectedScrollSnap);
@@ -44,7 +44,7 @@ export default function Home() {
         >
           <CarouselContent>
             {slides.map((slide) => (
-              <CarouselItem key={slide.id} className="relative w-full h-[40vh]">
+              <CarouselItem key={slide.id} className="relative w-full aspect-video">
                 <img
                   src={slide.image}
                   alt=""
