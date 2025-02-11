@@ -209,7 +209,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen animate-fade-in pt-[60px]">
+    <div className="min-h-screen animate-fade-in">
       <section className="relative w-full h-[calc(100vw*500/1500)] max-h-[500px] overflow-hidden">
         <Carousel
           opts={{
