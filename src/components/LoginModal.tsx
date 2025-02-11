@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Github, Twitter, Facebook, Linkedin, Mail, Google, Apple } from "lucide-react";
+import { Github, Twitter, Facebook, Linkedin, Mail, Mail2, Apple } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
@@ -95,7 +95,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   onClick={() => handleSocialLogin('Google')}
                   disabled={isLoading}
                 >
-                  <Google className="h-4 w-4" />
+                  <Mail2 className="h-4 w-4" />
                   Google
                 </Button>
                 <Button 
