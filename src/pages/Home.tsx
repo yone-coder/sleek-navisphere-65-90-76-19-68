@@ -348,30 +348,30 @@ export default function Home() {
             {recentWinners.map((winner) => (
               <div
                 key={winner.id}
-                className="flex-none w-[280px] animate-fade-in"
+                className="flex-none w-[220px] animate-fade-in"
               >
                 <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-gray-200">
-                  <div className="p-4">
-                    <div className="flex items-center gap-3 mb-4">
-                      <Avatar className="h-12 w-12 border-2 border-[#9b87f5]">
+                  <div className="p-3">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Avatar className="h-10 w-10 border-2 border-[#9b87f5]">
                         <AvatarImage src={winner.profileImage} alt={winner.playerName} />
                         <AvatarFallback>
-                          <User className="w-6 h-6 text-gray-400" />
+                          <User className="w-5 h-5 text-gray-400" />
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col">
-                        <span className="font-semibold text-gray-900">{winner.playerName}</span>
-                        <span className="text-sm text-gray-500">{winner.date}</span>
+                        <span className="font-semibold text-sm text-gray-900 truncate">{winner.playerName}</span>
+                        <span className="text-xs text-gray-500">{winner.date}</span>
                       </div>
                     </div>
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       <div className="flex items-center gap-2 text-gray-600">
                         <Trophy className="w-4 h-4 text-[#9b87f5]" />
-                        <span className="text-sm truncate">{winner.tournamentTitle}</span>
+                        <span className="text-xs truncate">{winner.tournamentTitle}</span>
                       </div>
                       <div className="flex items-center gap-2 text-gray-600">
                         <Award className="w-4 h-4 text-[#9b87f5]" />
-                        <span className="text-sm font-medium text-[#7E69AB]">{winner.prize}</span>
+                        <span className="text-xs font-medium text-[#7E69AB]">{winner.prize}</span>
                       </div>
                     </div>
                   </div>
