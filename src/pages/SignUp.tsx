@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -125,6 +124,68 @@ export default function SignUp() {
           <div className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <Button
+                variant="outline"
+                className="w-full gap-2"
+                onClick={() => handleSocialSignUp("Google")}
+                disabled={isLoading}
+              >
+                <Mail className="h-4 w-4" />
+                Google
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full gap-2"
+                onClick={() => handleSocialSignUp("Apple")}
+                disabled={isLoading}
+              >
+                <Apple className="h-4 w-4" />
+                Apple
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
+              <Button
+                variant="outline"
+                className="w-full gap-2"
+                onClick={() => handleSocialSignUp("Github")}
+                disabled={isLoading}
+              >
+                <Github className="h-4 w-4" />
+                Github
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full gap-2"
+                onClick={() => handleSocialSignUp("Twitter")}
+                disabled={isLoading}
+              >
+                <Twitter className="h-4 w-4" />
+                Twitter
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full gap-2"
+                onClick={() => handleSocialSignUp("Facebook")}
+                disabled={isLoading}
+              >
+                <Facebook className="h-4 w-4" />
+                Facebook
+              </Button>
+            </div>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <Button
                 variant={signupMethod === 'email' ? 'default' : 'outline'}
                 className="w-full gap-2"
                 onClick={() => setSignupMethod('email')}
@@ -150,82 +211,18 @@ export default function SignUp() {
             </div>
 
             {signupMethod === 'email' ? (
-              <>
-                <div className="grid grid-cols-2 gap-4">
-                  <Button
-                    variant="outline"
-                    className="w-full gap-2"
-                    onClick={() => handleSocialSignUp("Google")}
-                    disabled={isLoading}
-                  >
-                    <Mail className="h-4 w-4" />
-                    Google
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full gap-2"
-                    onClick={() => handleSocialSignUp("Apple")}
-                    disabled={isLoading}
-                  >
-                    <Apple className="h-4 w-4" />
-                    Apple
-                  </Button>
-                </div>
-
-                <div className="grid grid-cols-3 gap-4">
-                  <Button
-                    variant="outline"
-                    className="w-full gap-2"
-                    onClick={() => handleSocialSignUp("Github")}
-                    disabled={isLoading}
-                  >
-                    <Github className="h-4 w-4" />
-                    Github
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full gap-2"
-                    onClick={() => handleSocialSignUp("Twitter")}
-                    disabled={isLoading}
-                  >
-                    <Twitter className="h-4 w-4" />
-                    Twitter
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full gap-2"
-                    onClick={() => handleSocialSignUp("Facebook")}
-                    disabled={isLoading}
-                  >
-                    <Facebook className="h-4 w-4" />
-                    Facebook
-                  </Button>
-                </div>
-
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">
-                      Or continue with email
-                    </span>
-                  </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="name@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={isLoading}
-                    className="mt-1"
-                  />
-                </div>
-              </>
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isLoading}
+                  className="mt-1"
+                />
+              </div>
             ) : (
               <div>
                 <Label htmlFor="phone">Phone Number</Label>
