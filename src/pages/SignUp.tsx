@@ -263,19 +263,19 @@ export default function SignUp() {
                   maxLength={6}
                   value={verificationCode}
                   onChange={setVerificationCode}
-                  render={({ slots }) => (
-                    <InputOTPGroup>
-                      {slots.map((slot, idx) => (
-                        <InputOTPSlot 
-                          key={idx} 
-                          {...slot} 
-                          index={idx}
-                          className="w-10 h-12 text-center text-lg border-2"
-                        />
-                      ))} 
-                    </InputOTPGroup>
-                  )}
-                />
+                  containerClassName="flex items-center gap-2"
+                  className="flex items-center gap-2"
+                >
+                  <InputOTPGroup>
+                    {Array.from({ length: 6 }).map((_, index) => (
+                      <InputOTPSlot
+                        key={index}
+                        index={index}
+                        className="w-10 h-12 text-center text-lg border-2"
+                      />
+                    ))}
+                  </InputOTPGroup>
+                </InputOTP>
               </div>
               <p className="text-center text-sm text-muted-foreground mt-4">
                 Didn't receive the code?{' '}
