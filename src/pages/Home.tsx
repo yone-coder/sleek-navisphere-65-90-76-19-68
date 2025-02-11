@@ -6,7 +6,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { useState } from "react";
-import type { UseEmblaCarouselType } from 'embla-carousel-react';
+import type { CarouselApi } from "@/components/ui/carousel";
 
 const slides = [
   {
@@ -26,6 +26,7 @@ const slides = [
 export default function Home() {
   const { t } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [api, setApi] = useState<CarouselApi>();
   
   return (
     <div className="min-h-screen animate-fade-in pt-[60px]">
@@ -36,10 +37,9 @@ export default function Home() {
             loop: true,
           }}
           className="w-full h-full"
-          onSelect={(api: UseEmblaCarouselType[1]) => {
-            if (api) {
-              setActiveIndex(api.selectedScrollSnap());
-            }
+          setApi={setApi}
+          onSelect={() => {
+            setActiveIndex(api?.selectedScrollSnap() || 0);
           }}
         >
           <CarouselContent>
@@ -63,11 +63,7 @@ export default function Home() {
                     : "bg-white/50 hover:bg-white/75 scale-90 hover:scale-100"
                 }`}
                 onClick={() => {
-                  const carousel = document.querySelector('[role="region"]') as HTMLElement;
-                  const api = carousel?.__embla__;
-                  if (api) {
-                    api.scrollTo(index);
-                  }
+                  api?.scrollTo(index);
                 }}
               />
             ))}
