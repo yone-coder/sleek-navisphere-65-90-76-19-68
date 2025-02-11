@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useState } from 'react';
 
-export type Language = 'en' | 'es' | 'fr';
+export type Language = 'en' | 'es' | 'fr' | 'ht';
 
 type Translations = {
   [key in Language]: {
@@ -45,6 +45,18 @@ export const translations: Translations = {
     'btn.signup': "S'inscrire",
     'features.discover': 'Découvrez ce qui nous rend uniques',
     'pricing.plans': 'Des forfaits adaptés à vos besoins',
+  },
+  ht: {
+    'nav.home': 'Akèy',
+    'nav.about': 'Apropo',
+    'nav.contact': 'Kontakte',
+    'nav.products': 'Pwodwi yo',
+    'nav.features': 'Karakteristik',
+    'nav.pricing': 'Pri',
+    'btn.signin': 'Konekte',
+    'btn.signup': 'Enskri',
+    'features.discover': 'Dekouvri sa ki fè nou inik',
+    'pricing.plans': 'Plan ki adapte ak bezwen ou yo',
   },
 };
 

@@ -35,6 +35,11 @@ const languageDetails = {
     nativeName: 'French',
     languageInNative: 'Français',
     flag: '🇫🇷'
+  },
+  ht: {
+    nativeName: 'Haitian Creole',
+    languageInNative: 'Kreyòl Ayisyen',
+    flag: '🇭🇹'
   }
 };
 
@@ -179,4 +184,3 @@ export const Header = () => {
     </header>
   );
 };
-
