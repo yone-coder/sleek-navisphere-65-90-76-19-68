@@ -11,15 +11,15 @@ import type { UseEmblaCarouselType } from 'embla-carousel-react';
 const slides = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=2560&h=1440&q=80",
+    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=1500&h=500&q=80",
   },
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?auto=format&fit=crop&w=2560&h=1440&q=80",
+    image: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?auto=format&fit=crop&w=1500&h=500&q=80",
   },
   {
     id: 3,
-    image: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?auto=format&fit=crop&w=2560&h=1440&q=80",
+    image: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?auto=format&fit=crop&w=1500&h=500&q=80",
   },
 ];
 
@@ -29,14 +29,14 @@ export default function Home() {
   
   return (
     <div className="min-h-screen animate-fade-in pt-[60px]">
-      <section className="relative w-full h-[300px] overflow-hidden">
+      <section className="relative w-full h-[calc(100vw*500/1500)] max-h-[500px] overflow-hidden">
         <Carousel
           opts={{
             align: "start",
             loop: true,
           }}
           className="w-full h-full"
-          onSelect={(api) => {
+          onSelect={(api: UseEmblaCarouselType[1]) => {
             if (api) {
               setActiveIndex(api.selectedScrollSnap());
             }
@@ -44,7 +44,7 @@ export default function Home() {
         >
           <CarouselContent>
             {slides.map((slide) => (
-              <CarouselItem key={slide.id} className="relative w-full h-[300px]">
+              <CarouselItem key={slide.id} className="relative w-full h-full">
                 <img
                   src={slide.image}
                   alt=""
