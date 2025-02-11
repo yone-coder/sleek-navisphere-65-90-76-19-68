@@ -1,4 +1,3 @@
-
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Carousel,
@@ -7,7 +6,8 @@ import {
 } from "@/components/ui/carousel";
 import { useState } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
-import { Trophy, Users, Radio, Gamepad, Video, List, MoreHorizontal } from "lucide-react";
+import { Trophy, Users, Radio, Gamepad, Video, List, MoreHorizontal, Calendar, Award, CheckCircle, XCircle, Clock } from "lucide-react";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const slides = [
   {
@@ -35,10 +35,75 @@ const quickActions = [
   { icon: MoreHorizontal, label: "More", color: "#7E69AB" },
 ];
 
+const tournaments = [
+  {
+    id: 1,
+    title: "Winter Championship 2024",
+    banner: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&h=200&q=80",
+    status: "ongoing",
+    date: "Apr 15 - May 1",
+    participants: 128,
+    prizePool: "$10,000",
+  },
+  {
+    id: 2,
+    title: "Spring Tournament",
+    banner: "https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=400&h=200&q=80",
+    status: "upcoming",
+    date: "May 5 - May 20",
+    participants: 256,
+    prizePool: "$15,000",
+  },
+  {
+    id: 3,
+    title: "Summer League",
+    banner: "https://images.unsplash.com/photo-1560253023-3ec5d502959f?auto=format&fit=crop&w=400&h=200&q=80",
+    status: "closed",
+    date: "Mar 1 - Mar 15",
+    participants: 64,
+    prizePool: "$5,000",
+  },
+  {
+    id: 4,
+    title: "Regional Masters",
+    banner: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&h=200&q=80",
+    status: "upcoming",
+    date: "May 25 - Jun 10",
+    participants: 32,
+    prizePool: "$8,000",
+  },
+];
+
 export default function Home() {
   const { t } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "ongoing":
+        return "bg-[#F2FCE2] text-green-700";
+      case "upcoming":
+        return "bg-[#FEF7CD] text-yellow-700";
+      case "closed":
+        return "bg-[#FEC6A1] text-orange-700";
+      default:
+        return "bg-gray-100 text-gray-700";
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "ongoing":
+        return CheckCircle;
+      case "upcoming":
+        return Clock;
+      case "closed":
+        return XCircle;
+      default:
+        return CheckCircle;
+    }
+  };
   
   return (
     <div className="min-h-screen animate-fade-in pt-[60px]">
@@ -122,6 +187,55 @@ export default function Home() {
             );
           })}
         </div>
+      </section>
+
+      <section className="py-6 px-6">
+        <h2 className="text-2xl font-bold mb-6 px-2">Featured Tournaments</h2>
+        <ScrollArea className="w-full whitespace-nowrap">
+          <div className="flex space-x-4 pb-4">
+            {tournaments.map((tournament) => {
+              const StatusIcon = getStatusIcon(tournament.status);
+              return (
+                <div
+                  key={tournament.id}
+                  className="group flex-none w-[300px] animate-fade-in"
+                >
+                  <div className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:translate-y-[-2px]">
+                    <div className="relative h-[150px]">
+                      <img
+                        src={tournament.banner}
+                        alt=""
+                        className="w-full h-full object-cover"
+                      />
+                      <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${getStatusColor(tournament.status)}`}>
+                        <StatusIcon className="w-3 h-3" />
+                        <span className="capitalize">{tournament.status}</span>
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-semibold text-lg mb-3 text-left">{tournament.title}</h3>
+                      <div className="flex flex-col gap-2 text-sm text-left">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <Calendar className="w-4 h-4" />
+                          <span>{tournament.date}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <Users className="w-4 h-4" />
+                          <span>{tournament.participants} Participants</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <Award className="w-4 h-4" />
+                          <span>{tournament.prizePool} Prize Pool</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </section>
 
       <div className="pt-20 px-6">
