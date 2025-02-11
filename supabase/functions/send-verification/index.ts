@@ -46,7 +46,7 @@ serve(async (req) => {
 
     // Send email with verification code
     const { data: emailData, error: emailError } = await resend.emails.send({
-      from: 'Verification <onboarding@resend.dev>',
+      from: 'onboarding@resend.dev', // Using Resend's default testing domain
       to: email,
       subject: 'Your Verification Code',
       html: `
