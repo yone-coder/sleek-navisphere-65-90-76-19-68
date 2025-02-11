@@ -28,9 +28,6 @@ export default function SignUp() {
   const [username, setUsername] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
 
-  // Mock verification code for testing
-  const [mockVerificationCode] = useState("123456");
-
   const passwordStrength = zxcvbn(password);
   const strengthColor = {
     0: "bg-red-500",
@@ -40,47 +37,87 @@ export default function SignUp() {
     4: "bg-green-500"
   };
 
-  const handleSendVerification = () => {
+  const handleSendVerification = async () => {
     setIsLoading(true);
     
-    // Simulate API call delay
-    setTimeout(() => {
+    try {
+      const { error } = await supabase.functions.invoke('send-verification', {
+        body: { email: signupMethod === 'email' ? email : phoneNumber }
+      });
+
+      if (error) throw error;
+
       if (signupMethod === 'email') {
         toast({
           title: "Verification code sent",
-          description: `We've sent a verification code to ${email}. For testing, use: ${mockVerificationCode}`,
+          description: `We've sent a verification code to ${email}`,
         });
       } else {
         toast({
           title: "Verification code sent",
-          description: `We've sent a verification code to ${phoneNumber}. For testing, use: ${mockVerificationCode}`,
+          description: `We've sent a verification code to ${phoneNumber}`,
         });
       }
       setStep(2);
+    } catch (error) {
+      console.error('Error sending verification:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send verification code. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
-  const handleVerifyCode = () => {
+  const handleVerifyCode = async () => {
     setIsLoading(true);
     
-    // Simulate verification check
-    setTimeout(() => {
-      if (verificationCode === mockVerificationCode) {
-        toast({
-          title: "Verification successful",
-          description: "Your contact information has been verified.",
-        });
-        setStep(3);
-      } else {
+    try {
+      const { data, error } = await supabase
+        .from('verification_codes')
+        .select('*')
+        .eq('email', signupMethod === 'email' ? email : phoneNumber)
+        .eq('code', verificationCode)
+        .gt('expires_at', new Date().toISOString())
+        .is('verified', false)
+        .single();
+
+      if (error) throw error;
+
+      if (!data) {
         toast({
           title: "Verification failed",
-          description: "Invalid verification code. Please try again.",
+          description: "Invalid or expired verification code. Please try again.",
           variant: "destructive",
         });
+        return;
       }
+
+      // Mark code as verified
+      const { error: updateError } = await supabase
+        .from('verification_codes')
+        .update({ verified: true })
+        .eq('id', data.id);
+
+      if (updateError) throw updateError;
+
+      toast({
+        title: "Verification successful",
+        description: "Your contact information has been verified.",
+      });
+      setStep(3);
+    } catch (error) {
+      console.error('Verification error:', error);
+      toast({
+        title: "Verification failed",
+        description: "Invalid or expired verification code. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const handleEmailSignUp = async () => {
