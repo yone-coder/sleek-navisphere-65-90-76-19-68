@@ -31,14 +31,15 @@ export const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4 
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 md:px-6 py-3 md:py-4 
       ${scrolled ? 'bg-white/80 backdrop-blur-lg shadow-sm' : 'bg-transparent'}`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-8">
+        {/* Left section */}
+        <div className="flex items-center gap-4 md:gap-8">
           <Link 
             to="/" 
-            className="text-xl font-semibold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+            className="text-lg md:text-xl font-semibold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
           >
             Lovable
           </Link>
@@ -70,17 +71,23 @@ export const Header = () => {
           </NavigationMenu>
         </div>
 
-        <div className="flex items-center gap-4">
+        {/* Right section */}
+        <div className="flex items-center gap-2 md:gap-4">
           <Button 
             variant="ghost" 
             size="icon"
+            className="h-8 w-8 md:h-10 md:w-10"
           >
             <Search className="h-4 w-4" />
           </Button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
+              <Button 
+                variant="ghost" 
+                size="icon"
+                className="h-8 w-8 md:h-10 md:w-10"
+              >
                 <Globe className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -93,13 +100,13 @@ export const Header = () => {
 
           <Button 
             variant="ghost" 
-            className="text-sm font-medium hover:bg-gray-100/50"
+            className="hidden md:flex text-sm font-medium hover:bg-gray-100/50"
             asChild
           >
             <Link to="/login">Sign In</Link>
           </Button>
           <Button 
-            className="text-sm font-medium bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 transition-opacity"
+            className="text-sm font-medium bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 transition-opacity h-8 md:h-10"
             asChild
           >
             <Link to="/register">Get Started</Link>
@@ -109,4 +116,3 @@ export const Header = () => {
     </header>
   );
 };
-
