@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Github, Twitter, Facebook, Mail, Apple } from "lucide-react";
 
 export default function Login() {
-  const { t } = useLanguage();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -20,8 +20,8 @@ export default function Login() {
   const handleSocialLogin = (provider: string) => {
     setIsLoading(true);
     toast({
-      title: t('auth.social_login_attempt'),
-      description: `${t('auth.attempting_login_with')} ${provider}`,
+      title: "Logging in",
+      description: `Attempting to login with ${provider}`,
     });
     setTimeout(() => setIsLoading(false), 1000);
   };
@@ -30,8 +30,8 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
     toast({
-      title: t('auth.login_attempt'),
-      description: t('auth.checking_credentials'),
+      title: "Logging in",
+      description: "Checking your credentials...",
     });
     setTimeout(() => {
       setIsLoading(false);
@@ -43,8 +43,8 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center px-4 py-12 pb-24">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h2 className="text-3xl font-bold">{t('auth.welcome_back')}</h2>
-          <p className="mt-2 text-muted-foreground">{t('auth.login_description')}</p>
+          <h2 className="text-3xl font-bold">Welcome Back</h2>
+          <p className="mt-2 text-muted-foreground">Sign in to your account to continue</p>
         </div>
 
         <div className="mt-8 space-y-6">
@@ -105,7 +105,7 @@ export default function Login() {
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-background px-2 text-muted-foreground">
-                {t('auth.or_continue_with')}
+                Or continue with email
               </span>
             </div>
           </div>
@@ -114,7 +114,7 @@ export default function Login() {
             <div>
               <Label htmlFor="email">
                 <Mail className="h-4 w-4 inline mr-2" />
-                {t('auth.email')}
+                Email Address
               </Label>
               <Input
                 id="email"
@@ -130,12 +130,12 @@ export default function Login() {
 
             <div>
               <div className="flex items-center justify-between">
-                <Label htmlFor="password">{t('auth.password')}</Label>
+                <Label htmlFor="password">Password</Label>
                 <Link
                   to="/forgot-password"
                   className="text-sm font-medium text-primary hover:underline"
                 >
-                  {t('auth.forgot_password')}
+                  Forgot Password?
                 </Link>
               </div>
               <div className="relative mt-1">
@@ -171,7 +171,7 @@ export default function Login() {
                 disabled={isLoading}
               />
               <Label htmlFor="remember" className="ml-2 text-sm">
-                {t('auth.remember_me')}
+                Remember me
               </Label>
             </div>
 
@@ -180,14 +180,14 @@ export default function Login() {
               className="w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90"
               disabled={isLoading}
             >
-              {isLoading ? t('auth.signing_in') : t('auth.sign_in')}
+              {isLoading ? "Signing in..." : "Sign in"}
             </Button>
           </form>
 
           <p className="text-center text-sm text-muted-foreground">
-            {t('auth.no_account')}{' '}
+            Don't have an account?{' '}
             <Link to="/signup" className="font-medium text-primary hover:underline">
-              {t('auth.sign_up')}
+              Sign up
             </Link>
           </p>
         </div>
