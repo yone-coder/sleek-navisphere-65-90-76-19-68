@@ -1,5 +1,7 @@
 
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 export const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -19,7 +21,28 @@ export const Header = () => {
       ${scrolled ? 'bg-white/80 backdrop-blur-lg shadow-sm' : 'bg-transparent'}`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Logo</h1>
+        <Link 
+          to="/" 
+          className="text-xl font-semibold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+        >
+          Lovable
+        </Link>
+        
+        <div className="flex items-center gap-4">
+          <Button 
+            variant="ghost" 
+            className="text-sm font-medium hover:bg-gray-100/50"
+            asChild
+          >
+            <Link to="/login">Sign In</Link>
+          </Button>
+          <Button 
+            className="text-sm font-medium bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 transition-opacity"
+            asChild
+          >
+            <Link to="/register">Get Started</Link>
+          </Button>
+        </div>
       </div>
     </header>
   );
