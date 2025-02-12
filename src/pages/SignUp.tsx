@@ -112,7 +112,7 @@ export default function SignUp() {
       // Now sign in with Supabase
       const { data: authData, error: authError } = await supabase.auth.signInWithOtp({
         [signupMethod]: signupMethod === 'email' ? email : phoneNumber,
-        token: verificationCode,
+        code: verificationCode, // Changed from token to code
       });
 
       if (authError) throw authError;
