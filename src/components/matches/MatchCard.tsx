@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { 
   Trophy, Calendar, Clock, Check, User, Heart, MessageSquare, Share2, Users,
@@ -31,7 +30,7 @@ export const MatchCard = ({ match }: MatchCardProps) => {
     try {
       const date = parseISO(dateString);
       if (!isValid(date)) return '';
-      return `${format(date, "MMM d, yyyy")} • ${timeString}`;
+      return `${format(date, "MMM d, yyyy")} • ${format(parseISO(timeString), "h:mm a")}`;
     } catch (error) {
       console.error("Error formatting date:", error);
       return '';
@@ -67,32 +66,32 @@ export const MatchCard = ({ match }: MatchCardProps) => {
   };
 
   return (
-    <div className="w-[360px] animate-fade-in">
-      <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition-all duration-300 hover:shadow-[0_12px_48px_rgba(0,0,0,0.25)] hover:translate-y-[-2px]">
+    <div className="w-[480px] h-[200px] animate-fade-in">
+      <div className="relative h-full bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition-all duration-300 hover:shadow-[0_12px_48px_rgba(0,0,0,0.25)] hover:translate-y-[-2px]">
         <div className="absolute inset-0 bg-gradient-to-br from-[#1a1f2c]/80 to-[#2d3449]/80" />
         
         {/* Header Section */}
-        <div className="relative p-5 border-b border-white/10">
-          <div className="flex items-center justify-between mb-3">
+        <div className="relative p-4 border-b border-white/10">
+          <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               {match.phase.toLowerCase().includes('final') && (
-                <Trophy className="w-5 h-5 text-yellow-400" />
+                <Trophy className="w-4 h-4 text-yellow-400" />
               )}
-              <h3 className="text-lg font-bold tracking-tight text-white uppercase">
+              <h3 className="text-base font-bold tracking-tight text-white uppercase">
                 {match.championship}
               </h3>
             </div>
             <Badge 
               variant="outline" 
-              className="font-semibold uppercase text-[10px] tracking-wider px-3"
+              className="font-semibold uppercase text-[10px] tracking-wider px-2"
             >
               {match.phase}
             </Badge>
           </div>
           
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm text-white/90">
-              <Calendar className="w-4 h-4" />
+            <div className="flex items-center gap-2 text-xs text-white/90">
+              <Calendar className="w-3.5 h-3.5" />
               <span className="font-medium">
                 {formatMatchDateTime(match.date, match.time)}
               </span>
@@ -100,7 +99,7 @@ export const MatchCard = ({ match }: MatchCardProps) => {
             <Badge 
               variant="secondary"
               className={cn(
-                "uppercase text-xs tracking-wider font-semibold px-3 py-0.5",
+                "uppercase text-[10px] tracking-wider font-semibold px-2 py-0.5",
                 match.status === "live" && "bg-green-500/90 text-white border-none",
                 match.status === "upcoming" && "bg-blue-500/90 text-white border-none",
                 match.status === "done" && "bg-gray-500/90 text-white border-none"
@@ -108,19 +107,19 @@ export const MatchCard = ({ match }: MatchCardProps) => {
             >
               {match.status === "live" && (
                 <>
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse mr-1.5" />
+                  <span className="w-1 h-1 rounded-full bg-white animate-pulse mr-1" />
                   Live
                 </>
               )}
               {match.status === "upcoming" && (
                 <>
-                  <Clock className="w-3.5 h-3.5 mr-1.5" />
+                  <Clock className="w-3 h-3 mr-1" />
                   Upcoming
                 </>
               )}
               {match.status === "done" && (
                 <>
-                  <Check className="w-3.5 h-3.5 mr-1.5" />
+                  <Check className="w-3 h-3 mr-1" />
                   Completed
                 </>
               )}
@@ -128,138 +127,76 @@ export const MatchCard = ({ match }: MatchCardProps) => {
           </div>
         </div>
 
-        {/* Opponents Section */}
-        <div className="relative p-5">
-          <div className="flex items-center justify-between gap-4">
-            {match.opponents.map((opponent, index) => (
-              <div key={opponent.name} className="flex-1">
-                <div className="flex flex-col items-center text-center space-y-3">
-                  <div className="relative">
-                    <Avatar className="w-20 h-20 border-2 border-[#9b87f5] ring-2 ring-white/10">
+        {/* Main Content Section - Flexbox layout */}
+        <div className="relative p-4 flex justify-between h-[calc(200px-126px)]">
+          {/* Left Side - Players */}
+          <div className="flex-1">
+            <div className="flex items-center justify-between gap-8">
+              {match.opponents.map((opponent, index) => (
+                <div key={opponent.name} className="flex-1">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="w-12 h-12 border-2 border-[#9b87f5] ring-1 ring-white/10">
                       <AvatarImage 
                         src={opponent.photo} 
                         alt={opponent.name}
                         className="object-cover"
                       />
                       <AvatarFallback>
-                        <User className="w-8 h-8 text-gray-400" />
+                        <User className="w-6 h-6 text-gray-400" />
                       </AvatarFallback>
                     </Avatar>
-                    <Badge 
-                      variant="secondary" 
-                      className="absolute -top-1 -right-1 bg-gradient-to-r from-[#9b87f5] to-[#7b5dff] text-white border-none text-xs px-2 py-0.5"
-                    >
-                      #{opponent.rank}
-                    </Badge>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <div>
-                      <h4 className="text-base font-bold text-white">{opponent.name}</h4>
-                      <div className="flex items-center justify-center gap-1.5 mt-1 text-sm text-white/80">
-                        <Globe className="w-3.5 h-3.5" />
+                    <div className="flex flex-col items-start">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-bold text-white">{opponent.name}</span>
+                        <Badge 
+                          variant="secondary" 
+                          className="bg-gradient-to-r from-[#9b87f5] to-[#7b5dff] text-white border-none text-[10px] px-1.5"
+                        >
+                          #{opponent.rank}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center gap-1 text-xs text-white/60">
+                        <Globe className="w-3 h-3" />
                         <span>{opponent.city}</span>
                       </div>
-                    </div>
-
-                    {match.status !== "upcoming" && opponent.score !== undefined && (
-                      <div className={cn(
-                        "text-3xl font-bold",
-                        match.status === "done" && 
-                        opponent.score === Math.max(...match.opponents.map(o => o.score ?? 0)) 
-                          ? "text-green-400" 
-                          : "text-white"
-                      )}>
-                        {opponent.score}
+                      <div className="text-xs font-medium text-white/80 mt-1">
+                        {opponent.wins}W - {opponent.losses}L
                       </div>
-                    )}
-
-                    <div className="text-sm font-medium text-white/90">
-                      {opponent.wins}W - {opponent.losses}L
                     </div>
-
-                    <button
-                      onClick={() => toggleFollow(opponent.name)}
-                      className={cn(
-                        "px-4 py-1.5 rounded-full text-sm font-medium transition-all",
-                        isFollowing[opponent.name]
-                          ? "bg-[#9b87f5] text-white"
-                          : "bg-white/10 text-white hover:bg-white/20"
-                      )}
-                    >
-                      {isFollowing[opponent.name] ? 'Following' : 'Follow'}
-                    </button>
                   </div>
                 </div>
-              </div>
-            ))}
-            
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                <ArrowRight className="w-5 h-5 text-white/60" />
-              </div>
+              ))}
             </div>
           </div>
-        </div>
 
-        {/* Predictions Section */}
-        {match.predictions && (
-          <div className="px-5 pb-5">
-            <div className="bg-white/5 rounded-xl p-4 space-y-3">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-white/90 font-medium">Match Prediction</span>
-                <span className="text-white/60">
-                  {match.predictions.firstPlayer + match.predictions.secondPlayer} votes
-                </span>
-              </div>
-              
-              <div className="relative h-2 bg-white/10 rounded-full overflow-hidden">
-                <div 
-                  className="absolute left-0 top-0 h-full bg-gradient-to-r from-[#9b87f5] to-[#7b5dff] rounded-full"
-                  style={{ width: `${match.predictions.firstPlayer}%` }}
-                />
-              </div>
-              
-              <div className="flex justify-between text-sm text-white/80">
-                <span>{match.predictions.firstPlayer}%</span>
-                <span>{match.predictions.secondPlayer}%</span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Footer Section */}
-        <div className="px-5 pb-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <button className="flex items-center gap-1.5 text-white/60 hover:text-white transition-colors">
-                <Heart className="w-4 h-4" />
-                <span className="text-sm">{formatNumber(match.likes)}</span>
-              </button>
-              <button className="flex items-center gap-1.5 text-white/60 hover:text-white transition-colors">
-                <MessageSquare className="w-4 h-4" />
-                <span className="text-sm">{formatNumber(match.comments)}</span>
-              </button>
-              {match.status === 'live' && (
-                <div className="flex items-center gap-1.5 text-white/60">
-                  <Users className="w-4 h-4" />
-                  <span className="text-sm">{formatNumber(match.spectators)}</span>
+          {/* Right Side - Stats & Actions */}
+          <div className="flex flex-col justify-between ml-4 border-l border-white/10 pl-4">
+            {match.predictions && (
+              <div className="w-[120px]">
+                <div className="text-xs text-white/80 mb-1">Match Prediction</div>
+                <div className="relative h-1.5 bg-white/10 rounded-full overflow-hidden mb-1">
+                  <div 
+                    className="absolute left-0 top-0 h-full bg-gradient-to-r from-[#9b87f5] to-[#7b5dff] rounded-full"
+                    style={{ width: `${match.predictions.firstPlayer}%` }}
+                  />
                 </div>
-              )}
-            </div>
-            
+                <div className="flex justify-between text-[10px] text-white/60">
+                  <span>{match.predictions.firstPlayer}%</span>
+                  <span>{match.predictions.secondPlayer}%</span>
+                </div>
+              </div>
+            )}
+
             <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <Heart className="w-3.5 h-3.5 text-white/60" />
+                <span className="text-xs text-white/60">{formatNumber(match.likes)}</span>
+              </div>
               {match.status === 'live' && (
-                <button className="bg-red-500 text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-red-600 transition-colors">
-                  Watch Live
+                <button className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-red-600 transition-colors">
+                  Watch
                 </button>
               )}
-              <button 
-                onClick={handleShare}
-                className="text-white/60 hover:text-white transition-colors"
-              >
-                <Share2 className="w-5 h-5" />
-              </button>
             </div>
           </div>
         </div>
