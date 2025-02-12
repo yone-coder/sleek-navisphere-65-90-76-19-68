@@ -91,7 +91,7 @@ export const Header = () => {
   if (user) {
     return (
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 py-2 
-        ${scrolled ? 'bg-white/80 backdrop-blur-lg shadow-sm' : 'bg-transparent'}`}>
+        ${scrolled ? 'bg-white shadow-sm' : 'bg-white/0'}`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -128,7 +128,7 @@ export const Header = () => {
               <Input
                 type="search"
                 placeholder="Search..."
-                className="w-full pl-10 pr-4 h-10 bg-white/50 focus:bg-white"
+                className="w-full pl-10 pr-4 h-10 bg-white/80 focus:bg-white"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -161,7 +161,7 @@ export const Header = () => {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 md:px-6 py-2 md:py-3 
-      ${scrolled ? 'bg-white/80 backdrop-blur-lg shadow-sm' : 'bg-transparent'}`}
+      ${scrolled ? 'bg-white shadow-sm' : 'bg-white/0'}`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-4 md:gap-8">
