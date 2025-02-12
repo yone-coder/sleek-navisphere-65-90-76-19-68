@@ -2,11 +2,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { Resend } from "npm:resend@2.0.0"
-import * as twilio from "npm:twilio@4.22.0"
+import twilio from "npm:twilio@4.22.0"
 
 // Initialize services
 const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
-const twilioClient = twilio.default(
+const twilioClient = twilio(
   Deno.env.get('TWILIO_ACCOUNT_SID') || '',
   Deno.env.get('TWILIO_AUTH_TOKEN') || ''
 );
