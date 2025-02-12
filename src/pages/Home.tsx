@@ -219,6 +219,73 @@ const newsItems = [
   }
 ];
 
+const matches = [
+  {
+    id: 1,
+    championship: "Winter Championship 2024",
+    phase: "Quarter Finals",
+    status: "live",
+    date: "Now",
+    opponents: [
+      {
+        name: "Alex Chen",
+        photo: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&h=100&q=80",
+        score: 2
+      },
+      {
+        name: "Sarah Williams",
+        photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80",
+        score: 1
+      }
+    ],
+    spectators: 1234,
+    likes: 423,
+    comments: 89
+  },
+  {
+    id: 2,
+    championship: "Spring Tournament Elite",
+    phase: "Semi Finals",
+    status: "upcoming",
+    date: "Tomorrow, 15:00",
+    opponents: [
+      {
+        name: "Michael Rodriguez",
+        photo: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&h=100&q=80",
+      },
+      {
+        name: "Emma Watson",
+        photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&h=100&q=80",
+      }
+    ],
+    spectators: 856,
+    likes: 234,
+    comments: 45
+  },
+  {
+    id: 3,
+    championship: "Regional Masters",
+    phase: "Finals",
+    status: "done",
+    date: "Yesterday",
+    opponents: [
+      {
+        name: "John Doe",
+        photo: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=100&h=100&q=80",
+        score: 3
+      },
+      {
+        name: "Jane Smith",
+        photo: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&h=100&q=80",
+        score: 1
+      }
+    ],
+    spectators: 2543,
+    likes: 867,
+    comments: 156
+  },
+];
+
 export default function Home() {
   const { t } = useLanguage();
   const navigate = useNavigate();
@@ -584,6 +651,97 @@ export default function Home() {
                         <button className="text-[#9b87f5] hover:text-[#7E69AB] flex items-center gap-1 text-sm transition-colors">
                           Read more <ArrowUpRight className="w-3 h-3" />
                         </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </section>
+
+      <section className="py-6 px-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold px-2">Featured Matches</h2>
+          <button className="text-[#9b87f5] hover:text-[#7E69AB] flex items-center gap-1 text-sm font-medium transition-colors">
+            View all <ArrowUpRight className="w-4 h-4" />
+          </button>
+        </div>
+        <ScrollArea className="w-full whitespace-nowrap">
+          <div className="flex space-x-4 pb-4">
+            {matches.map((match) => (
+              <div
+                key={match.id}
+                className="flex-none w-[400px] animate-fade-in"
+              >
+                <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-xl hover:translate-y-[-2px]">
+                  <div className="p-4 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Trophy className="w-4 h-4 text-[#9b87f5]" />
+                        <span className="font-medium text-sm">{match.championship}</span>
+                      </div>
+                      <Badge 
+                        variant="secondary"
+                        className={cn(
+                          "font-medium flex items-center gap-1",
+                          match.status === "live" && "bg-red-100 text-red-700",
+                          match.status === "upcoming" && "bg-yellow-100 text-yellow-700",
+                          match.status === "done" && "bg-green-100 text-green-700"
+                        )}
+                      >
+                        {match.status === "live" && <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />}
+                        {match.status === "upcoming" && <Clock className="w-3 h-3" />}
+                        {match.status === "done" && <Check className="w-3 h-3" />}
+                        <span className="capitalize">{match.status}</span>
+                      </Badge>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-4">
+                      {match.opponents.map((opponent, index) => (
+                        <div key={opponent.name} className="flex flex-col items-center gap-2">
+                          <Avatar className="w-16 h-16 border-2 border-[#9b87f5]">
+                            <AvatarImage src={opponent.photo} alt={opponent.name} />
+                            <AvatarFallback>
+                              <User className="w-8 h-8 text-gray-400" />
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="font-medium text-sm text-center">{opponent.name}</span>
+                          {match.status !== "upcoming" && (
+                            <span className={cn(
+                              "text-lg font-bold",
+                              match.status === "done" && 
+                              match.opponents[index].score === Math.max(...match.opponents.map(o => o.score || 0)) 
+                                ? "text-green-600" 
+                                : "text-gray-600"
+                            )}>
+                              {match.opponents[index].score}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center justify-between text-sm text-gray-500">
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-1">
+                          <Users className="w-4 h-4" />
+                          <span>{match.spectators.toLocaleString()}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Heart className="w-4 h-4" />
+                          <span>{match.likes}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <MessageSquare className="w-4 h-4" />
+                          <span>{match.comments}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4" />
+                        <span>{match.date}</span>
                       </div>
                     </div>
                   </div>
