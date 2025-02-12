@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -92,12 +93,21 @@ export default function SignUp() {
 
       // Now sign in with Supabase using OTP
       const signInPayload = signupMethod === 'email' 
-        ? { email }
-        : { phone: phoneNumber };
+        ? { email, options: { data: { email_verified: true } } }
+        : { phone: phoneNumber, options: { data: { phone_verified: true } } };
 
       const { data: authData, error: authError } = await supabase.auth.signInWithOtp(signInPayload);
 
       if (authError) throw authError;
+
+      // Get the session after sign in
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError) throw sessionError;
+      
+      if (!session) {
+        throw new Error('Failed to establish session after verification');
+      }
 
       toast({
         title: "Verification successful",
@@ -117,18 +127,19 @@ export default function SignUp() {
   };
 
   const handleEmailSignUp = async () => {
-    if (password !== confirmPassword) {
-      toast({
-        title: "Error",
-        description: "Passwords do not match",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsLoading(true);
     
     try {
+      // First check if we have a valid session
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError) throw sessionError;
+      
+      if (!session) {
+        throw new Error('No active session found. Please verify your contact information again.');
+      }
+
+      // Now update the user profile
       const { data, error } = await supabase.auth.updateUser({
         password,
         data: {
