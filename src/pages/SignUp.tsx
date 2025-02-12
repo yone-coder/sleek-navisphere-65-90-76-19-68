@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -41,7 +42,7 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
-      const { data, error } = await supabase.functions.invoke('send-verification', {
+      const response = await supabase.functions.invoke('send-verification', {
         body: {
           method: signupMethod,
           email: signupMethod === 'email' ? email : undefined,
@@ -49,7 +50,9 @@ export default function SignUp() {
         },
       });
 
-      if (error) throw error;
+      if (response.error) {
+        throw new Error(response.error.message || 'Failed to send verification code');
+      }
       
       toast({
         title: "Verification code sent",
@@ -74,7 +77,7 @@ export default function SignUp() {
     
     try {
       // First verify the code against our database
-      const { data, error: verifyError } = await supabase.functions.invoke('verify-code', {
+      const verifyResponse = await supabase.functions.invoke('verify-code', {
         body: {
           method: signupMethod,
           contact: signupMethod === 'email' ? email : phoneNumber,
@@ -82,7 +85,9 @@ export default function SignUp() {
         },
       });
 
-      if (verifyError) throw verifyError;
+      if (verifyResponse.error) {
+        throw new Error(verifyResponse.error.message || 'Verification failed');
+      }
 
       // Now sign in with Supabase using OTP
       const { data: authData, error: authError } = await supabase.auth.signInWithOtp({
