@@ -24,13 +24,18 @@ serve(async (req) => {
       throw new Error('Missing Twilio credentials')
     }
 
+    // Ensure phone numbers are in E.164 format
+    const formattedRecipientNumber = phoneNumber.startsWith('+') ? phoneNumber : `+${phoneNumber}`
+    const formattedTwilioNumber = twilioPhoneNumber.startsWith('+') ? twilioPhoneNumber : `+${twilioPhoneNumber}`
+
     // Generate a 6-digit verification code
     const verificationCode = Math.floor(100000 + Math.random() * 900000).toString()
     
     // Set expiration time (15 minutes from now)
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString()
 
-    console.log('Attempting to send SMS to:', phoneNumber)
+    console.log('Attempting to send SMS to:', formattedRecipientNumber)
+    console.log('Sending from:', formattedTwilioNumber)
 
     // Send SMS via Twilio
     const twilioResponse = await fetch(
@@ -42,8 +47,8 @@ serve(async (req) => {
           'Authorization': 'Basic ' + btoa(`${twilioAccountSid}:${twilioAuthToken}`),
         },
         body: new URLSearchParams({
-          To: phoneNumber,
-          From: twilioPhoneNumber,
+          To: formattedRecipientNumber,
+          From: formattedTwilioNumber,
           Body: `Your verification code is: ${verificationCode}`,
         }),
       }
@@ -75,7 +80,7 @@ serve(async (req) => {
       throw new Error('Failed to store verification code')
     }
 
-    console.log(`SMS sent successfully to ${phoneNumber} with code ${verificationCode}`)
+    console.log(`SMS sent successfully to ${formattedRecipientNumber} with code ${verificationCode}`)
     
     return new Response(
       JSON.stringify({ message: 'Verification code sent successfully' }),
