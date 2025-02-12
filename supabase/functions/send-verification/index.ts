@@ -4,15 +4,18 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { Resend } from "npm:resend@2.0.0"
 import { Twilio } from "npm:twilio@4.22.0"
 
+// Initialize services
 const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
 const twilio = new Twilio(
   Deno.env.get('TWILIO_ACCOUNT_SID') || '',
   Deno.env.get('TWILIO_AUTH_TOKEN') || ''
 );
 
+// Define CORS headers
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
 }
 
 function generateVerificationCode(): string {
@@ -20,19 +23,36 @@ function generateVerificationCode(): string {
 }
 
 serve(async (req) => {
+  console.log('Received request:', req.method);
+  
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    console.log('Handling OPTIONS request');
+    return new Response(null, {
+      status: 204,
+      headers: corsHeaders
+    });
   }
 
   try {
+    if (req.method !== 'POST') {
+      throw new Error(`HTTP method ${req.method} is not allowed`);
+    }
+
     const { email, phoneNumber, method } = await req.json();
+    console.log('Received payload:', { email, phoneNumber, method });
+
+    if (!email && !phoneNumber) {
+      throw new Error('Either email or phone number must be provided');
+    }
+
     const verificationCode = generateVerificationCode();
     const contactMethod = method === 'email' ? email : phoneNumber;
     
     console.log(`Generating verification code for ${method}:`, contactMethod);
     console.log('Generated code:', verificationCode);
     
+    // Initialize Supabase client
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
@@ -41,7 +61,7 @@ serve(async (req) => {
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
     console.log('Expiration time:', expiresAt);
 
-    // First, invalidate all existing unverified codes for this contact method
+    // First, invalidate all existing unverified codes
     console.log('Invalidating old codes for:', contactMethod);
     const { error: invalidateError } = await supabaseClient
       .from('verification_codes')
@@ -53,9 +73,8 @@ serve(async (req) => {
       console.error('Error invalidating old codes:', invalidateError);
       throw invalidateError;
     }
-    console.log('Successfully invalidated old codes');
 
-    // Store verification code
+    // Store new verification code
     const { data: insertData, error: dbError } = await supabaseClient
       .from('verification_codes')
       .insert({
@@ -72,9 +91,7 @@ serve(async (req) => {
       throw new Error(`Database error: ${dbError.message}`);
     }
 
-    console.log('Verification code stored successfully:', insertData);
-
-    // Send verification code based on method
+    // Send verification code
     if (method === 'email') {
       const { data: emailData, error: emailError } = await resend.emails.send({
         from: 'onboarding@resend.dev',
@@ -99,7 +116,6 @@ serve(async (req) => {
       }
       console.log('Email sent successfully:', emailData);
     } else {
-      // Send SMS via Twilio
       const { sid: smsData, error: smsError } = await twilio.messages.create({
         body: `Your verification code is: ${verificationCode}. This code will expire in 10 minutes.`,
         to: phoneNumber,
@@ -114,9 +130,15 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ message: 'Verification code sent successfully' }),
+      JSON.stringify({ 
+        message: 'Verification code sent successfully',
+        success: true 
+      }),
       { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json'
+        },
         status: 200 
       }
     );
@@ -124,10 +146,16 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in send-verification function:', error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error.message,
+        success: false
+      }),
       { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json'
+        },
+        status: 400
       }
     );
   }
