@@ -3,12 +3,25 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { DragDropContext, Droppable, Draggable } from "@dnd-kit/core";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -25,6 +38,70 @@ interface Banner {
   id: number;
   image: string;
 }
+
+const SortableBannerItem = ({ banner, index, onEdit, onDelete }: { 
+  banner: Banner; 
+  index: number;
+  onEdit: (banner: Banner) => void;
+  onDelete: (id: number) => void;
+}) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id: banner.id });
+
+  const style = transform ? {
+    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+    transition,
+  } : undefined;
+
+  return (
+    <Card
+      ref={setNodeRef}
+      style={style}
+      className="bg-white"
+    >
+      <CardHeader className="flex flex-row items-center justify-between">
+        <div
+          {...attributes}
+          {...listeners}
+          className="cursor-move p-2"
+        >
+          <GripVertical className="w-5 h-5 text-gray-400" />
+        </div>
+        <CardTitle className="text-sm font-medium">
+          Banner {index + 1}
+        </CardTitle>
+        <div className="flex gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onEdit(banner)}
+          >
+            <Pencil className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onDelete(banner.id)}
+          >
+            <Trash2 className="w-4 h-4 text-red-500" />
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <img
+          src={banner.image}
+          alt={`Banner ${index + 1}`}
+          className="w-full h-32 object-cover rounded-md"
+        />
+      </CardContent>
+    </Card>
+  );
+};
 
 export default function AdminBanners() {
   const { toast } = useToast();
@@ -47,9 +124,16 @@ export default function AdminBanners() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  const handleDragEnd = (event: any) => {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (active.id !== over.id) {
+    if (over && active.id !== over.id) {
       const oldIndex = banners.findIndex((banner) => banner.id === active.id);
       const newIndex = banners.findIndex((banner) => banner.id === over.id);
       const newBanners = [...banners];
@@ -128,72 +212,32 @@ export default function AdminBanners() {
         </Dialog>
       </div>
 
-      <DragDropContext onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
-        <Droppable droppableId="banners">
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className="space-y-4"
-            >
-              {banners.map((banner, index) => (
-                <Draggable
-                  key={banner.id}
-                  draggableId={banner.id.toString()}
-                  index={index}
-                >
-                  {(provided) => (
-                    <Card
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      className="bg-white"
-                    >
-                      <CardHeader className="flex flex-row items-center justify-between">
-                        <div
-                          {...provided.dragHandleProps}
-                          className="cursor-move p-2"
-                        >
-                          <GripVertical className="w-5 h-5 text-gray-400" />
-                        </div>
-                        <CardTitle className="text-sm font-medium">
-                          Banner {index + 1}
-                        </CardTitle>
-                        <div className="flex gap-2">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => {
-                              setEditBanner(banner);
-                              setIsEditDialogOpen(true);
-                            }}
-                          >
-                            <Pencil className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleDeleteBanner(banner.id)}
-                          >
-                            <Trash2 className="w-4 h-4 text-red-500" />
-                          </Button>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <img
-                          src={banner.image}
-                          alt={`Banner ${index + 1}`}
-                          className="w-full h-32 object-cover rounded-md"
-                        />
-                      </CardContent>
-                    </Card>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+        modifiers={[restrictToVerticalAxis]}
+      >
+        <SortableContext
+          items={banners.map(b => b.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="space-y-4">
+            {banners.map((banner, index) => (
+              <SortableBannerItem
+                key={banner.id}
+                banner={banner}
+                index={index}
+                onEdit={(banner) => {
+                  setEditBanner(banner);
+                  setIsEditDialogOpen(true);
+                }}
+                onDelete={handleDeleteBanner}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent>
