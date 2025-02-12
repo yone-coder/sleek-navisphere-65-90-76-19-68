@@ -1,4 +1,3 @@
-
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Carousel,
@@ -445,7 +444,8 @@ export default function Home() {
               return (
                 <div
                   key={tournament.id}
-                  className="group flex-none w-[300px] animate-fade-in"
+                  className="group flex-none w-[300px] animate-fade-in cursor-pointer"
+                  onClick={() => navigate(`/tournament/${tournament.id}`)}
                 >
                   <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:translate-y-[-2px] group-hover:border-gray-200">
                     <div className="relative h-[150px]">

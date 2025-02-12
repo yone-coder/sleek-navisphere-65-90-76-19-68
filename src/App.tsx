@@ -17,6 +17,7 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import NewsDetail from "./pages/NewsDetail";
+import TournamentDetails from "./pages/TournamentDetails";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminBanners from "./pages/admin/AdminBanners";
@@ -44,6 +45,7 @@ const AppContent = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/news/:id" element={<NewsDetail />} />
+        <Route path="/tournament/:id" element={<TournamentDetails />} />
         
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
