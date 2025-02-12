@@ -100,6 +100,7 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
+      // First verify the code
       const verifyResponse = await supabase.functions.invoke('verify-code', {
         body: {
           method: signupMethod,
@@ -114,26 +115,25 @@ export default function SignUp() {
 
       console.log('Code verified successfully:', verifyResponse);
 
-      const signInPayload = signupMethod === 'email' 
-        ? { email, options: { data: { email_verified: true } } }
-        : { phone: phoneNumber, options: { data: { phone_verified: true } } };
+      // After successful verification, proceed with OTP sign in
+      const { error: signInError } = await supabase.auth.signInWithOtp({
+        [signupMethod]: signupMethod === 'email' ? email : phoneNumber,
+        token: verificationCode,
+        options: {
+          data: {
+            [signupMethod === 'email' ? 'email_verified' : 'phone_verified']: true
+          }
+        }
+      });
 
-      const { data: authData, error: authError } = await supabase.auth.signInWithOtp(signInPayload);
-
-      if (authError) throw authError;
-
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError) throw sessionError;
-      
-      if (!session) {
-        throw new Error('Failed to establish session after verification');
-      }
+      if (signInError) throw signInError;
 
       toast({
         title: "Verification successful",
         description: "Your contact information has been verified.",
       });
+
+      // Proceed to next step after successful verification
       setStep(3);
     } catch (error: any) {
       console.error('Verification error:', error);
