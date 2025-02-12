@@ -311,25 +311,25 @@ export default function Home() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
-            <div className="flex items-center gap-4 px-4 py-2 rounded-full bg-black/20 backdrop-blur-sm">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/20 backdrop-blur-sm">
               {slides.map((_, index) => (
                 <button
                   key={index}
                   aria-label={`Go to slide ${index + 1}`}
                   onClick={() => api?.scrollTo(index)}
                   className={`
-                    relative w-2.5 h-2.5 rounded-full 
+                    relative w-1.5 h-1.5 rounded-full 
                     transition-all duration-300 ease-spring
                     ${activeIndex === index 
-                      ? "bg-[#9b87f5] w-8" 
+                      ? "bg-[#9b87f5] w-5" 
                       : "bg-white/60 hover:bg-white/80"
                     }
                     ${activeIndex === index 
                       ? "animate-[scale-in_0.2s_ease-out]" 
                       : ""}
                     group
-                    focus:outline-none focus:ring-2 focus:ring-[#9b87f5] focus:ring-offset-2 focus:ring-offset-transparent
+                    focus:outline-none focus:ring-1 focus:ring-[#9b87f5] focus:ring-offset-1 focus:ring-offset-transparent
                   `}
                 >
                   {activeIndex === index && (
