@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -100,7 +99,7 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
-      // First verify the code with our edge function
+      // Only verify the code with our edge function
       const verifyResponse = await supabase.functions.invoke('verify-code', {
         body: {
           method: signupMethod,
@@ -115,29 +114,12 @@ export default function SignUp() {
 
       console.log('Code verified successfully:', verifyResponse);
 
-      // After successful verification, proceed with OTP sign in
-      const { data: { session }, error: signInError } = await supabase.auth.signInWithOtp({
-        email: signupMethod === 'email' ? email : undefined,
-        phone: signupMethod === 'phone' ? phoneNumber : undefined,
-        options: {
-          data: {
-            [signupMethod === 'email' ? 'email_verified' : 'phone_verified']: true
-          }
-        }
-      });
-
-      if (signInError) throw signInError;
-
-      if (!session) {
-        throw new Error('Failed to establish session after verification');
-      }
-
       toast({
         title: "Verification successful",
         description: "Your contact information has been verified.",
       });
 
-      // Proceed to next step after successful verification
+      // Simply proceed to password step after verification
       setStep(3);
     } catch (error: any) {
       console.error('Verification error:', error);
@@ -155,20 +137,14 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
-      // First check if we have an active session
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError) throw sessionError;
-      
-      if (!session) {
-        throw new Error('No active session found. Please verify your contact information again.');
-      }
-
-      // Now update the user with the password and username
-      const { data, error } = await supabase.auth.updateUser({
-        password,
-        data: {
-          username,
+      // Sign up with email and password
+      const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: {
+            username: username,
+          },
         },
       });
 
