@@ -80,23 +80,14 @@ const slides = [
   {
     id: 1,
     image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1500&h=500&q=80",
-    title: "Winter Gaming Finals",
-    subtitle: "Join us for the ultimate championship",
-    highlight: "$50,000 Prize Pool",
   },
   {
     id: 2,
     image: "https://images.unsplash.com/photo-1439337153520-7082a56a81f4?auto=format&fit=crop&w=1500&h=500&q=80",
-    title: "Pro Series Tournament",
-    subtitle: "Register now for the biggest event of the year",
-    highlight: "256 Teams",
   },
   {
     id: 3,
     image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1500&h=500&q=80",
-    title: "Summer Championships",
-    subtitle: "Rise to the challenge this summer",
-    highlight: "Global Event",
   },
 ];
 
@@ -277,6 +268,16 @@ export default function Home() {
     navigate(`/news/${news.id}`, { state: { news } });
   };
 
+  React.useEffect(() => {
+    if (!api) return;
+
+    const interval = setInterval(() => {
+      api.next();
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [api]);
+
   return (
     <div className="min-h-screen animate-fade-in pt-14 pb-24">
       <section className="relative w-full h-[calc(100vw*500/1500)] max-h-[500px] overflow-hidden">
@@ -300,30 +301,6 @@ export default function Home() {
                     alt=""
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent">
-                    <div className="max-w-3xl mx-auto">
-                      <div className="flex flex-col gap-2">
-                        <h2 className="text-4xl font-bold text-white tracking-tight">
-                          {slide.title}
-                        </h2>
-                        <p className="text-lg text-white/90">
-                          {slide.subtitle}
-                        </p>
-                        <div className="flex items-center gap-2 mt-2">
-                          <Badge 
-                            variant="secondary" 
-                            className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white border-none px-3 py-1"
-                          >
-                            {slide.highlight}
-                          </Badge>
-                          <button className="inline-flex items-center gap-2 text-white hover:text-[#9b87f5] transition-colors">
-                            Learn More <ArrowUpRight className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </CarouselItem>
             ))}
