@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Trophy, Globe, Clock, Check, User, Heart, MessageSquare, Share2, Star, Users } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -105,9 +104,9 @@ export const MatchCard = ({ match }: MatchCardProps) => {
         </div>
 
         <div className="p-4 space-y-4">
-          <div className="flex items-center justify-between gap-4">
+          <div className="relative flex items-center justify-between">
             {match.opponents.map((opponent, index) => (
-              <div key={opponent.name} className="flex-1 flex items-center gap-4">
+              <div key={opponent.name} className="flex-1">
                 <div className="flex flex-col items-center text-center space-y-2">
                   <div className="relative">
                     <Avatar className="w-16 h-16 border-2 border-[#9b87f5] ring-1 ring-white/10">
@@ -158,15 +157,13 @@ export const MatchCard = ({ match }: MatchCardProps) => {
                     </button>
                   </div>
                 </div>
-                {index === 0 && (
-                  <div className="flex flex-col items-center justify-center text-white/60 px-2">
-                    <span className="text-sm font-medium whitespace-nowrap">
-                      {formatMatchDate(match.date)}
-                    </span>
-                  </div>
-                )}
               </div>
             ))}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-white/10 px-3 py-1 rounded-full">
+              <span className="text-sm font-medium text-white/80 whitespace-nowrap">
+                {formatMatchDate(match.date)}
+              </span>
+            </div>
           </div>
 
           {match.predictions && (
