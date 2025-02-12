@@ -17,6 +17,7 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import NewsDetail from "./pages/NewsDetail";
+import AdminBanners from "./pages/admin/AdminBanners";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const AppContent = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/news/:id" element={<NewsDetail />} />
+        <Route path="/admin/banners" element={<AdminBanners />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <BottomNav />
