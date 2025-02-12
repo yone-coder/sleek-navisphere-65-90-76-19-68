@@ -76,6 +76,15 @@ serve(async (req) => {
       throw new Error('Either email or phone number must be provided');
     }
 
+    // Check if we're in development/trial mode for Twilio
+    const isTwilioTrial = true; // We'll assume trial mode for safety
+    if (method === 'phone' && isTwilioTrial) {
+      throw new Error(
+        'Phone verification is currently in test mode. Please use email verification instead, ' +
+        'or contact support to enable full SMS functionality.'
+      );
+    }
+
     // Validate and format phone number if method is phone
     const formattedPhoneNumber = method === 'phone' ? formatPhoneNumber(phoneNumber) : null;
     console.log('Formatted phone number:', formattedPhoneNumber);
