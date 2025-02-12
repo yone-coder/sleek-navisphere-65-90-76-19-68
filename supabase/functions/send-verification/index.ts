@@ -39,20 +39,10 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString()
-    console.log('Expiration time:', expiresAt);
-
-    // Invalidate any existing unverified codes for this email/phone
-    const { error: invalidateError } = await supabaseClient
-      .from('verification_codes')
-      .update({ verified: true })
-      .eq('email', contactMethod)
-      .is('verified', false);
-
-    if (invalidateError) {
-      console.error('Error invalidating old codes:', invalidateError);
-      throw invalidateError;
-    }
+    // Calculate expiration time (10 minutes from now)
+    const expiresAt = new Date();
+    expiresAt.setMinutes(expiresAt.getMinutes() + 10);
+    console.log('Expiration time:', expiresAt.toISOString());
 
     // Store verification code
     const { data: insertData, error: dbError } = await supabaseClient
@@ -60,7 +50,7 @@ serve(async (req) => {
       .insert({
         email: contactMethod,
         code: verificationCode,
-        expires_at: expiresAt,
+        expires_at: expiresAt.toISOString(),
         verified: false
       })
       .select()
@@ -130,7 +120,6 @@ serve(async (req) => {
       }
     )
   } finally {
-    // Clean up resources
     if (supabaseClient) {
       try {
         await supabaseClient.auth.signOut();
