@@ -23,26 +23,54 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    // Find the verification code
-    const { data: verificationData, error: verificationError } = await supabaseClient
+    // Find the verification code with more detailed logging
+    const query = supabaseClient
       .from('verification_codes')
       .select()
       .eq(method === 'email' ? 'email' : 'phone', contact)
       .eq('code', code)
       .eq('verified', false)
-      .gt('expires_at', new Date().toISOString())
-      .maybeSingle();
+      .gt('expires_at', new Date().toISOString());
+
+    console.log('Executing query:', query.toSQL());
+
+    const { data: verificationData, error: verificationError } = await query.maybeSingle();
 
     if (verificationError) {
       console.error('Verification query error:', verificationError);
       throw new Error(`Database error: ${verificationError.message}`);
     }
 
+    console.log('Verification data found:', verificationData);
+
     if (!verificationData) {
-      console.error('Invalid or expired verification code');
+      // Check if there's an expired code
+      const { data: expiredCode } = await supabaseClient
+        .from('verification_codes')
+        .select()
+        .eq(method === 'email' ? 'email' : 'phone', contact)
+        .eq('code', code)
+        .eq('verified', false)
+        .lte('expires_at', new Date().toISOString())
+        .maybeSingle();
+
+      if (expiredCode) {
+        console.error('Found expired code:', expiredCode);
+        return new Response(
+          JSON.stringify({ 
+            error: 'Verification code has expired. Please request a new one.' 
+          }),
+          { 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            status: 400
+          }
+        );
+      }
+
+      console.error('No valid verification code found');
       return new Response(
         JSON.stringify({ 
-          error: 'Invalid or expired verification code' 
+          error: 'Invalid verification code. Please check and try again.' 
         }),
         { 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -61,6 +89,8 @@ serve(async (req) => {
       console.error('Error updating verification status:', updateError);
       throw new Error(`Database error: ${updateError.message}`);
     }
+
+    console.log('Code verified successfully');
 
     return new Response(
       JSON.stringify({ 
