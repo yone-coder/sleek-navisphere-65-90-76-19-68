@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Trophy, Globe, Clock, Check, User, Heart, MessageSquare, Share2, Star, Users } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -159,10 +160,9 @@ export const MatchCard = ({ match }: MatchCardProps) => {
                 </div>
                 {index === 0 && (
                   <div className="flex flex-col items-center justify-center text-white/60 px-2">
-                    <span className="text-xs font-medium whitespace-nowrap">
+                    <span className="text-sm font-medium whitespace-nowrap">
                       {formatMatchDate(match.date)}
                     </span>
-                    <span className="text-xs text-white/40">vs</span>
                   </div>
                 )}
               </div>
