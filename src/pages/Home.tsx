@@ -279,6 +279,14 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [api]);
 
+  useEffect(() => {
+    if (!api) return;
+
+    api.on("select", () => {
+      setActiveIndex(api.selectedScrollSnap());
+    });
+  }, [api]);
+
   return (
     <div className="min-h-screen animate-fade-in pt-14 pb-24">
       <section className="relative w-full h-[calc(100vw*500/1500)] max-h-[500px] overflow-hidden">
@@ -289,9 +297,6 @@ export default function Home() {
           }}
           className="w-full h-full"
           setApi={setApi}
-          onSelect={(api) => {
-            setActiveIndex(api?.selectedScrollSnap() || 0);
-          }}
         >
           <CarouselContent>
             {slides.map((slide) => (
