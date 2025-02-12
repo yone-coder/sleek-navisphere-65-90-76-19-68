@@ -22,6 +22,30 @@ function generateVerificationCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
+function formatPhoneNumber(phoneNumber: string): string {
+  // Remove all non-digit characters
+  const cleaned = phoneNumber.replace(/\D/g, '');
+  
+  // If the number doesn't start with '+' or country code, add '+1' (US/Canada)
+  if (!phoneNumber.startsWith('+')) {
+    // If it's a 10-digit number, add +1
+    if (cleaned.length === 10) {
+      return `+1${cleaned}`;
+    }
+    // If it's already 11 digits starting with 1
+    if (cleaned.length === 11 && cleaned.startsWith('1')) {
+      return `+${cleaned}`;
+    }
+  }
+  
+  // If it already has a '+', just clean it and return
+  if (phoneNumber.startsWith('+')) {
+    return `+${cleaned}`;
+  }
+  
+  throw new Error('Invalid phone number format. Please use a valid international format (e.g., +1XXXXXXXXXX)');
+}
+
 serve(async (req) => {
   console.log('Received request:', req.method);
   
@@ -46,8 +70,12 @@ serve(async (req) => {
       throw new Error('Either email or phone number must be provided');
     }
 
+    // Validate and format phone number if method is phone
+    const formattedPhoneNumber = method === 'phone' ? formatPhoneNumber(phoneNumber) : null;
+    console.log('Formatted phone number:', formattedPhoneNumber);
+
     const verificationCode = generateVerificationCode();
-    const contactMethod = method === 'email' ? email : phoneNumber;
+    const contactMethod = method === 'email' ? email : formattedPhoneNumber;
     
     console.log(`Generating verification code for ${method}:`, contactMethod);
     console.log('Generated code:', verificationCode);
@@ -80,7 +108,7 @@ serve(async (req) => {
       expires_at: expiresAt,
       verified: false,
       email: method === 'email' ? email : 'placeholder@temp.com', // Always provide an email
-      phone: method === 'phone' ? phoneNumber : null
+      phone: method === 'phone' ? formattedPhoneNumber : null
     };
 
     console.log('Inserting verification code:', insertData);
@@ -121,9 +149,10 @@ serve(async (req) => {
       }
       console.log('Email sent successfully:', emailData);
     } else {
+      console.log('Sending SMS to:', formattedPhoneNumber);
       const { sid: smsData, error: smsError } = await twilioClient.messages.create({
         body: `Your verification code is: ${verificationCode}. This code will expire in 10 minutes.`,
-        to: phoneNumber,
+        to: formattedPhoneNumber!,
         from: Deno.env.get('TWILIO_PHONE_NUMBER') || '',
       });
 
