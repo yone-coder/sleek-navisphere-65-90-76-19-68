@@ -41,32 +41,32 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
-      if (signupMethod === 'email') {
-        const { error } = await supabase.auth.signInWithOtp({
-          email,
-        });
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-verification`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          },
+          body: JSON.stringify({
+            method: signupMethod,
+            email: signupMethod === 'email' ? email : undefined,
+            phoneNumber: signupMethod === 'phone' ? phoneNumber : undefined,
+          }),
+        }
+      );
 
-        if (error) throw error;
-
-        toast({
-          title: "Verification code sent",
-          description: `We've sent a verification code to ${email}`,
-        });
-      } else {
-        // Ensure phone number is in E.164 format
-        const formattedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+${phoneNumber}`;
-        
-        const { error } = await supabase.auth.signInWithOtp({
-          phone: formattedPhone,
-        });
-
-        if (error) throw error;
-
-        toast({
-          title: "Verification code sent",
-          description: `We've sent a verification code to ${formattedPhone}`,
-        });
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send verification code');
       }
+
+      toast({
+        title: "Verification code sent",
+        description: `We've sent a verification code to ${signupMethod === 'email' ? email : phoneNumber}`,
+      });
       
       setStep(2);
     } catch (error: any) {
@@ -85,14 +85,9 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
-      const contactMethod = signupMethod === 'email' ? email : phoneNumber;
-      const formattedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+${phoneNumber}`;
-      
-      const { data, error } = await supabase.auth.verifyOtp({
-        phone: signupMethod === 'phone' ? formattedPhone : undefined,
-        email: signupMethod === 'email' ? email : undefined,
+      const { data, error } = await supabase.auth.signInWithOtp({
+        [signupMethod]: signupMethod === 'email' ? email : phoneNumber,
         token: verificationCode,
-        type: 'sms',
       });
 
       if (error) throw error;
