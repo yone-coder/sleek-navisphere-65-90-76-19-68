@@ -476,6 +476,8 @@ export default function Home() {
         </div>
       </section>
 
+      <MatchesSection matches={matches} />
+
       <section className="py-6 px-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold px-2">Community Feed</h2>
@@ -691,3 +693,10 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+            ))}
+          </div>
+        </ScrollArea>
+      </section>
+    </div>
+  );
+}
