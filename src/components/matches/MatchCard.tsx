@@ -1,10 +1,17 @@
+
 import { useState } from "react";
-import { Trophy, Globe, Clock, Check, User, Heart, MessageSquare, Share2, Star, Users } from "lucide-react";
+import { 
+  Trophy, Globe, Clock, Check, User, Heart, MessageSquare, Share2, Star, Users,
+  ChevronDown, ChevronUp, TrendingUp, Medal, Whistle, Activity, ShieldAlert
+} from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { Match } from "./types";
 import { format, isValid, parseISO } from "date-fns";
+import { useToast } from "@/hooks/use-toast";
 
 interface MatchCardProps {
   match: Match;
@@ -12,6 +19,8 @@ interface MatchCardProps {
 
 export const MatchCard = ({ match }: MatchCardProps) => {
   const [isFollowing, setIsFollowing] = useState<{ [key: string]: boolean }>({});
+  const [showStats, setShowStats] = useState(false);
+  const { toast } = useToast();
 
   const calculateTimeLeft = (matchDate: string) => {
     if (match.status !== 'upcoming') return '';
@@ -40,6 +49,27 @@ export const MatchCard = ({ match }: MatchCardProps) => {
       ...prev,
       [playerName]: !prev[playerName]
     }));
+    toast({
+      title: isFollowing[playerName] ? "Unfollowed" : "Following",
+      description: `You are ${isFollowing[playerName] ? "no longer following" : "now following"} ${playerName}`,
+    });
+  };
+
+  const handleShare = () => {
+    const shareText = `Check out this match: ${match.opponents[0].name} vs ${match.opponents[1].name} at ${match.championship}!`;
+    if (navigator.share) {
+      navigator.share({
+        title: 'Match Details',
+        text: shareText,
+        url: window.location.href,
+      }).catch(console.error);
+    } else {
+      navigator.clipboard.writeText(shareText);
+      toast({
+        title: "Link copied!",
+        description: "Match details copied to clipboard",
+      });
+    }
   };
 
   return (
@@ -155,6 +185,22 @@ export const MatchCard = ({ match }: MatchCardProps) => {
                     >
                       {isFollowing[opponent.name] ? 'Following' : 'Follow'}
                     </button>
+                    
+                    {/* Recent Form */}
+                    <div className="flex items-center justify-center gap-0.5 mt-1">
+                      {opponent.stats.split('').map((result, idx) => (
+                        <span 
+                          key={idx}
+                          className={cn(
+                            "w-2 h-2 rounded-full",
+                            result === 'W' && "bg-green-500",
+                            result === 'L' && "bg-red-500",
+                            result === 'D' && "bg-yellow-500"
+                          )}
+                          title={result === 'W' ? 'Win' : result === 'L' ? 'Loss' : 'Draw'}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -164,6 +210,56 @@ export const MatchCard = ({ match }: MatchCardProps) => {
                 {formatMatchDate(match.date)}
               </span>
             </div>
+          </div>
+
+          {/* Match Statistics */}
+          <div className="space-y-2">
+            <button
+              onClick={() => setShowStats(!showStats)}
+              className="w-full flex items-center justify-between text-xs font-medium text-white/80 hover:text-white transition-colors"
+            >
+              <span className="flex items-center gap-1">
+                <Activity className="w-3 h-3" />
+                Match Statistics
+              </span>
+              {showStats ? (
+                <ChevronUp className="w-4 h-4" />
+              ) : (
+                <ChevronDown className="w-4 h-4" />
+              )}
+            </button>
+            
+            {showStats && (
+              <div className="space-y-2 bg-white/5 rounded-lg p-3 animate-fade-in">
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between text-xs text-white/60">
+                    <span>Head-to-Head Wins</span>
+                    <span>Recent Form</span>
+                  </div>
+                  <div className="relative h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div 
+                      className="absolute left-0 top-0 h-full bg-blue-500"
+                      style={{ width: '60%' }}
+                    />
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-2 text-[10px] text-white/80">
+                  <div className="flex items-center gap-1">
+                    <Medal className="w-3 h-3 text-yellow-400" />
+                    <span>Rank Diff: 5</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <TrendingUp className="w-3 h-3 text-green-400" />
+                    <span>Form: Better</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Whistle className="w-3 h-3 text-blue-400" />
+                    <span>Referee: TBA</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {match.predictions && (
@@ -212,10 +308,13 @@ export const MatchCard = ({ match }: MatchCardProps) => {
             <div className="flex items-center gap-2">
               {match.status === 'live' && (
                 <button className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-red-600 transition-colors">
-                  Watch
+                  Watch Live
                 </button>
               )}
-              <button className="text-white/60 hover:text-white transition-colors">
+              <button 
+                onClick={handleShare}
+                className="text-white/60 hover:text-white transition-colors"
+              >
                 <Share2 className="w-4 h-4" />
               </button>
             </div>
