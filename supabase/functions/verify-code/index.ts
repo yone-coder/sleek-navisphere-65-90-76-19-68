@@ -23,18 +23,17 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    // Find the verification code with more detailed logging
-    const query = supabaseClient
+    // Find the verification code
+    console.log('Searching for verification code:', { method, contact, code });
+    
+    const { data: verificationData, error: verificationError } = await supabaseClient
       .from('verification_codes')
       .select()
       .eq(method === 'email' ? 'email' : 'phone', contact)
       .eq('code', code)
       .eq('verified', false)
-      .gt('expires_at', new Date().toISOString());
-
-    console.log('Executing query:', query.toSQL());
-
-    const { data: verificationData, error: verificationError } = await query.maybeSingle();
+      .gt('expires_at', new Date().toISOString())
+      .maybeSingle();
 
     if (verificationError) {
       console.error('Verification query error:', verificationError);
