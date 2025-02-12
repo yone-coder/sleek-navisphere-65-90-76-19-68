@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -85,14 +86,38 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
-      const { data, error } = await supabase.auth.signInWithOtp({
+      // First verify the code against our database
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/verify-code`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          },
+          body: JSON.stringify({
+            method: signupMethod,
+            contact: signupMethod === 'email' ? email : phoneNumber,
+            code: verificationCode,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to verify code');
+      }
+
+      // Now sign in with Supabase
+      const { data: authData, error: authError } = await supabase.auth.signInWithOtp({
         [signupMethod]: signupMethod === 'email' ? email : phoneNumber,
         token: verificationCode,
       });
 
-      if (error) throw error;
+      if (authError) throw authError;
 
-      if (data.user) {
+      if (authData.user) {
         toast({
           title: "Verification successful",
           description: "Your contact information has been verified.",
