@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -42,28 +41,16 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-verification`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          },
-          body: JSON.stringify({
-            method: signupMethod,
-            email: signupMethod === 'email' ? email : undefined,
-            phoneNumber: signupMethod === 'phone' ? phoneNumber : undefined,
-          }),
-        }
-      );
+      const { data, error } = await supabase.functions.invoke('send-verification', {
+        body: {
+          method: signupMethod,
+          email: signupMethod === 'email' ? email : undefined,
+          phoneNumber: signupMethod === 'phone' ? phoneNumber : undefined,
+        },
+      });
 
-      const data = await response.json();
+      if (error) throw error;
       
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to send verification code');
-      }
-
       toast({
         title: "Verification code sent",
         description: `We've sent a verification code to ${signupMethod === 'email' ? email : phoneNumber}`,
@@ -87,32 +74,20 @@ export default function SignUp() {
     
     try {
       // First verify the code against our database
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/verify-code`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          },
-          body: JSON.stringify({
-            method: signupMethod,
-            contact: signupMethod === 'email' ? email : phoneNumber,
-            code: verificationCode,
-          }),
-        }
-      );
+      const { data, error: verifyError } = await supabase.functions.invoke('verify-code', {
+        body: {
+          method: signupMethod,
+          contact: signupMethod === 'email' ? email : phoneNumber,
+          code: verificationCode,
+        },
+      });
 
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to verify code');
-      }
+      if (verifyError) throw verifyError;
 
       // Now sign in with Supabase
-      const { data: authData, error: authError } = await supabase.auth.signInWithOtp({
-        [signupMethod]: signupMethod === 'email' ? email : phoneNumber,
-        code: verificationCode, // Changed from token to code
+      const { data: authData, error: authError } = await supabase.auth.signInWithPasswordless({
+        email: signupMethod === 'email' ? email : undefined,
+        phone: signupMethod === 'phone' ? phoneNumber : undefined,
       });
 
       if (authError) throw authError;
