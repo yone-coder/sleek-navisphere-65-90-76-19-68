@@ -134,26 +134,9 @@ serve(async (req) => {
       );
     }
 
-    // Mark the code as verified
-    const { error: updateError } = await supabaseClient
-      .from('verification_codes')
-      .update({ verified: true })
-      .eq('id', verificationData.id)
-      .select()
-      .single();
-
-    if (updateError) {
-      console.error('Error updating verification status:', updateError);
-      return new Response(
-        JSON.stringify({ error: 'Failed to verify code' }),
-        { 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          status: 500
-        }
-      );
-    }
-
-    console.log('Successfully verified code:', verificationData.id);
+    // Return success without marking the code as verified yet
+    // It will be marked as verified after successful OTP sign-in
+    console.log('Code is valid:', verificationData.id);
 
     return new Response(
       JSON.stringify({ 
