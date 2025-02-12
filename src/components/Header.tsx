@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -170,32 +171,6 @@ export const Header = () => {
           >
             Lovable
           </Link>
-
-          <NavigationMenu className="hidden md:flex">
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-sm truncate max-w-[150px]">{t('nav.products')}</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="grid gap-3 p-4 w-[400px]">
-                    <Link to="/features" className="block p-3 space-y-1 hover:bg-accent rounded-md">
-                      <div className="font-medium truncate">{t('nav.features')}</div>
-                      <div className="text-sm text-muted-foreground truncate">{t('features.discover')}</div>
-                    </Link>
-                    <Link to="/pricing" className="block p-3 space-y-1 hover:bg-accent rounded-md">
-                      <div className="font-medium truncate">{t('nav.pricing')}</div>
-                      <div className="text-sm text-muted-foreground truncate">{t('pricing.plans')}</div>
-                    </Link>
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link to="/about" className="px-4 py-2 text-sm truncate block max-w-[120px]">{t('nav.about')}</Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link to="/contact" className="px-4 py-2 text-sm truncate block max-w-[120px]">{t('nav.contact')}</Link>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">
