@@ -5,7 +5,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Match } from "./types";
-import { format } from "date-fns";
+import { format, isValid, parseISO } from "date-fns";
 
 interface MatchCardProps {
   match: Match;
@@ -16,10 +16,24 @@ export const MatchCard = ({ match }: MatchCardProps) => {
 
   const calculateTimeLeft = (matchDate: string) => {
     if (match.status !== 'upcoming') return '';
-    const diff = new Date(matchDate).getTime() - new Date().getTime();
+    const date = parseISO(matchDate);
+    if (!isValid(date)) return '';
+    
+    const diff = date.getTime() - new Date().getTime();
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     return `${hours}h ${minutes}m`;
+  };
+
+  const formatMatchDate = (dateString: string) => {
+    try {
+      const date = parseISO(dateString);
+      if (!isValid(date)) return '';
+      return format(date, "d/M/y");
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return '';
+    }
   };
 
   const toggleFollow = (playerName: string) => {
@@ -149,7 +163,7 @@ export const MatchCard = ({ match }: MatchCardProps) => {
                 {index === 0 && (
                   <div className="flex flex-col items-center justify-center text-white/60">
                     <span className="text-xs font-medium">
-                      {format(new Date(match.date), "d/M/y")}
+                      {formatMatchDate(match.date)}
                     </span>
                   </div>
                 )}
