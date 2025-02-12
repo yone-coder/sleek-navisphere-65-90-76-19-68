@@ -1,3 +1,4 @@
+
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Carousel,
@@ -273,7 +274,7 @@ export default function Home() {
 
     const interval = setInterval(() => {
       api.scrollNext();
-    }, 5000); // Change slide every 5 seconds
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [api]);
@@ -288,7 +289,7 @@ export default function Home() {
           }}
           className="w-full h-full"
           setApi={setApi}
-          onSelect={() => {
+          onSelect={(api) => {
             setActiveIndex(api?.selectedScrollSnap() || 0);
           }}
         >
@@ -305,25 +306,25 @@ export default function Home() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
-            <div 
-              className="flex gap-3 relative transition-transform duration-500 ease-in-out"
-              style={{ 
-                transform: `translateX(${activeIndex === slides.length - 1 ? 0 : activeIndex * -12}px)`
-              }}
-            >
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+            <div className="flex gap-3">
               {slides.map((_, index) => (
                 <button
                   key={index}
                   aria-label={`Go to slide ${index + 1}`}
-                  className={`w-2 h-2 rounded-full transition-all duration-500 ease-in-out transform
+                  onClick={() => api?.scrollTo(index)}
+                  className={`
+                    w-3 h-3 rounded-full transition-all duration-300
                     ${activeIndex === index 
-                      ? "bg-[#9b87f5] scale-125 shadow-lg animate-scale-in" 
-                      : "bg-white/60 hover:bg-white/80 hover:scale-110"
-                    }`}
-                  onClick={() => {
-                    api?.scrollTo(index);
-                  }}
+                      ? "bg-white scale-125 shadow-lg" 
+                      : "bg-white/50 hover:bg-white/80"
+                    }
+                    ${activeIndex === index 
+                      ? "animate-[scale-in_0.2s_ease-out]" 
+                      : ""}
+                    transform hover:scale-110
+                    focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent
+                  `}
                 />
               ))}
             </div>
