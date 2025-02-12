@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/carousel";
 import { useState } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
-import { Trophy, Users, Radio, Gamepad, Video, List, MoreHorizontal, Calendar, Award, CheckCircle, XCircle, Clock, User, ArrowUpRight } from "lucide-react";
+import { Trophy, Users, Radio, Gamepad, Video, List, MoreHorizontal, Calendar, Award, CheckCircle, XCircle, Clock, User, ArrowUpRight, MessageSquare, RefreshCw, Heart, Share2 } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
