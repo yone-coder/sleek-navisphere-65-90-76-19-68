@@ -1,8 +1,7 @@
-
 import { useState } from "react";
 import { 
   Trophy, Globe, Clock, Check, User, Heart, MessageSquare, Share2, Star, Users,
-  ChevronDown, ChevronUp, TrendingUp, Medal, Whistle, Activity, ShieldAlert
+  ChevronDown, ChevronUp, TrendingUp, Medal, Flag, Activity
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -254,7 +253,7 @@ export const MatchCard = ({ match }: MatchCardProps) => {
                     <span>Form: Better</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <Whistle className="w-3 h-3 text-blue-400" />
+                    <Flag className="w-3 h-3 text-blue-400" />
                     <span>Referee: TBA</span>
                   </div>
                 </div>
