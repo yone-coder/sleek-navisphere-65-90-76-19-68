@@ -2,13 +2,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { Resend } from "npm:resend@2.0.0"
-import twilio from 'npm:twilio@4.19.0'
 
 const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
-const twilioClient = twilio(
-  Deno.env.get('TWILIO_ACCOUNT_SID'),
-  Deno.env.get('TWILIO_AUTH_TOKEN')
-);
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -99,19 +94,6 @@ serve(async (req) => {
         throw new Error(`Email error: ${emailError.message}`);
       }
       console.log('Email sent successfully:', emailData);
-    } else {
-      // Send SMS using Twilio
-      const { sid: smsData, error: smsError } = await twilioClient.messages.create({
-        body: `Your verification code is: ${verificationCode}. This code will expire in 10 minutes.`,
-        to: phoneNumber,
-        from: Deno.env.get('TWILIO_PHONE_NUMBER'),
-      });
-
-      if (smsError) {
-        console.error('SMS sending error:', smsError);
-        throw new Error(`SMS error: ${smsError.message}`);
-      }
-      console.log('SMS sent successfully:', smsData);
     }
 
     return new Response(
