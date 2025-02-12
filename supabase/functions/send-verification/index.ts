@@ -20,26 +20,25 @@ function generateVerificationCode(): string {
 }
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders })
+    return new Response(null, { headers: corsHeaders });
   }
 
-  let supabaseClient;
-
   try {
-    const { email, phoneNumber, method } = await req.json()
-    const verificationCode = generateVerificationCode()
-    const contactMethod = method === 'email' ? email : phoneNumber
+    const { email, phoneNumber, method } = await req.json();
+    const verificationCode = generateVerificationCode();
+    const contactMethod = method === 'email' ? email : phoneNumber;
     
     console.log(`Generating verification code for ${method}:`, contactMethod);
     console.log('Generated code:', verificationCode);
     
-    supabaseClient = createClient(
+    const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
+    );
 
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString()
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
     console.log('Expiration time:', expiresAt);
 
     // First, invalidate all existing unverified codes for this contact method
@@ -120,7 +119,7 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200 
       }
-    )
+    );
 
   } catch (error) {
     console.error('Error in send-verification function:', error);
@@ -130,14 +129,6 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500
       }
-    )
-  } finally {
-    if (supabaseClient) {
-      try {
-        await supabaseClient.auth.signOut();
-      } catch (error) {
-        console.error('Error cleaning up Supabase client:', error);
-      }
-    }
+    );
   }
-})
+});
