@@ -17,6 +17,8 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import NewsDetail from "./pages/NewsDetail";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminBanners from "./pages/admin/AdminBanners";
 
 const queryClient = new QueryClient();
@@ -25,7 +27,9 @@ const queryClient = new QueryClient();
 const AppContent = () => {
   const location = useLocation();
   const hideHeaderRoutes = ['/login', '/signup'];
-  const shouldShowHeader = !hideHeaderRoutes.includes(location.pathname);
+  const isAdminRoute = location.pathname.startsWith('/admin');
+  const shouldShowHeader = !hideHeaderRoutes.includes(location.pathname) && !isAdminRoute;
+  const shouldShowBottomNav = !isAdminRoute;
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
@@ -40,10 +44,21 @@ const AppContent = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/news/:id" element={<NewsDetail />} />
-        <Route path="/admin/banners" element={<AdminBanners />} />
+        
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="banners" element={<AdminBanners />} />
+          <Route path="users" element={<div className="p-8">Users Management (Coming Soon)</div>} />
+          <Route path="content" element={<div className="p-8">Content Management (Coming Soon)</div>} />
+          <Route path="data" element={<div className="p-8">Data Management (Coming Soon)</div>} />
+          <Route path="settings" element={<div className="p-8">Settings (Coming Soon)</div>} />
+          <Route path="system" element={<div className="p-8">System Management (Coming Soon)</div>} />
+        </Route>
+        
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <BottomNav />
+      {shouldShowBottomNav && <BottomNav />}
     </div>
   );
 };

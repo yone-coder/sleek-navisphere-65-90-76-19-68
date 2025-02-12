@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -185,7 +184,7 @@ export default function AdminBanners() {
   };
 
   return (
-    <div className="container mx-auto p-6 pt-20">
+    <div className="p-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Manage Banners</h1>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
