@@ -2,11 +2,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { Resend } from "npm:resend@2.0.0"
-import { Twilio } from "npm:twilio@4.22.0"
+import * as twilio from "npm:twilio@4.22.0"
 
 // Initialize services
 const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
-const twilio = new Twilio(
+const twilioClient = twilio.default(
   Deno.env.get('TWILIO_ACCOUNT_SID') || '',
   Deno.env.get('TWILIO_AUTH_TOKEN') || ''
 );
@@ -116,7 +116,7 @@ serve(async (req) => {
       }
       console.log('Email sent successfully:', emailData);
     } else {
-      const { sid: smsData, error: smsError } = await twilio.messages.create({
+      const { sid: smsData, error: smsError } = await twilioClient.messages.create({
         body: `Your verification code is: ${verificationCode}. This code will expire in 10 minutes.`,
         to: phoneNumber,
         from: Deno.env.get('TWILIO_PHONE_NUMBER') || '',
