@@ -88,17 +88,16 @@ export default function SignUp() {
       console.log('Verifying code for:', contactMethod);
       console.log('Verification code entered:', verificationCode);
       
-      // First, fetch the most recent unverified code
+      // Query the verification code
       const { data, error } = await supabase
         .from('verification_codes')
         .select('*')
         .eq('email', contactMethod)
         .eq('code', verificationCode)
         .eq('verified', false)
-        .gt('expires_at', new Date().toISOString())
+        .gte('expires_at', new Date().toISOString())
         .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle();
+        .limit(1);
 
       console.log('Verification query result:', { data, error });
 
@@ -112,7 +111,7 @@ export default function SignUp() {
         return;
       }
 
-      if (!data) {
+      if (!data || data.length === 0) {
         console.log('No matching verification code found');
         toast({
           title: "Invalid Code",
@@ -122,13 +121,14 @@ export default function SignUp() {
         return;
       }
 
-      console.log('Valid verification code found:', data);
+      const verificationRecord = data[0];
+      console.log('Valid verification code found:', verificationRecord);
 
       // Mark code as verified
       const { error: updateError } = await supabase
         .from('verification_codes')
         .update({ verified: true })
-        .eq('id', data.id);
+        .eq('id', verificationRecord.id);
 
       if (updateError) {
         console.error('Update error:', updateError);
