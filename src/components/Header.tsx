@@ -59,7 +59,7 @@ export const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 0);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -90,9 +90,8 @@ export const Header = () => {
 
   if (user) {
     return (
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 py-2 
-        ${scrolled ? 'bg-white shadow-sm' : 'bg-white/0'}`}>
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 h-14 px-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button 
@@ -128,7 +127,7 @@ export const Header = () => {
               <Input
                 type="search"
                 placeholder="Search..."
-                className="w-full pl-10 pr-4 h-10 bg-white/80 focus:bg-white"
+                className="w-full pl-10 pr-4 h-10 bg-white"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -159,11 +158,8 @@ export const Header = () => {
   }
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 md:px-6 py-2 md:py-3 
-      ${scrolled ? 'bg-white shadow-sm' : 'bg-white/0'}`}
-    >
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
+      <div className="max-w-7xl mx-auto flex items-center justify-between h-14 px-4 md:px-6">
         <div className="flex items-center gap-4 md:gap-8">
           <Link 
             to="/" 
