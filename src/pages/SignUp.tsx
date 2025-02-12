@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -28,6 +27,7 @@ export default function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
 
   const passwordStrength = zxcvbn(password);
   const strengthColor = {
@@ -38,7 +38,23 @@ export default function SignUp() {
     4: "bg-green-500"
   };
 
+  useEffect(() => {
+    if (resendTimer > 0) {
+      const timer = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [resendTimer]);
+
   const handleSendVerification = async () => {
+    if (resendTimer > 0) {
+      toast({
+        title: "Please wait",
+        description: `You can request another code in ${resendTimer} seconds.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     
     try {
@@ -51,6 +67,11 @@ export default function SignUp() {
       });
 
       if (response.error) {
+        if (response.error.message?.includes('rate limit') || response.status === 429) {
+          const waitSeconds = 42; // Default wait time if not specified
+          setResendTimer(waitSeconds);
+          throw new Error(`Please wait ${waitSeconds} seconds before requesting another code.`);
+        }
         throw new Error(response.error.message || 'Failed to send verification code');
       }
       
@@ -59,6 +80,7 @@ export default function SignUp() {
         description: `We've sent a verification code to ${signupMethod === 'email' ? email : phoneNumber}`,
       });
       
+      setResendTimer(42);
       setStep(2);
     } catch (error: any) {
       console.error('Error sending verification:', error);
@@ -76,7 +98,6 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
-      // First verify the code against our database
       const verifyResponse = await supabase.functions.invoke('verify-code', {
         body: {
           method: signupMethod,
@@ -91,7 +112,6 @@ export default function SignUp() {
 
       console.log('Code verified successfully:', verifyResponse);
 
-      // Now sign in with Supabase using OTP
       const signInPayload = signupMethod === 'email' 
         ? { email, options: { data: { email_verified: true } } }
         : { phone: phoneNumber, options: { data: { phone_verified: true } } };
@@ -100,7 +120,6 @@ export default function SignUp() {
 
       if (authError) throw authError;
 
-      // Get the session after sign in
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
       if (sessionError) throw sessionError;
@@ -130,7 +149,6 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
-      // First check if we have a valid session
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
       if (sessionError) throw sessionError;
@@ -139,7 +157,6 @@ export default function SignUp() {
         throw new Error('No active session found. Please verify your contact information again.');
       }
 
-      // Now update the user profile
       const { data, error } = await supabase.auth.updateUser({
         password,
         data: {
@@ -358,14 +375,20 @@ export default function SignUp() {
               </div>
               <p className="text-center text-sm text-muted-foreground mt-4">
                 Didn't receive the code?{' '}
-                <Button 
-                  variant="link" 
-                  className="p-0 h-auto font-semibold" 
-                  onClick={handleSendVerification}
-                  disabled={isLoading}
-                >
-                  Resend
-                </Button>
+                {resendTimer > 0 ? (
+                  <span className="text-muted-foreground">
+                    Wait {resendTimer}s to resend
+                  </span>
+                ) : (
+                  <Button 
+                    variant="link" 
+                    className="p-0 h-auto font-semibold" 
+                    onClick={handleSendVerification}
+                    disabled={isLoading || resendTimer > 0}
+                  >
+                    Resend
+                  </Button>
+                )}
               </p>
             </div>
 
