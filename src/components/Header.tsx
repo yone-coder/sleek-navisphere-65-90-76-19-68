@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -53,6 +54,15 @@ export const Header = () => {
   const [user, setUser] = useState<any>(null);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+
+  // Filter languages based on search query
+  const filteredLanguages = Object.entries(languageDetails).filter(([code, details]) => {
+    const search = searchQuery.toLowerCase();
+    return (
+      details.nativeName.toLowerCase().includes(search) ||
+      details.languageInNative.toLowerCase().includes(search)
+    );
+  });
 
   useEffect(() => {
     const handleScroll = () => {
