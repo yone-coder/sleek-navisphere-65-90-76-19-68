@@ -16,7 +16,19 @@ serve(async (req) => {
   try {
     const { method, contact, code } = await req.json();
     
-    console.log(`Verifying code for ${method}:`, contact);
+    if (!method || !contact || !code) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Missing required fields: method, contact, and code are required' 
+        }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 400
+        }
+      );
+    }
+    
+    console.log(`Verifying code for ${method}:`, contact, 'Code:', code);
     
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
@@ -24,20 +36,28 @@ serve(async (req) => {
     );
 
     // Find the verification code
-    console.log('Searching for verification code:', { method, contact, code });
+    const now = new Date().toISOString();
+    console.log('Current timestamp:', now);
     
     const { data: verificationData, error: verificationError } = await supabaseClient
       .from('verification_codes')
-      .select()
+      .select('*')
       .eq(method === 'email' ? 'email' : 'phone', contact)
       .eq('code', code)
       .eq('verified', false)
-      .gt('expires_at', new Date().toISOString())
+      .gt('expires_at', now)
+      .order('created_at', { ascending: false })
       .maybeSingle();
 
     if (verificationError) {
       console.error('Verification query error:', verificationError);
-      throw new Error(`Database error: ${verificationError.message}`);
+      return new Response(
+        JSON.stringify({ error: 'Database error occurred' }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 500
+        }
+      );
     }
 
     console.log('Verification data found:', verificationData);
@@ -46,11 +66,11 @@ serve(async (req) => {
       // Check if there's an expired code
       const { data: expiredCode } = await supabaseClient
         .from('verification_codes')
-        .select()
+        .select('*')
         .eq(method === 'email' ? 'email' : 'phone', contact)
         .eq('code', code)
         .eq('verified', false)
-        .lte('expires_at', new Date().toISOString())
+        .lte('expires_at', now)
         .maybeSingle();
 
       if (expiredCode) {
@@ -66,7 +86,6 @@ serve(async (req) => {
         );
       }
 
-      console.error('No valid verification code found');
       return new Response(
         JSON.stringify({ 
           error: 'Invalid verification code. Please check and try again.' 
@@ -82,14 +101,20 @@ serve(async (req) => {
     const { error: updateError } = await supabaseClient
       .from('verification_codes')
       .update({ verified: true })
-      .eq('id', verificationData.id);
+      .eq('id', verificationData.id)
+      .select()
+      .single();
 
     if (updateError) {
       console.error('Error updating verification status:', updateError);
-      throw new Error(`Database error: ${updateError.message}`);
+      return new Response(
+        JSON.stringify({ error: 'Failed to verify code' }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 500
+        }
+      );
     }
-
-    console.log('Code verified successfully');
 
     return new Response(
       JSON.stringify({ 
@@ -105,7 +130,9 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in verify-code function:', error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: 'An unexpected error occurred during verification' 
+      }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500
