@@ -23,27 +23,33 @@ function generateVerificationCode(): string {
 }
 
 function formatPhoneNumber(phoneNumber: string): string {
-  // Remove all non-digit characters
-  const cleaned = phoneNumber.replace(/\D/g, '');
+  // Remove all non-digit characters and spaces
+  let cleaned = phoneNumber.replace(/[\s\-\(\)\.]/g, '');
   
-  // If the number doesn't start with '+' or country code, add '+1' (US/Canada)
-  if (!phoneNumber.startsWith('+')) {
-    // If it's a 10-digit number, add +1
-    if (cleaned.length === 10) {
-      return `+1${cleaned}`;
-    }
-    // If it's already 11 digits starting with 1
-    if (cleaned.length === 11 && cleaned.startsWith('1')) {
-      return `+${cleaned}`;
-    }
+  // If it starts with +, remove it temporarily
+  if (cleaned.startsWith('+')) {
+    cleaned = cleaned.substring(1);
   }
   
-  // If it already has a '+', just clean it and return
-  if (phoneNumber.startsWith('+')) {
+  // Remove any leading zeros
+  cleaned = cleaned.replace(/^0+/, '');
+  
+  // If it starts with a country code (e.g., 1 for US/Canada)
+  if (cleaned.startsWith('1') && cleaned.length === 11) {
     return `+${cleaned}`;
   }
   
-  throw new Error('Invalid phone number format. Please use a valid international format (e.g., +1XXXXXXXXXX)');
+  // If it's a 10-digit number, assume US/Canada
+  if (cleaned.length === 10) {
+    return `+1${cleaned}`;
+  }
+  
+  // If it's already in international format
+  if (cleaned.length >= 11 && cleaned.length <= 15) {
+    return `+${cleaned}`;
+  }
+  
+  throw new Error('Invalid phone number format. Please use a valid international format (e.g., +1XXXXXXXXXX) or a 10-digit US/Canada number');
 }
 
 serve(async (req) => {
