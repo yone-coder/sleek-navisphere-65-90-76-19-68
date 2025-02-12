@@ -1,5 +1,6 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const twilioAccountSid = Deno.env.get('TWILIO_ACCOUNT_SID')
 const twilioAuthToken = Deno.env.get('TWILIO_AUTH_TOKEN')
@@ -19,17 +20,17 @@ serve(async (req) => {
   try {
     const { phoneNumber } = await req.json()
     
+    if (!twilioAccountSid || !twilioAuthToken || !twilioPhoneNumber) {
+      throw new Error('Missing Twilio credentials')
+    }
+
     // Generate a 6-digit verification code
     const verificationCode = Math.floor(100000 + Math.random() * 900000).toString()
     
     // Set expiration time (15 minutes from now)
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString()
 
-    // Create client with Twilio credentials
-    const client = {
-      accountSid: twilioAccountSid,
-      authToken: twilioAuthToken,
-    }
+    console.log('Attempting to send SMS to:', phoneNumber)
 
     // Send SMS via Twilio
     const twilioResponse = await fetch(
@@ -42,20 +43,23 @@ serve(async (req) => {
         },
         body: new URLSearchParams({
           To: phoneNumber,
-          From: twilioPhoneNumber!,
+          From: twilioPhoneNumber,
           Body: `Your verification code is: ${verificationCode}`,
         }),
       }
     )
 
+    const twilioData = await twilioResponse.json()
+    console.log('Twilio API response:', twilioData)
+
     if (!twilioResponse.ok) {
-      throw new Error('Failed to send SMS')
+      throw new Error(`Twilio API error: ${JSON.stringify(twilioData)}`)
     }
 
     // Store verification code in database
     const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
     const { error: dbError } = await supabaseClient
@@ -67,10 +71,11 @@ serve(async (req) => {
       })
 
     if (dbError) {
+      console.error('Database error:', dbError)
       throw new Error('Failed to store verification code')
     }
 
-    console.log(`SMS sent to ${phoneNumber} with code ${verificationCode}`)
+    console.log(`SMS sent successfully to ${phoneNumber} with code ${verificationCode}`)
     
     return new Response(
       JSON.stringify({ message: 'Verification code sent successfully' }),
