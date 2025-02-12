@@ -299,10 +299,16 @@ const matches: Match[] = [
       {
         name: "Michael Rodriguez",
         photo: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&h=100&q=80",
+        country: "Mexico",
+        rank: 8,
+        stats: "35W - 15L"
       },
       {
         name: "Emma Watson",
         photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&h=100&q=80",
+        country: "UK",
+        rank: 12,
+        stats: "31W - 18L"
       }
     ],
     spectators: 856,
@@ -321,18 +327,24 @@ const matches: Match[] = [
       {
         name: "John Doe",
         photo: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=100&h=100&q=80",
-        score: 3
+        score: 3,
+        country: "Canada",
+        rank: 15,
+        stats: "28W - 20L"
       },
       {
         name: "Jane Smith",
         photo: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&h=100&q=80",
-        score: 1
+        score: 1,
+        country: "Australia",
+        rank: 18,
+        stats: "25W - 22L"
       }
     ],
     spectators: 2543,
     likes: 867,
     comments: 156
-  },
+  }
 ];
 
 export default function Home() {
