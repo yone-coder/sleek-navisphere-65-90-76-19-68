@@ -238,16 +238,22 @@ const matches: Match[] = [
         photo: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&h=100&q=80",
         score: 2,
         country: "USA",
+        city: "New York",
         rank: 3,
-        stats: "WWLWW"
+        stats: "WWLWW",
+        wins: 42,
+        losses: 12
       },
       {
         name: "Maria Garcia",
         photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80",
         score: 1,
         country: "Spain",
+        city: "Madrid",
         rank: 5,
-        stats: "WLWWL"
+        stats: "WLWWL",
+        wins: 38,
+        losses: 15
       }
     ],
     spectators: 24879,
@@ -272,15 +278,21 @@ const matches: Match[] = [
         name: "Michael Rodriguez",
         photo: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&h=100&q=80",
         country: "Mexico",
+        city: "Mexico City",
         rank: 8,
-        stats: "WLWWL"
+        stats: "WLWWL",
+        wins: 35,
+        losses: 18
       },
       {
         name: "Emma Watson",
         photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&h=100&q=80",
         country: "UK",
+        city: "London",
         rank: 12,
-        stats: "WWWLL"
+        stats: "WWWLL",
+        wins: 31,
+        losses: 20
       }
     ],
     spectators: 856,
@@ -306,16 +318,22 @@ const matches: Match[] = [
         photo: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=100&h=100&q=80",
         score: 3,
         country: "Canada",
+        city: "Toronto",
         rank: 15,
-        stats: "WWWLW"
+        stats: "WWWLW",
+        wins: 28,
+        losses: 22
       },
       {
         name: "Jane Smith",
         photo: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&h=100&q=80",
         score: 1,
         country: "Australia",
+        city: "Sydney",
         rank: 18,
-        stats: "WLLWW"
+        stats: "WLLWW",
+        wins: 25,
+        losses: 24
       }
     ],
     spectators: 2543,
@@ -555,7 +573,7 @@ export default function Home() {
               return (
                 <div
                   key={tournament.id}
-                  className="group flex-none w-[300px] animate-fade-in cursor-pointer"
+                  className="group flex-none w-[300px] shrink-0 animate-fade-in cursor-pointer"
                   onClick={() => navigate(`/tournament/${tournament.id}`)}
                 >
                   <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:translate-y-[-2px] group-hover:border-gray-200">
