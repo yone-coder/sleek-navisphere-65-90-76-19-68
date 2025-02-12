@@ -312,25 +312,30 @@ export default function Home() {
             ))}
           </CarouselContent>
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
-            <div className="flex gap-3">
+            <div className="flex items-center gap-4 px-4 py-2 rounded-full bg-black/20 backdrop-blur-sm">
               {slides.map((_, index) => (
                 <button
                   key={index}
                   aria-label={`Go to slide ${index + 1}`}
                   onClick={() => api?.scrollTo(index)}
                   className={`
-                    w-3 h-3 rounded-full transition-all duration-300
+                    relative w-2.5 h-2.5 rounded-full 
+                    transition-all duration-300 ease-spring
                     ${activeIndex === index 
-                      ? "bg-white scale-125 shadow-lg" 
-                      : "bg-white/50 hover:bg-white/80"
+                      ? "bg-[#9b87f5] w-8" 
+                      : "bg-white/60 hover:bg-white/80"
                     }
                     ${activeIndex === index 
                       ? "animate-[scale-in_0.2s_ease-out]" 
                       : ""}
-                    transform hover:scale-110
-                    focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent
+                    group
+                    focus:outline-none focus:ring-2 focus:ring-[#9b87f5] focus:ring-offset-2 focus:ring-offset-transparent
                   `}
-                />
+                >
+                  {activeIndex === index && (
+                    <span className="absolute inset-0 rounded-full bg-[#9b87f5] animate-pulse opacity-50" />
+                  )}
+                </button>
               ))}
             </div>
           </div>
