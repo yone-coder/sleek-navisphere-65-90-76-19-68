@@ -41,6 +41,8 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
+      console.log('Sending verification to:', signupMethod === 'email' ? email : phoneNumber);
+      
       const { error } = await supabase.functions.invoke('send-verification', {
         body: { 
           email: signupMethod === 'email' ? email : undefined,
@@ -49,7 +51,10 @@ export default function SignUp() {
         }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error invoking function:', error);
+        throw error;
+      }
 
       if (signupMethod === 'email') {
         toast({

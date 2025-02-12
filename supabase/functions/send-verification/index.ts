@@ -40,13 +40,25 @@ serve(async (req) => {
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString()
     console.log('Expiration time:', expiresAt);
 
+    // Invalidate any existing unverified codes for this email/phone
+    const { error: invalidateError } = await supabaseClient
+      .from('verification_codes')
+      .update({ verified: true })
+      .eq('email', contactMethod)
+      .is('verified', false);
+
+    if (invalidateError) {
+      console.error('Error invalidating old codes:', invalidateError);
+    }
+
     // Store verification code
     const { data: insertData, error: dbError } = await supabaseClient
       .from('verification_codes')
       .insert({
-        email: method === 'email' ? email : phoneNumber, // Store phone number in email field
+        email: contactMethod,
         code: verificationCode,
-        expires_at: expiresAt
+        expires_at: expiresAt,
+        verified: false
       })
       .select()
       .single();
