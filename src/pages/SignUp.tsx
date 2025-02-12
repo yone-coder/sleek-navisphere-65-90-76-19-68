@@ -84,10 +84,15 @@ export default function SignUp() {
 
       if (verifyError) throw verifyError;
 
-      // Now sign in with Supabase
-      const { data: authData, error: authError } = await supabase.auth.signInWithPasswordless({
+      // Now sign in with Supabase using OTP
+      const { data: authData, error: authError } = await supabase.auth.signInWithOtp({
         email: signupMethod === 'email' ? email : undefined,
         phone: signupMethod === 'phone' ? phoneNumber : undefined,
+        options: {
+          data: {
+            verificationCode
+          }
+        }
       });
 
       if (authError) throw authError;
