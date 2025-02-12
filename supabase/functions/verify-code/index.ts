@@ -35,10 +35,20 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
+    // Find all verification codes for this contact to debug
+    const { data: allCodes } = await supabaseClient
+      .from('verification_codes')
+      .select('*')
+      .eq(method === 'email' ? 'email' : 'phone', contact)
+      .order('created_at', { ascending: false });
+    
+    console.log('All verification codes found for contact:', allCodes);
+
     // Find the verification code
     const now = new Date().toISOString();
     console.log('Current timestamp:', now);
     
+    // First check for exact matches that aren't expired
     const { data: verificationData, error: verificationError } = await supabaseClient
       .from('verification_codes')
       .select('*')
@@ -62,6 +72,7 @@ serve(async (req) => {
 
     console.log('Verification data found:', verificationData);
 
+    // If no valid code found, check why
     if (!verificationData) {
       // Check if there's an expired code
       const { data: expiredCode } = await supabaseClient
@@ -69,12 +80,37 @@ serve(async (req) => {
         .select('*')
         .eq(method === 'email' ? 'email' : 'phone', contact)
         .eq('code', code)
-        .eq('verified', false)
-        .lte('expires_at', now)
+        .order('created_at', { ascending: false })
         .maybeSingle();
 
-      if (expiredCode) {
-        console.error('Found expired code:', expiredCode);
+      if (!expiredCode) {
+        console.log('No code found at all');
+        return new Response(
+          JSON.stringify({ 
+            error: 'Invalid verification code. Please check and try again.' 
+          }),
+          { 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            status: 400
+          }
+        );
+      }
+
+      if (expiredCode.verified) {
+        console.log('Code already verified:', expiredCode);
+        return new Response(
+          JSON.stringify({ 
+            error: 'This code has already been used. Please request a new one.' 
+          }),
+          { 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            status: 400
+          }
+        );
+      }
+
+      if (new Date(expiredCode.expires_at) <= new Date(now)) {
+        console.log('Code expired:', expiredCode);
         return new Response(
           JSON.stringify({ 
             error: 'Verification code has expired. Please request a new one.' 
@@ -86,9 +122,10 @@ serve(async (req) => {
         );
       }
 
+      console.log('Unexpected state for code:', expiredCode);
       return new Response(
         JSON.stringify({ 
-          error: 'Invalid verification code. Please check and try again.' 
+          error: 'Invalid verification code state. Please request a new one.' 
         }),
         { 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -115,6 +152,8 @@ serve(async (req) => {
         }
       );
     }
+
+    console.log('Successfully verified code:', verificationData.id);
 
     return new Response(
       JSON.stringify({ 
