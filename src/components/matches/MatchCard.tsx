@@ -1,11 +1,11 @@
+
 import { useState } from "react";
 import { 
-  Trophy, Globe, Clock, Check, User, Heart, MessageSquare, Share2, Star, Users,
+  Trophy, Globe, Clock, Check, User, Heart, MessageSquare, Share2, Users,
   ChevronDown, ChevronUp, TrendingUp, Medal, Flag, Activity
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { Match } from "./types";
@@ -99,6 +99,10 @@ export const MatchCard = ({ match }: MatchCardProps) => {
               <div className="flex items-center gap-1">
                 <Globe className="w-3 h-3" />
                 <span>{match.venue}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                <span>{match.time}</span>
               </div>
             </div>
             <Badge 
@@ -246,7 +250,7 @@ export const MatchCard = ({ match }: MatchCardProps) => {
                 <div className="grid grid-cols-3 gap-2 text-[10px] text-white/80">
                   <div className="flex items-center gap-1">
                     <Medal className="w-3 h-3 text-yellow-400" />
-                    <span>Rank Diff: 5</span>
+                    <span>Rank Diff: {Math.abs(match.opponents[0].rank - match.opponents[1].rank)}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <TrendingUp className="w-3 h-3 text-green-400" />
@@ -274,18 +278,6 @@ export const MatchCard = ({ match }: MatchCardProps) => {
                 <span>{match.predictions.firstPlayer}%</span>
                 <span>{match.predictions.secondPlayer}%</span>
               </div>
-            </div>
-          )}
-
-          {match.highlights && (
-            <div className="space-y-1.5 bg-yellow-500/10 rounded-lg p-3">
-              <p className="text-xs font-medium text-yellow-400">Highlights</p>
-              {match.highlights.map((highlight, index) => (
-                <div key={index} className="flex items-center gap-1.5 text-xs text-yellow-300/80">
-                  <Star className="w-3 h-3 text-yellow-400" />
-                  <span>{highlight}</span>
-                </div>
-              ))}
             </div>
           )}
 

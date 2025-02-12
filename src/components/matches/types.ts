@@ -14,6 +14,7 @@ export interface Match {
   phase: string;
   status: 'live' | 'upcoming' | 'done';
   date: string;
+  time: string;
   venue: string;
   location: string;
   opponents: Opponent[];
@@ -24,5 +25,4 @@ export interface Match {
     firstPlayer: number;
     secondPlayer: number;
   };
-  highlights?: string[];
 }

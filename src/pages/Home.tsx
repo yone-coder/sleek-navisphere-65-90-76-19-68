@@ -228,7 +228,8 @@ const matches: Match[] = [
     championship: "World Championship 2025",
     phase: "Quarter Finals",
     status: "live",
-    date: "Feb 12, 2025 • 18:00 GMT",
+    date: "Feb 12, 2025",
+    time: "18:00 GMT",
     venue: "Maple Arena",
     location: "Toronto",
     opponents: [
@@ -238,7 +239,7 @@ const matches: Match[] = [
         score: 2,
         country: "USA",
         rank: 3,
-        stats: "42W - 12L"
+        stats: "WWLWW"
       },
       {
         name: "Maria Garcia",
@@ -246,27 +247,24 @@ const matches: Match[] = [
         score: 1,
         country: "Spain",
         rank: 5,
-        stats: "38W - 14L"
+        stats: "WLWWL"
       }
     ],
     spectators: 24879,
     likes: 3452,
-    comments: 2,
+    comments: 234,
     predictions: {
       firstPlayer: 62,
       secondPlayer: 38
-    },
-    highlights: [
-      "Epic rally in 3rd set",
-      "Spectacular ace to win the match"
-    ]
+    }
   },
   {
     id: 2,
     championship: "Spring Tournament Elite",
     phase: "Semi Finals",
     status: "upcoming",
-    date: "Tomorrow, 15:00",
+    date: "Tomorrow",
+    time: "15:00 GMT",
     venue: "Olympic Stadium",
     location: "London",
     opponents: [
@@ -275,19 +273,23 @@ const matches: Match[] = [
         photo: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&h=100&q=80",
         country: "Mexico",
         rank: 8,
-        stats: "35W - 15L"
+        stats: "WLWWL"
       },
       {
         name: "Emma Watson",
         photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&h=100&q=80",
         country: "UK",
         rank: 12,
-        stats: "31W - 18L"
+        stats: "WWWLL"
       }
     ],
     spectators: 856,
     likes: 234,
-    comments: 45
+    comments: 45,
+    predictions: {
+      firstPlayer: 55,
+      secondPlayer: 45
+    }
   },
   {
     id: 3,
@@ -295,6 +297,7 @@ const matches: Match[] = [
     phase: "Finals",
     status: "done",
     date: "Yesterday",
+    time: "20:00 GMT",
     venue: "Grand Arena",
     location: "New York",
     opponents: [
@@ -304,7 +307,7 @@ const matches: Match[] = [
         score: 3,
         country: "Canada",
         rank: 15,
-        stats: "28W - 20L"
+        stats: "WWWLW"
       },
       {
         name: "Jane Smith",
@@ -312,12 +315,16 @@ const matches: Match[] = [
         score: 1,
         country: "Australia",
         rank: 18,
-        stats: "25W - 22L"
+        stats: "WLLWW"
       }
     ],
     spectators: 2543,
     likes: 867,
-    comments: 156
+    comments: 156,
+    predictions: {
+      firstPlayer: 48,
+      secondPlayer: 52
+    }
   }
 ];
 
