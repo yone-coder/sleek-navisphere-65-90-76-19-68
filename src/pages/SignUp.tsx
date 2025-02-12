@@ -91,9 +91,11 @@ export default function SignUp() {
       console.log('Code verified successfully:', verifyResponse);
 
       // Now sign in with Supabase using OTP
-      const { data: authData, error: authError } = await supabase.auth.signInWithOtp({
-        [signupMethod]: signupMethod === 'email' ? email : phoneNumber,
-      });
+      const signInPayload = signupMethod === 'email' 
+        ? { email }
+        : { phone: phoneNumber };
+
+      const { data: authData, error: authError } = await supabase.auth.signInWithOtp(signInPayload);
 
       if (authError) throw authError;
 
