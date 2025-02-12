@@ -100,7 +100,7 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
-      // First verify the code
+      // First verify the code with our edge function
       const verifyResponse = await supabase.functions.invoke('verify-code', {
         body: {
           method: signupMethod,
@@ -116,9 +116,9 @@ export default function SignUp() {
       console.log('Code verified successfully:', verifyResponse);
 
       // After successful verification, proceed with OTP sign in
-      const { error: signInError } = await supabase.auth.signInWithOtp({
-        [signupMethod]: signupMethod === 'email' ? email : phoneNumber,
-        token: verificationCode,
+      const { data: { session }, error: signInError } = await supabase.auth.signInWithOtp({
+        email: signupMethod === 'email' ? email : undefined,
+        phone: signupMethod === 'phone' ? phoneNumber : undefined,
         options: {
           data: {
             [signupMethod === 'email' ? 'email_verified' : 'phone_verified']: true
@@ -127,6 +127,10 @@ export default function SignUp() {
       });
 
       if (signInError) throw signInError;
+
+      if (!session) {
+        throw new Error('Failed to establish session after verification');
+      }
 
       toast({
         title: "Verification successful",
@@ -151,6 +155,7 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
+      // First check if we have an active session
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
       if (sessionError) throw sessionError;
@@ -159,6 +164,7 @@ export default function SignUp() {
         throw new Error('No active session found. Please verify your contact information again.');
       }
 
+      // Now update the user with the password and username
       const { data, error } = await supabase.auth.updateUser({
         password,
         data: {
