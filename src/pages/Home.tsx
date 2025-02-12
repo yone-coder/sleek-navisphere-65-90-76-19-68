@@ -6,7 +6,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { useState, useEffect } from "react";
-import { Trophy, Users, Radio, Gamepad, Video, List, MoreHorizontal, Calendar, Award, CheckCircle, XCircle, Clock, User, ArrowUpRight, MessageSquare, RefreshCw, Heart, Share2, Check } from "lucide-react";
+import { Trophy, Users, Radio, Gamepad, Video, List, MoreHorizontal, Calendar, Award, CheckCircle, XCircle, Clock, User, ArrowUpRight, MessageSquare, RefreshCw, Heart, Share2, Check, Globe, Star } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -220,28 +220,72 @@ const newsItems = [
   }
 ];
 
+interface Opponent {
+  name: string;
+  photo: string;
+  score?: number;
+  country: string;
+  rank: number;
+  stats: string;
+}
+
+interface Match {
+  id: number;
+  championship: string;
+  phase: string;
+  status: 'live' | 'upcoming' | 'done';
+  date: string;
+  venue: string;
+  location: string;
+  opponents: Opponent[];
+  spectators: number;
+  likes: number;
+  comments: number;
+  predictions?: {
+    firstPlayer: number;
+    secondPlayer: number;
+  };
+  highlights?: string[];
+}
+
 const matches: Match[] = [
   {
     id: 1,
-    championship: "Winter Championship 2024",
+    championship: "World Championship 2025",
     phase: "Quarter Finals",
     status: "live",
-    date: "Now",
+    date: "Feb 12, 2025 • 18:00 GMT",
+    venue: "Maple Arena",
+    location: "Toronto",
     opponents: [
       {
-        name: "Alex Chen",
+        name: "Alex Johnson",
         photo: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&h=100&q=80",
-        score: 2
+        score: 2,
+        country: "USA",
+        rank: 3,
+        stats: "42W - 12L"
       },
       {
-        name: "Sarah Williams",
+        name: "Maria Garcia",
         photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80",
-        score: 1
+        score: 1,
+        country: "Spain",
+        rank: 5,
+        stats: "38W - 14L"
       }
     ],
-    spectators: 1234,
-    likes: 423,
-    comments: 89
+    spectators: 24879,
+    likes: 3452,
+    comments: 2,
+    predictions: {
+      firstPlayer: 62,
+      secondPlayer: 38
+    },
+    highlights: [
+      "Epic rally in 3rd set",
+      "Spectacular ace to win the match"
+    ]
   },
   {
     id: 2,
@@ -249,6 +293,8 @@ const matches: Match[] = [
     phase: "Semi Finals",
     status: "upcoming",
     date: "Tomorrow, 15:00",
+    venue: "Olympic Stadium",
+    location: "London",
     opponents: [
       {
         name: "Michael Rodriguez",
@@ -269,6 +315,8 @@ const matches: Match[] = [
     phase: "Finals",
     status: "done",
     date: "Yesterday",
+    venue: "Grand Arena",
+    location: "New York",
     opponents: [
       {
         name: "John Doe",
@@ -713,8 +761,8 @@ export default function Home() {
                           {match.status !== "upcoming" && (
                             <span className={cn(
                               "text-lg font-bold",
-                              match.status === "done" && 
-                              match.opponents[index].score === Math.max(...match.opponents.map(o => o.score || 0)) 
+                              match.status === "done" 
+                              && match.opponents[index].score === Math.max(...match.opponents.map(o => o.score || 0)) 
                                 ? "text-green-600" 
                                 : "text-gray-600"
                             )}>
