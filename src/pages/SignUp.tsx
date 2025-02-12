@@ -43,30 +43,39 @@ export default function SignUp() {
     try {
       console.log('Sending verification to:', signupMethod === 'email' ? email : phoneNumber);
       
-      const { error } = await supabase.functions.invoke('send-verification', {
-        body: { 
-          email: signupMethod === 'email' ? email : undefined,
-          phoneNumber: signupMethod === 'phone' ? phoneNumber : undefined,
-          method: signupMethod
-        }
-      });
-
-      if (error) {
-        console.error('Error invoking function:', error);
-        throw error;
-      }
-
       if (signupMethod === 'email') {
+        const { error } = await supabase.functions.invoke('send-verification', {
+          body: { 
+            email,
+            method: 'email'
+          }
+        });
+
+        if (error) {
+          console.error('Error invoking function:', error);
+          throw error;
+        }
+
         toast({
           title: "Verification code sent",
           description: `We've sent a verification code to ${email}`,
         });
       } else {
+        const { error } = await supabase.functions.invoke('send-sms', {
+          body: { phoneNumber }
+        });
+
+        if (error) {
+          console.error('Error sending SMS:', error);
+          throw error;
+        }
+
         toast({
           title: "Verification code sent",
           description: `We've sent a verification code to ${phoneNumber}`,
         });
       }
+      
       setStep(2);
     } catch (error) {
       console.error('Error sending verification:', error);
@@ -88,7 +97,6 @@ export default function SignUp() {
       console.log('Verifying code for:', contactMethod);
       console.log('Verification code entered:', verificationCode);
       
-      // Query the verification code
       const { data, error } = await supabase
         .from('verification_codes')
         .select('*')
@@ -124,7 +132,6 @@ export default function SignUp() {
       const verificationRecord = data[0];
       console.log('Valid verification code found:', verificationRecord);
 
-      // Mark code as verified
       const { error: updateError } = await supabase
         .from('verification_codes')
         .update({ verified: true })
