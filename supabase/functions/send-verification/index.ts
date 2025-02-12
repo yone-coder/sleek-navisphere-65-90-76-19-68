@@ -75,14 +75,19 @@ serve(async (req) => {
     }
 
     // Store new verification code
-    const { data: insertData, error: dbError } = await supabaseClient
+    const insertData = {
+      code: verificationCode,
+      expires_at: expiresAt,
+      verified: false,
+      email: method === 'email' ? email : 'placeholder@temp.com', // Always provide an email
+      phone: method === 'phone' ? phoneNumber : null
+    };
+
+    console.log('Inserting verification code:', insertData);
+    
+    const { data, error: dbError } = await supabaseClient
       .from('verification_codes')
-      .insert({
-        [method === 'email' ? 'email' : 'phone']: contactMethod,
-        code: verificationCode,
-        expires_at: expiresAt,
-        verified: false
-      })
+      .insert(insertData)
       .select()
       .single();
 
