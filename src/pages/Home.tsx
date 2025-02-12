@@ -13,6 +13,69 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 
+const tweets = [
+  {
+    id: 1,
+    author: {
+      name: "Sarah Williams",
+      handle: "@sarahw",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80"
+    },
+    content: "Just finished an amazing tournament! The competition was fierce but our team pulled through. Thanks to everyone who supported us! 🏆 #ESports #Gaming",
+    timestamp: "2h ago",
+    stats: {
+      likes: 1243,
+      retweets: 328,
+      comments: 64
+    }
+  },
+  {
+    id: 2,
+    author: {
+      name: "Alex Chen",
+      handle: "@alexc",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&h=100&q=80"
+    },
+    content: "New tournament season is about to start! Who's ready for some intense matches? The prize pool this year is insane! 🎮 #GamingCommunity",
+    timestamp: "4h ago",
+    stats: {
+      likes: 892,
+      retweets: 245,
+      comments: 42
+    }
+  },
+  {
+    id: 3,
+    author: {
+      name: "Emma Watson",
+      handle: "@emmaw",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&h=100&q=80"
+    },
+    content: "Just announced: Our team will be competing in the upcoming Winter Championship! The preparation starts now. 🎯 #ESports #Competition",
+    timestamp: "6h ago",
+    stats: {
+      likes: 1567,
+      retweets: 423,
+      comments: 89
+    }
+  },
+  {
+    id: 4,
+    author: {
+      name: "Michael Rodriguez",
+      handle: "@michaelr",
+      avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&h=100&q=80"
+    },
+    content: "Big updates coming to the tournament platform! You won't believe what we've been working on. Stay tuned! ✨ #Gaming #Innovation",
+    timestamp: "8h ago",
+    stats: {
+      likes: 2134,
+      retweets: 567,
+      comments: 123
+    }
+  }
+];
+
 const slides = [
   {
     id: 1,
@@ -141,7 +204,7 @@ const newsItems = [
   },
   {
     id: 2,
-    title: "Spring Championship Registration Open",
+    title: "Spring Tournament Registration Open",
     excerpt: "Register now for the biggest tournament of the season with $50,000 prize pool",
     category: "Tournaments",
     date: "4h ago",
@@ -322,6 +385,66 @@ export default function Home() {
             );
           })}
         </div>
+      </section>
+
+      <section className="py-6 px-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold px-2">Community Feed</h2>
+          <button className="text-[#9b87f5] hover:text-[#7E69AB] flex items-center gap-1 text-sm font-medium transition-colors">
+            View all <ArrowUpRight className="w-4 h-4" />
+          </button>
+        </div>
+        <ScrollArea className="w-full whitespace-nowrap">
+          <div className="flex space-x-4 pb-4">
+            {tweets.map((tweet) => (
+              <div
+                key={tweet.id}
+                className="flex-none w-[350px] animate-fade-in"
+              >
+                <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-xl hover:translate-y-[-2px]">
+                  <div className="p-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex gap-3">
+                        <Avatar className="h-10 w-10 border-2 border-[#9b87f5]">
+                          <AvatarImage src={tweet.author.avatar} alt={tweet.author.name} />
+                          <AvatarFallback>
+                            <User className="w-5 h-5 text-gray-400" />
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col">
+                          <span className="font-semibold text-gray-900">{tweet.author.name}</span>
+                          <span className="text-sm text-gray-500">{tweet.author.handle}</span>
+                        </div>
+                      </div>
+                      <span className="text-xs text-gray-500">{tweet.timestamp}</span>
+                    </div>
+                    <p className="mt-3 text-gray-600 text-sm whitespace-normal line-clamp-3">
+                      {tweet.content}
+                    </p>
+                    <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                      <button className="flex items-center gap-1 text-gray-500 hover:text-[#9b87f5] transition-colors text-sm">
+                        <MessageSquare className="w-4 h-4" />
+                        <span>{tweet.stats.comments}</span>
+                      </button>
+                      <button className="flex items-center gap-1 text-gray-500 hover:text-green-500 transition-colors text-sm">
+                        <RefreshCw className="w-4 h-4" />
+                        <span>{tweet.stats.retweets}</span>
+                      </button>
+                      <button className="flex items-center gap-1 text-gray-500 hover:text-red-500 transition-colors text-sm">
+                        <Heart className="w-4 h-4" />
+                        <span>{tweet.stats.likes}</span>
+                      </button>
+                      <button className="text-gray-500 hover:text-[#9b87f5] transition-colors">
+                        <Share2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </section>
 
       <section className="py-6 px-6">
