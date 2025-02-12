@@ -6,12 +6,13 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { useState, useEffect } from "react";
-import { Trophy, Users, Radio, Gamepad, Video, List, MoreHorizontal, Calendar, Award, CheckCircle, XCircle, Clock, User, ArrowUpRight, MessageSquare, RefreshCw, Heart, Share2 } from "lucide-react";
+import { Trophy, Users, Radio, Gamepad, Video, List, MoreHorizontal, Calendar, Award, CheckCircle, XCircle, Clock, User, ArrowUpRight, MessageSquare, RefreshCw, Heart, Share2, Check } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 const tweets = [
   {
@@ -219,7 +220,7 @@ const newsItems = [
   }
 ];
 
-const matches = [
+const matches: Match[] = [
   {
     id: 1,
     championship: "Winter Championship 2024",
