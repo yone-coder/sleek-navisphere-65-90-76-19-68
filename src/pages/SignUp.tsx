@@ -41,47 +41,39 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
-      console.log('Sending verification to:', signupMethod === 'email' ? email : phoneNumber);
-      
       if (signupMethod === 'email') {
-        const { error } = await supabase.functions.invoke('send-verification', {
-          body: { 
-            email,
-            method: 'email'
-          }
+        const { error } = await supabase.auth.signInWithOtp({
+          email,
         });
 
-        if (error) {
-          console.error('Error invoking function:', error);
-          throw error;
-        }
+        if (error) throw error;
 
         toast({
           title: "Verification code sent",
           description: `We've sent a verification code to ${email}`,
         });
       } else {
-        const { error } = await supabase.functions.invoke('send-sms', {
-          body: { phoneNumber }
+        // Ensure phone number is in E.164 format
+        const formattedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+${phoneNumber}`;
+        
+        const { error } = await supabase.auth.signInWithOtp({
+          phone: formattedPhone,
         });
 
-        if (error) {
-          console.error('Error sending SMS:', error);
-          throw error;
-        }
+        if (error) throw error;
 
         toast({
           title: "Verification code sent",
-          description: `We've sent a verification code to ${phoneNumber}`,
+          description: `We've sent a verification code to ${formattedPhone}`,
         });
       }
       
       setStep(2);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error sending verification:', error);
       toast({
         title: "Error",
-        description: "Failed to send verification code. Please try again.",
+        description: error.message || "Failed to send verification code. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -94,70 +86,29 @@ export default function SignUp() {
     
     try {
       const contactMethod = signupMethod === 'email' ? email : phoneNumber;
-      console.log('Verifying code for:', contactMethod);
-      console.log('Verification code entered:', verificationCode);
+      const formattedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+${phoneNumber}`;
       
-      const { data, error } = await supabase
-        .from('verification_codes')
-        .select('*')
-        .eq('email', contactMethod)
-        .eq('code', verificationCode)
-        .eq('verified', false)
-        .gte('expires_at', new Date().toISOString())
-        .order('created_at', { ascending: false })
-        .limit(1);
-
-      console.log('Verification query result:', { data, error });
-
-      if (error) {
-        console.error('Database error:', error);
-        toast({
-          title: "Verification failed",
-          description: "An error occurred while verifying the code. Please try again.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      if (!data || data.length === 0) {
-        console.log('No matching verification code found');
-        toast({
-          title: "Invalid Code",
-          description: "The verification code is invalid or has expired. Please request a new code.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      const verificationRecord = data[0];
-      console.log('Valid verification code found:', verificationRecord);
-
-      const { error: updateError } = await supabase
-        .from('verification_codes')
-        .update({ verified: true })
-        .eq('id', verificationRecord.id);
-
-      if (updateError) {
-        console.error('Update error:', updateError);
-        toast({
-          title: "Verification failed",
-          description: "An error occurred while verifying the code. Please try again.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      console.log('Verification code marked as verified');
-      toast({
-        title: "Verification successful",
-        description: "Your contact information has been verified.",
+      const { data, error } = await supabase.auth.verifyOtp({
+        phone: signupMethod === 'phone' ? formattedPhone : undefined,
+        email: signupMethod === 'email' ? email : undefined,
+        token: verificationCode,
+        type: 'sms',
       });
-      setStep(3);
-    } catch (error) {
+
+      if (error) throw error;
+
+      if (data.user) {
+        toast({
+          title: "Verification successful",
+          description: "Your contact information has been verified.",
+        });
+        setStep(3);
+      }
+    } catch (error: any) {
       console.error('Verification error:', error);
       toast({
         title: "Verification failed",
-        description: "An error occurred while verifying the code. Please try again.",
+        description: error.message || "Failed to verify code. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -178,37 +129,27 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
+      const { data, error } = await supabase.auth.updateUser({
         password,
-        options: {
-          data: {
-            username,
-          },
+        data: {
+          username,
         },
       });
 
-      if (error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-        return;
-      }
+      if (error) throw error;
 
       if (data.user) {
         toast({
           title: "Success",
-          description: "Please check your email to verify your account.",
+          description: "Your account has been created successfully.",
         });
         navigate('/');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Signup error:', error);
       toast({
         title: "Error",
-        description: "An unexpected error occurred. Please try again.",
+        description: error.message || "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
     } finally {
