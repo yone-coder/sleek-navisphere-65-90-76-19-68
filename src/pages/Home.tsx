@@ -3,9 +3,9 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  type CarouselApi,
 } from "@/components/ui/carousel";
-import { useState } from "react";
-import type { CarouselApi } from "@/components/ui/carousel";
+import { useState, useEffect } from "react";
 import { Trophy, Users, Radio, Gamepad, Video, List, MoreHorizontal, Calendar, Award, CheckCircle, XCircle, Clock, User, ArrowUpRight, MessageSquare, RefreshCw, Heart, Share2 } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
@@ -268,11 +268,11 @@ export default function Home() {
     navigate(`/news/${news.id}`, { state: { news } });
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!api) return;
 
     const interval = setInterval(() => {
-      api.next();
+      api.scrollNext();
     }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(interval);
