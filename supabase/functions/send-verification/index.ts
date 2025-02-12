@@ -24,6 +24,8 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders })
   }
 
+  let supabaseClient;
+
   try {
     const { email, phoneNumber, method } = await req.json()
     const verificationCode = generateVerificationCode()
@@ -32,7 +34,7 @@ serve(async (req) => {
     console.log(`Generating verification code for ${method}:`, contactMethod);
     console.log('Generated code:', verificationCode);
     
-    const supabaseClient = createClient(
+    supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
@@ -49,6 +51,7 @@ serve(async (req) => {
 
     if (invalidateError) {
       console.error('Error invalidating old codes:', invalidateError);
+      throw invalidateError;
     }
 
     // Store verification code
@@ -126,5 +129,14 @@ serve(async (req) => {
         status: 500
       }
     )
+  } finally {
+    // Clean up resources
+    if (supabaseClient) {
+      try {
+        await supabaseClient.auth.signOut();
+      } catch (error) {
+        console.error('Error cleaning up Supabase client:', error);
+      }
+    }
   }
 })
