@@ -16,6 +16,7 @@ import Wallet from "./pages/Wallet";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import NewsDetail from "./pages/NewsDetail";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const AppContent = () => {
         <Route path="/wallet" element={<Wallet />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/news/:id" element={<NewsDetail />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <BottomNav />
@@ -59,4 +61,3 @@ const App = () => (
 );
 
 export default App;
-

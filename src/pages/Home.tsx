@@ -11,6 +11,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 
 const slides = [
   {
@@ -166,6 +167,7 @@ const newsItems = [
 
 export default function Home() {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
 
@@ -206,6 +208,10 @@ export default function Home() {
       default:
         return "bg-gray-500";
     }
+  };
+
+  const handleNewsClick = (news: any) => {
+    navigate(`/news/${news.id}`, { state: { news } });
   };
 
   return (
@@ -433,7 +439,8 @@ export default function Home() {
             {newsItems.map((news) => (
               <div
                 key={news.id}
-                className="flex-none w-[350px] animate-fade-in"
+                className="flex-none w-[350px] animate-fade-in cursor-pointer"
+                onClick={() => handleNewsClick(news)}
               >
                 <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg">
                   <div className="relative h-[200px] overflow-hidden">
