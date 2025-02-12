@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Trophy, Globe, Clock, Check, User, Heart, MessageSquare, Share2, Star, Users } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -107,67 +106,66 @@ export const MatchCard = ({ match }: MatchCardProps) => {
         <div className="p-4 space-y-4">
           <div className="flex items-center justify-between gap-4">
             {match.opponents.map((opponent, index) => (
-              <>
-                <div key={opponent.name} className="flex-1">
-                  <div className="flex flex-col items-center text-center space-y-2">
-                    <div className="relative">
-                      <Avatar className="w-16 h-16 border-2 border-[#9b87f5] ring-1 ring-white/10">
-                        <AvatarImage 
-                          src={opponent.photo} 
-                          alt={opponent.name}
-                          className="object-cover"
-                        />
-                        <AvatarFallback>
-                          <User className="w-8 h-8 text-gray-400" />
-                        </AvatarFallback>
-                      </Avatar>
-                      <Badge 
-                        variant="secondary" 
-                        className="absolute -top-1 -right-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white border-none text-[10px] px-1.5"
-                      >
-                        #{opponent.rank}
-                      </Badge>
+              <div key={opponent.name} className="flex-1 flex items-center gap-4">
+                <div className="flex flex-col items-center text-center space-y-2">
+                  <div className="relative">
+                    <Avatar className="w-16 h-16 border-2 border-[#9b87f5] ring-1 ring-white/10">
+                      <AvatarImage 
+                        src={opponent.photo} 
+                        alt={opponent.name}
+                        className="object-cover"
+                      />
+                      <AvatarFallback>
+                        <User className="w-8 h-8 text-gray-400" />
+                      </AvatarFallback>
+                    </Avatar>
+                    <Badge 
+                      variant="secondary" 
+                      className="absolute -top-1 -right-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white border-none text-[10px] px-1.5"
+                    >
+                      #{opponent.rank}
+                    </Badge>
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <h4 className="font-bold text-sm text-white">{opponent.name}</h4>
+                    <div className="flex items-center justify-center gap-1 text-xs text-white/80">
+                      <Globe className="w-3 h-3" />
+                      <span>{opponent.country}</span>
                     </div>
-                    
-                    <div className="space-y-1">
-                      <h4 className="font-bold text-sm text-white">{opponent.name}</h4>
-                      <div className="flex items-center justify-center gap-1 text-xs text-white/80">
-                        <Globe className="w-3 h-3" />
-                        <span>{opponent.country}</span>
-                      </div>
-                      {match.status !== "upcoming" && opponent.score !== undefined && (
-                        <span className={cn(
-                          "text-2xl font-bold block",
-                          match.status === "done" && 
-                          opponent.score === Math.max(...match.opponents.map(o => o.score ?? 0)) 
-                            ? "text-green-400" 
-                            : "text-white"
-                        )}>
-                          {opponent.score}
-                        </span>
+                    {match.status !== "upcoming" && opponent.score !== undefined && (
+                      <span className={cn(
+                        "text-2xl font-bold block",
+                        match.status === "done" && 
+                        opponent.score === Math.max(...match.opponents.map(o => o.score ?? 0)) 
+                          ? "text-green-400" 
+                          : "text-white"
+                      )}>
+                        {opponent.score}
+                      </span>
+                    )}
+                    <button
+                      onClick={() => toggleFollow(opponent.name)}
+                      className={cn(
+                        "px-3 py-1 rounded-full text-xs font-medium transition-all",
+                        isFollowing[opponent.name]
+                          ? "bg-[#9b87f5] text-white"
+                          : "bg-white/10 text-white hover:bg-white/20"
                       )}
-                      <button
-                        onClick={() => toggleFollow(opponent.name)}
-                        className={cn(
-                          "px-3 py-1 rounded-full text-xs font-medium transition-all",
-                          isFollowing[opponent.name]
-                            ? "bg-[#9b87f5] text-white"
-                            : "bg-white/10 text-white hover:bg-white/20"
-                        )}
-                      >
-                        {isFollowing[opponent.name] ? 'Following' : 'Follow'}
-                      </button>
-                    </div>
+                    >
+                      {isFollowing[opponent.name] ? 'Following' : 'Follow'}
+                    </button>
                   </div>
                 </div>
                 {index === 0 && (
-                  <div className="flex flex-col items-center justify-center text-white/60">
-                    <span className="text-xs font-medium">
+                  <div className="flex flex-col items-center justify-center text-white/60 px-2">
+                    <span className="text-xs font-medium whitespace-nowrap">
                       {formatMatchDate(match.date)}
                     </span>
+                    <span className="text-xs text-white/40">vs</span>
                   </div>
                 )}
-              </>
+              </div>
             ))}
           </div>
 
