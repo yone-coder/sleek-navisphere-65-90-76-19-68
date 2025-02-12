@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -114,14 +115,18 @@ export default function SignUp() {
 
       console.log('Code verified successfully:', verifyResponse);
 
-      // After successful verification, verify the OTP with Supabase Auth
-      const { error: verifyError } = await supabase.auth.verifyOtp({
+      // After successful verification, proceed with OTP sign in
+      const { error: signInError } = await supabase.auth.signInWithOtp({
         [signupMethod]: signupMethod === 'email' ? email : phoneNumber,
         token: verificationCode,
-        type: 'signup'
+        options: {
+          data: {
+            [signupMethod === 'email' ? 'email_verified' : 'phone_verified']: true
+          }
+        }
       });
 
-      if (verifyError) throw verifyError;
+      if (signInError) throw signInError;
 
       toast({
         title: "Verification successful",
