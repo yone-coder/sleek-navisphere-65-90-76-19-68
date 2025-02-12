@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -67,8 +68,9 @@ export default function SignUp() {
       });
 
       if (response.error) {
-        if (response.error.message?.includes('rate limit') || response.status === 429) {
-          const waitSeconds = 42; // Default wait time if not specified
+        // Check if error message contains rate limit information
+        if (response.error.message?.toLowerCase().includes('rate limit')) {
+          const waitSeconds = 42; // Default wait time
           setResendTimer(waitSeconds);
           throw new Error(`Please wait ${waitSeconds} seconds before requesting another code.`);
         }
