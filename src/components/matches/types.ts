@@ -4,8 +4,11 @@ export interface Opponent {
   photo: string;
   score?: number;
   country: string;
+  city: string;
   rank: number;
   stats: string;
+  wins: number;
+  losses: number;
 }
 
 export interface Match {
