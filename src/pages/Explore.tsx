@@ -83,9 +83,9 @@ export default function Explore() {
 
       <div className="space-y-12">
         <section className="px-8">
+          <h2 className="text-2xl font-semibold mb-4">Trending Games</h2>
           <Carousel>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-semibold">Trending Games</h2>
               <div className="flex gap-2">
                 <CarouselPrevious className="static translate-y-0" />
                 <CarouselNext className="static translate-y-0" />
@@ -102,9 +102,9 @@ export default function Explore() {
         </section>
 
         <section className="px-8">
+          <h2 className="text-2xl font-semibold mb-4">Competitive Games</h2>
           <Carousel>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-semibold">Competitive Games</h2>
               <div className="flex gap-2">
                 <CarouselPrevious className="static translate-y-0" />
                 <CarouselNext className="static translate-y-0" />
@@ -121,9 +121,9 @@ export default function Explore() {
         </section>
 
         <section className="px-8">
+          <h2 className="text-2xl font-semibold mb-4">Casual Games</h2>
           <Carousel>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-semibold">Casual Games</h2>
               <div className="flex gap-2">
                 <CarouselPrevious className="static translate-y-0" />
                 <CarouselNext className="static translate-y-0" />
