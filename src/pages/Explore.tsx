@@ -1,60 +1,206 @@
-
 import { useNavigate } from "react-router-dom";
 
-const games = [
-  {
-    id: 1,
-    title: "Chess",
-    description: "A strategic board game where two players move pieces with the goal of checkmating the opponent's king.",
-    image: "https://storage.googleapis.com/a1aa/image/A0tRiJ6w8HZujXs2A-4XYcnReWkJ1hU6JyQbw-55BIE.jpg",
-    profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
-    verified: true,
-    stats: {
-      likes: "3.2K",
-      comments: "600",
-      shares: "1.1K"
+const games = {
+  boardGames: [
+    {
+      id: 1,
+      title: "Chess",
+      description: "A strategic board game where two players move pieces with the goal of checkmating the opponent's king.",
+      image: "https://storage.googleapis.com/a1aa/image/A0tRiJ6w8HZujXs2A-4XYcnReWkJ1hU6JyQbw-55BIE.jpg",
+      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      verified: true,
+      stats: {
+        likes: "3.2K",
+        comments: "600",
+        shares: "1.1K"
+      }
+    },
+    {
+      id: 2,
+      title: "Dominoes",
+      description: "A family of tile-based games played with rectangular \"domino\" tiles.",
+      image: "https://storage.googleapis.com/a1aa/image/U9cxiKWRsMwBdP7GKinlUOUdzMsKzRiFuAfG1-PCvAg.jpg",
+      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      verified: true,
+      stats: {
+        likes: "1.1K",
+        comments: "180",
+        shares: "250"
+      }
+    },
+    {
+      id: 3,
+      title: "Morpion (Tic-Tac-Toe)",
+      description: "A simple strategy game for two players, who take turns marking the spaces in a 3×3 grid.",
+      image: "https://storage.googleapis.com/a1aa/image/ILaOkYoR7hDayBWLOW1hj6X9ZkaT-UcZm24KX8P1jDY.jpg",
+      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      verified: true,
+      stats: {
+        likes: "900",
+        comments: "150",
+        shares: "200"
+      }
+    },
+    {
+      id: 4,
+      title: "Shogi",
+      description: "A Japanese strategy board game for two players, similar to chess.",
+      image: "https://storage.googleapis.com/a1aa/image/URT1V_NcnrlLxnJWpP80Ej-uYh8hMuDel6e7Pxqs_eo.jpg",
+      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      verified: true,
+      stats: {
+        likes: "1.5K",
+        comments: "250",
+        shares: "400"
+      }
     }
-  },
-  {
-    id: 2,
-    title: "Dominoes",
-    description: "A family of tile-based games played with rectangular \"domino\" tiles.",
-    image: "https://storage.googleapis.com/a1aa/image/U9cxiKWRsMwBdP7GKinlUOUdzMsKzRiFuAfG1-PCvAg.jpg",
-    profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
-    verified: true,
-    stats: {
-      likes: "1.1K",
-      comments: "180",
-      shares: "250"
+  ],
+  arcadeGames: [
+    {
+      id: 5,
+      title: "Pac-Man",
+      description: "Navigate through a maze while eating dots and avoiding ghosts in this classic arcade game.",
+      image: "https://storage.googleapis.com/a1aa/image/A0tRiJ6w8HZujXs2A-4XYcnReWkJ1hU6JyQbw-55BIE.jpg",
+      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      verified: true,
+      stats: {
+        likes: "5.2K",
+        comments: "800",
+        shares: "1.5K"
+      }
+    },
+    {
+      id: 6,
+      title: "Space Invaders",
+      description: "Defend Earth from an alien invasion in this timeless shooting game.",
+      image: "https://storage.googleapis.com/a1aa/image/U9cxiKWRsMwBdP7GKinlUOUdzMsKzRiFuAfG1-PCvAg.jpg",
+      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      verified: true,
+      stats: {
+        likes: "4.1K",
+        comments: "720",
+        shares: "950"
+      }
     }
-  },
-  {
-    id: 3,
-    title: "Morpion (Tic-Tac-Toe)",
-    description: "A simple strategy game for two players, who take turns marking the spaces in a 3×3 grid.",
-    image: "https://storage.googleapis.com/a1aa/image/ILaOkYoR7hDayBWLOW1hj6X9ZkaT-UcZm24KX8P1jDY.jpg",
-    profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
-    verified: true,
-    stats: {
-      likes: "900",
-      comments: "150",
-      shares: "200"
+  ],
+  cardGames: [
+    {
+      id: 7,
+      title: "Poker",
+      description: "A family of card games involving betting and individual play against other players.",
+      image: "https://storage.googleapis.com/a1aa/image/ILaOkYoR7hDayBWLOW1hj6X9ZkaT-UcZm24KX8P1jDY.jpg",
+      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      verified: true,
+      stats: {
+        likes: "6.5K",
+        comments: "1.2K",
+        shares: "2.1K"
+      }
+    },
+    {
+      id: 8,
+      title: "Solitaire",
+      description: "A single-player card game also known as Patience, perfect for casual gaming.",
+      image: "https://storage.googleapis.com/a1aa/image/URT1V_NcnrlLxnJWpP80Ej-uYh8hMuDel6e7Pxqs_eo.jpg",
+      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      verified: true,
+      stats: {
+        likes: "3.8K",
+        comments: "450",
+        shares: "780"
+      }
     }
-  },
-  {
-    id: 4,
-    title: "Shogi",
-    description: "A Japanese strategy board game for two players, similar to chess.",
-    image: "https://storage.googleapis.com/a1aa/image/URT1V_NcnrlLxnJWpP80Ej-uYh8hMuDel6e7Pxqs_eo.jpg",
-    profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
-    verified: true,
-    stats: {
-      likes: "1.5K",
-      comments: "250",
-      shares: "400"
+  ],
+  puzzleGames: [
+    {
+      id: 9,
+      title: "Tetris",
+      description: "Arrange falling blocks to create complete lines in this addictive puzzle game.",
+      image: "https://storage.googleapis.com/a1aa/image/A0tRiJ6w8HZujXs2A-4XYcnReWkJ1hU6JyQbw-55BIE.jpg",
+      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      verified: true,
+      stats: {
+        likes: "7.2K",
+        comments: "1.5K",
+        shares: "2.8K"
+      }
+    },
+    {
+      id: 10,
+      title: "Sudoku",
+      description: "Fill a 9×9 grid with numbers according to specific rules in this logic puzzle.",
+      image: "https://storage.googleapis.com/a1aa/image/U9cxiKWRsMwBdP7GKinlUOUdzMsKzRiFuAfG1-PCvAg.jpg",
+      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      verified: true,
+      stats: {
+        likes: "4.5K",
+        comments: "890",
+        shares: "1.2K"
+      }
     }
-  }
-];
+  ]
+};
+
+const GameSection = ({ title, games }: { title: string; games: any[] }) => (
+  <div>
+    <div className="flex justify-between items-center mb-2">
+      <h1 className="text-xl font-bold">{title}</h1>
+      <i className="fas fa-arrow-right text-xl"></i>
+    </div>
+    <div className="flex space-x-2 overflow-x-auto">
+      {games.map((game) => (
+        <div key={game.id} className="bg-white rounded-lg shadow-md overflow-hidden w-60 flex-shrink-0">
+          <div className="relative">
+            <img 
+              src={game.image} 
+              alt={`${game.title} board`} 
+              className="h-32 w-full object-cover"
+            />
+            <img 
+              src={game.profileImage} 
+              alt="Profile picture of the user" 
+              className="absolute bottom-0 left-2 transform translate-y-1/2 h-10 w-10 rounded-full border-2 border-white"
+            />
+          </div>
+          <div className="p-2 pt-6">
+            <div className="flex justify-between items-center mb-2">
+              <div>
+                <h2 className="text-sm font-bold">
+                  {game.title}
+                  {game.verified && (
+                    <span className="text-green-500">
+                      <i className="fas fa-check-circle"></i>
+                    </span>
+                  )}
+                </h2>
+              </div>
+              <button className="bg-blue-500 text-white text-xs px-2 py-1 rounded-md">
+                + Follow
+              </button>
+            </div>
+            <p className="text-gray-500 text-xs truncate-2-lines">
+              {game.description}
+            </p>
+            <div className="mt-2 flex items-center justify-between text-gray-500 text-xs">
+              <span>
+                <i className="fas fa-heart"></i> {game.stats.likes}
+              </span>
+              <span>
+                <i className="fas fa-comment"></i> {game.stats.comments}
+              </span>
+              <span>
+                <i className="fas fa-share"></i> {game.stats.shares}
+              </span>
+            </div>
+            <button className="mt-2 w-full bg-blue-500 text-white py-1 rounded-md text-sm">
+              Play Now
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 export default function Explore() {
   const navigate = useNavigate();
@@ -75,65 +221,10 @@ export default function Explore() {
       </header>
 
       <div className="max-w-7xl mx-auto space-y-8">
-        {/* Section: Board Games */}
-        <div>
-          <div className="flex justify-between items-center mb-2">
-            <h1 className="text-xl font-bold">Board Games</h1>
-            <i className="fas fa-arrow-right text-xl"></i>
-          </div>
-          <div className="flex space-x-2 overflow-x-auto">
-            {games.map((game) => (
-              <div key={game.id} className="bg-white rounded-lg shadow-md overflow-hidden w-60 flex-shrink-0">
-                <div className="relative">
-                  <img 
-                    src={game.image} 
-                    alt={`${game.title} board`} 
-                    className="h-32 w-full object-cover"
-                  />
-                  <img 
-                    src={game.profileImage} 
-                    alt="Profile picture of the user" 
-                    className="absolute bottom-0 left-2 transform translate-y-1/2 h-10 w-10 rounded-full border-2 border-white"
-                  />
-                </div>
-                <div className="p-2 pt-6">
-                  <div className="flex justify-between items-center mb-2">
-                    <div>
-                      <h2 className="text-sm font-bold">
-                        {game.title}
-                        {game.verified && (
-                          <span className="text-green-500">
-                            <i className="fas fa-check-circle"></i>
-                          </span>
-                        )}
-                      </h2>
-                    </div>
-                    <button className="bg-blue-500 text-white text-xs px-2 py-1 rounded-md">
-                      + Follow
-                    </button>
-                  </div>
-                  <p className="text-gray-500 text-xs truncate-2-lines">
-                    {game.description}
-                  </p>
-                  <div className="mt-2 flex items-center justify-between text-gray-500 text-xs">
-                    <span>
-                      <i className="fas fa-heart"></i> {game.stats.likes}
-                    </span>
-                    <span>
-                      <i className="fas fa-comment"></i> {game.stats.comments}
-                    </span>
-                    <span>
-                      <i className="fas fa-share"></i> {game.stats.shares}
-                    </span>
-                  </div>
-                  <button className="mt-2 w-full bg-blue-500 text-white py-1 rounded-md text-sm">
-                    Play Now
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <GameSection title="Board Games" games={games.boardGames} />
+        <GameSection title="Arcade Games" games={games.arcadeGames} />
+        <GameSection title="Card Games" games={games.cardGames} />
+        <GameSection title="Puzzle Games" games={games.puzzleGames} />
       </div>
 
       <style>{`
