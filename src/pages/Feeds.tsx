@@ -59,7 +59,7 @@ export default function Feeds() {
       <h1 className="text-4xl font-bold mb-8">{t('nav.feeds')}</h1>
       
       <div className="flex justify-center mb-6">
-        <div className="flex items-center bg-white dark:bg-[#1a1a1a] rounded-full p-2 relative pl-4 pr-4 shadow-sm w-full max-w-2xl">
+        <div className="flex items-center bg-white dark:bg-[#1a1a1a] rounded-full p-2 relative pl-4 pr-4 w-full">
           <div className="absolute left-0 transform -translate-x-16">
             <div className="relative">
               <Avatar className="w-10 h-10">
