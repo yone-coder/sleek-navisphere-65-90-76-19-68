@@ -59,19 +59,19 @@ export default function Feeds() {
       {/* Stories Section */}
       <div className="w-full px-4 mb-8">
         <div className="overflow-x-auto no-scrollbar">
-          <div className="flex space-x-2 min-w-min">
+          <div className="flex space-x-3 min-w-min pb-2">
             {/* Story 1 - Your Story */}
             <div className="flex flex-col items-center">
-              <div className="relative w-12 h-12">
+              <div className="relative w-16 h-16">
                 <img 
                   src="https://storage.googleapis.com/a1aa/image/GCUTXZTGWqbGpgtDgeGftMqoBVre0ZeqIO7zcxRf2iE.jpg"
                   alt="Profile picture of a person with a flower crown"
                   className="w-full h-full rounded-full border-2 border-pink-500 object-cover overflow-hidden"
-                  width="48"
-                  height="48"
+                  width="64"
+                  height="64"
                 />
-                <div className="absolute bottom-0 right-0 bg-blue-500 rounded-full w-4 h-4 flex items-center justify-center">
-                  <i className="fas fa-plus text-white text-[10px]"></i>
+                <div className="absolute bottom-0 right-0 bg-blue-500 rounded-full w-5 h-5 flex items-center justify-center">
+                  <i className="fas fa-plus text-white text-xs"></i>
                 </div>
               </div>
               <span className="text-xs mt-1 text-gray-700 dark:text-gray-300">Your Story</span>
@@ -79,13 +79,13 @@ export default function Feeds() {
 
             {/* Story 2 */}
             <div className="flex flex-col items-center">
-              <div className="relative w-12 h-12">
+              <div className="relative w-16 h-16">
                 <img 
                   src="https://storage.googleapis.com/a1aa/image/ogag8o5tu_v_24ZBFbBRzWwvdNC0ezDlrh7TSfD2PgY.jpg"
                   alt="Profile picture of a person wearing a cap"
                   className="w-full h-full rounded-full border-2 border-pink-500 object-cover overflow-hidden"
-                  width="48"
-                  height="48"
+                  width="64"
+                  height="64"
                 />
               </div>
               <span className="text-xs mt-1 text-gray-700 dark:text-gray-300">mauroh</span>
@@ -93,13 +93,13 @@ export default function Feeds() {
 
             {/* Story 3 */}
             <div className="flex flex-col items-center">
-              <div className="relative w-12 h-12">
+              <div className="relative w-16 h-16">
                 <img 
                   src="https://storage.googleapis.com/a1aa/image/_eJzSC9R0avEOAYQxoUKd6pkQ37RK_a45_h8D4yUiPE.jpg"
                   alt="Profile picture of a person smiling"
                   className="w-full h-full rounded-full border-2 border-pink-500 object-cover overflow-hidden"
-                  width="48"
-                  height="48"
+                  width="64"
+                  height="64"
                 />
               </div>
               <span className="text-xs mt-1 text-gray-700 dark:text-gray-300">debby</span>
@@ -107,13 +107,13 @@ export default function Feeds() {
 
             {/* Story 4 */}
             <div className="flex flex-col items-center">
-              <div className="relative w-12 h-12">
+              <div className="relative w-16 h-16">
                 <img 
                   src="https://storage.googleapis.com/a1aa/image/RgZqjb8-1l_k5YYDf4X3Y1sjK48m64kRu3s8TMj9jaE.jpg"
                   alt="Profile picture of a person with glasses"
                   className="w-full h-full rounded-full border-2 border-pink-500 object-cover overflow-hidden"
-                  width="48"
-                  height="48"
+                  width="64"
+                  height="64"
                 />
               </div>
               <span className="text-xs mt-1 text-gray-700 dark:text-gray-300">amy</span>
@@ -121,16 +121,86 @@ export default function Feeds() {
 
             {/* Story 5 */}
             <div className="flex flex-col items-center">
-              <div className="relative w-12 h-12">
+              <div className="relative w-16 h-16">
                 <img 
                   src="https://storage.googleapis.com/a1aa/image/x0ZyuavIdf2kwiaZhzogOdm5CKLKuORq2wiewh3bOq0.jpg"
                   alt="Profile picture with a logo"
                   className="w-full h-full rounded-full border-2 border-pink-500 object-cover overflow-hidden"
-                  width="48"
-                  height="48"
+                  width="64"
+                  height="64"
                 />
               </div>
               <span className="text-xs mt-1 text-gray-700 dark:text-gray-300">annyelle</span>
+            </div>
+
+            {/* Story 6 */}
+            <div className="flex flex-col items-center">
+              <div className="relative w-16 h-16">
+                <img 
+                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah"
+                  alt="Profile picture"
+                  className="w-full h-full rounded-full border-2 border-pink-500 object-cover overflow-hidden"
+                  width="64"
+                  height="64"
+                />
+              </div>
+              <span className="text-xs mt-1 text-gray-700 dark:text-gray-300">sarah</span>
+            </div>
+
+            {/* Story 7 */}
+            <div className="flex flex-col items-center">
+              <div className="relative w-16 h-16">
+                <img 
+                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Michael"
+                  alt="Profile picture"
+                  className="w-full h-full rounded-full border-2 border-pink-500 object-cover overflow-hidden"
+                  width="64"
+                  height="64"
+                />
+              </div>
+              <span className="text-xs mt-1 text-gray-700 dark:text-gray-300">michael</span>
+            </div>
+
+            {/* Story 8 */}
+            <div className="flex flex-col items-center">
+              <div className="relative w-16 h-16">
+                <img 
+                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Emma"
+                  alt="Profile picture"
+                  className="w-full h-full rounded-full border-2 border-pink-500 object-cover overflow-hidden"
+                  width="64"
+                  height="64"
+                />
+              </div>
+              <span className="text-xs mt-1 text-gray-700 dark:text-gray-300">emma</span>
+            </div>
+
+            {/* Story 9 */}
+            <div className="flex flex-col items-center">
+              <div className="relative w-16 h-16">
+                <img 
+                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lucas"
+                  alt="Profile picture"
+                  className="w-full h-full rounded-full border-2 border-pink-500 object-cover overflow-hidden"
+                  width="64"
+                  height="64"
+                />
+              </div>
+              <span className="text-xs mt-1 text-gray-700 dark:text-gray-300">lucas</span>
+            </div>
+
+            {/* Story 10 */}
+            <div className="flex flex-col items-center">
+              <div className="relative w-16 h-16">
+                <img 
+                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sophia"
+                  alt="Profile picture"
+                  className="w-full h-full rounded-full border-2 border-pink-500 object-cover overflow-hidden"
+                  width="64"
+                  height="64"
+                />
+              </div>
+              <span className="text-xs mt-1 text-gray-700 dark:text-gray-300">sophia</span>
             </div>
           </div>
         </div>
