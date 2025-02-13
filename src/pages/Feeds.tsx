@@ -53,10 +53,10 @@ export default function Feeds() {
   const { t } = useLanguage();
 
   return (
-    <div className="min-h-screen pt-20 px-6 lg:px-8 animate-fade-in">
+    <div className="min-h-screen pt-20 animate-fade-in">
       <h1 className="text-4xl font-bold mb-8">{t('nav.feeds')}</h1>
       
-      <div className="max-w-5xl mx-auto space-y-6">
+      <div className="space-y-6">
         {SAMPLE_POSTS.map((post, index) => (
           <PostCard key={index} {...post} />
         ))}
