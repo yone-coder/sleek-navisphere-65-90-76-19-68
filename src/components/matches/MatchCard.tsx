@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Trophy, Calendar, Heart, MessageSquare, Eye, Share2 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -124,7 +123,6 @@ export const MatchCard = ({ match }: MatchCardProps) => {
             <Progress 
               value={match.predictions.firstPlayer} 
               className="h-1.5 bg-gray-700"
-              indicatorClassName="bg-blue-500"
             />
             <p className="text-xs text-gray-400 mt-1">Fan Prediction Poll</p>
           </div>
