@@ -17,28 +17,31 @@ export default function Tournaments() {
       <div className="flex flex-col space-y-6">
         <div>
           <h2 className="text-xl font-semibold px-4 mb-4">Featured Tournaments</h2>
-          <div className="flex overflow-x-auto px-4 space-x-4 pb-4">
-            <TournamentCard className="w-80 shrink-0" />
-            <TournamentCard className="w-80 shrink-0" />
-            <TournamentCard className="w-80 shrink-0" />
+          <div className="flex overflow-x-auto px-4 space-x-3 pb-4 no-scrollbar">
+            <TournamentCard className="w-64 shrink-0" />
+            <TournamentCard className="w-64 shrink-0" />
+            <TournamentCard className="w-64 shrink-0" />
+            <TournamentCard className="w-64 shrink-0" />
           </div>
         </div>
 
         <div>
           <h2 className="text-xl font-semibold px-4 mb-4">Upcoming Tournaments</h2>
-          <div className="flex overflow-x-auto px-4 space-x-4 pb-4">
-            <TournamentCard className="w-80 shrink-0" />
-            <TournamentCard className="w-80 shrink-0" />
-            <TournamentCard className="w-80 shrink-0" />
+          <div className="flex overflow-x-auto px-4 space-x-3 pb-4 no-scrollbar">
+            <TournamentCard className="w-64 shrink-0" />
+            <TournamentCard className="w-64 shrink-0" />
+            <TournamentCard className="w-64 shrink-0" />
+            <TournamentCard className="w-64 shrink-0" />
           </div>
         </div>
 
         <div>
           <h2 className="text-xl font-semibold px-4 mb-4">Past Tournaments</h2>
-          <div className="flex overflow-x-auto px-4 space-x-4 pb-4">
-            <TournamentCard className="w-80 shrink-0" />
-            <TournamentCard className="w-80 shrink-0" />
-            <TournamentCard className="w-80 shrink-0" />
+          <div className="flex overflow-x-auto px-4 space-x-3 pb-4 no-scrollbar">
+            <TournamentCard className="w-64 shrink-0" />
+            <TournamentCard className="w-64 shrink-0" />
+            <TournamentCard className="w-64 shrink-0" />
+            <TournamentCard className="w-64 shrink-0" />
           </div>
         </div>
       </div>
