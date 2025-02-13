@@ -64,11 +64,11 @@ export default function Explore() {
   const { t } = useLanguage();
 
   return (
-    <div className="min-h-screen pt-20 px-6 animate-fade-in">
-      <h1 className="text-4xl font-bold mb-8">{t('nav.products')}</h1>
+    <div className="min-h-screen pt-20 animate-fade-in">
+      <h1 className="text-4xl font-bold mb-8 px-6">{t('nav.products')}</h1>
       
       <Tabs defaultValue="games" className="w-full">
-        <TabsList className="w-full max-w-md h-12 grid grid-cols-3 gap-4 p-1 bg-gray-100/50 rounded-xl">
+        <TabsList className="w-full max-w-md h-12 grid grid-cols-3 gap-4 p-1 bg-gray-100/50 rounded-xl mx-6">
           <TabsTrigger 
             value="games"
             className="rounded-lg text-sm font-medium transition-all data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
@@ -89,7 +89,7 @@ export default function Explore() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="games" className="mt-6">
+        <TabsContent value="games" className="mt-6 px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {sampleGames.map((game) => (
               <GameCard key={game.id} game={game} />
@@ -98,14 +98,14 @@ export default function Explore() {
         </TabsContent>
 
         <TabsContent value="tournaments" className="mt-6">
-          <div className="flex flex-col space-y-6 w-full">
-            <TournamentCard className="w-full max-w-none" />
-            <TournamentCard className="w-full max-w-none" />
-            <TournamentCard className="w-full max-w-none" />
+          <div className="flex flex-col">
+            <TournamentCard className="w-full max-w-none rounded-none" />
+            <TournamentCard className="w-full max-w-none rounded-none" />
+            <TournamentCard className="w-full max-w-none rounded-none" />
           </div>
         </TabsContent>
 
-        <TabsContent value="events" className="mt-6">
+        <TabsContent value="events" className="mt-6 px-6">
           <div className="text-center text-gray-500">
             Events coming soon
           </div>
