@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { 
   Trophy, Calendar, Clock, Check, User, Heart, MessageSquare, Share2, Users,
@@ -127,7 +128,7 @@ export const MatchCard = ({ match }: MatchCardProps) => {
           </div>
         </div>
 
-        {/* Main Content Section - Flexbox layout */}
+        {/* Main Content Section */}
         <div className="relative p-4 flex justify-between h-[calc(200px-126px)]">
           {/* Left Side - Players */}
           <div className="flex-1">
