@@ -172,12 +172,17 @@ export const MatchCard = ({ match }: MatchCardProps) => {
           </button>
         </div>
 
-        {match.status === "live" && (
-          <button className="w-full bg-red-500 hover:bg-red-600 text-white text-xs font-bold py-1.5 rounded flex items-center justify-center gap-1.5 transition-colors">
-            <Eye className="w-3 h-3" />
-            Watch Live
-          </button>
-        )}
+        <button 
+          className={cn(
+            "w-full text-white text-xs font-bold py-1.5 rounded flex items-center justify-center gap-1.5 transition-colors",
+            match.status === "live" 
+              ? "bg-red-500 hover:bg-red-600" 
+              : "bg-blue-500 hover:bg-blue-600"
+          )}
+        >
+          <Eye className="w-3 h-3" />
+          {match.status === "live" ? "Watch Live" : "Watch Now"}
+        </button>
       </div>
     </div>
   );
