@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { Match } from "./types";
-import { format, parseISO } from "date-fns";
+import { format, parse } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 
 interface MatchCardProps {
@@ -23,10 +23,20 @@ export const MatchCard = ({ match }: MatchCardProps) => {
   };
 
   const formatMatchDateTime = (dateString: string, timeString: string) => {
-    // Combine date and time strings to create a valid ISO datetime string
-    const dateTimeString = `${dateString}T${timeString}`;
-    const date = parseISO(dateTimeString);
-    return `${format(date, "MMM d, yyyy")} • ${format(date, "h:mm a")}`;
+    try {
+      // Parse date and time separately
+      const date = parse(dateString, 'yyyy-MM-dd', new Date());
+      const time = parse(timeString, 'HH:mm:ss', new Date());
+      
+      // Format the date and time
+      const formattedDate = format(date, "MMM d, yyyy");
+      const formattedTime = format(time, "h:mm a");
+      
+      return `${formattedDate} • ${formattedTime}`;
+    } catch (error) {
+      console.error('Error formatting date/time:', error);
+      return 'Invalid date';
+    }
   };
 
   const toggleFollow = (playerName: string) => {
