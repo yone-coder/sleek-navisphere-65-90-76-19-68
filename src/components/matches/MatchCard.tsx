@@ -181,7 +181,7 @@ export const MatchCard = ({ match }: MatchCardProps) => {
           )}
         >
           <Eye className="w-3 h-3" />
-          {match.status === "live" ? "Watch Live" : "Watch Now"}
+          Watch Live
         </button>
       </div>
     </div>
