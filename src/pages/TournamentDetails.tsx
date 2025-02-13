@@ -1,8 +1,10 @@
 
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { MatchesSection } from "@/components/matches/MatchesSection";
 import { Match } from "@/components/matches/types";
+import { ArrowLeft, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const sampleMatches: Match[] = [
   {
@@ -127,16 +129,40 @@ const sampleMatches: Match[] = [
 export default function TournamentDetails() {
   const { id } = useParams();
   const { t } = useLanguage();
+  const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen animate-fade-in">
-      <div className="pt-20 px-6">
-        <h1 className="text-4xl font-bold mb-8">{t('Tournament Matches')}</h1>
+    <div className="min-h-screen animate-fade-in bg-black">
+      {/* Custom Header */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-[#1a1a1a] border-b border-[#2a2a2a]">
+        <div className="h-16 px-4 flex items-center justify-between max-w-7xl mx-auto">
+          <div className="flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white hover:bg-white/10"
+              onClick={() => navigate(-1)}
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <h1 className="text-lg font-semibold text-white">Winter Championship 2024</h1>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-white hover:bg-white/10"
+          >
+            <Search className="h-5 w-5" />
+          </Button>
+        </div>
       </div>
-      <div className="space-y-4">
-        <MatchesSection matches={sampleMatches} />
-        <MatchesSection matches={sampleMatches} />
-        <MatchesSection matches={sampleMatches} />
+
+      <div className="pt-20">
+        <div className="space-y-4">
+          <MatchesSection matches={sampleMatches} />
+          <MatchesSection matches={sampleMatches} />
+          <MatchesSection matches={sampleMatches} />
+        </div>
       </div>
     </div>
   );
