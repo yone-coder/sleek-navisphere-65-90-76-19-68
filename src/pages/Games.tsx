@@ -1,6 +1,7 @@
 
 import { GameCard } from "@/components/games/GameCard";
 import { Game } from "@/components/games/types";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const sampleGames: Game[] = [
   {
@@ -49,11 +50,14 @@ const Games = () => {
     <div className="min-h-screen bg-[#1a1a1a] py-8">
       <div className="container mx-auto px-4">
         <h1 className="text-3xl font-bold text-white mb-8">Featured Games</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sampleGames.map((game) => (
-            <GameCard key={game.id} game={game} />
-          ))}
-        </div>
+        <ScrollArea className="w-full whitespace-nowrap">
+          <div className="flex gap-4 pb-4">
+            {sampleGames.map((game) => (
+              <GameCard key={game.id} game={game} />
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </div>
     </div>
   );

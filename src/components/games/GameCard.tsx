@@ -57,8 +57,8 @@ export const GameCard = ({ game }: GameCardProps) => {
   };
 
   return (
-    <div className="w-[400px] bg-white rounded-lg shadow-lg overflow-hidden">
-      <div className="relative h-48">
+    <div className="w-[280px] shrink-0 bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="relative h-32">
         <img
           src={game.coverImage}
           alt={`${game.title} cover`}
@@ -67,24 +67,24 @@ export const GameCard = ({ game }: GameCardProps) => {
         <img
           src={game.creatorImage}
           alt="Creator"
-          className="absolute bottom-0 left-0 transform translate-x-4 translate-y-4 w-16 h-16 rounded-full border-4 border-white object-cover"
+          className="absolute bottom-0 left-0 transform translate-x-3 translate-y-3 w-12 h-12 rounded-full border-2 border-white object-cover"
         />
         <button
           onClick={handleBookmark}
-          className="absolute top-0 right-0 transform -translate-x-4 translate-y-4 bg-white p-2 rounded-full shadow-lg hover:bg-gray-50 transition-colors"
+          className="absolute top-0 right-0 transform -translate-x-2 translate-y-2 bg-white p-1.5 rounded-full shadow-lg hover:bg-gray-50 transition-colors"
         >
           <Bookmark className={cn(
-            "w-4 h-4",
+            "w-3 h-3",
             isBookmarked ? "fill-current" : "stroke-current"
           )} />
         </button>
-        <div className="absolute top-0 left-0 transform translate-x-4 translate-y-4 flex gap-2">
+        <div className="absolute top-0 left-0 transform translate-x-2 translate-y-2 flex gap-1">
           {game.type.map((type) => (
             <Badge
               key={type}
               variant="secondary"
               className={cn(
-                "text-white border-none",
+                "text-white border-none text-[10px] px-1.5 py-0.5",
                 type.toLowerCase() === "1vs1" ? "bg-blue-500" : "bg-green-500"
               )}
             >
@@ -94,53 +94,53 @@ export const GameCard = ({ game }: GameCardProps) => {
         </div>
       </div>
 
-      <div className="p-6">
+      <div className="p-4">
         <div className="flex justify-between items-center mb-2">
-          <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-bold">{game.title}</h2>
+          <div className="flex items-center gap-1">
+            <h2 className="text-lg font-bold">{game.title}</h2>
             {game.verified && (
-              <Check className="w-5 h-5 text-green-500" />
+              <Check className="w-4 h-4 text-green-500" />
             )}
           </div>
           <Button
             variant="default"
             size="sm"
             className={cn(
-              "gap-1",
+              "gap-1 text-xs px-2 py-1 h-7",
               isFollowing ? "bg-gray-200 text-gray-800 hover:bg-gray-300" : ""
             )}
             onClick={handleFollow}
           >
             {isFollowing ? (
-              <Check className="w-4 h-4" />
+              <Check className="w-3 h-3" />
             ) : (
-              <Plus className="w-4 h-4" />
+              <Plus className="w-3 h-3" />
             )}
             {isFollowing ? "Following" : "Follow"}
           </Button>
         </div>
 
-        <p className="text-gray-700 mb-4">{game.description}</p>
+        <p className="text-gray-700 mb-3 text-sm line-clamp-2">{game.description}</p>
 
-        <div className="flex items-center justify-between text-gray-600 mb-4">
+        <div className="flex items-center justify-between text-gray-600 mb-3 text-sm">
           <button className="flex items-center gap-1 hover:text-gray-800">
-            <Heart className="w-4 h-4 text-red-500" />
+            <Heart className="w-3 h-3 text-red-500" />
             <span>{formatNumber(game.likes)}</span>
           </button>
           <button className="flex items-center gap-1 hover:text-gray-800">
-            <MessageSquare className="w-4 h-4" />
+            <MessageSquare className="w-3 h-3" />
             <span>{formatNumber(game.comments)}</span>
           </button>
           <button 
             className="flex items-center gap-1 hover:text-gray-800"
             onClick={handleShare}
           >
-            <Share2 className="w-4 h-4" />
+            <Share2 className="w-3 h-3" />
             <span>{formatNumber(game.shares)}</span>
           </button>
         </div>
 
-        <Button className="w-full">Play Now</Button>
+        <Button size="sm" className="w-full text-sm h-8">Play Now</Button>
       </div>
     </div>
   );
