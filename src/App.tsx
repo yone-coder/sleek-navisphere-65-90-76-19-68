@@ -29,7 +29,7 @@ const queryClient = new QueryClient();
 
 const AppContent = () => {
   const location = useLocation();
-  const hideHeaderRoutes = ['/login', '/signup'];
+  const hideHeaderRoutes = ['/login', '/signup', '/explore'];
   const isAdminRoute = location.pathname.startsWith('/admin');
   const shouldShowHeader = !hideHeaderRoutes.includes(location.pathname) && !isAdminRoute;
   const shouldShowBottomNav = !isAdminRoute;
