@@ -18,7 +18,7 @@ export const MatchesSection = ({ matches }: MatchesSectionProps) => {
         </button>
       </div>
       <ScrollArea className="w-full whitespace-nowrap">
-        <div className="flex space-x-6 pb-6">
+        <div className="flex space-x-4 pb-6">
           {matches.map((match) => (
             <MatchCard key={match.id} match={match} />
           ))}

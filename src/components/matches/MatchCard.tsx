@@ -1,15 +1,12 @@
 
 import { useState } from "react";
-import { 
-  Trophy, Calendar, Clock, Check, User, Heart, MessageSquare, Share2, Users,
-  Globe, Crown, ArrowRight
-} from "lucide-react";
+import { Trophy, Calendar, Heart, MessageSquare, Eye, Share2 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { Match } from "./types";
-import { format, isValid, parseISO } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 
 interface MatchCardProps {
@@ -21,21 +18,13 @@ export const MatchCard = ({ match }: MatchCardProps) => {
   const { toast } = useToast();
 
   const formatNumber = (num: number): string => {
-    if (num >= 1e9) return `${(num / 1e9).toFixed(1)}B`;
-    if (num >= 1e6) return `${(num / 1e6).toFixed(1)}M`;
-    if (num >= 1e3) return `${(num / 1e3).toFixed(1)}K`;
+    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
     return num.toString();
   };
 
   const formatMatchDateTime = (dateString: string, timeString: string) => {
-    try {
-      const date = parseISO(dateString);
-      if (!isValid(date)) return '';
-      return `${format(date, "MMM d, yyyy")} • ${format(parseISO(timeString), "h:mm a")}`;
-    } catch (error) {
-      console.error("Error formatting date:", error);
-      return '';
-    }
+    const date = parseISO(dateString);
+    return `${format(date, "MMM d, yyyy")} • ${format(parseISO(timeString), "h:mm a")}`;
   };
 
   const toggleFollow = (playerName: string) => {
@@ -49,158 +38,124 @@ export const MatchCard = ({ match }: MatchCardProps) => {
     });
   };
 
-  const handleShare = () => {
-    const shareText = `Check out this match: ${match.opponents[0].name} vs ${match.opponents[1].name} at ${match.championship}!`;
-    if (navigator.share) {
-      navigator.share({
-        title: 'Match Details',
-        text: shareText,
-        url: window.location.href,
-      }).catch(console.error);
-    } else {
-      navigator.clipboard.writeText(shareText);
-      toast({
-        title: "Link copied!",
-        description: "Match details copied to clipboard",
-      });
-    }
-  };
-
   return (
-    <div className="w-[480px] h-[200px] animate-fade-in">
-      <div className="relative h-full bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition-all duration-300 hover:shadow-[0_12px_48px_rgba(0,0,0,0.25)] hover:translate-y-[-2px]">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1a1f2c]/80 to-[#2d3449]/80" />
-        
-        {/* Header Section */}
-        <div className="relative p-4 border-b border-white/10">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2">
-              {match.phase.toLowerCase().includes('final') && (
-                <Trophy className="w-4 h-4 text-yellow-400" />
-              )}
-              <h3 className="text-base font-bold tracking-tight text-white uppercase">
-                {match.championship}
-              </h3>
-            </div>
-            <Badge 
-              variant="outline" 
-              className="font-semibold uppercase text-[10px] tracking-wider px-2"
-            >
-              {match.phase}
-            </Badge>
+    <div className="w-[360px] bg-[#1a1a1a] rounded-lg overflow-hidden shrink-0 border border-white/10">
+      {/* Header */}
+      <div className="p-4 pb-3">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Trophy className="w-4 h-4 text-yellow-500" />
+            <h3 className="text-sm font-bold text-white uppercase">
+              {match.championship}
+            </h3>
           </div>
-          
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs text-white/90">
-              <Calendar className="w-3.5 h-3.5" />
-              <span className="font-medium">
-                {formatMatchDateTime(match.date, match.time)}
-              </span>
-            </div>
-            <Badge 
-              variant="secondary"
-              className={cn(
-                "uppercase text-[10px] tracking-wider font-semibold px-2 py-0.5",
-                match.status === "live" && "bg-green-500/90 text-white border-none",
-                match.status === "upcoming" && "bg-blue-500/90 text-white border-none",
-                match.status === "done" && "bg-gray-500/90 text-white border-none"
-              )}
-            >
-              {match.status === "live" && (
-                <>
-                  <span className="w-1 h-1 rounded-full bg-white animate-pulse mr-1" />
-                  Live
-                </>
-              )}
-              {match.status === "upcoming" && (
-                <>
-                  <Clock className="w-3 h-3 mr-1" />
-                  Upcoming
-                </>
-              )}
-              {match.status === "done" && (
-                <>
-                  <Check className="w-3 h-3 mr-1" />
-                  Completed
-                </>
-              )}
-            </Badge>
-          </div>
-        </div>
-
-        {/* Main Content Section */}
-        <div className="relative p-4 flex justify-between h-[calc(200px-126px)]">
-          {/* Left Side - Players */}
-          <div className="flex-1">
-            <div className="flex items-center justify-between gap-8">
-              {match.opponents.map((opponent, index) => (
-                <div key={opponent.name} className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="w-12 h-12 border-2 border-[#9b87f5] ring-1 ring-white/10">
-                      <AvatarImage 
-                        src={opponent.photo} 
-                        alt={opponent.name}
-                        className="object-cover"
-                      />
-                      <AvatarFallback>
-                        <User className="w-6 h-6 text-gray-400" />
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col items-start">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-white">{opponent.name}</span>
-                        <Badge 
-                          variant="secondary" 
-                          className="bg-gradient-to-r from-[#9b87f5] to-[#7b5dff] text-white border-none text-[10px] px-1.5"
-                        >
-                          #{opponent.rank}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center gap-1 text-xs text-white/60">
-                        <Globe className="w-3 h-3" />
-                        <span>{opponent.city}</span>
-                      </div>
-                      <div className="text-xs font-medium text-white/80 mt-1">
-                        {opponent.wins}W - {opponent.losses}L
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Right Side - Stats & Actions */}
-          <div className="flex flex-col justify-between ml-4 border-l border-white/10 pl-4">
-            {match.predictions && (
-              <div className="w-[120px]">
-                <div className="text-xs text-white/80 mb-1">Match Prediction</div>
-                <div className="relative h-1.5 bg-white/10 rounded-full overflow-hidden mb-1">
-                  <div 
-                    className="absolute left-0 top-0 h-full bg-gradient-to-r from-[#9b87f5] to-[#7b5dff] rounded-full"
-                    style={{ width: `${match.predictions.firstPlayer}%` }}
-                  />
-                </div>
-                <div className="flex justify-between text-[10px] text-white/60">
-                  <span>{match.predictions.firstPlayer}%</span>
-                  <span>{match.predictions.secondPlayer}%</span>
-                </div>
-              </div>
+          <Badge
+            variant="secondary"
+            className={cn(
+              "uppercase text-[10px] font-semibold px-2 py-0.5",
+              match.status === "live" && "bg-green-500 text-white"
             )}
-
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <Heart className="w-3.5 h-3.5 text-white/60" />
-                <span className="text-xs text-white/60">{formatNumber(match.likes)}</span>
-              </div>
-              {match.status === 'live' && (
-                <button className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-red-600 transition-colors">
-                  Watch
-                </button>
-              )}
-            </div>
+          >
+            {match.status === "live" && (
+              <>
+                <span className="w-1 h-1 rounded-full bg-white animate-pulse mr-1 inline-block" />
+                Live
+              </>
+            )}
+          </Badge>
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <Badge variant="secondary" className="bg-gray-800 text-white text-[10px] border-0">
+            {match.phase}
+          </Badge>
+          <div className="flex items-center gap-1.5 text-xs text-gray-400">
+            <Calendar className="w-3 h-3" />
+            <span>{formatMatchDateTime(match.date, match.time)}</span>
           </div>
         </div>
+      </div>
+
+      {/* Players */}
+      <div className="px-4 pb-4">
+        <div className="flex items-center justify-between mb-4">
+          {match.opponents.map((opponent, index) => (
+            <div key={opponent.name} className="text-center flex-1">
+              <Avatar className="w-14 h-14 mx-auto mb-2 ring-2 ring-white/10">
+                <AvatarImage src={opponent.photo} alt={opponent.name} className="object-cover" />
+                <AvatarFallback>{opponent.name[0]}</AvatarFallback>
+              </Avatar>
+              <h2 className="text-sm font-bold text-white mb-0.5">{opponent.name}</h2>
+              <p className="text-xs text-gray-400 mb-0.5">{opponent.city}</p>
+              <p className="text-xs font-medium text-white mb-2">
+                {opponent.wins}W - {opponent.losses}L
+              </p>
+              <button
+                onClick={() => toggleFollow(opponent.name)}
+                className={cn(
+                  "text-xs font-bold px-4 py-1 rounded transition-colors",
+                  isFollowing[opponent.name]
+                    ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
+                )}
+              >
+                {isFollowing[opponent.name] ? "Following" : "Follow"}
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {/* Game Info */}
+        <div className="text-center mb-4">
+          <h3 className="text-sm font-medium text-gray-400 mb-1">eFootball</h3>
+          <p className="text-xs text-gray-500 mb-1">VS</p>
+          {match.status === "live" && (
+            <p className="text-xl font-bold text-white">2 - 1</p>
+          )}
+        </div>
+
+        {/* Predictions */}
+        {match.predictions && (
+          <div className="text-center mb-4">
+            <div className="flex justify-between text-xs font-medium text-white mb-1">
+              <span>{match.predictions.firstPlayer}%</span>
+              <span>{match.predictions.secondPlayer}%</span>
+            </div>
+            <Progress 
+              value={match.predictions.firstPlayer} 
+              className="h-1.5 bg-gray-700"
+              indicatorClassName="bg-blue-500"
+            />
+            <p className="text-xs text-gray-400 mt-1">Fan Prediction Poll</p>
+          </div>
+        )}
+
+        {/* Stats */}
+        <div className="flex items-center justify-between text-xs text-gray-400 mb-4">
+          <div className="flex items-center gap-1">
+            <Heart className="w-3.5 h-3.5" />
+            <span>{formatNumber(match.likes)}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <MessageSquare className="w-3.5 h-3.5" />
+            <span>{formatNumber(match.comments)}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Eye className="w-3.5 h-3.5" />
+            <span>{formatNumber(match.spectators)}</span>
+          </div>
+          <button>
+            <Share2 className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        {/* Watch Button */}
+        {match.status === "live" && (
+          <button className="w-full bg-red-500 hover:bg-red-600 text-white text-sm font-bold py-2 rounded flex items-center justify-center gap-2 transition-colors">
+            <Eye className="w-4 h-4" />
+            Watch Live
+          </button>
+        )}
       </div>
     </div>
   );
