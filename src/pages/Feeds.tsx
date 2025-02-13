@@ -1,4 +1,3 @@
-
 import { useLanguage } from "@/contexts/LanguageContext";
 import { PostCard } from "@/components/posts/PostCard";
 import { Image as ImageIcon } from "lucide-react";
@@ -64,7 +63,7 @@ export default function Feeds() {
             <div className="relative">
               <img 
                 src="https://storage.googleapis.com/a1aa/image/--ZE9XtXSMls4itu_vT26OfFnb75N-Wpp5WQLWgFujE.jpg" 
-                alt="Profile picture" 
+                alt="Profile picture of a person"
                 className="w-10 h-10 rounded-full"
                 width="40"
                 height="40"
@@ -79,7 +78,7 @@ export default function Feeds() {
           
           <div className="absolute right-0 transform translate-x-16 flex flex-col items-center">
             <i className="fas fa-image text-green-500 text-xl"></i>
-            <span className="text-gray-500 text-sm">Photo</span>
+            <span className="text-gray-500">Photo</span>
           </div>
         </div>
       </div>
