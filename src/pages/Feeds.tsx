@@ -1,4 +1,3 @@
-
 import { useLanguage } from "@/contexts/LanguageContext";
 import { PostCard } from "@/components/posts/PostCard";
 import { Image as ImageIcon } from "lucide-react";
@@ -62,13 +61,11 @@ export default function Feeds() {
         <div className="flex items-center bg-white dark:bg-[#1a1a1a] rounded-full p-2 relative pl-4 pr-4 w-full">
           <div className="absolute left-0 transform -translate-x-16">
             <div className="relative">
-              <Avatar className="w-10 h-10">
-                <AvatarImage 
-                  src="https://storage.googleapis.com/a1aa/image/--ZE9XtXSMls4itu_vT26OfFnb75N-Wpp5WQLWgFujE.jpg" 
-                  alt="Profile picture" 
-                />
-                <AvatarFallback>U</AvatarFallback>
-              </Avatar>
+              <img 
+                src="https://storage.googleapis.com/a1aa/image/--ZE9XtXSMls4itu_vT26OfFnb75N-Wpp5WQLWgFujE.jpg" 
+                alt="Profile picture" 
+                className="w-10 h-10 rounded-full"
+              />
               <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white bg-green-500"></span>
             </div>
           </div>
@@ -78,7 +75,7 @@ export default function Feeds() {
           </span>
           
           <div className="absolute right-0 transform translate-x-16 flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity">
-            <ImageIcon className="h-6 w-6 text-green-500" />
+            <i className="fas fa-image text-green-500 text-xl"></i>
             <span className="text-gray-500 text-sm">Photo</span>
           </div>
         </div>
