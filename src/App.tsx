@@ -17,6 +17,7 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import NewsDetail from "./pages/NewsDetail";
+import Tournaments from "./pages/Tournaments";
 import TournamentDetails from "./pages/TournamentDetails";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -40,6 +41,7 @@ const AppContent = () => {
         <Route path="/" element={<Home />} />
         <Route path="/explore" element={<Explore />} />
         <Route path="/matches" element={<Matches />} />
+        <Route path="/tournaments" element={<Tournaments />} />
         <Route path="/games" element={<Games />} />
         <Route path="/games/gomoku" element={<Gomoku />} />
         <Route path="/feeds" element={<Feeds />} />

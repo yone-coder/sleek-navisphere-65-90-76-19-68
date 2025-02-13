@@ -1,9 +1,8 @@
-
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { GameCard } from "@/components/games/GameCard";
-import { TournamentCard } from "@/components/tournaments/TournamentCard";
 import { Game } from "@/components/games/types";
+import { Link } from "react-router-dom";
 
 const sampleGames: Game[] = [
   {
@@ -65,21 +64,20 @@ export default function Explore() {
 
   return (
     <div className="min-h-screen pt-20 animate-fade-in">
-      <h1 className="text-4xl font-bold mb-8 px-6">{t('nav.products')}</h1>
+      <div className="flex justify-between items-center px-6 mb-8">
+        <h1 className="text-4xl font-bold">{t('nav.products')}</h1>
+        <Link to="/tournaments" className="text-blue-600 hover:text-blue-700">
+          View Tournaments
+        </Link>
+      </div>
       
       <Tabs defaultValue="games" className="w-full">
-        <TabsList className="w-full max-w-md h-12 grid grid-cols-3 gap-4 p-1 bg-gray-100/50 rounded-xl mx-6">
+        <TabsList className="w-full max-w-md h-12 grid grid-cols-2 gap-4 p-1 bg-gray-100/50 rounded-xl mx-6">
           <TabsTrigger 
             value="games"
             className="rounded-lg text-sm font-medium transition-all data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
           >
             Games
-          </TabsTrigger>
-          <TabsTrigger 
-            value="tournaments"
-            className="rounded-lg text-sm font-medium transition-all data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
-          >
-            Tournaments
           </TabsTrigger>
           <TabsTrigger 
             value="events"
@@ -94,14 +92,6 @@ export default function Explore() {
             {sampleGames.map((game) => (
               <GameCard key={game.id} game={game} />
             ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="tournaments" className="mt-6">
-          <div className="flex flex-col">
-            <TournamentCard className="w-full max-w-none rounded-none" />
-            <TournamentCard className="w-full max-w-none rounded-none" />
-            <TournamentCard className="w-full max-w-none rounded-none" />
           </div>
         </TabsContent>
 
