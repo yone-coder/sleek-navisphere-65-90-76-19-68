@@ -56,7 +56,7 @@ export default function Feeds() {
     <div className="min-h-screen pt-20 animate-fade-in">
       <h1 className="text-4xl font-bold mb-8">{t('nav.feeds')}</h1>
       
-      <div className="space-y-6">
+      <div className="divide-y divide-gray-200 dark:divide-white/10">
         {SAMPLE_POSTS.map((post, index) => (
           <PostCard key={index} {...post} />
         ))}

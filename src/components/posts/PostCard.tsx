@@ -35,7 +35,7 @@ export const PostCard = ({
   };
 
   return (
-    <div className="bg-white dark:bg-[#1a1a1a] rounded-lg shadow-md p-6 w-full border border-gray-200 dark:border-white/10">
+    <div className="bg-white dark:bg-[#1a1a1a] p-6">
       <div className="flex items-center mb-4">
         <Avatar className="w-10 h-10">
           <AvatarImage src={author.avatar} alt={author.name} />
@@ -85,7 +85,7 @@ export const PostCard = ({
         <img
           src={image}
           alt="Post content"
-          className="w-full rounded-lg mb-4 object-cover max-h-[400px]"
+          className="w-full mb-4 object-cover max-h-[400px]"
         />
       )}
 
@@ -105,7 +105,7 @@ export const PostCard = ({
         <span>{formatNumber(stats.shares)} Shares</span>
       </div>
 
-      <div className="flex justify-around border-t border-gray-200 dark:border-gray-700 pt-2">
+      <div className="flex justify-around pt-2">
         <button className="flex items-center text-gray-500 hover:text-blue-500 transition-colors">
           <Heart className="w-4 h-4 mr-1" />
           Like
