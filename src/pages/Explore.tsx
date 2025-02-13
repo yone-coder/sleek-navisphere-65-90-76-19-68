@@ -7,6 +7,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
 } from "@/components/ui/carousel";
 
 const sampleGames: Game[] = [
@@ -73,50 +75,55 @@ export default function Explore() {
 
   return (
     <div className="min-h-screen pt-20 animate-fade-in">
-      <div className="flex justify-between items-center px-6 mb-8">
-        <h1 className="text-4xl font-bold">{t('nav.products')}</h1>
+      <div className="flex justify-end px-6 mb-8">
         <Link to="/tournaments" className="text-blue-600 hover:text-blue-700">
           View Tournaments
         </Link>
       </div>
 
-      <div className="space-y-8">
-        <section>
-          <h2 className="text-2xl font-semibold px-6 mb-4">Trending Games</h2>
+      <div className="space-y-12">
+        <section className="relative px-8">
+          <h2 className="text-2xl font-semibold mb-4">Trending Games</h2>
           <Carousel className="w-full">
-            <CarouselContent className="-ml-6">
+            <CarouselContent className="-ml-8">
               {trendingGames.map((game) => (
-                <CarouselItem key={game.id} className="pl-6 basis-[280px]">
+                <CarouselItem key={game.id} className="pl-8 basis-[300px]">
                   <GameCard game={game} />
                 </CarouselItem>
               ))}
             </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
           </Carousel>
         </section>
 
-        <section>
-          <h2 className="text-2xl font-semibold px-6 mb-4">Competitive Games</h2>
+        <section className="relative px-8">
+          <h2 className="text-2xl font-semibold mb-4">Competitive Games</h2>
           <Carousel className="w-full">
-            <CarouselContent className="-ml-6">
+            <CarouselContent className="-ml-8">
               {competitiveGames.map((game) => (
-                <CarouselItem key={game.id} className="pl-6 basis-[280px]">
+                <CarouselItem key={game.id} className="pl-8 basis-[300px]">
                   <GameCard game={game} />
                 </CarouselItem>
               ))}
             </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
           </Carousel>
         </section>
 
-        <section>
-          <h2 className="text-2xl font-semibold px-6 mb-4">Casual Games</h2>
+        <section className="relative px-8">
+          <h2 className="text-2xl font-semibold mb-4">Casual Games</h2>
           <Carousel className="w-full">
-            <CarouselContent className="-ml-6">
+            <CarouselContent className="-ml-8">
               {casualGames.map((game) => (
-                <CarouselItem key={game.id} className="pl-6 basis-[280px]">
+                <CarouselItem key={game.id} className="pl-8 basis-[300px]">
                   <GameCard game={game} />
                 </CarouselItem>
               ))}
             </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
           </Carousel>
         </section>
       </div>
