@@ -1,8 +1,13 @@
+
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { GameCard } from "@/components/games/GameCard";
 import { Game } from "@/components/games/types";
 import { Link } from "react-router-dom";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 
 const sampleGames: Game[] = [
   {
@@ -59,6 +64,10 @@ const sampleGames: Game[] = [
   }
 ];
 
+const competitiveGames = sampleGames.filter(game => game.type.includes("Tournament"));
+const casualGames = sampleGames.filter(game => game.type.includes("1vs1"));
+const trendingGames = [...sampleGames].sort((a, b) => b.likes - a.likes);
+
 export default function Explore() {
   const { t } = useLanguage();
 
@@ -70,37 +79,47 @@ export default function Explore() {
           View Tournaments
         </Link>
       </div>
-      
-      <Tabs defaultValue="games" className="w-full">
-        <TabsList className="w-full max-w-md h-12 grid grid-cols-2 gap-4 p-1 bg-gray-100/50 rounded-xl mx-6">
-          <TabsTrigger 
-            value="games"
-            className="rounded-lg text-sm font-medium transition-all data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
-          >
-            Games
-          </TabsTrigger>
-          <TabsTrigger 
-            value="events"
-            className="rounded-lg text-sm font-medium transition-all data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
-          >
-            Events
-          </TabsTrigger>
-        </TabsList>
 
-        <TabsContent value="games" className="mt-6 px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {sampleGames.map((game) => (
-              <GameCard key={game.id} game={game} />
-            ))}
-          </div>
-        </TabsContent>
+      <div className="space-y-8">
+        <section>
+          <h2 className="text-2xl font-semibold px-6 mb-4">Trending Games</h2>
+          <Carousel className="w-full">
+            <CarouselContent className="-ml-6">
+              {trendingGames.map((game) => (
+                <CarouselItem key={game.id} className="pl-6 basis-[280px]">
+                  <GameCard game={game} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        </section>
 
-        <TabsContent value="events" className="mt-6 px-6">
-          <div className="text-center text-gray-500">
-            Events coming soon
-          </div>
-        </TabsContent>
-      </Tabs>
+        <section>
+          <h2 className="text-2xl font-semibold px-6 mb-4">Competitive Games</h2>
+          <Carousel className="w-full">
+            <CarouselContent className="-ml-6">
+              {competitiveGames.map((game) => (
+                <CarouselItem key={game.id} className="pl-6 basis-[280px]">
+                  <GameCard game={game} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold px-6 mb-4">Casual Games</h2>
+          <Carousel className="w-full">
+            <CarouselContent className="-ml-6">
+              {casualGames.map((game) => (
+                <CarouselItem key={game.id} className="pl-6 basis-[280px]">
+                  <GameCard game={game} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        </section>
+      </div>
     </div>
   );
 }
