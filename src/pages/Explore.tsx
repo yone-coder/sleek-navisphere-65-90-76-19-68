@@ -43,6 +43,19 @@ const sampleGames: Game[] = [
     comments: 234,
     shares: 345,
     bookmarked: false
+  },
+  {
+    id: 4,
+    title: "Morpion",
+    description: "A classic game where two players take turns marking spaces in a 3×3 grid. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins.",
+    coverImage: "https://images.unsplash.com/photo-1501286353178-1ec881214838?auto=format&fit=crop&q=80&w=2574",
+    creatorImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=MorpionCreator",
+    verified: true,
+    type: ["1vs1"],
+    likes: 1543,
+    comments: 289,
+    shares: 432,
+    bookmarked: false
   }
 ];
 
