@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Trophy, Calendar, Heart, MessageSquare, Eye, Share2 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -22,8 +23,10 @@ export const MatchCard = ({ match }: MatchCardProps) => {
   };
 
   const formatMatchDateTime = (dateString: string, timeString: string) => {
-    const date = parseISO(dateString);
-    return `${format(date, "MMM d, yyyy")} • ${format(parseISO(timeString), "h:mm a")}`;
+    // Combine date and time strings to create a valid ISO datetime string
+    const dateTimeString = `${dateString}T${timeString}`;
+    const date = parseISO(dateTimeString);
+    return `${format(date, "MMM d, yyyy")} • ${format(date, "h:mm a")}`;
   };
 
   const toggleFollow = (playerName: string) => {
