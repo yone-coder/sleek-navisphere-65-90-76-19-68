@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 
 const games = {
@@ -149,65 +150,67 @@ const GameSection = ({ title, games }: { title: string; games: any[] }) => {
   };
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-2">
+    <div className="mb-8">
+      <div className="flex justify-between items-center px-4 mb-2">
         <h1 className="text-xl font-bold">{title}</h1>
         <i className="fas fa-arrow-right text-xl"></i>
       </div>
-      <div className="flex space-x-2 overflow-x-auto">
-        {games.map((game) => (
-          <div key={game.id} className="bg-white rounded-lg shadow-md overflow-hidden w-60 flex-shrink-0">
-            <div className="relative">
-              <img 
-                src={game.image} 
-                alt={`${game.title} board`} 
-                className="h-32 w-full object-cover"
-              />
-              <img 
-                src={game.profileImage} 
-                alt="Profile picture of the user" 
-                className="absolute bottom-0 left-2 transform translate-y-1/2 h-10 w-10 rounded-full border-2 border-white"
-              />
-            </div>
-            <div className="p-2 pt-6">
-              <div className="flex justify-between items-center mb-2">
-                <div>
-                  <h2 className="text-sm font-bold">
-                    {game.title}
-                    {game.verified && (
-                      <span className="text-green-500">
-                        <i className="fas fa-check-circle"></i>
-                      </span>
-                    )}
-                  </h2>
+      <div className="flex overflow-x-auto no-scrollbar">
+        <div className="flex space-x-3 px-4">
+          {games.map((game) => (
+            <div key={game.id} className="bg-white rounded-lg shadow-md overflow-hidden w-60 flex-shrink-0">
+              <div className="relative">
+                <img 
+                  src={game.image} 
+                  alt={`${game.title} board`} 
+                  className="h-32 w-full object-cover"
+                />
+                <img 
+                  src={game.profileImage} 
+                  alt="Profile picture of the user" 
+                  className="absolute bottom-0 left-2 transform translate-y-1/2 h-10 w-10 rounded-full border-2 border-white"
+                />
+              </div>
+              <div className="p-2 pt-6">
+                <div className="flex justify-between items-center mb-2">
+                  <div>
+                    <h2 className="text-sm font-bold">
+                      {game.title}
+                      {game.verified && (
+                        <span className="text-green-500 ml-1">
+                          <i className="fas fa-check-circle"></i>
+                        </span>
+                      )}
+                    </h2>
+                  </div>
+                  <button className="bg-blue-500 text-white text-xs px-2 py-1 rounded-md">
+                    + Follow
+                  </button>
                 </div>
-                <button className="bg-blue-500 text-white text-xs px-2 py-1 rounded-md">
-                  + Follow
+                <p className="text-gray-500 text-xs truncate-2-lines">
+                  {game.description}
+                </p>
+                <div className="mt-2 flex items-center justify-between text-gray-500 text-xs">
+                  <span>
+                    <i className="fas fa-heart"></i> {game.stats.likes}
+                  </span>
+                  <span>
+                    <i className="fas fa-comment"></i> {game.stats.comments}
+                  </span>
+                  <span>
+                    <i className="fas fa-share"></i> {game.stats.shares}
+                  </span>
+                </div>
+                <button 
+                  onClick={() => handleGameClick(game.id, game.title)}
+                  className="mt-2 w-full bg-blue-500 text-white py-1 rounded-md text-sm"
+                >
+                  View Tournaments
                 </button>
               </div>
-              <p className="text-gray-500 text-xs truncate-2-lines">
-                {game.description}
-              </p>
-              <div className="mt-2 flex items-center justify-between text-gray-500 text-xs">
-                <span>
-                  <i className="fas fa-heart"></i> {game.stats.likes}
-                </span>
-                <span>
-                  <i className="fas fa-comment"></i> {game.stats.comments}
-                </span>
-                <span>
-                  <i className="fas fa-share"></i> {game.stats.shares}
-                </span>
-              </div>
-              <button 
-                onClick={() => handleGameClick(game.id, game.title)}
-                className="mt-2 w-full bg-blue-500 text-white py-1 rounded-md text-sm"
-              >
-                View Tournaments
-              </button>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -217,8 +220,8 @@ export default function Explore() {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-gray-100 p-4">
-      <header className="flex items-center justify-between mb-4">
+    <div className="bg-gray-100">
+      <header className="flex items-center justify-between px-4 py-4">
         <div className="flex items-center">
           <button className="text-xl" onClick={() => navigate(-1)}>
             <i className="fas fa-arrow-left"></i>
@@ -230,7 +233,7 @@ export default function Explore() {
         </button>
       </header>
 
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="space-y-4">
         <GameSection title="Board Games" games={games.boardGames} />
         <GameSection title="Arcade Games" games={games.arcadeGames} />
         <GameSection title="Card Games" games={games.cardGames} />
