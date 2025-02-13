@@ -1,4 +1,3 @@
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Heart, MessageSquare, Share2, MoreHorizontal, UserPlus, Globe } from "lucide-react";
 import { useState } from "react";
@@ -35,7 +34,7 @@ export const PostCard = ({
   };
 
   return (
-    <div className="bg-white dark:bg-[#1a1a1a] rounded-lg shadow-md p-4 w-full max-w-2xl border border-gray-200 dark:border-white/10">
+    <div className="bg-white dark:bg-[#1a1a1a] rounded-lg shadow-md p-6 w-full border border-gray-200 dark:border-white/10">
       <div className="flex items-center mb-4">
         <Avatar className="w-10 h-10">
           <AvatarImage src={author.avatar} alt={author.name} />
