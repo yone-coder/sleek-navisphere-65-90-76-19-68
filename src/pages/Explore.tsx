@@ -1,148 +1,149 @@
 
-import { useLanguage } from "@/contexts/LanguageContext";
-import { GameCard } from "@/components/games/GameCard";
-import { Game } from "@/components/games/types";
-import { Link } from "react-router-dom";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const sampleGames: Game[] = [
+const games = [
   {
     id: 1,
     title: "Chess",
-    description: "A two-player strategy board game played on a checkered board with 64 squares arranged in an 8×8 grid.",
-    coverImage: "https://storage.googleapis.com/a1aa/image/mXWQ7mdPAnTHpduxXF4Ijpxvg_lJjGQ1WpJw-QQrNqA.jpg",
-    creatorImage: "https://storage.googleapis.com/a1aa/image/Rx1djXfNKOUuCzUIYc6iMZXnX0AAqQTUDeMdWWnW-uE.jpg",
+    description: "A strategic board game where two players move pieces with the goal of checkmating the opponent's king.",
+    image: "https://storage.googleapis.com/a1aa/image/A0tRiJ6w8HZujXs2A-4XYcnReWkJ1hU6JyQbw-55BIE.jpg",
+    profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
     verified: true,
-    type: ["1vs1", "Tournament"],
-    likes: 1259,
-    comments: 346,
-    shares: 528,
-    bookmarked: false
+    stats: {
+      likes: "3.2K",
+      comments: "600",
+      shares: "1.1K"
+    }
   },
   {
     id: 2,
-    title: "Poker",
-    description: "A family of card games involving betting and individual play, whereby the winner is determined by the ranks and combinations of cards.",
-    coverImage: "https://images.unsplash.com/photo-1609743522653-52354461eb27?auto=format&fit=crop&q=80&w=2574",
-    creatorImage: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&h=100&q=80",
+    title: "Dominoes",
+    description: "A family of tile-based games played with rectangular \"domino\" tiles.",
+    image: "https://storage.googleapis.com/a1aa/image/U9cxiKWRsMwBdP7GKinlUOUdzMsKzRiFuAfG1-PCvAg.jpg",
+    profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
     verified: true,
-    type: ["Multiplayer", "Tournament"],
-    likes: 2894,
-    comments: 452,
-    shares: 789,
-    bookmarked: true
+    stats: {
+      likes: "1.1K",
+      comments: "180",
+      shares: "250"
+    }
   },
   {
     id: 3,
-    title: "Go",
-    description: "An abstract strategy board game for two players in which the aim is to surround more territory than the opponent.",
-    coverImage: "https://images.unsplash.com/photo-1585504198199-20277593b94f?auto=format&fit=crop&q=80&w=2574",
-    creatorImage: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&h=100&q=80",
-    verified: false,
-    type: ["1vs1"],
-    likes: 876,
-    comments: 234,
-    shares: 345,
-    bookmarked: false
+    title: "Morpion (Tic-Tac-Toe)",
+    description: "A simple strategy game for two players, who take turns marking the spaces in a 3×3 grid.",
+    image: "https://storage.googleapis.com/a1aa/image/ILaOkYoR7hDayBWLOW1hj6X9ZkaT-UcZm24KX8P1jDY.jpg",
+    profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+    verified: true,
+    stats: {
+      likes: "900",
+      comments: "150",
+      shares: "200"
+    }
   },
   {
     id: 4,
-    title: "Morpion",
-    description: "A classic game where two players take turns marking spaces in a 3×3 grid. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins.",
-    coverImage: "https://images.unsplash.com/photo-1501286353178-1ec881214838?auto=format&fit=crop&q=80&w=2574",
-    creatorImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=MorpionCreator",
+    title: "Shogi",
+    description: "A Japanese strategy board game for two players, similar to chess.",
+    image: "https://storage.googleapis.com/a1aa/image/URT1V_NcnrlLxnJWpP80Ej-uYh8hMuDel6e7Pxqs_eo.jpg",
+    profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
     verified: true,
-    type: ["1vs1"],
-    likes: 1543,
-    comments: 289,
-    shares: 432,
-    bookmarked: false
+    stats: {
+      likes: "1.5K",
+      comments: "250",
+      shares: "400"
+    }
   }
 ];
 
-const competitiveGames = sampleGames.filter(game => game.type.includes("Tournament"));
-const casualGames = sampleGames.filter(game => game.type.includes("1vs1"));
-const trendingGames = [...sampleGames].sort((a, b) => b.likes - a.likes);
-
 export default function Explore() {
-  const { t } = useLanguage();
+  const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen pt-20 animate-fade-in">
-      <div className="flex justify-end mb-8">
-        <Link to="/tournaments" className="text-blue-600 hover:text-blue-700">
-          View Tournaments
-        </Link>
+    <div className="bg-gray-100 p-4">
+      {/* Header */}
+      <header className="flex items-center justify-between mb-4">
+        <div className="flex items-center">
+          <button className="text-xl" onClick={() => navigate(-1)}>
+            <i className="fas fa-arrow-left"></i>
+          </button>
+          <h1 className="text-2xl font-bold ml-4">Explore</h1>
+        </div>
+        <button className="text-xl">
+          <i className="fas fa-search"></i>
+        </button>
+      </header>
+
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Section: Board Games */}
+        <div>
+          <div className="flex justify-between items-center mb-2">
+            <h1 className="text-xl font-bold">Board Games</h1>
+            <i className="fas fa-arrow-right text-xl"></i>
+          </div>
+          <div className="flex space-x-2 overflow-x-auto">
+            {games.map((game) => (
+              <div key={game.id} className="bg-white rounded-lg shadow-md overflow-hidden w-60 flex-shrink-0">
+                <div className="relative">
+                  <img 
+                    src={game.image} 
+                    alt={`${game.title} board`} 
+                    className="h-32 w-full object-cover"
+                  />
+                  <img 
+                    src={game.profileImage} 
+                    alt="Profile picture of the user" 
+                    className="absolute bottom-0 left-2 transform translate-y-1/2 h-10 w-10 rounded-full border-2 border-white"
+                  />
+                </div>
+                <div className="p-2 pt-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <div>
+                      <h2 className="text-sm font-bold">
+                        {game.title}
+                        {game.verified && (
+                          <span className="text-green-500">
+                            <i className="fas fa-check-circle"></i>
+                          </span>
+                        )}
+                      </h2>
+                    </div>
+                    <button className="bg-blue-500 text-white text-xs px-2 py-1 rounded-md">
+                      + Follow
+                    </button>
+                  </div>
+                  <p className="text-gray-500 text-xs truncate-2-lines">
+                    {game.description}
+                  </p>
+                  <div className="mt-2 flex items-center justify-between text-gray-500 text-xs">
+                    <span>
+                      <i className="fas fa-heart"></i> {game.stats.likes}
+                    </span>
+                    <span>
+                      <i className="fas fa-comment"></i> {game.stats.comments}
+                    </span>
+                    <span>
+                      <i className="fas fa-share"></i> {game.stats.shares}
+                    </span>
+                  </div>
+                  <button className="mt-2 w-full bg-blue-500 text-white py-1 rounded-md text-sm">
+                    Play Now
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
-      <div>
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-3xl font-medium">Social networking</h2>
-            <ArrowRight className="h-6 w-6" />
-          </div>
-          <Carousel>
-            <CarouselContent className="-ml-4">
-              {trendingGames.map((game) => (
-                <CarouselItem key={game.id} className="pl-4 basis-[300px]">
-                  <GameCard game={game} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <div className="flex gap-2 mt-4">
-              <CarouselPrevious className="static translate-y-0" />
-              <CarouselNext className="static translate-y-0" />
-            </div>
-          </Carousel>
-        </section>
-
-        <section className="mt-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-3xl font-medium">Social networking</h2>
-            <ArrowRight className="h-6 w-6" />
-          </div>
-          <Carousel>
-            <CarouselContent className="-ml-4">
-              {competitiveGames.map((game) => (
-                <CarouselItem key={game.id} className="pl-4 basis-[300px]">
-                  <GameCard game={game} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <div className="flex gap-2 mt-4">
-              <CarouselPrevious className="static translate-y-0" />
-              <CarouselNext className="static translate-y-0" />
-            </div>
-          </Carousel>
-        </section>
-
-        <section className="mt-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-3xl font-medium">Social networking</h2>
-            <ArrowRight className="h-6 w-6" />
-          </div>
-          <Carousel>
-            <CarouselContent className="-ml-4">
-              {casualGames.map((game) => (
-                <CarouselItem key={game.id} className="pl-4 basis-[300px]">
-                  <GameCard game={game} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <div className="flex gap-2 mt-4">
-              <CarouselPrevious className="static translate-y-0" />
-              <CarouselNext className="static translate-y-0" />
-            </div>
-          </Carousel>
-        </section>
-      </div>
+      <style>{`
+        .truncate-2-lines {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+      `}</style>
     </div>
   );
 }
