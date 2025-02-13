@@ -131,7 +131,7 @@ export default function Matches() {
       <div className="pt-20 px-6">
         <h1 className="text-4xl font-bold mb-8">{t('nav.matches')}</h1>
       </div>
-      <MatchesSection matches={sampleMatches} />
+      <MatchesSection matches={sampleMatches} title="Featured Matches" />
     </div>
   );
 }

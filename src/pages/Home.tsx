@@ -501,7 +501,7 @@ export default function Home() {
         </div>
       </section>
 
-      <MatchesSection matches={matches} />
+      <MatchesSection matches={matches} title="Live Matches" />
 
       <section className="py-6 px-6">
         <div className="flex justify-between items-center mb-6">
