@@ -10,6 +10,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { ArrowRight } from "lucide-react";
 
 const sampleGames: Game[] = [
   {
@@ -75,67 +76,70 @@ export default function Explore() {
 
   return (
     <div className="min-h-screen pt-20 animate-fade-in">
-      <div className="flex justify-end px-6 mb-8">
+      <div className="flex justify-end mb-8">
         <Link to="/tournaments" className="text-blue-600 hover:text-blue-700">
           View Tournaments
         </Link>
       </div>
 
-      <div className="space-y-12">
-        <section className="px-8">
-          <h2 className="text-2xl font-semibold mb-4">Trending Games</h2>
+      <div>
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-3xl font-medium">Social networking</h2>
+            <ArrowRight className="h-6 w-6" />
+          </div>
           <Carousel>
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex gap-2">
-                <CarouselPrevious className="static translate-y-0" />
-                <CarouselNext className="static translate-y-0" />
-              </div>
-            </div>
-            <CarouselContent className="-ml-8">
+            <CarouselContent className="-ml-4">
               {trendingGames.map((game) => (
-                <CarouselItem key={game.id} className="pl-8 basis-[300px]">
+                <CarouselItem key={game.id} className="pl-4 basis-[300px]">
                   <GameCard game={game} />
                 </CarouselItem>
               ))}
             </CarouselContent>
+            <div className="flex gap-2 mt-4">
+              <CarouselPrevious className="static translate-y-0" />
+              <CarouselNext className="static translate-y-0" />
+            </div>
           </Carousel>
         </section>
 
-        <section className="px-8">
-          <h2 className="text-2xl font-semibold mb-4">Competitive Games</h2>
+        <section className="mt-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-3xl font-medium">Social networking</h2>
+            <ArrowRight className="h-6 w-6" />
+          </div>
           <Carousel>
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex gap-2">
-                <CarouselPrevious className="static translate-y-0" />
-                <CarouselNext className="static translate-y-0" />
-              </div>
-            </div>
-            <CarouselContent className="-ml-8">
+            <CarouselContent className="-ml-4">
               {competitiveGames.map((game) => (
-                <CarouselItem key={game.id} className="pl-8 basis-[300px]">
+                <CarouselItem key={game.id} className="pl-4 basis-[300px]">
                   <GameCard game={game} />
                 </CarouselItem>
               ))}
             </CarouselContent>
+            <div className="flex gap-2 mt-4">
+              <CarouselPrevious className="static translate-y-0" />
+              <CarouselNext className="static translate-y-0" />
+            </div>
           </Carousel>
         </section>
 
-        <section className="px-8">
-          <h2 className="text-2xl font-semibold mb-4">Casual Games</h2>
+        <section className="mt-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-3xl font-medium">Social networking</h2>
+            <ArrowRight className="h-6 w-6" />
+          </div>
           <Carousel>
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex gap-2">
-                <CarouselPrevious className="static translate-y-0" />
-                <CarouselNext className="static translate-y-0" />
-              </div>
-            </div>
-            <CarouselContent className="-ml-8">
+            <CarouselContent className="-ml-4">
               {casualGames.map((game) => (
-                <CarouselItem key={game.id} className="pl-8 basis-[300px]">
+                <CarouselItem key={game.id} className="pl-4 basis-[300px]">
                   <GameCard game={game} />
                 </CarouselItem>
               ))}
             </CarouselContent>
+            <div className="flex gap-2 mt-4">
+              <CarouselPrevious className="static translate-y-0" />
+              <CarouselNext className="static translate-y-0" />
+            </div>
           </Carousel>
         </section>
       </div>
