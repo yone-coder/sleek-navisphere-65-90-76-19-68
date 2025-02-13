@@ -10,7 +10,7 @@ const SAMPLE_POSTS = [
     },
     timeAgo: "2 hours ago",
     content: "Just had an amazing weekend exploring the mountains! The views were absolutely breathtaking. Nature never ceases to amaze me.",
-    image: "photo-1460925895917-afdab827c52f",
+    image: "https://storage.googleapis.com/a1aa/image/C_ZFJtxQVMULaoSMWvqV0AC40hx-2BGVwnkXIUMyqOw.jpg",
     stats: {
       likes: 1200,
       comments: 234,
@@ -39,7 +39,7 @@ const SAMPLE_POSTS = [
     },
     timeAgo: "6 hours ago",
     content: "Check out this amazing play from yesterday's tournament! Still can't believe we pulled it off.",
-    image: "photo-1517022812141-23620dba5c23",
+    image: "https://picsum.photos/seed/gaming/800/400",
     stats: {
       likes: 2100,
       comments: 342,
