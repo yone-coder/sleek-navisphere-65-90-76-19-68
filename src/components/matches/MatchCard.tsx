@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { Match } from "./types";
-import { format, parse } from "date-fns";
+import { format, parse, setHours, setMinutes, setSeconds } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 
 interface MatchCardProps {
@@ -24,15 +24,18 @@ export const MatchCard = ({ match }: MatchCardProps) => {
 
   const formatMatchDateTime = (dateString: string, timeString: string) => {
     try {
-      // Parse date and time separately
-      const date = parse(dateString, 'yyyy-MM-dd', new Date());
-      const time = parse(timeString, 'HH:mm:ss', new Date());
+      // First parse the date
+      let dateTime = parse(dateString, 'yyyy-MM-dd', new Date());
       
-      // Format the date and time
-      const formattedDate = format(date, "MMM d, yyyy");
-      const formattedTime = format(time, "h:mm a");
+      // Split time string and convert to numbers
+      const [hours, minutes, seconds] = timeString.split(':').map(Number);
       
-      return `${formattedDate} • ${formattedTime}`;
+      // Set time components on the date object
+      dateTime = setHours(dateTime, hours);
+      dateTime = setMinutes(dateTime, minutes);
+      dateTime = setSeconds(dateTime, seconds);
+      
+      return `${format(dateTime, "MMM d, yyyy")} • ${format(dateTime, "h:mm a")}`;
     } catch (error) {
       console.error('Error formatting date/time:', error);
       return 'Invalid date';
