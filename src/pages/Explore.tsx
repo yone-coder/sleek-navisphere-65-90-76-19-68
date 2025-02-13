@@ -98,8 +98,10 @@ export default function Explore() {
         </TabsContent>
 
         <TabsContent value="tournaments" className="mt-6">
-          <div className="w-full">
-            <TournamentCard className="w-full" />
+          <div className="flex flex-col space-y-6 w-full">
+            <TournamentCard className="w-full max-w-none" />
+            <TournamentCard className="w-full max-w-none" />
+            <TournamentCard className="w-full max-w-none" />
           </div>
         </TabsContent>
 
