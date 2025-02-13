@@ -2,6 +2,7 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { GameCard } from "@/components/games/GameCard";
+import { TournamentCard } from "@/components/tournaments/TournamentCard";
 import { Game } from "@/components/games/types";
 
 const sampleGames: Game[] = [
@@ -97,8 +98,8 @@ export default function Explore() {
         </TabsContent>
 
         <TabsContent value="tournaments" className="mt-6">
-          <div className="text-center text-gray-500">
-            Tournaments coming soon
+          <div className="flex justify-center">
+            <TournamentCard />
           </div>
         </TabsContent>
 
