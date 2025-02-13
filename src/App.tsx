@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -21,10 +20,10 @@ import TournamentDetails from "./pages/TournamentDetails";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminBanners from "./pages/admin/AdminBanners";
+import Games from "./pages/Games";
 
 const queryClient = new QueryClient();
 
-// Create a wrapper component to handle header visibility
 const AppContent = () => {
   const location = useLocation();
   const hideHeaderRoutes = ['/login', '/signup'];
@@ -39,6 +38,7 @@ const AppContent = () => {
         <Route path="/" element={<Home />} />
         <Route path="/explore" element={<Explore />} />
         <Route path="/matches" element={<Matches />} />
+        <Route path="/games" element={<Games />} />
         <Route path="/feeds" element={<Feeds />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/wallet" element={<Wallet />} />
