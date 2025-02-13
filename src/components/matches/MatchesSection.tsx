@@ -6,16 +6,15 @@ import { Match } from "./types";
 
 interface MatchesSectionProps {
   matches: Match[];
+  title: string;
 }
 
-export const MatchesSection = ({ matches }: MatchesSectionProps) => {
+export const MatchesSection = ({ matches, title }: MatchesSectionProps) => {
   return (
     <section className="py-8 px-6 bg-[#1a1a1a]">
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-bold text-white px-2">Featured Matches</h2>
-        <button className="text-[#9b87f5] hover:text-white flex items-center gap-1 text-sm font-medium transition-colors">
-          View all <ArrowUpRight className="w-4 h-4" />
-        </button>
+        <h2 className="text-4xl font-semibold text-white">{title}</h2>
+        <ArrowUpRight className="w-6 h-6 text-white" />
       </div>
       <ScrollArea className="w-full whitespace-nowrap">
         <div className="flex space-x-4 pb-6">

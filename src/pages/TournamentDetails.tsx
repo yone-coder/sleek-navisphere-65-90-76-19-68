@@ -159,9 +159,9 @@ export default function TournamentDetails() {
 
       <div className="pt-20">
         <div className="space-y-4">
-          <MatchesSection matches={sampleMatches} />
-          <MatchesSection matches={sampleMatches} />
-          <MatchesSection matches={sampleMatches} />
+          <MatchesSection matches={sampleMatches} title="Quarter Finals" />
+          <MatchesSection matches={sampleMatches} title="Group Stage" />
+          <MatchesSection matches={sampleMatches} title="Qualifiers" />
         </div>
       </div>
     </div>
