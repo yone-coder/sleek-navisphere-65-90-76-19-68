@@ -56,6 +56,85 @@ export default function Feeds() {
     <div className="min-h-screen pt-20 animate-fade-in">
       <h1 className="text-4xl font-bold mb-8">{t('nav.feeds')}</h1>
       
+      {/* Stories Section */}
+      <div className="flex justify-center mb-8">
+        <div className="flex space-x-4">
+          {/* Story 1 - Your Story */}
+          <div className="flex flex-col items-center">
+            <div className="relative">
+              <img 
+                src="https://storage.googleapis.com/a1aa/image/GCUTXZTGWqbGpgtDgeGftMqoBVre0ZeqIO7zcxRf2iE.jpg"
+                alt="Profile picture of a person with a flower crown"
+                className="w-14 h-14 rounded-full border-2 border-pink-500 object-cover"
+                width="56"
+                height="56"
+              />
+              <div className="absolute bottom-0 right-0 bg-blue-500 rounded-full p-1">
+                <i className="fas fa-plus text-white text-xs"></i>
+              </div>
+            </div>
+            <span className="text-xs mt-1 text-gray-700 dark:text-gray-300">Your Story</span>
+          </div>
+
+          {/* Story 2 */}
+          <div className="flex flex-col items-center">
+            <div className="relative">
+              <img 
+                src="https://storage.googleapis.com/a1aa/image/ogag8o5tu_v_24ZBFbBRzWwvdNC0ezDlrh7TSfD2PgY.jpg"
+                alt="Profile picture of a person wearing a cap"
+                className="w-14 h-14 rounded-full border-2 border-pink-500 object-cover"
+                width="56"
+                height="56"
+              />
+            </div>
+            <span className="text-xs mt-1 text-gray-700 dark:text-gray-300">mauroh_nas...</span>
+          </div>
+
+          {/* Story 3 */}
+          <div className="flex flex-col items-center">
+            <div className="relative">
+              <img 
+                src="https://storage.googleapis.com/a1aa/image/_eJzSC9R0avEOAYQxoUKd6pkQ37RK_a45_h8D4yUiPE.jpg"
+                alt="Profile picture of a person smiling"
+                className="w-14 h-14 rounded-full border-2 border-pink-500 object-cover"
+                width="56"
+                height="56"
+              />
+            </div>
+            <span className="text-xs mt-1 text-gray-700 dark:text-gray-300">debby_yao</span>
+          </div>
+
+          {/* Story 4 */}
+          <div className="flex flex-col items-center">
+            <div className="relative">
+              <img 
+                src="https://storage.googleapis.com/a1aa/image/RgZqjb8-1l_k5YYDf4X3Y1sjK48m64kRu3s8TMj9jaE.jpg"
+                alt="Profile picture of a person with glasses"
+                className="w-14 h-14 rounded-full border-2 border-pink-500 object-cover"
+                width="56"
+                height="56"
+              />
+            </div>
+            <span className="text-xs mt-1 text-gray-700 dark:text-gray-300">dramyhsu</span>
+          </div>
+
+          {/* Story 5 */}
+          <div className="flex flex-col items-center">
+            <div className="relative">
+              <img 
+                src="https://storage.googleapis.com/a1aa/image/x0ZyuavIdf2kwiaZhzogOdm5CKLKuORq2wiewh3bOq0.jpg"
+                alt="Profile picture with a logo"
+                className="w-14 h-14 rounded-full border-2 border-pink-500 object-cover"
+                width="56"
+                height="56"
+              />
+            </div>
+            <span className="text-xs mt-1 text-gray-700 dark:text-gray-300">annyelleparis</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Create Post Section */}
       <div className="flex justify-center mb-6">
         <div className="flex items-center bg-gray-200 dark:bg-[#1a1a1a] rounded-full p-2 relative pl-4 pr-4">
           <div className="absolute left-0 transform -translate-x-16">
