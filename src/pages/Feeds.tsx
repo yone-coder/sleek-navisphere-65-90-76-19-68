@@ -1,6 +1,8 @@
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import { PostCard } from "@/components/posts/PostCard";
+import { Image as ImageIcon } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const SAMPLE_POSTS = [
   {
@@ -55,6 +57,32 @@ export default function Feeds() {
   return (
     <div className="min-h-screen pt-20 animate-fade-in">
       <h1 className="text-4xl font-bold mb-8">{t('nav.feeds')}</h1>
+      
+      <div className="flex justify-center mb-6">
+        <div className="flex items-center bg-white dark:bg-[#1a1a1a] rounded-full p-2 relative pl-4 pr-4 shadow-sm w-full max-w-2xl">
+          <div className="absolute left-0 transform -translate-x-16">
+            <div className="relative">
+              <Avatar className="w-10 h-10">
+                <AvatarImage 
+                  src="https://storage.googleapis.com/a1aa/image/--ZE9XtXSMls4itu_vT26OfFnb75N-Wpp5WQLWgFujE.jpg" 
+                  alt="Profile picture" 
+                />
+                <AvatarFallback>U</AvatarFallback>
+              </Avatar>
+              <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white bg-green-500"></span>
+            </div>
+          </div>
+          
+          <span className="ml-2 text-gray-700 dark:text-gray-300">
+            À quoi pensez-vous ?
+          </span>
+          
+          <div className="absolute right-0 transform translate-x-16 flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity">
+            <ImageIcon className="h-6 w-6 text-green-500" />
+            <span className="text-gray-500 text-sm">Photo</span>
+          </div>
+        </div>
+      </div>
       
       <div className="divide-y divide-gray-200 dark:divide-white/10">
         {SAMPLE_POSTS.map((post, index) => (
