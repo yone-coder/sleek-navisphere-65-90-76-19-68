@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -21,6 +22,7 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminBanners from "./pages/admin/AdminBanners";
 import Games from "./pages/Games";
+import Gomoku from "./pages/games/Gomoku";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +41,7 @@ const AppContent = () => {
         <Route path="/explore" element={<Explore />} />
         <Route path="/matches" element={<Matches />} />
         <Route path="/games" element={<Games />} />
+        <Route path="/games/gomoku" element={<Gomoku />} />
         <Route path="/feeds" element={<Feeds />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/wallet" element={<Wallet />} />
