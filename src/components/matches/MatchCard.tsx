@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Trophy, Calendar, Heart, MessageSquare, Eye, Share2 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +15,6 @@ interface MatchCardProps {
 export const MatchCard = ({ match }: MatchCardProps) => {
   const [isFollowing, setIsFollowing] = useState<{ [key: string]: boolean }>({});
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   const formatNumber = (num: number): string => {
     if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
