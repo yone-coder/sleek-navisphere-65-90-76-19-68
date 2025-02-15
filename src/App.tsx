@@ -1,4 +1,5 @@
 
+import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,25 +8,46 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Header } from "./components/Header";
 import { BottomNav } from "./components/BottomNav";
 import { LanguageProvider } from "./contexts/LanguageContext";
-import Home from "./pages/Home";
-import Explore from "./pages/Explore";
-import Matches from "./pages/Matches";
-import Feeds from "./pages/Feeds";
-import Profile from "./pages/Profile";
-import Wallet from "./pages/Wallet";
-import NotFound from "./pages/NotFound";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import NewsDetail from "./pages/NewsDetail";
-import Tournaments from "./pages/Tournaments";
-import TournamentDetails from "./pages/TournamentDetails";
-import AdminLayout from "./pages/admin/AdminLayout";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminBanners from "./pages/admin/AdminBanners";
-import AdminTournaments from "./pages/admin/AdminTournaments";
-import Games from "./pages/Games";
-import Gomoku from "./pages/games/Gomoku";
-import MatchDetails from "./pages/MatchDetails";
+import { Skeleton } from "@/components/ui/skeleton";
+
+// Lazy load all pages
+const Home = lazy(() => import("./pages/Home"));
+const Explore = lazy(() => import("./pages/Explore"));
+const Matches = lazy(() => import("./pages/Matches"));
+const Feeds = lazy(() => import("./pages/Feeds"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Wallet = lazy(() => import("./pages/Wallet"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Login = lazy(() => import("./pages/Login"));
+const SignUp = lazy(() => import("./pages/SignUp"));
+const NewsDetail = lazy(() => import("./pages/NewsDetail"));
+const Tournaments = lazy(() => import("./pages/Tournaments"));
+const TournamentDetails = lazy(() => import("./pages/TournamentDetails"));
+const Games = lazy(() => import("./pages/Games"));
+const Gomoku = lazy(() => import("./pages/games/Gomoku"));
+const MatchDetails = lazy(() => import("./pages/MatchDetails"));
+
+// Lazy load admin pages
+const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminBanners = lazy(() => import("./pages/admin/AdminBanners"));
+const AdminTournaments = lazy(() => import("./pages/admin/AdminTournaments"));
+
+const LoadingFallback = () => (
+  <div className="min-h-screen p-8 space-y-4">
+    <Skeleton className="h-8 w-[250px]" />
+    <div className="space-y-4">
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-[90%]" />
+      <Skeleton className="h-4 w-[80%]" />
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <Skeleton className="h-[200px] w-full rounded-lg" />
+      <Skeleton className="h-[200px] w-full rounded-lg" />
+      <Skeleton className="h-[200px] w-full rounded-lg" />
+    </div>
+  </div>
+);
 
 const queryClient = new QueryClient();
 
@@ -39,36 +61,38 @@ const AppContent = () => {
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
       {shouldShowHeader && <Header />}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/explore" element={<Explore />} />
-        <Route path="/matches" element={<Matches />} />
-        <Route path="/match/:id" element={<MatchDetails />} />
-        <Route path="/tournaments" element={<Tournaments />} />
-        <Route path="/games" element={<Games />} />
-        <Route path="/games/gomoku" element={<Gomoku />} />
-        <Route path="/feeds" element={<Feeds />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/wallet" element={<Wallet />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/news/:id" element={<NewsDetail />} />
-        <Route path="/tournament/:id" element={<TournamentDetails />} />
-        
-        {/* Admin Routes */}
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
-          <Route path="banners" element={<AdminBanners />} />
-          <Route path="tournaments" element={<AdminTournaments />} />
-          <Route path="users" element={<div className="p-8">Users Management (Coming Soon)</div>} />
-          <Route path="content" element={<div className="p-8">Content Management (Coming Soon)</div>} />
-          <Route path="data" element={<div className="p-8">Data Management (Coming Soon)</div>} />
-          <Route path="settings" element={<div className="p-8">Settings (Coming Soon)</div>} />
-          <Route path="system" element={<div className="p-8">System Management (Coming Soon)</div>} />
-        </Route>
-        
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Suspense fallback={<LoadingFallback />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/matches" element={<Matches />} />
+          <Route path="/match/:id" element={<MatchDetails />} />
+          <Route path="/tournaments" element={<Tournaments />} />
+          <Route path="/games" element={<Games />} />
+          <Route path="/games/gomoku" element={<Gomoku />} />
+          <Route path="/feeds" element={<Feeds />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/wallet" element={<Wallet />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/news/:id" element={<NewsDetail />} />
+          <Route path="/tournament/:id" element={<TournamentDetails />} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="banners" element={<AdminBanners />} />
+            <Route path="tournaments" element={<AdminTournaments />} />
+            <Route path="users" element={<div className="p-8">Users Management (Coming Soon)</div>} />
+            <Route path="content" element={<div className="p-8">Content Management (Coming Soon)</div>} />
+            <Route path="data" element={<div className="p-8">Data Management (Coming Soon)</div>} />
+            <Route path="settings" element={<div className="p-8">Settings (Coming Soon)</div>} />
+            <Route path="system" element={<div className="p-8">System Management (Coming Soon)</div>} />
+          </Route>
+          
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
       {shouldShowBottomNav && <BottomNav />}
     </div>
   );
