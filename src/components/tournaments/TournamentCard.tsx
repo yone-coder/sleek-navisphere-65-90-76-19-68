@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { CalendarIcon, Users, Trophy, DollarSign } from 'lucide-react';
 import { cn } from "@/lib/utils";
@@ -178,12 +177,12 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
         </div>
 
         <div className="flex space-x-2 text-xs">
-          <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-2 rounded transition-colors duration-300">
+          <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-2 rounded-md transition-colors duration-300">
             Register
           </button>
           <button 
             onClick={() => navigate(`/tournament/${tournament?.id || '1'}`)}
-            className="flex-1 bg-transparent hover:bg-blue-50 text-blue-600 dark:text-blue-400 font-medium py-1 px-2 border border-blue-600 rounded transition-colors duration-300 dark:hover:bg-gray-700 dark:border-blue-400"
+            className="flex-1 bg-transparent hover:bg-blue-50 text-blue-600 dark:text-blue-400 font-medium py-1 px-2 border border-blue-600 rounded-md transition-colors duration-300 dark:hover:bg-gray-700 dark:border-blue-400"
           >
             Details
           </button>

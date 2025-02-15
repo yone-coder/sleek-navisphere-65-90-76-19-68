@@ -27,12 +27,12 @@ export default function Tournaments() {
         {/* Custom Header */}
         <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm h-14 px-4 flex items-center justify-between">
           <div className="flex items-center">
-            <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="rounded-full">
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <h1 className="text-lg font-semibold ml-2">Game Details</h1>
           </div>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" className="rounded-full">
             <Search className="h-5 w-5" />
           </Button>
         </div>
@@ -55,12 +55,12 @@ export default function Tournaments() {
       {/* Custom Header */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm h-14 px-4 flex items-center justify-between">
         <div className="flex items-center">
-          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="rounded-full">
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <h1 className="text-lg font-semibold ml-2">Game Details</h1>
         </div>
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" className="rounded-full">
           <Search className="h-5 w-5" />
         </Button>
       </div>
@@ -114,7 +114,7 @@ export default function Tournaments() {
                     <i className="fas fa-check-circle text-green-500 text-sm ml-2"></i>
                   </h2>
                 </div>
-                <button className="bg-blue-600 text-white text-sm font-semibold px-3 py-1">
+                <button className="bg-blue-600 text-white text-sm font-semibold px-3 py-1 rounded-full">
                   + Follow
                 </button>
               </div>
@@ -135,7 +135,7 @@ export default function Tournaments() {
                   <span>528</span>
                 </div>
               </div>
-              <button className="bg-blue-600 text-white text-base font-semibold w-full py-2 mt-4">
+              <button className="bg-blue-600 text-white text-base font-semibold w-full py-2 mt-4 rounded-md">
                 Play Now
               </button>
             </div>
@@ -150,17 +150,17 @@ export default function Tournaments() {
             </div>
             {/* Filter Buttons */}
             <div className="flex space-x-3 p-4 overflow-x-auto">
-              <button className="bg-gray-700 text-white px-4 py-2 flex items-center whitespace-nowrap">
+              <button className="bg-gray-700 text-white px-4 py-2 flex items-center whitespace-nowrap rounded-md">
                 <i className="fas fa-check text-blue-500 mr-2"></i>
                 Top free
                 <i className="fas fa-chevron-down ml-2 text-sm"></i>
               </button>
-              <button className="bg-gray-700 text-white px-4 py-2 flex items-center whitespace-nowrap">
+              <button className="bg-gray-700 text-white px-4 py-2 flex items-center whitespace-nowrap rounded-md">
                 <i className="fas fa-check text-blue-500 mr-2"></i>
                 Phone
                 <i className="fas fa-chevron-down ml-2 text-sm"></i>
               </button>
-              <button className="bg-gray-700 text-white px-4 py-2 whitespace-nowrap">
+              <button className="bg-gray-700 text-white px-4 py-2 whitespace-nowrap rounded-md">
                 Categories
               </button>
             </div>
