@@ -3,12 +3,33 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { TournamentCard } from "@/components/tournaments/TournamentCard";
 import { ArrowLeft, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Tournament } from "@/types/tournament";
 
 export default function Tournaments() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const gameId = searchParams.get("game");
   const gameTitle = searchParams.get("title");
+
+  const { data: tournaments = [], isLoading } = useQuery({
+    queryKey: ["tournaments"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("tournaments")
+        .select("*")
+        .order("position");
+      
+      if (error) throw error;
+      return data || [];
+    },
+  });
+
+  // Split tournaments by status
+  const featuredTournaments = tournaments.filter((t: Tournament) => t.position <= 4);
+  const upcomingTournaments = tournaments.filter((t: Tournament) => t.status === "upcoming");
+  const pastTournaments = tournaments.filter((t: Tournament) => t.status === "completed");
 
   return (
     <div className="min-h-screen">
@@ -43,37 +64,57 @@ export default function Tournaments() {
             {decodeURIComponent(gameTitle)} Tournaments
           </h2>
         )}
-        <div className="flex flex-col space-y-6">
-          <div>
-            <h2 className="text-xl font-semibold px-4 mb-4">Featured Tournaments</h2>
-            <div className="flex overflow-x-auto px-4 space-x-3 pb-4 no-scrollbar">
-              <TournamentCard className="w-64 shrink-0" />
-              <TournamentCard className="w-64 shrink-0" />
-              <TournamentCard className="w-64 shrink-0" />
-              <TournamentCard className="w-64 shrink-0" />
-            </div>
-          </div>
+        
+        {isLoading ? (
+          <div className="p-4">Loading tournaments...</div>
+        ) : (
+          <div className="flex flex-col space-y-6">
+            {featuredTournaments.length > 0 && (
+              <div>
+                <h2 className="text-xl font-semibold px-4 mb-4">Featured Tournaments</h2>
+                <div className="flex overflow-x-auto px-4 space-x-3 pb-4 no-scrollbar">
+                  {featuredTournaments.map((tournament) => (
+                    <TournamentCard 
+                      key={tournament.id}
+                      tournament={tournament}
+                      className="w-64 shrink-0"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
 
-          <div>
-            <h2 className="text-xl font-semibold px-4 mb-4">Upcoming Tournaments</h2>
-            <div className="flex overflow-x-auto px-4 space-x-3 pb-4 no-scrollbar">
-              <TournamentCard className="w-64 shrink-0" />
-              <TournamentCard className="w-64 shrink-0" />
-              <TournamentCard className="w-64 shrink-0" />
-              <TournamentCard className="w-64 shrink-0" />
-            </div>
-          </div>
+            {upcomingTournaments.length > 0 && (
+              <div>
+                <h2 className="text-xl font-semibold px-4 mb-4">Upcoming Tournaments</h2>
+                <div className="flex overflow-x-auto px-4 space-x-3 pb-4 no-scrollbar">
+                  {upcomingTournaments.map((tournament) => (
+                    <TournamentCard 
+                      key={tournament.id}
+                      tournament={tournament}
+                      className="w-64 shrink-0"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
 
-          <div>
-            <h2 className="text-xl font-semibold px-4 mb-4">Past Tournaments</h2>
-            <div className="flex overflow-x-auto px-4 space-x-3 pb-4 no-scrollbar">
-              <TournamentCard className="w-64 shrink-0" />
-              <TournamentCard className="w-64 shrink-0" />
-              <TournamentCard className="w-64 shrink-0" />
-              <TournamentCard className="w-64 shrink-0" />
-            </div>
+            {pastTournaments.length > 0 && (
+              <div>
+                <h2 className="text-xl font-semibold px-4 mb-4">Past Tournaments</h2>
+                <div className="flex overflow-x-auto px-4 space-x-3 pb-4 no-scrollbar">
+                  {pastTournaments.map((tournament) => (
+                    <TournamentCard 
+                      key={tournament.id}
+                      tournament={tournament}
+                      className="w-64 shrink-0"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
