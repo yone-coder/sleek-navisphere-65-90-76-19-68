@@ -4,14 +4,26 @@ import { CalendarIcon, Users, Trophy, DollarSign } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { useNavigate } from 'react-router-dom';
 
-interface TournamentCardProps {
-  className?: string;
+interface Tournament {
+  id: string;
+  title: string;
+  start_date: string;
+  status: "upcoming" | "in-progress" | "closed" | "completed";
+  prize_pool: number;
+  max_participants: number;
+  current_participants: number;
+  banner_url: string;
 }
 
-export const TournamentCard = ({ className }: TournamentCardProps) => {
+interface TournamentCardProps {
+  className?: string;
+  tournament?: Tournament;
+}
+
+export const TournamentCard = ({ className, tournament }: TournamentCardProps) => {
   const [countdown, setCountdown] = useState('');
   const navigate = useNavigate();
-  const targetDate = new Date('2025-02-12T17:45:00').getTime();
+  const targetDate = tournament ? new Date(tournament.start_date).getTime() : new Date('2025-02-12T17:45:00').getTime();
 
   useEffect(() => {
     const updateCountdown = () => {
@@ -35,14 +47,14 @@ export const TournamentCard = ({ className }: TournamentCardProps) => {
     updateCountdown();
 
     return () => clearInterval(interval);
-  }, []);
+  }, [targetDate]);
 
   return (
     <div className={cn("rounded-lg overflow-hidden shadow-md bg-white dark:bg-gray-800 transition-all duration-300 hover:shadow-lg", className)}>
       {/* Tournament Image */}
       <div className="relative h-32">
         <img
-          src="https://storage.googleapis.com/a1aa/image/1KrFqMU9yacw7XaUF67L6MaKLpXyjGHzZqDa24FBdig.jpg"
+          src={tournament?.banner_url || "https://storage.googleapis.com/a1aa/image/1KrFqMU9yacw7XaUF67L6MaKLpXyjGHzZqDa24FBdig.jpg"}
           alt="Tournament banner"
           className="w-full h-full object-cover"
         />
@@ -67,25 +79,44 @@ export const TournamentCard = ({ className }: TournamentCardProps) => {
       {/* Tournament Info */}
       <div className="p-3">
         <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1">
-          2025 Summer Championship
+          {tournament?.title || "2025 Summer Championship"}
         </h3>
 
         {/* Details Section */}
         <div className="space-y-2 mb-2">
           <div className="flex items-center text-gray-600 dark:text-gray-300">
             <CalendarIcon className="h-3 w-3 text-blue-500 mr-1" />
-            <span className="text-xs">Feb 12 - Feb 28, 2025</span>
+            <span className="text-xs">
+              {tournament 
+                ? new Date(tournament.start_date).toLocaleDateString()
+                : "Feb 12 - Feb 28, 2025"}
+            </span>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center text-gray-600 dark:text-gray-300">
               <Users className="h-3 w-3 text-blue-500 mr-1" />
-              <span className="text-xs">128/256</span>
+              <span className="text-xs">
+                {tournament 
+                  ? `${tournament.current_participants}/${tournament.max_participants}`
+                  : "128/256"}
+              </span>
             </div>
-            <span className="text-xs text-blue-600 dark:text-blue-400">128 left</span>
+            <span className="text-xs text-blue-600 dark:text-blue-400">
+              {tournament 
+                ? `${tournament.max_participants - tournament.current_participants} left`
+                : "128 left"}
+            </span>
           </div>
           {/* Progress Bar */}
           <div className="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
-            <div className="bg-blue-600 h-1.5 rounded-full" style={{ width: '50%' }}></div>
+            <div 
+              className="bg-blue-600 h-1.5 rounded-full" 
+              style={{ 
+                width: tournament 
+                  ? `${(tournament.current_participants / tournament.max_participants) * 100}%`
+                  : "50%" 
+              }}
+            ></div>
           </div>
         </div>
 
@@ -95,7 +126,9 @@ export const TournamentCard = ({ className }: TournamentCardProps) => {
             <Trophy className="h-3 w-3 text-yellow-500" />
             <div>
               <span className="text-gray-500 dark:text-gray-400">Prize</span>
-              <p className="font-semibold text-gray-800 dark:text-white">$10,000</p>
+              <p className="font-semibold text-gray-800 dark:text-white">
+                ${tournament ? tournament.prize_pool.toLocaleString() : "10,000"}
+              </p>
             </div>
           </div>
           <div className="flex items-center space-x-1">
@@ -113,7 +146,7 @@ export const TournamentCard = ({ className }: TournamentCardProps) => {
             Register
           </button>
           <button 
-            onClick={() => navigate(`/tournament/1`)}
+            onClick={() => navigate(`/tournament/${tournament?.id || '1'}`)}
             className="flex-1 bg-transparent hover:bg-blue-50 text-blue-600 dark:text-blue-400 font-medium py-1 px-2 border border-blue-600 rounded transition-colors duration-300 dark:hover:bg-gray-700 dark:border-blue-400"
           >
             Details
