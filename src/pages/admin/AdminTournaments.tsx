@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Plus, Pencil, Trash2 } from "lucide-react";
 import {
@@ -20,11 +20,32 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useToast } from "@/components/ui/use-toast";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function AdminTournaments() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [selectedTournament, setSelectedTournament] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    start_date: "",
+    prize_pool: "",
+    max_participants: "",
+    status: "upcoming",
+    banner_url: "",
+  });
+  
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const { data: tournaments, isLoading } = useQuery({
     queryKey: ["admin-tournaments"],
@@ -59,6 +80,52 @@ export default function AdminTournaments() {
       description: "Tournament deleted successfully",
     });
     setIsDeleteDialogOpen(false);
+    queryClient.invalidateQueries({ queryKey: ["admin-tournaments"] });
+  };
+
+  const handleAddTournament = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const { error } = await supabase.from("tournaments").insert([
+        {
+          title: formData.title,
+          start_date: new Date(formData.start_date).toISOString(),
+          prize_pool: Number(formData.prize_pool),
+          max_participants: Number(formData.max_participants),
+          status: formData.status,
+          banner_url: formData.banner_url,
+          position: tournaments ? tournaments.length : 0,
+        },
+      ]);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Tournament added successfully",
+      });
+      
+      setIsAddDialogOpen(false);
+      setFormData({
+        title: "",
+        start_date: "",
+        prize_pool: "",
+        max_participants: "",
+        status: "upcoming",
+        banner_url: "",
+      });
+      queryClient.invalidateQueries({ queryKey: ["admin-tournaments"] });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to add tournament",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (isLoading) {
@@ -73,7 +140,7 @@ export default function AdminTournaments() {
     <div className="p-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Tournaments Management</h1>
-        <Button>
+        <Button onClick={() => setIsAddDialogOpen(true)}>
           <Plus className="w-4 h-4 mr-2" /> Add Tournament
         </Button>
       </div>
@@ -125,6 +192,7 @@ export default function AdminTournaments() {
         </Table>
       </div>
 
+      {/* Delete Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -149,6 +217,107 @@ export default function AdminTournaments() {
               Delete
             </Button>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Tournament Dialog */}
+      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Add Tournament</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleAddTournament} className="space-y-4">
+            <div className="grid w-full items-center gap-2">
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
+                required
+                value={formData.title}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
+              />
+            </div>
+            <div className="grid w-full items-center gap-2">
+              <Label htmlFor="start_date">Start Date</Label>
+              <Input
+                id="start_date"
+                type="datetime-local"
+                required
+                value={formData.start_date}
+                onChange={(e) =>
+                  setFormData({ ...formData, start_date: e.target.value })
+                }
+              />
+            </div>
+            <div className="grid w-full items-center gap-2">
+              <Label htmlFor="prize_pool">Prize Pool ($)</Label>
+              <Input
+                id="prize_pool"
+                type="number"
+                required
+                value={formData.prize_pool}
+                onChange={(e) =>
+                  setFormData({ ...formData, prize_pool: e.target.value })
+                }
+              />
+            </div>
+            <div className="grid w-full items-center gap-2">
+              <Label htmlFor="max_participants">Max Participants</Label>
+              <Input
+                id="max_participants"
+                type="number"
+                required
+                value={formData.max_participants}
+                onChange={(e) =>
+                  setFormData({ ...formData, max_participants: e.target.value })
+                }
+              />
+            </div>
+            <div className="grid w-full items-center gap-2">
+              <Label htmlFor="status">Status</Label>
+              <Select
+                value={formData.status}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, status: value })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="upcoming">Upcoming</SelectItem>
+                  <SelectItem value="in-progress">In Progress</SelectItem>
+                  <SelectItem value="completed">Completed</SelectItem>
+                  <SelectItem value="closed">Closed</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid w-full items-center gap-2">
+              <Label htmlFor="banner_url">Banner URL</Label>
+              <Input
+                id="banner_url"
+                required
+                value={formData.banner_url}
+                onChange={(e) =>
+                  setFormData({ ...formData, banner_url: e.target.value })
+                }
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsAddDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={loading}>
+                {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                Add Tournament
+              </Button>
+            </div>
+          </form>
         </DialogContent>
       </Dialog>
     </div>
