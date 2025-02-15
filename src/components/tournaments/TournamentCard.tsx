@@ -54,7 +54,7 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
       {/* Tournament Image */}
       <div className="relative h-32">
         <img
-          src={tournament.banner_url}
+          src={tournament.banner_url || "/placeholder.svg"}
           alt={`${tournament.title} banner`}
           className="w-full h-full object-cover"
         />
@@ -83,10 +83,12 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
           <div className="flex items-center justify-between">
             <div className="flex items-center text-gray-600 dark:text-gray-300">
               <Users className="h-3 w-3 text-blue-500 mr-1" />
-              <span className="text-xs">{tournament.current_participants}/{tournament.max_participants}</span>
+              <span className="text-xs">
+                {tournament.current_participants || 0}/{tournament.max_participants}
+              </span>
             </div>
             <span className="text-xs text-blue-600 dark:text-blue-400">
-              {tournament.max_participants - tournament.current_participants} left
+              {tournament.max_participants - (tournament.current_participants || 0)} left
             </span>
           </div>
           {/* Progress Bar */}
@@ -94,7 +96,7 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
             <div 
               className="bg-blue-600 h-1.5 rounded-full" 
               style={{ 
-                width: `${(tournament.current_participants / tournament.max_participants) * 100}%` 
+                width: `${((tournament.current_participants || 0) / tournament.max_participants) * 100}%` 
               }}
             ></div>
           </div>
