@@ -1,10 +1,29 @@
-
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { MatchesSection } from "@/components/matches/MatchesSection";
 import { Match } from "@/components/matches/types";
-import { ArrowLeft, Search } from "lucide-react";
+import { 
+  ArrowLeft, 
+  Search, 
+  Scroll,
+  CalendarClock, 
+  Users,
+  Trophy,
+  DollarSign,
+  Heart,
+  MessageSquare,
+  Share2,
+  Copy,
+  UserPlus,
+  ChevronDown,
+  ChevronUp
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
 const sampleMatches: Match[] = [
   {
@@ -126,10 +145,115 @@ const sampleMatches: Match[] = [
   }
 ];
 
+const rules = [
+  {
+    id: 'general',
+    title: 'General Rules',
+    rules: [
+      'All matches will be played on the latest tournament patch (v2.34)',
+      'Players must arrive 30 minutes before scheduled match time',
+      'Match results are final once submitted to tournament officials',
+      'Players must use tournament-provided equipment',
+      'Unsportsmanlike conduct will result in immediate disqualification'
+    ]
+  },
+  {
+    id: 'competition',
+    title: 'Competition Format',
+    rules: [
+      'Double elimination bracket system',
+      'Best-of-three matches for all rounds except finals',
+      'Finals will be best-of-five',
+      'Map selection alternates between players, loser picks next map',
+      'No map may be played twice in the same match'
+    ]
+  },
+  {
+    id: 'conduct',
+    title: 'Player Conduct',
+    rules: [
+      'Players must maintain professional behavior at all times',
+      'Verbal abuse of opponents or officials is prohibited',
+      'Intentional disconnects without approval will count as a forfeit',
+      'Players may not receive coaching during matches',
+      'All disputes must be reported to tournament officials immediately'
+    ]
+  },
+  {
+    id: 'technical',
+    title: 'Technical Rules',
+    rules: [
+      'In case of technical failure, match may be paused up to 15 minutes',
+      'Only approved peripherals may be used (list available at check-in)',
+      'Settings must be configured before match start',
+      'Recording software must be approved by tournament officials',
+      'Streaming is prohibited during tournament hours'
+    ]
+  }
+];
+
+const TournamentRulesCard = () => {
+  const [expandedSection, setExpandedSection] = useState<string | null>(null);
+
+  const toggleSection = (section: string) => {
+    setExpandedSection(expandedSection === section ? null : section);
+  };
+
+  return (
+    <div className="w-full max-w-2xl mx-auto shadow-lg">
+      <div className="bg-slate-800 text-white p-4">
+        <div className="flex items-center gap-2">
+          <Scroll className="h-5 w-5" />
+          <h2 className="text-lg font-bold">Official Tournament Rule Book</h2>
+        </div>
+      </div>
+
+      <div className="p-5">
+        <div className="space-y-4">
+          {rules.map((section) => (
+            <div key={section.id} className="border border-slate-200 rounded-lg overflow-hidden">
+              <button 
+                onClick={() => toggleSection(section.id)}
+                className="flex items-center justify-between w-full p-4 text-left bg-slate-50 hover:bg-slate-100 transition"
+              >
+                <span className="font-semibold text-slate-800">{section.title}</span>
+                {expandedSection === section.id ? 
+                  <ChevronUp className="h-5 w-5 text-slate-500" /> : 
+                  <ChevronDown className="h-5 w-5 text-slate-500" />
+                }
+              </button>
+              
+              {expandedSection === section.id && (
+                <div className="p-4 bg-white">
+                  <ul className="space-y-2">
+                    {section.rules.map((rule, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <span className="text-slate-400 mt-1">•</span>
+                        <span className="text-slate-700">{rule}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="my-6 border-t border-slate-200"></div>
+        
+        <div className="text-sm text-slate-500">
+          <p>All rules are subject to interpretation by the tournament committee. Additional rules may be announced before the tournament. Players are responsible for staying updated on any rule changes.</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function TournamentDetails() {
   const { id } = useParams();
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("participants");
 
   return (
     <div className="min-h-screen animate-fade-in">
@@ -145,7 +269,7 @@ export default function TournamentDetails() {
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <h1 className="text-lg font-semibold">Winter Championship 2024</h1>
+            <h1 className="text-lg font-semibold">2025 Summer Championship</h1>
           </div>
           <Button
             variant="ghost"
@@ -157,11 +281,129 @@ export default function TournamentDetails() {
         </div>
       </div>
 
-      <div className="pt-24 pb-16">
-        <div className="space-y-12">
-          <MatchesSection matches={sampleMatches} title="Quarter Finals" />
-          <MatchesSection matches={sampleMatches} title="Group Stage" />
-          <MatchesSection matches={sampleMatches} title="Qualifiers" />
+      <div className="pt-16">
+        {/* Tournament Card */}
+        <div className="max-w-2xl mx-auto p-4">
+          <div className="overflow-hidden shadow-lg bg-white dark:bg-gray-800 rounded-lg">
+            <div className="relative">
+              <img 
+                src="https://storage.googleapis.com/a1aa/image/BcP3itd2BEfYcAhKkd2UAUs_vV9N3Sl-reNN8Mi1FEo.jpg" 
+                alt="Tournament banner" 
+                className="w-full h-48 object-cover"
+              />
+              <Badge className="absolute top-4 right-4" variant="default">
+                Premium Event
+              </Badge>
+            </div>
+
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <Badge variant="secondary">Sponsored by: Google</Badge>
+                <Button variant="default" size="sm">
+                  <UserPlus className="h-4 w-4 mr-2" />
+                  Follow
+                </Button>
+              </div>
+
+              <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                The premier summer gaming event featuring the latest titles and top competitors from around the world.
+              </p>
+
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center text-gray-700 dark:text-gray-300">
+                  <CalendarClock className="h-5 w-5 text-blue-500 mr-3" />
+                  <span className="text-sm">July 15-18, 2025</span>
+                </div>
+                
+                <div className="flex flex-col space-y-2">
+                  <div className="flex items-center justify-between text-gray-700 dark:text-gray-300">
+                    <div className="flex items-center">
+                      <Users className="h-5 w-5 text-blue-500 mr-3" />
+                      <span className="text-sm">128/256 Participants</span>
+                    </div>
+                    <span className="text-sm text-blue-600 dark:text-blue-400 font-medium">128 left</span>
+                  </div>
+                  <Progress value={50} className="h-2" />
+                </div>
+              </div>
+
+              <div className="flex justify-between mb-6">
+                <div className="flex items-center space-x-2">
+                  <Trophy className="h-5 w-5 text-yellow-500" />
+                  <div>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Prize Pool</span>
+                    <p className="font-bold text-gray-800 dark:text-white">$10,000</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <DollarSign className="h-5 w-5 text-green-500" />
+                  <div>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Entry Fee</span>
+                    <p className="font-bold text-gray-800 dark:text-white">$75.00</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-around mb-6 space-x-4">
+                <div className="flex items-center space-x-1">
+                  <Heart className="h-4 w-4 text-red-500" />
+                  <span className="text-sm text-gray-700 dark:text-gray-300">1.2K</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <MessageSquare className="h-4 w-4 text-blue-500" />
+                  <span className="text-sm text-gray-700 dark:text-gray-300">350</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Share2 className="h-4 w-4 text-green-500" />
+                  <span className="text-sm text-gray-700 dark:text-gray-300">75</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Copy className="h-4 w-4 text-gray-500" />
+                </div>
+              </div>
+
+              <div className="flex mb-6">
+                <Button className="w-full" size="lg">
+                  Register Now
+                </Button>
+              </div>
+
+              <Tabs defaultValue="participants" className="w-full">
+                <TabsList className="w-full h-auto flex-wrap">
+                  {["participants", "rules", "matches", "faqs", "schedule", "brackets", "roadmap"].map((tab) => (
+                    <TabsTrigger
+                      key={tab}
+                      value={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className="flex-1 min-w-[120px]"
+                    >
+                      {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+
+                <TabsContent value="rules">
+                  <TournamentRulesCard />
+                </TabsContent>
+
+                <TabsContent value="matches">
+                  <div className="space-y-12">
+                    <MatchesSection matches={sampleMatches} title="Quarter Finals" />
+                    <MatchesSection matches={sampleMatches} title="Group Stage" />
+                    <MatchesSection matches={sampleMatches} title="Qualifiers" />
+                  </div>
+                </TabsContent>
+
+                {["participants", "faqs", "schedule", "brackets", "roadmap"].map((tab) => (
+                  <TabsContent key={tab} value={tab}>
+                    <div className="p-4 text-center text-gray-500">
+                      {tab.charAt(0).toUpperCase() + tab.slice(1)} content coming soon...
+                    </div>
+                  </TabsContent>
+                ))}
+              </Tabs>
+            </div>
+          </div>
         </div>
       </div>
     </div>
