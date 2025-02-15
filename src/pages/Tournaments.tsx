@@ -5,7 +5,7 @@ import { MatchCard } from "@/components/matches/MatchCard";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Search } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Match } from "@/components/matches/types";
@@ -54,8 +54,12 @@ const sampleMatches: Match[] = [
 
 export default function Tournaments() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState<'tournaments' | 'matches' | 'leaderboard'>('matches');
-  const currentGame = "Chess"; // We can make this dynamic later by passing it as a prop or URL parameter
+  
+  // Get the game name from URL search params
+  const searchParams = new URLSearchParams(location.search);
+  const currentGame = searchParams.get('title') || "Chess";
   
   const { data: tournaments, isLoading } = useQuery({
     queryKey: ['tournaments', currentGame],
@@ -117,7 +121,7 @@ export default function Tournaments() {
 
       {/* Content */}
       <div className="pt-14">
-        {/* Chess Game Card Section */}
+        {/* Game Card Section */}
         <div className="flex flex-col items-center justify-center">
           <div className="bg-gray-800 text-white w-full">
             <div className="relative">
