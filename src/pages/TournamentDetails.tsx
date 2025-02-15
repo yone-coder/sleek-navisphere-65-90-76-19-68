@@ -259,7 +259,7 @@ export default function TournamentDetails() {
     <div className="min-h-screen animate-fade-in">
       {/* Custom Header */}
       <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg bg-background/80 border-b border-border/40">
-        <div className="h-16 px-4 flex items-center justify-between max-w-7xl mx-auto">
+        <div className="h-16 px-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Button
               variant="ghost"
@@ -283,7 +283,7 @@ export default function TournamentDetails() {
 
       <div className="pt-16">
         {/* Tournament Card */}
-        <div className="max-w-2xl mx-auto p-4">
+        <div className="px-2 sm:px-4">
           <div className="overflow-hidden shadow-lg bg-white dark:bg-gray-800 rounded-lg">
             <div className="relative">
               <img 
