@@ -1,13 +1,61 @@
+
 import { TournamentCard } from "@/components/tournaments/TournamentCard";
 import { TournamentCardSkeleton } from "@/components/tournaments/TournamentCardSkeleton";
+import { MatchCard } from "@/components/matches/MatchCard";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Match } from "@/components/matches/types";
+
+const sampleMatches: Match[] = [
+  {
+    id: 1,
+    championship: "World Championship",
+    phase: "Quarterfinals",
+    status: "live",
+    date: "2025-02-12",
+    time: "17:45:00",
+    venue: "Madison Square Garden",
+    location: "New York, USA",
+    opponents: [
+      {
+        name: "Alex Johnson",
+        photo: "https://storage.googleapis.com/a1aa/image/u9QlGEQDPW0dq8Wric7AsU_j7PkzMnKLIgLMlSRCv5I.jpg",
+        country: "USA",
+        city: "New York",
+        rank: 1,
+        stats: "Top Player",
+        wins: 42,
+        losses: 12
+      },
+      {
+        name: "Maria Rodriguez",
+        photo: "https://storage.googleapis.com/a1aa/image/iG3N08MIvjY6mNComFBnnpKsPY-e90lt6EILTZH3NF8.jpg",
+        country: "Spain",
+        city: "Miami",
+        rank: 2,
+        stats: "Rising Star",
+        wins: 38,
+        losses: 15
+      }
+    ],
+    spectators: 2500,
+    likes: 1200,
+    comments: 458,
+    predictions: {
+      firstPlayer: 65,
+      secondPlayer: 35
+    }
+  }
+];
 
 export default function Tournaments() {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<'tournaments' | 'matches' | 'leaderboard'>('matches');
+  
   const { data: tournaments, isLoading } = useQuery({
     queryKey: ['tournaments'],
     queryFn: async () => {
@@ -143,10 +191,25 @@ export default function Tournaments() {
 
           {/* Navigation Tabs */}
           <div className="w-full bg-gray-800">
-            <div className="flex justify-between text-white text-lg border-b border-gray-700">
-              <a className="px-4 py-2 opacity-70" href="#">Tournaments</a>
-              <a className="px-4 py-2 border-b-2 border-blue-500 text-blue-500" href="#">Matches</a>
-              <a className="px-4 py-2 opacity-70" href="#">Leaderboard</a>
+            <div className="flex justify-between text-white text-sm border-b border-gray-700">
+              <button 
+                onClick={() => setActiveTab('tournaments')}
+                className={`px-4 py-2 ${activeTab === 'tournaments' ? 'border-b-2 border-blue-500 text-blue-500' : 'opacity-70'}`}
+              >
+                Tournaments
+              </button>
+              <button 
+                onClick={() => setActiveTab('matches')}
+                className={`px-4 py-2 ${activeTab === 'matches' ? 'border-b-2 border-blue-500 text-blue-500' : 'opacity-70'}`}
+              >
+                Matches
+              </button>
+              <button 
+                onClick={() => setActiveTab('leaderboard')}
+                className={`px-4 py-2 ${activeTab === 'leaderboard' ? 'border-b-2 border-blue-500 text-blue-500' : 'opacity-70'}`}
+              >
+                Leaderboard
+              </button>
             </div>
             {/* Filter Buttons */}
             <div className="flex space-x-3 p-4 overflow-x-auto">
@@ -167,12 +230,36 @@ export default function Tournaments() {
           </div>
         </div>
 
-        {/* Existing Tournaments Section */}
-        <h1 className="text-2xl font-bold mb-6 px-4">Tournaments</h1>
-        <div className="flex overflow-x-auto space-x-6 pb-6 px-4">
-          {tournaments?.map((tournament) => (
-            <TournamentCard key={tournament.id} tournament={tournament} className="min-w-[300px]" />
-          ))}
+        {/* Tab Content */}
+        <div className="px-4 py-6">
+          {activeTab === 'tournaments' && (
+            <div className="space-y-4">
+              <h2 className="text-xl font-bold">Available Tournaments</h2>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {tournaments?.map((tournament) => (
+                  <TournamentCard key={tournament.id} tournament={tournament} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'matches' && (
+            <div className="space-y-4">
+              <h2 className="text-xl font-bold">Current Matches</h2>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {sampleMatches.map((match) => (
+                  <MatchCard key={match.id} match={match} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'leaderboard' && (
+            <div className="space-y-4">
+              <h2 className="text-xl font-bold">Leaderboard</h2>
+              <p className="text-gray-500">Leaderboard content coming soon...</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
