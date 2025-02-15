@@ -22,6 +22,7 @@ import TournamentDetails from "./pages/TournamentDetails";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminBanners from "./pages/admin/AdminBanners";
+import AdminTournaments from "./pages/admin/AdminTournaments";
 import Games from "./pages/Games";
 import Gomoku from "./pages/games/Gomoku";
 import MatchDetails from "./pages/MatchDetails";
@@ -58,6 +59,7 @@ const AppContent = () => {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
           <Route path="banners" element={<AdminBanners />} />
+          <Route path="tournaments" element={<AdminTournaments />} />
           <Route path="users" element={<div className="p-8">Users Management (Coming Soon)</div>} />
           <Route path="content" element={<div className="p-8">Content Management (Coming Soon)</div>} />
           <Route path="data" element={<div className="p-8">Data Management (Coming Soon)</div>} />
