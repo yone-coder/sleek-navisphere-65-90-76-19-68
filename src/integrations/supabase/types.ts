@@ -41,6 +41,8 @@ export type Database = {
           banner_url: string
           created_at: string
           current_participants: number
+          end_date: string
+          game: string
           id: string
           max_participants: number
           position: number | null
@@ -54,6 +56,8 @@ export type Database = {
           banner_url: string
           created_at?: string
           current_participants?: number
+          end_date: string
+          game?: string
           id?: string
           max_participants: number
           position?: number | null
@@ -67,6 +71,8 @@ export type Database = {
           banner_url?: string
           created_at?: string
           current_participants?: number
+          end_date?: string
+          game?: string
           id?: string
           max_participants?: number
           position?: number | null

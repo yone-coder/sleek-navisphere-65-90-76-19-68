@@ -29,17 +29,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { format } from "date-fns";
 
 type TournamentStatus = "upcoming" | "in-progress" | "closed" | "completed";
 
 interface FormData {
   title: string;
   start_date: string;
+  end_date: string;
   prize_pool: string;
   max_participants: string;
   status: TournamentStatus;
   banner_url: string;
+  game: string;
 }
+
+const GAME_OPTIONS = ["Chess", "Checkers", "Go", "Backgammon", "Poker", "Other"];
 
 export default function AdminTournaments() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -49,10 +54,12 @@ export default function AdminTournaments() {
   const [formData, setFormData] = useState<FormData>({
     title: "",
     start_date: "",
+    end_date: "",
     prize_pool: "",
     max_participants: "",
     status: "upcoming",
     banner_url: "",
+    game: "Chess"
   });
   
   const { toast } = useToast();
@@ -102,10 +109,12 @@ export default function AdminTournaments() {
       const { error } = await supabase.from("tournaments").insert({
         title: formData.title,
         start_date: new Date(formData.start_date).toISOString(),
+        end_date: new Date(formData.end_date).toISOString(),
         prize_pool: Number(formData.prize_pool),
         max_participants: Number(formData.max_participants),
         status: formData.status,
         banner_url: formData.banner_url,
+        game: formData.game,
         position: tournaments ? tournaments.length : 0,
       });
 
@@ -120,10 +129,12 @@ export default function AdminTournaments() {
       setFormData({
         title: "",
         start_date: "",
+        end_date: "",
         prize_pool: "",
         max_participants: "",
         status: "upcoming",
         banner_url: "",
+        game: "Chess"
       });
       queryClient.invalidateQueries({ queryKey: ["admin-tournaments"] });
     } catch (error) {
@@ -145,6 +156,10 @@ export default function AdminTournaments() {
     );
   }
 
+  const formatDateRange = (startDate: string, endDate: string) => {
+    return `${format(new Date(startDate), 'MMM dd')} - ${format(new Date(endDate), 'MMM dd')}, ${format(new Date(endDate), 'yyyy')}`;
+  };
+
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-6">
@@ -160,7 +175,8 @@ export default function AdminTournaments() {
             <TableRow>
               <TableHead>Position</TableHead>
               <TableHead>Title</TableHead>
-              <TableHead>Start Date</TableHead>
+              <TableHead>Game</TableHead>
+              <TableHead>Date Range</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Prize Pool</TableHead>
               <TableHead>Participants</TableHead>
@@ -172,8 +188,9 @@ export default function AdminTournaments() {
               <TableRow key={tournament.id}>
                 <TableCell>{tournament.position}</TableCell>
                 <TableCell>{tournament.title}</TableCell>
+                <TableCell>{tournament.game}</TableCell>
                 <TableCell>
-                  {new Date(tournament.start_date).toLocaleDateString()}
+                  {formatDateRange(tournament.start_date, tournament.end_date)}
                 </TableCell>
                 <TableCell>{tournament.status}</TableCell>
                 <TableCell>${tournament.prize_pool}</TableCell>
@@ -248,6 +265,26 @@ export default function AdminTournaments() {
               />
             </div>
             <div className="grid w-full items-center gap-2">
+              <Label htmlFor="game">Game</Label>
+              <Select
+                value={formData.game}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, game: value })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {GAME_OPTIONS.map((game) => (
+                    <SelectItem key={game} value={game}>
+                      {game}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid w-full items-center gap-2">
               <Label htmlFor="start_date">Start Date</Label>
               <Input
                 id="start_date"
@@ -256,6 +293,18 @@ export default function AdminTournaments() {
                 value={formData.start_date}
                 onChange={(e) =>
                   setFormData({ ...formData, start_date: e.target.value })
+                }
+              />
+            </div>
+            <div className="grid w-full items-center gap-2">
+              <Label htmlFor="end_date">End Date</Label>
+              <Input
+                id="end_date"
+                type="datetime-local"
+                required
+                value={formData.end_date}
+                onChange={(e) =>
+                  setFormData({ ...formData, end_date: e.target.value })
                 }
               />
             </div>

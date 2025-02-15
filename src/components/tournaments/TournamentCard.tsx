@@ -1,18 +1,20 @@
-
 import React, { useEffect, useState } from 'react';
 import { CalendarIcon, Users, Trophy, DollarSign } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
 
 interface Tournament {
   id: string;
   title: string;
   start_date: string;
+  end_date: string;
   status: "upcoming" | "in-progress" | "closed" | "completed";
   prize_pool: number;
   max_participants: number;
   current_participants: number;
   banner_url: string;
+  game: string;
 }
 
 interface TournamentCardProps {
@@ -49,9 +51,14 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
     return () => clearInterval(interval);
   }, [targetDate]);
 
+  const formatDateRange = (startDate: string, endDate: string) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    return `${format(start, 'MMM dd')} - ${format(end, 'MMM dd')}, ${format(end, 'yyyy')}`;
+  };
+
   return (
     <div className={cn("rounded-lg overflow-hidden shadow-md bg-white dark:bg-gray-800 transition-all duration-300 hover:shadow-lg", className)}>
-      {/* Tournament Image */}
       <div className="relative h-32">
         <img
           src={tournament?.banner_url || "https://storage.googleapis.com/a1aa/image/1KrFqMU9yacw7XaUF67L6MaKLpXyjGHzZqDa24FBdig.jpg"}
@@ -71,25 +78,23 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
             className="w-6 h-6 rounded-full border border-white"
           />
           <div className="bg-black bg-opacity-50 px-2 py-0.5 rounded backdrop-blur-sm">
-            <span className="text-white text-xs">Chess</span>
+            <span className="text-white text-xs">{tournament?.game || "Chess"}</span>
           </div>
         </div>
       </div>
 
-      {/* Tournament Info */}
       <div className="p-3">
         <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1">
           {tournament?.title || "2025 Summer Championship"}
         </h3>
 
-        {/* Details Section */}
         <div className="space-y-2 mb-2">
           <div className="flex items-center text-gray-600 dark:text-gray-300">
             <CalendarIcon className="h-3 w-3 text-blue-500 mr-1" />
             <span className="text-xs">
               {tournament 
-                ? new Date(tournament.start_date).toLocaleDateString()
-                : "Feb 12 - Feb 28, 2025"}
+                ? formatDateRange(tournament.start_date, tournament.end_date)
+                : "Feb 12 - May 01, 2025"}
             </span>
           </div>
           <div className="flex items-center justify-between">
@@ -107,7 +112,6 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
                 : "128 left"}
             </span>
           </div>
-          {/* Progress Bar */}
           <div className="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
             <div 
               className="bg-blue-600 h-1.5 rounded-full" 
@@ -120,7 +124,6 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
           </div>
         </div>
 
-        {/* Prize & Entry */}
         <div className="flex justify-between mb-2 text-xs">
           <div className="flex items-center space-x-1">
             <Trophy className="h-3 w-3 text-yellow-500" />
@@ -140,7 +143,6 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex space-x-2 text-xs">
           <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-2 rounded transition-colors duration-300">
             Register
