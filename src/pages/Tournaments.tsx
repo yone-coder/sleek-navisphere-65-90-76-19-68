@@ -55,13 +55,15 @@ const sampleMatches: Match[] = [
 export default function Tournaments() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'tournaments' | 'matches' | 'leaderboard'>('matches');
+  const currentGame = "Chess"; // We can make this dynamic later by passing it as a prop or URL parameter
   
   const { data: tournaments, isLoading } = useQuery({
-    queryKey: ['tournaments'],
+    queryKey: ['tournaments', currentGame],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('tournaments')
         .select('*')
+        .eq('game', currentGame)
         .order('created_at', { ascending: false });
       
       if (error) throw error;
@@ -78,7 +80,7 @@ export default function Tournaments() {
             <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="rounded-full">
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <h1 className="text-lg font-semibold ml-2">Game Details</h1>
+            <h1 className="text-lg font-semibold ml-2">{currentGame}</h1>
           </div>
           <Button variant="ghost" size="icon" className="rounded-full">
             <Search className="h-5 w-5" />
@@ -87,7 +89,7 @@ export default function Tournaments() {
 
         {/* Content */}
         <div className="pt-14">
-          <h1 className="text-2xl font-bold mb-6 px-4">Tournaments</h1>
+          <h1 className="text-2xl font-bold mb-6 px-4">{currentGame} Tournaments</h1>
           <div className="flex overflow-x-auto space-x-6 pb-6 px-4">
             {[1, 2, 3, 4, 5, 6].map((n) => (
               <TournamentCardSkeleton key={n} className="min-w-[300px]" />
@@ -106,7 +108,7 @@ export default function Tournaments() {
           <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="rounded-full">
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-lg font-semibold ml-2">Game Details</h1>
+          <h1 className="text-lg font-semibold ml-2">{currentGame}</h1>
         </div>
         <Button variant="ghost" size="icon" className="rounded-full">
           <Search className="h-5 w-5" />
@@ -158,7 +160,7 @@ export default function Tournaments() {
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-xl font-bold flex items-center">
-                    Chess
+                    {currentGame}
                     <i className="fas fa-check-circle text-green-500 text-sm ml-2"></i>
                   </h2>
                 </div>
@@ -234,7 +236,7 @@ export default function Tournaments() {
         <div className="px-4 py-6">
           {activeTab === 'tournaments' && (
             <div className="space-y-4">
-              <h2 className="text-xl font-bold">Available Tournaments</h2>
+              <h2 className="text-xl font-bold">{currentGame} Tournaments</h2>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {tournaments?.map((tournament) => (
                   <TournamentCard key={tournament.id} tournament={tournament} />
@@ -245,7 +247,7 @@ export default function Tournaments() {
 
           {activeTab === 'matches' && (
             <div className="space-y-4">
-              <h2 className="text-xl font-bold">Current Matches</h2>
+              <h2 className="text-xl font-bold">Current {currentGame} Matches</h2>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {sampleMatches.map((match) => (
                   <MatchCard key={match.id} match={match} />
@@ -256,7 +258,7 @@ export default function Tournaments() {
 
           {activeTab === 'leaderboard' && (
             <div className="space-y-4">
-              <h2 className="text-xl font-bold">Leaderboard</h2>
+              <h2 className="text-xl font-bold">{currentGame} Leaderboard</h2>
               <p className="text-gray-500">Leaderboard content coming soon...</p>
             </div>
           )}
