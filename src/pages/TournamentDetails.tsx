@@ -369,18 +369,20 @@ export default function TournamentDetails() {
               </div>
 
               <Tabs defaultValue="participants" className="w-full">
-                <TabsList className="w-full h-auto flex-wrap">
-                  {["participants", "rules", "matches", "faqs", "schedule", "brackets", "roadmap"].map((tab) => (
-                    <TabsTrigger
-                      key={tab}
-                      value={tab}
-                      onClick={() => setActiveTab(tab)}
-                      className="flex-1 min-w-[120px]"
-                    >
-                      {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
+                <div className="w-full overflow-x-auto no-scrollbar">
+                  <TabsList className="w-full h-auto inline-flex whitespace-nowrap">
+                    {["participants", "rules", "matches", "faqs", "schedule", "brackets", "roadmap"].map((tab) => (
+                      <TabsTrigger
+                        key={tab}
+                        value={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className="flex-shrink-0"
+                      >
+                        {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </div>
 
                 <TabsContent value="rules">
                   <TournamentRulesCard />
