@@ -283,20 +283,20 @@ export default function TournamentDetails() {
 
       <div className="pt-16">
         {/* Tournament Card */}
-        <div className="px-2 sm:px-4">
-          <div className="overflow-hidden shadow-lg bg-white dark:bg-gray-800 rounded-lg">
-            <div className="relative">
-              <img 
-                src="https://storage.googleapis.com/a1aa/image/BcP3itd2BEfYcAhKkd2UAUs_vV9N3Sl-reNN8Mi1FEo.jpg" 
-                alt="Tournament banner" 
-                className="w-full h-48 object-cover"
-              />
-              <Badge className="absolute top-4 right-4" variant="default">
-                Premium Event
-              </Badge>
-            </div>
+        <div className="bg-white dark:bg-gray-800">
+          <div className="relative">
+            <img 
+              src="https://storage.googleapis.com/a1aa/image/BcP3itd2BEfYcAhKkd2UAUs_vV9N3Sl-reNN8Mi1FEo.jpg" 
+              alt="Tournament banner" 
+              className="w-full h-48 object-cover"
+            />
+            <Badge className="absolute top-4 right-4" variant="default">
+              Premium Event
+            </Badge>
+          </div>
 
-            <div className="p-6">
+          <div className="px-4">
+            <div className="py-6">
               <div className="flex justify-between items-center mb-4">
                 <Badge variant="secondary">Sponsored by: Google</Badge>
                 <Button variant="default" size="sm">
@@ -389,7 +389,7 @@ export default function TournamentDetails() {
                 </TabsContent>
 
                 <TabsContent value="matches">
-                  <div className="space-y-12">
+                  <div className="space-y-12 -mx-4">
                     <MatchesSection matches={sampleMatches} title="Quarter Finals" />
                     <MatchesSection matches={sampleMatches} title="Group Stage" />
                     <MatchesSection matches={sampleMatches} title="Qualifiers" />
