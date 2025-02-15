@@ -30,12 +30,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+type TournamentStatus = "upcoming" | "in-progress" | "closed" | "completed";
+
+interface FormData {
+  title: string;
+  start_date: string;
+  prize_pool: string;
+  max_participants: string;
+  status: TournamentStatus;
+  banner_url: string;
+}
+
 export default function AdminTournaments() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [selectedTournament, setSelectedTournament] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     title: "",
     start_date: "",
     prize_pool: "",
@@ -88,17 +99,15 @@ export default function AdminTournaments() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.from("tournaments").insert([
-        {
-          title: formData.title,
-          start_date: new Date(formData.start_date).toISOString(),
-          prize_pool: Number(formData.prize_pool),
-          max_participants: Number(formData.max_participants),
-          status: formData.status,
-          banner_url: formData.banner_url,
-          position: tournaments ? tournaments.length : 0,
-        },
-      ]);
+      const { error } = await supabase.from("tournaments").insert({
+        title: formData.title,
+        start_date: new Date(formData.start_date).toISOString(),
+        prize_pool: Number(formData.prize_pool),
+        max_participants: Number(formData.max_participants),
+        status: formData.status,
+        banner_url: formData.banner_url,
+        position: tournaments ? tournaments.length : 0,
+      });
 
       if (error) throw error;
 
@@ -278,7 +287,7 @@ export default function AdminTournaments() {
               <Label htmlFor="status">Status</Label>
               <Select
                 value={formData.status}
-                onValueChange={(value) =>
+                onValueChange={(value: TournamentStatus) =>
                   setFormData({ ...formData, status: value })
                 }
               >
