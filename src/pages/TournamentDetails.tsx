@@ -323,11 +323,8 @@ export default function TournamentDetails() {
               className="w-full h-48 object-cover"
             />
             <Badge className="absolute top-4 right-4" variant="default">
-              Sponsored by Google
+              Premium Event
             </Badge>
-            <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 px-2 py-0.5 rounded backdrop-blur-sm">
-              <span className="text-white text-xs">{tournament?.game || "Chess"}</span>
-            </div>
           </div>
 
           <div className="px-4">
