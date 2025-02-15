@@ -4,7 +4,6 @@ import { Plus } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { TournamentCard } from "@/components/tournaments/TournamentCard";
 import {
   DndContext,
   closestCenter,
@@ -20,9 +19,10 @@ import {
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import { SortableTournamentCard } from "@/components/admin/SortableTournamentCard";
+import { Tournament } from "@/types/tournament";
 
 export default function AdminTournaments() {
-  const [tournaments, setTournaments] = useState<any[]>([]);
+  const [tournaments, setTournaments] = useState<Tournament[]>([]);
 
   const { data, isLoading } = useQuery({
     queryKey: ["tournaments"],

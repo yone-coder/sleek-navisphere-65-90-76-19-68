@@ -2,9 +2,10 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { TournamentCard } from "@/components/tournaments/TournamentCard";
+import { Tournament } from "@/types/tournament";
 
 interface SortableTournamentCardProps {
-  tournament: any;
+  tournament: Tournament;
 }
 
 export function SortableTournamentCard({ tournament }: SortableTournamentCardProps) {

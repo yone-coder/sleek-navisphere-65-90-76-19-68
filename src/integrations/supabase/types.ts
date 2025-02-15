@@ -43,6 +43,7 @@ export type Database = {
           current_participants: number
           id: string
           max_participants: number
+          position: number | null
           prize_pool: number
           start_date: string
           status: Database["public"]["Enums"]["tournament_status"]
@@ -55,6 +56,7 @@ export type Database = {
           current_participants?: number
           id?: string
           max_participants: number
+          position?: number | null
           prize_pool: number
           start_date: string
           status?: Database["public"]["Enums"]["tournament_status"]
@@ -67,6 +69,7 @@ export type Database = {
           current_participants?: number
           id?: string
           max_participants?: number
+          position?: number | null
           prize_pool?: number
           start_date?: string
           status?: Database["public"]["Enums"]["tournament_status"]
