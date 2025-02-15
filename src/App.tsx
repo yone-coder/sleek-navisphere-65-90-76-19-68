@@ -24,14 +24,15 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminBanners from "./pages/admin/AdminBanners";
 import Games from "./pages/Games";
 import Gomoku from "./pages/games/Gomoku";
+import MatchDetails from "./pages/MatchDetails";
 
 const queryClient = new QueryClient();
 
 const AppContent = () => {
   const location = useLocation();
-  const hideHeaderRoutes = ['/login', '/signup', '/explore'];
+  const hideHeaderRoutes = ['/login', '/signup', '/explore', '/match'];
   const isAdminRoute = location.pathname.startsWith('/admin');
-  const shouldShowHeader = !hideHeaderRoutes.includes(location.pathname) && !isAdminRoute;
+  const shouldShowHeader = !hideHeaderRoutes.some(route => location.pathname.startsWith(route)) && !isAdminRoute;
   const shouldShowBottomNav = !isAdminRoute;
 
   return (
@@ -41,6 +42,7 @@ const AppContent = () => {
         <Route path="/" element={<Home />} />
         <Route path="/explore" element={<Explore />} />
         <Route path="/matches" element={<Matches />} />
+        <Route path="/match/:id" element={<MatchDetails />} />
         <Route path="/tournaments" element={<Tournaments />} />
         <Route path="/games" element={<Games />} />
         <Route path="/games/gomoku" element={<Gomoku />} />
