@@ -17,13 +17,17 @@ import {
   Copy,
   UserPlus,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { format } from "date-fns";
 
 const sampleMatches: Match[] = [
   {
@@ -255,6 +259,34 @@ export default function TournamentDetails() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("participants");
 
+  const { data: tournament, isLoading } = useQuery({
+    queryKey: ["tournament", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("tournaments")
+        .select("*")
+        .eq("id", id)
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const formatDateRange = (startDate: string, endDate: string) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    return `${format(start, 'MMM dd')} - ${format(end, 'MMM dd')}, ${format(end, 'yyyy')}`;
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen pt-14 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen animate-fade-in">
       {/* Custom Header */}
@@ -269,7 +301,7 @@ export default function TournamentDetails() {
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <h1 className="text-lg font-semibold">2025 Summer Championship</h1>
+            <h1 className="text-lg font-semibold">{tournament?.title || "Tournament Details"}</h1>
           </div>
           <Button
             variant="ghost"
@@ -286,7 +318,7 @@ export default function TournamentDetails() {
         <div className="bg-white dark:bg-gray-800">
           <div className="relative">
             <img 
-              src="https://storage.googleapis.com/a1aa/image/BcP3itd2BEfYcAhKkd2UAUs_vV9N3Sl-reNN8Mi1FEo.jpg" 
+              src={tournament?.banner_url || "https://storage.googleapis.com/a1aa/image/BcP3itd2BEfYcAhKkd2UAUs_vV9N3Sl-reNN8Mi1FEo.jpg"}
               alt="Tournament banner" 
               className="w-full h-48 object-cover"
             />
@@ -298,7 +330,9 @@ export default function TournamentDetails() {
           <div className="px-4">
             <div className="py-6">
               <div className="flex justify-between items-center mb-4">
-                <Badge variant="secondary">Sponsored by: Google</Badge>
+                <Badge variant="secondary">
+                  Game: {tournament?.game || "Chess"}
+                </Badge>
                 <Button variant="default" size="sm">
                   <UserPlus className="h-4 w-4 mr-2" />
                   Follow
@@ -306,24 +340,40 @@ export default function TournamentDetails() {
               </div>
 
               <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                The premier summer gaming event featuring the latest titles and top competitors from around the world.
+                The premier gaming event featuring the latest titles and top competitors from around the world.
               </p>
 
               <div className="space-y-3 mb-6">
                 <div className="flex items-center text-gray-700 dark:text-gray-300">
                   <CalendarClock className="h-5 w-5 text-blue-500 mr-3" />
-                  <span className="text-sm">July 15-18, 2025</span>
+                  <span className="text-sm">
+                    {tournament 
+                      ? formatDateRange(tournament.start_date, tournament.end_date)
+                      : "Loading..."}
+                  </span>
                 </div>
                 
                 <div className="flex flex-col space-y-2">
                   <div className="flex items-center justify-between text-gray-700 dark:text-gray-300">
                     <div className="flex items-center">
                       <Users className="h-5 w-5 text-blue-500 mr-3" />
-                      <span className="text-sm">128/256 Participants</span>
+                      <span className="text-sm">
+                        {tournament?.current_participants || 0}/{tournament?.max_participants || 0} Participants
+                      </span>
                     </div>
-                    <span className="text-sm text-blue-600 dark:text-blue-400 font-medium">128 left</span>
+                    <span className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                      {tournament 
+                        ? `${tournament.max_participants - tournament.current_participants} left`
+                        : "Loading..."}
+                    </span>
                   </div>
-                  <Progress value={50} className="h-2" />
+                  <Progress 
+                    value={tournament 
+                      ? (tournament.current_participants / tournament.max_participants) * 100
+                      : 0
+                    } 
+                    className="h-2" 
+                  />
                 </div>
               </div>
 
@@ -332,7 +382,9 @@ export default function TournamentDetails() {
                   <Trophy className="h-5 w-5 text-yellow-500" />
                   <div>
                     <span className="text-sm text-gray-500 dark:text-gray-400">Prize Pool</span>
-                    <p className="font-bold text-gray-800 dark:text-white">$10,000</p>
+                    <p className="font-bold text-gray-800 dark:text-white">
+                      ${tournament?.prize_pool?.toLocaleString() || "0"}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
