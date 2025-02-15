@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Trophy, Calendar, Heart, MessageSquare, Eye, Share2 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -7,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { Match } from "./types";
 import { format, parse, setHours, setMinutes, setSeconds } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface MatchCardProps {
   match: Match;
@@ -15,6 +17,7 @@ interface MatchCardProps {
 export const MatchCard = ({ match }: MatchCardProps) => {
   const [isFollowing, setIsFollowing] = useState<{ [key: string]: boolean }>({});
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const formatNumber = (num: number): string => {
     if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
@@ -35,7 +38,8 @@ export const MatchCard = ({ match }: MatchCardProps) => {
     }
   };
 
-  const toggleFollow = (playerName: string) => {
+  const toggleFollow = (e: React.MouseEvent, playerName: string) => {
+    e.stopPropagation(); // Prevent card click when clicking follow button
     setIsFollowing(prev => ({
       ...prev,
       [playerName]: !prev[playerName]
@@ -46,8 +50,15 @@ export const MatchCard = ({ match }: MatchCardProps) => {
     });
   };
 
+  const handleCardClick = () => {
+    navigate(`/match/${match.id}`);
+  };
+
   return (
-    <div className="w-[280px] bg-[#1a1a1a] rounded-lg overflow-hidden shrink-0 border border-white/10">
+    <div 
+      className="w-[280px] bg-[#1a1a1a] rounded-lg overflow-hidden shrink-0 border border-white/10 cursor-pointer hover:border-white/20 transition-colors"
+      onClick={handleCardClick}
+    >
       <div className="p-3 pb-2">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-1.5">
@@ -96,7 +107,7 @@ export const MatchCard = ({ match }: MatchCardProps) => {
               {match.opponents[0].wins}W - {match.opponents[0].losses}L
             </p>
             <button
-              onClick={() => toggleFollow(match.opponents[0].name)}
+              onClick={(e) => toggleFollow(e, match.opponents[0].name)}
               className={cn(
                 "text-[10px] font-bold px-3 py-0.5 rounded transition-colors",
                 isFollowing[match.opponents[0].name]
@@ -127,7 +138,7 @@ export const MatchCard = ({ match }: MatchCardProps) => {
               {match.opponents[1].wins}W - {match.opponents[1].losses}L
             </p>
             <button
-              onClick={() => toggleFollow(match.opponents[1].name)}
+              onClick={(e) => toggleFollow(e, match.opponents[1].name)}
               className={cn(
                 "text-[10px] font-bold px-3 py-0.5 rounded transition-colors",
                 isFollowing[match.opponents[1].name]
@@ -167,13 +178,14 @@ export const MatchCard = ({ match }: MatchCardProps) => {
             <Eye className="w-3 h-3" />
             <span>{formatNumber(match.spectators)}</span>
           </div>
-          <button>
+          <button onClick={(e) => e.stopPropagation()}>
             <Share2 className="w-3 h-3" />
           </button>
         </div>
 
         <button 
           className="w-full text-white text-xs font-bold py-1.5 rounded flex items-center justify-center gap-1.5 transition-colors bg-red-500 hover:bg-red-600"
+          onClick={(e) => e.stopPropagation()}
         >
           <Eye className="w-3 h-3" />
           Watch Live
