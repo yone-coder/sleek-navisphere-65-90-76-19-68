@@ -322,7 +322,7 @@ export default function TournamentDetails() {
               alt="Tournament banner" 
               className="w-full h-48 object-cover"
             />
-            <Badge className="absolute top-4 right-4" variant="default">
+            <Badge className="absolute bottom-4 right-4" variant="default">
               Sponsored by Google
             </Badge>
             <div className="absolute bottom-2 left-2 flex items-center space-x-1">

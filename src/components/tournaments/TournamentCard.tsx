@@ -69,7 +69,7 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
         <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-0.5 rounded-full text-xs">
           {countdown}
         </div>
-        <div className="absolute top-2 right-2 bg-blue-600 text-white px-2 py-0.5 rounded-full text-xs">
+        <div className="absolute bottom-2 right-2 bg-blue-600 text-white px-2 py-0.5 rounded-full text-xs">
           Sponsored by Google
         </div>
         <div className="absolute bottom-2 left-2 flex items-center space-x-1">
