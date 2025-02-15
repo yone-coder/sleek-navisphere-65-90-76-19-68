@@ -39,8 +39,8 @@ export default function Tournaments() {
 
         {/* Content */}
         <div className="pt-14">
-          <h1 className="text-2xl font-bold mb-6 px-6">Tournaments</h1>
-          <div className="flex overflow-x-auto space-x-6 pb-6 px-6 no-scrollbar">
+          <h1 className="text-2xl font-bold mb-6 px-4">Tournaments</h1>
+          <div className="flex overflow-x-auto space-x-6 pb-6 px-4">
             {[1, 2, 3, 4, 5, 6].map((n) => (
               <TournamentCardSkeleton key={n} className="min-w-[300px]" />
             ))}
@@ -68,8 +68,8 @@ export default function Tournaments() {
       {/* Content */}
       <div className="pt-14">
         {/* Chess Game Card Section */}
-        <div className="flex flex-col items-center justify-center p-4">
-          <div className="bg-gray-800 text-white rounded-xl shadow-lg max-w-sm w-full overflow-hidden mb-4">
+        <div className="flex flex-col items-center justify-center">
+          <div className="bg-gray-800 text-white w-full">
             <div className="relative">
               <img
                 alt="Chess game background"
@@ -77,10 +77,10 @@ export default function Tournaments() {
                 src="https://storage.googleapis.com/a1aa/image/30DXDBKFa6waogbGp91vb710vkQQtDtK7-17FAvnp2s.jpg"
               />
               <div className="absolute top-2 left-2 flex space-x-2">
-                <span className="bg-blue-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                <span className="bg-blue-500 text-white text-xs font-semibold px-2 py-1">
                   1vs1
                 </span>
-                <span className="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                <span className="bg-green-500 text-white text-xs font-semibold px-2 py-1">
                   Tournament
                 </span>
               </div>
@@ -94,11 +94,11 @@ export default function Tournaments() {
                   src="https://storage.googleapis.com/a1aa/image/Kpv055PTHWBW_W_tc40OtDzOQ6AESZ6xJ-4UHNtreIg.jpg"
                 />
               </div>
-              <div className="absolute bottom-2 right-2 text-xs text-gray-300 bg-black bg-opacity-50 px-2 py-1 rounded">
+              <div className="absolute bottom-2 right-2 text-xs text-gray-300 bg-black bg-opacity-50 px-2 py-1">
                 Developed by Mima
               </div>
             </div>
-            <div className="p-4 pt-3">
+            <div className="p-4 pt-8">
               <div className="flex items-center justify-end text-xs text-gray-400 mb-1">
                 <span className="flex items-center">
                   4.4
@@ -114,7 +114,7 @@ export default function Tournaments() {
                     <i className="fas fa-check-circle text-green-500 text-sm ml-2"></i>
                   </h2>
                 </div>
-                <button className="bg-blue-600 text-white text-sm font-semibold px-3 py-1 rounded-md">
+                <button className="bg-blue-600 text-white text-sm font-semibold px-3 py-1">
                   + Follow
                 </button>
               </div>
@@ -135,32 +135,32 @@ export default function Tournaments() {
                   <span>528</span>
                 </div>
               </div>
-              <button className="bg-blue-600 text-white text-base font-semibold w-full py-2 rounded-lg mt-4">
+              <button className="bg-blue-600 text-white text-base font-semibold w-full py-2 mt-4">
                 Play Now
               </button>
             </div>
           </div>
 
           {/* Navigation Tabs */}
-          <div className="w-full max-w-sm">
+          <div className="w-full bg-gray-800">
             <div className="flex justify-between text-white text-lg border-b border-gray-700">
               <a className="px-4 py-2 opacity-70" href="#">Tournaments</a>
               <a className="px-4 py-2 border-b-2 border-blue-500 text-blue-500" href="#">Matches</a>
               <a className="px-4 py-2 opacity-70" href="#">Leaderboard</a>
             </div>
             {/* Filter Buttons */}
-            <div className="flex space-x-3 mt-4 overflow-x-auto">
-              <button className="bg-gray-800 text-white px-4 py-2 rounded-full flex items-center whitespace-nowrap">
+            <div className="flex space-x-3 p-4 overflow-x-auto">
+              <button className="bg-gray-700 text-white px-4 py-2 flex items-center whitespace-nowrap">
                 <i className="fas fa-check text-blue-500 mr-2"></i>
                 Top free
                 <i className="fas fa-chevron-down ml-2 text-sm"></i>
               </button>
-              <button className="bg-gray-800 text-white px-4 py-2 rounded-full flex items-center whitespace-nowrap">
+              <button className="bg-gray-700 text-white px-4 py-2 flex items-center whitespace-nowrap">
                 <i className="fas fa-check text-blue-500 mr-2"></i>
                 Phone
                 <i className="fas fa-chevron-down ml-2 text-sm"></i>
               </button>
-              <button className="bg-gray-700 text-white px-4 py-2 rounded-full whitespace-nowrap">
+              <button className="bg-gray-700 text-white px-4 py-2 whitespace-nowrap">
                 Categories
               </button>
             </div>
@@ -168,8 +168,8 @@ export default function Tournaments() {
         </div>
 
         {/* Existing Tournaments Section */}
-        <h1 className="text-2xl font-bold mb-6 px-6">Tournaments</h1>
-        <div className="flex overflow-x-auto space-x-6 pb-6 px-6 no-scrollbar">
+        <h1 className="text-2xl font-bold mb-6 px-4">Tournaments</h1>
+        <div className="flex overflow-x-auto space-x-6 pb-6 px-4">
           {tournaments?.map((tournament) => (
             <TournamentCard key={tournament.id} tournament={tournament} className="min-w-[300px]" />
           ))}

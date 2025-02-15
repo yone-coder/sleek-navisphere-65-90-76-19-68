@@ -89,7 +89,7 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
   };
 
   return (
-    <div className={cn("rounded-lg overflow-hidden shadow-md bg-white dark:bg-gray-800 transition-all duration-300 hover:shadow-lg", className)}>
+    <div className={cn("overflow-hidden shadow-md bg-white dark:bg-gray-800 transition-all duration-300 hover:shadow-lg", className)}>
       <div className="relative h-32">
         <img
           src={tournament?.banner_url || "https://storage.googleapis.com/a1aa/image/1KrFqMU9yacw7XaUF67L6MaKLpXyjGHzZqDa24FBdig.jpg"}
