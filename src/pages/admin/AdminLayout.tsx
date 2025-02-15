@@ -9,6 +9,7 @@ import {
   FileText,
   Database,
   Server,
+  Trophy,
 } from "lucide-react";
 
 const sidebarItems = [
@@ -16,6 +17,11 @@ const sidebarItems = [
     icon: LayoutDashboard,
     label: "Dashboard",
     href: "/admin",
+  },
+  {
+    icon: Trophy,
+    label: "Tournaments",
+    href: "/admin/tournaments",
   },
   {
     icon: Images,
