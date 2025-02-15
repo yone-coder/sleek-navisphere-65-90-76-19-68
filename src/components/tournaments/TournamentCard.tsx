@@ -72,8 +72,15 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
         <div className="absolute top-2 right-2 bg-blue-600 text-white px-2 py-0.5 rounded-full text-xs">
           Sponsored by Google
         </div>
-        <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 px-2 py-0.5 rounded backdrop-blur-sm">
-          <span className="text-white text-xs">{tournament?.game || "Chess"}</span>
+        <div className="absolute bottom-2 left-2 flex items-center space-x-1">
+          <img
+            src="https://storage.googleapis.com/a1aa/image/RW76eSv1bI06GoXLZPNVQlLvVFuloRbfcxmSiTYAc8E.jpg"
+            alt="Game icon"
+            className="w-6 h-6 rounded-full border border-white"
+          />
+          <div className="bg-black bg-opacity-50 px-2 py-0.5 rounded backdrop-blur-sm">
+            <span className="text-white text-xs">{tournament?.game || "Chess"}</span>
+          </div>
         </div>
       </div>
 
