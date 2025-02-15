@@ -28,6 +28,36 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
   const navigate = useNavigate();
   const targetDate = tournament ? new Date(tournament.start_date).getTime() : new Date('2025-02-12T17:45:00').getTime();
 
+  const getStatusColor = (status?: string) => {
+    switch (status) {
+      case 'in-progress':
+        return 'bg-green-600';
+      case 'upcoming':
+        return 'bg-blue-600';
+      case 'closed':
+        return 'bg-red-600';
+      case 'completed':
+        return 'bg-gray-600';
+      default:
+        return 'bg-blue-600';
+    }
+  };
+
+  const getStatusText = (status?: string) => {
+    switch (status) {
+      case 'in-progress':
+        return 'Live';
+      case 'upcoming':
+        return 'Upcoming';
+      case 'closed':
+        return 'Closed';
+      case 'completed':
+        return 'Completed';
+      default:
+        return 'Upcoming';
+    }
+  };
+
   useEffect(() => {
     const updateCountdown = () => {
       const now = new Date().getTime();
@@ -68,6 +98,9 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
         />
         <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-0.5 rounded-full text-xs">
           {countdown}
+        </div>
+        <div className={cn("absolute top-2 right-2 text-white px-2 py-0.5 rounded-full text-xs", getStatusColor(tournament?.status))}>
+          {getStatusText(tournament?.status)}
         </div>
         <div className="absolute bottom-2 right-2 bg-blue-600 text-white px-2 py-0.5 rounded-full text-xs">
           Sponsored by Google

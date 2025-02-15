@@ -279,6 +279,36 @@ export default function TournamentDetails() {
     return `${format(start, 'MMM dd')} - ${format(end, 'MMM dd')}, ${format(end, 'yyyy')}`;
   };
 
+  const getStatusColor = (status?: string) => {
+    switch (status) {
+      case 'in-progress':
+        return 'bg-green-600';
+      case 'upcoming':
+        return 'bg-blue-600';
+      case 'closed':
+        return 'bg-red-600';
+      case 'completed':
+        return 'bg-gray-600';
+      default:
+        return 'bg-blue-600';
+    }
+  };
+
+  const getStatusText = (status?: string) => {
+    switch (status) {
+      case 'in-progress':
+        return 'Live';
+      case 'upcoming':
+        return 'Upcoming';
+      case 'closed':
+        return 'Closed';
+      case 'completed':
+        return 'Completed';
+      default:
+        return 'Upcoming';
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen pt-14 flex items-center justify-center">
@@ -322,6 +352,12 @@ export default function TournamentDetails() {
               alt="Tournament banner" 
               className="w-full h-48 object-cover"
             />
+            <Badge 
+              className={cn("absolute top-4 right-4", getStatusColor(tournament?.status))}
+              variant="default"
+            >
+              {getStatusText(tournament?.status)}
+            </Badge>
             <Badge className="absolute bottom-4 right-4" variant="default">
               Sponsored by Google
             </Badge>
