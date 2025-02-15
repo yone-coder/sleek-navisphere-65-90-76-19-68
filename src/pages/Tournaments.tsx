@@ -22,9 +22,9 @@ export default function Tournaments() {
     return (
       <div className="min-h-screen pt-20 px-6">
         <h1 className="text-2xl font-bold mb-6">Tournaments</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex overflow-x-auto space-x-6 pb-6 no-scrollbar">
           {[1, 2, 3, 4, 5, 6].map((n) => (
-            <TournamentCardSkeleton key={n} />
+            <TournamentCardSkeleton key={n} className="min-w-[300px]" />
           ))}
         </div>
       </div>
@@ -34,9 +34,9 @@ export default function Tournaments() {
   return (
     <div className="min-h-screen pt-20 px-6">
       <h1 className="text-2xl font-bold mb-6">Tournaments</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="flex overflow-x-auto space-x-6 pb-6 no-scrollbar">
         {tournaments?.map((tournament) => (
-          <TournamentCard key={tournament.id} tournament={tournament} />
+          <TournamentCard key={tournament.id} tournament={tournament} className="min-w-[300px]" />
         ))}
       </div>
     </div>
