@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 
@@ -242,6 +244,7 @@ const GameSection = ({ title, games }: { title: string; games: any[] }) => {
 export default function Explore() {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [api, setApi] = useState<CarouselApi>();
 
   return (
     <div className="bg-gray-100">
@@ -265,9 +268,7 @@ export default function Explore() {
             loop: true,
           }}
           className="w-full"
-          onSelect={(api) => {
-            setCurrentSlide(api.selectedScrollSnap());
-          }}
+          setApi={setApi}
         >
           <CarouselContent>
             {sliderImages.map((image, index) => (
@@ -288,14 +289,10 @@ export default function Explore() {
                 key={index}
                 className={cn(
                   "w-2 h-2 rounded-full transition-all",
-                  currentSlide === index ? "bg-blue-500 w-4" : "bg-gray-300"
+                  api?.selectedScrollSnap() === index ? "bg-blue-500 w-4" : "bg-gray-300"
                 )}
                 onClick={() => {
-                  const api = (document.querySelector("[data-carousel]") as any)
-                    ?.component;
-                  if (api) {
-                    api.scrollTo(index);
-                  }
+                  api?.scrollTo(index);
                 }}
               />
             ))}
