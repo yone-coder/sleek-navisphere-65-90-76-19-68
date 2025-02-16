@@ -1,5 +1,10 @@
-
 import { useNavigate } from "react-router-dom";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import { cn } from "@/lib/utils";
 
 const games = {
   boardGames: [
@@ -142,6 +147,24 @@ const games = {
   ]
 };
 
+const sliderImages = [
+  {
+    id: 1,
+    url: "https://storage.googleapis.com/a1aa/image/A0tRiJ6w8HZujXs2A-4XYcnReWkJ1hU6JyQbw-55BIE.jpg",
+    alt: "Gaming slide 1"
+  },
+  {
+    id: 2,
+    url: "https://storage.googleapis.com/a1aa/image/U9cxiKWRsMwBdP7GKinlUOUdzMsKzRiFuAfG1-PCvAg.jpg",
+    alt: "Gaming slide 2"
+  },
+  {
+    id: 3,
+    url: "https://storage.googleapis.com/a1aa/image/ILaOkYoR7hDayBWLOW1hj6X9ZkaT-UcZm24KX8P1jDY.jpg",
+    alt: "Gaming slide 3"
+  }
+];
+
 const GameSection = ({ title, games }: { title: string; games: any[] }) => {
   const navigate = useNavigate();
 
@@ -218,6 +241,7 @@ const GameSection = ({ title, games }: { title: string; games: any[] }) => {
 
 export default function Explore() {
   const navigate = useNavigate();
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   return (
     <div className="bg-gray-100">
@@ -232,6 +256,52 @@ export default function Explore() {
           <i className="fas fa-search"></i>
         </button>
       </header>
+
+      {/* Image Slider */}
+      <div className="w-full">
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+          onSelect={(api) => {
+            setCurrentSlide(api.selectedScrollSnap());
+          }}
+        >
+          <CarouselContent>
+            {sliderImages.map((image, index) => (
+              <CarouselItem key={image.id} className="w-full pl-0">
+                <div className="relative aspect-[2/1]">
+                  <img
+                    src={image.url}
+                    alt={image.alt}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className="flex justify-center gap-2 mt-4 mb-6">
+            {sliderImages.map((_, index) => (
+              <button
+                key={index}
+                className={cn(
+                  "w-2 h-2 rounded-full transition-all",
+                  currentSlide === index ? "bg-blue-500 w-4" : "bg-gray-300"
+                )}
+                onClick={() => {
+                  const api = (document.querySelector("[data-carousel]") as any)
+                    ?.component;
+                  if (api) {
+                    api.scrollTo(index);
+                  }
+                }}
+              />
+            ))}
+          </div>
+        </Carousel>
+      </div>
 
       <div className="space-y-4">
         <GameSection title="Board Games" games={games.boardGames} />
