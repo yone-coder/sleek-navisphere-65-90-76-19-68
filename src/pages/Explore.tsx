@@ -328,7 +328,7 @@ export default function Explore() {
       {/* Categories Tab Switcher */}
       <div className="py-4">
         <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
-          <TabsList className="h-10 items-center bg-transparent gap-2 flex overflow-x-auto no-scrollbar px-4">
+          <TabsList className="h-10 items-center bg-transparent gap-2 flex overflow-x-auto no-scrollbar pl-4">
             {categories.map((category) => (
               <TabsTrigger
                 key={category.id}
