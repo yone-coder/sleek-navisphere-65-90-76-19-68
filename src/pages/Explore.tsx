@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
@@ -326,11 +325,10 @@ export default function Explore() {
       </div>
 
       {/* Categories Tab Switcher */}
-      <div className="relative py-4">
-        <div className="absolute left-0 top-0 bottom-0 w-4 bg-gray-100 z-10" />
+      <div className="px-4 py-4">
         <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
-          <TabsList className="h-10 items-center bg-transparent gap-2 flex overflow-x-auto no-scrollbar">
-            <div className="pl-4 flex gap-2">
+          <div className="mx-[-16px] px-4">
+            <TabsList className="h-10 items-center bg-transparent gap-2 flex overflow-x-auto no-scrollbar">
               {categories.map((category) => (
                 <TabsTrigger
                   key={category.id}
@@ -345,8 +343,8 @@ export default function Explore() {
                   {category.label}
                 </TabsTrigger>
               ))}
-            </div>
-          </TabsList>
+            </TabsList>
+          </div>
         </Tabs>
       </div>
 
