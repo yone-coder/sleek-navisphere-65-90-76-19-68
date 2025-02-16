@@ -329,21 +329,23 @@ export default function Explore() {
       <div className="py-4">
         <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
           <div className="relative">
-            <TabsList className="h-10 items-center bg-transparent gap-2 flex overflow-x-auto no-scrollbar px-4">
-              {categories.map((category) => (
-                <TabsTrigger
-                  key={category.id}
-                  value={category.id}
-                  className={cn(
-                    "px-4 py-2 rounded-full text-sm font-medium transition-all flex-shrink-0",
-                    "data-[state=active]:bg-gray-900 data-[state=active]:text-white",
-                    "data-[state=inactive]:bg-gray-200 data-[state=inactive]:text-gray-600",
-                    "hover:bg-gray-300"
-                  )}
-                >
-                  {category.label}
-                </TabsTrigger>
-              ))}
+            <TabsList className="h-10 items-center bg-transparent gap-2 flex overflow-x-auto no-scrollbar">
+              <div className="pl-4 flex gap-2 min-w-full pr-4">
+                {categories.map((category) => (
+                  <TabsTrigger
+                    key={category.id}
+                    value={category.id}
+                    className={cn(
+                      "px-4 py-2 rounded-full text-sm font-medium transition-all flex-shrink-0",
+                      "data-[state=active]:bg-gray-900 data-[state=active]:text-white",
+                      "data-[state=inactive]:bg-gray-200 data-[state=inactive]:text-gray-600",
+                      "hover:bg-gray-300"
+                    )}
+                  >
+                    {category.label}
+                  </TabsTrigger>
+                ))}
+              </div>
             </TabsList>
           </div>
         </Tabs>
