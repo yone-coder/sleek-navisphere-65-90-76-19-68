@@ -1,6 +1,6 @@
 
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -248,7 +248,7 @@ export default function Explore() {
   const [api, setApi] = useState<CarouselApi>();
 
   // Add API event listener for slide changes
-  React.useEffect(() => {
+  useEffect(() => {
     if (!api) {
       return;
     }
