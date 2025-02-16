@@ -8,6 +8,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const games = {
   boardGames: [
@@ -168,6 +169,14 @@ const sliderImages = [
   }
 ];
 
+const categories = [
+  { id: "all", label: "All" },
+  { id: "entertainment", label: "Entertainment" },
+  { id: "sports", label: "Sports" },
+  { id: "anime", label: "Anime & Comics" },
+  { id: "games", label: "Games" }
+];
+
 const GameSection = ({ title, games }: { title: string; games: any[] }) => {
   const navigate = useNavigate();
 
@@ -246,8 +255,8 @@ export default function Explore() {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
+  const [activeCategory, setActiveCategory] = useState("all");
 
-  // Add API event listener for slide changes
   useEffect(() => {
     if (!api) {
       return;
@@ -314,6 +323,28 @@ export default function Explore() {
             </div>
           </div>
         </Carousel>
+      </div>
+
+      {/* Categories Tab Switcher */}
+      <div className="px-4 py-4 overflow-x-auto">
+        <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
+          <TabsList className="h-10 items-center bg-transparent gap-2 w-full flex overflow-x-auto no-scrollbar">
+            {categories.map((category) => (
+              <TabsTrigger
+                key={category.id}
+                value={category.id}
+                className={cn(
+                  "px-4 py-2 rounded-full text-sm font-medium transition-all",
+                  "data-[state=active]:bg-gray-900 data-[state=active]:text-white",
+                  "data-[state=inactive]:bg-gray-200 data-[state=inactive]:text-gray-600",
+                  "hover:bg-gray-300"
+                )}
+              >
+                {category.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
       </div>
 
       <div className="space-y-4">
