@@ -326,23 +326,26 @@ export default function Explore() {
       </div>
 
       {/* Categories Tab Switcher */}
-      <div className="py-4">
+      <div className="relative py-4">
+        <div className="absolute left-0 top-0 bottom-0 w-4 bg-gray-100 z-10" />
         <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
-          <TabsList className="h-10 items-center bg-transparent gap-2 flex overflow-x-auto no-scrollbar pl-4">
-            {categories.map((category) => (
-              <TabsTrigger
-                key={category.id}
-                value={category.id}
-                className={cn(
-                  "px-4 py-2 rounded-full text-sm font-medium transition-all flex-shrink-0",
-                  "data-[state=active]:bg-gray-900 data-[state=active]:text-white",
-                  "data-[state=inactive]:bg-gray-200 data-[state=inactive]:text-gray-600",
-                  "hover:bg-gray-300"
-                )}
-              >
-                {category.label}
-              </TabsTrigger>
-            ))}
+          <TabsList className="h-10 items-center bg-transparent gap-2 flex overflow-x-auto no-scrollbar">
+            <div className="pl-4 flex gap-2">
+              {categories.map((category) => (
+                <TabsTrigger
+                  key={category.id}
+                  value={category.id}
+                  className={cn(
+                    "px-4 py-2 rounded-full text-sm font-medium transition-all flex-shrink-0",
+                    "data-[state=active]:bg-gray-900 data-[state=active]:text-white",
+                    "data-[state=inactive]:bg-gray-200 data-[state=inactive]:text-gray-600",
+                    "hover:bg-gray-300"
+                  )}
+                >
+                  {category.label}
+                </TabsTrigger>
+              ))}
+            </div>
           </TabsList>
         </Tabs>
       </div>
