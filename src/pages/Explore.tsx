@@ -247,6 +247,17 @@ export default function Explore() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
 
+  // Add API event listener for slide changes
+  React.useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    api.on("select", () => {
+      setCurrentSlide(api.selectedScrollSnap());
+    });
+  }, [api]);
+
   return (
     <div className="bg-gray-100">
       <header className="flex items-center justify-between px-4 py-4">
@@ -291,7 +302,7 @@ export default function Explore() {
                   key={index}
                   className={cn(
                     "w-2 h-2 rounded-full transition-all duration-300 ease-in-out transform",
-                    api?.selectedScrollSnap() === index 
+                    currentSlide === index 
                       ? "bg-blue-500 w-4 scale-110" 
                       : "bg-gray-300 hover:bg-gray-400"
                   )}
