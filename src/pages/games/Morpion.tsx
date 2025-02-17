@@ -365,7 +365,6 @@ const Avatar = ({ name, size = 'md', hasPhoto = false }) => {
               onClick={() => setSoundEnabled(!soundEnabled)}
               className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition duration-300 shadow-md border border-gray-200"
             >
-            >
               <Settings2 size={16} className="md:w-5 md:h-5" />
             </button>
 
