@@ -1,8 +1,9 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Settings2, Undo2, RotateCcw, Volume2, VolumeX, Clock } from 'lucide-react';
 
 const Gomoku = () => {
-  const [boardSize, setBoardSize] = useState(19);
+  const [boardSize, setBoardSize] = useState(30);  // Changed from 19 to 30
   const [board, setBoard] = useState([]);
   const [currentPlayer, setCurrentPlayer] = useState('X');
   const [moves, setMoves] = useState(0);
