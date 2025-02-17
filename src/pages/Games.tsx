@@ -1,4 +1,3 @@
-
 import { GameCard } from "@/components/games/GameCard";
 import { Game } from "@/components/games/types";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -19,16 +18,16 @@ const sampleGames: Game[] = [
   },
   {
     id: 2,
-    title: "Poker",
-    description: "A family of card games involving betting and individual play, whereby the winner is determined by the ranks and combinations of cards.",
-    coverImage: "https://images.unsplash.com/photo-1609743522653-52354461eb27?auto=format&fit=crop&q=80&w=2574",
-    creatorImage: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&h=100&q=80",
+    title: "Gomoku",
+    description: "A strategy board game where players alternate placing pieces on the board with the goal of getting 5 in a row.",
+    coverImage: "https://images.unsplash.com/photo-1611195974226-a6a9be9dd763?auto=format&fit=crop&q=80&w=2574",
+    creatorImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=Player1",
     verified: true,
-    type: ["Multiplayer", "Tournament"],
-    likes: 2894,
-    comments: 452,
-    shares: 789,
-    bookmarked: true
+    type: ["1vs1"],
+    likes: 823,
+    comments: 156,
+    shares: 245,
+    bookmarked: false
   },
   {
     id: 3,
