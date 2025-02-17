@@ -1,3 +1,4 @@
+
 import { GameCard } from "@/components/games/GameCard";
 import { Game } from "@/components/games/types";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -31,6 +32,19 @@ const sampleGames: Game[] = [
   },
   {
     id: 3,
+    title: "Morpion",
+    description: "A classic strategy game where players take turns marking spaces in a 3×3 grid, aiming to get five in a row to win.",
+    coverImage: "https://images.unsplash.com/photo-1611195974226-a6a9be9dd763?auto=format&fit=crop&q=80&w=2574",
+    creatorImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=Player2",
+    verified: true,
+    type: ["1vs1"],
+    likes: 756,
+    comments: 124,
+    shares: 198,
+    bookmarked: false
+  },
+  {
+    id: 4,
     title: "Go",
     description: "An abstract strategy board game for two players in which the aim is to surround more territory than the opponent.",
     coverImage: "https://images.unsplash.com/photo-1585504198199-20277593b94f?auto=format&fit=crop&q=80&w=2574",
