@@ -24,12 +24,10 @@ const Gomoku = () => {
   const winAudioRef = useRef(new Audio('/api/placeholder/audio')); // Placeholder for win sound
   const warningAudioRef = useRef(new Audio('/api/placeholder/audio')); // Placeholder for warning sound
 
-  // Initialize board
   useEffect(() => {
     resetGame();
   }, [boardSize]);
 
-  // Timer effect for main game clock
   useEffect(() => {
     if (!winner && isTimerRunning) {
       const timer = setInterval(() => {
@@ -43,7 +41,6 @@ const Gomoku = () => {
     }
   }, [currentPlayer, winner, isTimerRunning]);
 
-  // Inactivity timer effect
   useEffect(() => {
     if (!winner && isTimerRunning) {
       const inactivityTimer = setInterval(() => {
@@ -63,14 +60,12 @@ const Gomoku = () => {
     }
   }, [currentPlayer, winner, isTimerRunning]);
 
-  // Warning sound for low inactivity time
   useEffect(() => {
     if (inactivityTime === 5 && soundEnabled && !winner) {
       warningAudioRef.current.play().catch(() => {});
     }
   }, [inactivityTime, soundEnabled, winner]);
 
-  // Check for time-based loss
   useEffect(() => {
     if (timeLeft[currentPlayer] === 0) {
       setWinner(currentPlayer === 'X' ? 'O' : 'X');
@@ -89,7 +84,6 @@ const Gomoku = () => {
     const centerRow = Math.floor(boardSize / 2);
     const centerCol = Math.floor(boardSize / 2);
 
-    // Only allow moves that are within 3 squares of the center (first move)
     const rowDiff = Math.abs(row - centerRow);
     const colDiff = Math.abs(col - centerCol);
 
@@ -99,9 +93,7 @@ const Gomoku = () => {
   const handleClick = (row, col) => {
     if (board[row][col] || winner || !isTimerRunning) return;
 
-    // Check if it's a valid second move
     if (!isValidSecondMove(row, col)) {
-      // Show visual feedback that the move is invalid
       setHoveredCell({ row, col, invalid: true });
       setTimeout(() => setHoveredCell(null), 500);
       return;
@@ -126,7 +118,6 @@ const Gomoku = () => {
     setBoard(newBoard);
     setLastMove({ row, col });
     setMoves(moves + 1);
-    // Reset inactivity timer after a move
     setInactivityTime(15);
 
     if (checkWinner(newBoard, row, col)) {
@@ -147,7 +138,6 @@ const Gomoku = () => {
       let count = 1;
       let positions = [[row, col]];
 
-      // Check forward
       for (let i = 1; i < 5; i++) {
         const r = row + dx * i;
         const c = col + dy * i;
@@ -156,7 +146,6 @@ const Gomoku = () => {
         positions.push([r, c]);
       }
 
-      // Check backward
       for (let i = 1; i < 5; i++) {
         const r = row - dx * i;
         const c = col - dy * i;
@@ -166,7 +155,6 @@ const Gomoku = () => {
       }
 
       if (count >= 5) {
-        // Highlight winning line
         positions.forEach(([r, c]) => {
           board[r][c] = `${symbol}_WIN`;
         });
@@ -213,61 +201,59 @@ const Gomoku = () => {
   };
 
   const getInitials = (name) => {
-  if (!name) return '?';
-  const words = name.split(' ');
-  if (words.length >= 2) {
-    return `${words[0][0]}${words[1][0]}`.toUpperCase();
-  }
-  return name.slice(0, 2).toUpperCase();
-};
-
-const getAvatarColor = (name) => {
-  const colors = [
-    'bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-yellow-500', 
-    'bg-pink-500', 'bg-indigo-500', 'bg-teal-500', 'bg-orange-500'
-  ];
-  
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  
-  return colors[Math.abs(hash) % colors.length];
-};
-
-const Avatar = ({ name, size = 'md', hasPhoto = false }) => {
-  const initials = getInitials(name);
-  const bgColor = getAvatarColor(name);
-  const sizeClasses = {
-    sm: 'w-8 h-8 text-sm',
-    md: 'w-12 h-12 text-base',
-    lg: 'w-16 h-16 text-lg'
+    if (!name) return '?';
+    const words = name.split(' ');
+    if (words.length >= 2) {
+      return `${words[0][0]}${words[1][0]}`.toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
   };
 
-  if (hasPhoto) {
+  const getAvatarColor = (name) => {
+    const colors = [
+      'bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-yellow-500', 
+      'bg-pink-500', 'bg-indigo-500', 'bg-teal-500', 'bg-orange-500'
+    ];
+    
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    return colors[Math.abs(hash) % colors.length];
+  };
+
+  const Avatar = ({ name, size = 'md', hasPhoto = false }) => {
+    const initials = getInitials(name);
+    const bgColor = getAvatarColor(name);
+    const sizeClasses = {
+      sm: 'w-8 h-8 text-sm',
+      md: 'w-12 h-12 text-base',
+      lg: 'w-16 h-16 text-lg'
+    };
+
+    if (hasPhoto) {
+      return (
+        <img
+          src={`/api/placeholder/64/64`}
+          alt={`${name}'s avatar`}
+          className={`${sizeClasses[size]} rounded-full object-cover ring-2 ring-white`}
+        />
+      );
+    }
+
     return (
-      <img
-        src={`/api/placeholder/64/64`}
-        alt={`${name}'s avatar`}
-        className={`${sizeClasses[size]} rounded-full object-cover ring-2 ring-white`}
-      />
+      <div className={`
+        ${sizeClasses[size]} ${bgColor} 
+        rounded-full flex items-center justify-center 
+        text-white font-semibold ring-2 ring-white
+      `}>
+        {initials}
+      </div>
     );
-  }
-
-  return (
-    <div className={`
-      ${sizeClasses[size]} ${bgColor} 
-      rounded-full flex items-center justify-center 
-      text-white font-semibold ring-2 ring-white
-    `}>
-      {initials}
-    </div>
-  );
-};
-
+  };
 
   const PlayerCard = ({ player, symbol, isTop }) => {
-    // Assume Guest users don't have photos
     const hasPhoto = !player.toLowerCase().includes('guest');
 
     return (
@@ -276,7 +262,6 @@ const Avatar = ({ name, size = 'md', hasPhoto = false }) => {
         ${currentPlayer === symbol ? 'bg-blue-100 ring-2 ring-blue-400' : 'bg-white'}
         transition-all duration-300 shadow-md
       `}>
-        {/* Profile Photo or Avatar */}
         <div className="relative">
           <Avatar 
             name={player} 
@@ -329,7 +314,6 @@ const Avatar = ({ name, size = 'md', hasPhoto = false }) => {
       </div>
     );
   };
-                
 
   const getCellContent = (cell) => {
     if (cell?.includes('_WIN')) {
@@ -354,8 +338,7 @@ const Avatar = ({ name, size = 'md', hasPhoto = false }) => {
   };
 
   return (
-    <div className="flex flex-col items-center bg-gray-50 h-screen w-full overflow-hidden">
-      {/* Top bar */}
+    <div className="flex flex-col items-center bg-gray-50 h-screen w-full overflow-hidden pb-16">
       <div className="w-full bg-white shadow-md px-2 md:px-4 py-2">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <PlayerCard player={player2} symbol="O" isTop={true} />
@@ -388,7 +371,6 @@ const Avatar = ({ name, size = 'md', hasPhoto = false }) => {
         </div>
       </div>
 
-      {/* Board container */}
       <div 
         ref={boardRef}
         className="flex-grow w-full overflow-auto bg-amber-50 border-t border-b border-amber-200"
@@ -435,7 +417,6 @@ const Avatar = ({ name, size = 'md', hasPhoto = false }) => {
               ))
             )}
 
-            {/* Visual indicator for valid second move area */}
             {moves === 1 && hoveredCell && !isValidSecondMove(hoveredCell.row, hoveredCell.col) && (
               <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none">
                 <div className="text-red-500 text-sm bg-white bg-opacity-80 px-2 py-1 rounded shadow">
@@ -447,7 +428,6 @@ const Avatar = ({ name, size = 'md', hasPhoto = false }) => {
         </div>
       </div>
 
-      {/* Bottom bar */}
       <div className="w-full bg-white shadow-md px-2 md:px-4 py-2">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <PlayerCard player={player1} symbol="X" isTop={false} />
@@ -457,7 +437,6 @@ const Avatar = ({ name, size = 'md', hasPhoto = false }) => {
               <span className="font-medium">Moves:</span> {moves}
             </div>
 
-            {/* Game stats - desktop only */}
             <div className="bg-white px-4 py-2 rounded-lg shadow-md border border-gray-200">
               <div className="flex gap-4">
                 <div>
@@ -476,14 +455,12 @@ const Avatar = ({ name, size = 'md', hasPhoto = false }) => {
             </div>
           </div>
 
-          {/* Mobile stats */}
           <div className="md:hidden text-sm bg-white px-2 py-1 rounded shadow-sm">
             <span className="font-medium">{moves}</span> moves
           </div>
         </div>
       </div>
 
-      {/* Coordinates overlay */}
       <div className="fixed bottom-4 right-4 bg-white p-2 rounded-lg shadow-md border border-gray-200 text-xs md:text-sm">
         {hoveredCell && (
           <div>
@@ -492,7 +469,6 @@ const Avatar = ({ name, size = 'md', hasPhoto = false }) => {
         )}
       </div>
 
-      {/* Game end modal */}
       {winner && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white p-4 md:p-8 rounded-xl shadow-2xl max-w-xs md:max-w-md w-full">
@@ -552,7 +528,6 @@ const Avatar = ({ name, size = 'md', hasPhoto = false }) => {
         </div>
       )}
 
-      {/* Settings modal */}
       {isSettingsOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white p-4 md:p-8 rounded-xl shadow-2xl max-w-xs md:max-w-md w-full">
