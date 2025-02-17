@@ -330,7 +330,7 @@ export default function Explore() {
         <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
           <div className="relative">
             <TabsList className="h-10 items-center bg-transparent gap-2 flex overflow-x-auto no-scrollbar">
-              <div className="flex gap-2 min-w-full px-4">
+              <div className="flex gap-2 pl-4">
                 {categories.map((category) => (
                   <TabsTrigger
                     key={category.id}
@@ -345,6 +345,7 @@ export default function Explore() {
                     {category.label}
                   </TabsTrigger>
                 ))}
+                <div className="w-4 flex-shrink-0" />
               </div>
             </TabsList>
           </div>
