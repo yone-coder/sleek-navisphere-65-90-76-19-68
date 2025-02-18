@@ -136,13 +136,19 @@ const Gomoku = () => {
   };
 
   const checkWinner = (board, row, col) => {
-    const directions = [[0, 1], [1, 0], [1, 1], [1, -1]];
+    const directions = [
+      [0, 1], // horizontal
+      [1, 0], // vertical
+      [1, 1], // diagonal down-right
+      [1, -1] // diagonal down-left
+    ];
     const symbol = board[row][col];
 
     return directions.some(([dx, dy]) => {
       let count = 1;
       let positions = [[row, col]];
 
+      // Check forward direction
       for (let i = 1; i < 5; i++) {
         const r = row + dx * i;
         const c = col + dy * i;
@@ -151,6 +157,7 @@ const Gomoku = () => {
         positions.push([r, c]);
       }
 
+      // Check backward direction
       for (let i = 1; i < 5; i++) {
         const r = row - dx * i;
         const c = col - dy * i;
@@ -160,15 +167,33 @@ const Gomoku = () => {
       }
 
       if (count >= 5) {
+        // Sort positions to ensure consistent line drawing from start to end
         positions.sort((a, b) => {
-          if (a[0] === b[0]) return a[1] - b[1];
-          return a[0] - b[0];
+          if (dx === 0) return a[1] - b[1]; // horizontal
+          if (dy === 0) return a[0] - b[0]; // vertical
+          return a[0] - b[0]; // diagonal
         });
         
+        // Calculate angle based on direction
+        let angle;
+        if (dx === 0) angle = 0; // horizontal
+        else if (dy === 0) angle = Math.PI / 2; // vertical
+        else if (dx === 1 && dy === 1) angle = Math.PI / 4; // diagonal down-right
+        else angle = -Math.PI / 4; // diagonal down-left
+
+        // Calculate line width based on actual distance between first and last position
+        const startPos = positions[0];
+        const endPos = positions[positions.length - 1];
+        const width = Math.sqrt(
+          Math.pow((endPos[0] - startPos[0]) * 1.5 * (zoom/100), 2) + 
+          Math.pow((endPos[1] - startPos[1]) * 1.5 * (zoom/100), 2)
+        );
+
         setWinningLine({
           positions,
           color: symbol === 'X' ? 'black' : 'red',
-          direction: Math.atan2(dy, dx)
+          angle,
+          width: `${width}rem`
         });
 
         positions.forEach(([r, c]) => {
@@ -414,10 +439,10 @@ const Gomoku = () => {
                 className="absolute z-20 bg-current transition-all duration-500 ease-out animate-scale-in"
                 style={{
                   height: '4px',
-                  width: `${(winningLine.positions.length - 1) * 1.5 * (zoom/100)}rem`,
+                  width: winningLine.width,
                   left: `${(winningLine.positions[0][1] + 0.5) * 1.5 * (zoom/100)}rem`,
                   top: `${(winningLine.positions[0][0] + 0.5) * 1.5 * (zoom/100)}rem`,
-                  transform: `rotate(${winningLine.direction}rad)`,
+                  transform: `rotate(${winningLine.angle}rad)`,
                   transformOrigin: 'left center',
                   backgroundColor: winningLine.color,
                   opacity: 0.6,
