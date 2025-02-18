@@ -206,29 +206,29 @@ const Gomoku = () => {
   };
 
   useEffect(() => {
-    if (boardRef.current) {
-      const centerPos = Math.floor(boardSize / 2);
-      
-      const cellSizeInPixels = 1.5 * 16 * (zoom/100);
-      
-      const validAreaSize = 7;
-      const offsetCells = Math.floor(validAreaSize / 2);
-      
-      const containerWidth = boardRef.current.clientWidth;
-      const containerHeight = boardRef.current.clientHeight;
-      
-      const targetCellX = (centerPos - offsetCells) * cellSizeInPixels;
-      const targetCellY = (centerPos - offsetCells) * cellSizeInPixels;
-      
-      const scrollLeft = targetCellX - (containerWidth - validAreaSize * cellSizeInPixels) / 2;
-      const scrollTop = targetCellY - (containerHeight - validAreaSize * cellSizeInPixels) / 2;
+    const centerGrid = () => {
+      if (boardRef.current) {
+        const centerPos = Math.floor(boardSize / 2);
+        const cellSizeInPixels = 1.5 * 16 * (zoom/100);
+        const validAreaSize = 7;
+        const offsetCells = Math.floor(validAreaSize / 2);
+        
+        const containerWidth = boardRef.current.clientWidth;
+        const containerHeight = boardRef.current.clientHeight;
+        
+        const targetCellX = (centerPos - offsetCells) * cellSizeInPixels;
+        const targetCellY = (centerPos - offsetCells) * cellSizeInPixels;
+        
+        boardRef.current.scrollLeft = targetCellX - (containerWidth - validAreaSize * cellSizeInPixels) / 2;
+        boardRef.current.scrollTop = targetCellY - (containerHeight - validAreaSize * cellSizeInPixels) / 2;
+      }
+    };
 
-      boardRef.current.scrollTo({
-        left: scrollLeft,
-        top: scrollTop,
-        behavior: 'smooth'
-      });
-    }
+    centerGrid();
+    
+    const timer = setTimeout(centerGrid, 100);
+    
+    return () => clearTimeout(timer);
   }, [boardSize, zoom]);
 
   const resetGame = () => {
@@ -434,14 +434,14 @@ const Gomoku = () => {
 
       <div 
         ref={boardRef}
-        className="flex-grow w-full overflow-auto bg-amber-50 border-t border-b border-amber-200 scroll-smooth"
+        className="flex-grow w-full overflow-auto bg-amber-50 border-t border-b border-amber-200"
         style={{
           scrollbarWidth: 'thin',
           scrollbarColor: '#D6B88E transparent',
           height: 'calc(100vh - 9rem)'
         }}
       >
-        <div className="py-2 md:py-4 h-full flex justify-center items-center">
+        <div className="py-2 md:py-4 h-full flex justify-center items-center min-h-[400px]">
           <div 
             className="grid relative"
             style={{
