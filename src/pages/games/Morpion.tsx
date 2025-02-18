@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Settings2, Undo2, RotateCcw, Volume2, VolumeX, Clock } from 'lucide-react';
 
@@ -15,7 +16,7 @@ const Gomoku = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [zoom, setZoom] = useState(100);
   const [hoveredCell, setHoveredCell] = useState(null);
-  const [timeLeft, setTimeLeft({ X: 300, O: 300 });
+  const [timeLeft, setTimeLeft] = useState({ X: 300, O: 300 }); // Fixed syntax error here
   const [isTimerRunning, setIsTimerRunning] = useState(true);
   const [inactivityTime, setInactivityTime] = useState(15);
   const [winningLine, setWinningLine] = useState(null);
