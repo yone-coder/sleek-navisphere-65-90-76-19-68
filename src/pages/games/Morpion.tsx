@@ -15,7 +15,7 @@ const Gomoku = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [zoom, setZoom] = useState(100);
   const [hoveredCell, setHoveredCell] = useState(null);
-  const [timeLeft, setTimeLeft] = useState({ X: 300, O: 300 });
+  const [timeLeft, setTimeLeft({ X: 300, O: 300 });
   const [isTimerRunning, setIsTimerRunning] = useState(true);
   const [inactivityTime, setInactivityTime] = useState(15);
   const [winningLine, setWinningLine] = useState(null);
@@ -205,6 +205,33 @@ const Gomoku = () => {
     });
   };
 
+  useEffect(() => {
+    if (boardRef.current) {
+      const centerCellSize = 1.5 * (zoom/100);
+      const centerPos = Math.floor(boardSize / 2);
+      
+      // Calculate the valid play area (3 cells from center)
+      const validAreaSize = 7 * centerCellSize; // 7 cells total (center + 3 on each side)
+      const validAreaOffset = centerPos * centerCellSize - (validAreaSize / 2);
+
+      // Get container dimensions
+      const containerWidth = boardRef.current.clientWidth;
+      const containerHeight = boardRef.current.clientHeight;
+
+      // Calculate total board size in rem
+      const totalBoardWidth = boardSize * centerCellSize;
+      const totalBoardHeight = boardSize * centerCellSize;
+
+      // Calculate scroll position to center the valid play area
+      const scrollLeft = (totalBoardWidth * 16) / 2 - containerWidth / 2 + validAreaOffset * 16;
+      const scrollTop = (totalBoardHeight * 16) / 2 - containerHeight / 2 + validAreaOffset * 16;
+
+      // Apply scroll position
+      boardRef.current.scrollLeft = scrollLeft;
+      boardRef.current.scrollTop = scrollTop;
+    }
+  }, [boardSize, zoom]); // Add zoom as dependency to recenter when zooming
+
   const resetGame = () => {
     const newBoard = Array(boardSize).fill(null).map(() => Array(boardSize).fill(null));
     const centerPos = Math.floor(boardSize / 2);
@@ -220,13 +247,6 @@ const Gomoku = () => {
     setIsTimerRunning(true);
     setInactivityTime(15);
     setWinningLine(null);
-
-    if (boardRef.current) {
-      const totalSize = boardSize * 1.5 * 16;
-      const centerOffset = totalSize / 2 - boardRef.current.clientHeight / 2;
-      boardRef.current.scrollLeft = centerOffset;
-      boardRef.current.scrollTop = centerOffset;
-    }
   };
 
   const undoMove = () => {
@@ -415,7 +435,7 @@ const Gomoku = () => {
 
       <div 
         ref={boardRef}
-        className="flex-grow w-full overflow-auto bg-amber-50 border-t border-b border-amber-200"
+        className="flex-grow w-full overflow-auto bg-amber-50 border-t border-b border-amber-200 scroll-smooth"
         style={{
           scrollbarWidth: 'thin',
           scrollbarColor: '#D6B88E transparent',
