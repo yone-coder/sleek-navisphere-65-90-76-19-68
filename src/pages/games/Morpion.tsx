@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Settings2, Undo2, RotateCcw, Volume2, VolumeX, Clock } from 'lucide-react';
 
@@ -213,19 +214,24 @@ const Gomoku = () => {
         const validAreaSize = 7;
         const offsetCells = Math.floor(validAreaSize / 2);
         
+        // Get container dimensions
         const containerWidth = boardRef.current.clientWidth;
         const containerHeight = boardRef.current.clientHeight;
         
-        const targetCellX = (centerPos - offsetCells) * cellSizeInPixels;
+        // Calculate the target position focusing on the left side of the valid area
+        const targetCellX = (centerPos - offsetCells - 2) * cellSizeInPixels; // Subtract 2 cells to show more of the left side
         const targetCellY = (centerPos - offsetCells) * cellSizeInPixels;
         
-        boardRef.current.scrollLeft = targetCellX - (containerWidth - validAreaSize * cellSizeInPixels) / 2;
+        // Set scroll position with focus on left side
+        boardRef.current.scrollLeft = targetCellX;
         boardRef.current.scrollTop = targetCellY - (containerHeight - validAreaSize * cellSizeInPixels) / 2;
       }
     };
 
+    // Center immediately
     centerGrid();
     
+    // Also center after a short delay to handle any layout shifts
     const timer = setTimeout(centerGrid, 100);
     
     return () => clearTimeout(timer);
