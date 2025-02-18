@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Settings2, Undo2, RotateCcw, Volume2, VolumeX, Clock } from 'lucide-react';
 
 const Gomoku = () => {
-  const [boardSize, setBoardSize] = useState(30);  // Changed from 19 to 30
+  const [boardSize, setBoardSize] = useState(30);
   const [board, setBoard] = useState([]);
   const [currentPlayer, setCurrentPlayer] = useState('X');
   const [moves, setMoves] = useState(0);
@@ -15,15 +15,16 @@ const Gomoku = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [zoom, setZoom] = useState(100);
   const [hoveredCell, setHoveredCell] = useState(null);
-  const [timeLeft, setTimeLeft] = useState({ X: 300, O: 300 }); // 5 minutes per player
+  const [timeLeft, setTimeLeft] = useState({ X: 300, O: 300 });
   const [isTimerRunning, setIsTimerRunning] = useState(true);
-  const [inactivityTime, setInactivityTime] = useState(15); // 15 seconds for inactivity
+  const [inactivityTime, setInactivityTime] = useState(15);
   const [winningLine, setWinningLine] = useState(null);
+  const [showWinnerPopup, setShowWinnerPopup] = useState(false);
 
   const boardRef = useRef(null);
-  const moveAudioRef = useRef(new Audio('/api/placeholder/audio')); // Placeholder for move sound
-  const winAudioRef = useRef(new Audio('/api/placeholder/audio')); // Placeholder for win sound
-  const warningAudioRef = useRef(new Audio('/api/placeholder/audio')); // Placeholder for warning sound
+  const moveAudioRef = useRef(new Audio('/api/placeholder/audio'));
+  const winAudioRef = useRef(new Audio('/api/placeholder/audio'));
+  const warningAudioRef = useRef(new Audio('/api/placeholder/audio'));
 
   useEffect(() => {
     resetGame();
@@ -122,10 +123,13 @@ const Gomoku = () => {
     setInactivityTime(15);
 
     if (checkWinner(newBoard, row, col)) {
-      setWinner(currentPlayer);
       if (soundEnabled) {
         winAudioRef.current.play().catch(() => {});
       }
+      setWinner(currentPlayer);
+      setTimeout(() => {
+        setShowWinnerPopup(true);
+      }, 1500);
     } else {
       setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
     }
@@ -499,7 +503,7 @@ const Gomoku = () => {
         )}
       </div>
 
-      {winner && (
+      {winner && showWinnerPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white p-4 md:p-8 rounded-xl shadow-2xl max-w-xs md:max-w-md w-full">
             <div className="text-center">
@@ -538,14 +542,17 @@ const Gomoku = () => {
 
               <div className="flex gap-2 md:gap-4 justify-center">
                 <button 
-                  onClick={resetGame}
+                  onClick={() => {
+                    setShowWinnerPopup(false);
+                    resetGame();
+                  }}
                   className="bg-blue-500 text-white px-4 md:px-6 py-2 md:py-3 rounded-full hover:bg-blue-600 transition duration-300 shadow-md font-medium text-sm md:text-base"
                 >
                   Play Again
                 </button>
                 <button 
                   onClick={() => {
-                    setWinner(null);
+                    setShowWinnerPopup(false);
                     setIsSettingsOpen(true);
                   }}
                   className="bg-gray-100 text-gray-700 px-4 md:px-6 py-2 md:py-3 rounded-full hover:bg-gray-200 transition duration-300 shadow-md font-medium text-sm md:text-base"
