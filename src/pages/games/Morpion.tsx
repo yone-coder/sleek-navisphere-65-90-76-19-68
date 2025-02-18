@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Settings2, Undo2, RotateCcw, Volume2, VolumeX, Clock } from 'lucide-react';
 
@@ -19,6 +18,7 @@ const Gomoku = () => {
   const [timeLeft, setTimeLeft] = useState({ X: 300, O: 300 }); // 5 minutes per player
   const [isTimerRunning, setIsTimerRunning] = useState(true);
   const [inactivityTime, setInactivityTime] = useState(15); // 15 seconds for inactivity
+  const [winningLine, setWinningLine] = useState(null);
 
   const boardRef = useRef(null);
   const moveAudioRef = useRef(new Audio('/api/placeholder/audio')); // Placeholder for move sound
@@ -156,6 +156,17 @@ const Gomoku = () => {
       }
 
       if (count >= 5) {
+        positions.sort((a, b) => {
+          if (a[0] === b[0]) return a[1] - b[1];
+          return a[0] - b[0];
+        });
+        
+        setWinningLine({
+          positions,
+          color: symbol === 'X' ? 'black' : 'red',
+          direction: Math.atan2(dy, dx)
+        });
+
         positions.forEach(([r, c]) => {
           board[r][c] = `${symbol}_WIN`;
         });
@@ -179,6 +190,7 @@ const Gomoku = () => {
     setTimeLeft({ X: 300, O: 300 });
     setIsTimerRunning(true);
     setInactivityTime(15);
+    setWinningLine(null);
 
     if (boardRef.current) {
       const totalSize = boardSize * 1.5 * 16;
@@ -393,6 +405,23 @@ const Gomoku = () => {
               height: `${boardSize * 1.5 * (zoom/100)}rem`
             }}
           >
+            {winningLine && (
+              <div
+                className="absolute z-20 bg-current transition-all duration-500 ease-out animate-scale-in"
+                style={{
+                  height: '4px',
+                  width: `${(winningLine.positions.length - 1) * 1.5 * (zoom/100)}rem`,
+                  left: `${(winningLine.positions[0][1] + 0.5) * 1.5 * (zoom/100)}rem`,
+                  top: `${(winningLine.positions[0][0] + 0.5) * 1.5 * (zoom/100)}rem`,
+                  transform: `rotate(${winningLine.direction}rad)`,
+                  transformOrigin: 'left center',
+                  backgroundColor: winningLine.color,
+                  opacity: 0.6,
+                  boxShadow: `0 0 10px ${winningLine.color}`
+                }}
+              />
+            )}
+
             {board.map((row, rowIndex) =>
               row.map((cell, colIndex) => (
                 <div
