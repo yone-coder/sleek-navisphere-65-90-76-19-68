@@ -219,12 +219,12 @@ const Gomoku = () => {
         const containerHeight = boardRef.current.clientHeight;
         
         // Calculate the target position at the start of the grid
-        const targetCellX = 0; // Start from the beginning of the grid
-        const targetCellY = (centerPos - offsetCells) * cellSizeInPixels;
+        const targetCellX = 0; // Start from the left
+        const targetCellY = 0; // Start from the top
         
         // Set scroll position
         boardRef.current.scrollLeft = targetCellX;
-        boardRef.current.scrollTop = targetCellY - (containerHeight - validAreaSize * cellSizeInPixels) / 2;
+        boardRef.current.scrollTop = targetCellY;
       }
     };
 
