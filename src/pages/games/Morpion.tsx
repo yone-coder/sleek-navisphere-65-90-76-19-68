@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Settings2, Undo2, RotateCcw, Volume2, VolumeX, Clock } from 'lucide-react';
 
@@ -325,54 +324,54 @@ const Gomoku = () => {
 
     return (
       <div className={`
-        flex items-center gap-2 md:gap-4 p-2 md:p-3 rounded-lg
+        flex items-center gap-2 md:gap-3 p-1 md:p-2 rounded-lg
         ${currentPlayer === symbol ? 'bg-blue-100 ring-2 ring-blue-400' : 'bg-white'}
         transition-all duration-300 shadow-md
       `}>
         <div className="relative">
           <Avatar 
             name={player} 
-            size={window.innerWidth >= 768 ? 'md' : 'sm'} 
+            size={window.innerWidth >= 768 ? 'sm' : 'xs'} 
             hasPhoto={hasPhoto} 
           />
           <div className={`
-            absolute -bottom-1 -right-1 w-4 h-4 md:w-5 md:h-5 rounded-full 
+            absolute -bottom-1 -right-1 w-3 h-3 md:w-4 md:h-4 rounded-full 
             flex items-center justify-center
             ${symbol === 'X' ? 'bg-black text-white' : 'bg-red-500 text-white'}
             ring-2 ring-white
           `}>
-            <span className="text-xs md:text-sm font-bold">{symbol}</span>
+            <span className="text-[10px] md:text-xs font-bold">{symbol}</span>
           </div>
-          <div className="text-xs md:text-sm font-medium mt-1 text-center">
+          <div className="text-[10px] md:text-xs font-medium mt-0.5 text-center">
             {formatTime(timeLeft[symbol])}
           </div>
         </div>
 
         <div className="flex flex-col">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-sm md:text-lg truncate max-w-[80px] md:max-w-full">
+          <div className="flex items-center gap-1">
+            <span className="font-bold text-xs md:text-sm truncate max-w-[60px] md:max-w-[80px]">
               {player}
             </span>
             {symbol === currentPlayer && (
               <div className={`
-                text-xs px-1.5 py-0.5 rounded-full font-medium hidden md:flex items-center gap-1
+                text-[10px] px-1 py-0.5 rounded-full font-medium hidden md:flex items-center gap-1
                 ${inactivityTime <= 5 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}
               `}>
-                <Clock size={10} className={inactivityTime <= 5 ? 'animate-pulse' : ''} />
+                <Clock size={8} className={inactivityTime <= 5 ? 'animate-pulse' : ''} />
                 <span>{inactivityTime}s</span>
               </div>
             )}
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs md:text-sm text-gray-600">
+          <div className="flex items-center gap-1">
+            <span className="text-[10px] md:text-xs text-gray-600">
               {isTop ? 'Opponent' : 'You'}
             </span>
             {symbol === currentPlayer && (
               <div className={`
-                md:hidden text-xs px-1.5 py-0.5 rounded-full font-medium flex items-center gap-1
+                md:hidden text-[10px] px-1 py-0.5 rounded-full font-medium flex items-center gap-1
                 ${inactivityTime <= 5 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}
               `}>
-                <Clock size={10} className={inactivityTime <= 5 ? 'animate-pulse' : ''} />
+                <Clock size={8} className={inactivityTime <= 5 ? 'animate-pulse' : ''} />
                 <span>{inactivityTime}s</span>
               </div>
             )}
@@ -405,34 +404,34 @@ const Gomoku = () => {
   };
 
   return (
-    <div className="flex flex-col items-center bg-gray-50 h-screen w-full overflow-hidden pb-16">
-      <div className="w-full bg-white shadow-md px-2 md:px-4 py-2">
+    <div className="flex flex-col items-center bg-gray-50 h-screen w-full overflow-hidden pb-8">
+      <div className="w-full bg-white shadow-md px-2 md:px-4 py-1">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <PlayerCard player={player2} symbol="O" isTop={true} />
 
-          <div className="flex items-center gap-1 md:gap-3">
+          <div className="flex items-center gap-1 md:gap-2">
             <button 
               onClick={() => setSoundEnabled(!soundEnabled)}
-              className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition duration-300 shadow-md border border-gray-200"
+              className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition duration-300 shadow-md border border-gray-200"
             >
-              <Settings2 size={16} className="md:w-5 md:h-5" />
+              <Settings2 size={14} className="md:w-4 md:h-4" />
             </button>
 
             <button 
               onClick={undoMove}
               disabled={gameHistory.length === 0}
-              className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center transition duration-300
+              className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center transition duration-300
                 ${gameHistory.length === 0 ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-100 shadow-md border border-gray-200'}
               `}
             >
-              <Undo2 size={16} className="md:w-5 md:h-5" />
+              <Undo2 size={14} className="md:w-4 md:h-4" />
             </button>
 
             <button 
               onClick={resetGame}
-              className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition duration-300 shadow-md border border-gray-200"
+              className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition duration-300 shadow-md border border-gray-200"
             >
-              <RotateCcw size={16} className="md:w-5 md:h-5" />
+              <RotateCcw size={14} className="md:w-4 md:h-4" />
             </button>
           </div>
         </div>
@@ -444,7 +443,7 @@ const Gomoku = () => {
         style={{
           scrollbarWidth: 'thin',
           scrollbarColor: '#D6B88E transparent',
-          height: 'calc(100vh - 9rem)'
+          height: 'calc(100vh - 7rem)'
         }}
       >
         <div className="py-2 md:py-4 h-full flex justify-center items-center min-h-[400px]">
@@ -512,16 +511,16 @@ const Gomoku = () => {
         </div>
       </div>
 
-      <div className="w-full bg-white shadow-md px-2 md:px-4 py-2">
+      <div className="w-full bg-white shadow-md px-2 md:px-4 py-1">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <PlayerCard player={player1} symbol="X" isTop={false} />
 
-          <div className="hidden md:flex items-center gap-4">
-            <div className="bg-white px-4 py-2 rounded-lg shadow-md border border-gray-200">
+          <div className="hidden md:flex items-center gap-2">
+            <div className="bg-white px-3 py-1 rounded-lg shadow-md border border-gray-200">
               <span className="font-medium">Moves:</span> {moves}
             </div>
 
-            <div className="bg-white px-4 py-2 rounded-lg shadow-md border border-gray-200">
+            <div className="bg-white px-3 py-1 rounded-lg shadow-md border border-gray-200">
               <div className="flex gap-4">
                 <div>
                   <span className="text-sm text-gray-500">Win Rate:</span>
