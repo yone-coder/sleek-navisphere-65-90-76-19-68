@@ -88,7 +88,7 @@ export const SellersList = () => {
         </div>
       </div>
       
-      <div className="relative">
+      <div className="relative px-4">
         <Carousel
           opts={{
             align: "start",
@@ -97,14 +97,14 @@ export const SellersList = () => {
           }}
           className="w-full"
         >
-          <CarouselContent className="-ml-4 md:-ml-6">
+          <CarouselContent className="-ml-2">
             {sellers.map((seller) => (
-              <CarouselItem key={seller.id} className="pl-4 md:pl-6 basis-[85%] sm:basis-[45%] lg:basis-[32%] xl:basis-[24%]">
+              <CarouselItem key={seller.id} className="pl-2 basis-[85%] sm:basis-[45%] lg:basis-[32%] xl:basis-[24%]">
                 <SellerCard seller={seller} />
               </CarouselItem>
             ))}
           </CarouselContent>
-          <div className="max-w-7xl mx-auto px-4 relative">
+          <div className="max-w-7xl mx-auto relative">
             <CarouselPrevious className="hidden md:flex absolute -left-12 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm" />
             <CarouselNext className="hidden md:flex absolute -right-12 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm" />
           </div>
