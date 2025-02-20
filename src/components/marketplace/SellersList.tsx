@@ -98,11 +98,13 @@ export const SellersList = () => {
           className="w-full"
         >
           <CarouselContent className="-ml-2">
+            <CarouselItem className="pl-4 basis-0" /> {/* Starting padding */}
             {sellers.map((seller) => (
               <CarouselItem key={seller.id} className="pl-2 basis-[85%] sm:basis-[45%] lg:basis-[32%] xl:basis-[24%]">
                 <SellerCard seller={seller} />
               </CarouselItem>
             ))}
+            <CarouselItem className="pl-4 basis-0" /> {/* Ending padding */}
           </CarouselContent>
           <div className="max-w-7xl mx-auto relative">
             <CarouselPrevious className="hidden md:flex absolute -left-12 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm" />
