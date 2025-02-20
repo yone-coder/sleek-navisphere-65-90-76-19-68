@@ -1,10 +1,7 @@
-
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { SellerCard } from "./SellerCard";
 
@@ -86,7 +83,7 @@ export const SellersList = () => {
         </button>
       </div>
       
-      <div className="relative w-full">
+      <div className="w-full">
         <Carousel
           opts={{
             align: "start",
@@ -94,15 +91,13 @@ export const SellersList = () => {
           }}
           className="w-full"
         >
-          <CarouselContent className="-ml-4 pl-4 pr-4">
+          <CarouselContent className="-ml-4">
             {sellers.map((seller) => (
               <CarouselItem key={seller.id} className="pl-4 basis-auto">
                 <SellerCard seller={seller} />
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="left-2 lg:left-8" />
-          <CarouselNext className="right-2 lg:right-8" />
         </Carousel>
       </div>
     </div>
