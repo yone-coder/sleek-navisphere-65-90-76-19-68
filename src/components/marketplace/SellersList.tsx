@@ -92,7 +92,7 @@ export const SellersList = () => {
         <Carousel
           opts={{
             align: "start",
-            loop: true,
+            loop: false,
             slidesToScroll: 1,
           }}
           className="w-full"
