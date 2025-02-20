@@ -3,6 +3,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { SellerCard } from "./SellerCard";
 
@@ -90,16 +92,19 @@ export const SellersList = () => {
         opts={{
           align: "start",
           loop: true,
+          slidesToScroll: 2,
         }}
-        className="w-full"
+        className="w-full relative"
       >
-        <CarouselContent className="-ml-0">
+        <CarouselContent className="-ml-2 md:-ml-4">
           {sellers.map((seller) => (
-            <CarouselItem key={seller.id} className="pl-0 md:basis-1/2 lg:basis-1/3">
+            <CarouselItem key={seller.id} className="pl-2 md:pl-4 basis-1/2 md:basis-1/3 lg:basis-1/4">
               <SellerCard seller={seller} />
             </CarouselItem>
           ))}
         </CarouselContent>
+        <CarouselPrevious className="hidden md:flex -left-4" />
+        <CarouselNext className="hidden md:flex -right-4" />
       </Carousel>
     </section>
   );
