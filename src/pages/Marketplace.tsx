@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Search, MapPin, Grid, ListFilter, Menu, Bell, Heart } from 'lucide-react';
+import { Search, MapPin } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -9,8 +9,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Link } from 'react-router-dom';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Carousel,
@@ -65,12 +63,6 @@ const categorySlides = {
       title: "Tech Essentials",
       description: "Latest gadgets and accessories",
     },
-    {
-      id: 2,
-      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=1500&h=500&q=80",
-      title: "Smart Devices",
-      description: "Connect your world",
-    },
   ],
   home: [
     {
@@ -79,12 +71,6 @@ const categorySlides = {
       title: "Home Decor",
       description: "Transform your space",
     },
-    {
-      id: 2,
-      image: "https://images.unsplash.com/photo-1497604401993-f2e922e5cb0a?auto=format&fit=crop&w=1500&h=500&q=80",
-      title: "Modern Living",
-      description: "Elevate your home",
-    },
   ],
   fashion: [
     {
@@ -92,12 +78,6 @@ const categorySlides = {
       image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1500&h=500&q=80",
       title: "Summer Collection",
       description: "Fresh styles for the season",
-    },
-    {
-      id: 2,
-      image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&w=1500&h=500&q=80",
-      title: "Designer Picks",
-      description: "Curated fashion essentials",
     },
   ],
   sports: [
@@ -121,7 +101,6 @@ const categorySlides = {
 const Marketplace = () => {
   const [selectedLocation, setSelectedLocation] = useState(locations[0]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState('browse');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
@@ -285,86 +264,7 @@ const Marketplace = () => {
         </div>
 
         <SellersList />
-
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[...Array(6)].map((_, i) => (
-              <div 
-                key={i} 
-                className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 animate-fade-in"
-                style={{ animationDelay: `${i * 0.1}s` }}
-              >
-                <Skeleton className="w-full h-48 rounded-md mb-4" />
-                <Skeleton className="h-4 w-3/4 mb-2" />
-                <Skeleton className="h-4 w-1/2" />
-              </div>
-            ))}
-          </div>
-        </div>
       </main>
-
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white shadow-lg border-t border-gray-200">
-        <div className="max-w-md mx-auto px-4">
-          <ul className="flex items-center justify-between h-16">
-            <li>
-              <Link
-                to="/marketplace"
-                className={`flex flex-col items-center gap-1 ${
-                  activeTab === 'browse' ? 'text-primary' : 'text-gray-500'
-                }`}
-                onClick={() => setActiveTab('browse')}
-              >
-                <Grid className="h-5 w-5" />
-                <span className="text-xs">Browse</span>
-              </Link>
-            </li>
-            <li>
-              <button
-                className={`flex flex-col items-center gap-1 ${
-                  activeTab === 'filter' ? 'text-primary' : 'text-gray-500'
-                }`}
-                onClick={() => setActiveTab('filter')}
-              >
-                <ListFilter className="h-5 w-5" />
-                <span className="text-xs">Filter</span>
-              </button>
-            </li>
-            <li>
-              <button
-                className={`flex flex-col items-center gap-1 ${
-                  activeTab === 'notifications' ? 'text-primary' : 'text-gray-500'
-                }`}
-                onClick={() => setActiveTab('notifications')}
-              >
-                <Bell className="h-5 w-5" />
-                <span className="text-xs">Alerts</span>
-              </button>
-            </li>
-            <li>
-              <button
-                className={`flex flex-col items-center gap-1 ${
-                  activeTab === 'saved' ? 'text-primary' : 'text-gray-500'
-                }`}
-                onClick={() => setActiveTab('saved')}
-              >
-                <Heart className="h-5 w-5" />
-                <span className="text-xs">Saved</span>
-              </button>
-            </li>
-            <li>
-              <button
-                className={`flex flex-col items-center gap-1 ${
-                  activeTab === 'menu' ? 'text-primary' : 'text-gray-500'
-                }`}
-                onClick={() => setActiveTab('menu')}
-              >
-                <Menu className="h-5 w-5" />
-                <span className="text-xs">Menu</span>
-              </button>
-            </li>
-          </ul>
-        </div>
-      </nav>
     </div>
   );
 };
