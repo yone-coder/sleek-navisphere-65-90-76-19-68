@@ -220,7 +220,7 @@ const Marketplace = () => {
         </div>
       </header>
 
-      <main className="pt-32 pb-16">
+      <main className="pt-24 pb-16">
         <div className="mb-8">
           <Carousel
             key={selectedCategory}
