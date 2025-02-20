@@ -86,23 +86,25 @@ export const SellersList = () => {
         </button>
       </div>
       
-      <Carousel
-        opts={{
-          align: "start",
-          loop: true,
-        }}
-        className="w-full px-4 md:px-8"
-      >
-        <CarouselContent className="-ml-4">
-          {sellers.map((seller) => (
-            <CarouselItem key={seller.id} className="pl-4 basis-auto">
-              <SellerCard seller={seller} />
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious className="left-2 lg:left-4" />
-        <CarouselNext className="right-2 lg:right-4" />
-      </Carousel>
+      <div className="relative w-full">
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent className="-ml-4 pl-4 pr-4">
+            {sellers.map((seller) => (
+              <CarouselItem key={seller.id} className="pl-4 basis-auto">
+                <SellerCard seller={seller} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="left-2 lg:left-8" />
+          <CarouselNext className="right-2 lg:right-8" />
+        </Carousel>
+      </div>
     </div>
   );
 };
