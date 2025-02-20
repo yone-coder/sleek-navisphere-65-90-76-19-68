@@ -17,6 +17,7 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/components/ui/carousel";
+import { SellersList } from "@/components/marketplace/SellersList";
 
 const locations = [
   { id: 1, name: "New York, USA", code: "NYC" },
@@ -282,7 +283,9 @@ const Marketplace = () => {
           </Carousel>
         </div>
 
-        <div className="px-4 max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto px-4">
+          <SellersList />
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[...Array(6)].map((_, i) => (
               <div 
