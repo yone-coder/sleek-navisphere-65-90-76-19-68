@@ -1,3 +1,4 @@
+
 import {
   Carousel,
   CarouselContent,
@@ -75,7 +76,7 @@ const sellers = [
 
 export const SellersList = () => {
   return (
-    <section className="w-full">
+    <section className="w-full overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-medium text-gray-900">Featured Sellers</h2>
@@ -92,9 +93,9 @@ export const SellersList = () => {
         }}
         className="w-full"
       >
-        <CarouselContent>
+        <CarouselContent className="-ml-0">
           {sellers.map((seller) => (
-            <CarouselItem key={seller.id} className="md:basis-1/2 lg:basis-1/3">
+            <CarouselItem key={seller.id} className="pl-0 md:basis-1/2 lg:basis-1/3">
               <SellerCard seller={seller} />
             </CarouselItem>
           ))}
