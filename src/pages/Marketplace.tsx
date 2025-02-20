@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, MapPin, Grid, ListFilter, Menu, Bell, Heart } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import {
@@ -12,6 +11,12 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from 'react-router-dom';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 
 const locations = [
   { id: 1, name: "New York, USA", code: "NYC" },
@@ -30,15 +35,51 @@ const categories = [
   { id: 'beauty', label: 'Beauty' },
 ];
 
+const slides = [
+  {
+    id: 1,
+    image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1500&h=500&q=80",
+    title: "Featured Collection",
+    description: "Discover our latest arrivals",
+  },
+  {
+    id: 2,
+    image: "https://images.unsplash.com/photo-1439337153520-7082a56a81f4?auto=format&fit=crop&w=1500&h=500&q=80",
+    title: "Summer Sale",
+    description: "Up to 50% off on selected items",
+  },
+  {
+    id: 3,
+    image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1500&h=500&q=80",
+    title: "New Season",
+    description: "Spring collection now available",
+  },
+];
+
 const Marketplace = () => {
   const [selectedLocation, setSelectedLocation] = useState(locations[0]);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('browse');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+
+    const interval = setInterval(() => {
+      api.scrollNext();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [api]);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header with location selector and search */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4">
           <div className="h-16 flex items-center gap-4">
@@ -88,7 +129,6 @@ const Marketplace = () => {
           </div>
         </div>
 
-        {/* Categories tabs */}
         <div className="border-t border-gray-200">
           <div className="max-w-7xl mx-auto px-4">
             <Tabs 
@@ -113,10 +153,68 @@ const Marketplace = () => {
         </div>
       </header>
 
-      {/* Main content */}
-      <main className="pt-32 pb-16 px-4">
-        <div className="max-w-7xl mx-auto">
-          {/* Placeholder content */}
+      <main className="pt-32 pb-16">
+        <div className="mb-8">
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full"
+            setApi={setApi}
+          >
+            <CarouselContent>
+              {slides.map((slide) => (
+                <CarouselItem key={slide.id}>
+                  <div className="relative w-full overflow-hidden group">
+                    <div className="relative aspect-[3/1] w-full">
+                      <img
+                        src={slide.image}
+                        alt={slide.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                      <div className="absolute bottom-8 left-8 text-white">
+                        <h2 className="text-3xl font-bold mb-2">{slide.title}</h2>
+                        <p className="text-lg text-white/90">{slide.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
+              <div className="flex items-center gap-4 px-4 py-2 rounded-full bg-black/20 backdrop-blur-sm">
+                {slides.map((_, index) => (
+                  <button
+                    key={index}
+                    aria-label={`Go to slide ${index + 1}`}
+                    onClick={() => api?.scrollTo(index)}
+                    className={`
+                      relative w-2 h-2 rounded-full 
+                      transition-all duration-300 ease-spring
+                      ${current === index 
+                        ? "bg-white w-6" 
+                        : "bg-white/60 hover:bg-white/80"
+                      }
+                      ${current === index 
+                        ? "animate-[scale-in_0.2s_ease-out]" 
+                        : ""}
+                      group
+                      focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent
+                    `}
+                  >
+                    {current === index && (
+                      <span className="absolute inset-0 rounded-full bg-white animate-pulse opacity-50" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </Carousel>
+        </div>
+
+        <div className="px-4 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[...Array(6)].map((_, i) => (
               <div 
@@ -133,7 +231,6 @@ const Marketplace = () => {
         </div>
       </main>
 
-      {/* Marketplace-specific bottom navigation */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white shadow-lg border-t border-gray-200">
         <div className="max-w-md mx-auto px-4">
           <ul className="flex items-center justify-between h-16">
