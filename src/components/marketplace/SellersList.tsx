@@ -78,34 +78,36 @@ const sellers = [
 
 export const SellersList = () => {
   return (
-    <section className="w-full overflow-hidden bg-gray-900 py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-white">Featured Sellers</h2>
-          <button className="text-blue-400 hover:text-blue-300 transition-colors text-sm font-medium">
+    <section className="w-full py-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex items-center justify-between mb-6 px-4">
+          <h2 className="text-xl font-bold text-gray-900">Featured Sellers</h2>
+          <button className="text-blue-600 hover:text-blue-700 transition-colors text-sm font-medium">
             View All
           </button>
         </div>
       </div>
       
-      <Carousel
-        opts={{
-          align: "start",
-          loop: true,
-          slidesToScroll: 1,
-        }}
-        className="w-full relative px-4"
-      >
-        <CarouselContent className="-ml-4">
-          {sellers.map((seller) => (
-            <CarouselItem key={seller.id} className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-              <SellerCard seller={seller} />
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious className="hidden md:flex -left-4 bg-gray-800 border-gray-700 text-white hover:bg-gray-700" />
-        <CarouselNext className="hidden md:flex -right-4 bg-gray-800 border-gray-700 text-white hover:bg-gray-700" />
-      </Carousel>
+      <div className="px-4 md:px-0">
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+            slidesToScroll: 1,
+          }}
+          className="w-full relative max-w-7xl mx-auto"
+        >
+          <CarouselContent className="-ml-4">
+            {sellers.map((seller) => (
+              <CarouselItem key={seller.id} className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+                <SellerCard seller={seller} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="hidden md:flex -left-12 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm" />
+          <CarouselNext className="hidden md:flex -right-12 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm" />
+        </Carousel>
+      </div>
     </section>
   );
 };
