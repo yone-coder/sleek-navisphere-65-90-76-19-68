@@ -56,9 +56,10 @@ const queryClient = new QueryClient();
 const AppContent = () => {
   const location = useLocation();
   const hideHeaderRoutes = ['/login', '/signup', '/explore', '/match', '/games/morpion', '/marketplace'];
+  const hideBottomNavRoutes = ['/marketplace']; // Add this line
   const isAdminRoute = location.pathname.startsWith('/admin');
   const shouldShowHeader = !hideHeaderRoutes.some(route => location.pathname.startsWith(route)) && !isAdminRoute;
-  const shouldShowBottomNav = !isAdminRoute;
+  const shouldShowBottomNav = !isAdminRoute && !hideBottomNavRoutes.some(route => location.pathname.startsWith(route));
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">

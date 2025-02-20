@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Search, MapPin } from 'lucide-react';
+import { Search, MapPin, Grid, ListFilter, Menu, Bell, Heart } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from 'react-router-dom';
 
 const locations = [
   { id: 1, name: "New York, USA", code: "NYC" },
@@ -22,6 +23,7 @@ const locations = [
 const Marketplace = () => {
   const [selectedLocation, setSelectedLocation] = useState(locations[0]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState('browse');
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -95,6 +97,70 @@ const Marketplace = () => {
           </div>
         </div>
       </main>
+
+      {/* Marketplace-specific bottom navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white shadow-lg border-t border-gray-200">
+        <div className="max-w-md mx-auto px-4">
+          <ul className="flex items-center justify-between h-16">
+            <li>
+              <Link
+                to="/marketplace"
+                className={`flex flex-col items-center gap-1 ${
+                  activeTab === 'browse' ? 'text-primary' : 'text-gray-500'
+                }`}
+                onClick={() => setActiveTab('browse')}
+              >
+                <Grid className="h-5 w-5" />
+                <span className="text-xs">Browse</span>
+              </Link>
+            </li>
+            <li>
+              <button
+                className={`flex flex-col items-center gap-1 ${
+                  activeTab === 'filter' ? 'text-primary' : 'text-gray-500'
+                }`}
+                onClick={() => setActiveTab('filter')}
+              >
+                <ListFilter className="h-5 w-5" />
+                <span className="text-xs">Filter</span>
+              </button>
+            </li>
+            <li>
+              <button
+                className={`flex flex-col items-center gap-1 ${
+                  activeTab === 'notifications' ? 'text-primary' : 'text-gray-500'
+                }`}
+                onClick={() => setActiveTab('notifications')}
+              >
+                <Bell className="h-5 w-5" />
+                <span className="text-xs">Alerts</span>
+              </button>
+            </li>
+            <li>
+              <button
+                className={`flex flex-col items-center gap-1 ${
+                  activeTab === 'saved' ? 'text-primary' : 'text-gray-500'
+                }`}
+                onClick={() => setActiveTab('saved')}
+              >
+                <Heart className="h-5 w-5" />
+                <span className="text-xs">Saved</span>
+              </button>
+            </li>
+            <li>
+              <button
+                className={`flex flex-col items-center gap-1 ${
+                  activeTab === 'menu' ? 'text-primary' : 'text-gray-500'
+                }`}
+                onClick={() => setActiveTab('menu')}
+              >
+                <Menu className="h-5 w-5" />
+                <span className="text-xs">Menu</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </nav>
     </div>
   );
 };
