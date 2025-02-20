@@ -35,26 +35,86 @@ const categories = [
   { id: 'beauty', label: 'Beauty' },
 ];
 
-const slides = [
-  {
-    id: 1,
-    image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1500&h=500&q=80",
-    title: "Featured Collection",
-    description: "Discover our latest arrivals",
-  },
-  {
-    id: 2,
-    image: "https://images.unsplash.com/photo-1439337153520-7082a56a81f4?auto=format&fit=crop&w=1500&h=500&q=80",
-    title: "Summer Sale",
-    description: "Up to 50% off on selected items",
-  },
-  {
-    id: 3,
-    image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1500&h=500&q=80",
-    title: "New Season",
-    description: "Spring collection now available",
-  },
-];
+const categorySlides = {
+  all: [
+    {
+      id: 1,
+      image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1500&h=500&q=80",
+      title: "Featured Collection",
+      description: "Discover our latest arrivals",
+    },
+    {
+      id: 2,
+      image: "https://images.unsplash.com/photo-1439337153520-7082a56a81f4?auto=format&fit=crop&w=1500&h=500&q=80",
+      title: "Summer Sale",
+      description: "Up to 50% off on selected items",
+    },
+    {
+      id: 3,
+      image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1500&h=500&q=80",
+      title: "New Season",
+      description: "Spring collection now available",
+    },
+  ],
+  electronics: [
+    {
+      id: 1,
+      image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1500&h=500&q=80",
+      title: "Tech Essentials",
+      description: "Latest gadgets and accessories",
+    },
+    {
+      id: 2,
+      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=1500&h=500&q=80",
+      title: "Smart Devices",
+      description: "Connect your world",
+    },
+  ],
+  home: [
+    {
+      id: 1,
+      image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?auto=format&fit=crop&w=1500&h=500&q=80",
+      title: "Home Decor",
+      description: "Transform your space",
+    },
+    {
+      id: 2,
+      image: "https://images.unsplash.com/photo-1497604401993-f2e922e5cb0a?auto=format&fit=crop&w=1500&h=500&q=80",
+      title: "Modern Living",
+      description: "Elevate your home",
+    },
+  ],
+  fashion: [
+    {
+      id: 1,
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1500&h=500&q=80",
+      title: "Summer Collection",
+      description: "Fresh styles for the season",
+    },
+    {
+      id: 2,
+      image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&w=1500&h=500&q=80",
+      title: "Designer Picks",
+      description: "Curated fashion essentials",
+    },
+  ],
+  sports: [
+    {
+      id: 1,
+      image: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1500&h=500&q=80",
+      title: "Active Lifestyle",
+      description: "Gear up for success",
+    },
+  ],
+  beauty: [
+    {
+      id: 1,
+      image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1500&h=500&q=80",
+      title: "Beauty Essentials",
+      description: "Self-care favorites",
+    },
+  ],
+};
 
 const Marketplace = () => {
   const [selectedLocation, setSelectedLocation] = useState(locations[0]);
@@ -77,6 +137,13 @@ const Marketplace = () => {
 
     return () => clearInterval(interval);
   }, [api]);
+
+  useEffect(() => {
+    setCurrent(0);
+    api?.scrollTo(0);
+  }, [selectedCategory, api]);
+
+  const currentSlides = categorySlides[selectedCategory as keyof typeof categorySlides];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -156,6 +223,7 @@ const Marketplace = () => {
       <main className="pt-32 pb-16">
         <div className="mb-8">
           <Carousel
+            key={selectedCategory}
             opts={{
               align: "start",
               loop: true,
@@ -164,7 +232,7 @@ const Marketplace = () => {
             setApi={setApi}
           >
             <CarouselContent>
-              {slides.map((slide) => (
+              {currentSlides.map((slide) => (
                 <CarouselItem key={slide.id}>
                   <div className="relative w-full overflow-hidden group">
                     <div className="relative aspect-[3/1] w-full">
@@ -185,7 +253,7 @@ const Marketplace = () => {
             </CarouselContent>
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
               <div className="flex items-center gap-4 px-4 py-2 rounded-full bg-black/20 backdrop-blur-sm">
-                {slides.map((_, index) => (
+                {currentSlides.map((_, index) => (
                   <button
                     key={index}
                     aria-label={`Go to slide ${index + 1}`}
