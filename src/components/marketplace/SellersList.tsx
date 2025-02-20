@@ -79,9 +79,9 @@ const sellers = [
 export const SellersList = () => {
   return (
     <div className="w-full py-6">
-      <div className="flex items-center justify-between mb-4 px-4">
-        <h2 className="text-2xl font-semibold text-gray-900">Featured Sellers</h2>
-        <button className="text-primary hover:text-primary/80 transition-colors">
+      <div className="flex items-center justify-between mb-4 max-w-7xl mx-auto px-4">
+        <h2 className="text-lg font-medium text-gray-900">Featured Sellers</h2>
+        <button className="text-primary hover:text-primary/80 transition-colors text-sm">
           View All
         </button>
       </div>
@@ -91,7 +91,7 @@ export const SellersList = () => {
           align: "start",
           loop: true,
         }}
-        className="w-full"
+        className="w-full px-4 md:px-8"
       >
         <CarouselContent className="-ml-4">
           {sellers.map((seller) => (
@@ -100,8 +100,8 @@ export const SellersList = () => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="left-2" />
-        <CarouselNext className="right-2" />
+        <CarouselPrevious className="left-2 lg:left-4" />
+        <CarouselNext className="right-2 lg:right-4" />
       </Carousel>
     </div>
   );
