@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Star, Check, Heart, Trophy } from "lucide-react";
+import { Star, Heart } from "lucide-react";
 
 interface SellerCardProps {
   seller: {
@@ -26,37 +26,27 @@ const formatNumber = (num: number) => {
 export const SellerCard = ({ seller }: SellerCardProps) => {
   return (
     <div className="w-[300px]">
-      <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-800">
-        <div className="flex items-center gap-3">
+      <div className="bg-white dark:bg-gray-900 rounded-lg p-4 hover:shadow-sm transition-shadow">
+        <div className="flex items-center gap-4">
           {/* Avatar */}
           <img 
             src={seller.image}
             alt={seller.name}
-            className="w-10 h-10 rounded-lg object-cover"
+            className="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100 dark:ring-gray-800"
           />
           
           {/* Info */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1.5">
-              <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                {seller.name}
-              </h3>
-              <div className="flex gap-1 flex-shrink-0">
-                {seller.isVerified && (
-                  <Check className="w-3.5 h-3.5 text-blue-500" />
-                )}
-                {seller.isTopSeller && (
-                  <Trophy className="w-3.5 h-3.5 text-yellow-500" />
-                )}
-              </div>
-            </div>
-            <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+            <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate mb-1">
+              {seller.name}
+            </h3>
+            <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
               <div className="flex items-center gap-1">
                 <Heart className="w-3 h-3" />
                 <span>{formatNumber(seller.followers)}</span>
               </div>
               <div className="flex items-center gap-1">
-                <Star className="w-3 h-3 text-yellow-500" />
+                <Star className="w-3 h-3" />
                 <span>{seller.rating}</span>
               </div>
             </div>
@@ -65,7 +55,8 @@ export const SellerCard = ({ seller }: SellerCardProps) => {
           {/* Action Button */}
           <Button 
             size="sm"
-            className="h-7 px-3 bg-gray-900 dark:bg-gray-100 hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-gray-900 text-xs rounded-lg"
+            variant="outline"
+            className="h-8 px-3 text-xs"
           >
             Follow
           </Button>
