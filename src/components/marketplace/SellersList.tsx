@@ -93,10 +93,12 @@ export const SellersList = () => {
         }}
         className="w-full"
       >
-        <CarouselContent className="-ml-4">
+        <CarouselContent>
           {sellers.map((seller) => (
-            <CarouselItem key={seller.id} className="pl-4 basis-auto">
-              <SellerCard seller={seller} />
+            <CarouselItem key={seller.id} className="md:basis-1/2 lg:basis-1/3">
+              <div className="px-2">
+                <SellerCard seller={seller} />
+              </div>
             </CarouselItem>
           ))}
         </CarouselContent>
