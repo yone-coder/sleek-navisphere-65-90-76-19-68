@@ -88,7 +88,7 @@ export const SellersList = () => {
         </div>
       </div>
       
-      <div className="relative px-4">
+      <div className="relative">
         <Carousel
           opts={{
             align: "start",
