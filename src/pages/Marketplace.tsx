@@ -149,7 +149,7 @@ const Marketplace = () => {
     <div className="min-h-screen bg-gray-50">
       <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="h-16 flex items-center gap-4">
+          <div className="h-14 flex items-center gap-4">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button 
@@ -204,12 +204,12 @@ const Marketplace = () => {
               value={selectedCategory}
               onValueChange={setSelectedCategory}
             >
-              <TabsList className="h-12 w-full justify-start gap-2 bg-transparent p-0 overflow-x-auto no-scrollbar">
+              <TabsList className="h-10 w-full justify-start gap-1.5 bg-transparent p-0 overflow-x-auto no-scrollbar">
                 {categories.map((category) => (
                   <TabsTrigger
                     key={category.id}
                     value={category.id}
-                    className="h-9 px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full"
+                    className="h-7 px-3 text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full"
                   >
                     {category.label}
                   </TabsTrigger>
