@@ -1,4 +1,3 @@
-
 import {
   Carousel,
   CarouselContent,
@@ -96,9 +95,7 @@ export const SellersList = () => {
         <CarouselContent>
           {sellers.map((seller) => (
             <CarouselItem key={seller.id} className="md:basis-1/2 lg:basis-1/3">
-              <div className="px-2">
-                <SellerCard seller={seller} />
-              </div>
+              <SellerCard seller={seller} />
             </CarouselItem>
           ))}
         </CarouselContent>
