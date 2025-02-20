@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from 'react-router-dom';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const locations = [
   { id: 1, name: "New York, USA", code: "NYC" },
@@ -20,10 +21,20 @@ const locations = [
   { id: 5, name: "Sydney, Australia", code: "SYD" },
 ];
 
+const categories = [
+  { id: 'all', label: 'All' },
+  { id: 'electronics', label: 'Electronics' },
+  { id: 'home', label: 'Home' },
+  { id: 'fashion', label: 'Fashion' },
+  { id: 'sports', label: 'Sports' },
+  { id: 'beauty', label: 'Beauty' },
+];
+
 const Marketplace = () => {
   const [selectedLocation, setSelectedLocation] = useState(locations[0]);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('browse');
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -76,10 +87,34 @@ const Marketplace = () => {
             </div>
           </div>
         </div>
+
+        {/* Categories tabs */}
+        <div className="border-t border-gray-200">
+          <div className="max-w-7xl mx-auto px-4">
+            <Tabs 
+              defaultValue="all" 
+              className="w-full"
+              value={selectedCategory}
+              onValueChange={setSelectedCategory}
+            >
+              <TabsList className="h-12 w-full justify-start gap-2 bg-transparent p-0 overflow-x-auto no-scrollbar">
+                {categories.map((category) => (
+                  <TabsTrigger
+                    key={category.id}
+                    value={category.id}
+                    className="h-9 px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full"
+                  >
+                    {category.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          </div>
+        </div>
       </header>
 
       {/* Main content */}
-      <main className="pt-20 pb-16 px-4">
+      <main className="pt-32 pb-16 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Placeholder content */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
