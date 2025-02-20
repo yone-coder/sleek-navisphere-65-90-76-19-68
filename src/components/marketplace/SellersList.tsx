@@ -1,3 +1,4 @@
+
 import {
   Carousel,
   CarouselContent,
@@ -75,31 +76,31 @@ const sellers = [
 
 export const SellersList = () => {
   return (
-    <div className="w-full py-6">
-      <div className="flex items-center justify-between mb-4 max-w-7xl mx-auto px-4">
-        <h2 className="text-lg font-medium text-gray-900">Featured Sellers</h2>
-        <button className="text-primary hover:text-primary/80 transition-colors text-sm">
-          View All
-        </button>
+    <section className="w-full">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-medium text-gray-900">Featured Sellers</h2>
+          <button className="text-primary hover:text-primary/80 transition-colors text-sm">
+            View All
+          </button>
+        </div>
       </div>
       
-      <div className="w-full">
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          className="w-full"
-        >
-          <CarouselContent className="-ml-4">
-            {sellers.map((seller) => (
-              <CarouselItem key={seller.id} className="pl-4 basis-auto">
-                <SellerCard seller={seller} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-      </div>
-    </div>
+      <Carousel
+        opts={{
+          align: "start",
+          loop: true,
+        }}
+        className="w-full"
+      >
+        <CarouselContent className="-ml-4">
+          {sellers.map((seller) => (
+            <CarouselItem key={seller.id} className="pl-4 basis-auto">
+              <SellerCard seller={seller} />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
+    </section>
   );
 };
