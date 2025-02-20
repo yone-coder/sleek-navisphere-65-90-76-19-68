@@ -94,11 +94,11 @@ export const SellersList = () => {
           loop: true,
           slidesToScroll: 2,
         }}
-        className="w-full relative"
+        className="w-full relative px-4"
       >
-        <CarouselContent className="-ml-2 md:-ml-4">
+        <CarouselContent className="-ml-8">
           {sellers.map((seller) => (
-            <CarouselItem key={seller.id} className="pl-2 md:pl-4 basis-1/2 md:basis-1/3 lg:basis-1/4">
+            <CarouselItem key={seller.id} className="pl-8 basis-1/2 md:basis-1/3 lg:basis-1/4">
               <SellerCard seller={seller} />
             </CarouselItem>
           ))}
