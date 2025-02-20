@@ -27,6 +27,7 @@ const Games = lazy(() => import("./pages/Games"));
 const Gomoku = lazy(() => import("./pages/games/Gomoku"));
 const Morpion = lazy(() => import("./pages/games/Morpion"));
 const MatchDetails = lazy(() => import("./pages/MatchDetails"));
+const Marketplace = lazy(() => import("./pages/Marketplace"));
 
 // Lazy load admin pages
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
@@ -54,7 +55,7 @@ const queryClient = new QueryClient();
 
 const AppContent = () => {
   const location = useLocation();
-  const hideHeaderRoutes = ['/login', '/signup', '/explore', '/match', '/games/morpion'];
+  const hideHeaderRoutes = ['/login', '/signup', '/explore', '/match', '/games/morpion', '/marketplace'];
   const isAdminRoute = location.pathname.startsWith('/admin');
   const shouldShowHeader = !hideHeaderRoutes.some(route => location.pathname.startsWith(route)) && !isAdminRoute;
   const shouldShowBottomNav = !isAdminRoute;
@@ -79,6 +80,7 @@ const AppContent = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/tournament/:id" element={<TournamentDetails />} />
+          <Route path="/marketplace" element={<Marketplace />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>

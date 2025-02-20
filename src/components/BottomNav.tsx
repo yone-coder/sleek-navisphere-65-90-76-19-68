@@ -1,5 +1,5 @@
 
-import { Home, Search, Users, Rss, User, Wallet } from 'lucide-react';
+import { Home, Search, Users, Rss, User, Wallet, ShoppingBag } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -12,6 +12,7 @@ export const BottomNav = () => {
   const navItems = [
     { icon: Home, label: t('nav.home'), path: '/' },
     { icon: Search, label: t('nav.products'), path: '/explore' },
+    { icon: ShoppingBag, label: 'Marketplace', path: '/marketplace' },
     { icon: Users, label: t('nav.matches'), path: '/matches' },
     { icon: Rss, label: t('nav.feeds'), path: '/feeds' },
     { icon: User, label: t('nav.profile'), path: '/profile' },
@@ -40,4 +41,4 @@ export const BottomNav = () => {
       </ul>
     </nav>
   );
-}
+};
