@@ -28,6 +28,7 @@ const Morpion = lazy(() => import("./pages/games/Morpion"));
 const MatchDetails = lazy(() => import("./pages/MatchDetails"));
 const Marketplace = lazy(() => import("./pages/Marketplace"));
 const ProductDetails = lazy(() => import("./pages/ProductDetails"));
+const Apps = lazy(() => import("./pages/Apps"));
 
 // Lazy load admin pages
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
@@ -55,8 +56,8 @@ const queryClient = new QueryClient();
 
 const AppContent = () => {
   const location = useLocation();
-  const hideHeaderRoutes = ['/login', '/signup', '/explore', '/match', '/games/morpion', '/marketplace'];
-  const hideBottomNavRoutes = ['/marketplace']; // Add this line
+  const hideHeaderRoutes = ['/login', '/signup', '/explore', '/match', '/games/morpion', '/marketplace', '/apps'];
+  const hideBottomNavRoutes = ['/marketplace'];
   const isAdminRoute = location.pathname.startsWith('/admin');
   const shouldShowHeader = !hideHeaderRoutes.some(route => location.pathname.startsWith(route)) && !isAdminRoute;
   const shouldShowBottomNav = !isAdminRoute && !hideBottomNavRoutes.some(route => location.pathname.startsWith(route));
@@ -83,6 +84,7 @@ const AppContent = () => {
           <Route path="/tournament/:id" element={<TournamentDetails />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/marketplace/product/:id" element={<ProductDetails />} />
+          <Route path="/apps" element={<Apps />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
