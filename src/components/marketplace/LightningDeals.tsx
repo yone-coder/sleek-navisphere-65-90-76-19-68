@@ -139,7 +139,7 @@ export const LightningDeals = () => {
           >
             <CarouselContent className="-ml-2 md:-ml-2">
               {products.map((product) => (
-                <CarouselItem key={product.id} className="pl-2 md:pl-2 basis-[75%] sm:basis-[35%] md:basis-[28%] lg:basis-[18%]">
+                <CarouselItem key={product.id} className="pl-2 md:pl-2 basis-[60%] sm:basis-[30%] md:basis-[22%] lg:basis-[15%]">
                   <Card className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow">
                     <CardContent className="p-0">
                       <div className="relative">
