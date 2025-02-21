@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Heart, GitCompare, Share2, Maximize2, ChevronLeft, ChevronRight, Award, ImageIcon, ZoomIn, ZoomOut } from "lucide-react";
@@ -14,8 +13,6 @@ type ProductGalleryProps = {
   stockStatus: 'In Stock' | 'Low Stock' | 'Out of Stock';
   isWishlisted: boolean;
   onWishlistToggle: () => void;
-  scrolled: boolean;
-  scrollDirection: 'up' | 'down';
 };
 
 export function ProductGallery({
@@ -23,9 +20,7 @@ export function ProductGallery({
   name,
   stockStatus,
   isWishlisted,
-  onWishlistToggle,
-  scrolled,
-  scrollDirection
+  onWishlistToggle
 }: ProductGalleryProps) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -248,8 +243,6 @@ export function ProductGallery({
           setSelectedImage(index);
           api?.scrollTo(index);
         }}
-        scrolled={scrolled}
-        scrollDirection={scrollDirection}
       />
 
       {isFullscreen && (

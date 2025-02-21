@@ -6,25 +6,15 @@ type GalleryThumbnailsProps = {
   images: string[];
   selectedImage: number;
   onSelect: (index: number) => void;
-  scrolled: boolean;
-  scrollDirection: 'up' | 'down';
 };
 
 export function GalleryThumbnails({
   images,
   selectedImage,
-  onSelect,
-  scrolled,
-  scrollDirection
+  onSelect
 }: GalleryThumbnailsProps) {
   return (
-    <div 
-      className={cn(
-        "max-w-3xl mx-auto px-4 py-3",
-        "transition-all duration-300 ease-out",
-        scrolled && scrollDirection === 'down' ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
-      )}
-    >
+    <div className="max-w-3xl mx-auto px-4 py-3">
       <ScrollArea className="w-full">
         <div className="flex gap-2 pb-2">
           {images.map((image, index) => (

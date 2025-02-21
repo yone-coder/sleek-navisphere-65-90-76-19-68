@@ -46,8 +46,6 @@ export function ProductHeader({
         stockStatus={stockStatus}
         isWishlisted={isWishlisted}
         onWishlistToggle={onWishlistToggle}
-        scrolled={scrolled}
-        scrollDirection={scrollDirection}
       />
       <NavigationHeader
         name={name}
