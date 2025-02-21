@@ -196,7 +196,7 @@ const ProductDetails = () => {
 
       {/* Modern Product Description */}
       <div className="flex-1 bg-white">
-        <div className="max-w-3xl mx-auto px-6 py-12">
+        <div className="max-w-3xl mx-auto px-6 pt-4">
           <div className="space-y-8">
             {/* Product Header with integrated price */}
             <div className="flex items-center justify-between">
