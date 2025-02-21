@@ -230,10 +230,10 @@ const ProductDetails = () => {
               <Button 
                 variant="outline"
                 size="sm"
-                className={`text-xs ${
+                className={`text-xs transition-all duration-300 ${
                   isFollowing 
                     ? 'bg-gray-50 text-gray-700' 
-                    : 'bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100'
+                    : 'bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100 shadow-[0_0_10px_rgba(59,130,246,0.5)] hover:shadow-[0_0_15px_rgba(59,130,246,0.6)]'
                 }`}
                 onClick={() => setIsFollowing(!isFollowing)}
               >
