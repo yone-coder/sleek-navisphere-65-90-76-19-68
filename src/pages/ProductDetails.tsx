@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { StarIcon, Heart, Send, ShoppingCart, ArrowLeft, Search, CheckCircle, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -197,17 +196,20 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      {/* Modern Product Description */}
       <div className="flex-1 bg-white">
         <div className="max-w-3xl mx-auto px-6 pt-4">
           <div className="space-y-8">
-            {/* Product Header with integrated price */}
             <div className="flex items-center justify-between">
               <h1 className="text-base font-medium text-gray-900 truncate pr-4 flex-1">{product.name}</h1>
-              <span className="text-base font-medium text-gray-900 whitespace-nowrap">{Math.round(product.price)} G</span>
+              <div className="flex items-center gap-2">
+                <span className="text-base font-medium text-[#0FA0CE] whitespace-nowrap">{Math.round(product.price)} G</span>
+                <span className="text-sm text-red-500 line-through whitespace-nowrap">{Math.round(product.originalPrice)} G</span>
+                <Badge className="bg-[#FEF7CD] text-yellow-700 border-yellow-200">
+                  {product.discount}% OFF
+                </Badge>
+              </div>
             </div>
 
-            {/* Seller Profile Section */}
             <div className="flex items-center justify-between border-t border-b border-gray-100 py-3">
               <div className="flex items-center gap-3">
                 <Avatar className="h-10 w-10 border border-gray-200">
@@ -241,7 +243,6 @@ const ProductDetails = () => {
 
             <p className="text-xl text-gray-600">{product.brand}</p>
 
-            {/* Rating */}
             <div className="flex items-center justify-between py-6 border-y border-gray-100">
               <div className="flex items-baseline gap-2">
                 <span className="text-lg text-gray-500 line-through">${product.originalPrice}</span>
@@ -266,12 +267,10 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            {/* Description */}
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 leading-relaxed">{product.description}</p>
             </div>
 
-            {/* Highlights */}
             <div className="space-y-4">
               <h2 className="text-lg font-semibold text-gray-900">Key Features</h2>
               <ul className="grid grid-cols-1 gap-3">
