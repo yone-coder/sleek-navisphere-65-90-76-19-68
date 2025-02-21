@@ -30,14 +30,19 @@ const ProductDetails = () => {
       "4D Adjustable Armrests",
       "360° Swivel Base",
       "Memory Foam Padding",
-    ]
+    ],
+    images: [
+      "https://images.unsplash.com/photo-1511370235399-1802cae1d32f?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1600854964509-99661b5e9e6b?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1611195974226-a6a9be9dd68b?w=800&h=800&fit=crop",
+    ],
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
       <Carousel className="w-full">
         <CarouselContent>
-          {product.images?.map((image, index) => (
+          {product.images.map((image, index) => (
             <CarouselItem key={index} className="relative aspect-square">
               <img
                 src={image}
