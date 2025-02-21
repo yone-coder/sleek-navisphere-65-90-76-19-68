@@ -70,9 +70,9 @@ const ProductDetails = () => {
               variant="ghost" 
               size="icon" 
               onClick={() => navigate(-1)}
-              className="text-white hover:bg-white/20"
+              className="text-white bg-black/20 hover:bg-black/30 backdrop-blur-sm rounded-full"
             >
-              <ArrowLeft className="h-6 w-6" />
+              <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="flex gap-2">
               <Button 
