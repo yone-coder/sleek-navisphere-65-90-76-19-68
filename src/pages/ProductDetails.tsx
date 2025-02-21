@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { StarIcon, Heart, Send, ShoppingCart, AlertCircle, ArrowLeft, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -59,19 +58,32 @@ const ProductDetails = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
-      {/* Sleek Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/50 to-transparent">
+      <Carousel className="w-full">
+        <CarouselContent>
+          {product.images.map((image, index) => (
+            <CarouselItem key={index} className="relative aspect-square">
+              <img
+                src={image}
+                alt={`${product.name} - View ${index + 1}`}
+                className="object-cover w-full h-full"
+              />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
+
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/50 to-transparent pointer-events-none">
         <div className="max-w-7xl mx-auto px-4">
           <div className="h-16 flex items-center justify-between">
             <Button 
               variant="ghost" 
               size="icon" 
               onClick={() => navigate(-1)}
-              className="text-white bg-black/20 hover:bg-black/30 backdrop-blur-sm rounded-full"
+              className="text-white bg-black/20 hover:bg-black/30 backdrop-blur-sm rounded-full pointer-events-auto"
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <div className="flex gap-2">
+            <div className="flex gap-2 pointer-events-auto">
               <Button 
                 variant="ghost" 
                 size="icon"
@@ -89,22 +101,6 @@ const ProductDetails = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="pt-16">
-        <Carousel className="w-full">
-          <CarouselContent>
-            {product.images.map((image, index) => (
-              <CarouselItem key={index} className="relative aspect-square">
-                <img
-                  src={image}
-                  alt={`${product.name} - View ${index + 1}`}
-                  className="object-cover w-full h-full"
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
       </div>
 
       <div className="w-full bg-gray-50 border-y border-gray-200">
@@ -141,7 +137,6 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      {/* Product Info */}
       <div className="flex-1">
         <div className="max-w-7xl mx-auto px-4">
           <div className="space-y-8">
