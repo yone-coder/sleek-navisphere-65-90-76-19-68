@@ -1,6 +1,7 @@
 
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type GalleryThumbnailsProps = {
   images: string[];
@@ -14,9 +15,9 @@ export function GalleryThumbnails({
   onSelect
 }: GalleryThumbnailsProps) {
   return (
-    <div className="max-w-3xl mx-auto px-4 py-3">
+    <div className="relative bg-white border-t border-gray-100">
       <ScrollArea className="w-full">
-        <div className="flex gap-2 pb-2">
+        <div className="flex gap-2 px-4 py-3">
           {images.map((image, index) => (
             <button
               key={index}
@@ -42,6 +43,11 @@ export function GalleryThumbnails({
                   "transition-opacity duration-300"
                 )}
               />
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="bg-black/60 text-white text-xs font-medium px-2 py-1 rounded-full">
+                  {index + 1}/{images.length}
+                </span>
+              </div>
             </button>
           ))}
         </div>
@@ -50,6 +56,39 @@ export function GalleryThumbnails({
           className="h-2"
         />
       </ScrollArea>
+
+      <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-white to-white/0 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-white to-white/0 pointer-events-none" />
+
+      <div className="absolute inset-y-0 left-0 flex items-center">
+        <button
+          onClick={() => onSelect(Math.max(0, selectedImage - 1))}
+          className={cn(
+            "p-1.5 rounded-full bg-white/80 backdrop-blur-sm shadow-lg",
+            "hover:bg-white hover:scale-110 active:scale-95",
+            "transition-all duration-300",
+            "focus:outline-none",
+            selectedImage === 0 && "opacity-50 pointer-events-none"
+          )}
+        >
+          <ChevronLeft className="w-4 h-4 text-gray-700" />
+        </button>
+      </div>
+
+      <div className="absolute inset-y-0 right-0 flex items-center">
+        <button
+          onClick={() => onSelect(Math.min(images.length - 1, selectedImage + 1))}
+          className={cn(
+            "p-1.5 rounded-full bg-white/80 backdrop-blur-sm shadow-lg",
+            "hover:bg-white hover:scale-110 active:scale-95",
+            "transition-all duration-300",
+            "focus:outline-none",
+            selectedImage === images.length - 1 && "opacity-50 pointer-events-none"
+          )}
+        >
+          <ChevronRight className="w-4 h-4 text-gray-700" />
+        </button>
+      </div>
     </div>
   );
 }
