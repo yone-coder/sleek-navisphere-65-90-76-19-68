@@ -74,13 +74,22 @@ const ProductDetails = () => {
             >
               <ArrowLeft className="h-6 w-6" />
             </Button>
-            <Button 
-              variant="ghost" 
-              size="icon"
-              className="text-white hover:bg-white/20"
-            >
-              <Search className="h-6 w-6" />
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                variant="ghost" 
+                size="icon"
+                className="text-white bg-black/20 hover:bg-black/30 backdrop-blur-sm rounded-full"
+              >
+                <Search className="h-5 w-5" />
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="icon"
+                className="text-white bg-black/20 hover:bg-black/30 backdrop-blur-sm rounded-full"
+              >
+                <Share2 className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -91,7 +100,7 @@ const ProductDetails = () => {
           <CarouselContent>
             {product.images.map((image, index) => (
               <CarouselItem key={index}>
-                <div className="relative w-full h-[100vh]">
+                <div className="relative w-full aspect-square">
                   <img
                     src={image}
                     alt={`${product.name} - View ${index + 1}`}
