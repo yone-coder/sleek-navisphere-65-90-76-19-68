@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StarIcon, Heart, Send, ShoppingCart, ArrowLeft, Search, CheckCircle, Users, ListCompare } from "lucide-react";
+import { StarIcon, Heart, Send, ShoppingCart, ArrowLeft, Search, CheckCircle, Users, GitCompare } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -340,7 +340,7 @@ const ProductDetails = () => {
                 size="icon"
                 className="shrink-0"
               >
-                <ListCompare className="w-4 h-4" />
+                <GitCompare className="w-4 h-4" />
               </Button>
             </div>
           </div>
