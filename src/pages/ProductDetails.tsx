@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StarIcon, Heart, Send, ShoppingCart, AlertCircle, ArrowLeft, Search, Bell } from "lucide-react";
+import { StarIcon, Heart, Send, ShoppingCart, AlertCircle, ArrowLeft, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -57,7 +57,7 @@ const ProductDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
       {/* Sleek Header */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/50 to-transparent">
         <div className="max-w-7xl mx-auto px-4">
@@ -90,26 +90,22 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      {/* Full Screen Carousel */}
-      <div className="h-[80vh]">
-        <Carousel className="w-full h-full">
-          <CarouselContent>
-            {product.images.map((image, index) => (
-              <CarouselItem key={index}>
-                <div className="w-full h-full">
-                  <img
-                    src={image}
-                    alt={`${product.name} - View ${index + 1}`}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-      </div>
+      <Carousel className="w-full h-[80vh]">
+        <CarouselContent className="-mt-0">
+          {product.images.map((image, index) => (
+            <CarouselItem key={index}>
+              <div className="w-full h-full">
+                <img
+                  src={image}
+                  alt={`${product.name} - View ${index + 1}`}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
 
-      {/* News Bar */}
       <div className="w-full bg-gray-50 border-y border-gray-200">
         <div className="max-w-7xl mx-auto px-4">
           <div className="relative overflow-hidden py-2">
@@ -145,7 +141,7 @@ const ProductDetails = () => {
       </div>
 
       {/* Product Info */}
-      <div className="relative z-10">
+      <div className="flex-1">
         <div className="max-w-7xl mx-auto px-4">
           <div className="space-y-8">
             <div className="bg-white rounded-2xl p-8 shadow-lg space-y-6">
