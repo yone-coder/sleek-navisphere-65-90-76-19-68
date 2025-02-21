@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { ShoppingCart, CreditCard, BadgePercent, ShieldCheck, Clock, Truck } from "lucide-react";
+import { ShoppingCart, CreditCard, BadgePercent, ShieldCheck, Clock, Truck, CalendarClock, ScrollText, Medal, CheckCircle2, XCircle, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { ProductHeader } from "@/components/product/ProductHeader";
 import { ProductInfo } from "@/components/product/ProductInfo";
 import { ProductOptions } from "@/components/product/ProductOptions";
 import { ProductTabs } from "@/components/product/ProductTabs";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 type Product = {
   id: string;
@@ -174,6 +175,78 @@ const ProductDetails = () => {
               onSizeChange={setSelectedSize}
               onQuantityChange={setQuantity}
             />
+
+            <div className="py-6 space-y-6 border-t border-gray-100">
+              <div className="flex items-center justify-between">
+                <h3 className="text-base font-semibold text-gray-900">Warranty & Support</h3>
+                <button className="text-xs text-[#9b87f5] hover:text-[#8670e6] font-medium">
+                  View Full Terms
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-[#F1F0FB] rounded-xl p-4 space-y-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 bg-[#9b87f5] rounded-lg">
+                        <CalendarClock className="w-4 h-4 text-white" />
+                      </div>
+                      <span className="text-sm font-medium text-gray-900">Coverage Period</span>
+                    </div>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Info className="w-4 h-4 text-gray-400" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p className="text-xs">Warranty period starts from the delivery date</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm">
+                      <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      <span>2 Years Full Coverage</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      <span>1 Year Extended Support</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                      <XCircle className="w-4 h-4" />
+                      <span>Water Damage (Optional)</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-[#F1F0FB] rounded-xl p-4 space-y-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 bg-[#9b87f5] rounded-lg">
+                        <ScrollText className="w-4 h-4 text-white" />
+                      </div>
+                      <span className="text-sm font-medium text-gray-900">Coverage Terms</span>
+                    </div>
+                    <Medal className="w-5 h-5 text-[#9b87f5]" />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm">
+                      <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      <span>Manufacturing Defects</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      <span>Parts & Labor</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      <span>24/7 Support Access</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div className="mt-8">
               <ProductTabs
