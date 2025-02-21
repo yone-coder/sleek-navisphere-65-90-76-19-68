@@ -98,163 +98,170 @@ const apps = [
   }
 ];
 
+const categories = Array.from(new Set(apps.map(app => app.category)));
+
 export default function Apps() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const categories = ["All", ...Array.from(new Set(apps.map(app => app.category)))];
-  
-  const filteredApps = apps.filter(app => {
-    const matchesSearch = 
-      app.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      app.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      app.category.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    return matchesSearch && (selectedCategory === "All" || app.category === selectedCategory);
-  });
+  const filteredApps = apps.filter(app => 
+    app.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    app.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    app.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  const recentApps = apps.slice(0, 4);
-  const featuredApps = apps.slice(4, 7);
+  const recentApps = apps.slice(0, 4); // Simulated recent apps
+  const featuredApps = apps.slice(4, 7); // Simulated featured apps
 
   return (
     <ScrollArea className="h-screen">
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-16 pb-20 animate-fade-in">
-        <div className="relative mb-6 overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-20 pb-24 animate-fade-in">
+        <div className="relative mb-8 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-violet-50" />
-          <div className="relative mx-auto px-4 sm:px-6">
-            <div className="py-4 sm:py-8">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-4 sm:gap-0">
+          <div className="relative max-w-7xl mx-auto px-4">
+            <div className="py-8">
+              <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-violet-500">
-                    <Grid2X2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                    <Grid2X2 className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
+                    <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
                       Apps
                     </h1>
-                    <p className="text-xs sm:text-sm text-gray-500">Access all your gaming tools and services</p>
+                    <p className="text-sm text-gray-500">Access all your gaming tools and services</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <Button variant="ghost" size="icon" className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl">
-                    <Star className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" />
+                <div className="flex items-center gap-3">
+                  <Button variant="ghost" size="icon" className="rounded-xl">
+                    <Star className="w-5 h-5 text-amber-500" />
                   </Button>
-                  <Button variant="ghost" size="icon" className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl">
-                    <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
+                  <Button variant="ghost" size="icon" className="rounded-xl">
+                    <Clock className="w-5 h-5 text-blue-500" />
                   </Button>
                 </div>
               </div>
 
-              <div className="relative max-w-2xl mx-auto mb-6 sm:mb-8">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+              <div className="relative max-w-2xl mx-auto mb-8">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <Input
                   type="search"
                   placeholder="Search apps, categories, or features..."
-                  className="w-full pl-9 sm:pl-10 pr-4 h-10 sm:h-11 text-sm bg-white/80 backdrop-blur-xl border-gray-200 rounded-xl"
+                  className="w-full pl-10 pr-4 h-11 bg-white/80 backdrop-blur-xl border-gray-200 rounded-xl"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
 
-              <div className="mb-6 sm:mb-8 flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-                {categories.map((category) => (
+              {!searchQuery && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                  <Card className="p-4 border border-gray-100 rounded-xl bg-white/50 backdrop-blur-sm">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-blue-500" />
+                        <h3 className="font-medium text-gray-900">Recent Apps</h3>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-4 gap-4">
+                      {recentApps.map((app) => (
+                        <Button
+                          key={`recent-${app.name}`}
+                          variant="ghost"
+                          className="flex flex-col items-center gap-2 p-2 h-auto hover:bg-gray-50"
+                          onClick={() => navigate(app.route)}
+                        >
+                          <div className={`w-12 h-12 rounded-2xl ${app.color} flex items-center justify-center`}>
+                            <app.icon className="w-6 h-6 text-white" />
+                          </div>
+                          <span className="text-xs font-medium text-gray-700 text-center">
+                            {app.name}
+                          </span>
+                        </Button>
+                      ))}
+                    </div>
+                  </Card>
+
+                  <Card className="p-4 border border-gray-100 rounded-xl bg-white/50 backdrop-blur-sm">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-amber-500" />
+                        <h3 className="font-medium text-gray-900">Featured Apps</h3>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-4 gap-4">
+                      {featuredApps.map((app) => (
+                        <Button
+                          key={`featured-${app.name}`}
+                          variant="ghost"
+                          className="flex flex-col items-center gap-2 p-2 h-auto hover:bg-gray-50"
+                          onClick={() => navigate(app.route)}
+                        >
+                          <div className={`w-12 h-12 rounded-2xl ${app.color} flex items-center justify-center`}>
+                            <app.icon className="w-6 h-6 text-white" />
+                          </div>
+                          <span className="text-xs font-medium text-gray-700 text-center">
+                            {app.name}
+                          </span>
+                        </Button>
+                      ))}
+                    </div>
+                  </Card>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4">
+          {searchQuery ? (
+            <div className="space-y-6">
+              <h2 className="text-lg font-semibold text-gray-800">Search Results</h2>
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-6">
+                {filteredApps.map((app) => (
                   <Button
-                    key={category}
-                    variant={selectedCategory === category ? "default" : "outline"}
-                    className="rounded-full px-3 sm:px-4 py-1 text-xs sm:text-sm whitespace-nowrap min-w-fit"
-                    onClick={() => setSelectedCategory(category)}
+                    key={app.name}
+                    variant="ghost"
+                    className="group flex flex-col items-center gap-3 p-0 h-auto hover:bg-transparent"
+                    onClick={() => navigate(app.route)}
                   >
-                    {category}
+                    <div className={`w-16 h-16 rounded-2xl ${app.color} flex items-center justify-center shadow-lg shadow-black/5 group-hover:scale-110 transition-all duration-300 relative overflow-hidden`}>
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
+                      <app.icon className="w-7 h-7 text-white relative z-10" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 text-center transition-colors">
+                      {app.name}
+                    </span>
                   </Button>
                 ))}
               </div>
-
-              <div className="grid grid-cols-1 gap-4 sm:gap-6 mb-6 sm:mb-8">
-                <Card className="p-4 border border-gray-100 rounded-xl bg-white/50 backdrop-blur-sm">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-blue-500" />
-                      <h3 className="font-medium text-gray-900">Recent Apps</h3>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                    {recentApps.map((app) => (
-                      <Button
-                        key={`recent-${app.name}`}
-                        variant="ghost"
-                        className="flex flex-col items-center gap-2 p-2 h-auto hover:bg-gray-50"
-                        onClick={() => navigate(app.route)}
-                      >
-                        <div className={`w-12 h-12 rounded-2xl ${app.color} flex items-center justify-center`}>
-                          <app.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                        </div>
-                        <span className="text-xs font-medium text-gray-700 text-center">
-                          {app.name}
-                        </span>
-                      </Button>
-                    ))}
-                  </div>
-                </Card>
-
-                <Card className="p-4 border border-gray-100 rounded-xl bg-white/50 backdrop-blur-sm">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-amber-500" />
-                      <h3 className="font-medium text-gray-900">Featured Apps</h3>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                    {featuredApps.map((app) => (
-                      <Button
-                        key={`featured-${app.name}`}
-                        variant="ghost"
-                        className="flex flex-col items-center gap-2 p-2 h-auto hover:bg-gray-50"
-                        onClick={() => navigate(app.route)}
-                      >
-                        <div className={`w-12 h-12 rounded-2xl ${app.color} flex items-center justify-center`}>
-                          <app.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                        </div>
-                        <span className="text-xs font-medium text-gray-700 text-center">
-                          {app.name}
-                        </span>
-                      </Button>
-                    ))}
-                  </div>
-                </Card>
-              </div>
-
-              <Card className="p-4 border border-gray-100 rounded-xl bg-white/50 backdrop-blur-sm">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <Grid2X2 className="w-4 h-4 text-gray-500" />
-                    <h3 className="font-medium text-gray-900">All Apps</h3>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 sm:gap-4">
-                  {filteredApps.map((app) => (
-                    <Button
-                      key={app.name}
-                      variant="ghost"
-                      className="group flex flex-col items-center gap-2 p-2 h-auto hover:bg-gray-50"
-                      onClick={() => navigate(app.route)}
-                    >
-                      <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl ${app.color} flex items-center justify-center shadow-lg shadow-black/5 group-hover:scale-110 transition-all duration-300 relative overflow-hidden`}>
-                        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
-                        <app.icon className="w-6 h-6 sm:w-7 sm:h-7 text-white relative z-10" />
-                      </div>
-                      <span className="text-xs font-medium text-gray-700 text-center group-hover:text-gray-900">
-                        {app.name}
-                      </span>
-                      <span className="text-[10px] text-gray-500 text-center line-clamp-2">
-                        {app.description}
-                      </span>
-                    </Button>
-                  ))}
-                </div>
-              </Card>
             </div>
-          </div>
+          ) : (
+            categories.map((category) => (
+              <div key={category} className="mb-12">
+                <h2 className="text-lg font-semibold text-gray-800 mb-6 pl-1">{category}</h2>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-6">
+                  {apps
+                    .filter(app => app.category === category)
+                    .map((app) => (
+                      <Button
+                        key={app.name}
+                        variant="ghost"
+                        className="group flex flex-col items-center gap-3 p-0 h-auto hover:bg-transparent"
+                        onClick={() => navigate(app.route)}
+                      >
+                        <div className={`w-16 h-16 rounded-2xl ${app.color} flex items-center justify-center shadow-lg shadow-black/5 group-hover:scale-110 transition-all duration-300 relative overflow-hidden`}>
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
+                          <app.icon className="w-7 h-7 text-white relative z-10" />
+                        </div>
+                        <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 text-center transition-colors">
+                          {app.name}
+                        </span>
+                      </Button>
+                    ))}
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </ScrollArea>
