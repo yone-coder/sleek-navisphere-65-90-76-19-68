@@ -11,7 +11,7 @@ const apps = [
     description: "Buy and sell gaming gear",
     icon: ShoppingCart,
     route: "/marketplace",
-    color: "bg-gradient-to-br from-blue-500/90 to-blue-600/90",
+    color: "bg-blue-500",
     category: "Shopping"
   },
   {
@@ -19,7 +19,7 @@ const apps = [
     description: "Manage your balance",
     icon: Wallet,
     route: "/wallet",
-    color: "bg-gradient-to-br from-emerald-500/90 to-emerald-600/90",
+    color: "bg-emerald-500",
     category: "Finance"
   },
   {
@@ -27,7 +27,7 @@ const apps = [
     description: "Play your favorite games",
     icon: Gamepad2,
     route: "/games",
-    color: "bg-gradient-to-br from-violet-500/90 to-violet-600/90",
+    color: "bg-violet-500",
     category: "Entertainment"
   },
   {
@@ -35,7 +35,7 @@ const apps = [
     description: "Join competitive matches",
     icon: Trophy,
     route: "/tournaments",
-    color: "bg-gradient-to-br from-amber-500/90 to-amber-600/90",
+    color: "bg-amber-500",
     category: "Gaming"
   },
   {
@@ -43,7 +43,7 @@ const apps = [
     description: "Track your gaming stats",
     icon: ActivitySquare,
     route: "/activity",
-    color: "bg-gradient-to-br from-rose-500/90 to-rose-600/90",
+    color: "bg-rose-500",
     category: "Analytics"
   },
   {
@@ -51,7 +51,7 @@ const apps = [
     description: "Connect with friends",
     icon: Users,
     route: "/social",
-    color: "bg-gradient-to-br from-pink-500/90 to-pink-600/90",
+    color: "bg-pink-500",
     category: "Social"
   },
   {
@@ -59,7 +59,7 @@ const apps = [
     description: "Manage transactions",
     icon: CreditCard,
     route: "/payments",
-    color: "bg-gradient-to-br from-indigo-500/90 to-indigo-600/90",
+    color: "bg-indigo-500",
     category: "Finance"
   },
   {
@@ -67,7 +67,7 @@ const apps = [
     description: "Claim your rewards",
     icon: Gift,
     route: "/rewards",
-    color: "bg-gradient-to-br from-orange-500/90 to-orange-600/90",
+    color: "bg-orange-500",
     category: "Rewards"
   },
   {
@@ -75,7 +75,7 @@ const apps = [
     description: "Chat with others",
     icon: Mail,
     route: "/messages",
-    color: "bg-gradient-to-br from-teal-500/90 to-teal-600/90",
+    color: "bg-teal-500",
     category: "Communication"
   },
   {
@@ -83,7 +83,7 @@ const apps = [
     description: "Stay updated",
     icon: Bell,
     route: "/notifications",
-    color: "bg-gradient-to-br from-cyan-500/90 to-cyan-600/90",
+    color: "bg-cyan-500",
     category: "Updates"
   },
   {
@@ -91,7 +91,7 @@ const apps = [
     description: "Customize your experience",
     icon: Settings,
     route: "/settings",
-    color: "bg-gradient-to-br from-gray-600/90 to-gray-700/90",
+    color: "bg-gray-600",
     category: "System"
   }
 ];
@@ -119,31 +119,26 @@ export default function Apps() {
             
             {/* Category sections */}
             {categories.map((category) => (
-              <div key={category} className="mb-8">
-                <h2 className="text-lg font-semibold text-gray-800 mb-4 pl-1">{category}</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div key={category} className="mb-12">
+                <h2 className="text-lg font-semibold text-gray-800 mb-6 pl-1">{category}</h2>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-6">
                   {apps
                     .filter(app => app.category === category)
                     .map((app) => (
-                      <Card
+                      <Button
                         key={app.name}
-                        className={`group relative overflow-hidden border-0 ${app.color} hover:shadow-2xl hover:shadow-${app.color.split('-')[2]}/20 hover:scale-[1.02] transition-all duration-300`}
+                        variant="ghost"
+                        className="group flex flex-col items-center gap-3 p-0 h-auto hover:bg-transparent"
+                        onClick={() => navigate(app.route)}
                       >
-                        <Button
-                          variant="ghost"
-                          className="w-full h-full p-6 flex flex-col items-center justify-center gap-4 text-white hover:bg-white/5"
-                          onClick={() => navigate(app.route)}
-                        >
-                          <div className="relative z-10">
-                            <div className="p-3 rounded-xl bg-white/10 backdrop-blur-sm mb-3 group-hover:scale-110 transition-transform duration-300">
-                              <app.icon className="w-6 h-6" />
-                            </div>
-                            <h2 className="font-semibold mb-1">{app.name}</h2>
-                            <p className="text-xs opacity-80">{app.description}</p>
-                          </div>
-                        </Button>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      </Card>
+                        <div className={`w-16 h-16 rounded-2xl ${app.color} flex items-center justify-center shadow-lg shadow-black/5 group-hover:scale-110 transition-all duration-300 relative overflow-hidden`}>
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
+                          <app.icon className="w-7 h-7 text-white relative z-10" />
+                        </div>
+                        <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 text-center transition-colors">
+                          {app.name}
+                        </span>
+                      </Button>
                     ))}
                 </div>
               </div>
