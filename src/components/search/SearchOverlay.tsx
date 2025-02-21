@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, X, History, ArrowLeft, Filter, Tag, Star, Command } from "lucide-react";
@@ -5,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card } from "@/components/ui/card";
+import { LucideIcon } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -26,7 +28,7 @@ interface AppItem {
   category: string;
   route: string;
   color: string;
-  icon: () => JSX.Element;
+  icon: LucideIcon;
 }
 
 interface SearchOverlayProps {
@@ -319,7 +321,7 @@ export function SearchOverlay({ isOpen, onClose, apps }: SearchOverlayProps) {
               <div className="space-y-3">
                 <h3 className="font-medium text-sm text-gray-900">Categories</h3>
                 <div className="flex flex-wrap gap-2">
-                  {categoryTags.map((category) => (
+                  {Array.from(new Set(apps.map(app => app.category))).map((category) => (
                     <Button
                       key={category}
                       variant="outline"
