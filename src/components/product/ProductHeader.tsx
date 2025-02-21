@@ -26,6 +26,9 @@ export function ProductHeader({
   const [selectedImage, setSelectedImage] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [api, setApi] = useState<CarouselApi>();
+  const [scrolled, setScrolled] = useState(false);
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     if (!api) return;
@@ -34,6 +37,26 @@ export function ProductHeader({
       setSelectedImage(api.selectedScrollSnap());
     });
   }, [api]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Determine scroll direction
+      if (currentScrollY > lastScrollY) {
+        setScrollDirection('down');
+      } else if (currentScrollY < lastScrollY) {
+        setScrollDirection('up');
+      }
+      
+      // Update scroll state
+      setScrolled(currentScrollY > 50);
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   const handleShare = () => {
     if (navigator.share) {
@@ -148,7 +171,11 @@ export function ProductHeader({
         </Carousel>
 
         {/* Thumbnail Navigation */}
-        <div className="absolute left-4 right-4 bottom-16">
+        <div className={`
+          absolute left-4 right-4 bottom-16
+          transition-opacity duration-300
+          ${scrolled && scrollDirection === 'down' ? 'opacity-0' : 'opacity-100'}
+        `}>
           <ScrollArea>
             <div className="flex gap-2 pb-2">
               {images.map((image, index) => (
@@ -177,30 +204,68 @@ export function ProductHeader({
         </div>
       </div>
 
-      {/* Header Navigation */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/50 to-transparent pointer-events-none">
+      {/* Header Navigation with Scroll Behavior */}
+      <div 
+        className={`
+          fixed top-0 left-0 right-0 z-50 
+          transition-all duration-300 ease-in-out
+          ${scrolled 
+            ? 'bg-white shadow-md' 
+            : 'bg-gradient-to-b from-black/50 to-transparent'}
+          ${scrollDirection === 'down' && scrolled 
+            ? '-translate-y-full' 
+            : 'translate-y-0'}
+        `}
+      >
         <div className="max-w-7xl mx-auto px-4">
           <div className="h-16 flex items-center justify-between">
             <Button 
               variant="ghost" 
               size="icon" 
               onClick={() => navigate(-1)}
-              className="text-white bg-black/20 hover:bg-black/30 backdrop-blur-sm rounded-full pointer-events-auto"
+              className={`
+                transition-colors duration-300
+                ${scrolled 
+                  ? 'text-gray-700 hover:bg-gray-100' 
+                  : 'text-white bg-black/20 hover:bg-black/30'}
+                backdrop-blur-sm rounded-full pointer-events-auto
+              `}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
+
+            <div className="flex-1 max-w-[200px] mx-4 transition-opacity duration-300">
+              {scrolled && (
+                <h2 className="text-sm font-medium truncate text-gray-700 text-center">
+                  {name}
+                </h2>
+              )}
+            </div>
+
             <div className="flex gap-2 pointer-events-auto">
               <Button 
                 variant="ghost" 
                 size="icon"
-                className="text-white bg-black/20 hover:bg-black/30 backdrop-blur-sm rounded-full"
+                className={`
+                  transition-colors duration-300
+                  ${scrolled 
+                    ? 'text-gray-700 hover:bg-gray-100' 
+                    : 'text-white bg-black/20 hover:bg-black/30'}
+                  backdrop-blur-sm rounded-full
+                `}
               >
                 <Search className="h-5 w-5" />
               </Button>
               <Button 
                 variant="ghost" 
                 size="icon"
-                className="text-white bg-black/20 hover:bg-black/30 backdrop-blur-sm rounded-full"
+                className={`
+                  transition-colors duration-300
+                  ${scrolled 
+                    ? 'text-gray-700 hover:bg-gray-100' 
+                    : 'text-white bg-black/20 hover:bg-black/30'}
+                  backdrop-blur-sm rounded-full
+                `}
               >
                 <Send className="h-5 w-5" />
               </Button>
