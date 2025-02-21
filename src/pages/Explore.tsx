@@ -367,7 +367,7 @@ const GameSection = ({ title, games, onLike, onShare, likedGames }: GameSectionP
         </Button>
       </div>
       <ScrollArea className="w-full">
-        <div className="flex space-x-4 px-4 pb-4">
+        <div className="flex w-max space-x-4 px-4 pb-4">
           {games.map((game) => (
             <GameCard
               key={game.id}
