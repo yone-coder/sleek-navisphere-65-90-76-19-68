@@ -116,8 +116,8 @@ const products: Product[] = [
 export const LightningDeals = () => {
   return (
     <section className="w-full py-2 bg-gradient-to-r from-[#fdfcfb] to-[#e2d1c3]">
-      <div className="max-w-3xl mx-auto px-4">
-        <div className="flex items-center justify-between mb-2">
+      <div className="px-0">
+        <div className="flex items-center justify-between mb-2 px-4">
           <div className="flex items-center gap-2">
             <h2 className="text-base font-bold text-gray-900">Lightning Deals</h2>
             <Timer className="w-3.5 h-3.5 text-blue-600" />
@@ -133,7 +133,7 @@ export const LightningDeals = () => {
               align: "start",
               loop: false,
               dragFree: true,
-              containScroll: "keepSnaps"
+              containScroll: "trimSnaps"
             }}
             className="w-full"
           >
@@ -179,9 +179,9 @@ export const LightningDeals = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <div className="max-w-3xl mx-auto relative">
-              <CarouselPrevious className="hidden md:flex absolute -left-6 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm h-5 w-5" />
-              <CarouselNext className="hidden md:flex absolute -right-6 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm h-5 w-5" />
+            <div className="relative px-4">
+              <CarouselPrevious className="hidden md:flex absolute -left-2 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm h-5 w-5" />
+              <CarouselNext className="hidden md:flex absolute -right-2 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm h-5 w-5" />
             </div>
           </Carousel>
         </div>
