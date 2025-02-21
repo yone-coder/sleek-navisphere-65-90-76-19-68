@@ -1,6 +1,6 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { DescriptionTab } from "./tabs/DescriptionTab";
 import { WarrantyTab } from "./tabs/WarrantyTab";
 import { ReviewsTab } from "./tabs/ReviewsTab";
@@ -69,10 +69,6 @@ export function ProductTabs({
               </TabsTrigger>
             </TabsList>
           </div>
-          <ScrollBar 
-            orientation="horizontal" 
-            className="h-2.5 bg-transparent"
-          />
         </ScrollArea>
       </div>
 
