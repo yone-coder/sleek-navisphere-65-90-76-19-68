@@ -8,8 +8,6 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Timer } from "lucide-react";
-import Autoplay from "embla-carousel-autoplay";
-import { useRef } from "react";
 
 interface Product {
   id: number;
@@ -115,10 +113,6 @@ const products: Product[] = [
 ];
 
 export const LightningDeals = () => {
-  const plugin = useRef(
-    Autoplay({ delay: 4000, stopOnInteraction: true })
-  );
-
   return (
     <section className="w-full overflow-hidden bg-gradient-to-r from-[#fdfcfb] to-[#e2d1c3] py-2">
       <div className="relative">
@@ -135,62 +129,64 @@ export const LightningDeals = () => {
           </div>
         </div>
 
-        {/* Carousel Container */}
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          plugins={[plugin.current]}
-          className="w-full"
-        >
-          <CarouselContent className="-ml-4">
+        {/* Scrolling Container */}
+        <div className="relative w-full overflow-x-auto pb-6">
+          <div className="flex gap-4 px-4 w-max min-w-full">
             {products.map((product) => (
-              <CarouselItem key={product.id} className="pl-4 basis-[160px] sm:basis-[200px]">
-                <div className="relative">
-                  <Card className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow">
-                    <CardContent className="p-0">
-                      <div className="relative">
-                        <img 
-                          src={product.image} 
-                          alt={product.name}
-                          className="w-full h-32 object-cover"
-                        />
-                        <Badge 
-                          className="absolute top-1.5 right-1.5 bg-red-500 text-white border-0 text-[10px] px-1.5 py-0.5"
-                          variant="secondary"
-                        >
-                          {product.discount}% OFF
-                        </Badge>
-                      </div>
-                      <div className="p-1.5">
-                        <h3 className="font-medium text-[10px] text-gray-900 mb-1 truncate">
-                          {product.name}
-                        </h3>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-baseline gap-1">
-                            <span className="text-xs font-bold text-gray-900">
-                              ${product.price}
-                            </span>
-                            <span className="text-[8px] text-gray-500 line-through">
-                              ${product.originalPrice}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-0.5 text-[8px] font-medium text-blue-600">
-                            <Timer className="w-2 h-2" />
-                            {product.timeLeft}
-                          </div>
+              <div
+                key={product.id}
+                className="relative flex-none w-[160px] sm:w-[200px]"
+              >
+                <Card className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow">
+                  <CardContent className="p-0">
+                    <div className="relative">
+                      <img 
+                        src={product.image} 
+                        alt={product.name}
+                        className="w-full h-32 object-cover"
+                      />
+                      <Badge 
+                        className="absolute top-1.5 right-1.5 bg-red-500 text-white border-0 text-[10px] px-1.5 py-0.5"
+                        variant="secondary"
+                      >
+                        {product.discount}% OFF
+                      </Badge>
+                    </div>
+                    <div className="p-1.5">
+                      <h3 className="font-medium text-[10px] text-gray-900 mb-1 truncate">
+                        {product.name}
+                      </h3>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-xs font-bold text-gray-900">
+                            ${product.price}
+                          </span>
+                          <span className="text-[8px] text-gray-500 line-through">
+                            ${product.originalPrice}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-0.5 text-[8px] font-medium text-blue-600">
+                          <Timer className="w-2 h-2" />
+                          {product.timeLeft}
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             ))}
-          </CarouselContent>
-          <CarouselPrevious className="hidden md:flex h-8 w-8 absolute left-1 top-1/2 -translate-y-1/2" />
-          <CarouselNext className="hidden md:flex h-8 w-8 absolute right-1 top-1/2 -translate-y-1/2" />
-        </Carousel>
+          </div>
+
+          {/* Navigation arrows */}
+          <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none px-1">
+            <button className="hidden md:flex items-center justify-center w-8 h-8 rounded-full bg-white shadow-lg text-gray-700 hover:bg-gray-50 pointer-events-auto">
+              <Timer className="w-4 h-4" />
+            </button>
+            <button className="hidden md:flex items-center justify-center w-8 h-8 rounded-full bg-white shadow-lg text-gray-700 hover:bg-gray-50 pointer-events-auto">
+              <Timer className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );
