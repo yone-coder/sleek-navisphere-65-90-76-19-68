@@ -90,46 +90,46 @@ export const ProductGrid = () => {
               className="group overflow-hidden border-0 bg-white/90 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-300"
             >
               <CardContent className="p-0">
-                <div className="flex">
-                  <div className="relative w-32 sm:w-48">
+                <div className="relative">
+                  <div className="relative aspect-[4/3] overflow-hidden">
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="h-full w-full object-cover aspect-square transition-transform duration-500 group-hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <Badge 
-                      className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm text-gray-900 border-0 text-[10px] px-1.5 py-0.5"
+                      className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm text-gray-900 border-0"
                       variant="secondary"
                     >
                       {product.category}
                     </Badge>
                   </div>
                   
-                  <div className="flex-1 p-4">
+                  <div className="p-4">
                     <div className="flex items-start justify-between gap-2">
                       <h3 className="font-medium text-gray-900 line-clamp-2">
                         {product.name}
                       </h3>
                       <div className="flex items-center gap-1">
                         <div className="flex items-center text-yellow-400">
-                          <Star className="w-3.5 h-3.5 fill-current" />
-                          <span className="ml-0.5 text-xs font-medium text-gray-900">
+                          <Star className="w-4 h-4 fill-current" />
+                          <span className="ml-1 text-sm font-medium text-gray-900">
                             {product.rating}
                           </span>
                         </div>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-sm text-gray-500">
                           ({product.reviews})
                         </span>
                       </div>
                     </div>
 
-                    <div className="mt-2 flex items-center gap-2">
+                    <div className="mt-3 flex items-center gap-2">
                       <img
                         src={product.seller.image}
                         alt={product.seller.name}
-                        className="w-5 h-5 rounded-full object-cover"
+                        className="w-6 h-6 rounded-full object-cover"
                       />
-                      <span className="text-xs text-gray-600">
+                      <span className="text-sm text-gray-600">
                         {product.seller.name}
                       </span>
                     </div>
@@ -138,7 +138,7 @@ export const ProductGrid = () => {
                       <span className="text-lg font-bold text-gray-900">
                         ${product.price}
                       </span>
-                      <button className="text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors">
+                      <button className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors border border-blue-600 rounded-full hover:bg-blue-50">
                         View Details
                       </button>
                     </div>
