@@ -1,3 +1,4 @@
+
 import {
   Carousel,
   CarouselContent,
@@ -93,7 +94,7 @@ export const SellersList = () => {
             align: "start",
             loop: false,
             dragFree: true,
-            containScroll: false
+            containScroll: "keepSnaps"
           }}
           className="w-full"
         >
