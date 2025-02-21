@@ -51,7 +51,27 @@ const productData: Record<string, Product> = {
     ],
   },
   "2": {
-    // ... similar structure for product 2
+    id: "2",
+    name: "Ergonomic Gaming Chair",
+    brand: "Pro Gaming Gear",
+    price: 349.99,
+    originalPrice: 449.99,
+    discount: 22,
+    rating: 4.7,
+    reviews: 142,
+    description: "The Ergonomic Gaming Chair combines style with ultimate comfort. Perfect for long gaming sessions with its advanced ergonomic features.",
+    highlights: [
+      "High-Quality PU Leather",
+      "Ergonomic Design",
+      "Adjustable Armrests",
+      "Premium Base",
+      "Neck Support Pillow",
+    ],
+    images: [
+      "https://images.unsplash.com/photo-1511370235399-1802cae1d32f?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1600854964509-99661b5e9e6b?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1611195974226-a6a9be9dd68b?w=800&h=800&fit=crop",
+    ],
   },
   "3": {
     id: "3",
