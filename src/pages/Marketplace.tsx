@@ -5,6 +5,7 @@ import { CategoryTabs } from '@/components/marketplace/CategoryTabs';
 import { CategorySlider } from '@/components/marketplace/CategorySlider';
 import { categorySlides } from '@/data/categorySlides';
 import { SellersList } from "@/components/marketplace/SellersList";
+import { LightningDeals } from "@/components/marketplace/LightningDeals";
 
 const Marketplace = () => {
   const [selectedLocation, setSelectedLocation] = useState(locations[0]);
@@ -37,6 +38,7 @@ const Marketplace = () => {
 
       <main className="pt-24 pb-16">
         <CategorySlider slides={currentSlides} />
+        <LightningDeals />
         <SellersList />
       </main>
     </div>
