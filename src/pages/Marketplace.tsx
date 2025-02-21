@@ -8,6 +8,7 @@ import { SellersList } from "@/components/marketplace/SellersList";
 import { LightningDeals } from "@/components/marketplace/LightningDeals";
 import { FeaturedProducts } from "@/components/marketplace/FeaturedProducts";
 import { RecentProducts } from "@/components/marketplace/RecentProducts";
+import { ProductGrid } from "@/components/marketplace/ProductGrid";
 
 const Marketplace = () => {
   const [selectedLocation, setSelectedLocation] = useState(locations[0]);
@@ -44,6 +45,7 @@ const Marketplace = () => {
         <RecentProducts />
         <SellersList />
         <FeaturedProducts />
+        <ProductGrid />
       </main>
     </div>
   );
