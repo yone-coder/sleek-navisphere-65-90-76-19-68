@@ -277,9 +277,16 @@ const ProductDetails = () => {
             </div>
 
             <div className="mt-2 mb-4 px-3 py-2 bg-[#F1F0FB] rounded-lg border border-[#E5DEFF]">
-              <p className="text-xs leading-relaxed text-gray-600">
-                Experience premium gaming comfort with ergonomic design, 4D adjustable armrests, and memory foam padding. Perfect for extended gaming sessions.
-              </p>
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-xs leading-relaxed text-gray-600">
+                  Experience premium gaming comfort with ergonomic design, 4D adjustable armrests, and memory foam padding. Perfect for extended gaming sessions.
+                </p>
+                <button
+                  className="px-2.5 py-1 rounded-full bg-green-500/10 text-green-500 border border-green-500/20 text-[10px] font-medium tracking-wide whitespace-nowrap hover:bg-green-500/15 transition-all duration-300"
+                >
+                  Specifications
+                </button>
+              </div>
             </div>
 
             <div className="flex items-center justify-between py-3">
