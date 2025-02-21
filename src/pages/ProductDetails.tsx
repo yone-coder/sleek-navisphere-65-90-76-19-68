@@ -198,7 +198,7 @@ const ProductDetails = () => {
 
       <div className="flex-1 bg-white">
         <div className="max-w-3xl mx-auto px-6 pt-4">
-          <div className="space-y-8">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h1 className="text-base font-medium text-gray-900 truncate pr-4 flex-1">{product.name}</h1>
               <div className="flex items-center gap-1.5">
