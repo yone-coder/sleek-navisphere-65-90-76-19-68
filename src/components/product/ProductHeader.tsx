@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -26,6 +27,8 @@ export function ProductHeader({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [api, setApi] = useState<CarouselApi>();
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
   const [isZoomed, setIsZoomed] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
@@ -35,6 +38,22 @@ export function ProductHeader({
       setSelectedImage(api.selectedScrollSnap());
     });
   }, [api]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY) {
+        setScrollDirection('down');
+      } else if (currentScrollY < lastScrollY) {
+        setScrollDirection('up');
+      }
+      setScrolled(currentScrollY > 50);
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   const handleZoom = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!isZoomed) return;
@@ -187,7 +206,13 @@ export function ProductHeader({
           </div>
         </Carousel>
 
-        <div className="max-w-3xl mx-auto px-4 py-3">
+        <div 
+          className={`
+            max-w-3xl mx-auto px-4 py-3
+            ${scrolled && scrollDirection === 'down' ? 'opacity-0' : 'opacity-100'}
+            transition-opacity duration-300
+          `}
+        >
           <ScrollArea className="w-full">
             <div className="flex gap-2 pb-2">
               {images.map((image, index) => (
