@@ -116,7 +116,7 @@ const products: Product[] = [
 export const LightningDeals = () => {
   return (
     <section className="w-full py-2 bg-gradient-to-r from-[#fdfcfb] to-[#e2d1c3]">
-      <div className="px-6">
+      <div className="px-4 md:px-8">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <h2 className="text-base font-bold text-gray-900">Lightning Deals</h2>
@@ -127,7 +127,7 @@ export const LightningDeals = () => {
           </button>
         </div>
 
-        <div className="relative -mx-6">
+        <div className="relative -mx-4 md:-mx-8">
           <Carousel
             opts={{
               align: "start",
@@ -135,7 +135,7 @@ export const LightningDeals = () => {
               dragFree: true,
               containScroll: "trimSnaps"
             }}
-            className="w-full px-6"
+            className="w-full px-4 md:px-8"
           >
             <CarouselContent className="-ml-2 md:-ml-2">
               {products.map((product) => (
