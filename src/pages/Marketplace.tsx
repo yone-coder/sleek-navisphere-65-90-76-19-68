@@ -9,7 +9,6 @@ import { LightningDeals } from "@/components/marketplace/LightningDeals";
 import { FeaturedProducts } from "@/components/marketplace/FeaturedProducts";
 import { RecentProducts } from "@/components/marketplace/RecentProducts";
 import { ProductGrid } from "@/components/marketplace/ProductGrid";
-import { AlertCircle } from "lucide-react";
 
 const newsItems = [
   "🎮 New Gaming Laptops Coming Soon - Pre-order Now!",
@@ -50,7 +49,6 @@ const Marketplace = () => {
       <main className="pt-24 pb-16">
         <CategorySlider slides={currentSlides} />
           
-        {/* News Band */}
         <div className="w-full bg-gray-50 border-y border-gray-200">
           <div className="max-w-7xl mx-auto px-4">
             <div className="relative overflow-hidden py-2">
@@ -64,7 +62,6 @@ const Marketplace = () => {
                     <span className="h-1.5 w-1.5 rounded-full bg-gray-300 last:hidden" />
                   </div>
                 ))}
-                {/* Duplicate items for seamless loop */}
                 {newsItems.map((news, index) => (
                   <div
                     key={`repeat-${index}`}
@@ -86,24 +83,21 @@ const Marketplace = () => {
         <ProductGrid />
       </main>
 
-      <style>
-        {`
-          @keyframes marquee {
-            0% {
-              transform: translateX(0);
-            }
-            100% {
-              transform: translateX(-50%);
-            }
+      <style jsx="true">{`
+        @keyframes marquee {
+          0% {
+            transform: translateX(0);
           }
-          .animate-marquee {
-            animation: marquee 30s linear infinite;
+          100% {
+            transform: translateX(-50%);
           }
-        `}
-      </style>
+        }
+        .animate-marquee {
+          animation: marquee 30s linear infinite;
+        }
+      `}</style>
     </div>
   );
 };
 
-export { Marketplace };
 export default Marketplace;
