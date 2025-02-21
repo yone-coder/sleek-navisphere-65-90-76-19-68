@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
-import { Heart, GitCompare, Share2, Maximize2, ChevronLeft, ChevronRight, Award, ImageIcon, ZoomIn, ZoomOut } from "lucide-react";
+import { Heart, GitCompare, Share2, Maximize2, ChevronLeft, ChevronRight, Award, ImageIcon, ZoomIn, ZoomOut, ShieldCheck, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
 import { GalleryThumbnails } from "./GalleryThumbnails";
@@ -29,6 +29,7 @@ export function ProductGallery({
   const [isZoomed, setIsZoomed] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentProgress, setCurrentProgress] = useState(0);
+  const [showHint, setShowHint] = useState(true);
 
   useEffect(() => {
     if (!api) return;
@@ -36,6 +37,10 @@ export function ProductGallery({
       setSelectedImage(api.selectedScrollSnap());
       setCurrentProgress((api.selectedScrollSnap() / (images.length - 1)) * 100);
     });
+
+    // Auto-hide the hint after 3 seconds
+    const timer = setTimeout(() => setShowHint(false), 3000);
+    return () => clearTimeout(timer);
   }, [api, images.length]);
 
   const handleZoom = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -62,14 +67,40 @@ export function ProductGallery({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowRight') {
+      api?.scrollNext();
+    } else if (e.key === 'ArrowLeft') {
+      api?.scrollPrev();
+    } else if (e.key === 'f') {
+      setIsFullscreen(true);
+    } else if (e.key === 'Escape') {
+      if (isZoomed) setIsZoomed(false);
+      else if (isFullscreen) setIsFullscreen(false);
+    }
+  };
+
   return (
-    <div className="relative bg-gradient-to-b from-gray-50 to-white">
+    <div 
+      className="relative bg-gradient-to-b from-gray-50 to-white"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+    >
       <div className="absolute top-0 left-0 right-0 h-1 bg-gray-100 z-50">
         <div
           className="h-full bg-[#0FA0CE] transition-all duration-300 ease-out"
           style={{ width: `${currentProgress}%` }}
         />
       </div>
+
+      {showHint && (
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none animate-fade-in">
+          <div className="bg-black/60 text-white px-4 py-2 rounded-lg backdrop-blur-sm text-sm flex items-center gap-2">
+            <ArrowRight className="w-4 h-4" />
+            Use arrow keys to navigate
+          </div>
+        </div>
+      )}
 
       <Carousel 
         className="w-full aspect-[4/3] md:aspect-[16/9] lg:aspect-[21/9]"
@@ -114,15 +145,19 @@ export function ProductGallery({
                   <Award className="w-3.5 h-3.5" />
                   Premium Quality
                 </div>
-                <div className="flex items-center gap-1.5">
+                <div className="flex flex-col gap-1.5">
                   <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/40 backdrop-blur-md text-white text-xs font-medium shadow-lg">
                     <ImageIcon className="w-3.5 h-3.5" />
                     {index + 1}/{images.length}
                   </div>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/40 backdrop-blur-md text-white text-xs font-medium shadow-lg">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    Verified Product
+                  </div>
                 </div>
               </div>
 
-              <div className="absolute bottom-4 left-4 z-10">
+              <div className="absolute bottom-4 left-4 z-50">
                 <div 
                   className={cn(
                     "px-3 py-1.5 rounded-full backdrop-blur-md shadow-lg",
@@ -137,7 +172,7 @@ export function ProductGallery({
                 </div>
               </div>
 
-              <div className="absolute bottom-4 right-4 z-10">
+              <div className="absolute bottom-4 right-4 z-50">
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/40 backdrop-blur-md text-white text-xs font-medium shadow-lg">
                   {isZoomed ? <ZoomOut className="w-3.5 h-3.5" /> : <ZoomIn className="w-3.5 h-3.5" />}
                   {isZoomed ? 'Click to zoom out' : 'Click to zoom in'}
