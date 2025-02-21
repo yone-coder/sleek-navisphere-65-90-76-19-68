@@ -1,11 +1,15 @@
-
-import { Grid2X2, Wallet, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Search, Clock, Star, Sparkles } from "lucide-react";
+import { Grid2X2, Wallet, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Search, Clock, Star, Sparkles, History, X } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { useState, useEffect } from "react";
 
 const apps = [
   {
@@ -98,11 +102,14 @@ const apps = [
   }
 ];
 
-const categories = Array.from(new Set(apps.map(app => app.category)));
-
 export default function Apps() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchHistory, setSearchHistory] = useState<string[]>(() => {
+    const saved = localStorage.getItem("searchHistory");
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   const filteredApps = apps.filter(app => 
     app.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -112,6 +119,28 @@ export default function Apps() {
 
   const recentApps = apps.slice(0, 4);
   const featuredApps = apps.slice(4, 7);
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (query.trim() && !searchHistory.includes(query.trim())) {
+      const newHistory = [query.trim(), ...searchHistory.slice(0, 4)];
+      setSearchHistory(newHistory);
+      localStorage.setItem("searchHistory", JSON.stringify(newHistory));
+    }
+  };
+
+  const clearSearchHistory = () => {
+    setSearchHistory([]);
+    localStorage.removeItem("searchHistory");
+  };
+
+  const removeSearchItem = (index: number) => {
+    const newHistory = searchHistory.filter((_, i) => i !== index);
+    setSearchHistory(newHistory);
+    localStorage.setItem("searchHistory", JSON.stringify(newHistory));
+  };
+
+  const categoryTags = Array.from(new Set(apps.map(app => app.category)));
 
   return (
     <ScrollArea className="h-screen">
@@ -143,14 +172,118 @@ export default function Apps() {
               </div>
 
               <div className="relative max-w-2xl mx-auto mb-8">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <Input
-                  type="search"
-                  placeholder="Search apps, categories, or features..."
-                  className="w-full pl-10 pr-4 h-11 bg-white/80 backdrop-blur-xl border-gray-200 rounded-xl"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+                <Popover open={isSearchFocused} onOpenChange={setIsSearchFocused}>
+                  <PopoverTrigger asChild>
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <Input
+                        type="search"
+                        placeholder="Search apps, categories, or features..."
+                        className="w-full pl-10 pr-4 h-11 bg-white/80 backdrop-blur-xl border-gray-200 rounded-xl"
+                        value={searchQuery}
+                        onChange={(e) => handleSearch(e.target.value)}
+                        onFocus={() => setIsSearchFocused(true)}
+                      />
+                      {searchQuery && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7"
+                          onClick={() => setSearchQuery("")}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[calc(100vw-2rem)] max-w-2xl p-4" align="start">
+                    <div className="space-y-4">
+                      {searchHistory.length > 0 && (
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-sm font-medium text-gray-900">Recent Searches</h3>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-xs text-gray-500 h-auto py-1"
+                              onClick={clearSearchHistory}
+                            >
+                              Clear All
+                            </Button>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {searchHistory.map((query, index) => (
+                              <div
+                                key={index}
+                                className="group flex items-center gap-1 bg-gray-100 rounded-lg px-3 py-1.5"
+                              >
+                                <History className="w-3 h-3 text-gray-400" />
+                                <button
+                                  className="text-sm text-gray-600"
+                                  onClick={() => handleSearch(query)}
+                                >
+                                  {query}
+                                </button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity"
+                                  onClick={() => removeSearchItem(index)}
+                                >
+                                  <X className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="space-y-2">
+                        <h3 className="text-sm font-medium text-gray-900">Categories</h3>
+                        <div className="flex flex-wrap gap-2">
+                          {categoryTags.map((category) => (
+                            <Button
+                              key={category}
+                              variant="outline"
+                              size="sm"
+                              className="h-auto py-1.5 px-3 text-xs"
+                              onClick={() => handleSearch(category)}
+                            >
+                              {category}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {searchQuery && filteredApps.length > 0 && (
+                        <div className="space-y-2">
+                          <h3 className="text-sm font-medium text-gray-900">Quick Results</h3>
+                          <div className="grid grid-cols-2 gap-2">
+                            {filteredApps.slice(0, 4).map((app) => (
+                              <Button
+                                key={app.name}
+                                variant="ghost"
+                                className="flex items-center gap-2 justify-start h-auto py-2"
+                                onClick={() => {
+                                  navigate(app.route);
+                                  setIsSearchFocused(false);
+                                }}
+                              >
+                                <div className={`w-8 h-8 rounded-lg ${app.color} flex items-center justify-center`}>
+                                  <app.icon className="w-4 h-4 text-white" />
+                                </div>
+                                <div className="text-left">
+                                  <div className="text-sm font-medium">{app.name}</div>
+                                  <div className="text-xs text-gray-500">{app.category}</div>
+                                </div>
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
 
               {!searchQuery && (
