@@ -1,3 +1,4 @@
+
 import { Grid2X2, Wallet, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Search, Clock, Star, Sparkles } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -259,7 +260,7 @@ export default function Apps() {
                     ))}
                 </div>
               </div>
-            ))}
+            ))
           )}
         </div>
       </div>
