@@ -1,4 +1,3 @@
-
 import { Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -74,78 +73,64 @@ const products: Product[] = [
 
 export const ProductGrid = () => {
   return (
-    <section className="w-full py-8 bg-gradient-to-r from-gray-50 to-gray-100">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-900">Popular Products</h2>
-          <button className="text-blue-600 hover:text-blue-700 transition-colors text-sm font-medium">
+    <section className="w-full py-2 bg-gradient-to-r from-gray-50 to-gray-100">
+      <div className="mx-auto px-4">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <h2 className="text-base font-bold text-gray-900">Popular Products</h2>
+          </div>
+          <button className="text-blue-600 hover:text-blue-700 transition-colors text-xs font-medium">
             View All
           </button>
         </div>
 
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 gap-4">
           {products.map((product) => (
-            <Card 
+            <div
               key={product.id}
-              className="group overflow-hidden border-0 bg-white/90 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-300"
+              className="relative flex-none w-full"
             >
-              <CardContent className="p-0">
-                <div className="relative">
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <img
-                      src={product.image}
+              <Card className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow">
+                <CardContent className="p-0">
+                  <div className="relative">
+                    <img 
+                      src={product.image} 
                       alt={product.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="w-full h-32 object-cover"
                     />
                     <Badge 
-                      className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm text-gray-900 border-0"
+                      className="absolute top-1.5 right-1.5 bg-white/90 backdrop-blur-sm text-gray-900 border-0 text-[10px] px-1.5 py-0.5"
                       variant="secondary"
                     >
                       {product.category}
                     </Badge>
                   </div>
-                  
-                  <div className="p-4">
-                    <div className="flex items-start justify-between gap-2">
-                      <h3 className="font-medium text-gray-900 line-clamp-2">
-                        {product.name}
-                      </h3>
-                      <div className="flex items-center gap-1">
+                  <div className="p-1.5">
+                    <h3 className="font-medium text-[10px] text-gray-900 mb-1 truncate">
+                      {product.name}
+                    </h3>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-xs font-bold text-gray-900">
+                          ${product.price}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1 text-[8px]">
                         <div className="flex items-center text-yellow-400">
-                          <Star className="w-4 h-4 fill-current" />
-                          <span className="ml-1 text-sm font-medium text-gray-900">
+                          <Star className="w-2 h-2 fill-current" />
+                          <span className="ml-0.5 font-medium text-gray-900">
                             {product.rating}
                           </span>
                         </div>
-                        <span className="text-sm text-gray-500">
+                        <span className="text-gray-500">
                           ({product.reviews})
                         </span>
                       </div>
                     </div>
-
-                    <div className="mt-3 flex items-center gap-2">
-                      <img
-                        src={product.seller.image}
-                        alt={product.seller.name}
-                        className="w-6 h-6 rounded-full object-cover"
-                      />
-                      <span className="text-sm text-gray-600">
-                        {product.seller.name}
-                      </span>
-                    </div>
-
-                    <div className="mt-4 flex items-center justify-between">
-                      <span className="text-lg font-bold text-gray-900">
-                        ${product.price}
-                      </span>
-                      <button className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors border border-blue-600 rounded-full hover:bg-blue-50">
-                        View Details
-                      </button>
-                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           ))}
         </div>
       </div>
