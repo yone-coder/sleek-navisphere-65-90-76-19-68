@@ -201,10 +201,10 @@ const ProductDetails = () => {
           <div className="space-y-8">
             <div className="flex items-center justify-between">
               <h1 className="text-base font-medium text-gray-900 truncate pr-4 flex-1">{product.name}</h1>
-              <div className="flex items-center gap-2">
-                <span className="text-base font-medium text-[#0FA0CE] whitespace-nowrap">{Math.round(product.price)} G</span>
-                <span className="text-sm text-red-500 line-through whitespace-nowrap">{Math.round(product.originalPrice)} G</span>
-                <Badge className="bg-[#FEF7CD] text-yellow-700 border-yellow-200">
+              <div className="flex items-center gap-1.5">
+                <span className="text-sm font-medium text-[#0FA0CE] whitespace-nowrap">{Math.round(product.price)} G</span>
+                <span className="text-xs text-red-500 line-through whitespace-nowrap">{Math.round(product.originalPrice)} G</span>
+                <Badge className="text-[10px] px-1.5 py-0.5 bg-[#FEF7CD] text-yellow-700 border-yellow-200">
                   {product.discount}% OFF
                 </Badge>
               </div>
