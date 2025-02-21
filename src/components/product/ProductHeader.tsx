@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -26,8 +25,6 @@ export function ProductHeader({
   const [selectedImage, setSelectedImage] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [api, setApi] = useState<CarouselApi>();
-  const [scrolled, setScrolled] = useState(false);
-  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -38,22 +35,6 @@ export function ProductHeader({
       setSelectedImage(api.selectedScrollSnap());
     });
   }, [api]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY) {
-        setScrollDirection('down');
-      } else if (currentScrollY < lastScrollY) {
-        setScrollDirection('up');
-      }
-      setScrolled(currentScrollY > 50);
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
 
   const handleZoom = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!isZoomed) return;
@@ -124,13 +105,7 @@ export function ProductHeader({
                   </div>
                 </div>
 
-                <div 
-                  className={`
-                    absolute bottom-4 left-4 z-10
-                    opacity-0 group-hover:opacity-100
-                    transition-opacity duration-200
-                  `}
-                >
+                <div className="absolute bottom-4 left-4 z-10">
                   <div 
                     className={`
                       px-3 py-1.5 rounded-full backdrop-blur-md
@@ -212,11 +187,7 @@ export function ProductHeader({
           </div>
         </Carousel>
 
-        <div className={`
-          max-w-3xl mx-auto px-4 py-3
-          transition-opacity duration-300
-          ${scrolled && scrollDirection === 'down' ? 'opacity-0' : 'opacity-100'}
-        `}>
+        <div className="max-w-3xl mx-auto px-4 py-3">
           <ScrollArea className="w-full">
             <div className="flex gap-2 pb-2">
               {images.map((image, index) => (
@@ -247,67 +218,36 @@ export function ProductHeader({
         </div>
       </div>
 
-      <div 
-        className={`
-          fixed top-0 left-0 right-0 z-50 
-          transition-all duration-300 ease-in-out
-          ${scrolled 
-            ? 'bg-white shadow-md' 
-            : 'bg-gradient-to-b from-black/50 to-transparent'}
-          ${scrollDirection === 'down' && scrolled 
-            ? '-translate-y-full' 
-            : 'translate-y-0'}
-        `}
-      >
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 shadow-sm backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4">
           <div className="h-16 flex items-center justify-between">
             <Button 
               variant="ghost" 
               size="icon" 
               onClick={() => navigate(-1)}
-              className={`
-                transition-colors duration-300
-                ${scrolled 
-                  ? 'text-gray-700 hover:bg-gray-100' 
-                  : 'text-white bg-black/20 hover:bg-black/30'}
-                backdrop-blur-sm rounded-full pointer-events-auto
-              `}
+              className="text-gray-700 hover:bg-gray-100 rounded-full"
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
 
-            <div className="flex-1 max-w-[200px] mx-4 transition-opacity duration-300">
-              {scrolled && (
-                <h2 className="text-sm font-medium truncate text-gray-700 text-center">
-                  {name}
-                </h2>
-              )}
+            <div className="flex-1 max-w-[200px] mx-4">
+              <h2 className="text-sm font-medium truncate text-gray-700 text-center">
+                {name}
+              </h2>
             </div>
 
-            <div className="flex gap-2 pointer-events-auto">
+            <div className="flex gap-2">
               <Button 
                 variant="ghost" 
                 size="icon"
-                className={`
-                  transition-colors duration-300
-                  ${scrolled 
-                    ? 'text-gray-700 hover:bg-gray-100' 
-                    : 'text-white bg-black/20 hover:bg-black/30'}
-                  backdrop-blur-sm rounded-full
-                `}
+                className="text-gray-700 hover:bg-gray-100 rounded-full"
               >
                 <Search className="h-5 w-5" />
               </Button>
               <Button 
                 variant="ghost" 
                 size="icon"
-                className={`
-                  transition-colors duration-300
-                  ${scrolled 
-                    ? 'text-gray-700 hover:bg-gray-100' 
-                    : 'text-white bg-black/20 hover:bg-black/30'}
-                  backdrop-blur-sm rounded-full
-                `}
+                className="text-gray-700 hover:bg-gray-100 rounded-full"
               >
                 <Send className="h-5 w-5" />
               </Button>
