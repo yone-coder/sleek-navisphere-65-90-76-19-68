@@ -24,6 +24,7 @@ type Product = {
   description: string;
   highlights: string[];
   images: string[];
+  stockStatus: 'In Stock' | 'Low Stock' | 'Out of Stock';
 };
 
 const productData: Record<string, Product> = {
@@ -49,6 +50,7 @@ const productData: Record<string, Product> = {
       "https://images.unsplash.com/photo-1600854964509-99661b5e9e6b?w=800&h=800&fit=crop",
       "https://images.unsplash.com/photo-1611195974226-a6a9be9dd68b?w=800&h=800&fit=crop",
     ],
+    stockStatus: 'Low Stock'
   },
   "2": {
     id: "2",
@@ -117,19 +119,40 @@ const ProductDetails = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
-      <Carousel className="w-full">
-        <CarouselContent>
-          {product.images.map((image, index) => (
-            <CarouselItem key={index} className="relative aspect-square">
-              <img
-                src={image}
-                alt={`${product.name} - View ${index + 1}`}
-                className="object-cover w-full h-full"
-              />
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
+      <div className="relative">
+        <Carousel className="w-full">
+          <CarouselContent>
+            {product.images.map((image, index) => (
+              <CarouselItem key={index} className="relative aspect-square">
+                <img
+                  src={image}
+                  alt={`${product.name} - View ${index + 1}`}
+                  className="object-cover w-full h-full"
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+
+        {/* Stock Indicator */}
+        <div className="absolute bottom-4 left-4 z-10">
+          <div 
+            className={`
+              px-3 py-1.5 rounded-full backdrop-blur-md
+              font-medium text-xs tracking-wide
+              transition-all duration-300
+              ${product.stockStatus === 'In Stock' 
+                ? 'bg-green-500/10 text-green-500 border border-green-500/20' 
+                : product.stockStatus === 'Low Stock'
+                ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 animate-pulse'
+                : 'bg-red-500/10 text-red-500 border border-red-500/20'
+              }
+            `}
+          >
+            {product.stockStatus}
+          </div>
+        </div>
+      </div>
 
       <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/50 to-transparent pointer-events-none">
         <div className="max-w-7xl mx-auto px-4">
