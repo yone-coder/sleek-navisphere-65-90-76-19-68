@@ -30,6 +30,9 @@ export function ProductTabs({
           className="relative h-full px-0 data-[state=active]:text-[#0FA0CE] data-[state=active]:shadow-none rounded-none bg-transparent"
         >
           <span>Reviews</span>
+          <span className="ml-2 inline-flex items-center justify-center rounded-full bg-gray-50 px-2 py-0.5 text-xs font-medium text-gray-600">
+            {reviews}
+          </span>
           <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0FA0CE] opacity-0 transition-all duration-300 data-[state=active]:opacity-100" />
         </TabsTrigger>
         <TabsTrigger 
@@ -60,20 +63,54 @@ export function ProductTabs({
       </TabsContent>
 
       <TabsContent value="reviews" className="mt-6">
-        <div className="flex items-center gap-2">
-          <div className="flex">
-            {[...Array(5)].map((_, i) => (
-              <StarIcon
-                key={i}
-                className={`w-5 h-5 ${
-                  i < Math.floor(rating)
-                    ? "text-yellow-400 fill-current"
-                    : "text-gray-200"
-                }`}
-              />
-            ))}
+        <div className="space-y-6">
+          {/* Summary */}
+          <div className="flex items-start gap-8 p-4 bg-gray-50 rounded-lg">
+            <div className="flex flex-col items-center">
+              <div className="text-3xl font-bold text-gray-900">{rating}</div>
+              <div className="flex mt-1">
+                {[...Array(5)].map((_, i) => (
+                  <StarIcon
+                    key={i}
+                    className={`w-4 h-4 ${
+                      i < Math.floor(rating)
+                        ? "text-yellow-400 fill-current"
+                        : "text-gray-200"
+                    }`}
+                  />
+                ))}
+              </div>
+              <div className="text-sm text-gray-500 mt-1">{reviews} reviews</div>
+            </div>
+
+            {/* Rating Breakdown */}
+            <div className="flex-1">
+              {[5, 4, 3, 2, 1].map((star) => (
+                <div key={star} className="flex items-center gap-2 mb-1">
+                  <div className="text-sm text-gray-600 w-6">{star}★</div>
+                  <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-yellow-400 rounded-full"
+                      style={{ 
+                        width: `${Math.round((star === Math.floor(rating) ? reviews : reviews / star) / reviews * 100)}%`
+                      }}
+                    />
+                  </div>
+                  <div className="text-sm text-gray-500 w-10">
+                    {Math.round((star === Math.floor(rating) ? reviews : reviews / star))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <span className="text-sm text-gray-600">({reviews} reviews)</span>
+
+          {/* Review Actions */}
+          <div className="flex items-center justify-between p-4 border border-gray-100 rounded-lg">
+            <div className="text-sm text-gray-600">Share your thoughts about this product</div>
+            <button className="px-4 py-2 text-sm font-medium text-[#0FA0CE] hover:bg-blue-50 rounded-lg transition-colors">
+              Write a Review
+            </button>
+          </div>
         </div>
       </TabsContent>
 
