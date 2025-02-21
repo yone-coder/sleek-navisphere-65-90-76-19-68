@@ -120,7 +120,12 @@ const ProductDetails = () => {
     { name: 'Royal Purple', value: 'purple', class: 'bg-purple-500', hex: '#A855F7' },
   ];
 
-  const sizes = ['S', 'M', 'L', 'XL'];
+  const sizes = [
+    { value: 'S', label: 'Small', description: 'Height: < 170cm' },
+    { value: 'M', label: 'Medium', description: 'Height: 170-180cm' },
+    { value: 'L', label: 'Large', description: 'Height: 180-190cm' },
+    { value: 'XL', label: 'Extra Large', description: 'Height: > 190cm' }
+  ];
 
   if (!product) {
     return (
@@ -342,23 +347,33 @@ const ProductDetails = () => {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-700">Size</span>
-                  <span className="text-sm text-gray-500">{selectedSize}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-gray-500">{selectedSize}</span>
+                    <Badge variant="secondary" className="text-[10px] px-1.5">
+                      {sizes.find(s => s.value === selectedSize)?.label}
+                    </Badge>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   {sizes.map((size) => (
                     <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
+                      key={size.value}
+                      onClick={() => setSelectedSize(size.value)}
                       className={`
-                        w-12 h-12 rounded-xl border font-medium text-sm
+                        group relative w-9 h-9 rounded-lg border text-sm font-medium
                         transition-all duration-300
-                        ${selectedSize === size
-                          ? 'bg-[#0FA0CE] text-white border-transparent'
-                          : 'bg-white text-gray-900 border-gray-200 hover:border-[#0FA0CE] hover:text-[#0FA0CE]'
+                        ${selectedSize === size.value
+                          ? 'bg-[#0FA0CE] text-white border-transparent scale-110 shadow-[0_0_10px_rgba(15,160,206,0.3)]'
+                          : 'bg-white text-gray-900 border-gray-200 hover:border-[#0FA0CE] hover:text-[#0FA0CE] hover:scale-105'
                         }
                       `}
                     >
-                      {size}
+                      {size.value}
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 min-w-max">
+                        <div className="font-medium mb-0.5">{size.label}</div>
+                        <div className="text-gray-300 text-[10px]">{size.description}</div>
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 -translate-y-1/2 border-4 border-transparent border-t-gray-900" />
+                      </div>
                     </button>
                   ))}
                 </div>
