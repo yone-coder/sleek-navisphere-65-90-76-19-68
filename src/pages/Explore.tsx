@@ -466,7 +466,7 @@ const GameSection = ({ title, games, onLike, onShare, likedGames }: GameSectionP
           See All
         </Button>
       </div>
-      <ScrollArea className="w-full" orientation="horizontal">
+      <ScrollArea className="w-full">
         <div className="flex space-x-4 px-4 pb-4">
           {games.map((game) => (
             <GameCard
