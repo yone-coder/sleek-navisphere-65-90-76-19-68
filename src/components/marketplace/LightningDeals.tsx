@@ -115,14 +115,14 @@ const products: Product[] = [
 
 export const LightningDeals = () => {
   return (
-    <section className="w-full py-6 bg-gradient-to-r from-[#fdfcfb] to-[#e2d1c3]">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="flex items-center justify-between mb-4">
+    <section className="w-full py-4 bg-gradient-to-r from-[#fdfcfb] to-[#e2d1c3]">
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <h2 className="text-lg font-bold text-gray-900">Lightning Deals</h2>
-            <Timer className="w-4 h-4 text-blue-600" />
+            <h2 className="text-base font-bold text-gray-900">Lightning Deals</h2>
+            <Timer className="w-3.5 h-3.5 text-blue-600" />
           </div>
-          <button className="text-blue-600 hover:text-blue-700 transition-colors text-sm font-medium">
+          <button className="text-blue-600 hover:text-blue-700 transition-colors text-xs font-medium">
             View All
           </button>
         </div>
@@ -137,9 +137,9 @@ export const LightningDeals = () => {
             }}
             className="w-full"
           >
-            <CarouselContent className="-ml-2 md:-ml-3">
+            <CarouselContent className="-ml-2 md:-ml-2">
               {products.map((product) => (
-                <CarouselItem key={product.id} className="pl-2 md:pl-3 basis-[85%] sm:basis-[45%] md:basis-[35%] lg:basis-[28.5%]">
+                <CarouselItem key={product.id} className="pl-2 md:pl-2 basis-[85%] sm:basis-[45%] md:basis-[35%] lg:basis-[22%]">
                   <Card className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow">
                     <CardContent className="p-0">
                       <div className="relative">
@@ -149,27 +149,27 @@ export const LightningDeals = () => {
                           className="w-full aspect-square object-cover"
                         />
                         <Badge 
-                          className="absolute top-2 right-2 bg-red-500 text-white border-0"
+                          className="absolute top-1.5 right-1.5 bg-red-500 text-white border-0 text-[10px] px-1.5 py-0.5"
                           variant="secondary"
                         >
                           {product.discount}% OFF
                         </Badge>
                       </div>
-                      <div className="p-3">
-                        <h3 className="font-medium text-sm text-gray-900 mb-1.5 truncate">
+                      <div className="p-2">
+                        <h3 className="font-medium text-xs text-gray-900 mb-1 truncate">
                           {product.name}
                         </h3>
                         <div className="flex items-center justify-between">
-                          <div className="flex items-baseline gap-1.5">
-                            <span className="text-base font-bold text-gray-900">
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-sm font-bold text-gray-900">
                               ${product.price}
                             </span>
-                            <span className="text-xs text-gray-500 line-through">
+                            <span className="text-[10px] text-gray-500 line-through">
                               ${product.originalPrice}
                             </span>
                           </div>
-                          <div className="flex items-center gap-1 text-xs font-medium text-blue-600">
-                            <Timer className="w-3 h-3" />
+                          <div className="flex items-center gap-0.5 text-[10px] font-medium text-blue-600">
+                            <Timer className="w-2.5 h-2.5" />
                             {product.timeLeft}
                           </div>
                         </div>
@@ -179,9 +179,9 @@ export const LightningDeals = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <div className="max-w-6xl mx-auto relative">
-              <CarouselPrevious className="hidden md:flex absolute -left-10 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm" />
-              <CarouselNext className="hidden md:flex absolute -right-10 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm" />
+            <div className="max-w-4xl mx-auto relative">
+              <CarouselPrevious className="hidden md:flex absolute -left-8 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm h-6 w-6" />
+              <CarouselNext className="hidden md:flex absolute -right-8 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm h-6 w-6" />
             </div>
           </Carousel>
         </div>
