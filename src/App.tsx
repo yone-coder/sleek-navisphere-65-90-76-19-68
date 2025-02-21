@@ -29,12 +29,7 @@ const MatchDetails = lazy(() => import("./pages/MatchDetails"));
 const Marketplace = lazy(() => import("./pages/Marketplace"));
 const ProductDetails = lazy(() => import("./pages/ProductDetails"));
 const Apps = lazy(() => import("./pages/Apps"));
-
-// Lazy load admin pages
-const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
-const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
-const AdminBanners = lazy(() => import("./pages/admin/AdminBanners"));
-const AdminTournaments = lazy(() => import("./pages/admin/AdminTournaments"));
+const Search = lazy(() => import("./pages/Search"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen p-8 space-y-4">
@@ -56,7 +51,7 @@ const queryClient = new QueryClient();
 
 const AppContent = () => {
   const location = useLocation();
-  const hideHeaderRoutes = ['/login', '/signup', '/explore', '/match', '/games/morpion', '/marketplace', '/apps'];
+  const hideHeaderRoutes = ['/login', '/signup', '/explore', '/match', '/games/morpion', '/marketplace', '/apps', '/search'];
   const hideBottomNavRoutes = ['/marketplace'];
   const isAdminRoute = location.pathname.startsWith('/admin');
   const shouldShowHeader = !hideHeaderRoutes.some(route => location.pathname.startsWith(route)) && !isAdminRoute;
@@ -85,6 +80,7 @@ const AppContent = () => {
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/marketplace/product/:id" element={<ProductDetails />} />
           <Route path="/apps" element={<Apps />} />
+          <Route path="/search" element={<Search />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
