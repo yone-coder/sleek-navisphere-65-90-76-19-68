@@ -9,6 +9,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useNavigate, useParams } from "react-router-dom";
 
 type Product = {
@@ -589,21 +590,21 @@ const ProductDetails = () => {
                     className="relative h-full px-0 data-[state=active]:text-[#0FA0CE] data-[state=active]:shadow-none rounded-none bg-transparent"
                   >
                     <span>Description</span>
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0FA0CE] opacity-0 transition-all duration-300 data-[state=active]:opacity-100" data-state={defaultValue === "description" ? "active" : "inactive"} />
+                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0FA0CE] opacity-0 transition-all duration-300 data-[state=active]:opacity-100" />
                   </TabsTrigger>
                   <TabsTrigger 
                     value="reviews"
                     className="relative h-full px-0 data-[state=active]:text-[#0FA0CE] data-[state=active]:shadow-none rounded-none bg-transparent"
                   >
                     <span>Reviews</span>
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0FA0CE] opacity-0 transition-all duration-300 data-[state=active]:opacity-100" data-state={defaultValue === "reviews" ? "active" : "inactive"} />
+                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0FA0CE] opacity-0 transition-all duration-300 data-[state=active]:opacity-100" />
                   </TabsTrigger>
                   <TabsTrigger 
                     value="faqs"
                     className="relative h-full px-0 data-[state=active]:text-[#0FA0CE] data-[state=active]:shadow-none rounded-none bg-transparent"
                   >
                     <span>FAQs</span>
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0FA0CE] opacity-0 transition-all duration-300 data-[state=active]:opacity-100" data-state={defaultValue === "faqs" ? "active" : "inactive"} />
+                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0FA0CE] opacity-0 transition-all duration-300 data-[state=active]:opacity-100" />
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="description" className="mt-6">
@@ -629,40 +630,4 @@ const ProductDetails = () => {
                       {[...Array(5)].map((_, i) => (
                         <StarIcon
                           key={i}
-                          className={`w-5 h-5 ${
-                            i < Math.floor(product.rating)
-                              ? "text-yellow-400 fill-current"
-                              : "text-gray-200"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-sm text-gray-600">({product.reviews} reviews)</span>
-                  </div>
-                </TabsContent>
-                <TabsContent value="faqs" className="mt-6">
-                  <div className="space-y-4">
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <h3 className="font-medium text-gray-900">What is the warranty period?</h3>
-                      <p className="mt-2 text-sm text-gray-600">Our gaming chairs come with a 2-year warranty covering manufacturing defects and material issues.</p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <h3 className="font-medium text-gray-900">How long does assembly take?</h3>
-                      <p className="mt-2 text-sm text-gray-600">Assembly typically takes 20-30 minutes with the included tools and instructions.</p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <h3 className="font-medium text-gray-900">What's the weight capacity?</h3>
-                      <p className="mt-2 text-sm text-gray-600">Our gaming chairs support up to 150kg (330lbs) of weight.</p>
-                    </div>
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default ProductDetails;
+                          className={`w-5 h-
