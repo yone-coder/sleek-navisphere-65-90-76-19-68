@@ -93,12 +93,12 @@ const ProductDetails = () => {
       </div>
 
       {/* Full Screen Carousel */}
-      <div className="h-[100vh] relative">
+      <div className="h-[90vh]">
         <Carousel className="w-full h-full">
           <CarouselContent>
             {product.images.map((image, index) => (
               <CarouselItem key={index}>
-                <div className="relative w-full aspect-square">
+                <div className="relative w-full h-full">
                   <img
                     src={image}
                     alt={`${product.name} - View ${index + 1}`}
