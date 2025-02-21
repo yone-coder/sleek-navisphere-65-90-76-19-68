@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { ShoppingCart, CreditCard } from "lucide-react";
+import { ShoppingCart, CreditCard, BadgePercent, ShieldCheck, Clock, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { ProductHeader } from "@/components/product/ProductHeader";
@@ -145,7 +145,7 @@ const ProductDetails = () => {
         onWishlistToggle={() => setIsWishlisted(!isWishlisted)}
       />
 
-      <div className="flex-1 bg-white pb-28">
+      <div className="flex-1 bg-white pb-36">
         <div className="max-w-3xl mx-auto px-6 pt-4 w-full">
           <div className="space-y-4">
             <ProductInfo
@@ -180,23 +180,61 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      {/* Sticky Action Buttons */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
-        <div className="max-w-3xl mx-auto">
-          <div className="flex items-center gap-4">
-            <Button 
-              className="flex-1 bg-[#0FA0CE] hover:bg-[#0F8CBE] text-white text-sm h-11 px-4 rounded-lg shadow-sm transition-all duration-300"
-            >
-              <ShoppingCart className="w-4 h-4 mr-2" />
-              Add to Cart
-            </Button>
-            
-            <Button
-              className="flex-1 bg-red-500 hover:bg-red-600 text-white text-sm h-11 px-4 rounded-lg shadow-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-red-500/25 hover:shadow-lg"
-            >
-              <CreditCard className="w-4 h-4 mr-2" />
-              Buy Now
-            </Button>
+      {/* Enhanced Sticky Action Section */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+        {/* Features Bar */}
+        <div className="border-b border-gray-100">
+          <div className="max-w-3xl mx-auto px-4">
+            <div className="flex items-center justify-between py-2 text-xs">
+              <div className="flex items-center gap-1.5 text-gray-600">
+                <BadgePercent className="w-3.5 h-3.5 text-green-600" />
+                <span>5% bulk discount</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-gray-600">
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
+                <span>2 year warranty</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-gray-600">
+                <Clock className="w-3.5 h-3.5 text-orange-600" />
+                <span>24h delivery</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-gray-600">
+                <Truck className="w-3.5 h-3.5 text-purple-600" />
+                <span>Free shipping</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Price and Action Buttons */}
+        <div className="p-4">
+          <div className="max-w-3xl mx-auto">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-baseline gap-2">
+                <span className="text-xl font-bold text-gray-900">{Math.round(product.price)} G</span>
+                <span className="text-sm text-gray-500 line-through">{Math.round(product.originalPrice)} G</span>
+                <span className="text-xs font-medium text-green-600">Save {Math.round(product.originalPrice - product.price)} G</span>
+              </div>
+              <div className="text-xs text-gray-500">
+                {quantity} {quantity === 1 ? 'item' : 'items'} selected
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <Button 
+                className="flex-1 bg-[#0FA0CE] hover:bg-[#0F8CBE] text-white text-sm h-11 px-4 rounded-lg shadow-sm transition-all duration-300"
+              >
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                Add to Cart
+              </Button>
+              
+              <Button
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white text-sm h-11 px-4 rounded-lg shadow-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-red-500/25 hover:shadow-lg"
+              >
+                <CreditCard className="w-4 h-4 mr-2" />
+                Buy Now
+              </Button>
+            </div>
           </div>
         </div>
       </div>
