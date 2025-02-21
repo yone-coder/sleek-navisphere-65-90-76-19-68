@@ -51,4 +51,8 @@ const Marketplace = () => {
   );
 };
 
+// Change the export to a named export
+export { Marketplace };
+
+// Also add a default export
 export default Marketplace;
