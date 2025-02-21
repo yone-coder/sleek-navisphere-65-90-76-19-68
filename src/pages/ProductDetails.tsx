@@ -112,10 +112,12 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
 
   const colors = [
-    { name: 'Black', value: 'black', class: 'bg-black' },
-    { name: 'White', value: 'white', class: 'bg-white border border-gray-200' },
-    { name: 'Red', value: 'red', class: 'bg-red-500' },
-    { name: 'Blue', value: 'blue', class: 'bg-blue-500' },
+    { name: 'Black', value: 'black', class: 'bg-black', hex: '#000000' },
+    { name: 'White', value: 'white', class: 'bg-white border border-gray-200', hex: '#FFFFFF' },
+    { name: 'Racing Red', value: 'red', class: 'bg-red-500', hex: '#EF4444' },
+    { name: 'Ocean Blue', value: 'blue', class: 'bg-blue-500', hex: '#3B82F6' },
+    { name: 'Forest Green', value: 'green', class: 'bg-green-500', hex: '#22C55E' },
+    { name: 'Royal Purple', value: 'purple', class: 'bg-purple-500', hex: '#A855F7' },
   ];
 
   const sizes = ['S', 'M', 'L', 'XL'];
@@ -304,23 +306,35 @@ const ProductDetails = () => {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-700">Color</span>
-                  <span className="text-sm text-gray-500 capitalize">{selectedColor}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-gray-500 capitalize">{selectedColor}</span>
+                    <div 
+                      className={`w-4 h-4 rounded-full ${
+                        colors.find(c => c.value === selectedColor)?.class
+                      }`}
+                    />
+                  </div>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-2">
                   {colors.map((color) => (
                     <button
                       key={color.value}
                       onClick={() => setSelectedColor(color.value)}
                       className={`
-                        w-9 h-9 rounded-full ${color.class}
-                        transition-all duration-300
+                        group relative w-7 h-7 rounded-full ${color.class}
+                        transition-all duration-300 
                         ${selectedColor === color.value 
-                          ? 'ring-2 ring-offset-2 ring-[#0FA0CE]' 
-                          : 'hover:ring-2 hover:ring-offset-2 hover:ring-gray-200'
+                          ? 'ring-2 ring-offset-2 ring-[#0FA0CE] scale-110' 
+                          : 'hover:ring-2 hover:ring-offset-2 hover:ring-gray-200 hover:scale-110'
                         }
                       `}
                       aria-label={`Select ${color.name} color`}
-                    />
+                    >
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap">
+                        {color.name}
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 -translate-y-1/2 border-4 border-transparent border-t-gray-900" />
+                      </div>
+                    </button>
                   ))}
                 </div>
               </div>
