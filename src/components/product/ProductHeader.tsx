@@ -4,7 +4,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Heart, GitCompare, ArrowLeft, Search, Send, Share2, ZoomIn, Award } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
 
 type ProductHeaderProps = {
@@ -26,6 +26,14 @@ export function ProductHeader({
   const [selectedImage, setSelectedImage] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [api, setApi] = useState<CarouselApi>();
+
+  useEffect(() => {
+    if (!api) return;
+
+    api.on("select", () => {
+      setSelectedImage(api.selectedScrollSnap());
+    });
+  }, [api]);
 
   const handleShare = () => {
     if (navigator.share) {
@@ -50,9 +58,6 @@ export function ProductHeader({
           opts={{
             startIndex: selectedImage,
             loop: true,
-          }}
-          onSelect={(api) => {
-            setSelectedImage(api.selectedScrollSnap());
           }}
         >
           <CarouselContent>
