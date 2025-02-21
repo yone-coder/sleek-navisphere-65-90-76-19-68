@@ -176,72 +176,130 @@ const ProductDetails = () => {
               onQuantityChange={setQuantity}
             />
 
-            <div className="py-6 space-y-6 border-t border-gray-100">
+            <div className="py-8 space-y-6 border-t border-gray-100">
               <div className="flex items-center justify-between">
-                <h3 className="text-base font-semibold text-gray-900">Warranty & Support</h3>
-                <button className="text-xs text-[#9b87f5] hover:text-[#8670e6] font-medium">
-                  View Full Terms
-                </button>
+                <div className="flex items-center gap-3">
+                  <ShieldCheck className="w-5 h-5 text-[#9b87f5]" />
+                  <h3 className="text-lg font-semibold text-gray-900">Warranty & Support</h3>
+                  <span className="px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700 rounded-full">Premium</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="text-xs text-gray-500 flex items-center gap-2">
+                    <Medal className="w-4 h-4 text-[#9b87f5]" />
+                    Elite Coverage
+                  </div>
+                  <button className="text-xs text-[#9b87f5] hover:text-[#8670e6] font-medium hover:underline underline-offset-4">
+                    View Full Terms
+                  </button>
+                </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-[#F1F0FB] rounded-xl p-4 space-y-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 bg-[#9b87f5] rounded-lg">
-                        <CalendarClock className="w-4 h-4 text-white" />
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="bg-[#F1F0FB] rounded-xl p-5 space-y-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="p-2 bg-[#9b87f5] rounded-lg">
+                          <CalendarClock className="w-4 h-4 text-white" />
+                        </div>
+                        <div>
+                          <span className="text-sm font-medium text-gray-900 block">Coverage Period</span>
+                          <span className="text-xs text-gray-500">Starting from delivery</span>
+                        </div>
                       </div>
-                      <span className="text-sm font-medium text-gray-900">Coverage Period</span>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Info className="w-4 h-4 text-gray-400 hover:text-[#9b87f5] transition-colors" />
+                          </TooltipTrigger>
+                          <TooltipContent side="right" className="max-w-xs">
+                            <p className="text-xs">Premium warranty coverage begins from the product delivery date and includes all standard protections plus extended support options.</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </div>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Info className="w-4 h-4 text-gray-400" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p className="text-xs">Warranty period starts from the delivery date</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                      <span>2 Years Full Coverage</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                      <span>1 Year Extended Support</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <XCircle className="w-4 h-4" />
-                      <span>Water Damage (Optional)</span>
+                    <div className="space-y-3 pl-2">
+                      <div className="relative">
+                        <div className="absolute left-1.5 top-2.5 w-px h-full bg-gray-200"></div>
+                        <div className="space-y-3">
+                          <div className="relative flex items-center gap-3 pl-4">
+                            <div className="absolute left-0 w-3 h-3 rounded-full border-2 border-green-500 bg-white"></div>
+                            <CheckCircle2 className="w-4 h-4 text-green-500 flex-none" />
+                            <div>
+                              <span className="text-sm font-medium block">2 Years Full Coverage</span>
+                              <span className="text-xs text-gray-500">Complete protection plan</span>
+                            </div>
+                          </div>
+                          <div className="relative flex items-center gap-3 pl-4">
+                            <div className="absolute left-0 w-3 h-3 rounded-full border-2 border-blue-500 bg-white"></div>
+                            <CheckCircle2 className="w-4 h-4 text-blue-500 flex-none" />
+                            <div>
+                              <span className="text-sm font-medium block">1 Year Extended Support</span>
+                              <span className="text-xs text-gray-500">Additional coverage option</span>
+                            </div>
+                          </div>
+                          <div className="relative flex items-center gap-3 pl-4 opacity-60">
+                            <div className="absolute left-0 w-3 h-3 rounded-full border-2 border-gray-400 bg-white"></div>
+                            <XCircle className="w-4 h-4 text-gray-400 flex-none" />
+                            <div>
+                              <span className="text-sm font-medium block">Water Damage Protection</span>
+                              <span className="text-xs text-gray-500">Optional add-on available</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-[#F1F0FB] rounded-xl p-4 space-y-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 bg-[#9b87f5] rounded-lg">
-                        <ScrollText className="w-4 h-4 text-white" />
+                <div className="space-y-4">
+                  <div className="bg-[#F1F0FB] rounded-xl p-5 space-y-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="p-2 bg-[#9b87f5] rounded-lg">
+                          <ScrollText className="w-4 h-4 text-white" />
+                        </div>
+                        <div>
+                          <span className="text-sm font-medium text-gray-900 block">Coverage Terms</span>
+                          <span className="text-xs text-gray-500">What's included</span>
+                        </div>
                       </div>
-                      <span className="text-sm font-medium text-gray-900">Coverage Terms</span>
+                      <div className="px-2 py-1 bg-[#9b87f5]/10 rounded-lg">
+                        <div className="flex items-center gap-1.5">
+                          <Medal className="w-4 h-4 text-[#9b87f5]" />
+                          <span className="text-xs font-medium text-[#9b87f5]">Premium</span>
+                        </div>
+                      </div>
                     </div>
-                    <Medal className="w-5 h-5 text-[#9b87f5]" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                      <span>Manufacturing Defects</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                      <span>Parts & Labor</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                      <span>24/7 Support Access</span>
+                    <div className="grid grid-cols-2 gap-3 mt-2">
+                      <div className="bg-white/50 rounded-lg p-3 space-y-1">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-green-500" />
+                          <span className="text-sm font-medium">Manufacturing</span>
+                        </div>
+                        <p className="text-xs text-gray-500 pl-6">All factory defects covered</p>
+                      </div>
+                      <div className="bg-white/50 rounded-lg p-3 space-y-1">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-green-500" />
+                          <span className="text-sm font-medium">Parts & Labor</span>
+                        </div>
+                        <p className="text-xs text-gray-500 pl-6">Full repair coverage</p>
+                      </div>
+                      <div className="bg-white/50 rounded-lg p-3 space-y-1">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-green-500" />
+                          <span className="text-sm font-medium">24/7 Support</span>
+                        </div>
+                        <p className="text-xs text-gray-500 pl-6">Priority assistance</p>
+                      </div>
+                      <div className="bg-white/50 rounded-lg p-3 space-y-1">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-green-500" />
+                          <span className="text-sm font-medium">Replacement</span>
+                        </div>
+                        <p className="text-xs text-gray-500 pl-6">If unrepairable</p>
+                      </div>
                     </div>
                   </div>
                 </div>
