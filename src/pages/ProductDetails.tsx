@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { StarIcon, Heart, Share2, ShoppingCart, AlertCircle } from "lucide-react";
+import { StarIcon, Heart, Share2, ShoppingCart, AlertCircle, ArrowLeft, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -12,10 +12,11 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [selectedColor, setSelectedColor] = useState("black");
   const [quantity, setQuantity] = useState(1);
 
@@ -60,31 +61,55 @@ const ProductDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-24 pb-16">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* Image Gallery */}
-          <div className="space-y-6">
-            <Carousel className="w-full bg-white rounded-2xl p-6 shadow-lg">
-              <CarouselContent>
-                {product.images.map((image, index) => (
-                  <CarouselItem key={index}>
-                    <div className="aspect-square relative overflow-hidden rounded-xl">
-                      <img
-                        src={image}
-                        alt={`${product.name} - View ${index + 1}`}
-                        className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-4" />
-              <CarouselNext className="right-4" />
-            </Carousel>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white relative">
+      {/* Sleek Header */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/50 to-transparent">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="h-16 flex items-center justify-between">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => navigate(-1)}
+              className="text-white hover:bg-white/20"
+            >
+              <ArrowLeft className="h-6 w-6" />
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              className="text-white hover:bg-white/20"
+            >
+              <Search className="h-6 w-6" />
+            </Button>
           </div>
+        </div>
+      </div>
 
-          {/* Product Info */}
+      {/* Full Screen Carousel */}
+      <div className="h-[100vh] relative">
+        <Carousel className="w-full h-full">
+          <CarouselContent>
+            {product.images.map((image, index) => (
+              <CarouselItem key={index}>
+                <div className="relative w-full h-[100vh]">
+                  <img
+                    src={image}
+                    alt={`${product.name} - View ${index + 1}`}
+                    className="object-cover w-full h-full"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent bottom-0" />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="left-4 text-white hover:bg-white/20 border-none" />
+          <CarouselNext className="right-4 text-white hover:bg-white/20 border-none" />
+        </Carousel>
+      </div>
+
+      {/* Product Info */}
+      <div className="relative z-10 -mt-20">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="space-y-8">
             <div className="bg-white rounded-2xl p-8 shadow-lg space-y-6">
               <div>
@@ -155,9 +180,7 @@ const ProductDetails = () => {
 
               {/* Quantity */}
               <div className="space-y-3">
-                <label className="text-sm font-medium text-gray-700">
-                  Quantity
-                </label>
+                <label className="text-sm font-medium text-gray-700">Quantity</label>
                 <div className="flex items-center gap-3">
                   <Button
                     variant="outline"
