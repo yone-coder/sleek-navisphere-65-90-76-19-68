@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { StarIcon, Heart, Send, ShoppingCart, AlertCircle, ArrowLeft, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -90,21 +91,21 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      <Carousel className="w-full h-[80vh]">
-        <CarouselContent className="-mt-0">
-          {product.images.map((image, index) => (
-            <CarouselItem key={index}>
-              <div className="w-full h-full">
+      <div className="pt-16">
+        <Carousel className="w-full">
+          <CarouselContent>
+            {product.images.map((image, index) => (
+              <CarouselItem key={index} className="relative aspect-square">
                 <img
                   src={image}
                   alt={`${product.name} - View ${index + 1}`}
                   className="object-cover w-full h-full"
                 />
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </div>
 
       <div className="w-full bg-gray-50 border-y border-gray-200">
         <div className="max-w-7xl mx-auto px-4">
