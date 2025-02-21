@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { StarIcon, Heart, Send, ShoppingCart, ArrowLeft, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -201,8 +200,8 @@ const ProductDetails = () => {
           <div className="space-y-8">
             {/* Product Header with integrated price */}
             <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-semibold text-gray-900 truncate pr-4 flex-1">{product.name}</h1>
-              <span className="text-2xl font-bold text-gray-900 whitespace-nowrap">{Math.round(product.price)} G</span>
+              <h1 className="text-base font-medium text-gray-900 truncate pr-4 flex-1">{product.name}</h1>
+              <span className="text-base font-medium text-gray-900 whitespace-nowrap">{Math.round(product.price)} G</span>
             </div>
 
             <p className="text-xl text-gray-600">{product.brand}</p>
