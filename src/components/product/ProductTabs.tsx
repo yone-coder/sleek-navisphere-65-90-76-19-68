@@ -23,8 +23,8 @@ export function ProductTabs({
   return (
     <Tabs defaultValue="description" className="w-full">
       <div className="overflow-hidden -mx-6">
-        <ScrollArea className="w-full">
-          <div className="min-w-full px-6">
+        <ScrollArea orientation="horizontal" className="w-full">
+          <div className="min-w-max px-6">
             <TabsList className="flex w-max h-12 bg-gradient-to-b from-gray-50/50 to-white p-2 rounded-2xl">
               <TabsTrigger 
                 value="description"
