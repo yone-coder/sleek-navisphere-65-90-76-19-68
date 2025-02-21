@@ -110,8 +110,8 @@ export default function Apps() {
     app.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const recentApps = apps.slice(0, 4); // Simulated recent apps
-  const featuredApps = apps.slice(4, 7); // Simulated featured apps
+  const recentApps = apps.slice(0, 4);
+  const featuredApps = apps.slice(4, 7);
 
   return (
     <ScrollArea className="h-screen">
@@ -208,41 +208,12 @@ export default function Apps() {
                   </Card>
                 </div>
               )}
-            </div>
-          </div>
-        </div>
 
-        <div className="max-w-7xl mx-auto px-4">
-          {searchQuery ? (
-            <div className="space-y-6">
-              <h2 className="text-lg font-semibold text-gray-800">Search Results</h2>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-6">
-                {filteredApps.map((app) => (
-                  <Button
-                    key={app.name}
-                    variant="ghost"
-                    className="group flex flex-col items-center gap-3 p-0 h-auto hover:bg-transparent"
-                    onClick={() => navigate(app.route)}
-                  >
-                    <div className={`w-16 h-16 rounded-2xl ${app.color} flex items-center justify-center shadow-lg shadow-black/5 group-hover:scale-110 transition-all duration-300 relative overflow-hidden`}>
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
-                      <app.icon className="w-7 h-7 text-white relative z-10" />
-                    </div>
-                    <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 text-center transition-colors">
-                      {app.name}
-                    </span>
-                  </Button>
-                ))}
-              </div>
-            </div>
-          ) : (
-            categories.map((category) => (
-              <div key={category} className="mb-12">
-                <h2 className="text-lg font-semibold text-gray-800 mb-6 pl-1">{category}</h2>
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-6">
-                  {apps
-                    .filter(app => app.category === category)
-                    .map((app) => (
+              {searchQuery && (
+                <div className="space-y-6">
+                  <h2 className="text-lg font-semibold text-gray-800">Search Results</h2>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-6">
+                    {filteredApps.map((app) => (
                       <Button
                         key={app.name}
                         variant="ghost"
@@ -258,10 +229,11 @@ export default function Apps() {
                         </span>
                       </Button>
                     ))}
+                  </div>
                 </div>
-              </div>
-            ))
-          )}
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </ScrollArea>
