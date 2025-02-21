@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { StarIcon, Heart, Send, ShoppingCart, ArrowLeft, Search, CheckCircle, Users, GitCompare } from "lucide-react";
+import { StarIcon, Heart, Send, ShoppingCart, ArrowLeft, Search, CheckCircle, Users, GitCompare, CreditCard } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -290,15 +291,16 @@ const ProductDetails = () => {
 
             <div className="flex items-center gap-2 pt-2 pb-4">
               <Button 
-                className="flex-1 bg-[#0FA0CE] hover:bg-[#0F8CBE] text-white text-sm h-9 px-4 rounded-lg shadow-sm transition-all duration-300"
+                className="flex-1 basis-0 bg-[#0FA0CE] hover:bg-[#0F8CBE] text-white text-sm h-9 px-4 rounded-lg shadow-sm transition-all duration-300"
               >
                 <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
                 Add to Cart
               </Button>
               
               <Button
-                className="flex-1 bg-black hover:bg-gray-900 text-white text-sm h-9 px-4 rounded-lg shadow-sm transition-all duration-300"
+                className="flex-1 basis-0 bg-red-500 hover:bg-red-600 text-white text-sm h-9 px-4 rounded-lg shadow-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-red-500/25 hover:shadow-lg"
               >
+                <CreditCard className="w-3.5 h-3.5 mr-1.5" />
                 Buy Now
               </Button>
             </div>
