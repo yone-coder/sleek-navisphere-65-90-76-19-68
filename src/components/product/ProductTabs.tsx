@@ -22,9 +22,9 @@ export function ProductTabs({
 }: ProductTabsProps) {
   return (
     <Tabs defaultValue="description" className="w-full">
-      <ScrollArea className="w-full px-0 -mx-6">
-        <div className="px-6 w-full whitespace-nowrap">
-          <TabsList className="w-full h-12 bg-gradient-to-b from-gray-50/50 to-white p-2 rounded-2xl">
+      <ScrollArea className="w-full -mx-6">
+        <div className="px-6">
+          <TabsList className="inline-flex h-12 bg-gradient-to-b from-gray-50/50 to-white p-2 rounded-2xl">
             <TabsTrigger 
               value="description"
               className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
