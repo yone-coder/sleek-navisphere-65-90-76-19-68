@@ -465,41 +465,103 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between py-4 border-t border-gray-100 gap-4">
-              <Button 
-                className="flex-1 basis-0 bg-[#0FA0CE] hover:bg-[#0F8CBE] text-white text-sm h-9 px-4 rounded-lg shadow-sm transition-all duration-300"
-              >
-                <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
-                Add to Cart
-              </Button>
-              
-              <Button
-                className="flex-1 basis-0 bg-red-500 hover:bg-red-600 text-white text-sm h-9 px-4 rounded-lg shadow-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-red-500/25 hover:shadow-lg"
-              >
-                <CreditCard className="w-3.5 h-3.5 mr-1.5" />
-                Buy Now
-              </Button>
+            <div className="mt-8">
+              <div className="flex items-center gap-4">
+                <Button 
+                  className="flex-1 bg-[#0FA0CE] hover:bg-[#0F8CBE] text-white text-sm h-9 px-4 rounded-lg shadow-sm transition-all duration-300"
+                >
+                  <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
+                  Add to Cart
+                </Button>
+                
+                <Button
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white text-sm h-9 px-4 rounded-lg shadow-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-red-500/25 hover:shadow-lg"
+                >
+                  <CreditCard className="w-3.5 h-3.5 mr-1.5" />
+                  Buy Now
+                </Button>
+              </div>
 
-              <Button 
-                variant="outline" 
-                size="icon"
-                className={`shrink-0 ${
-                  isWishlisted 
-                    ? 'bg-pink-50 text-pink-600 border-pink-200' 
-                    : 'text-gray-600'
-                }`}
-                onClick={() => setIsWishlisted(!isWishlisted)}
-              >
-                <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-current' : ''}`} />
-              </Button>
+              <div className="mt-8">
+                <Tabs defaultValue="description" className="w-full">
+                  <TabsList className="w-full h-12 bg-transparent border-b border-gray-100 p-0 gap-8">
+                    <TabsTrigger 
+                      value="description"
+                      className="relative h-full px-0 data-[state=active]:text-[#0FA0CE] data-[state=active]:shadow-none rounded-none bg-transparent"
+                    >
+                      <span>Description</span>
+                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0FA0CE] opacity-0 transition-all duration-300 data-[state=active]:opacity-100" />
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="reviews"
+                      className="relative h-full px-0 data-[state=active]:text-[#0FA0CE] data-[state=active]:shadow-none rounded-none bg-transparent"
+                    >
+                      <span>Reviews</span>
+                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0FA0CE] opacity-0 transition-all duration-300 data-[state=active]:opacity-100" />
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="faqs"
+                      className="relative h-full px-0 data-[state=active]:text-[#0FA0CE] data-[state=active]:shadow-none rounded-none bg-transparent"
+                    >
+                      <span>FAQs</span>
+                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0FA0CE] opacity-0 transition-all duration-300 data-[state=active]:opacity-100" />
+                    </TabsTrigger>
+                  </TabsList>
 
-              <Button 
-                variant="outline" 
-                size="icon"
-                className="shrink-0"
-              >
-                <GitCompare className="w-4 h-4" />
-              </Button>
+                  <TabsContent value="description" className="mt-6">
+                    <div className="prose prose-gray max-w-none">
+                      <p className="text-gray-600 leading-relaxed">{product.description}</p>
+                    </div>
+
+                    <div className="space-y-4 mt-8">
+                      <h2 className="text-lg font-semibold text-gray-900">Key Features</h2>
+                      <ul className="grid grid-cols-1 gap-3">
+                        {product.highlights.map((highlight, index) => (
+                          <li key={index} className="flex items-center gap-3 text-gray-600">
+                            <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-purple-600" />
+                            {highlight}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="reviews" className="mt-6">
+                    <div className="flex items-center gap-2">
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <StarIcon
+                            key={i}
+                            className={`w-5 h-5 ${
+                              i < Math.floor(product.rating)
+                                ? "text-yellow-400 fill-current"
+                                : "text-gray-200"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <span className="text-sm text-gray-600">({product.reviews} reviews)</span>
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="faqs" className="mt-6">
+                    <div className="space-y-4">
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <h3 className="font-medium text-gray-900">What is the warranty period?</h3>
+                        <p className="mt-2 text-sm text-gray-600">Our gaming chairs come with a 2-year warranty covering manufacturing defects and material issues.</p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <h3 className="font-medium text-gray-900">How long does assembly take?</h3>
+                        <p className="mt-2 text-sm text-gray-600">Assembly typically takes 20-30 minutes with the included tools and instructions.</p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <h3 className="font-medium text-gray-900">What's the weight capacity?</h3>
+                        <p className="mt-2 text-sm text-gray-600">Our gaming chairs support up to 150kg (330lbs) of weight.</p>
+                      </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </div>
             </div>
 
             <p className="text-xl text-gray-600">{product.brand}</p>
@@ -551,122 +613,4 @@ const ProductDetails = () => {
               >
                 <ShoppingCart className="w-4 h-4" />
                 Add to Cart
-              </Button>
-              
-              <Button
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white"
-                size="lg"
-              >
-                Buy Now
-              </Button>
-
-              <Button 
-                variant="outline" 
-                size="icon"
-                className={`shrink-0 ${
-                  isWishlisted 
-                    ? 'bg-pink-50 text-pink-600 border-pink-200' 
-                    : 'text-gray-600'
-                }`}
-                onClick={() => setIsWishlisted(!isWishlisted)}
-              >
-                <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-current' : ''}`} />
-              </Button>
-
-              <Button 
-                variant="outline" 
-                size="icon"
-                className="shrink-0"
-              >
-                <GitCompare className="w-4 h-4" />
-              </Button>
-            </div>
-
-            <div className="mt-8">
-              <Tabs defaultValue="description" className="w-full">
-                <TabsList className="w-full h-12 bg-transparent border-b border-gray-100 p-0 gap-8">
-                  <TabsTrigger 
-                    value="description"
-                    className="relative h-full px-0 data-[state=active]:text-[#0FA0CE] data-[state=active]:shadow-none rounded-none bg-transparent"
-                  >
-                    <span>Description</span>
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0FA0CE] opacity-0 transition-all duration-300 data-[state=active]:opacity-100" />
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="reviews"
-                    className="relative h-full px-0 data-[state=active]:text-[#0FA0CE] data-[state=active]:shadow-none rounded-none bg-transparent"
-                  >
-                    <span>Reviews</span>
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0FA0CE] opacity-0 transition-all duration-300 data-[state=active]:opacity-100" />
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="faqs"
-                    className="relative h-full px-0 data-[state=active]:text-[#0FA0CE] data-[state=active]:shadow-none rounded-none bg-transparent"
-                  >
-                    <span>FAQs</span>
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0FA0CE] opacity-0 transition-all duration-300 data-[state=active]:opacity-100" />
-                  </TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="description" className="mt-6">
-                  <div className="prose prose-gray max-w-none">
-                    <p className="text-gray-600 leading-relaxed">{product.description}</p>
-                  </div>
-
-                  <div className="space-y-4 mt-8">
-                    <h2 className="text-lg font-semibold text-gray-900">Key Features</h2>
-                    <ul className="grid grid-cols-1 gap-3">
-                      {product.highlights.map((highlight, index) => (
-                        <li key={index} className="flex items-center gap-3 text-gray-600">
-                          <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-purple-600" />
-                          {highlight}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="reviews" className="mt-6">
-                  <div className="flex items-center gap-2">
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <StarIcon
-                          key={i}
-                          className={`w-5 h-5 ${
-                            i < Math.floor(product.rating)
-                              ? "text-yellow-400 fill-current"
-                              : "text-gray-200"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-sm text-gray-600">({product.reviews} reviews)</span>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="faqs" className="mt-6">
-                  <div className="space-y-4">
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <h3 className="font-medium text-gray-900">What is the warranty period?</h3>
-                      <p className="mt-2 text-sm text-gray-600">Our gaming chairs come with a 2-year warranty covering manufacturing defects and material issues.</p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <h3 className="font-medium text-gray-900">How long does assembly take?</h3>
-                      <p className="mt-2 text-sm text-gray-600">Assembly typically takes 20-30 minutes with the included tools and instructions.</p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <h3 className="font-medium text-gray-900">What's the weight capacity?</h3>
-                      <p className="mt-2 text-sm text-gray-600">Our gaming chairs support up to 150kg (330lbs) of weight.</p>
-                    </div>
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default ProductDetails;
+              </
