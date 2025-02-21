@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { StarIcon, Heart, Send, ShoppingCart, AlertCircle, ArrowLeft, Search, Bell } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -18,7 +17,6 @@ const ProductDetails = () => {
   const [selectedColor, setSelectedColor] = useState("black");
   const [quantity, setQuantity] = useState(1);
 
-  // Simulated product data - in a real app, this would come from an API
   const product = {
     id: "1",
     name: "Professional Gaming Chair",
@@ -59,7 +57,7 @@ const ProductDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white relative">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Sleek Header */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/50 to-transparent">
         <div className="max-w-7xl mx-auto px-4">
@@ -93,18 +91,17 @@ const ProductDetails = () => {
       </div>
 
       {/* Full Screen Carousel */}
-      <div className="h-[90vh]">
+      <div className="h-[80vh]">
         <Carousel className="w-full h-full">
           <CarouselContent>
             {product.images.map((image, index) => (
               <CarouselItem key={index}>
-                <div className="relative w-full h-full">
+                <div className="w-full h-full">
                   <img
                     src={image}
                     alt={`${product.name} - View ${index + 1}`}
                     className="object-cover w-full h-full"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent bottom-0" />
                 </div>
               </CarouselItem>
             ))}
@@ -189,7 +186,6 @@ const ProductDetails = () => {
                 </span>
               </div>
 
-              {/* Stock Status */}
               <div className="flex items-center gap-2 text-sm bg-orange-50 p-3 rounded-lg">
                 <AlertCircle className="w-4 h-4 text-orange-500" />
                 <span className="text-orange-700 font-medium">
@@ -197,7 +193,6 @@ const ProductDetails = () => {
                 </span>
               </div>
 
-              {/* Color Selection */}
               <div className="space-y-3">
                 <label className="text-sm font-medium text-gray-700">Color</label>
                 <div className="flex gap-3">
@@ -218,7 +213,6 @@ const ProductDetails = () => {
                 </div>
               </div>
 
-              {/* Quantity */}
               <div className="space-y-3">
                 <label className="text-sm font-medium text-gray-700">Quantity</label>
                 <div className="flex items-center gap-3">
@@ -244,7 +238,6 @@ const ProductDetails = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="flex gap-4 pt-4">
                 <Button
                   className="flex-1 h-12 text-base font-medium"
@@ -269,7 +262,6 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            {/* Product Details Tabs */}
             <Tabs defaultValue="description" className="w-full">
               <TabsList className="grid w-full grid-cols-3 bg-white rounded-xl p-1">
                 <TabsTrigger value="description">Description</TabsTrigger>
