@@ -56,17 +56,17 @@ export function GalleryImage({
         )}
       </div>
 
-      <div className="absolute top-4 left-4 space-y-2">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/40 backdrop-blur-md text-white text-xs font-medium shadow-lg">
+      <div className="absolute top-4 left-4 flex flex-col gap-3">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/40 backdrop-blur-md text-white text-xs font-medium shadow-lg w-fit">
           <Award className="w-3.5 h-3.5" />
           Premium Quality
         </div>
-        <div className="flex flex-col gap-1.5">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/40 backdrop-blur-md text-white text-xs font-medium shadow-lg">
+        <div className="space-y-1.5">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/40 backdrop-blur-md text-white text-xs font-medium shadow-lg w-fit">
             <ImageIcon className="w-3.5 h-3.5" />
             {index + 1}/{total}
           </div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/40 backdrop-blur-md text-white text-xs font-medium shadow-lg">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/40 backdrop-blur-md text-white text-xs font-medium shadow-lg w-fit">
             <ShieldCheck className="w-3.5 h-3.5" />
             Verified Product
           </div>
