@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Heart, GitCompare, Share2, Maximize2, ChevronLeft, ChevronRight, Award, ImageIcon, ZoomIn, ZoomOut } from "lucide-react";
@@ -63,7 +64,7 @@ export function ProductGallery({
 
   return (
     <div className="relative bg-gradient-to-b from-gray-50 to-white">
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gray-100 z-10">
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gray-100 z-50">
         <div
           className="h-full bg-[#0FA0CE] transition-all duration-300 ease-out"
           style={{ width: `${currentProgress}%` }}
@@ -146,7 +147,7 @@ export function ProductGallery({
           ))}
         </CarouselContent>
         
-        <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 flex items-center justify-between pointer-events-none">
+        <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 flex items-center justify-between pointer-events-none z-50">
           <Button 
             variant="ghost" 
             size="icon"
@@ -177,7 +178,7 @@ export function ProductGallery({
           </Button>
         </div>
 
-        <div className="absolute top-4 right-4 z-10 flex gap-2">
+        <div className="absolute top-4 right-4 z-50 flex gap-2">
           <Button 
             variant="outline" 
             size="sm"
