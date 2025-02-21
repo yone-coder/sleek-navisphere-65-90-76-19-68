@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { ShoppingCart, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -144,7 +145,7 @@ const ProductDetails = () => {
         onWishlistToggle={() => setIsWishlisted(!isWishlisted)}
       />
 
-      <div className="flex-1 bg-white">
+      <div className="flex-1 bg-white pb-28">
         <div className="max-w-3xl mx-auto px-6 pt-4 w-full">
           <div className="space-y-4">
             <ProductInfo
@@ -168,31 +169,34 @@ const ProductDetails = () => {
             />
 
             <div className="mt-8">
-              <div className="flex items-center gap-4">
-                <Button 
-                  className="flex-1 bg-[#0FA0CE] hover:bg-[#0F8CBE] text-white text-sm h-9 px-4 rounded-lg shadow-sm transition-all duration-300"
-                >
-                  <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
-                  Add to Cart
-                </Button>
-                
-                <Button
-                  className="flex-1 bg-red-500 hover:bg-red-600 text-white text-sm h-9 px-4 rounded-lg shadow-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-red-500/25 hover:shadow-lg"
-                >
-                  <CreditCard className="w-3.5 h-3.5 mr-1.5" />
-                  Buy Now
-                </Button>
-              </div>
-
-              <div className="mt-8">
-                <ProductTabs
-                  description={product.description}
-                  highlights={product.highlights}
-                  rating={product.rating}
-                  reviews={product.reviews}
-                />
-              </div>
+              <ProductTabs
+                description={product.description}
+                highlights={product.highlights}
+                rating={product.rating}
+                reviews={product.reviews}
+              />
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Sticky Action Buttons */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex items-center gap-4">
+            <Button 
+              className="flex-1 bg-[#0FA0CE] hover:bg-[#0F8CBE] text-white text-sm h-11 px-4 rounded-lg shadow-sm transition-all duration-300"
+            >
+              <ShoppingCart className="w-4 h-4 mr-2" />
+              Add to Cart
+            </Button>
+            
+            <Button
+              className="flex-1 bg-red-500 hover:bg-red-600 text-white text-sm h-11 px-4 rounded-lg shadow-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-red-500/25 hover:shadow-lg"
+            >
+              <CreditCard className="w-4 h-4 mr-2" />
+              Buy Now
+            </Button>
           </div>
         </div>
       </div>
