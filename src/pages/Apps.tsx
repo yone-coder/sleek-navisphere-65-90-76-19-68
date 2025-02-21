@@ -1,3 +1,4 @@
+
 import { Grid2X2, Wallet, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Search, Clock, Star, Sparkles, History, X } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -181,10 +182,13 @@ export default function Apps() {
               </div>
 
               <div className="relative max-w-2xl mx-auto mb-8">
-                <Popover open={isSearchFocused} onOpenChange={setIsSearchFocused}>
+                <Popover open={isSearchFocused}>
                   <PopoverTrigger asChild>
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <div 
+                      className="relative cursor-text"
+                      onClick={() => setIsSearchFocused(true)}
+                    >
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
                       <Input
                         type="search"
                         placeholder="Search apps, categories, or features..."
@@ -211,7 +215,9 @@ export default function Apps() {
                   <PopoverContent 
                     className="w-[calc(100vw-2rem)] max-w-2xl p-4" 
                     align="start"
-                    onClick={(e) => e.stopPropagation()}
+                    sideOffset={8}
+                    onInteractOutside={() => setIsSearchFocused(false)}
+                    onEscapeKeyDown={() => setIsSearchFocused(false)}
                   >
                     <div className="space-y-4">
                       {searchHistory.length > 0 && (
