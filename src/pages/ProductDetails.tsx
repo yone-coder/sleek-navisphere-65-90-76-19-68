@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { StarIcon, Heart, Send, ShoppingCart, ArrowLeft, Search, CheckCircle, Users, GitCompare, CreditCard } from "lucide-react";
+import { StarIcon, Heart, Send, ShoppingCart, ArrowLeft, Search, CheckCircle, Users, GitCompare, CreditCard, Plus, Minus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -108,6 +107,18 @@ const ProductDetails = () => {
   const product = id ? productData[id as keyof typeof productData] : null;
   const [isFollowing, setIsFollowing] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [selectedColor, setSelectedColor] = useState('black');
+  const [selectedSize, setSelectedSize] = useState('M');
+  const [quantity, setQuantity] = useState(1);
+
+  const colors = [
+    { name: 'Black', value: 'black', class: 'bg-black' },
+    { name: 'White', value: 'white', class: 'bg-white border border-gray-200' },
+    { name: 'Red', value: 'red', class: 'bg-red-500' },
+    { name: 'Blue', value: 'blue', class: 'bg-blue-500' },
+  ];
+
+  const sizes = ['S', 'M', 'L', 'XL'];
 
   if (!product) {
     return (
@@ -287,6 +298,82 @@ const ProductDetails = () => {
               >
                 {isFollowing ? 'Following' : 'Follow'}
               </Button>
+            </div>
+
+            <div className="space-y-6 py-4 border-t border-gray-100">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-700">Color</span>
+                  <span className="text-sm text-gray-500 capitalize">{selectedColor}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  {colors.map((color) => (
+                    <button
+                      key={color.value}
+                      onClick={() => setSelectedColor(color.value)}
+                      className={`
+                        w-9 h-9 rounded-full ${color.class}
+                        transition-all duration-300
+                        ${selectedColor === color.value 
+                          ? 'ring-2 ring-offset-2 ring-[#0FA0CE]' 
+                          : 'hover:ring-2 hover:ring-offset-2 hover:ring-gray-200'
+                        }
+                      `}
+                      aria-label={`Select ${color.name} color`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-700">Size</span>
+                  <span className="text-sm text-gray-500">{selectedSize}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  {sizes.map((size) => (
+                    <button
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      className={`
+                        w-12 h-12 rounded-xl border font-medium text-sm
+                        transition-all duration-300
+                        ${selectedSize === size
+                          ? 'bg-[#0FA0CE] text-white border-transparent'
+                          : 'bg-white text-gray-900 border-gray-200 hover:border-[#0FA0CE] hover:text-[#0FA0CE]'
+                        }
+                      `}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-700">Quantity</span>
+                  <div className="flex items-center gap-4 bg-gray-50 rounded-lg p-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                    <span className="text-sm font-medium w-8 text-center">{quantity}</span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                      onClick={() => setQuantity(quantity + 1)}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="flex items-center gap-2 pt-2 pb-4">
