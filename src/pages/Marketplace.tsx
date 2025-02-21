@@ -6,6 +6,7 @@ import { CategorySlider } from '@/components/marketplace/CategorySlider';
 import { categorySlides } from '@/data/categorySlides';
 import { SellersList } from "@/components/marketplace/SellersList";
 import { LightningDeals } from "@/components/marketplace/LightningDeals";
+import { FeaturedProducts } from "@/components/marketplace/FeaturedProducts";
 
 const Marketplace = () => {
   const [selectedLocation, setSelectedLocation] = useState(locations[0]);
@@ -40,6 +41,7 @@ const Marketplace = () => {
         <CategorySlider slides={currentSlides} />
         <LightningDeals />
         <SellersList />
+        <FeaturedProducts />
       </main>
     </div>
   );
