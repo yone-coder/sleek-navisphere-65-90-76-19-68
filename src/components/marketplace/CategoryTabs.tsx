@@ -27,7 +27,7 @@ export const CategoryTabs = ({
       value={selectedCategory}
       onValueChange={setSelectedCategory}
     >
-      <ScrollArea className="w-full" orientation="horizontal">
+      <ScrollArea className="w-full">
         <TabsList className="w-max inline-flex h-11 items-center justify-start gap-2 rounded-lg bg-gray-100/50 p-1 font-medium">
           {categories.map((category) => (
             <TabsTrigger
