@@ -56,17 +56,17 @@ export function GalleryImage({
         )}
       </div>
 
-      <div className="absolute top-4 left-4 flex items-center gap-2">
-        <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/40 backdrop-blur-md text-white text-xs font-medium shadow-lg w-fit">
-          <Award className="w-3.5 h-3.5" />
+      <div className="absolute top-14 left-4 flex items-center gap-1.5">
+        <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-black/40 backdrop-blur-md text-white text-[10px] font-medium shadow-lg">
+          <Award className="w-3 h-3" />
           <span className="whitespace-nowrap">Premium Quality</span>
         </div>
-        <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/40 backdrop-blur-md text-white text-xs font-medium shadow-lg w-fit">
-          <ImageIcon className="w-3.5 h-3.5" />
+        <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-black/40 backdrop-blur-md text-white text-[10px] font-medium shadow-lg">
+          <ImageIcon className="w-3 h-3" />
           <span className="whitespace-nowrap">{index + 1}/{total}</span>
         </div>
-        <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/40 backdrop-blur-md text-white text-xs font-medium shadow-lg w-fit">
-          <ShieldCheck className="w-3.5 h-3.5" />
+        <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-black/40 backdrop-blur-md text-white text-[10px] font-medium shadow-lg">
+          <ShieldCheck className="w-3 h-3" />
           <span className="whitespace-nowrap">Verified Product</span>
         </div>
       </div>
