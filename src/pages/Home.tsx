@@ -1,3 +1,4 @@
+<lov-code>
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Carousel,
@@ -5,8 +6,13 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import { useState, useEffect } from "react";
-import { Trophy, Users, Radio, Gamepad, Video, List, MoreHorizontal, Calendar, Award, CheckCircle, XCircle, Clock, User, ArrowUpRight, MessageSquare, RefreshCw, Heart, Share2, Check, Globe, Star } from "lucide-react";
+import { useState, useEffect, Suspense } from "react";
+import { 
+  Trophy, Users, Radio, Gamepad, Video, List, 
+  MoreHorizontal, Calendar, Award, CheckCircle, 
+  XCircle, Clock, User, ArrowUpRight, MessageSquare, 
+  RefreshCw, Heart, Share2, Globe, Star 
+} from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -346,7 +352,7 @@ const matches: Match[] = [
   }
 ];
 
-export default function Home() {
+const Home = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -414,314 +420,291 @@ export default function Home() {
   }, [api]);
 
   return (
-    <div className="min-h-screen animate-fade-in pt-14 pb-24">
-      <section className="relative w-full h-[calc(100vw*500/1500)] max-h-[500px] overflow-hidden">
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          className="w-full h-full"
-          setApi={setApi}
-        >
-          <CarouselContent>
-            {slides.map((slide) => (
-              <CarouselItem key={slide.id} className="relative w-full h-full">
-                <div className="relative w-full h-full group">
-                  <img
-                    src={slide.image}
-                    alt=""
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
-            <div className="flex items-center gap-4 px-4 py-2 rounded-full bg-black/20 backdrop-blur-sm">
-              {slides.map((_, index) => (
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="min-h-screen animate-fade-in pt-14 pb-24">
+        <section className="relative w-full h-[calc(100vw*500/1500)] max-h-[500px] overflow-hidden">
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full h-full"
+            setApi={setApi}
+          >
+            <CarouselContent>
+              {slides.map((slide) => (
+                <CarouselItem key={slide.id} className="relative w-full h-full">
+                  <div className="relative w-full h-full group">
+                    <img
+                      src={slide.image}
+                      alt=""
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
+              <div className="flex items-center gap-4 px-4 py-2 rounded-full bg-black/20 backdrop-blur-sm">
+                {slides.map((_, index) => (
+                  <button
+                    key={index}
+                    aria-label={`Go to slide ${index + 1}`}
+                    onClick={() => api?.scrollTo(index)}
+                    className={`
+                      relative w-2 h-2 rounded-full 
+                      transition-all duration-300 ease-spring
+                      ${activeIndex === index 
+                        ? "bg-[#9b87f5] w-6" 
+                        : "bg-white/60 hover:bg-white/80"
+                      }
+                      ${activeIndex === index 
+                        ? "animate-[scale-in_0.2s_ease-out]" 
+                        : ""}
+                      group
+                      focus:outline-none focus:ring-2 focus:ring-[#9b87f5] focus:ring-offset-2 focus:ring-offset-transparent
+                    `}
+                  >
+                    {activeIndex === index && (
+                      <span className="absolute inset-0 rounded-full bg-[#9b87f5] animate-pulse opacity-50" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </Carousel>
+        </section>
+
+        <section className="py-6 px-6">
+          <div className="grid grid-cols-4 gap-4 max-w-xl mx-auto">
+            {quickActions.map((action, index) => {
+              const Icon = action.icon;
+              const isMoreButton = index === quickActions.length - 1;
+              return (
                 <button
                   key={index}
-                  aria-label={`Go to slide ${index + 1}`}
-                  onClick={() => api?.scrollTo(index)}
-                  className={`
-                    relative w-2 h-2 rounded-full 
-                    transition-all duration-300 ease-spring
-                    ${activeIndex === index 
-                      ? "bg-[#9b87f5] w-6" 
-                      : "bg-white/60 hover:bg-white/80"
-                    }
-                    ${activeIndex === index 
-                      ? "animate-[scale-in_0.2s_ease-out]" 
-                      : ""}
-                    group
-                    focus:outline-none focus:ring-2 focus:ring-[#9b87f5] focus:ring-offset-2 focus:ring-offset-transparent
-                  `}
-                >
-                  {activeIndex === index && (
-                    <span className="absolute inset-0 rounded-full bg-[#9b87f5] animate-pulse opacity-50" />
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
-        </Carousel>
-      </section>
-
-      <section className="py-6 px-6">
-        <div className="grid grid-cols-4 gap-4 max-w-xl mx-auto">
-          {quickActions.map((action, index) => {
-            const Icon = action.icon;
-            const isMoreButton = index === quickActions.length - 1;
-            return (
-              <button
-                key={index}
-                className={`group flex flex-col items-center gap-2 ${
-                  index >= 4 ? 'mt-4' : ''
-                }`}
-              >
-                <div 
-                  className={`w-16 h-16 rounded-full flex items-center justify-center bg-white shadow-lg transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 group-active:scale-95 ${
-                    isMoreButton ? 'bg-[#7E69AB]' : ''
+                  className={`group flex flex-col items-center gap-2 ${
+                    index >= 4 ? 'mt-4' : ''
                   }`}
                 >
-                  <Icon 
-                    className={`w-6 h-6 transition-transform duration-300 group-hover:scale-110 ${
-                      isMoreButton ? 'text-white' : 'text-[#9b87f5]'
+                  <div 
+                    className={`w-16 h-16 rounded-full flex items-center justify-center bg-white shadow-lg transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 group-active:scale-95 ${
+                      isMoreButton ? 'bg-[#7E69AB]' : ''
                     }`}
-                    strokeWidth={1.5} 
-                  />
-                </div>
-                <span className="text-sm font-medium text-gray-700">
-                  {action.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </section>
-
-      <MatchesSection matches={matches} title="Live Matches" />
-
-      <section className="py-6 px-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold px-2">Community Feed</h2>
-          <button className="text-[#9b87f5] hover:text-[#7E69AB] flex items-center gap-1 text-sm font-medium transition-colors">
-            View all <ArrowUpRight className="w-4 h-4" />
-          </button>
-        </div>
-        <ScrollArea className="w-full whitespace-nowrap">
-          <div className="flex space-x-4 pb-4">
-            {tweets.map((tweet) => (
-              <div
-                key={tweet.id}
-                className="flex-none w-[350px] animate-fade-in"
-              >
-                <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-xl hover:translate-y-[-2px]">
-                  <div className="p-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex gap-3">
-                        <Avatar className="h-10 w-10 border-2 border-[#9b87f5]">
-                          <AvatarImage src={tweet.author.avatar} alt={tweet.author.name} />
-                          <AvatarFallback>
-                            <User className="w-5 h-5 text-gray-400" />
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex flex-col">
-                          <span className="font-semibold text-gray-900">{tweet.author.name}</span>
-                          <span className="text-sm text-gray-500">{tweet.author.handle}</span>
-                        </div>
-                      </div>
-                      <span className="text-xs text-gray-500">{tweet.timestamp}</span>
-                    </div>
-                    <p className="mt-3 text-gray-600 text-sm whitespace-normal line-clamp-3">
-                      {tweet.content}
-                    </p>
-                    <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
-                      <button className="flex items-center gap-1 text-gray-500 hover:text-[#9b87f5] transition-colors text-sm">
-                        <MessageSquare className="w-4 h-4" />
-                        <span>{tweet.stats.comments}</span>
-                      </button>
-                      <button className="flex items-center gap-1 text-gray-500 hover:text-green-500 transition-colors text-sm">
-                        <RefreshCw className="w-4 h-4" />
-                        <span>{tweet.stats.retweets}</span>
-                      </button>
-                      <button className="flex items-center gap-1 text-gray-500 hover:text-red-500 transition-colors text-sm">
-                        <Heart className="w-4 h-4" />
-                        <span>{tweet.stats.likes}</span>
-                      </button>
-                      <button className="text-gray-500 hover:text-[#9b87f5] transition-colors">
-                        <Share2 className="w-4 h-4" />
-                      </button>
-                    </div>
+                  >
+                    <Icon 
+                      className={`w-6 h-6 transition-transform duration-300 group-hover:scale-110 ${
+                        isMoreButton ? 'text-white' : 'text-[#9b87f5]'
+                      }`}
+                      strokeWidth={1.5} 
+                    />
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-      </section>
-
-      <section className="py-6 px-6">
-        <h2 className="text-2xl font-bold mb-6 px-2">Featured Tournaments</h2>
-        <ScrollArea className="w-full whitespace-nowrap">
-          <div className="flex space-x-4 pb-4">
-            {tournaments.map((tournament) => {
-              const StatusIcon = getStatusIcon(tournament.status);
-              const progressPercentage = (tournament.currentParticipants / tournament.maxParticipants) * 100;
-              return (
-                <div
-                  key={tournament.id}
-                  className="group flex-none w-[300px] shrink-0 animate-fade-in cursor-pointer"
-                  onClick={() => navigate(`/tournament/${tournament.id}`)}
-                >
-                  <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:translate-y-[-2px] group-hover:border-gray-200">
-                    <div className="relative h-[150px]">
-                      <img
-                        src={tournament.banner}
-                        alt=""
-                        className="w-full h-full object-cover brightness-[0.95] group-hover:brightness-100 transition-all duration-300"
-                      />
-                      <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${getStatusColor(tournament.status)}`}>
-                        <StatusIcon className="w-3 h-3" />
-                        <span className="capitalize">{tournament.status}</span>
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-semibold text-lg mb-3 text-left truncate">{tournament.title}</h3>
-                      <div className="flex flex-col gap-3 text-sm text-left">
-                        <div className="flex items-center gap-2 text-gray-600">
-                          <Calendar className="w-4 h-4" />
-                          <span>{tournament.date}</span>
-                        </div>
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between text-gray-600">
-                            <div className="flex items-center gap-2">
-                              <Users className="w-4 h-4" />
-                              <span>{tournament.currentParticipants}/{tournament.maxParticipants} Participants</span>
-                            </div>
-                          </div>
-                          <Progress 
-                            value={progressPercentage} 
-                            className={`h-1.5 bg-gray-100 ${getProgressColor(tournament.status)}`}
-                          />
-                        </div>
-                        <div className="flex items-center gap-2 text-gray-600">
-                          <Award className="w-4 h-4" />
-                          <span>{tournament.prizePool} Prize Pool</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  <span className="text-sm font-medium text-gray-700">
+                    {action.label}
+                  </span>
+                </button>
               );
             })}
           </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-      </section>
+        </section>
 
-      <section className="py-6 w-full">
-        <h2 className="text-2xl font-bold mb-6 px-6">Recent Winners</h2>
-        <div className="relative w-full">
-          <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-background to-transparent pointer-events-none z-10 shrink-0" />
-          <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-background to-transparent pointer-events-none z-10 shrink-0" />
-          <div className="overflow-x-auto no-scrollbar">
-            <div className="flex gap-4 pb-4 px-6">
-              {recentWinners.map((winner) => (
-                <div
-                  key={winner.id}
-                  className="flex-none w-[220px] shrink-0 animate-fade-in"
-                >
-                  <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-gray-200">
-                    <div className="p-3">
-                      <div className="flex items-center gap-2 mb-3">
-                        <Avatar className="h-10 w-10 border-2 border-[#9b87f5]">
-                          <AvatarImage src={winner.profileImage} alt={winner.playerName} />
-                          <AvatarFallback>
-                            <User className="w-5 h-5 text-gray-400" />
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex flex-col">
-                          <span className="font-semibold text-sm text-gray-900 truncate">{winner.playerName}</span>
-                          <span className="text-xs text-gray-500">{winner.date}</span>
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-gray-600">
-                          <Trophy className="w-4 h-4 text-[#9b87f5]" />
-                          <span className="text-xs truncate">{winner.tournamentTitle}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-gray-600">
-                          <Award className="w-4 h-4 text-[#9b87f5]" />
-                          <span className="text-xs font-medium text-[#7E69AB]">{winner.prize}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+        <MatchesSection matches={matches} title="Live Matches" />
+
+        <section className="py-6 px-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold px-2">Community Feed</h2>
+            <button className="text-[#9b87f5] hover:text-[#7E69AB] flex items-center gap-1 text-sm font-medium transition-colors">
+              View all <ArrowUpRight className="w-4 h-4" />
+            </button>
           </div>
-        </div>
-      </section>
-
-      <section className="py-6 px-6">
-        <div className="flex justify-between items-center mb-6 px-2">
-          <h2 className="text-2xl font-bold">Latest News</h2>
-          <button className="text-[#9b87f5] hover:text-[#7E69AB] flex items-center gap-1 text-sm font-medium transition-colors">
-            View all <ArrowUpRight className="w-4 h-4" />
-          </button>
-        </div>
-        <ScrollArea className="w-full whitespace-nowrap">
-          <div className="flex space-x-4 pb-4">
-            {newsItems.map((news) => (
-              <div
-                key={news.id}
-                className="flex-none w-[350px] animate-fade-in cursor-pointer"
-                onClick={() => handleNewsClick(news)}
-              >
-                <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg">
-                  <div className="relative h-[200px] overflow-hidden">
-                    <img
-                      src={news.image}
-                      alt=""
-                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                    />
-                    <div className="absolute top-3 left-3">
-                      <Badge 
-                        variant="secondary" 
-                        className="bg-white/90 hover:bg-white/95 text-[#7E69AB] backdrop-blur-sm"
-                      >
-                        {news.category}
-                      </Badge>
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <div className="space-y-3">
-                      <div className="space-y-2">
-                        <h3 className="font-semibold text-lg text-left line-clamp-2 leading-tight">
-                          {news.title}
-                        </h3>
-                        <p className="text-sm text-gray-600 text-left line-clamp-2">
-                          {news.excerpt}
-                        </p>
+          <ScrollArea className="w-full whitespace-nowrap">
+            <div className="flex space-x-4 pb-4">
+              {tweets.map((tweet) => (
+                <div
+                  key={tweet.id}
+                  className="flex-none w-[350px] animate-fade-in"
+                >
+                  <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-xl hover:translate-y-[-2px]">
+                    <div className="p-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex gap-3">
+                          <Avatar className="h-10 w-10 border-2 border-[#9b87f5]">
+                            <AvatarImage src={tweet.author.avatar} alt={tweet.author.name} />
+                            <AvatarFallback>
+                              <User className="w-5 h-5 text-gray-400" />
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex flex-col">
+                            <span className="font-semibold text-gray-900">{tweet.author.name}</span>
+                            <span className="text-sm text-gray-500">{tweet.author.handle}</span>
+                          </div>
+                        </div>
+                        <span className="text-xs text-gray-500">{tweet.timestamp}</span>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-500">{news.date}</span>
-                        <button className="text-[#9b87f5] hover:text-[#7E69AB] flex items-center gap-1 text-sm transition-colors">
-                          Read more <ArrowUpRight className="w-3 h-3" />
+                      <p className="mt-3 text-gray-600 text-sm whitespace-normal line-clamp-3">
+                        {tweet.content}
+                      </p>
+                      <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                        <button className="flex items-center gap-1 text-gray-500 hover:text-[#9b87f5] transition-colors text-sm">
+                          <MessageSquare className="w-4 h-4" />
+                          <span>{tweet.stats.comments}</span>
+                        </button>
+                        <button className="flex items-center gap-1 text-gray-500 hover:text-green-500 transition-colors text-sm">
+                          <RefreshCw className="w-4 h-4" />
+                          <span>{tweet.stats.retweets}</span>
+                        </button>
+                        <button className="flex items-center gap-1 text-gray-500 hover:text-red-500 transition-colors text-sm">
+                          <Heart className="w-4 h-4" />
+                          <span>{tweet.stats.likes}</span>
+                        </button>
+                        <button className="text-gray-500 hover:text-[#9b87f5] transition-colors">
+                          <Share2 className="w-4 h-4" />
                         </button>
                       </div>
                     </div>
                   </div>
                 </div>
+              ))}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </section>
+
+        <section className="py-6 px-6">
+          <h2 className="text-2xl font-bold mb-6 px-2">Featured Tournaments</h2>
+          <ScrollArea className="w-full whitespace-nowrap">
+            <div className="flex space-x-4 pb-4">
+              {tournaments.map((tournament) => {
+                const StatusIcon = getStatusIcon(tournament.status);
+                const progressPercentage = (tournament.currentParticipants / tournament.maxParticipants) * 100;
+                return (
+                  <div
+                    key={tournament.id}
+                    className="group flex-none w-[300px] shrink-0 animate-fade-in cursor-pointer"
+                    onClick={() => navigate(`/tournament/${tournament.id}`)}
+                  >
+                    <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:translate-y-[-2px] group-hover:border-gray-200">
+                      <div className="relative h-[150px]">
+                        <img
+                          src={tournament.banner}
+                          alt=""
+                          className="w-full h-full object-cover brightness-[0.95] group-hover:brightness-100 transition-all duration-300"
+                        />
+                        <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${getStatusColor(tournament.status)}`}>
+                          <StatusIcon className="w-3 h-3" />
+                          <span className="capitalize">{tournament.status}</span>
+                        </div>
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-semibold text-lg mb-3 text-left truncate">{tournament.title}</h3>
+                        <div className="flex flex-col gap-3 text-sm text-left">
+                          <div className="flex items-center gap-2 text-gray-600">
+                            <Calendar className="w-4 h-4" />
+                            <span>{tournament.date}</span>
+                          </div>
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between text-gray-600">
+                              <div className="flex items-center gap-2">
+                                <Users className="w-4 h-4" />
+                                <span>{tournament.currentParticipants}/{tournament.maxParticipants} Participants</span>
+                              </div>
+                            </div>
+                            <Progress 
+                              value={progressPercentage} 
+                              className={`h-1.5 bg-gray-100 ${getProgressColor(tournament.status)}`}
+                            />
+                          </div>
+                          <div className="flex items-center gap-2 text-gray-600">
+                            <Award className="w-4 h-4" />
+                            <span>{tournament.prizePool} Prize Pool</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </section>
+
+        <section className="py-6 w-full">
+          <h2 className="text-2xl font-bold mb-6 px-6">Recent Winners</h2>
+          <div className="relative w-full">
+            <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-background to-transparent pointer-events-none z-10 shrink-0" />
+            <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-background to-transparent pointer-events-none z-10 shrink-0" />
+            <div className="overflow-x-auto no-scrollbar">
+              <div className="flex gap-4 pb-4 px-6">
+                {recentWinners.map((winner) => (
+                  <div
+                    key={winner.id}
+                    className="flex-none w-[220px] shrink-0 animate-fade-in"
+                  >
+                    <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-gray-200">
+                      <div className="p-3">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Avatar className="h-10 w-10 border-2 border-[#9b87f5]">
+                            <AvatarImage src={winner.profileImage} alt={winner.playerName} />
+                            <AvatarFallback>
+                              <User className="w-5 h-5 text-gray-400" />
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex flex-col">
+                            <span className="font-semibold text-sm text-gray-900 truncate">{winner.playerName}</span>
+                            <span className="text-xs text-gray-500">{winner.date}</span>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2 text-gray-600">
+                            <Trophy className="w-4 h-4 text-[#9b87f5]" />
+                            <span className="text-xs truncate">{winner.tournamentTitle}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-gray-600">
+                            <Award className="w-4 h-4 text-[#9b87f5]" />
+                            <span className="text-xs font-medium text-[#7E69AB]">{winner.prize}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
-        </ScrollArea>
-      </section>
-    </div>
-  );
-}
+        </section>
+
+        <section className="py-6 px-6">
+          <div className="flex justify-between items-center mb-6 px-2">
+            <h2 className="text-2xl font-bold">Latest News</h2>
+            <button className="text-[#9b87f5] hover:text-[#7E69AB] flex items-center gap-1 text-sm font-medium transition-colors">
+              View all <ArrowUpRight className="w-4 h-4" />
+            </button>
+          </div>
+          <ScrollArea className="w-full whitespace-nowrap">
+            <div className="flex space-x-4 pb-4">
+              {newsItems.map((news) => (
+                <div
+                  key={news.id}
+                  className="flex-none w-[350px] animate-fade-in cursor-pointer"
+                  onClick={() => handleNewsClick(news)}
+                >
+                  <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg">
+                    <div className="relative h-[200px] overflow-hidden">
+                      <img
+                        src={news.image}
+                        alt=""
+                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                      />
+                      <div className="absolute top-3 left-3">
+                        <Badge 
+                          variant="secondary" 
+                          className="bg-white/90 hover:bg-white/95 text-[#7E69AB] backdrop-blur-sm"
+                        >
+                          {news.category}
+                        </Badge>
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <div className="space-y-3">
+                        
