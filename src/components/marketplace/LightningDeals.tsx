@@ -115,9 +115,9 @@ const products: Product[] = [
 
 export const LightningDeals = () => {
   return (
-    <section className="w-full py-4 bg-gradient-to-r from-[#fdfcfb] to-[#e2d1c3]">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="flex items-center justify-between mb-3">
+    <section className="w-full py-2 bg-gradient-to-r from-[#fdfcfb] to-[#e2d1c3]">
+      <div className="max-w-3xl mx-auto px-4">
+        <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <h2 className="text-base font-bold text-gray-900">Lightning Deals</h2>
             <Timer className="w-3.5 h-3.5 text-blue-600" />
@@ -146,7 +146,7 @@ export const LightningDeals = () => {
                         <img 
                           src={product.image} 
                           alt={product.name}
-                          className="w-full aspect-square object-cover"
+                          className="w-full h-32 object-cover"
                         />
                         <Badge 
                           className="absolute top-1.5 right-1.5 bg-red-500 text-white border-0 text-[10px] px-1.5 py-0.5"
@@ -155,21 +155,21 @@ export const LightningDeals = () => {
                           {product.discount}% OFF
                         </Badge>
                       </div>
-                      <div className="p-2">
-                        <h3 className="font-medium text-xs text-gray-900 mb-1 truncate">
+                      <div className="p-1.5">
+                        <h3 className="font-medium text-[10px] text-gray-900 mb-1 truncate">
                           {product.name}
                         </h3>
                         <div className="flex items-center justify-between">
                           <div className="flex items-baseline gap-1">
-                            <span className="text-sm font-bold text-gray-900">
+                            <span className="text-xs font-bold text-gray-900">
                               ${product.price}
                             </span>
-                            <span className="text-[10px] text-gray-500 line-through">
+                            <span className="text-[8px] text-gray-500 line-through">
                               ${product.originalPrice}
                             </span>
                           </div>
-                          <div className="flex items-center gap-0.5 text-[10px] font-medium text-blue-600">
-                            <Timer className="w-2.5 h-2.5" />
+                          <div className="flex items-center gap-0.5 text-[8px] font-medium text-blue-600">
+                            <Timer className="w-2 h-2" />
                             {product.timeLeft}
                           </div>
                         </div>
@@ -179,9 +179,9 @@ export const LightningDeals = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <div className="max-w-4xl mx-auto relative">
-              <CarouselPrevious className="hidden md:flex absolute -left-8 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm h-6 w-6" />
-              <CarouselNext className="hidden md:flex absolute -right-8 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm h-6 w-6" />
+            <div className="max-w-3xl mx-auto relative">
+              <CarouselPrevious className="hidden md:flex absolute -left-6 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm h-5 w-5" />
+              <CarouselNext className="hidden md:flex absolute -right-6 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm h-5 w-5" />
             </div>
           </Carousel>
         </div>
