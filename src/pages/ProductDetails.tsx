@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { StarIcon, Heart, Send, ShoppingCart, AlertCircle, ArrowLeft, Search } from "lucide-react";
+import { StarIcon, Heart, Send, ShoppingCart, AlertCircle, ArrowLeft, Search, Bell } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -7,8 +8,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNavigate, useParams } from "react-router-dom";
@@ -110,13 +109,31 @@ const ProductDetails = () => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="left-4 text-white hover:bg-white/20 border-none" />
-          <CarouselNext className="right-4 text-white hover:bg-white/20 border-none" />
         </Carousel>
       </div>
 
+      {/* News Bar */}
+      <div className="relative z-10 -mt-20 mb-8">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
+            <div className="flex items-center gap-3">
+              <div className="flex-shrink-0">
+                <Bell className="h-5 w-5 text-blue-500" />
+              </div>
+              <div className="flex-1 overflow-hidden">
+                <div className="animate-[marquee_20s_linear_infinite] whitespace-nowrap">
+                  <span className="text-sm font-medium text-gray-900">
+                    🔥 Flash Sale: Get 25% off on all gaming chairs! Limited time offer. Free shipping on orders over $500.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Product Info */}
-      <div className="relative z-10 -mt-20">
+      <div className="relative z-10">
         <div className="max-w-7xl mx-auto px-4">
           <div className="space-y-8">
             <div className="bg-white rounded-2xl p-8 shadow-lg space-y-6">
