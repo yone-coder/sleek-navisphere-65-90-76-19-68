@@ -379,29 +379,77 @@ const ProductDetails = () => {
                 </div>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-700">Quantity</span>
-                  <div className="flex items-center gap-4 bg-gray-50 rounded-lg p-1">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    >
-                      <Minus className="h-4 w-4" />
-                    </Button>
-                    <span className="text-sm font-medium w-8 text-center">{quantity}</span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                      onClick={() => setQuantity(quantity + 1)}
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="text-[10px] px-1.5">
+                      {quantity} {quantity === 1 ? 'unit' : 'units'}
+                    </Badge>
+                    {quantity >= 5 && (
+                      <Badge className="text-[10px] px-1.5 bg-blue-50 text-blue-600 border border-blue-100">
+                        Bulk Order
+                      </Badge>
+                    )}
                   </div>
                 </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center bg-gray-50 rounded-lg">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`
+                        relative group h-8 w-8 rounded-l-lg text-gray-600 
+                        hover:text-gray-900 hover:bg-gray-100
+                        ${quantity <= 1 ? 'opacity-50 cursor-not-allowed' : ''}
+                      `}
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      disabled={quantity <= 1}
+                    >
+                      <Minus className="h-3.5 w-3.5" />
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap">
+                        Decrease quantity
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 -translate-y-1/2 border-4 border-transparent border-t-gray-900" />
+                      </div>
+                    </Button>
+                    <input
+                      type="number"
+                      value={quantity}
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value);
+                        if (!isNaN(val) && val >= 1) {
+                          setQuantity(val);
+                        }
+                      }}
+                      className="w-12 h-8 text-center text-sm font-medium bg-transparent border-x border-gray-200 focus:outline-none focus:ring-1 focus:ring-[#0FA0CE] [-moz-appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="relative group h-8 w-8 rounded-r-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                      onClick={() => setQuantity(quantity + 1)}
+                    >
+                      <Plus className="h-3.5 w-3.5" />
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap">
+                        Increase quantity
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 -translate-y-1/2 border-4 border-transparent border-t-gray-900" />
+                      </div>
+                    </Button>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 text-xs font-medium"
+                    onClick={() => setQuantity(1)}
+                  >
+                    Reset
+                  </Button>
+                </div>
+                {quantity >= 5 && (
+                  <p className="text-xs text-blue-600 bg-blue-50 px-3 py-2 rounded-lg">
+                    Bulk order discount of 5% will be applied at checkout
+                  </p>
+                )}
               </div>
             </div>
 
