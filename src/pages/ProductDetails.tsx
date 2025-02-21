@@ -210,7 +210,7 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between border-t border-b border-gray-100 py-3">
+            <div className="flex items-center justify-between py-3">
               <div className="flex items-center gap-3">
                 <Avatar className="h-10 w-10 border border-gray-200">
                   <AvatarImage src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" />
