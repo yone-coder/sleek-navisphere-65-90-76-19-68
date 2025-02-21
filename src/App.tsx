@@ -1,3 +1,4 @@
+
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -30,6 +31,12 @@ const Marketplace = lazy(() => import("./pages/Marketplace"));
 const ProductDetails = lazy(() => import("./pages/ProductDetails"));
 const Apps = lazy(() => import("./pages/Apps"));
 const Search = lazy(() => import("./pages/Search"));
+
+// Lazy load admin pages
+const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminBanners = lazy(() => import("./pages/admin/AdminBanners"));
+const AdminTournaments = lazy(() => import("./pages/admin/AdminTournaments"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen p-8 space-y-4">
