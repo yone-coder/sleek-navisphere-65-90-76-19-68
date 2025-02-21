@@ -94,6 +94,8 @@ export const SellersList = () => {
             align: "start",
             loop: false,
             slidesToScroll: 1,
+            dragFree: false,
+            containScroll: "trimSnaps"
           }}
           className="w-full"
         >
