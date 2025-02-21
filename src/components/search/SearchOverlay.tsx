@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, X, History, ArrowLeft, Filter, Tag, Star, Command } from "lucide-react";
@@ -21,10 +20,19 @@ import {
   DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
 
+interface AppItem {
+  name: string;
+  description: string;
+  category: string;
+  route: string;
+  color: string;
+  icon: () => JSX.Element;
+}
+
 interface SearchOverlayProps {
   isOpen: boolean;
   onClose: () => void;
-  apps: any[];
+  apps: AppItem[];
 }
 
 export function SearchOverlay({ isOpen, onClose, apps }: SearchOverlayProps) {
@@ -74,7 +82,7 @@ export function SearchOverlay({ isOpen, onClose, apps }: SearchOverlayProps) {
     if (!acc[key]) acc[key] = [];
     acc[key].push(app);
     return acc;
-  }, {} as Record<string, typeof apps>);
+  }, {} as Record<string, AppItem[]>);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
