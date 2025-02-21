@@ -49,7 +49,9 @@ const Marketplace = () => {
 
       <main className="pt-24 pb-16">
         <div className="space-y-0">
-          <CategorySlider slides={currentSlides} />
+          <div className="mb-0">
+            <CategorySlider slides={currentSlides} />
+          </div>
           
           {/* News Band */}
           <div className="w-full bg-gray-50 border-y border-gray-200">
