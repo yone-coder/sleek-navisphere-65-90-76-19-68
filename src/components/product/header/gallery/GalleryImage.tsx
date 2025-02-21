@@ -56,7 +56,7 @@ export function GalleryImage({
         )}
       </div>
 
-      <div className="absolute top-14 left-4 flex items-center gap-1.5">
+      <div className="absolute top-20 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
         <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-black/40 backdrop-blur-md text-white text-[10px] font-medium shadow-lg">
           <Award className="w-3 h-3" />
           <span className="whitespace-nowrap">Premium Quality</span>
