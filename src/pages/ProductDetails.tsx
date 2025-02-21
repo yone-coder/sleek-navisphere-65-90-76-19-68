@@ -153,6 +153,30 @@ const ProductDetails = () => {
             {product.stockStatus}
           </div>
         </div>
+
+        <div className="absolute bottom-4 right-4 z-10 flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm"
+            className={`h-9 w-9 rounded-lg backdrop-blur-md border-0 ${
+              isWishlisted 
+                ? 'bg-pink-500/20 text-pink-500 hover:bg-pink-500/30' 
+                : 'bg-black/20 text-white hover:bg-black/30'
+            } transition-all duration-300`}
+            onClick={() => setIsWishlisted(!isWishlisted)}
+          >
+            <Heart className={`w-3.5 h-3.5 ${isWishlisted ? 'fill-current' : ''}`} />
+          </Button>
+
+          <Button 
+            variant="outline" 
+            size="sm"
+            className="h-9 w-9 rounded-lg backdrop-blur-md bg-black/20 border-0 text-white hover:bg-black/30 transition-all duration-300"
+          >
+            <GitCompare className="w-3.5 h-3.5" />
+          </Button>
+        </div>
+
       </div>
 
       <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/50 to-transparent pointer-events-none">
@@ -276,27 +300,6 @@ const ProductDetails = () => {
                 className="flex-1 bg-black hover:bg-gray-900 text-white text-sm h-9 px-4 rounded-lg shadow-sm transition-all duration-300"
               >
                 Buy Now
-              </Button>
-
-              <Button 
-                variant="outline" 
-                size="sm"
-                className={`h-9 w-9 rounded-lg ${
-                  isWishlisted 
-                    ? 'bg-pink-50 text-pink-600 border-pink-200 hover:bg-pink-100' 
-                    : 'text-gray-600 hover:bg-gray-50'
-                } transition-all duration-300`}
-                onClick={() => setIsWishlisted(!isWishlisted)}
-              >
-                <Heart className={`w-3.5 h-3.5 ${isWishlisted ? 'fill-current' : ''}`} />
-              </Button>
-
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="h-9 w-9 rounded-lg text-gray-600 hover:bg-gray-50 transition-all duration-300"
-              >
-                <GitCompare className="w-3.5 h-3.5" />
               </Button>
             </div>
 
