@@ -37,7 +37,7 @@ export const CategorySlider = ({ slides }: CategorySliderProps) => {
   }, [api]);
 
   return (
-    <div className="mb-8">
+    <div className="w-full">
       <Carousel
         opts={{
           align: "start",
@@ -51,8 +51,8 @@ export const CategorySlider = ({ slides }: CategorySliderProps) => {
             <CarouselItem key={slide.id}>
               <div className="relative w-full overflow-hidden group">
                 <div className="relative aspect-[3/1] w-full">
-                  <img
-                    src={slide.image}
+                  <img 
+                    src={slide.image} 
                     alt={slide.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
