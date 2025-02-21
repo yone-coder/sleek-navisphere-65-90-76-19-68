@@ -42,14 +42,12 @@ export function ProductHeader({
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      // Determine scroll direction
       if (currentScrollY > lastScrollY) {
         setScrollDirection('down');
       } else if (currentScrollY < lastScrollY) {
         setScrollDirection('up');
       }
       
-      // Update scroll state
       setScrolled(currentScrollY > 50);
       setLastScrollY(currentScrollY);
     };
@@ -67,14 +65,12 @@ export function ProductHeader({
       }).catch(console.error);
     } else {
       navigator.clipboard.writeText(window.location.href);
-      // You would typically show a toast here
     }
   };
 
   return (
     <>
       <div className="relative">
-        {/* Main Image Carousel */}
         <Carousel 
           className="w-full"
           setApi={setApi}
@@ -102,13 +98,11 @@ export function ProductHeader({
             ))}
           </CarouselContent>
           
-          {/* Carousel Navigation */}
           <div className="absolute left-4 right-4 top-1/2 -translate-y-1/2 flex justify-between pointer-events-none">
             <CarouselPrevious className="pointer-events-auto bg-white/80 backdrop-blur-sm hover:bg-white" />
             <CarouselNext className="pointer-events-auto bg-white/80 backdrop-blur-sm hover:bg-white" />
           </div>
 
-          {/* Stock Status Badge */}
           <div className="absolute bottom-4 left-4 z-10">
             <div 
               className={`
@@ -127,7 +121,6 @@ export function ProductHeader({
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div className="absolute bottom-4 right-4 z-10 flex gap-2">
             <Button 
               variant="outline" 
@@ -170,7 +163,6 @@ export function ProductHeader({
           </div>
         </Carousel>
 
-        {/* Thumbnail Navigation */}
         <div className={`
           absolute left-4 right-4 bottom-16
           transition-opacity duration-300
@@ -204,7 +196,6 @@ export function ProductHeader({
         </div>
       </div>
 
-      {/* Header Navigation with Scroll Behavior */}
       <div 
         className={`
           fixed top-0 left-0 right-0 z-50 
@@ -274,7 +265,6 @@ export function ProductHeader({
         </div>
       </div>
 
-      {/* Fullscreen Image Modal */}
       {isFullscreen && (
         <div 
           className="fixed inset-0 z-50 bg-black flex items-center justify-center"
