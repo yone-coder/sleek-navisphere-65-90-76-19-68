@@ -48,36 +48,32 @@ const Marketplace = () => {
       </header>
 
       <main className="pt-24 pb-16">
-        <div className="space-y-0">
-          <div className="mb-0">
-            <CategorySlider slides={currentSlides} />
-          </div>
+        <CategorySlider slides={currentSlides} />
           
-          {/* News Band */}
-          <div className="w-full bg-gray-50 border-y border-gray-200">
-            <div className="max-w-7xl mx-auto px-4">
-              <div className="relative overflow-hidden py-2">
-                <div className="flex items-center gap-3 animate-marquee whitespace-nowrap">
-                  {newsItems.map((news, index) => (
-                    <div
-                      key={index}
-                      className="inline-flex items-center gap-2 text-sm text-gray-700"
-                    >
-                      <span>{news}</span>
-                      <span className="h-1.5 w-1.5 rounded-full bg-gray-300 last:hidden" />
-                    </div>
-                  ))}
-                  {/* Duplicate items for seamless loop */}
-                  {newsItems.map((news, index) => (
-                    <div
-                      key={`repeat-${index}`}
-                      className="inline-flex items-center gap-2 text-sm text-gray-700"
-                    >
-                      <span>{news}</span>
-                      <span className="h-1.5 w-1.5 rounded-full bg-gray-300 last:hidden" />
-                    </div>
-                  ))}
-                </div>
+        {/* News Band */}
+        <div className="w-full bg-gray-50 border-y border-gray-200">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="relative overflow-hidden py-2">
+              <div className="flex items-center gap-3 animate-marquee whitespace-nowrap">
+                {newsItems.map((news, index) => (
+                  <div
+                    key={index}
+                    className="inline-flex items-center gap-2 text-sm text-gray-700"
+                  >
+                    <span>{news}</span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-gray-300 last:hidden" />
+                  </div>
+                ))}
+                {/* Duplicate items for seamless loop */}
+                {newsItems.map((news, index) => (
+                  <div
+                    key={`repeat-${index}`}
+                    className="inline-flex items-center gap-2 text-sm text-gray-700"
+                  >
+                    <span>{news}</span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-gray-300 last:hidden" />
+                  </div>
+                ))}
               </div>
             </div>
           </div>
