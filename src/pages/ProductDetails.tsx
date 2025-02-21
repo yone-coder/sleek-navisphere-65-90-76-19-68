@@ -113,19 +113,34 @@ const ProductDetails = () => {
       </div>
 
       {/* News Bar */}
-      <div className="relative z-10 -mt-20 mb-8">
+      <div className="w-full bg-gray-50 border-y border-gray-200">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
-            <div className="flex items-center gap-3">
-              <div className="flex-shrink-0">
-                <Bell className="h-5 w-5 text-blue-500" />
+          <div className="relative overflow-hidden py-2">
+            <div className="flex items-center gap-3 animate-marquee whitespace-nowrap">
+              <div className="inline-flex items-center gap-2 text-sm text-gray-700">
+                <span>🔥 Flash Sale: Get 25% off on all gaming chairs!</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-gray-300" />
               </div>
-              <div className="flex-1 overflow-hidden">
-                <div className="animate-[marquee_20s_linear_infinite] whitespace-nowrap">
-                  <span className="text-sm font-medium text-gray-900">
-                    🔥 Flash Sale: Get 25% off on all gaming chairs! Limited time offer. Free shipping on orders over $500.
-                  </span>
-                </div>
+              <div className="inline-flex items-center gap-2 text-sm text-gray-700">
+                <span>Limited time offer</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-gray-300" />
+              </div>
+              <div className="inline-flex items-center gap-2 text-sm text-gray-700">
+                <span>Free shipping on orders over $500</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-gray-300" />
+              </div>
+              {/* Duplicate items for smooth infinite scroll */}
+              <div className="inline-flex items-center gap-2 text-sm text-gray-700">
+                <span>🔥 Flash Sale: Get 25% off on all gaming chairs!</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-gray-300" />
+              </div>
+              <div className="inline-flex items-center gap-2 text-sm text-gray-700">
+                <span>Limited time offer</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-gray-300" />
+              </div>
+              <div className="inline-flex items-center gap-2 text-sm text-gray-700">
+                <span>Free shipping on orders over $500</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-gray-300" />
               </div>
             </div>
           </div>
