@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ShoppingCart, CreditCard, BadgePercent, ShieldCheck, Clock, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,6 @@ import { ProductInfo } from "@/components/product/ProductInfo";
 import { ProductOptions } from "@/components/product/ProductOptions";
 import { ProductTabs } from "@/components/product/ProductTabs";
 
-// Move type definitions outside of component
 type Product = {
   id: string;
   name: string;
@@ -24,7 +22,6 @@ type Product = {
   stockStatus: 'In Stock' | 'Low Stock' | 'Out of Stock';
 };
 
-// Move product data outside of component
 const productData: Record<string, Product> = {
   "1": {
     id: "1",
@@ -95,6 +92,13 @@ const productData: Record<string, Product> = {
       "https://images.unsplash.com/photo-1511370235399-1802cae1d32f?w=800&h=800&fit=crop",
       "https://images.unsplash.com/photo-1600854964509-99661b5e9e6b?w=800&h=800&fit=crop",
       "https://images.unsplash.com/photo-1611195974226-a6a9be9dd68b?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&h=800&fit=crop",
     ],
     stockStatus: 'Out of Stock'
   }
