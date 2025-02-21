@@ -1,5 +1,5 @@
 
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface CategoryTabsProps {
@@ -27,24 +27,22 @@ export const CategoryTabs = ({
       value={selectedCategory}
       onValueChange={setSelectedCategory}
     >
-      <div className="relative">
-        <ScrollArea className="w-full">
-          <TabsList className="w-full inline-flex h-11 items-center justify-start gap-2 rounded-lg bg-gray-100/50 p-1 font-medium">
-            {categories.map((category) => (
-              <TabsTrigger
-                key={category.id}
-                value={category.id}
-                className="group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-all data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm hover:bg-white/50"
-              >
-                {category.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </ScrollArea>
-      </div>
+      <ScrollArea className="w-full" orientation="horizontal">
+        <TabsList className="w-max inline-flex h-11 items-center justify-start gap-2 rounded-lg bg-gray-100/50 p-1 font-medium">
+          {categories.map((category) => (
+            <TabsTrigger
+              key={category.id}
+              value={category.id}
+              className="group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-all data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm hover:bg-white/50"
+            >
+              {category.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        <ScrollBar orientation="horizontal" className="invisible" />
+      </ScrollArea>
     </Tabs>
   );
 };
 
 export { categories };
-
