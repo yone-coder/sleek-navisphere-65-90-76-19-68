@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StarIcon, Heart, Send, ShoppingCart, ArrowLeft, Search, CheckCircle, Users } from "lucide-react";
+import { StarIcon, Heart, Send, ShoppingCart, ArrowLeft, Search, CheckCircle, Users, ListCompare } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/carousel";
 import { useNavigate, useParams } from "react-router-dom";
 
-// Mock product data
 type Product = {
   id: string;
   name: string;
@@ -107,6 +106,7 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const product = id ? productData[id as keyof typeof productData] : null;
   const [isFollowing, setIsFollowing] = useState(false);
+  const [isWishlisted, setIsWishlisted] = useState(false);
 
   if (!product) {
     return (
@@ -136,7 +136,6 @@ const ProductDetails = () => {
           </CarouselContent>
         </Carousel>
 
-        {/* Stock Indicator */}
         <div className="absolute bottom-4 left-4 z-10">
           <div 
             className={`
@@ -203,7 +202,6 @@ const ProductDetails = () => {
                 <span>Free shipping on orders over $500</span>
                 <span className="h-1.5 w-1.5 rounded-full bg-gray-300" />
               </div>
-              {/* Duplicate items for smooth infinite scroll */}
               <div className="inline-flex items-center gap-2 text-sm text-gray-700">
                 <span>🔥 Flash Sale: Get 25% off on all gaming chairs!</span>
                 <span className="h-1.5 w-1.5 rounded-full bg-gray-300" />
@@ -306,6 +304,44 @@ const ProductDetails = () => {
                   </li>
                 ))}
               </ul>
+            </div>
+
+            <div className="flex items-center justify-between py-4 border-t border-gray-100">
+              <Button 
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white gap-2"
+                size="lg"
+              >
+                <ShoppingCart className="w-4 h-4" />
+                Add to Cart
+              </Button>
+              
+              <Button
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                size="lg"
+              >
+                Buy Now
+              </Button>
+
+              <Button 
+                variant="outline" 
+                size="icon"
+                className={`shrink-0 ${
+                  isWishlisted 
+                    ? 'bg-pink-50 text-pink-600 border-pink-200' 
+                    : 'text-gray-600'
+                }`}
+                onClick={() => setIsWishlisted(!isWishlisted)}
+              >
+                <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-current' : ''}`} />
+              </Button>
+
+              <Button 
+                variant="outline" 
+                size="icon"
+                className="shrink-0"
+              >
+                <ListCompare className="w-4 h-4" />
+              </Button>
             </div>
           </div>
         </div>
