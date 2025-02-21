@@ -52,170 +52,174 @@ const ProductDetails = () => {
   };
 
   const handleAddToCart = () => {
-    // Add to cart logic here
     console.log("Added to cart:", { product, quantity, selectedColor });
   };
 
   const handleBuyNow = () => {
-    // Buy now logic here
     console.log("Buying now:", { product, quantity, selectedColor });
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24 pb-16">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Image Gallery */}
-          <div className="space-y-4">
-            <Carousel className="w-full">
+          <div className="space-y-6">
+            <Carousel className="w-full bg-white rounded-2xl p-6 shadow-lg">
               <CarouselContent>
                 {product.images.map((image, index) => (
                   <CarouselItem key={index}>
-                    <div className="aspect-square relative overflow-hidden rounded-lg">
+                    <div className="aspect-square relative overflow-hidden rounded-xl">
                       <img
                         src={image}
                         alt={`${product.name} - View ${index + 1}`}
-                        className="object-cover w-full h-full"
+                        className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
                       />
                     </div>
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
+              <CarouselPrevious className="left-4" />
+              <CarouselNext className="right-4" />
             </Carousel>
           </div>
 
           {/* Product Info */}
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
-              <p className="text-lg text-gray-600">{product.brand}</p>
-            </div>
+          <div className="space-y-8">
+            <div className="bg-white rounded-2xl p-8 shadow-lg space-y-6">
+              <div>
+                <h1 className="text-4xl font-bold text-gray-900 mb-2">{product.name}</h1>
+                <p className="text-lg text-gray-600 font-medium">{product.brand}</p>
+              </div>
 
-            <div className="flex items-center gap-4">
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-bold text-gray-900">
-                  ${product.price}
+              <div className="flex items-center gap-4 py-4 border-y border-gray-100">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-bold text-gray-900">
+                    ${product.price}
+                  </span>
+                  <span className="text-lg text-gray-400 line-through">
+                    ${product.originalPrice}
+                  </span>
+                  <Badge variant="destructive" className="ml-2">
+                    {product.discount}% OFF
+                  </Badge>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, i) => (
+                    <StarIcon
+                      key={i}
+                      className={`w-5 h-5 ${
+                        i < Math.floor(product.rating)
+                          ? "text-yellow-400 fill-current"
+                          : "text-gray-200"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-sm font-medium text-gray-600">
+                  ({product.reviews} reviews)
                 </span>
-                <span className="text-lg text-gray-500 line-through">
-                  ${product.originalPrice}
+              </div>
+
+              {/* Stock Status */}
+              <div className="flex items-center gap-2 text-sm bg-orange-50 p-3 rounded-lg">
+                <AlertCircle className="w-4 h-4 text-orange-500" />
+                <span className="text-orange-700 font-medium">
+                  Only {product.stock} items left in stock
                 </span>
-                <Badge variant="destructive" className="ml-2">
-                  {product.discount}% OFF
-                </Badge>
               </div>
-            </div>
 
-            <div className="flex items-center gap-2">
-              <div className="flex items-center">
-                {[...Array(5)].map((_, i) => (
-                  <StarIcon
-                    key={i}
-                    className={`w-5 h-5 ${
-                      i < Math.floor(product.rating)
-                        ? "text-yellow-400 fill-current"
-                        : "text-gray-300"
-                    }`}
-                  />
-                ))}
+              {/* Color Selection */}
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-gray-700">Color</label>
+                <div className="flex gap-3">
+                  {product.colors.map((color) => (
+                    <button
+                      key={color}
+                      onClick={() => setSelectedColor(color)}
+                      className={`
+                        w-10 h-10 rounded-full border-2 transition-all duration-200
+                        ${color === selectedColor 
+                          ? "border-blue-500 scale-110 shadow-lg" 
+                          : "border-transparent hover:scale-105"
+                        }
+                      `}
+                      style={{ backgroundColor: color }}
+                    />
+                  ))}
+                </div>
               </div>
-              <span className="text-sm text-gray-600">
-                ({product.reviews} reviews)
-              </span>
-            </div>
 
-            {/* Stock Status */}
-            <div className="flex items-center gap-2 text-sm">
-              <AlertCircle className="w-4 h-4 text-orange-500" />
-              <span className="text-orange-500">
-                Only {product.stock} items left in stock
-              </span>
-            </div>
-
-            {/* Color Selection */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Color</label>
-              <div className="flex gap-2">
-                {product.colors.map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => setSelectedColor(color)}
-                    className={`
-                      w-8 h-8 rounded-full border-2
-                      ${color === selectedColor 
-                        ? "border-blue-500" 
-                        : "border-transparent"
-                      }
-                    `}
-                    style={{ backgroundColor: color }}
-                  />
-                ))}
+              {/* Quantity */}
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-gray-700">
+                  Quantity
+                </label>
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    disabled={quantity <= 1}
+                    className="hover:bg-gray-100"
+                  >
+                    -
+                  </Button>
+                  <span className="w-12 text-center font-medium">{quantity}</span>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setQuantity(quantity + 1)}
+                    disabled={quantity >= product.stock}
+                    className="hover:bg-gray-100"
+                  >
+                    +
+                  </Button>
+                </div>
               </div>
-            </div>
 
-            {/* Quantity */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Quantity
-              </label>
-              <div className="flex items-center gap-2">
+              {/* Action Buttons */}
+              <div className="flex gap-4 pt-4">
                 <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  disabled={quantity <= 1}
+                  className="flex-1 h-12 text-base font-medium"
+                  onClick={handleAddToCart}
                 >
-                  -
+                  <ShoppingCart className="mr-2" />
+                  Add to Cart
                 </Button>
-                <span className="w-12 text-center">{quantity}</span>
                 <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setQuantity(quantity + 1)}
-                  disabled={quantity >= product.stock}
+                  className="flex-1 h-12 text-base font-medium"
+                  variant="secondary"
+                  onClick={handleBuyNow}
                 >
-                  +
+                  Buy Now
+                </Button>
+                <Button variant="outline" size="icon" className="h-12 w-12">
+                  <Heart className="w-5 h-5" />
+                </Button>
+                <Button variant="outline" size="icon" className="h-12 w-12">
+                  <Share2 className="w-5 h-5" />
                 </Button>
               </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex gap-4">
-              <Button
-                className="flex-1"
-                onClick={handleAddToCart}
-              >
-                <ShoppingCart className="mr-2" />
-                Add to Cart
-              </Button>
-              <Button
-                className="flex-1"
-                variant="secondary"
-                onClick={handleBuyNow}
-              >
-                Buy Now
-              </Button>
-              <Button variant="outline" size="icon">
-                <Heart className="w-4 h-4" />
-              </Button>
-              <Button variant="outline" size="icon">
-                <Share2 className="w-4 h-4" />
-              </Button>
             </div>
 
             {/* Product Details Tabs */}
             <Tabs defaultValue="description" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-3 bg-white rounded-xl p-1">
                 <TabsTrigger value="description">Description</TabsTrigger>
                 <TabsTrigger value="features">Features</TabsTrigger>
                 <TabsTrigger value="specifications">Specifications</TabsTrigger>
               </TabsList>
-              <TabsContent value="description" className="mt-4">
-                <Card className="p-4">{product.description}</Card>
+              <TabsContent value="description" className="mt-6">
+                <Card className="p-6 bg-white/50 backdrop-blur-sm border-0 shadow-lg rounded-xl">
+                  {product.description}
+                </Card>
               </TabsContent>
-              <TabsContent value="features" className="mt-4">
-                <Card className="p-4">
+              <TabsContent value="features" className="mt-6">
+                <Card className="p-6 bg-white/50 backdrop-blur-sm border-0 shadow-lg rounded-xl">
                   <ul className="list-disc list-inside space-y-2">
                     {product.features.map((feature, index) => (
                       <li key={index}>{feature}</li>
@@ -223,13 +227,13 @@ const ProductDetails = () => {
                   </ul>
                 </Card>
               </TabsContent>
-              <TabsContent value="specifications" className="mt-4">
-                <Card className="p-4">
-                  <dl className="space-y-2">
+              <TabsContent value="specifications" className="mt-6">
+                <Card className="p-6 bg-white/50 backdrop-blur-sm border-0 shadow-lg rounded-xl">
+                  <dl className="space-y-4">
                     {Object.entries(product.specifications).map(([key, value]) => (
-                      <div key={key} className="grid grid-cols-2">
-                        <dt className="font-medium capitalize">{key}</dt>
-                        <dd className="text-gray-600">{value}</dd>
+                      <div key={key} className="grid grid-cols-2 gap-4">
+                        <dt className="font-medium capitalize text-gray-600">{key}</dt>
+                        <dd className="text-gray-900">{value}</dd>
                       </div>
                     ))}
                   </dl>
