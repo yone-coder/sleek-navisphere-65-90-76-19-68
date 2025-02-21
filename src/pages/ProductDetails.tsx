@@ -264,6 +264,42 @@ const ProductDetails = () => {
               </Button>
             </div>
 
+            <div className="flex items-center gap-2 pt-2 pb-4">
+              <Button 
+                className="flex-1 bg-[#0FA0CE] hover:bg-[#0F8CBE] text-white text-sm h-9 px-4 rounded-lg shadow-sm transition-all duration-300"
+              >
+                <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
+                Add to Cart
+              </Button>
+              
+              <Button
+                className="flex-1 bg-black hover:bg-gray-900 text-white text-sm h-9 px-4 rounded-lg shadow-sm transition-all duration-300"
+              >
+                Buy Now
+              </Button>
+
+              <Button 
+                variant="outline" 
+                size="sm"
+                className={`h-9 w-9 rounded-lg ${
+                  isWishlisted 
+                    ? 'bg-pink-50 text-pink-600 border-pink-200 hover:bg-pink-100' 
+                    : 'text-gray-600 hover:bg-gray-50'
+                } transition-all duration-300`}
+                onClick={() => setIsWishlisted(!isWishlisted)}
+              >
+                <Heart className={`w-3.5 h-3.5 ${isWishlisted ? 'fill-current' : ''}`} />
+              </Button>
+
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="h-9 w-9 rounded-lg text-gray-600 hover:bg-gray-50 transition-all duration-300"
+              >
+                <GitCompare className="w-3.5 h-3.5" />
+              </Button>
+            </div>
+
             <p className="text-xl text-gray-600">{product.brand}</p>
 
             <div className="flex items-center justify-between py-6 border-y border-gray-100">
