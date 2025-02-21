@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const apps = [
   {
@@ -111,11 +111,14 @@ export default function Apps() {
   });
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
-  const filteredApps = apps.filter(app => 
-    app.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    app.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    app.category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredApps = apps.filter(app => {
+    const searchTerms = searchQuery.toLowerCase().trim().split(' ');
+    return searchTerms.every(term => 
+      app.name.toLowerCase().includes(term) ||
+      app.description.toLowerCase().includes(term) ||
+      app.category.toLowerCase().includes(term)
+    );
+  });
 
   const recentApps = apps.slice(0, 4);
   const featuredApps = apps.slice(4, 7);
@@ -134,10 +137,16 @@ export default function Apps() {
     localStorage.removeItem("searchHistory");
   };
 
-  const removeSearchItem = (index: number) => {
+  const removeSearchItem = (index: number, e: React.MouseEvent) => {
+    e.stopPropagation();
     const newHistory = searchHistory.filter((_, i) => i !== index);
     setSearchHistory(newHistory);
     localStorage.setItem("searchHistory", JSON.stringify(newHistory));
+  };
+
+  const handleHistoryItemClick = (query: string) => {
+    handleSearch(query);
+    setIsSearchFocused(false);
   };
 
   const categoryTags = Array.from(new Set(apps.map(app => app.category)));
@@ -189,14 +198,21 @@ export default function Apps() {
                           variant="ghost"
                           size="icon"
                           className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7"
-                          onClick={() => setSearchQuery("")}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSearchQuery("");
+                          }}
                         >
                           <X className="h-4 w-4" />
                         </Button>
                       )}
                     </div>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[calc(100vw-2rem)] max-w-2xl p-4" align="start">
+                  <PopoverContent 
+                    className="w-[calc(100vw-2rem)] max-w-2xl p-4" 
+                    align="start"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <div className="space-y-4">
                       {searchHistory.length > 0 && (
                         <div className="space-y-2">
@@ -220,7 +236,7 @@ export default function Apps() {
                                 <History className="w-3 h-3 text-gray-400" />
                                 <button
                                   className="text-sm text-gray-600"
-                                  onClick={() => handleSearch(query)}
+                                  onClick={() => handleHistoryItemClick(query)}
                                 >
                                   {query}
                                 </button>
@@ -228,7 +244,7 @@ export default function Apps() {
                                   variant="ghost"
                                   size="icon"
                                   className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity"
-                                  onClick={() => removeSearchItem(index)}
+                                  onClick={(e) => removeSearchItem(index, e)}
                                 >
                                   <X className="h-3 w-3" />
                                 </Button>
@@ -247,7 +263,10 @@ export default function Apps() {
                               variant="outline"
                               size="sm"
                               className="h-auto py-1.5 px-3 text-xs"
-                              onClick={() => handleSearch(category)}
+                              onClick={() => {
+                                handleSearch(category);
+                                setIsSearchFocused(false);
+                              }}
                             >
                               {category}
                             </Button>
