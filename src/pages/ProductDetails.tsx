@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { StarIcon, Heart, Share2, ShoppingCart, AlertCircle, ArrowLeft, Search } from "lucide-react";
+import { StarIcon, Heart, Send, ShoppingCart, AlertCircle, ArrowLeft, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -87,7 +86,7 @@ const ProductDetails = () => {
                 size="icon"
                 className="text-white bg-black/20 hover:bg-black/30 backdrop-blur-sm rounded-full"
               >
-                <Share2 className="h-5 w-5" />
+                <Send className="h-5 w-5" />
               </Button>
             </div>
           </div>
@@ -233,7 +232,7 @@ const ProductDetails = () => {
                   <Heart className="w-5 h-5" />
                 </Button>
                 <Button variant="outline" size="icon" className="h-12 w-12">
-                  <Share2 className="w-5 h-5" />
+                  <Send className="w-5 h-5" />
                 </Button>
               </div>
             </div>
