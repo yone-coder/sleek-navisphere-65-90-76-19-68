@@ -1,4 +1,3 @@
-
 import {
   Carousel,
   CarouselContent,
@@ -93,9 +92,8 @@ export const SellersList = () => {
           opts={{
             align: "start",
             loop: false,
-            slidesToScroll: 1,
-            dragFree: false,
-            containScroll: "trimSnaps"
+            dragFree: true,
+            containScroll: false
           }}
           className="w-full"
         >
