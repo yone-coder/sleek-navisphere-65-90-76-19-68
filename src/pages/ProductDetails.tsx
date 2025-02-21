@@ -8,6 +8,7 @@ import { ProductInfo } from "@/components/product/ProductInfo";
 import { ProductOptions } from "@/components/product/ProductOptions";
 import { ProductTabs } from "@/components/product/ProductTabs";
 
+// Move type definitions outside of component
 type Product = {
   id: string;
   name: string;
@@ -23,6 +24,7 @@ type Product = {
   stockStatus: 'In Stock' | 'Low Stock' | 'Out of Stock';
 };
 
+// Move product data outside of component
 const productData: Record<string, Product> = {
   "1": {
     id: "1",
@@ -101,12 +103,24 @@ const productData: Record<string, Product> = {
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = id ? productData[id as keyof typeof productData] : null;
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
   const [selectedColor, setSelectedColor] = useState('black');
   const [selectedSize, setSelectedSize] = useState('M');
   const [quantity, setQuantity] = useState(1);
+
+  const product = id ? productData[id] : null;
+
+  if (!product) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col items-center justify-center p-4">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Product not found</h1>
+        <Button onClick={() => navigate('/marketplace')}>
+          Return to Marketplace
+        </Button>
+      </div>
+    );
+  }
 
   const colors = [
     { name: 'Black', value: 'black', class: 'bg-black', hex: '#000000' },
@@ -123,17 +137,6 @@ const ProductDetails = () => {
     { value: 'L', label: 'Large', description: 'Height: 180-190cm' },
     { value: 'XL', label: 'Extra Large', description: 'Height: > 190cm' }
   ];
-
-  if (!product) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col items-center justify-center p-4">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Product not found</h1>
-        <Button onClick={() => navigate('/marketplace')}>
-          Return to Marketplace
-        </Button>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
@@ -180,9 +183,7 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      {/* Enhanced Sticky Action Section */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
-        {/* Features Bar */}
         <div className="border-b border-gray-100">
           <div className="max-w-3xl mx-auto px-4">
             <div className="flex items-center justify-between py-2 text-xs">
@@ -206,7 +207,6 @@ const ProductDetails = () => {
           </div>
         </div>
 
-        {/* Price and Action Buttons */}
         <div className="p-4">
           <div className="max-w-3xl mx-auto">
             <div className="flex items-center justify-between mb-3">
