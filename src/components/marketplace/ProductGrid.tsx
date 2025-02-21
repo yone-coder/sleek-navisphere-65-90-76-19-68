@@ -1,6 +1,8 @@
+
 import { Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 
 interface Product {
   id: number;
@@ -86,9 +88,10 @@ export const ProductGrid = () => {
 
         <div className="grid grid-cols-2 gap-4">
           {products.map((product) => (
-            <div
+            <Link
               key={product.id}
-              className="relative flex-none w-full"
+              to={`/marketplace/product/${product.id}`}
+              className="block"
             >
               <Card className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow">
                 <CardContent className="p-0">
@@ -130,7 +133,7 @@ export const ProductGrid = () => {
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

@@ -1,4 +1,3 @@
-
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -28,6 +27,7 @@ const Gomoku = lazy(() => import("./pages/games/Gomoku"));
 const Morpion = lazy(() => import("./pages/games/Morpion"));
 const MatchDetails = lazy(() => import("./pages/MatchDetails"));
 const Marketplace = lazy(() => import("./pages/Marketplace"));
+const ProductDetails = lazy(() => import("./pages/ProductDetails"));
 
 // Lazy load admin pages
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
@@ -82,6 +82,7 @@ const AppContent = () => {
           <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/tournament/:id" element={<TournamentDetails />} />
           <Route path="/marketplace" element={<Marketplace />} />
+          <Route path="/marketplace/product/:id" element={<ProductDetails />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
