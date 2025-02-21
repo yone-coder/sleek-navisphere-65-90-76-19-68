@@ -115,12 +115,12 @@ const products: Product[] = [
 
 export const LightningDeals = () => {
   return (
-    <section className="w-full py-8 bg-gradient-to-r from-[#fdfcfb] to-[#e2d1c3]">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between mb-6">
+    <section className="w-full py-6 bg-gradient-to-r from-[#fdfcfb] to-[#e2d1c3]">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <h2 className="text-xl font-bold text-gray-900">Lightning Deals</h2>
-            <Timer className="w-5 h-5 text-blue-600" />
+            <h2 className="text-lg font-bold text-gray-900">Lightning Deals</h2>
+            <Timer className="w-4 h-4 text-blue-600" />
           </div>
           <button className="text-blue-600 hover:text-blue-700 transition-colors text-sm font-medium">
             View All
@@ -139,8 +139,8 @@ export const LightningDeals = () => {
           >
             <CarouselContent className="-ml-2 md:-ml-3">
               {products.map((product) => (
-                <CarouselItem key={product.id} className="pl-2 md:pl-3 basis-[85%] sm:basis-[45%] md:basis-[35%] lg:basis-[28%]">
-                  <Card className="overflow-hidden border-0 shadow-md hover:shadow-lg transition-shadow">
+                <CarouselItem key={product.id} className="pl-2 md:pl-3 basis-[85%] sm:basis-[45%] md:basis-[35%] lg:basis-[28.5%]">
+                  <Card className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow">
                     <CardContent className="p-0">
                       <div className="relative">
                         <img 
@@ -155,21 +155,21 @@ export const LightningDeals = () => {
                           {product.discount}% OFF
                         </Badge>
                       </div>
-                      <div className="p-4">
-                        <h3 className="font-semibold text-gray-900 mb-2 truncate">
+                      <div className="p-3">
+                        <h3 className="font-medium text-sm text-gray-900 mb-1.5 truncate">
                           {product.name}
                         </h3>
                         <div className="flex items-center justify-between">
-                          <div className="flex items-baseline gap-2">
-                            <span className="text-lg font-bold text-gray-900">
+                          <div className="flex items-baseline gap-1.5">
+                            <span className="text-base font-bold text-gray-900">
                               ${product.price}
                             </span>
-                            <span className="text-sm text-gray-500 line-through">
+                            <span className="text-xs text-gray-500 line-through">
                               ${product.originalPrice}
                             </span>
                           </div>
                           <div className="flex items-center gap-1 text-xs font-medium text-blue-600">
-                            <Timer className="w-3.5 h-3.5" />
+                            <Timer className="w-3 h-3" />
                             {product.timeLeft}
                           </div>
                         </div>
@@ -179,9 +179,9 @@ export const LightningDeals = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <div className="max-w-7xl mx-auto relative">
-              <CarouselPrevious className="hidden md:flex absolute -left-12 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm" />
-              <CarouselNext className="hidden md:flex absolute -right-12 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm" />
+            <div className="max-w-6xl mx-auto relative">
+              <CarouselPrevious className="hidden md:flex absolute -left-10 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm" />
+              <CarouselNext className="hidden md:flex absolute -right-10 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm" />
             </div>
           </Carousel>
         </div>
