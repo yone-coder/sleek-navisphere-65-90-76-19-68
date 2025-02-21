@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
@@ -11,7 +10,11 @@ import { cn } from "@/lib/utils";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Search, Heart, MessageSquare, Share2, Filter, SlidersHorizontal } from "lucide-react";
+import { 
+  Search, Heart, MessageSquare, Share2, Filter, 
+  SlidersHorizontal, Users, Clock, DollarSign, Star,
+  Gamepad, Trophy, Tag, ThumbsUp 
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -24,6 +27,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import type { Game } from "@/types/explore";
 
 const games = {
   boardGames: [
@@ -38,7 +49,14 @@ const games = {
         likes: "3.2K",
         comments: "600",
         shares: "1.1K"
-      }
+      },
+      category: "boardGames",
+      tags: ["strategy", "classic"],
+      difficulty: "medium",
+      players: 2,
+      rating: 4.5,
+      playTime: "60-120 minutes",
+      price: { amount: 0, currency: "USD" }
     },
     {
       id: 2,
@@ -51,7 +69,14 @@ const games = {
         likes: "1.1K",
         comments: "180",
         shares: "250"
-      }
+      },
+      category: "boardGames",
+      tags: ["tile-based", "family"],
+      difficulty: "easy",
+      players: 2,
+      rating: 3.8,
+      playTime: "30-45 minutes",
+      price: { amount: 0, currency: "USD" }
     },
     {
       id: 3,
@@ -64,7 +89,14 @@ const games = {
         likes: "900",
         comments: "150",
         shares: "200"
-      }
+      },
+      category: "boardGames",
+      tags: ["strategy", "simple"],
+      difficulty: "easy",
+      players: 2,
+      rating: 4.0,
+      playTime: "5-10 minutes",
+      price: { amount: 0, currency: "USD" }
     },
     {
       id: 4,
@@ -77,7 +109,14 @@ const games = {
         likes: "1.5K",
         comments: "250",
         shares: "400"
-      }
+      },
+      category: "boardGames",
+      tags: ["strategy", "japanese"],
+      difficulty: "hard",
+      players: 2,
+      rating: 4.2,
+      playTime: "90-180 minutes",
+      price: { amount: 0, currency: "USD" }
     }
   ],
   arcadeGames: [
@@ -92,7 +131,14 @@ const games = {
         likes: "5.2K",
         comments: "800",
         shares: "1.5K"
-      }
+      },
+      category: "arcadeGames",
+      tags: ["maze", "classic"],
+      difficulty: "easy",
+      players: 1,
+      rating: 4.7,
+      playTime: "5-15 minutes",
+      price: { amount: 0, currency: "USD" }
     },
     {
       id: 6,
@@ -105,7 +151,14 @@ const games = {
         likes: "4.1K",
         comments: "720",
         shares: "950"
-      }
+      },
+      category: "arcadeGames",
+      tags: ["shooting", "alien"],
+      difficulty: "medium",
+      players: 1,
+      rating: 4.3,
+      playTime: "10-20 minutes",
+      price: { amount: 0, currency: "USD" }
     }
   ],
   cardGames: [
@@ -120,7 +173,14 @@ const games = {
         likes: "6.5K",
         comments: "1.2K",
         shares: "2.1K"
-      }
+      },
+      category: "cardGames",
+      tags: ["betting", "strategy"],
+      difficulty: "medium",
+      players: 2,
+      rating: 4.8,
+      playTime: "30-60 minutes",
+      price: { amount: 75, currency: "USD" }
     },
     {
       id: 8,
@@ -133,7 +193,14 @@ const games = {
         likes: "3.8K",
         comments: "450",
         shares: "780"
-      }
+      },
+      category: "cardGames",
+      tags: ["single-player", "casual"],
+      difficulty: "easy",
+      players: 1,
+      rating: 4.1,
+      playTime: "15-30 minutes",
+      price: { amount: 0, currency: "USD" }
     }
   ],
   puzzleGames: [
@@ -148,7 +215,14 @@ const games = {
         likes: "7.2K",
         comments: "1.5K",
         shares: "2.8K"
-      }
+      },
+       category: "puzzleGames",
+      tags: ["blocks", "addictive"],
+      difficulty: "medium",
+      players: 1,
+      rating: 4.9,
+      playTime: "10-20 minutes",
+      price: { amount: 0, currency: "USD" }
     },
     {
       id: 10,
@@ -161,7 +235,14 @@ const games = {
         likes: "4.5K",
         comments: "890",
         shares: "1.2K"
-      }
+      },
+      category: "puzzleGames",
+      tags: ["logic", "numbers"],
+      difficulty: "hard",
+      players: 1,
+      rating: 4.4,
+      playTime: "20-40 minutes",
+      price: { amount: 0, currency: "USD" }
     }
   ]
 };
@@ -192,21 +273,186 @@ const categories = [
   { id: "games", label: "Games" }
 ];
 
-interface GameSectionProps {
-  title: string;
-  games: any[];
+interface GameCardProps {
+  game: Game;
   onLike: (gameId: number) => void;
   onShare: (gameId: number) => void;
-  likedGames: number[];
+  isLiked: boolean;
 }
 
-const GameSection = ({ title, games, onLike, onShare, likedGames }: GameSectionProps) => {
+const GameCard = ({ game, onLike, onShare, isLiked }: GameCardProps) => {
   const navigate = useNavigate();
 
   const handleGameClick = (gameId: number, gameTitle: string) => {
     navigate(`/tournaments?game=${gameId}&title=${encodeURIComponent(gameTitle)}`);
   };
 
+  const getDifficultyColor = (difficulty?: string) => {
+    switch (difficulty) {
+      case "easy": return "bg-green-500";
+      case "medium": return "bg-yellow-500";
+      case "hard": return "bg-red-500";
+      default: return "bg-gray-500";
+    }
+  };
+
+  return (
+    <Card className="bg-white rounded-lg shadow-md overflow-hidden w-72 flex-shrink-0 group hover:shadow-lg transition-all duration-300">
+      <div className="relative">
+        <img 
+          src={game.image} 
+          alt={`${game.title} cover`} 
+          className="h-40 w-full object-cover transition-transform group-hover:scale-105 duration-300"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute top-3 left-3 flex flex-wrap gap-1">
+          {game.tags.map((tag, index) => (
+            <Badge 
+              key={index} 
+              variant="secondary" 
+              className="bg-black/50 text-white backdrop-blur-sm text-xs"
+            >
+              {tag}
+            </Badge>
+          ))}
+        </div>
+        {game.difficulty && (
+          <Badge 
+            className={`absolute top-3 right-3 ${getDifficultyColor(game.difficulty)}`}
+          >
+            {game.difficulty}
+          </Badge>
+        )}
+        <div className="absolute bottom-3 left-3 flex items-center gap-2">
+          <img 
+            src={game.profileImage} 
+            alt="Creator" 
+            className="h-8 w-8 rounded-full border-2 border-white"
+          />
+          {game.verified && (
+            <Badge className="bg-blue-500/90">Verified</Badge>
+          )}
+        </div>
+      </div>
+      <CardContent className="p-4">
+        <div className="space-y-3">
+          <div className="flex items-start justify-between">
+            <h2 className="text-lg font-semibold line-clamp-1">{game.title}</h2>
+            {game.rating && (
+              <div className="flex items-center">
+                <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                <span className="ml-1 text-sm">{game.rating}</span>
+              </div>
+            )}
+          </div>
+          
+          <p className="text-sm text-gray-500 line-clamp-2">{game.description}</p>
+          
+          <div className="flex items-center gap-4 text-xs text-gray-500">
+            {game.players && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger className="flex items-center gap-1">
+                    <Users className="w-4 h-4" />
+                    {game.players}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Players required</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+            {game.playTime && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger className="flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    {game.playTime}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Average play time</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+            {game.price && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger className="flex items-center gap-1">
+                    <DollarSign className="w-4 h-4" />
+                    {game.price.amount} {game.price.currency}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Entry fee</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between text-sm text-gray-500">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="hover:text-red-500 transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                onLike(game.id);
+              }}
+            >
+              <Heart className={cn(
+                "w-4 h-4 mr-1",
+                isLiked && "fill-red-500 text-red-500"
+              )} />
+              {game.stats.likes}
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                onShare(game.id);
+              }}
+            >
+              <Share2 className="w-4 h-4 mr-1" />
+              {game.stats.shares}
+            </Button>
+            <Button variant="ghost" size="sm">
+              <MessageSquare className="w-4 h-4 mr-1" />
+              {game.stats.comments}
+            </Button>
+          </div>
+
+          <div className="flex gap-2">
+            <Button 
+              className="flex-1"
+              onClick={() => handleGameClick(game.id, game.title)}
+            >
+              <Trophy className="w-4 h-4 mr-2" />
+              Tournaments
+            </Button>
+            <Button 
+              variant="outline"
+              onClick={() => navigate(`/game/${game.id}`)}
+            >
+              <Gamepad className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+interface GameSectionProps {
+  title: string;
+  games: Game[];
+  onLike: (gameId: number) => void;
+  onShare: (gameId: number) => void;
+  likedGames: number[];
+}
+
+const GameSection = ({ title, games, onLike, onShare, likedGames }: GameSectionProps) => {
   return (
     <div className="mb-8">
       <div className="flex justify-between items-center px-4 mb-4">
@@ -220,80 +466,19 @@ const GameSection = ({ title, games, onLike, onShare, likedGames }: GameSectionP
           See All
         </Button>
       </div>
-      <div className="flex overflow-x-auto no-scrollbar">
-        <div className="flex space-x-4 px-4">
+      <ScrollArea className="w-full" orientation="horizontal">
+        <div className="flex space-x-4 px-4 pb-4">
           {games.map((game) => (
-            <Card key={game.id} className="bg-white rounded-lg shadow-md overflow-hidden w-72 flex-shrink-0 group hover:shadow-lg transition-all duration-300">
-              <div className="relative">
-                <img 
-                  src={game.image} 
-                  alt={`${game.title} board`} 
-                  className="h-40 w-full object-cover transition-transform group-hover:scale-105 duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <img 
-                  src={game.profileImage} 
-                  alt="Profile" 
-                  className="absolute bottom-3 left-3 h-10 w-10 rounded-full border-2 border-white shadow-md"
-                />
-                {game.verified && (
-                  <Badge className="absolute top-3 right-3 bg-blue-500/90 hover:bg-blue-500/95">
-                    Verified
-                  </Badge>
-                )}
-              </div>
-              <CardContent className="p-4">
-                <div className="space-y-3">
-                  <h2 className="text-lg font-semibold line-clamp-1">
-                    {game.title}
-                  </h2>
-                  <p className="text-sm text-gray-500 line-clamp-2">
-                    {game.description}
-                  </p>
-                  <div className="flex items-center justify-between text-sm text-gray-500">
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="hover:text-red-500 transition-colors"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onLike(game.id);
-                      }}
-                    >
-                      <Heart className={cn(
-                        "w-4 h-4 mr-1",
-                        likedGames.includes(game.id) && "fill-red-500 text-red-500"
-                      )} />
-                      {game.stats.likes}
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onShare(game.id);
-                      }}
-                    >
-                      <Share2 className="w-4 h-4 mr-1" />
-                      {game.stats.shares}
-                    </Button>
-                    <Button variant="ghost" size="sm">
-                      <MessageSquare className="w-4 h-4 mr-1" />
-                      {game.stats.comments}
-                    </Button>
-                  </div>
-                  <Button 
-                    className="w-full"
-                    onClick={() => handleGameClick(game.id, game.title)}
-                  >
-                    View Tournaments
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <GameCard
+              key={game.id}
+              game={game}
+              onLike={onLike}
+              onShare={onShare}
+              isLiked={likedGames.includes(game.id)}
+            />
           ))}
         </div>
-      </div>
+      </ScrollArea>
     </div>
   );
 };
@@ -344,6 +529,11 @@ export default function Explore() {
       description: "This feature will be available soon!",
     });
   };
+
+  const [sortBy, setSortBy] = useState<'popular' | 'recent' | 'rating'>('popular');
+  const [view, setView] = useState<'grid' | 'list'>('grid');
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100]);
+  const [selectedDifficulties, setSelectedDifficulties] = useState<string[]>([]);
 
   return (
     <div className="bg-gray-50 min-h-screen pb-20">
