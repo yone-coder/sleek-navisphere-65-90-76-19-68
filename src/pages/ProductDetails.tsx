@@ -74,6 +74,7 @@ const productData: Record<string, Product> = {
       "https://images.unsplash.com/photo-1600854964509-99661b5e9e6b?w=800&h=800&fit=crop",
       "https://images.unsplash.com/photo-1611195974226-a6a9be9dd68b?w=800&h=800&fit=crop",
     ],
+    stockStatus: 'In Stock'
   },
   "3": {
     id: "3",
@@ -97,6 +98,7 @@ const productData: Record<string, Product> = {
       "https://images.unsplash.com/photo-1600854964509-99661b5e9e6b?w=800&h=800&fit=crop",
       "https://images.unsplash.com/photo-1611195974226-a6a9be9dd68b?w=800&h=800&fit=crop",
     ],
+    stockStatus: 'Out of Stock'
   }
 };
 
