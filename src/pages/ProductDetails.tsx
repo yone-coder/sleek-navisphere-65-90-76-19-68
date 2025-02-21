@@ -11,8 +11,22 @@ import {
 } from "@/components/ui/carousel";
 import { useNavigate, useParams } from "react-router-dom";
 
-// Mock product data - In a real app, this would come from an API
-const productData = {
+// Mock product data
+type Product = {
+  id: string;
+  name: string;
+  brand: string;
+  price: number;
+  originalPrice: number;
+  discount: number;
+  rating: number;
+  reviews: number;
+  description: string;
+  highlights: string[];
+  images: string[];
+};
+
+const productData: Record<string, Product> = {
   "1": {
     id: "1",
     name: "Professional Gaming Chair",
@@ -165,16 +179,17 @@ const ProductDetails = () => {
       <div className="flex-1 bg-white">
         <div className="max-w-3xl mx-auto px-6 py-12">
           <div className="space-y-8">
-            {/* Product Header */}
-            <div className="space-y-4">
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900">{product.name}</h1>
-              <p className="text-xl text-gray-600">{product.brand}</p>
+            {/* Product Header with integrated price */}
+            <div className="flex items-center justify-between">
+              <h1 className="text-2xl font-semibold text-gray-900 truncate pr-4 flex-1">{product.name}</h1>
+              <span className="text-2xl font-bold text-gray-900 whitespace-nowrap">{Math.round(product.price)} G</span>
             </div>
 
-            {/* Price and Rating */}
+            <p className="text-xl text-gray-600">{product.brand}</p>
+
+            {/* Rating */}
             <div className="flex items-center justify-between py-6 border-y border-gray-100">
               <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-bold text-gray-900">${product.price}</span>
                 <span className="text-lg text-gray-500 line-through">${product.originalPrice}</span>
                 <Badge variant="destructive" className="ml-2">
                   {product.discount}% OFF
