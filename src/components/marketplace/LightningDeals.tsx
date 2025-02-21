@@ -1,4 +1,3 @@
-
 import {
   Carousel,
   CarouselContent,
@@ -8,7 +7,7 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Timer, Tag } from "lucide-react";
+import { Timer } from "lucide-react";
 
 interface Product {
   id: number;
@@ -115,28 +114,28 @@ const products: Product[] = [
 
 export const LightningDeals = () => {
   return (
-    <section className="w-full py-2 bg-gradient-to-r from-[#fdfcfb] to-[#e2d1c3]">
-      {/* Header with consistent padding */}
-      <div className="px-4 md:px-6 mb-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h2 className="text-base font-bold text-gray-900">Lightning Deals</h2>
-            <Timer className="w-3.5 h-3.5 text-blue-600" />
+    <section className="w-full overflow-hidden bg-gradient-to-r from-[#fdfcfb] to-[#e2d1c3] py-2">
+      <div className="relative">
+        {/* Section Header */}
+        <div className="mx-auto px-4 mb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <h2 className="text-base font-bold text-gray-900">Lightning Deals</h2>
+              <Timer className="w-3.5 h-3.5 text-blue-600" />
+            </div>
+            <button className="text-blue-600 hover:text-blue-700 transition-colors text-xs font-medium">
+              View All
+            </button>
           </div>
-          <button className="text-blue-600 hover:text-blue-700 transition-colors text-xs font-medium">
-            View All
-          </button>
         </div>
-      </div>
 
-      {/* Scroll container with edge padding */}
-      <div className="w-full overflow-hidden">
-        <div className="relative w-full overflow-x-auto">
-          <div className="flex gap-3 px-4 md:px-6 w-max min-w-full">
+        {/* Scrolling Container */}
+        <div className="relative w-full overflow-x-auto pb-6">
+          <div className="flex gap-4 px-4 w-max min-w-full">
             {products.map((product) => (
-              <div 
-                key={product.id} 
-                className="flex-none w-[160px] sm:w-[200px]"
+              <div
+                key={product.id}
+                className="relative flex-none w-[160px] sm:w-[200px]"
               >
                 <Card className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow">
                   <CardContent className="p-0">
@@ -178,7 +177,7 @@ export const LightningDeals = () => {
             ))}
           </div>
 
-          {/* Navigation arrows floating over content */}
+          {/* Navigation arrows */}
           <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none px-1">
             <button className="hidden md:flex items-center justify-center w-8 h-8 rounded-full bg-white shadow-lg text-gray-700 hover:bg-gray-50 pointer-events-auto">
               <Timer className="w-4 h-4" />
