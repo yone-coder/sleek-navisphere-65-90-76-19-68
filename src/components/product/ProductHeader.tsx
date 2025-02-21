@@ -1,10 +1,11 @@
 
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Heart, GitCompare, ArrowLeft, Search, Send, Share2, ZoomIn, Award } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import type { CarouselApi } from "@/components/ui/carousel";
 
 type ProductHeaderProps = {
   images: string[];
@@ -24,6 +25,7 @@ export function ProductHeader({
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [api, setApi] = useState<CarouselApi>();
 
   const handleShare = () => {
     if (navigator.share) {
@@ -44,8 +46,14 @@ export function ProductHeader({
         {/* Main Image Carousel */}
         <Carousel 
           className="w-full"
-          selectedIndex={selectedImage}
-          setSelectedIndex={setSelectedImage}
+          setApi={setApi}
+          opts={{
+            startIndex: selectedImage,
+            loop: true,
+          }}
+          onSelect={(api) => {
+            setSelectedImage(api.selectedScrollSnap());
+          }}
         >
           <CarouselContent>
             {images.map((image, index) => (
@@ -136,7 +144,7 @@ export function ProductHeader({
 
         {/* Thumbnail Navigation */}
         <div className="absolute left-4 right-4 bottom-16">
-          <ScrollArea className="w-full" orientation="horizontal">
+          <ScrollArea>
             <div className="flex gap-2 pb-2">
               {images.map((image, index) => (
                 <button
@@ -146,7 +154,10 @@ export function ProductHeader({
                       ? 'ring-2 ring-[#0FA0CE] ring-offset-2' 
                       : 'opacity-70 hover:opacity-100'
                   } transition-all duration-300`}
-                  onClick={() => setSelectedImage(index)}
+                  onClick={() => {
+                    setSelectedImage(index);
+                    api?.scrollTo(index);
+                  }}
                 >
                   <img
                     src={image}
@@ -156,6 +167,7 @@ export function ProductHeader({
                 </button>
               ))}
             </div>
+            <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </div>
       </div>
