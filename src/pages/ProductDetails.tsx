@@ -1,7 +1,9 @@
+
 import { useState } from "react";
-import { StarIcon, Heart, Send, ShoppingCart, ArrowLeft, Search } from "lucide-react";
+import { StarIcon, Heart, Send, ShoppingCart, ArrowLeft, Search, CheckCircle, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Carousel,
@@ -101,6 +103,7 @@ const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const product = id ? productData[id as keyof typeof productData] : null;
+  const [isFollowing, setIsFollowing] = useState(false);
 
   if (!product) {
     return (
@@ -202,6 +205,38 @@ const ProductDetails = () => {
             <div className="flex items-center justify-between">
               <h1 className="text-base font-medium text-gray-900 truncate pr-4 flex-1">{product.name}</h1>
               <span className="text-base font-medium text-gray-900 whitespace-nowrap">{Math.round(product.price)} G</span>
+            </div>
+
+            {/* Seller Profile Section */}
+            <div className="flex items-center justify-between border-t border-b border-gray-100 py-3">
+              <div className="flex items-center gap-3">
+                <Avatar className="h-10 w-10 border border-gray-200">
+                  <AvatarImage src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" />
+                  <AvatarFallback>PG</AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-1">
+                    <span className="text-sm font-medium text-gray-900">Pro Gaming Store</span>
+                    <CheckCircle className="h-4 w-4 text-blue-500 fill-current" />
+                  </div>
+                  <div className="flex items-center gap-1 text-xs text-gray-500">
+                    <Users className="h-3 w-3" />
+                    <span>23.4k followers</span>
+                  </div>
+                </div>
+              </div>
+              <Button 
+                variant="outline"
+                size="sm"
+                className={`text-xs ${
+                  isFollowing 
+                    ? 'bg-gray-50 text-gray-700' 
+                    : 'bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100'
+                }`}
+                onClick={() => setIsFollowing(!isFollowing)}
+              >
+                {isFollowing ? 'Following' : 'Follow'}
+              </Button>
             </div>
 
             <p className="text-xl text-gray-600">{product.brand}</p>
