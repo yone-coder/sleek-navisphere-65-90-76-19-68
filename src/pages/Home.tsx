@@ -1,4 +1,3 @@
-<lov-code>
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Carousel,
@@ -11,7 +10,7 @@ import {
   Trophy, Users, Radio, Gamepad, Video, List, 
   MoreHorizontal, Calendar, Award, CheckCircle, 
   XCircle, Clock, User, ArrowUpRight, MessageSquare, 
-  RefreshCw, Heart, Share2, Globe, Star 
+  RefreshCw, Heart, Share2
 } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
@@ -427,6 +426,8 @@ const Home = () => {
             opts={{
               align: "start",
               loop: true,
+              dragFree: true,
+              containScroll: "keepSnaps"
             }}
             className="w-full h-full"
             setApi={setApi}
@@ -707,4 +708,19 @@ const Home = () => {
                     </div>
                     <div className="p-4">
                       <div className="space-y-3">
-                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </section>
+
+      </div>
+    </Suspense>
+  );
+};
+
+export default Home;
