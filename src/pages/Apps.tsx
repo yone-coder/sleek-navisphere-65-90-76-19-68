@@ -115,8 +115,8 @@ export default function Apps() {
 
   return (
     <ScrollArea className="h-screen">
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-20 pb-24 animate-fade-in">
-        <div className="relative mb-8 overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+        <div className="relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-violet-50" />
           <div className="relative max-w-7xl mx-auto px-4">
             <div className="py-8">
