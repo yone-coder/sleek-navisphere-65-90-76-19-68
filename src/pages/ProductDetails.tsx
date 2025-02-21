@@ -3,6 +3,7 @@ import { useState } from "react";
 import { StarIcon, Heart, Send, ShoppingCart, ArrowLeft, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Carousel,
   CarouselContent,
@@ -10,11 +11,9 @@ import {
 } from "@/components/ui/carousel";
 import { useNavigate, useParams } from "react-router-dom";
 
-const ProductDetails = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-
-  const product = {
+// Mock product data - In a real app, this would come from an API
+const productData = {
+  "1": {
     id: "1",
     name: "Professional Gaming Chair",
     brand: "Pro Gaming Gear",
@@ -36,7 +35,50 @@ const ProductDetails = () => {
       "https://images.unsplash.com/photo-1600854964509-99661b5e9e6b?w=800&h=800&fit=crop",
       "https://images.unsplash.com/photo-1611195974226-a6a9be9dd68b?w=800&h=800&fit=crop",
     ],
-  };
+  },
+  "2": {
+    // ... similar structure for product 2
+  },
+  "3": {
+    id: "3",
+    name: "Elite Gaming Chair Pro",
+    brand: "Pro Gaming Gear",
+    price: 399.99,
+    originalPrice: 499.99,
+    discount: 20,
+    rating: 4.9,
+    reviews: 203,
+    description: "The Elite Gaming Chair Pro represents the pinnacle of gaming comfort and style. Engineered for professional gamers and enthusiasts who demand the very best in their setup.",
+    highlights: [
+      "Premium Italian PU Leather",
+      "Advanced Ergonomic Design",
+      "5D Adjustable Armrests",
+      "Carbon Fiber Structure",
+      "Premium Memory Foam",
+    ],
+    images: [
+      "https://images.unsplash.com/photo-1511370235399-1802cae1d32f?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1600854964509-99661b5e9e6b?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1611195974226-a6a9be9dd68b?w=800&h=800&fit=crop",
+    ],
+  }
+};
+
+const ProductDetails = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const product = id ? productData[id as keyof typeof productData] : null;
+
+  if (!product) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col items-center justify-center p-4">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Product not found</h1>
+        <Button onClick={() => navigate('/marketplace')}>
+          Return to Marketplace
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
