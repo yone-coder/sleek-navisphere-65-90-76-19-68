@@ -52,7 +52,7 @@ const games = {
       },
       category: "boardGames",
       tags: ["strategy", "classic"],
-      difficulty: "medium",
+      difficulty: "medium" as const,
       players: 2,
       rating: 4.5,
       playTime: "60-120 minutes",
@@ -72,50 +72,10 @@ const games = {
       },
       category: "boardGames",
       tags: ["tile-based", "family"],
-      difficulty: "easy",
+      difficulty: "easy" as const,
       players: 2,
       rating: 3.8,
       playTime: "30-45 minutes",
-      price: { amount: 0, currency: "USD" }
-    },
-    {
-      id: 3,
-      title: "Morpion (Tic-Tac-Toe)",
-      description: "A simple strategy game for two players, who take turns marking the spaces in a 3×3 grid.",
-      image: "https://storage.googleapis.com/a1aa/image/ILaOkYoR7hDayBWLOW1hj6X9ZkaT-UcZm24KX8P1jDY.jpg",
-      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
-      verified: true,
-      stats: {
-        likes: "900",
-        comments: "150",
-        shares: "200"
-      },
-      category: "boardGames",
-      tags: ["strategy", "simple"],
-      difficulty: "easy",
-      players: 2,
-      rating: 4.0,
-      playTime: "5-10 minutes",
-      price: { amount: 0, currency: "USD" }
-    },
-    {
-      id: 4,
-      title: "Shogi",
-      description: "A Japanese strategy board game for two players, similar to chess.",
-      image: "https://storage.googleapis.com/a1aa/image/URT1V_NcnrlLxnJWpP80Ej-uYh8hMuDel6e7Pxqs_eo.jpg",
-      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
-      verified: true,
-      stats: {
-        likes: "1.5K",
-        comments: "250",
-        shares: "400"
-      },
-      category: "boardGames",
-      tags: ["strategy", "japanese"],
-      difficulty: "hard",
-      players: 2,
-      rating: 4.2,
-      playTime: "90-180 minutes",
       price: { amount: 0, currency: "USD" }
     }
   ],
@@ -134,30 +94,10 @@ const games = {
       },
       category: "arcadeGames",
       tags: ["maze", "classic"],
-      difficulty: "easy",
+      difficulty: "easy" as const,
       players: 1,
       rating: 4.7,
       playTime: "5-15 minutes",
-      price: { amount: 0, currency: "USD" }
-    },
-    {
-      id: 6,
-      title: "Space Invaders",
-      description: "Defend Earth from an alien invasion in this timeless shooting game.",
-      image: "https://storage.googleapis.com/a1aa/image/U9cxiKWRsMwBdP7GKinlUOUdzMsKzRiFuAfG1-PCvAg.jpg",
-      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
-      verified: true,
-      stats: {
-        likes: "4.1K",
-        comments: "720",
-        shares: "950"
-      },
-      category: "arcadeGames",
-      tags: ["shooting", "alien"],
-      difficulty: "medium",
-      players: 1,
-      rating: 4.3,
-      playTime: "10-20 minutes",
       price: { amount: 0, currency: "USD" }
     }
   ],
@@ -176,31 +116,11 @@ const games = {
       },
       category: "cardGames",
       tags: ["betting", "strategy"],
-      difficulty: "medium",
+      difficulty: "hard" as const,
       players: 2,
       rating: 4.8,
       playTime: "30-60 minutes",
       price: { amount: 75, currency: "USD" }
-    },
-    {
-      id: 8,
-      title: "Solitaire",
-      description: "A single-player card game also known as Patience, perfect for casual gaming.",
-      image: "https://storage.googleapis.com/a1aa/image/URT1V_NcnrlLxnJWpP80Ej-uYh8hMuDel6e7Pxqs_eo.jpg",
-      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
-      verified: true,
-      stats: {
-        likes: "3.8K",
-        comments: "450",
-        shares: "780"
-      },
-      category: "cardGames",
-      tags: ["single-player", "casual"],
-      difficulty: "easy",
-      players: 1,
-      rating: 4.1,
-      playTime: "15-30 minutes",
-      price: { amount: 0, currency: "USD" }
     }
   ],
   puzzleGames: [
@@ -216,32 +136,12 @@ const games = {
         comments: "1.5K",
         shares: "2.8K"
       },
-       category: "puzzleGames",
+      category: "puzzleGames",
       tags: ["blocks", "addictive"],
-      difficulty: "medium",
+      difficulty: "medium" as const,
       players: 1,
       rating: 4.9,
       playTime: "10-20 minutes",
-      price: { amount: 0, currency: "USD" }
-    },
-    {
-      id: 10,
-      title: "Sudoku",
-      description: "Fill a 9×9 grid with numbers according to specific rules in this logic puzzle.",
-      image: "https://storage.googleapis.com/a1aa/image/U9cxiKWRsMwBdP7GKinlUOUdzMsKzRiFuAfG1-PCvAg.jpg",
-      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
-      verified: true,
-      stats: {
-        likes: "4.5K",
-        comments: "890",
-        shares: "1.2K"
-      },
-      category: "puzzleGames",
-      tags: ["logic", "numbers"],
-      difficulty: "hard",
-      players: 1,
-      rating: 4.4,
-      playTime: "20-40 minutes",
       price: { amount: 0, currency: "USD" }
     }
   ]
