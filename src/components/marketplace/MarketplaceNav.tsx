@@ -1,5 +1,5 @@
 
-import { Home, Search, Grid, ShoppingCart, Clock, ChevronLeft } from 'lucide-react';
+import { Home, Search, Grid, ShoppingCart, Clock } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Badge } from '../ui/badge';
@@ -45,25 +45,6 @@ export const MarketplaceNav = () => {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50">
-      {/* Back button - Updated positioning */}
-      <button
-        onClick={() => navigate(-1)}
-        className={cn(
-          "fixed left-4 bottom-20", // Changed from absolute to fixed and adjusted position
-          "flex items-center gap-2 px-3 py-1.5",
-          "text-xs font-medium text-gray-600",
-          "bg-white/50 backdrop-blur-sm rounded-full",
-          "border border-gray-200/30 shadow-sm",
-          "transition-all duration-300 hover:bg-white/80",
-          "opacity-0 translate-y-4", // Changed translate direction
-          location.pathname !== '/marketplace' && "opacity-100 translate-y-0"
-        )}
-        aria-label="Go back"
-      >
-        <ChevronLeft className="w-4 h-4" aria-hidden="true" />
-        Back
-      </button>
-
       {/* Glassmorphism backdrop */}
       <div className="absolute inset-0 bg-gradient-to-t from-white/95 to-white/75 backdrop-blur-lg border-t border-gray-200/30" />
       
