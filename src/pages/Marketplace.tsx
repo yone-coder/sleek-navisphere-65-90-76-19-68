@@ -9,7 +9,6 @@ import { LightningDeals } from "@/components/marketplace/LightningDeals";
 import { FeaturedProducts } from "@/components/marketplace/FeaturedProducts";
 import { RecentProducts } from "@/components/marketplace/RecentProducts";
 import { ProductGrid } from "@/components/marketplace/ProductGrid";
-import { MarketplaceNav } from '@/components/marketplace/MarketplaceNav';
 
 const newsItems = [
   "🎮 New Gaming Laptops Coming Soon - Pre-order Now!",
@@ -47,7 +46,7 @@ const Marketplace = () => {
         </div>
       </header>
 
-      <main className="pt-24 pb-20">
+      <main className="pt-24 pb-16">
         <CategorySlider slides={currentSlides} />
           
         <div className="w-full bg-gray-50 border-y border-gray-200">
@@ -83,8 +82,6 @@ const Marketplace = () => {
         <FeaturedProducts />
         <ProductGrid />
       </main>
-
-      <MarketplaceNav />
 
       <style>
         {`
