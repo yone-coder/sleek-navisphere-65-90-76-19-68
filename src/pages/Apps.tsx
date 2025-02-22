@@ -18,7 +18,10 @@ const apps = [
     color: "bg-blue-500",
     category: "Shopping",
     status: "popular",
-    users: "10K+"
+    users: "10K+",
+    lastUsed: "2 hours ago",
+    rating: 4.8,
+    updates: 2
   },
   {
     name: "Wallet",
@@ -28,7 +31,10 @@ const apps = [
     color: "bg-emerald-500",
     category: "Finance",
     status: "new",
-    users: "5K+"
+    users: "5K+",
+    lastUsed: "1 day ago",
+    rating: 4.5,
+    updates: 1
   },
   {
     name: "Games",
@@ -105,17 +111,37 @@ const apps = [
 ];
 
 const categories = [
-  { id: "all", label: "All Apps", icon: Grid2X2 },
-  { id: "recent", label: "Recent", icon: Clock },
-  { id: "popular", label: "Popular", icon: TrendingUp },
+  { id: "all", label: "All Apps", icon: Grid2X2, count: apps.length },
+  { id: "recent", label: "Recent", icon: Clock, count: apps.filter(app => app.status === "new").length },
+  { id: "popular", label: "Popular", icon: TrendingUp, count: apps.filter(app => app.status === "popular").length },
   { id: "favorites", label: "Favorites", icon: Star }
 ];
 
 const quickActions = [
-  { name: "New Tournament", icon: Trophy, color: "bg-amber-500" },
-  { name: "Quick Play", icon: Gamepad2, color: "bg-violet-500" },
-  { name: "Daily Rewards", icon: Gift, color: "bg-pink-500" },
-  { name: "Premium", icon: Crown, color: "bg-yellow-500" }
+  { 
+    name: "New Tournament", 
+    icon: Trophy, 
+    color: "bg-amber-500",
+    description: "Join competitive matches"
+  },
+  { 
+    name: "Quick Play", 
+    icon: Gamepad2, 
+    color: "bg-violet-500",
+    description: "Start gaming instantly"
+  },
+  { 
+    name: "Daily Rewards", 
+    icon: Gift, 
+    color: "bg-pink-500",
+    description: "Claim your rewards"
+  },
+  { 
+    name: "Premium", 
+    icon: Crown, 
+    color: "bg-yellow-500",
+    description: "Upgrade your account"
+  }
 ];
 
 const AppCard = ({ app, isFavorite, onToggleFavorite }) => (
@@ -125,15 +151,29 @@ const AppCard = ({ app, isFavorite, onToggleFavorite }) => (
   >
     <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative group-hover:scale-105 transition-transform duration-300`}>
       <app.icon className="w-7 h-7 text-white" />
-      {app.status === "new" && (
-        <Badge className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5">NEW</Badge>
+      {app.updates > 0 && (
+        <Badge className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5">
+          {app.updates} NEW
+        </Badge>
       )}
     </div>
-    <div className="text-center">
-      <span className="text-sm font-medium text-gray-700">
-        {app.name}
-      </span>
-      <p className="text-xs text-gray-500 mt-1">{app.description}</p>
+    <div className="text-center w-full">
+      <div className="flex items-center justify-center gap-1 mb-1">
+        <span className="text-sm font-medium text-gray-700">{app.name}</span>
+        {app.rating && (
+          <div className="flex items-center gap-1 text-xs text-yellow-500">
+            <Star className="w-3 h-3 fill-yellow-400" />
+            {app.rating}
+          </div>
+        )}
+      </div>
+      <p className="text-xs text-gray-500 mb-2">{app.description}</p>
+      {app.lastUsed && (
+        <div className="text-[10px] text-gray-400 flex items-center justify-center gap-1">
+          <Clock className="w-3 h-3" />
+          {app.lastUsed}
+        </div>
+      )}
     </div>
     <div className="absolute top-2 right-2">
       <Button
@@ -160,10 +200,19 @@ export default function Apps() {
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    const saved = localStorage.getItem("favoriteApps");
+    return saved ? JSON.parse(saved) : [];
+  });
   const [searchQuery, setSearchQuery] = useState("");
+  const [showUpdatesOnly, setShowUpdatesOnly] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("favoriteApps", JSON.stringify(favorites));
+  }, [favorites]);
 
   const filteredApps = apps.filter(app => {
+    if (showUpdatesOnly) return app.updates > 0;
     if (activeTab === "favorites") return favorites.includes(app.name);
     if (activeTab === "popular") return app.status === "popular";
     if (activeTab === "recent") return app.status === "new";
@@ -205,11 +254,16 @@ export default function Apps() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon" className="rounded-xl hover:bg-gray-100">
-                      <Filter className="w-5 h-5 text-gray-500" />
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className={`rounded-xl transition-colors ${showUpdatesOnly ? 'bg-amber-100 text-amber-600' : 'hover:bg-gray-100'}`}
+                      onClick={() => setShowUpdatesOnly(!showUpdatesOnly)}
+                    >
+                      <Zap className="w-5 h-5" />
                     </Button>
                     <Button variant="ghost" size="icon" className="rounded-xl hover:bg-gray-100">
-                      <Zap className="w-5 h-5 text-amber-500" />
+                      <Filter className="w-5 h-5 text-gray-500" />
                     </Button>
                   </div>
                 </div>
@@ -239,7 +293,10 @@ export default function Apps() {
                       <div className={`${action.color} p-3 rounded-xl group-hover:scale-105 transition-transform duration-300`}>
                         <action.icon className="w-6 h-6 text-white" />
                       </div>
-                      <span className="text-sm font-medium text-gray-700">{action.name}</span>
+                      <div className="text-center">
+                        <span className="text-sm font-medium text-gray-700">{action.name}</span>
+                        <p className="text-xs text-gray-500 mt-1">{action.description}</p>
+                      </div>
                     </Button>
                   ))}
                 </div>
@@ -250,10 +307,18 @@ export default function Apps() {
                       <TabsTrigger
                         key={category.id}
                         value={category.id}
-                        className="flex flex-col items-center gap-2 p-3 data-[state=active]:bg-white rounded-xl border border-transparent data-[state=active]:border-gray-200"
+                        className="flex flex-col items-center gap-2 p-3 data-[state=active]:bg-white rounded-xl border border-transparent data-[state=active]:border-gray-200 relative"
                       >
                         <category.icon className="w-5 h-5" />
                         <span className="text-xs">{category.label}</span>
+                        {category.count && (
+                          <Badge 
+                            variant="secondary" 
+                            className="absolute -top-1 -right-1 text-[10px] h-5"
+                          >
+                            {category.count}
+                          </Badge>
+                        )}
                       </TabsTrigger>
                     ))}
                   </TabsList>
