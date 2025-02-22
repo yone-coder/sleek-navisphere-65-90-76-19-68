@@ -5,20 +5,11 @@ import { cn } from '@/lib/utils';
 import { Badge } from '../ui/badge';
 import { RecentScreens } from '../RecentScreens';
 
-// Define the type for navigation items
-interface NavItem {
-  icon: typeof Home | typeof Search | typeof Grid | typeof ShoppingCart | typeof UserRound;
-  label: string;
-  path: string;
-  color: string;
-  badge?: string;
-}
-
 export const MarketplaceNav = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const navItems: NavItem[] = [
+  const navItems = [
     {
       icon: Home,
       label: 'Home',
@@ -122,7 +113,11 @@ export const MarketplaceNav = () => {
 
             return (
               <li key={item.label}>
-                {button}
+                {item.isRecent ? (
+                  <RecentScreens>{button}</RecentScreens>
+                ) : (
+                  button
+                )}
               </li>
             );
           })}
