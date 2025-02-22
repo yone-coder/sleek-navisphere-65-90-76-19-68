@@ -57,7 +57,7 @@ export const MarketplaceHeader = ({
   const [showSearchBar, setShowSearchBar] = useState(false);
 
   const handleSearchClick = () => {
-    navigate('/search');
+    navigate('/marketplace/search');
   };
 
   return (

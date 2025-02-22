@@ -29,6 +29,7 @@ const Marketplace = lazy(() => import("./pages/Marketplace"));
 const ProductDetails = lazy(() => import("./pages/ProductDetails"));
 const Apps = lazy(() => import("./pages/Apps"));
 const Search = lazy(() => import("./pages/Search"));
+const MarketplaceSearch = lazy(() => import("./pages/MarketplaceSearch"));
 
 // Lazy load admin pages
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
@@ -81,6 +82,7 @@ const AppContent = () => {
           <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/tournament/:id" element={<TournamentDetails />} />
           <Route path="/marketplace" element={<Marketplace />} />
+          <Route path="/marketplace/search" element={<MarketplaceSearch />} />
           <Route path="/marketplace/product/:id" element={<ProductDetails />} />
           <Route path="/search" element={<Search />} />
           
