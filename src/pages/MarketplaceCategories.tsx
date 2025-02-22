@@ -93,8 +93,8 @@ const MarketplaceCategories = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Fixed Header - More compact */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b">
+      {/* Fixed Header with higher z-index */}
+      <div className="fixed top-0 left-0 right-0 z-[100] bg-white border-b">
         <div className="flex items-center gap-1.5 px-1.5 py-1">
           <Button
             variant="ghost"
@@ -142,8 +142,8 @@ const MarketplaceCategories = () => {
         </div>
       </div>
 
-      {/* Content - Adjusted spacing */}
-      <div className="pt-[96px] pb-20 px-3">
+      {/* Content with increased top padding */}
+      <div className="pt-[120px] pb-24 px-3">
         <div className={cn(
           "grid gap-3",
           view === "grid" ? "grid-cols-2" : "grid-cols-1"

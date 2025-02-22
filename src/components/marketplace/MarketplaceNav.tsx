@@ -44,32 +44,13 @@ export const MarketplaceNav = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-[60]">
-      {/* Glassmorphism backdrop with higher z-index */}
+    <nav className="fixed bottom-0 left-0 right-0 z-[100]">
+      {/* Glassmorphism backdrop */}
       <div className="absolute inset-0 bg-gradient-to-t from-white/95 to-white/75 backdrop-blur-lg border-t border-gray-200/30" />
       
       {/* Navigation content */}
-      <div className="relative">
-        {/* Back button with animation */}
-        <button
-          onClick={() => navigate(-1)}
-          className={cn(
-            "absolute left-4 -top-12",
-            "flex items-center gap-2 px-3 py-1.5",
-            "text-xs font-medium text-gray-600",
-            "bg-white/50 backdrop-blur-sm rounded-full",
-            "border border-gray-200/30 shadow-sm",
-            "transition-all duration-300 hover:bg-white/80",
-            "opacity-0 -translate-y-2",
-            location.pathname !== '/marketplace' && "opacity-100 translate-y-0"
-          )}
-          aria-label="Go back"
-        >
-          <ChevronLeft className="w-4 h-4" aria-hidden="true" />
-          Back
-        </button>
-
-        <ul className="container flex items-center justify-around py-2 relative z-10">
+      <div className="relative max-w-screen-xl mx-auto">
+        <ul className="flex items-center justify-around py-3 px-4 relative z-10">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             
@@ -78,7 +59,7 @@ export const MarketplaceNav = () => {
                 key={item.label}
                 onClick={() => item.path && navigate(item.path)}
                 className={cn(
-                  "flex flex-col items-center gap-1 py-1 px-3",
+                  "flex flex-col items-center gap-1.5 py-1 px-3",
                   "transition-all duration-300 group relative"
                 )}
               >
