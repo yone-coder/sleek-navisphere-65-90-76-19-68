@@ -208,6 +208,39 @@ const popularGames: Game[] = [
     rating: 4.6,
     downloads: "1B+",
     size: "85MB"
+  },
+  {
+    id: "pubg-mobile",
+    title: "PUBG MOBILE: Miramar",
+    description: "Battle royale game with intense multiplayer combat",
+    thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
+    icon: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
+    category: ["Action", "Shooter"],
+    rating: 4.2,
+    downloads: "1B+",
+    size: "772MB"
+  },
+  {
+    id: "subway-surfers",
+    title: "Subway Surfers",
+    description: "Run and dodge trains in this endless runner game",
+    thumbnail: "https://images.unsplash.com/photo-1533236897111-3e94666b2edf",
+    icon: "https://images.unsplash.com/photo-1533236897111-3e94666b2edf",
+    category: ["Casual", "Runner"],
+    rating: 4.5,
+    downloads: "1B+",
+    size: "128MB"
+  },
+  {
+    id: "genshin-impact",
+    title: "Genshin Impact",
+    description: "Open-world action RPG with stunning visuals",
+    thumbnail: "https://images.unsplash.com/photo-1624085568108-36410cef3028",
+    icon: "https://images.unsplash.com/photo-1624085568108-36410cef3028",
+    category: ["RPG", "Adventure"],
+    rating: 4.3,
+    downloads: "500M+",
+    size: "15GB"
   }
 ];
 
@@ -414,11 +447,11 @@ export default function GamesPages() {
         </div>
 
         <ScrollArea className="w-full" type="scroll">
-          <div className="flex flex-col gap-4 pb-4">
+          <div className="flex gap-4 pb-4">
             {popularGames.map((game) => (
               <div 
                 key={game.id}
-                className="flex gap-4 items-center"
+                className="flex-none w-[300px] flex gap-4 items-center"
               >
                 <img
                   src={game.icon}
