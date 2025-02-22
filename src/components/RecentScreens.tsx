@@ -4,7 +4,24 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/s
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
-import { Clock, X, Pin, PinOff, Maximize2, ArrowUpRight } from "lucide-react";
+import { 
+  Clock, 
+  X, 
+  Pin, 
+  PinOff, 
+  Maximize2, 
+  ArrowUpRight,
+  Home,
+  User,
+  Gamepad2,
+  Trophy,
+  Wallet,
+  ShoppingBag,
+  Newspaper,
+  History,
+  Minimize2,
+  Trash2
+} from "lucide-react";
 
 interface RecentScreen {
   path: string;
@@ -12,6 +29,27 @@ interface RecentScreen {
   timestamp: number;
   isPinned?: boolean;
 }
+
+const getIconForPath = (path: string) => {
+  switch (path) {
+    case "/":
+      return <Home className="w-5 h-5" />;
+    case "/profile":
+      return <User className="w-5 h-5" />;
+    case "/games":
+      return <Gamepad2 className="w-5 h-5" />;
+    case "/tournaments":
+      return <Trophy className="w-5 h-5" />;
+    case "/wallet":
+      return <Wallet className="w-5 h-5" />;
+    case "/marketplace":
+      return <ShoppingBag className="w-5 h-5" />;
+    case "/feeds":
+      return <Newspaper className="w-5 h-5" />;
+    default:
+      return <History className="w-5 h-5" />;
+  }
+};
 
 const mockScreens: RecentScreen[] = [
   { path: "/", title: "Home", timestamp: Date.now() - 1000, isPinned: true },
@@ -70,9 +108,17 @@ export function RecentScreens({ children }: { children: React.ReactNode }) {
     <Card 
       key={screen.path + screen.timestamp}
       className={`relative group cursor-pointer hover:shadow-lg transition-all duration-200 aspect-video bg-gradient-to-br 
-        ${screen.isPinned ? 'from-blue-500/10 to-blue-600/10 ring-1 ring-blue-500/20' : 'from-gray-500/5 to-gray-600/5'}`}
+        ${screen.isPinned 
+          ? 'from-blue-500/10 to-blue-600/10 ring-1 ring-blue-500/20' 
+          : 'from-gray-500/5 to-gray-600/5'
+        } ${location.pathname === screen.path ? 'ring-2 ring-primary' : ''}`}
     >
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+      
+      {/* Icon */}
+      <div className="absolute top-4 left-4 text-white/70">
+        {getIconForPath(screen.path)}
+      </div>
       
       {/* Action buttons */}
       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
@@ -82,6 +128,7 @@ export function RecentScreens({ children }: { children: React.ReactNode }) {
             togglePin(screen.path);
           }}
           className="p-1.5 rounded-full bg-black/50 hover:bg-black/70 text-white"
+          title={screen.isPinned ? "Unpin" : "Pin"}
         >
           {screen.isPinned ? <PinOff className="w-4 h-4" /> : <Pin className="w-4 h-4" />}
         </button>
@@ -91,6 +138,7 @@ export function RecentScreens({ children }: { children: React.ReactNode }) {
             removeScreen(screen.path);
           }}
           className="p-1.5 rounded-full bg-black/50 hover:bg-black/70 text-white"
+          title="Remove"
         >
           <X className="w-4 h-4" />
         </button>
@@ -135,11 +183,16 @@ export function RecentScreens({ children }: { children: React.ReactNode }) {
                 <button
                   onClick={() => setIsFullScreen(!isFullScreen)}
                   className="p-2 hover:bg-gray-100 rounded-full"
+                  title={isFullScreen ? "Minimize" : "Maximize"}
                 >
-                  <Maximize2 className="w-5 h-5" />
+                  {isFullScreen ? (
+                    <Minimize2 className="w-5 h-5" />
+                  ) : (
+                    <Maximize2 className="w-5 h-5" />
+                  )}
                 </button>
                 <SheetClose asChild>
-                  <button className="p-2 hover:bg-gray-100 rounded-full">
+                  <button className="p-2 hover:bg-gray-100 rounded-full" title="Close">
                     <X className="w-5 h-5" />
                   </button>
                 </SheetClose>
@@ -149,7 +202,10 @@ export function RecentScreens({ children }: { children: React.ReactNode }) {
             {/* Pinned screens */}
             {pinnedScreens.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-sm font-medium text-muted-foreground mb-3">Pinned</h3>
+                <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
+                  <Pin className="w-4 h-4" />
+                  Pinned
+                </h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {pinnedScreens.map(renderScreen)}
                 </div>
@@ -160,11 +216,15 @@ export function RecentScreens({ children }: { children: React.ReactNode }) {
             {unpinnedScreens.length > 0 && (
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-medium text-muted-foreground">Recent</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                    <History className="w-4 h-4" />
+                    Recent
+                  </h3>
                   <button
                     onClick={clearAll}
-                    className="text-xs text-muted-foreground hover:text-foreground"
+                    className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
                   >
+                    <Trash2 className="w-3 h-3" />
                     Clear all
                   </button>
                 </div>
