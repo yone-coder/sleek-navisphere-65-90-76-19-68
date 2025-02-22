@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
@@ -181,17 +180,23 @@ const sliderImages = [
   {
     id: 1,
     url: "https://storage.googleapis.com/a1aa/image/A0tRiJ6w8HZujXs2A-4XYcnReWkJ1hU6JyQbw-55BIE.jpg",
-    alt: "Gaming slide 1"
+    alt: "Gaming slide 1",
+    title: "Weekly Tournament",
+    subtitle: "Join now and win exclusive rewards"
   },
   {
     id: 2,
     url: "https://storage.googleapis.com/a1aa/image/U9cxiKWRsMwBdP7GKinlUOUdzMsKzRiFuAfG1-PCvAg.jpg",
-    alt: "Gaming slide 2"
+    alt: "Gaming slide 2",
+    title: "New Games Added",
+    subtitle: "Explore our latest collection"
   },
   {
     id: 3,
     url: "https://storage.googleapis.com/a1aa/image/ILaOkYoR7hDayBWLOW1hj6X9ZkaT-UcZm24KX8P1jDY.jpg",
-    alt: "Gaming slide 3"
+    alt: "Gaming slide 3",
+    title: "Special Events",
+    subtitle: "Don't miss out on the action"
   }
 ];
 
@@ -320,12 +325,16 @@ export default function Explore() {
           <CarouselContent>
             {sliderImages.map((image, index) => (
               <CarouselItem key={image.id} className="w-full pl-0">
-                <div className="relative aspect-[2/1]">
+                <div className="relative aspect-[21/9]">
                   <img
                     src={image.url}
                     alt={image.alt}
                     className="w-full h-full object-cover"
                   />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                    <h3 className="text-white font-bold text-lg">{image.title}</h3>
+                    <p className="text-white/90 text-sm">{image.subtitle}</p>
+                  </div>
                 </div>
               </CarouselItem>
             ))}
@@ -336,14 +345,15 @@ export default function Explore() {
                 <button
                   key={index}
                   className={cn(
-                    "w-2 h-2 rounded-full transition-all duration-300 ease-in-out transform",
+                    "w-2 h-2 rounded-full transition-all duration-300 ease-in-out",
                     currentSlide === index 
-                      ? "bg-blue-500 w-4 scale-110" 
-                      : "bg-gray-300 hover:bg-gray-400"
+                      ? "bg-white w-4" 
+                      : "bg-white/50 hover:bg-white/70"
                   )}
                   onClick={() => {
                     api?.scrollTo(index);
                   }}
+                  aria-label={`Go to slide ${index + 1}`}
                 />
               ))}
             </div>
