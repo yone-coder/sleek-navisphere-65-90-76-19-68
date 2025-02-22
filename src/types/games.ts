@@ -8,6 +8,7 @@ export interface Game {
   category: string;
   rating: number;
   downloads: string;
+  price?: string;
   isFeatured?: boolean;
   isEditorChoice?: boolean;
   route?: string;
