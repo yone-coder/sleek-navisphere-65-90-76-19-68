@@ -78,6 +78,26 @@ export const MarketplaceNav = () => {
           Back
         </button>
 
+        {/* Recent screens button */}
+        <RecentScreens>
+          <button
+            className={cn(
+              "absolute right-4 -top-12",
+              "flex items-center gap-2 px-3 py-1.5",
+              "text-xs font-medium text-gray-600",
+              "bg-white/50 backdrop-blur-sm rounded-full",
+              "border border-gray-200/30 shadow-sm",
+              "transition-all duration-300 hover:bg-white/80",
+              "opacity-0 -translate-y-2",
+              location.pathname !== '/marketplace' && "opacity-100 translate-y-0"
+            )}
+            aria-label="Recent screens"
+          >
+            <Clock className="w-4 h-4" aria-hidden="true" />
+            Recent
+          </button>
+        </RecentScreens>
+
         <ul className="flex items-center justify-around py-3 px-4 relative z-10">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
