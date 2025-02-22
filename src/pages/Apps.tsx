@@ -254,9 +254,9 @@ export default function Apps() {
                         <h2 className="text-lg font-semibold text-gray-900">Favorites</h2>
                       </div>
                     </div>
-                    <div className="relative w-full">
-                      <ScrollArea className="w-full [&_[data-orientation=vertical]]:hidden">
-                        <div className="flex gap-4 pb-4">
+                    <div className="relative w-full overflow-hidden">
+                      <ScrollArea className="w-full">
+                        <div className="flex gap-4 pb-4 max-w-[100vw]">
                           {favoriteApps.map((app) => (
                             <div key={app.name} className="flex-shrink-0 first:pl-1 last:pr-1">
                               <Button
