@@ -39,7 +39,7 @@ export const AppControls = ({
     <div className="flex items-center gap-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button variant="outline" size="sm" className="h-9 gap-2">
             <ListFilter className="w-4 h-4" />
             {selectedCategory}
           </Button>
@@ -62,7 +62,7 @@ export const AppControls = ({
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button variant="outline" size="sm" className="h-9 gap-2">
             <TrendingUp className="w-4 h-4" />
             Sort by
           </Button>
@@ -83,7 +83,7 @@ export const AppControls = ({
       <Button
         variant="outline"
         size="sm"
-        className="gap-2"
+        className="h-9 gap-2"
         onClick={() => onViewModeChange(viewMode === "grid" ? "list" : "grid")}
       >
         {viewMode === "grid" ? (
@@ -97,10 +97,10 @@ export const AppControls = ({
       <Button
         variant="outline"
         size="sm"
-        className={`gap-2 ${showUpdatesOnly ? "bg-blue-50 border-blue-200 text-blue-600" : ""}`}
+        className={`h-9 gap-2 ${showUpdatesOnly ? "bg-blue-50 border-blue-200 text-blue-600" : ""}`}
         onClick={onUpdatesToggle}
       >
-        <Badge variant="secondary" className="h-5">
+        <Badge variant="secondary" className="h-5 px-1.5">
           {updatesCount}
         </Badge>
         Updates

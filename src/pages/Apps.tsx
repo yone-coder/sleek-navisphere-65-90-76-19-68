@@ -189,7 +189,7 @@ export default function Apps() {
             <div className="py-8">
               <FavoritesSection favoriteApps={favoriteApps} />
 
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-auto">
                   <CategoryTabs categories={categories} />
                 </Tabs>
