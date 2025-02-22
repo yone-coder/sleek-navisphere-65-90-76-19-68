@@ -107,7 +107,7 @@ export const MarketplaceHeader = ({
           <div className="relative cursor-pointer">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
             <div className="w-full h-8 pl-10 pr-3 flex items-center bg-gray-50 rounded-md border border-gray-200">
-              <span className="text-sm text-gray-500">Search products, categories, brands...</span>
+              <span className="text-sm text-gray-500 truncate">Search products, categories, brands...</span>
             </div>
           </div>
         </div>
