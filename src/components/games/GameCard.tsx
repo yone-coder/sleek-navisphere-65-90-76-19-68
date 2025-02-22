@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Heart, MessageSquare, Share2, Plus, Check, Bookmark } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +10,7 @@ interface GameCardProps {
   game: Game;
 }
 
-export const GameCard = ({ game }: GameCardProps) => {
+const GameCard = ({ game }: GameCardProps) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(game.bookmarked);
   const { toast } = useToast();
@@ -145,3 +144,5 @@ export const GameCard = ({ game }: GameCardProps) => {
     </div>
   );
 };
+
+export default GameCard;

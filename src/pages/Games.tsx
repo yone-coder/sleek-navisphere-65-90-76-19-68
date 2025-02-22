@@ -1,5 +1,5 @@
 
-import { GameCard } from "@/components/games/GameCard";
+import GameCard from "@/components/games/GameCard";
 import { Game } from "@/components/games/types";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
