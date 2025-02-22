@@ -1,5 +1,5 @@
 
-import { Home, ArrowLeft, Clock } from 'lucide-react';
+import { Home, ChevronRight, Clock } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -11,9 +11,9 @@ export const BottomNav = () => {
   const { t } = useLanguage();
 
   const navItems = [
-    { icon: ArrowLeft, label: t('nav.back'), action: () => navigate(-1) },
     { icon: Home, label: t('nav.home'), path: '/' },
     { icon: Clock, label: t('nav.recent'), path: '/apps' },
+    { icon: ChevronRight, label: t('nav.back'), action: () => navigate(-1) },
   ];
 
   return (
