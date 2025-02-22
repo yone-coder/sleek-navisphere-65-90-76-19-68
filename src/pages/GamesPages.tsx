@@ -3,7 +3,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   ChevronLeft, Gamepad2, Trophy, Users, 
-  Clock, Star, Chess, Dice, Cards, Grid3X3
+  Clock, Star, Dices, Dice1, Grid3X3,
+  PlaySquare
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -32,7 +33,7 @@ const games: Game[] = [
     id: "chess",
     title: "Chess",
     description: "Classic strategy board game for two players",
-    icon: <Chess className="w-6 h-6" />,
+    icon: <Dices className="w-6 h-6" />,
     image: "https://storage.googleapis.com/a1aa/image/mXWQ7mdPAnTHpduxXF4Ijpxvg_lJjGQ1WpJw-QQrNqA.jpg",
     players: "1v1",
     category: "Strategy",
@@ -60,7 +61,7 @@ const games: Game[] = [
     id: "domino",
     title: "Dominoes",
     description: "Strategic tile-based game of matching numbers",
-    icon: <Dice className="w-6 h-6" />,
+    icon: <Dice1 className="w-6 h-6" />,
     image: "https://storage.googleapis.com/a1aa/image/ILaOkYoR7hDayBWLOW1hj6X9ZkaT-UcZm24KX8P1jDY.jpg",
     players: "2-4",
     category: "Strategy",
@@ -73,7 +74,7 @@ const games: Game[] = [
     id: "poker",
     title: "Poker",
     description: "Popular card game of skill and chance",
-    icon: <Cards className="w-6 h-6" />,
+    icon: <PlaySquare className="w-6 h-6" />,
     image: "https://storage.googleapis.com/a1aa/image/URT1V_NcnrlLxnJWpP80Ej-uYh8hMuDel6e7Pxqs_eo.jpg",
     players: "2-6",
     category: "Cards",
