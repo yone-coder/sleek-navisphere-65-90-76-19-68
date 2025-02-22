@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Search, Grid, ListFilter, ChevronRight, Sparkles } from "lucide-react";
@@ -93,46 +92,35 @@ const MarketplaceCategories = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Fixed Header */}
+      {/* Fixed Header - More compact */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b">
-        <div className="flex items-center gap-2 p-2">
+        <div className="flex items-center gap-1.5 px-1.5 py-1">
           <Button
             variant="ghost"
             size="icon"
-            className="h-10 w-10"
+            className="h-8 w-8"
             onClick={() => navigate(-1)}
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <h1 className="text-lg font-semibold">Categories</h1>
-        </div>
-
-        <div className="px-4 pb-2">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <div className="flex-1 relative">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
             <Input
               type="search"
               placeholder="Search categories..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-gray-50"
+              className="pl-8 pr-3 h-8 text-sm bg-gray-50"
             />
           </div>
-        </div>
-
-        <div className="px-4 pb-3 flex items-center justify-between">
-          <CategoryTabs
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-          />
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <Button
               variant="ghost"
               size="icon"
               className={cn("h-8 w-8", view === "grid" && "text-blue-500")}
               onClick={() => setView("grid")}
             >
-              <Grid className="h-4 w-4" />
+              <Grid className="h-3.5 w-3.5" />
             </Button>
             <Button
               variant="ghost"
@@ -140,16 +128,23 @@ const MarketplaceCategories = () => {
               className={cn("h-8 w-8", view === "list" && "text-blue-500")}
               onClick={() => setView("list")}
             >
-              <ListFilter className="h-4 w-4" />
+              <ListFilter className="h-3.5 w-3.5" />
             </Button>
           </div>
         </div>
+
+        <div className="px-2 py-1">
+          <CategoryTabs
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+        </div>
       </div>
 
-      {/* Content */}
-      <div className="pt-[132px] pb-20 px-4">
+      {/* Content - Tighter grid */}
+      <div className="pt-[84px] pb-16 px-2">
         <div className={cn(
-          "grid gap-4",
+          "grid gap-2",
           view === "grid" ? "grid-cols-2" : "grid-cols-1"
         )}>
           {filteredCategories.map((category) => (
@@ -158,45 +153,44 @@ const MarketplaceCategories = () => {
               onClick={() => navigate(`/marketplace/categories/${category.id}`)}
               className={cn(
                 "relative group overflow-hidden",
-                "bg-gradient-to-br rounded-2xl",
+                "bg-gradient-to-br rounded-xl",
                 category.gradient,
                 "animate-scale-in transition-transform hover:scale-[1.02] active:scale-[0.98]",
-                view === "grid" ? "aspect-square" : "h-24"
+                view === "grid" ? "aspect-[4/3]" : "h-20"
               )}
             >
-              {/* Category Content */}
-              <div className="absolute inset-0 p-4 text-white">
-                <div className="flex items-start justify-between">
+              <div className="absolute inset-0 p-3">
+                <div className="flex items-start justify-between h-full">
                   <div>
-                    <span className="text-3xl mb-1">{category.icon}</span>
-                    <h3 className="font-semibold mt-2">{category.name}</h3>
+                    <span className="text-2xl leading-none">{category.icon}</span>
+                    <h3 className="font-medium text-sm text-white mt-1.5">{category.name}</h3>
                     {view === "list" && (
-                      <p className="text-xs text-white/80 mt-1">{category.description}</p>
+                      <p className="text-xs text-white/80 mt-0.5 line-clamp-1">{category.description}</p>
                     )}
                   </div>
-                  <div className="flex flex-col items-end gap-2">
-                    <ChevronRight className="h-4 w-4 opacity-50 group-hover:opacity-100 transition-opacity" />
-                    <Badge variant="secondary" className="bg-white/20 text-white border-0">
-                      {category.itemCount.toLocaleString()} items
+                  <div className="flex flex-col items-end gap-1.5">
+                    <ChevronRight className="h-3.5 w-3.5 text-white/50 group-hover:text-white/90 transition-colors" />
+                    <Badge variant="secondary" className="px-1.5 py-0.5 text-[10px] bg-white/20 text-white border-0">
+                      {category.itemCount.toLocaleString()}
                     </Badge>
                   </div>
                 </div>
 
-                {/* Status Indicators */}
-                <div className="absolute bottom-4 left-4 flex items-center gap-2">
+                {/* Status Indicators - Smaller and more compact */}
+                <div className="absolute bottom-2 left-2 flex items-center gap-1.5">
                   {category.trending && (
-                    <Badge variant="secondary" className="bg-white/20 text-white border-0">
-                      🔥 Trending
+                    <Badge variant="secondary" className="px-1.5 py-0.5 text-[10px] bg-white/20 text-white border-0">
+                      🔥
                     </Badge>
                   )}
                   {category.new && (
-                    <Badge variant="secondary" className="bg-white/20 text-white border-0">
-                      ✨ New
+                    <Badge variant="secondary" className="px-1.5 py-0.5 text-[10px] bg-white/20 text-white border-0">
+                      ✨
                     </Badge>
                   )}
                   {category.hot && (
-                    <Badge variant="secondary" className="bg-white/20 text-white border-0">
-                      🌟 Hot
+                    <Badge variant="secondary" className="px-1.5 py-0.5 text-[10px] bg-white/20 text-white border-0">
+                      🌟
                     </Badge>
                   )}
                 </div>
