@@ -1,5 +1,5 @@
 
-import { Star } from "lucide-react";
+import { Star, Clock } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
