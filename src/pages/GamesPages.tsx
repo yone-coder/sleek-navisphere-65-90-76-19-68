@@ -11,6 +11,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { GameSearchOverlay } from "@/components/search/GameSearchOverlay";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -92,6 +93,7 @@ export default function GamesPages() {
   const [activeTab, setActiveTab] = useState("For you");
   const [searchQuery, setSearchQuery] = useState("");
   const [notifications] = useState(3);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const renderRating = (rating: number) => {
     return (
@@ -130,9 +132,10 @@ export default function GamesPages() {
               <Search className="absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground/60 group-hover:text-muted-foreground/80 transition-colors duration-200" />
               <Input
                 placeholder="Search games, categories..."
-                className="w-full pl-10 pr-16 bg-gray-50/80 hover:bg-gray-50 focus:bg-white transition-colors border-none h-10 text-sm rounded-xl"
+                className="w-full pl-10 pr-16 bg-gray-50/80 hover:bg-gray-50 focus:bg-white transition-colors border-none h-10 text-sm rounded-xl cursor-pointer"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onClick={() => setIsSearchOpen(true)}
+                readOnly
               />
               <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 hidden sm:inline-flex h-5 select-none items-center gap-1 rounded border bg-background px-1.5 font-mono text-[10px] font-medium opacity-50 hover:opacity-100 transition-opacity duration-200">
                 <span className="text-xs">⌘</span>K
@@ -354,6 +357,11 @@ export default function GamesPages() {
           </div>
         </div>
       </div>
+
+      <GameSearchOverlay 
+        isOpen={isSearchOpen} 
+        onClose={() => setIsSearchOpen(false)} 
+      />
     </div>
   );
 }
