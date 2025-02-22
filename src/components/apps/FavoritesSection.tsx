@@ -21,7 +21,7 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
   if (favoriteApps.length === 0) return null;
 
   return (
-    <div className="mb-8">
+    <div className="mb-8 w-full">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-500">
@@ -30,34 +30,36 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
           <h2 className="text-lg font-semibold text-gray-900">Favorites</h2>
         </div>
       </div>
-      <ScrollArea className="w-full whitespace-nowrap rounded-lg pb-4">
-        <div className="flex space-x-4">
-          {favoriteApps.map((app) => (
-            <div key={app.name} className="flex-none w-[120px]">
-              <Button
-                variant="ghost"
-                className="relative flex flex-col items-center gap-3 p-4 h-auto w-full group rounded-xl"
-                onClick={() => navigate(app.route)}
-              >
-                <div 
-                  className={`w-16 h-16 rounded-full ${app.color} flex items-center justify-center relative group-hover:scale-105 transition-transform duration-300`}
+      <div className="relative w-full max-w-full">
+        <ScrollArea className="w-full max-w-full">
+          <div className="flex gap-4 pb-4">
+            {favoriteApps.map((app) => (
+              <div key={app.name} className="w-[120px] shrink-0 first:ml-1 last:mr-1">
+                <Button
+                  variant="ghost"
+                  className="relative flex flex-col items-center gap-3 p-4 h-auto w-full group rounded-xl"
+                  onClick={() => navigate(app.route)}
                 >
-                  <app.icon className="w-8 h-8 text-white" />
-                  {app.updates > 0 && (
-                    <Badge className="absolute -top-1 -right-1 bg-red-500 text-[10px] h-5">
-                      {app.updates}
-                    </Badge>
-                  )}
-                </div>
-                <span className="text-sm font-medium text-gray-700 text-center line-clamp-2">
-                  {app.name}
-                </span>
-              </Button>
-            </div>
-          ))}
-        </div>
-        <ScrollBar orientation="horizontal" className="opacity-0" />
-      </ScrollArea>
+                  <div 
+                    className={`w-16 h-16 rounded-full ${app.color} flex items-center justify-center relative group-hover:scale-105 transition-transform duration-300`}
+                  >
+                    <app.icon className="w-8 h-8 text-white" />
+                    {app.updates > 0 && (
+                      <Badge className="absolute -top-1 -right-1 bg-red-500 text-[10px] h-5">
+                        {app.updates}
+                      </Badge>
+                    )}
+                  </div>
+                  <span className="text-sm font-medium text-gray-700 text-center line-clamp-2">
+                    {app.name}
+                  </span>
+                </Button>
+              </div>
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </div>
     </div>
   );
 };
