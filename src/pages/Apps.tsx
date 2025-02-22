@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { SearchOverlay } from "@/components/search/SearchOverlay";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AppsHeader } from "@/components/apps/AppsHeader";
+import { BannerSlider } from "@/components/BannerSlider";
 
 const apps = [
   {
@@ -238,6 +239,7 @@ export default function Apps() {
       <ScrollArea className="h-[calc(100vh-3.5rem)]">
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
           <div className="relative overflow-hidden">
+            <BannerSlider />
             <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-violet-50" />
             <div className="relative max-w-7xl mx-auto px-4">
               <div className="py-8">

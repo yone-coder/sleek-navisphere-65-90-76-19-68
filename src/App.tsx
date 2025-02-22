@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { BottomNav } from "./components/BottomNav";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
-import { BannerSlider } from "./components/BannerSlider";
 
 // Lazy load all pages
 const Home = lazy(() => import("./pages/Apps"));
@@ -60,12 +59,10 @@ const AppContent = () => {
   const hideBottomNavRoutes = ['/marketplace'];
   const isAdminRoute = location.pathname.startsWith('/admin');
   const shouldShowBottomNav = !isAdminRoute && !hideBottomNavRoutes.some(route => location.pathname.startsWith(route));
-  const isHomePage = location.pathname === "/";
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
       <Suspense fallback={<LoadingFallback />}>
-        {isHomePage && <BannerSlider />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/apps" element={<Apps />} />
