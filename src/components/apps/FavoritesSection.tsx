@@ -41,7 +41,7 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
                   onClick={() => navigate(app.route)}
                 >
                   <div 
-                    className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative group-hover:scale-105 transition-transform duration-300`}
+                    className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}
                   >
                     <app.icon className="w-7 h-7 text-white" />
                     {app.updates > 0 && (
