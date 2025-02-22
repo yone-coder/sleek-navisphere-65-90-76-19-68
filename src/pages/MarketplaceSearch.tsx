@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ProductGrid } from "@/components/marketplace/ProductGrid";
+import { MarketplaceNav } from "@/components/marketplace/MarketplaceNav";
 import { cn } from "@/lib/utils";
 
 const recentSearches = [
@@ -208,6 +209,8 @@ const MarketplaceSearch = () => {
           </div>
         )}
       </div>
+
+      <MarketplaceNav />
     </div>
   );
 };
