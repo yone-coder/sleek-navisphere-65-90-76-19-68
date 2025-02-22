@@ -12,7 +12,6 @@ import Marketplace from "./pages/Marketplace";
 import MarketplaceSearch from "./pages/MarketplaceSearch";
 import MarketplaceCategories from "./pages/MarketplaceCategories";
 import MarketplaceCart from "./pages/MarketplaceCart";
-import { LanguageProvider } from "./contexts/LanguageContext";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,11 +30,8 @@ const router = createBrowserRouter(
 
 function App() {
   return (
-    <LanguageProvider>
-      <RouterProvider router={router} />
-    </LanguageProvider>
+    <RouterProvider router={router} />
   );
 }
 
 export default App;
-
