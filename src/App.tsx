@@ -10,7 +10,7 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Lazy load all pages
-const Home = lazy(() => import("./pages/Apps"));
+const Apps = lazy(() => import("./pages/Apps"));
 const Explore = lazy(() => import("./pages/Explore"));
 const Matches = lazy(() => import("./pages/Matches"));
 const Feeds = lazy(() => import("./pages/Feeds"));
@@ -28,7 +28,6 @@ const Morpion = lazy(() => import("./pages/games/Morpion"));
 const MatchDetails = lazy(() => import("./pages/MatchDetails"));
 const Marketplace = lazy(() => import("./pages/Marketplace"));
 const ProductDetails = lazy(() => import("./pages/ProductDetails"));
-const Apps = lazy(() => import("./pages/Apps"));
 const Search = lazy(() => import("./pages/Search"));
 const MarketplaceSearch = lazy(() => import("./pages/MarketplaceSearch"));
 const MarketplaceCategories = lazy(() => import("./pages/MarketplaceCategories"));
@@ -67,7 +66,7 @@ const AppContent = () => {
     <div className="min-h-screen bg-background text-foreground font-sans">
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Apps />} />
           <Route path="/apps" element={<Apps />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/matches" element={<Matches />} />
