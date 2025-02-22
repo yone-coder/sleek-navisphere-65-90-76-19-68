@@ -240,7 +240,6 @@ export default function Apps() {
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
           <div className="relative overflow-hidden">
             <BannerSlider />
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-violet-50" />
             <div className="relative max-w-7xl mx-auto px-4">
               <div className="py-8">
                 <div className="flex items-center justify-between mb-8">
