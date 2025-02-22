@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
@@ -8,33 +9,6 @@ import {
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { 
-  Search, Heart, MessageSquare, Share2, Filter, 
-  SlidersHorizontal, Users, Clock, DollarSign, Star,
-  Gamepad, Trophy, Tag, ThumbsUp 
-} from "lucide-react";
-import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import type { Game } from "@/types/explore";
 
 const games = {
   boardGames: [
@@ -49,14 +23,7 @@ const games = {
         likes: "3.2K",
         comments: "600",
         shares: "1.1K"
-      },
-      category: "boardGames",
-      tags: ["strategy", "classic"],
-      difficulty: "medium" as const,
-      players: 2,
-      rating: 4.5,
-      playTime: "60-120 minutes",
-      price: { amount: 0, currency: "USD" }
+      }
     },
     {
       id: 2,
@@ -69,14 +36,33 @@ const games = {
         likes: "1.1K",
         comments: "180",
         shares: "250"
-      },
-      category: "boardGames",
-      tags: ["tile-based", "family"],
-      difficulty: "easy" as const,
-      players: 2,
-      rating: 3.8,
-      playTime: "30-45 minutes",
-      price: { amount: 0, currency: "USD" }
+      }
+    },
+    {
+      id: 3,
+      title: "Morpion (Tic-Tac-Toe)",
+      description: "A simple strategy game for two players, who take turns marking the spaces in a 3×3 grid.",
+      image: "https://storage.googleapis.com/a1aa/image/ILaOkYoR7hDayBWLOW1hj6X9ZkaT-UcZm24KX8P1jDY.jpg",
+      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      verified: true,
+      stats: {
+        likes: "900",
+        comments: "150",
+        shares: "200"
+      }
+    },
+    {
+      id: 4,
+      title: "Shogi",
+      description: "A Japanese strategy board game for two players, similar to chess.",
+      image: "https://storage.googleapis.com/a1aa/image/URT1V_NcnrlLxnJWpP80Ej-uYh8hMuDel6e7Pxqs_eo.jpg",
+      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      verified: true,
+      stats: {
+        likes: "1.5K",
+        comments: "250",
+        shares: "400"
+      }
     }
   ],
   arcadeGames: [
@@ -91,14 +77,20 @@ const games = {
         likes: "5.2K",
         comments: "800",
         shares: "1.5K"
-      },
-      category: "arcadeGames",
-      tags: ["maze", "classic"],
-      difficulty: "easy" as const,
-      players: 1,
-      rating: 4.7,
-      playTime: "5-15 minutes",
-      price: { amount: 0, currency: "USD" }
+      }
+    },
+    {
+      id: 6,
+      title: "Space Invaders",
+      description: "Defend Earth from an alien invasion in this timeless shooting game.",
+      image: "https://storage.googleapis.com/a1aa/image/U9cxiKWRsMwBdP7GKinlUOUdzMsKzRiFuAfG1-PCvAg.jpg",
+      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      verified: true,
+      stats: {
+        likes: "4.1K",
+        comments: "720",
+        shares: "950"
+      }
     }
   ],
   cardGames: [
@@ -113,14 +105,20 @@ const games = {
         likes: "6.5K",
         comments: "1.2K",
         shares: "2.1K"
-      },
-      category: "cardGames",
-      tags: ["betting", "strategy"],
-      difficulty: "hard" as const,
-      players: 2,
-      rating: 4.8,
-      playTime: "30-60 minutes",
-      price: { amount: 75, currency: "USD" }
+      }
+    },
+    {
+      id: 8,
+      title: "Solitaire",
+      description: "A single-player card game also known as Patience, perfect for casual gaming.",
+      image: "https://storage.googleapis.com/a1aa/image/URT1V_NcnrlLxnJWpP80Ej-uYh8hMuDel6e7Pxqs_eo.jpg",
+      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      verified: true,
+      stats: {
+        likes: "3.8K",
+        comments: "450",
+        shares: "780"
+      }
     }
   ],
   puzzleGames: [
@@ -135,14 +133,20 @@ const games = {
         likes: "7.2K",
         comments: "1.5K",
         shares: "2.8K"
-      },
-      category: "puzzleGames",
-      tags: ["blocks", "addictive"],
-      difficulty: "medium" as const,
-      players: 1,
-      rating: 4.9,
-      playTime: "10-20 minutes",
-      price: { amount: 0, currency: "USD" }
+      }
+    },
+    {
+      id: 10,
+      title: "Sudoku",
+      description: "Fill a 9×9 grid with numbers according to specific rules in this logic puzzle.",
+      image: "https://storage.googleapis.com/a1aa/image/U9cxiKWRsMwBdP7GKinlUOUdzMsKzRiFuAfG1-PCvAg.jpg",
+      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      verified: true,
+      stats: {
+        likes: "4.5K",
+        comments: "890",
+        shares: "1.2K"
+      }
     }
   ]
 };
@@ -173,212 +177,76 @@ const categories = [
   { id: "games", label: "Games" }
 ];
 
-interface GameCardProps {
-  game: Game;
-  onLike: (gameId: number) => void;
-  onShare: (gameId: number) => void;
-  isLiked: boolean;
-}
-
-const GameCard = ({ game, onLike, onShare, isLiked }: GameCardProps) => {
+const GameSection = ({ title, games }: { title: string; games: any[] }) => {
   const navigate = useNavigate();
 
   const handleGameClick = (gameId: number, gameTitle: string) => {
     navigate(`/tournaments?game=${gameId}&title=${encodeURIComponent(gameTitle)}`);
   };
 
-  const getDifficultyColor = (difficulty?: string) => {
-    switch (difficulty) {
-      case "easy": return "bg-green-500";
-      case "medium": return "bg-yellow-500";
-      case "hard": return "bg-red-500";
-      default: return "bg-gray-500";
-    }
-  };
-
-  return (
-    <Card className="bg-white rounded-lg shadow-md overflow-hidden w-72 flex-shrink-0 group hover:shadow-lg transition-all duration-300">
-      <div className="relative">
-        <img 
-          src={game.image} 
-          alt={`${game.title} cover`} 
-          className="h-40 w-full object-cover transition-transform group-hover:scale-105 duration-300"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-        <div className="absolute top-3 left-3 flex flex-wrap gap-1">
-          {game.tags.map((tag, index) => (
-            <Badge 
-              key={index} 
-              variant="secondary" 
-              className="bg-black/50 text-white backdrop-blur-sm text-xs"
-            >
-              {tag}
-            </Badge>
-          ))}
-        </div>
-        {game.difficulty && (
-          <Badge 
-            className={`absolute top-3 right-3 ${getDifficultyColor(game.difficulty)}`}
-          >
-            {game.difficulty}
-          </Badge>
-        )}
-        <div className="absolute bottom-3 left-3 flex items-center gap-2">
-          <img 
-            src={game.profileImage} 
-            alt="Creator" 
-            className="h-8 w-8 rounded-full border-2 border-white"
-          />
-          {game.verified && (
-            <Badge className="bg-blue-500/90">Verified</Badge>
-          )}
-        </div>
-      </div>
-      <CardContent className="p-4">
-        <div className="space-y-3">
-          <div className="flex items-start justify-between">
-            <h2 className="text-lg font-semibold line-clamp-1">{game.title}</h2>
-            {game.rating && (
-              <div className="flex items-center">
-                <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                <span className="ml-1 text-sm">{game.rating}</span>
-              </div>
-            )}
-          </div>
-          
-          <p className="text-sm text-gray-500 line-clamp-2">{game.description}</p>
-          
-          <div className="flex items-center gap-4 text-xs text-gray-500">
-            {game.players && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger className="flex items-center gap-1">
-                    <Users className="w-4 h-4" />
-                    {game.players}
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Players required</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-            {game.playTime && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    {game.playTime}
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Average play time</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-            {game.price && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger className="flex items-center gap-1">
-                    <DollarSign className="w-4 h-4" />
-                    {game.price.amount} {game.price.currency}
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Entry fee</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-          </div>
-
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="hover:text-red-500 transition-colors"
-              onClick={(e) => {
-                e.stopPropagation();
-                onLike(game.id);
-              }}
-            >
-              <Heart className={cn(
-                "w-4 h-4 mr-1",
-                isLiked && "fill-red-500 text-red-500"
-              )} />
-              {game.stats.likes}
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                onShare(game.id);
-              }}
-            >
-              <Share2 className="w-4 h-4 mr-1" />
-              {game.stats.shares}
-            </Button>
-            <Button variant="ghost" size="sm">
-              <MessageSquare className="w-4 h-4 mr-1" />
-              {game.stats.comments}
-            </Button>
-          </div>
-
-          <div className="flex gap-2">
-            <Button 
-              className="flex-1"
-              onClick={() => handleGameClick(game.id, game.title)}
-            >
-              <Trophy className="w-4 h-4 mr-2" />
-              Tournaments
-            </Button>
-            <Button 
-              variant="outline"
-              onClick={() => navigate(`/game/${game.id}`)}
-            >
-              <Gamepad className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
-
-interface GameSectionProps {
-  title: string;
-  games: Game[];
-  onLike: (gameId: number) => void;
-  onShare: (gameId: number) => void;
-  likedGames: number[];
-}
-
-const GameSection = ({ title, games, onLike, onShare, likedGames }: GameSectionProps) => {
   return (
     <div className="mb-8">
-      <div className="flex justify-between items-center px-4 mb-4">
-        <div className="flex items-center gap-3">
-          <h1 className="text-xl font-bold">{title}</h1>
-          <Badge variant="secondary" className="rounded-full">
-            {games.length}
-          </Badge>
-        </div>
-        <Button variant="ghost" size="sm" className="text-sm">
-          See All
-        </Button>
+      <div className="flex justify-between items-center px-4 mb-2">
+        <h1 className="text-xl font-bold">{title}</h1>
+        <i className="fas fa-arrow-right text-xl"></i>
       </div>
-      <ScrollArea className="w-full">
-        <div className="flex w-max space-x-4 px-4 pb-4">
+      <div className="flex overflow-x-auto no-scrollbar">
+        <div className="flex space-x-3 px-4">
           {games.map((game) => (
-            <GameCard
-              key={game.id}
-              game={game}
-              onLike={onLike}
-              onShare={onShare}
-              isLiked={likedGames.includes(game.id)}
-            />
+            <div key={game.id} className="bg-white rounded-lg shadow-md overflow-hidden w-60 flex-shrink-0">
+              <div className="relative">
+                <img 
+                  src={game.image} 
+                  alt={`${game.title} board`} 
+                  className="h-32 w-full object-cover"
+                />
+                <img 
+                  src={game.profileImage} 
+                  alt="Profile picture of the user" 
+                  className="absolute bottom-0 left-2 transform translate-y-1/2 h-10 w-10 rounded-full border-2 border-white"
+                />
+              </div>
+              <div className="p-2 pt-6">
+                <div className="flex justify-between items-center mb-2">
+                  <div>
+                    <h2 className="text-sm font-bold">
+                      {game.title}
+                      {game.verified && (
+                        <span className="text-green-500 ml-1">
+                          <i className="fas fa-check-circle"></i>
+                        </span>
+                      )}
+                    </h2>
+                  </div>
+                  <button className="bg-blue-500 text-white text-xs px-2 py-1 rounded-md">
+                    + Follow
+                  </button>
+                </div>
+                <p className="text-gray-500 text-xs truncate-2-lines">
+                  {game.description}
+                </p>
+                <div className="mt-2 flex items-center justify-between text-gray-500 text-xs">
+                  <span>
+                    <i className="fas fa-heart"></i> {game.stats.likes}
+                  </span>
+                  <span>
+                    <i className="fas fa-comment"></i> {game.stats.comments}
+                  </span>
+                  <span>
+                    <i className="fas fa-share"></i> {game.stats.shares}
+                  </span>
+                </div>
+                <button 
+                  onClick={() => handleGameClick(game.id, game.title)}
+                  className="mt-2 w-full bg-blue-500 text-white py-1 rounded-md text-sm"
+                >
+                  View Tournaments
+                </button>
+              </div>
+            </div>
           ))}
         </div>
-      </ScrollArea>
+      </div>
     </div>
   );
 };
@@ -388,14 +256,6 @@ export default function Explore() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
   const [activeCategory, setActiveCategory] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [likedGames, setLikedGames] = useState<number[]>([]);
-  const [filters, setFilters] = useState({
-    verified: false,
-    hasComments: false,
-    trending: false,
-  });
-  const { toast } = useToast();
 
   useEffect(() => {
     if (!api) {
@@ -407,113 +267,22 @@ export default function Explore() {
     });
   }, [api]);
 
-  const handleLike = (gameId: number) => {
-    setLikedGames(prev => {
-      const isLiked = prev.includes(gameId);
-      const newLikedGames = isLiked 
-        ? prev.filter(id => id !== gameId)
-        : [...prev, gameId];
-      
-      toast({
-        title: isLiked ? "Removed from favorites" : "Added to favorites",
-        description: "Your preferences have been updated",
-      });
-      
-      return newLikedGames;
-    });
-  };
-
-  const handleShare = (gameId: number) => {
-    toast({
-      title: "Sharing...",
-      description: "This feature will be available soon!",
-    });
-  };
-
-  const [sortBy, setSortBy] = useState<'popular' | 'recent' | 'rating'>('popular');
-  const [view, setView] = useState<'grid' | 'list'>('grid');
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100]);
-  const [selectedDifficulties, setSelectedDifficulties] = useState<string[]>([]);
-
   return (
-    <div className="bg-gray-50 min-h-screen pb-20">
-      <header className="sticky top-0 z-10 bg-white border-b">
-        <div className="flex items-center justify-between px-4 py-4">
-          <div className="flex items-center">
-            <button className="text-xl" onClick={() => navigate(-1)}>
-              <i className="fas fa-arrow-left"></i>
-            </button>
-            <h1 className="text-2xl font-bold ml-4">Explore</h1>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5" />
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <SlidersHorizontal className="h-5 w-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>Filters</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuCheckboxItem
-                  checked={filters.verified}
-                  onCheckedChange={(checked) => 
-                    setFilters(prev => ({ ...prev, verified: checked }))
-                  }
-                >
-                  Verified Only
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  checked={filters.hasComments}
-                  onCheckedChange={(checked) =>
-                    setFilters(prev => ({ ...prev, hasComments: checked }))
-                  }
-                >
-                  Has Comments
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  checked={filters.trending}
-                  onCheckedChange={(checked) =>
-                    setFilters(prev => ({ ...prev, trending: checked }))
-                  }
-                >
-                  Trending
-                </DropdownMenuCheckboxItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+    <div className="bg-gray-100">
+      <header className="flex items-center justify-between px-4 py-4">
+        <div className="flex items-center">
+          <button className="text-xl" onClick={() => navigate(-1)}>
+            <i className="fas fa-arrow-left"></i>
+          </button>
+          <h1 className="text-2xl font-bold ml-4">Explore</h1>
         </div>
-        
-        <div className="px-4 pb-4">
-          <Input
-            placeholder="Search games, tournaments..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full"
-          />
-        </div>
-
-        <div className="px-4 pb-4">
-          <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
-            <TabsList className="w-full justify-start overflow-x-auto no-scrollbar">
-              {categories.map((category) => (
-                <TabsTrigger
-                  key={category.id}
-                  value={category.id}
-                  className="px-4 py-2"
-                >
-                  {category.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
-        </div>
+        <button className="text-xl">
+          <i className="fas fa-search"></i>
+        </button>
       </header>
 
-      <div className="w-full relative mb-6">
+      {/* Image Slider */}
+      <div className="w-full relative">
         <Carousel
           opts={{
             align: "start",
@@ -531,7 +300,6 @@ export default function Explore() {
                     alt={image.alt}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 </div>
               </CarouselItem>
             ))}
@@ -544,10 +312,12 @@ export default function Explore() {
                   className={cn(
                     "w-2 h-2 rounded-full transition-all duration-300 ease-in-out transform",
                     currentSlide === index 
-                      ? "bg-white w-4" 
-                      : "bg-white/60 hover:bg-white/80"
+                      ? "bg-blue-500 w-4 scale-110" 
+                      : "bg-gray-300 hover:bg-gray-400"
                   )}
-                  onClick={() => api?.scrollTo(index)}
+                  onClick={() => {
+                    api?.scrollTo(index);
+                  }}
                 />
               ))}
             </div>
@@ -555,35 +325,38 @@ export default function Explore() {
         </Carousel>
       </div>
 
-      <div className="space-y-6">
-        <GameSection 
-          title="Board Games" 
-          games={games.boardGames} 
-          onLike={handleLike}
-          onShare={handleShare}
-          likedGames={likedGames}
-        />
-        <GameSection 
-          title="Arcade Games" 
-          games={games.arcadeGames}
-          onLike={handleLike}
-          onShare={handleShare}
-          likedGames={likedGames}
-        />
-        <GameSection 
-          title="Card Games" 
-          games={games.cardGames}
-          onLike={handleLike}
-          onShare={handleShare}
-          likedGames={likedGames}
-        />
-        <GameSection 
-          title="Puzzle Games" 
-          games={games.puzzleGames}
-          onLike={handleLike}
-          onShare={handleShare}
-          likedGames={likedGames}
-        />
+      {/* Categories Tab Switcher */}
+      <div className="py-4">
+        <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
+          <div className="relative">
+            <TabsList className="h-10 items-center bg-transparent gap-2 flex overflow-x-auto no-scrollbar">
+              <div className="flex gap-2 min-w-full px-4">
+                {categories.map((category) => (
+                  <TabsTrigger
+                    key={category.id}
+                    value={category.id}
+                    className={cn(
+                      "px-4 py-2 rounded-full text-sm font-medium transition-all flex-shrink-0",
+                      "data-[state=active]:bg-gray-900 data-[state=active]:text-white",
+                      "data-[state=inactive]:bg-gray-200 data-[state=inactive]:text-gray-600",
+                      "hover:bg-gray-300"
+                    )}
+                  >
+                    {category.label}
+                  </TabsTrigger>
+                ))}
+                <div className="w-4 flex-shrink-0" />
+              </div>
+            </TabsList>
+          </div>
+        </Tabs>
+      </div>
+
+      <div className="space-y-4">
+        <GameSection title="Board Games" games={games.boardGames} />
+        <GameSection title="Arcade Games" games={games.arcadeGames} />
+        <GameSection title="Card Games" games={games.cardGames} />
+        <GameSection title="Puzzle Games" games={games.puzzleGames} />
       </div>
 
       <style>{`
