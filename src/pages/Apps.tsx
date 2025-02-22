@@ -181,7 +181,7 @@ export default function Apps() {
   const favoriteApps = apps.filter(app => favorites.includes(app.name));
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen w-full overflow-x-hidden">
       <AppsHeader onOpenSearch={() => setIsSearchOpen(true)} />
       <SearchOverlay 
         isOpen={isSearchOpen} 
@@ -189,11 +189,11 @@ export default function Apps() {
         apps={apps}
       />
 
-      <ScrollArea className="h-[calc(100vh-3.5rem)]">
+      <ScrollArea className="flex-1">
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-          <div className="relative overflow-hidden">
+          <div className="relative">
             <BannerSlider />
-            <div className="relative max-w-7xl mx-auto px-4">
+            <div className="relative max-w-7xl mx-auto px-4 w-full">
               <div className="py-8">
                 <FavoritesSection favoriteApps={favoriteApps} />
 
@@ -259,6 +259,6 @@ export default function Apps() {
           </div>
         </div>
       </ScrollArea>
-    </>
+    </div>
   );
 }
