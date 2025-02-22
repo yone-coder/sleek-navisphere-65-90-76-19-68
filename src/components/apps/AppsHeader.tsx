@@ -12,7 +12,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export const AppsHeader = () => {
+interface AppsHeaderProps {
+  onOpenSearch: () => void;
+}
+
+export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
   const [notifications, setNotifications] = useState(3); // Mock notification count
 
   return (
@@ -35,7 +39,9 @@ export const AppsHeader = () => {
             <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search apps, games, tournaments..."
-              className="pl-8 bg-muted/50"
+              className="pl-8 bg-muted/50 cursor-pointer"
+              onClick={onOpenSearch}
+              readOnly
             />
           </div>
           <Button variant="ghost" size="icon" className="hidden md:flex">

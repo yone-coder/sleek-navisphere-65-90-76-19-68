@@ -3,7 +3,6 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
 import { SearchOverlay } from "@/components/search/SearchOverlay";
@@ -205,7 +204,6 @@ export default function Apps() {
     const saved = localStorage.getItem("favoriteApps");
     return saved ? JSON.parse(saved) : [];
   });
-  const [searchQuery, setSearchQuery] = useState("");
   const [showUpdatesOnly, setShowUpdatesOnly] = useState(false);
 
   useEffect(() => {
@@ -230,7 +228,7 @@ export default function Apps() {
 
   return (
     <>
-      <AppsHeader />
+      <AppsHeader onOpenSearch={() => setIsSearchOpen(true)} />
       <SearchOverlay 
         isOpen={isSearchOpen} 
         onClose={() => setIsSearchOpen(false)} 
@@ -267,21 +265,6 @@ export default function Apps() {
                     <Button variant="ghost" size="icon" className="rounded-xl hover:bg-gray-100">
                       <Filter className="w-5 h-5 text-gray-500" />
                     </Button>
-                  </div>
-                </div>
-
-                <div className="relative max-w-2xl mx-auto mb-8">
-                  <div 
-                    className="relative cursor-pointer group"
-                    onClick={() => setIsSearchOpen(true)}
-                  >
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-                    <Input
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search apps, categories, or features..."
-                      className="w-full pl-10 pr-4 h-11 bg-white/80 backdrop-blur-xl border-gray-200 rounded-xl cursor-pointer group-hover:border-gray-300 transition-colors"
-                    />
                   </div>
                 </div>
 
