@@ -1,5 +1,5 @@
 
-import { Home, ChevronRight, Clock } from 'lucide-react';
+import { Home, ChevronRight, Clock, ChevronLeft } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -35,6 +35,25 @@ export const BottomNav = () => {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50">
+      {/* Back button */}
+      <button
+        onClick={() => navigate(-1)}
+        className={cn(
+          "absolute left-4 -top-12",
+          "flex items-center gap-2 px-3 py-1.5",
+          "text-xs font-medium text-gray-600",
+          "bg-white/50 backdrop-blur-sm rounded-full",
+          "border border-gray-200/30 shadow-sm",
+          "transition-all duration-300 hover:bg-white/80",
+          "opacity-0 -translate-y-2",
+          location.pathname !== '/' && "opacity-100 translate-y-0"
+        )}
+        aria-label="Go back"
+      >
+        <ChevronLeft className="w-4 h-4" aria-hidden="true" />
+        Back
+      </button>
+
       {/* Glassmorphism backdrop */}
       <div className="absolute inset-0 bg-gradient-to-t from-white/95 to-white/75 dark:from-gray-900/95 dark:to-gray-900/75 backdrop-blur-lg border-t border-white/10" />
       
