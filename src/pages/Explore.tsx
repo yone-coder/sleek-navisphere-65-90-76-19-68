@@ -27,51 +27,38 @@ const games = {
     },
     {
       id: 2,
-      title: "Dominoes",
-      description: "A family of tile-based games played with rectangular \"domino\" tiles.",
+      title: "Go",
+      description: "An ancient board game of territory control and strategic thinking.",
       image: "https://storage.googleapis.com/a1aa/image/U9cxiKWRsMwBdP7GKinlUOUdzMsKzRiFuAfG1-PCvAg.jpg",
-      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      profileImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=Player8",
       verified: true,
       stats: {
-        likes: "1.1K",
-        comments: "180",
-        shares: "250"
+        likes: "2.8K",
+        comments: "450",
+        shares: "980"
       }
     },
     {
       id: 3,
-      title: "Morpion (Tic-Tac-Toe)",
-      description: "A simple strategy game for two players, who take turns marking the spaces in a 3×3 grid.",
-      image: "https://storage.googleapis.com/a1aa/image/ILaOkYoR7hDayBWLOW1hj6X9ZkaT-UcZm24KX8P1jDY.jpg",
-      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
-      verified: true,
-      stats: {
-        likes: "900",
-        comments: "150",
-        shares: "200"
-      }
-    },
-    {
-      id: 4,
       title: "Shogi",
-      description: "A Japanese strategy board game for two players, similar to chess.",
-      image: "https://storage.googleapis.com/a1aa/image/URT1V_NcnrlLxnJWpP80Ej-uYh8hMuDel6e7Pxqs_eo.jpg",
-      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      description: "Japanese chess with unique piece capturing and redeployment mechanics.",
+      image: "https://storage.googleapis.com/a1aa/image/ILaOkYoR7hDayBWLOW1hj6X9ZkaT-UcZm24KX8P1jDY.jpg",
+      profileImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=Player9",
       verified: true,
       stats: {
         likes: "1.5K",
-        comments: "250",
-        shares: "400"
+        comments: "320",
+        shares: "670"
       }
     }
   ],
   arcadeGames: [
     {
-      id: 5,
+      id: 4,
       title: "Pac-Man",
-      description: "Navigate through a maze while eating dots and avoiding ghosts in this classic arcade game.",
+      description: "Navigate through a maze while eating dots and avoiding ghosts.",
       image: "https://storage.googleapis.com/a1aa/image/A0tRiJ6w8HZujXs2A-4XYcnReWkJ1hU6JyQbw-55BIE.jpg",
-      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      profileImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=Player10",
       verified: true,
       stats: {
         likes: "5.2K",
@@ -80,16 +67,29 @@ const games = {
       }
     },
     {
-      id: 6,
+      id: 5,
       title: "Space Invaders",
-      description: "Defend Earth from an alien invasion in this timeless shooting game.",
+      description: "Classic shooter game defending Earth from alien invasion.",
       image: "https://storage.googleapis.com/a1aa/image/U9cxiKWRsMwBdP7GKinlUOUdzMsKzRiFuAfG1-PCvAg.jpg",
-      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      profileImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=Player11",
       verified: true,
       stats: {
         likes: "4.1K",
         comments: "720",
         shares: "950"
+      }
+    },
+    {
+      id: 6,
+      title: "Tetris",
+      description: "Arrange falling blocks to create complete lines in this classic puzzle game.",
+      image: "https://storage.googleapis.com/a1aa/image/ILaOkYoR7hDayBWLOW1hj6X9ZkaT-UcZm24KX8P1jDY.jpg",
+      profileImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=Player12",
+      verified: true,
+      stats: {
+        likes: "6.7K",
+        comments: "1.2K",
+        shares: "2.1K"
       }
     }
   ],
@@ -97,9 +97,9 @@ const games = {
     {
       id: 7,
       title: "Poker",
-      description: "A family of card games involving betting and individual play against other players.",
-      image: "https://storage.googleapis.com/a1aa/image/ILaOkYoR7hDayBWLOW1hj6X9ZkaT-UcZm24KX8P1jDY.jpg",
-      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      description: "Strategic card game of betting and bluffing.",
+      image: "https://storage.googleapis.com/a1aa/image/URT1V_NcnrlLxnJWpP80Ej-uYh8hMuDel6e7Pxqs_eo.jpg",
+      profileImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=Player13",
       verified: true,
       stats: {
         likes: "6.5K",
@@ -110,42 +110,68 @@ const games = {
     {
       id: 8,
       title: "Solitaire",
-      description: "A single-player card game also known as Patience, perfect for casual gaming.",
-      image: "https://storage.googleapis.com/a1aa/image/URT1V_NcnrlLxnJWpP80Ej-uYh8hMuDel6e7Pxqs_eo.jpg",
-      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      description: "Classic single-player card game of patience and strategy.",
+      image: "https://storage.googleapis.com/a1aa/image/A0tRiJ6w8HZujXs2A-4XYcnReWkJ1hU6JyQbw-55BIE.jpg",
+      profileImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=Player14",
       verified: true,
       stats: {
         likes: "3.8K",
         comments: "450",
         shares: "780"
       }
+    },
+    {
+      id: 9,
+      title: "Bridge",
+      description: "Partnership card game of bidding and trick-taking.",
+      image: "https://storage.googleapis.com/a1aa/image/U9cxiKWRsMwBdP7GKinlUOUdzMsKzRiFuAfG1-PCvAg.jpg",
+      profileImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=Player15",
+      verified: true,
+      stats: {
+        likes: "2.9K",
+        comments: "520",
+        shares: "890"
+      }
     }
   ],
   puzzleGames: [
     {
-      id: 9,
-      title: "Tetris",
-      description: "Arrange falling blocks to create complete lines in this addictive puzzle game.",
-      image: "https://storage.googleapis.com/a1aa/image/A0tRiJ6w8HZujXs2A-4XYcnReWkJ1hU6JyQbw-55BIE.jpg",
-      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
-      verified: true,
-      stats: {
-        likes: "7.2K",
-        comments: "1.5K",
-        shares: "2.8K"
-      }
-    },
-    {
       id: 10,
       title: "Sudoku",
-      description: "Fill a 9×9 grid with numbers according to specific rules in this logic puzzle.",
-      image: "https://storage.googleapis.com/a1aa/image/U9cxiKWRsMwBdP7GKinlUOUdzMsKzRiFuAfG1-PCvAg.jpg",
-      profileImage: "https://storage.googleapis.com/a1aa/image/NfjObQXeS07bJ0o5j5OGJdMQYaLuQKhxEVvfei-LEAI.jpg",
+      description: "Fill a 9×9 grid with numbers according to specific rules.",
+      image: "https://storage.googleapis.com/a1aa/image/ILaOkYoR7hDayBWLOW1hj6X9ZkaT-UcZm24KX8P1jDY.jpg",
+      profileImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=Player16",
       verified: true,
       stats: {
         likes: "4.5K",
         comments: "890",
         shares: "1.2K"
+      }
+    },
+    {
+      id: 11,
+      title: "2048",
+      description: "Merge tiles to reach the elusive 2048 tile in this addictive puzzle.",
+      image: "https://storage.googleapis.com/a1aa/image/URT1V_NcnrlLxnJWpP80Ej-uYh8hMuDel6e7Pxqs_eo.jpg",
+      profileImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=Player17",
+      verified: true,
+      stats: {
+        likes: "5.1K",
+        comments: "950",
+        shares: "1.7K"
+      }
+    },
+    {
+      id: 12,
+      title: "Minesweeper",
+      description: "Classic logic puzzle game of uncovering tiles while avoiding mines.",
+      image: "https://storage.googleapis.com/a1aa/image/A0tRiJ6w8HZujXs2A-4XYcnReWkJ1hU6JyQbw-55BIE.jpg",
+      profileImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=Player18",
+      verified: true,
+      stats: {
+        likes: "3.4K",
+        comments: "670",
+        shares: "920"
       }
     }
   ]
