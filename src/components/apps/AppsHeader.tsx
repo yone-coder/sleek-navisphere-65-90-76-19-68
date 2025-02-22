@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Bell, History, Scan, Sparkles, Settings, Filter, Globe, Mail, Crown } from "lucide-react";
+import { Search, Bell, History, Scan, Sparkles, Settings, Filter, Globe, Mail, Crown, Check } from "lucide-react";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { RecentScreens } from "@/components/RecentScreens";
