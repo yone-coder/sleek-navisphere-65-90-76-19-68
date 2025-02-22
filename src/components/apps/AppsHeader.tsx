@@ -1,10 +1,9 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Bell, History, Scan, Sparkles, Settings, Filter, Globe, Mail, Crown, Check } from "lucide-react";
+import { Search, Bell, Globe, Check } from "lucide-react";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { RecentScreens } from "@/components/RecentScreens";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useLanguage, Language } from "@/contexts/LanguageContext";
 import {
@@ -22,13 +21,11 @@ interface AppsHeaderProps {
 
 export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
   const [notifications, setNotifications] = useState(3);
-  const [messages, setMessages] = useState(2);
   const { language, setLanguage, t } = useLanguage();
   const user = {
     name: "John Doe",
     email: "john@example.com",
     avatar: "https://github.com/shadcn.png",
-    level: 42,
   };
 
   const languageDetails = {
@@ -40,17 +37,6 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
-        <div className="mr-4 flex items-center gap-2">
-          <RecentScreens>
-            <Button variant="ghost" size="icon" className="relative">
-              <History className="h-5 w-5" />
-              <Badge className="absolute -right-1 -top-1 h-4 w-4 items-center justify-center rounded-full bg-blue-500 p-2 text-[10px] text-white">
-                8
-              </Badge>
-            </Button>
-          </RecentScreens>
-        </div>
-
         {/* Search bar */}
         <div className="flex flex-1 items-center gap-2 md:gap-4 max-w-2xl">
           <div className="relative flex-1">
@@ -62,16 +48,10 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
               readOnly
             />
           </div>
-          <Button variant="ghost" size="icon" className="hidden md:flex">
-            <Filter className="h-5 w-5" />
-          </Button>
-          <Button variant="ghost" size="icon" className="hidden md:flex">
-            <Scan className="h-5 w-5" />
-          </Button>
         </div>
 
         {/* Right section */}
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-4">
           {/* Language Selector */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -93,18 +73,6 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-
-          {/* Messages */}
-          <Button variant="ghost" size="icon" className="relative">
-            <Mail className="h-5 w-5" />
-            {messages > 0 && (
-              <Badge 
-                className="absolute -right-1 -top-1 h-4 w-4 items-center justify-center rounded-full bg-blue-500 p-2 text-[10px] text-white"
-              >
-                {messages}
-              </Badge>
-            )}
-          </Button>
 
           {/* Notifications */}
           <Button variant="ghost" size="icon" className="relative">
@@ -128,7 +96,7 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent align="end">
               <DropdownMenuLabel>
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">{user.name}</p>
@@ -137,16 +105,6 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Crown className="mr-2 h-4 w-4 text-yellow-500" />
-                Level {user.level}
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Sparkles className="mr-2 h-4 w-4 text-yellow-500" />
-                Upgrade to Pro
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Settings className="mr-2 h-4 w-4" />
                 Settings
               </DropdownMenuItem>
             </DropdownMenuContent>
