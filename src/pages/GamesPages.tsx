@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   ChevronLeft, Search, Bell, Sparkles,
@@ -141,6 +141,19 @@ export default function GamesPages() {
   const [gameStates, setGameStates] = useState<{ [key: number]: { isFollowing: boolean; isLiked: boolean; isBookmarked: boolean; likes: number } }>({});
   const { toast } = useToast();
 
+  useEffect(() => {
+    const initialStates: { [key: number]: { isFollowing: boolean; isLiked: boolean; isBookmarked: boolean; likes: number } } = {};
+    games.forEach(game => {
+      initialStates[game.id] = {
+        isFollowing: false,
+        isLiked: false,
+        isBookmarked: game.bookmarked || false,
+        likes: game.likes
+      };
+    });
+    setGameStates(initialStates);
+  }, []);
+
   const formatNumber = (num: number): string => {
     if (num >= 1000000) {
       return `${(num / 1000000).toFixed(1)}M`;
@@ -152,18 +165,14 @@ export default function GamesPages() {
   };
 
   const getGameState = (gameId: number) => {
-    if (!gameStates[gameId]) {
-      setGameStates(prev => ({
-        ...prev,
-        [gameId]: {
-          isFollowing: false,
-          isLiked: false,
-          isBookmarked: false,
-          likes: games.find(g => g.id === gameId)?.likes || 0
-        }
-      }));
-    }
-    return gameStates[gameId];
+    return (
+      gameStates[gameId] || {
+        isFollowing: false,
+        isLiked: false,
+        isBookmarked: false,
+        likes: games.find(g => g.id === gameId)?.likes || 0
+      }
+    );
   };
 
   const handleFollow = (gameId: number) => {
@@ -409,7 +418,7 @@ export default function GamesPages() {
                   >
                     <Bookmark className={cn(
                       "w-3 h-3",
-                      state.isBookmarked ? "fill-current" : "stroke-current"
+                      state?.isBookmarked ? "fill-current" : "stroke-current"
                     )} />
                   </button>
                   <div className="absolute top-0 left-0 transform translate-x-2 translate-y-2 flex gap-1">
