@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Minus, Plus, X, ArrowLeft, ChevronRight, Tag, CreditCard, Gift, Shield, Truck, PackageCheck, Store, Clock } from "lucide-react";
@@ -103,10 +102,10 @@ export default function MarketplaceCart() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50/50">
+    <div className="min-h-screen bg-gray-50/50 max-w-screen">
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
-        <div className="flex items-center gap-3 px-4 py-3">
+        <div className="flex items-center gap-3 px-4 py-2">
           <Button
             variant="ghost"
             size="icon"
@@ -125,9 +124,9 @@ export default function MarketplaceCart() {
       </div>
 
       {/* Content */}
-      <div className="pt-[68px] pb-[180px]">
+      <div className="pt-[60px] pb-[140px]">
         {items.length > 0 ? (
-          <div className="px-4 py-6 space-y-6">
+          <div className="px-4 py-6 space-y-6 max-w-xl mx-auto">
             {/* Delivery Status */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
               <div className="flex items-center gap-3 text-sm">
@@ -310,20 +309,22 @@ export default function MarketplaceCart() {
 
       {/* Checkout Button */}
       {items.length > 0 && (
-        <div className="fixed bottom-16 left-0 right-0 p-4 bg-gradient-to-t from-white via-white to-white/95">
-          <Button 
-            className="w-full h-12 text-base flex items-center justify-between px-6"
-            onClick={() => navigate('/checkout')}
-          >
-            <span className="flex items-center gap-2">
-              <CreditCard className="h-4 w-4" />
-              Proceed to Checkout
-            </span>
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-          <p className="text-xs text-center text-gray-500 mt-2">
-            Free shipping on orders over $500
-          </p>
+        <div className="fixed bottom-12 left-0 right-0 p-3 bg-gradient-to-t from-white via-white to-white/95">
+          <div className="max-w-xl mx-auto">
+            <Button 
+              className="w-full h-10 text-base flex items-center justify-between px-6"
+              onClick={() => navigate('/checkout')}
+            >
+              <span className="flex items-center gap-2">
+                <CreditCard className="h-4 w-4" />
+                Proceed to Checkout
+              </span>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+            <p className="text-xs text-center text-gray-500 mt-1.5">
+              Free shipping on orders over $500
+            </p>
+          </div>
         </div>
       )}
 
