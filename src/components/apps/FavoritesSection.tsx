@@ -43,7 +43,7 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
                   <div 
                     className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}
                   >
-                    <app.icon className="w-7 h-7 text-white" />
+                    <app.icon className="w-8 h-8 text-white" />
                     {app.updates > 0 && (
                       <Badge className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5">
                         {app.updates}
