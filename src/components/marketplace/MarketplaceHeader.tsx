@@ -72,7 +72,7 @@ export const MarketplaceHeader = ({
             <Button 
               variant="ghost" 
               size="icon"
-              className="h-8 w-8"
+              className="h-8 w-8 shrink-0"
             >
               <MapPin className="w-4 h-4 text-gray-500" />
             </Button>
@@ -101,7 +101,7 @@ export const MarketplaceHeader = ({
         </DropdownMenu>
 
         <div 
-          className="flex-1"
+          className="flex-1 min-w-0 max-w-[60%]"
           onClick={handleSearchClick}
         >
           <div className="relative cursor-pointer">
@@ -114,7 +114,7 @@ export const MarketplaceHeader = ({
 
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="relative h-8 w-8 border-gray-200">
+            <Button variant="outline" size="icon" className="relative h-8 w-8 border-gray-200 shrink-0">
               <Bell className="h-3.5 w-3.5 text-gray-500" />
               <Badge className="absolute -top-1 -right-1 h-3.5 min-w-3.5 p-0.5 flex items-center justify-center bg-red-500 text-[9px]">
                 2
@@ -147,7 +147,7 @@ export const MarketplaceHeader = ({
           </SheetContent>
         </Sheet>
 
-        <Button variant="outline" size="icon" className="h-8 w-8 border-gray-200">
+        <Button variant="outline" size="icon" className="h-8 w-8 border-gray-200 shrink-0">
           <Heart className="h-3.5 w-3.5 text-gray-500" />
         </Button>
       </div>
