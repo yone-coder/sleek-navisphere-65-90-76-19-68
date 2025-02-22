@@ -5,7 +5,6 @@ import {
   Route,
   createRoutesFromElements,
 } from "react-router-dom";
-import { LanguageProvider } from "./contexts/LanguageContext";
 
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
@@ -31,9 +30,7 @@ const router = createBrowserRouter(
 
 function App() {
   return (
-    <LanguageProvider>
-      <RouterProvider router={router} />
-    </LanguageProvider>
+    <RouterProvider router={router} />
   );
 }
 
