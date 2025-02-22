@@ -21,13 +21,13 @@ export const BottomNav = () => {
     },
     { 
       icon: Clock, 
-      label: t('nav.recent'), 
+      label: 'Recents', 
       isRecent: true,
       color: 'from-purple-500 to-pink-500'
     },
     { 
       icon: ChevronRight, 
-      label: t('nav.back'), 
+      label: 'Back', 
       action: () => navigate(-1),
       color: 'from-emerald-500 to-green-500'
     },
@@ -39,7 +39,7 @@ export const BottomNav = () => {
       <div className="absolute inset-0 bg-gradient-to-t from-white/95 to-white/75 dark:from-gray-900/95 dark:to-gray-900/75 backdrop-blur-lg border-t border-white/10" />
       
       {/* Navigation content */}
-      <div className="relative max-w-2xl mx-auto px-4 py-2">
+      <div className="relative max-w-2xl mx-auto px-4 py-1">
         <ul className="flex items-center justify-around">
           {navItems.map(({ icon: Icon, label, path, action, isRecent, color }) => {
             const isActive = path ? location.pathname === path : false;
@@ -49,7 +49,7 @@ export const BottomNav = () => {
               <button
                 onClick={handleClick}
                 className={cn(
-                  "relative flex flex-col items-center justify-center gap-1 p-2 w-16",
+                  "relative flex flex-col items-center justify-center gap-0.5 py-1.5 px-2 w-16",
                   "transition-all duration-300 group",
                   isActive ? "scale-105" : "hover:scale-105"
                 )}
@@ -64,7 +64,7 @@ export const BottomNav = () => {
                   )} />
                   
                   <Icon className={cn(
-                    isMobile ? "w-6 h-6" : "w-7 h-7",
+                    "w-5 h-5",
                     "transition-colors duration-300",
                     isActive ? "text-nav-active" : "text-nav-inactive group-hover:text-nav-active"
                   )} />
@@ -72,9 +72,8 @@ export const BottomNav = () => {
 
                 {/* Label */}
                 <span className={cn(
-                  "text-[10px] font-medium tracking-tight transition-colors duration-300",
-                  isActive ? "text-nav-active" : "text-nav-inactive group-hover:text-nav-active",
-                  isMobile && "tracking-tight"
+                  "text-[9px] font-medium tracking-tight transition-colors duration-300",
+                  isActive ? "text-nav-active" : "text-nav-inactive group-hover:text-nav-active"
                 )}>
                   {label}
                 </span>
@@ -82,8 +81,8 @@ export const BottomNav = () => {
                 {/* Active indicator */}
                 {isActive && (
                   <div className={cn(
-                    "absolute -bottom-2 left-1/2 -translate-x-1/2",
-                    "h-1 w-8 rounded-full bg-gradient-to-r",
+                    "absolute -bottom-1 left-1/2 -translate-x-1/2",
+                    "h-0.5 w-6 rounded-full bg-gradient-to-r",
                     color
                   )} />
                 )}
