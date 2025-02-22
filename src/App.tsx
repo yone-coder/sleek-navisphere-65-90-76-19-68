@@ -7,8 +7,9 @@ import {
 } from "react-router-dom";
 import { LanguageProvider } from "./contexts/LanguageContext";
 
-import Home from "./pages/Home";
+import Apps from "./pages/Apps";
 import NotFound from "./pages/NotFound";
+import Home from "./pages/Home";
 import Marketplace from "./pages/Marketplace";
 import MarketplaceSearch from "./pages/MarketplaceSearch";
 import MarketplaceCategories from "./pages/MarketplaceCategories";
@@ -17,7 +18,8 @@ import MarketplaceCart from "./pages/MarketplaceCart";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/">
-      <Route index element={<Home />} />
+      <Route index element={<Apps />} />
+      <Route path="home" element={<Home />} />
       <Route path="/marketplace">
         <Route index element={<Marketplace />} />
         <Route path="search" element={<MarketplaceSearch />} />
