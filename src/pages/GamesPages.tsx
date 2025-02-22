@@ -13,13 +13,6 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { GameSearchOverlay } from "@/components/search/GameSearchOverlay";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 interface Game {
   id: string;
@@ -270,7 +263,7 @@ const categories = [
 
 export default function GamesPages() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'tournaments' | 'matches' | 'leaderboard'>('matches');
+  const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [searchQuery, setSearchQuery] = useState("");
   const [notifications] = useState(3);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -466,8 +459,9 @@ export default function GamesPages() {
         <ScrollArea className="w-full" type="scroll">
           <div className="px-4 pb-3">
             <Tabs 
-              value={activeTab}
-              onValueChange={setActiveTab}
+              defaultValue={categories[0]}
+              value={activeCategory}
+              onValueChange={setActiveCategory}
               className="w-full"
             >
               <TabsList className="h-9 bg-transparent p-0 w-auto">
@@ -492,8 +486,6 @@ export default function GamesPages() {
       </div>
 
       <div className="pt-4 pb-24">
-        <EventsSection />
-        <SponsoredSection />
         <CategorySection title="Popular Sports Games" games={games.filter(g => g.category.includes("Sports"))} />
         <CategorySection title="Trending Board Games" games={games.filter(g => g.category.includes("Board"))} />
         <PopularGamesSection />
