@@ -19,7 +19,9 @@ import {
   Newspaper,
   History,
   Minimize2,
-  Trash2
+  Trash2,
+  Swords,
+  Menu
 } from "lucide-react";
 
 interface RecentScreen {
@@ -45,8 +47,10 @@ const getIconForPath = (path: string) => {
       return <ShoppingBag className="w-5 h-5 text-orange-500" />;
     case "/feeds":
       return <Newspaper className="w-5 h-5 text-pink-500" />;
+    case "/matches":
+      return <Swords className="w-5 h-5 text-red-500" />;
     default:
-      return <History className="w-5 h-5 text-gray-500" />;
+      return <Menu className="w-5 h-5 text-gray-500" />;
   }
 };
 
@@ -167,35 +171,37 @@ export function RecentScreens({ children }: { children: React.ReactNode }) {
           isFullScreen ? 'h-[90vh]' : 'h-[60vh]'
         }`}
       >
-        <ScrollArea className="h-full">
-          <div className="p-4">
-            {/* Header with horizontally aligned icon and title */}
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <Clock className="w-5 h-5 text-blue-500" />
-                <h2 className="text-lg font-semibold">Recent Screens</h2>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setIsFullScreen(!isFullScreen)}
-                  className="p-2 hover:bg-gray-100 rounded-full"
-                  title={isFullScreen ? "Minimize" : "Maximize"}
-                >
-                  {isFullScreen ? (
-                    <Minimize2 className="w-5 h-5 text-gray-500" />
-                  ) : (
-                    <Maximize2 className="w-5 h-5 text-gray-500" />
-                  )}
-                </button>
-                <SheetClose asChild>
-                  <button className="p-2 hover:bg-gray-100 rounded-full" title="Close">
-                    <X className="w-5 h-5 text-gray-500" />
-                  </button>
-                </SheetClose>
-              </div>
+        {/* Sticky header outside ScrollArea */}
+        <div className="sticky top-0 z-10 bg-white border-b p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Clock className="w-5 h-5 text-blue-500" />
+              <h2 className="text-lg font-semibold">Recent Screens</h2>
             </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setIsFullScreen(!isFullScreen)}
+                className="p-2 hover:bg-gray-100 rounded-full"
+                title={isFullScreen ? "Minimize" : "Maximize"}
+              >
+                {isFullScreen ? (
+                  <Minimize2 className="w-5 h-5 text-gray-500" />
+                ) : (
+                  <Maximize2 className="w-5 h-5 text-gray-500" />
+                )}
+              </button>
+              <SheetClose asChild>
+                <button className="p-2 hover:bg-gray-100 rounded-full" title="Close">
+                  <X className="w-5 h-5 text-gray-500" />
+                </button>
+              </SheetClose>
+            </div>
+          </div>
+        </div>
 
-            {/* Pinned screens section with horizontally aligned icon and title */}
+        <ScrollArea className="h-[calc(100%-4rem)]">
+          <div className="p-4">
+            {/* Pinned screens section */}
             {pinnedScreens.length > 0 && (
               <div className="mb-6">
                 <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-3">
@@ -208,7 +214,7 @@ export function RecentScreens({ children }: { children: React.ReactNode }) {
               </div>
             )}
 
-            {/* Recent screens section with horizontally aligned icon and title */}
+            {/* Recent screens section */}
             {unpinnedScreens.length > 0 && (
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-3">
