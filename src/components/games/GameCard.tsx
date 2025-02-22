@@ -1,24 +1,10 @@
-
 import { useState } from "react";
-import { 
-  Heart, 
-  MessageSquare, 
-  Share2, 
-  Plus, 
-  Check, 
-  Bookmark,
-  Users,
-  Star,
-  Trophy,
-  Timer,
-  Gamepad
-} from "lucide-react";
+import { Heart, MessageSquare, Share2, Plus, Check, Bookmark } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Game } from "./types";
 import { useToast } from "@/hooks/use-toast";
-import { Progress } from "@/components/ui/progress";
 
 interface GameCardProps {
   game: Game;
@@ -27,14 +13,9 @@ interface GameCardProps {
 const GameCard = ({ game }: GameCardProps) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(game.bookmarked);
-  const [isLiked, setIsLiked] = useState(false);
-  const [likesCount, setLikesCount] = useState(game.likes);
   const { toast } = useToast();
 
   const formatNumber = (num: number): string => {
-    if (num >= 1000000) {
-      return `${(num / 1000000).toFixed(1)}M`;
-    }
     if (num >= 1000) {
       return `${(num / 1000).toFixed(1)}K`;
     }
@@ -57,15 +38,6 @@ const GameCard = ({ game }: GameCardProps) => {
     });
   };
 
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    setLikesCount(prev => isLiked ? prev - 1 : prev + 1);
-    toast({
-      title: isLiked ? "Unliked" : "Liked",
-      description: `You ${isLiked ? "unliked" : "liked"} ${game.title}`,
-    });
-  };
-
   const handleShare = () => {
     const shareText = `Check out ${game.title} - ${game.description}`;
     if (navigator.share) {
@@ -84,7 +56,7 @@ const GameCard = ({ game }: GameCardProps) => {
   };
 
   return (
-    <div className="w-[280px] shrink-0 bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+    <div className="w-[280px] shrink-0 bg-white rounded-lg shadow-lg overflow-hidden">
       <div className="relative h-32">
         <img
           src={game.coverImage}
@@ -94,7 +66,7 @@ const GameCard = ({ game }: GameCardProps) => {
         <img
           src={game.creatorImage}
           alt="Creator"
-          className="absolute bottom-0 left-0 transform translate-x-3 translate-y-3 w-12 h-12 rounded-full border-2 border-white object-cover shadow-md"
+          className="absolute bottom-0 left-0 transform translate-x-3 translate-y-3 w-12 h-12 rounded-full border-2 border-white object-cover"
         />
         <button
           onClick={handleBookmark}
@@ -149,53 +121,10 @@ const GameCard = ({ game }: GameCardProps) => {
 
         <p className="text-gray-700 mb-3 text-sm line-clamp-2">{game.description}</p>
 
-        <div className="grid grid-cols-2 gap-2 mb-3">
-          <div className="flex items-center gap-1.5 text-xs text-gray-600">
-            <Users className="w-3 h-3" />
-            <span>1.2K Playing</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-xs text-gray-600">
-            <Trophy className="w-3 h-3 text-yellow-500" />
-            <span>32 Tournaments</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-xs text-gray-600">
-            <Timer className="w-3 h-3" />
-            <span>~15 min/game</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-xs text-gray-600">
-            <Gamepad className="w-3 h-3" />
-            <span>Easy to learn</span>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-0.5">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star
-                key={star}
-                className={cn(
-                  "w-3 h-3",
-                  star <= 4 ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                )}
-              />
-            ))}
-            <span className="text-xs text-gray-600 ml-1">4.0</span>
-          </div>
-          <span className="text-xs text-gray-600">2.5K ratings</span>
-        </div>
-
-        <Progress value={75} className="h-1.5 mb-3" />
-
         <div className="flex items-center justify-between text-gray-600 mb-3 text-sm">
-          <button 
-            className="flex items-center gap-1 hover:text-gray-800"
-            onClick={handleLike}
-          >
-            <Heart className={cn(
-              "w-3 h-3 transition-colors",
-              isLiked ? "fill-red-500 text-red-500" : "text-gray-400"
-            )} />
-            <span>{formatNumber(likesCount)}</span>
+          <button className="flex items-center gap-1 hover:text-gray-800">
+            <Heart className="w-3 h-3 text-red-500" />
+            <span>{formatNumber(game.likes)}</span>
           </button>
           <button className="flex items-center gap-1 hover:text-gray-800">
             <MessageSquare className="w-3 h-3" />
@@ -210,9 +139,7 @@ const GameCard = ({ game }: GameCardProps) => {
           </button>
         </div>
 
-        <Button size="sm" className="w-full text-sm h-8 bg-blue-500 hover:bg-blue-600">
-          Play Now
-        </Button>
+        <Button size="sm" className="w-full text-sm h-8">Play Now</Button>
       </div>
     </div>
   );
