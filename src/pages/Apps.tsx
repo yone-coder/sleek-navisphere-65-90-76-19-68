@@ -190,21 +190,25 @@ export default function Apps() {
               <FavoritesSection favoriteApps={favoriteApps} />
 
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-auto">
-                  <CategoryTabs categories={categories} />
-                </Tabs>
+                <div className="flex-1 min-w-0">
+                  <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-full">
+                    <CategoryTabs categories={categories} />
+                  </Tabs>
+                </div>
 
-                <AppControls
-                  selectedCategory={selectedCategory}
-                  viewMode={viewMode}
-                  showUpdatesOnly={showUpdatesOnly}
-                  updatesCount={updatesCount}
-                  categories={appCategories}
-                  onCategoryChange={setSelectedCategory}
-                  onSortChange={setSortBy}
-                  onViewModeChange={setViewMode}
-                  onUpdatesToggle={() => setShowUpdatesOnly(!showUpdatesOnly)}
-                />
+                <div className="flex-shrink-0">
+                  <AppControls
+                    selectedCategory={selectedCategory}
+                    viewMode={viewMode}
+                    showUpdatesOnly={showUpdatesOnly}
+                    updatesCount={updatesCount}
+                    categories={appCategories}
+                    onCategoryChange={setSelectedCategory}
+                    onSortChange={setSortBy}
+                    onViewModeChange={setViewMode}
+                    onUpdatesToggle={() => setShowUpdatesOnly(!showUpdatesOnly)}
+                  />
+                </div>
               </div>
 
               <AppGrid 
