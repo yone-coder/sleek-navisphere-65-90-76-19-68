@@ -9,7 +9,7 @@ import { LightningDeals } from "@/components/marketplace/LightningDeals";
 import { FeaturedProducts } from "@/components/marketplace/FeaturedProducts";
 import { RecentProducts } from "@/components/marketplace/RecentProducts";
 import { ProductGrid } from "@/components/marketplace/ProductGrid";
-import { BottomNav } from '@/components/BottomNav';
+import { MarketplaceNav } from '@/components/marketplace/MarketplaceNav';
 
 const newsItems = [
   "🎮 New Gaming Laptops Coming Soon - Pre-order Now!",
@@ -84,7 +84,7 @@ const Marketplace = () => {
         <ProductGrid />
       </main>
 
-      <BottomNav />
+      <MarketplaceNav />
 
       <style>
         {`
