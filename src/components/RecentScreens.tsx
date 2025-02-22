@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -33,21 +32,21 @@ interface RecentScreen {
 const getIconForPath = (path: string) => {
   switch (path) {
     case "/":
-      return <Home className="w-5 h-5" />;
+      return <Home className="w-5 h-5 text-blue-500" />;
     case "/profile":
-      return <User className="w-5 h-5" />;
+      return <User className="w-5 h-5 text-purple-500" />;
     case "/games":
-      return <Gamepad2 className="w-5 h-5" />;
+      return <Gamepad2 className="w-5 h-5 text-green-500" />;
     case "/tournaments":
-      return <Trophy className="w-5 h-5" />;
+      return <Trophy className="w-5 h-5 text-yellow-500" />;
     case "/wallet":
-      return <Wallet className="w-5 h-5" />;
+      return <Wallet className="w-5 h-5 text-indigo-500" />;
     case "/marketplace":
-      return <ShoppingBag className="w-5 h-5" />;
+      return <ShoppingBag className="w-5 h-5 text-orange-500" />;
     case "/feeds":
-      return <Newspaper className="w-5 h-5" />;
+      return <Newspaper className="w-5 h-5 text-pink-500" />;
     default:
-      return <History className="w-5 h-5" />;
+      return <History className="w-5 h-5 text-gray-500" />;
   }
 };
 
@@ -115,47 +114,44 @@ export function RecentScreens({ children }: { children: React.ReactNode }) {
     >
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
       
-      {/* Icon */}
-      <div className="absolute top-4 left-4 text-white/70">
-        {getIconForPath(screen.path)}
-      </div>
-      
-      {/* Action buttons */}
-      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            togglePin(screen.path);
-          }}
-          className="p-1.5 rounded-full bg-black/50 hover:bg-black/70 text-white"
-          title={screen.isPinned ? "Unpin" : "Pin"}
-        >
-          {screen.isPinned ? <PinOff className="w-4 h-4" /> : <Pin className="w-4 h-4" />}
-        </button>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            removeScreen(screen.path);
-          }}
-          className="p-1.5 rounded-full bg-black/50 hover:bg-black/70 text-white"
-          title="Remove"
-        >
-          <X className="w-4 h-4" />
-        </button>
-      </div>
-
-      {/* Screen content */}
+      {/* Screen content with horizontally aligned icon and title */}
       <div 
-        className="absolute inset-0 flex flex-col justify-end p-4"
+        className="absolute inset-0 flex flex-col justify-between p-4"
         onClick={() => navigate(screen.path)}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          {getIconForPath(screen.path)}
           <p className="text-white font-medium flex-1">{screen.title}</p>
-          <ArrowUpRight className="w-4 h-4 text-white/70" />
         </div>
-        <p className="text-xs text-gray-300">
-          {new Date(screen.timestamp).toLocaleTimeString()}
-        </p>
+
+        {/* Action buttons */}
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-gray-300">
+            {new Date(screen.timestamp).toLocaleTimeString()}
+          </p>
+          <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                togglePin(screen.path);
+              }}
+              className="p-1.5 rounded-full bg-black/50 hover:bg-black/70 text-white"
+              title={screen.isPinned ? "Unpin" : "Pin"}
+            >
+              {screen.isPinned ? <PinOff className="w-4 h-4" /> : <Pin className="w-4 h-4" />}
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                removeScreen(screen.path);
+              }}
+              className="p-1.5 rounded-full bg-black/50 hover:bg-black/70 text-white"
+              title="Remove"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
       </div>
     </Card>
   );
@@ -173,10 +169,10 @@ export function RecentScreens({ children }: { children: React.ReactNode }) {
       >
         <ScrollArea className="h-full">
           <div className="p-4">
-            {/* Header */}
+            {/* Header with horizontally aligned icon and title */}
             <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-muted-foreground" />
+              <div className="flex items-center gap-3">
+                <Clock className="w-5 h-5 text-blue-500" />
                 <h2 className="text-lg font-semibold">Recent Screens</h2>
               </div>
               <div className="flex items-center gap-2">
@@ -186,24 +182,24 @@ export function RecentScreens({ children }: { children: React.ReactNode }) {
                   title={isFullScreen ? "Minimize" : "Maximize"}
                 >
                   {isFullScreen ? (
-                    <Minimize2 className="w-5 h-5" />
+                    <Minimize2 className="w-5 h-5 text-gray-500" />
                   ) : (
-                    <Maximize2 className="w-5 h-5" />
+                    <Maximize2 className="w-5 h-5 text-gray-500" />
                   )}
                 </button>
                 <SheetClose asChild>
                   <button className="p-2 hover:bg-gray-100 rounded-full" title="Close">
-                    <X className="w-5 h-5" />
+                    <X className="w-5 h-5 text-gray-500" />
                   </button>
                 </SheetClose>
               </div>
             </div>
 
-            {/* Pinned screens */}
+            {/* Pinned screens section with horizontally aligned icon and title */}
             {pinnedScreens.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
-                  <Pin className="w-4 h-4" />
+                <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-3">
+                  <Pin className="w-4 h-4 text-blue-500" />
                   Pinned
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -212,19 +208,19 @@ export function RecentScreens({ children }: { children: React.ReactNode }) {
               </div>
             )}
 
-            {/* Recent screens */}
+            {/* Recent screens section with horizontally aligned icon and title */}
             {unpinnedScreens.length > 0 && (
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                    <History className="w-4 h-4" />
+                  <h3 className="text-sm font-medium text-muted-foreground flex items-center gap-3">
+                    <History className="w-4 h-4 text-blue-500" />
                     Recent
                   </h3>
                   <button
                     onClick={clearAll}
-                    className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
+                    className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-2"
                   >
-                    <Trash2 className="w-3 h-3" />
+                    <Trash2 className="w-3 h-3 text-red-500" />
                     Clear all
                   </button>
                 </div>
