@@ -63,11 +63,14 @@ export const BottomNav = () => {
                     "transition-opacity duration-300"
                   )} />
                   
-                  <Icon className={cn(
-                    "w-5 h-5",
-                    "transition-colors duration-300",
-                    isActive ? "text-nav-active" : "text-nav-inactive group-hover:text-nav-active"
-                  )} />
+                  <Icon 
+                    className={cn(
+                      "w-5 h-5",
+                      "transition-colors duration-300",
+                      isActive ? "text-nav-active" : "text-nav-inactive group-hover:text-nav-active"
+                    )}
+                    strokeWidth={1.5} // Added this to match the thinner stroke style
+                  />
                 </div>
 
                 {/* Label */}
