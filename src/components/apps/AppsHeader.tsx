@@ -36,10 +36,39 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center gap-4">
-        {/* Search bar */}
-        <div className="flex flex-1 items-center max-w-2xl">
-          <div className="relative flex-1 group">
+      <div className="container flex h-16 items-center justify-between gap-4">
+        {/* Left: Profile Menu */}
+        <div className="flex items-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="ghost" 
+                className="relative h-10 w-10 rounded-full hover:bg-muted/60 transition-colors duration-200 p-0.5"
+              >
+                <Avatar className="h-full w-full ring-2 ring-background">
+                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarFallback>JD</AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-56">
+              <DropdownMenuLabel className="px-3 py-2">
+                <div className="flex flex-col space-y-1.5">
+                  <p className="text-sm font-semibold leading-none">{user.name}</p>
+                  <p className="text-xs text-muted-foreground">{user.email}</p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="px-3 py-2 gap-2 cursor-pointer">
+                Settings
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        {/* Middle: Search bar */}
+        <div className="flex flex-1 items-center justify-center max-w-2xl">
+          <div className="relative w-full group">
             <Search className="absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground/60 group-hover:text-muted-foreground/80 transition-colors duration-200" />
             <Input
               placeholder="Search apps, games, tournaments..."
@@ -50,9 +79,8 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
           </div>
         </div>
 
-        {/* Right section */}
+        {/* Right: Language & Notifications */}
         <div className="flex items-center gap-1.5">
-          {/* Language Selector */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button 
@@ -78,7 +106,6 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Notifications */}
           <Button 
             variant="ghost" 
             size="icon" 
@@ -93,33 +120,6 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
               </Badge>
             )}
           </Button>
-
-          {/* Profile Menu */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button 
-                variant="ghost" 
-                className="relative h-10 w-10 rounded-full hover:bg-muted/60 transition-colors duration-200 p-0.5"
-              >
-                <Avatar className="h-full w-full ring-2 ring-background">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback>JD</AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel className="px-3 py-2">
-                <div className="flex flex-col space-y-1.5">
-                  <p className="text-sm font-semibold leading-none">{user.name}</p>
-                  <p className="text-xs text-muted-foreground">{user.email}</p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="px-3 py-2 gap-2 cursor-pointer">
-                Settings
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
     </header>
