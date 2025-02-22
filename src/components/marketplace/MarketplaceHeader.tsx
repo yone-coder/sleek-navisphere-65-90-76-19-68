@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 interface Location {
   id: number;
@@ -52,7 +53,12 @@ export const MarketplaceHeader = ({
   searchQuery,
   setSearchQuery,
 }: MarketplaceHeaderProps) => {
+  const navigate = useNavigate();
   const [showSearchBar, setShowSearchBar] = useState(false);
+
+  const handleSearchClick = () => {
+    navigate('/search');
+  };
 
   return (
     <div className="relative">
@@ -64,16 +70,18 @@ export const MarketplaceHeader = ({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button 
-              variant="outline" 
-              className="h-8 gap-1 border-gray-200 px-2"
+              variant="ghost" 
+              size="icon"
+              className="h-8 w-8"
             >
-              <MapPin className="w-3.5 h-3.5 text-gray-500" />
-              <span className="text-xs font-medium truncate max-w-[80px]">
-                {selectedLocation.name}
-              </span>
+              <MapPin className="w-4 h-4 text-gray-500" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-[240px]">
+            <div className="px-2 py-1.5">
+              <p className="text-xs text-gray-500">Current location</p>
+              <p className="text-sm font-medium">{selectedLocation.name}</p>
+            </div>
             {locations.map((location) => (
               <DropdownMenuItem
                 key={location.id}
@@ -93,13 +101,13 @@ export const MarketplaceHeader = ({
         </DropdownMenu>
 
         <div 
-          className="flex-1 max-w-lg"
-          onClick={() => setShowSearchBar(true)}
+          className="flex-1"
+          onClick={handleSearchClick}
         >
           <div className="relative cursor-pointer">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-500" />
-            <div className="w-full h-8 pl-8 pr-3 flex items-center bg-gray-50 rounded-md border border-gray-200">
-              <span className="text-xs text-gray-500">Search marketplace...</span>
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+            <div className="w-full h-8 pl-10 pr-3 flex items-center bg-gray-50 rounded-md border border-gray-200">
+              <span className="text-sm text-gray-500">Search products, categories, brands...</span>
             </div>
           </div>
         </div>
@@ -142,29 +150,6 @@ export const MarketplaceHeader = ({
         <Button variant="outline" size="icon" className="h-8 w-8 border-gray-200">
           <Heart className="h-3.5 w-3.5 text-gray-500" />
         </Button>
-      </div>
-
-      {/* Expandable search bar */}
-      <div className={cn(
-        "absolute inset-0 flex items-center gap-2 px-3 bg-white transition-all duration-300",
-        !showSearchBar && "opacity-0 pointer-events-none"
-      )}>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 shrink-0"
-          onClick={() => setShowSearchBar(false)}
-        >
-          <X className="h-3.5 w-3.5" />
-        </Button>
-        <Input
-          type="search"
-          placeholder="Search marketplace..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="h-8 text-xs"
-          autoFocus
-        />
       </div>
     </div>
   );
