@@ -1,9 +1,10 @@
 
-import { Star } from "lucide-react";
+import { Star, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useNavigate } from "react-router-dom";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface FavoritesSectionProps {
   favoriteApps: Array<{
@@ -20,6 +21,8 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
 
   if (favoriteApps.length === 0) return null;
 
+  const totalUpdates = favoriteApps.reduce((sum, app) => sum + (app.updates || 0), 0);
+
   // Create groups of 4 apps
   const groups = favoriteApps.reduce((acc, app, i) => {
     const groupIndex = Math.floor(i / 4);
@@ -31,11 +34,35 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
   return (
     <div className="mb-8 -mx-4 sm:-mx-6 md:-mx-8">
       <div className="flex items-center justify-between mb-4 px-4 sm:px-6 md:px-8">
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-500 animate-pulse">
-            <Star className="w-5 h-5 text-white" />
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-500 animate-pulse">
+              <Star className="w-5 h-5 text-white" />
+            </div>
+            <h2 className="text-lg font-semibold text-gray-900">Favorites</h2>
           </div>
-          <h2 className="text-lg font-semibold text-gray-900">Favorites</h2>
+          
+          <div className="flex items-center gap-3">
+            <Badge variant="secondary" className="px-2 py-1">
+              {favoriteApps.length} {favoriteApps.length === 1 ? 'app' : 'apps'}
+            </Badge>
+            {totalUpdates > 0 && (
+              <Badge variant="destructive" className="animate-pulse">
+                {totalUpdates} {totalUpdates === 1 ? 'update' : 'updates'}
+              </Badge>
+            )}
+          </div>
+          
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Info className="h-4 w-4 text-gray-500" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>These are your favorite apps for quick access</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
       <ScrollArea className="w-full">
