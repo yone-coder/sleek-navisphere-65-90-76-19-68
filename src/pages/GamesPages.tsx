@@ -175,6 +175,42 @@ const sponsoredGames: Game[] = [
   }
 ];
 
+const popularGames: Game[] = [
+  {
+    id: "free-fire-naruto",
+    title: "Free Fire x NARUTO SHIPPUDEN",
+    description: "Battle other players around the world in a survival shooter",
+    thumbnail: "https://images.unsplash.com/photo-1612404730960-5c71577fca11",
+    icon: "https://images.unsplash.com/photo-1612404730960-5c71577fca11",
+    category: ["Action", "Shooter"],
+    rating: 4.4,
+    downloads: "100M+",
+    size: "326MB"
+  },
+  {
+    id: "mobile-legends",
+    title: "Mobile Legends: Bang Bang",
+    description: "Play the 5v5 MOBA game on mobile with players worldwide.",
+    thumbnail: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
+    icon: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
+    category: ["Strategy", "MOBA"],
+    rating: 3.9,
+    downloads: "500M+",
+    size: "156MB"
+  },
+  {
+    id: "candy-crush",
+    title: "Candy Crush Saga",
+    description: "Match 3 candies to blast sugar! Spread jam & master the sweetest of puzzle games",
+    thumbnail: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
+    icon: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
+    category: ["Casual", "Puzzle"],
+    rating: 4.6,
+    downloads: "1B+",
+    size: "85MB"
+  }
+];
+
 const categories = [
   "Top charts",
   "Children",
@@ -362,6 +398,54 @@ export default function GamesPages() {
     </div>
   );
 
+  const PopularGamesSection = () => (
+    <div className="mb-8">
+      <div className="px-4">
+        <div className="flex items-center justify-between mb-4">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-semibold text-gray-900">
+              Browse popular games
+            </h2>
+            <p className="text-gray-500">A great place to start</p>
+          </div>
+          <Button variant="ghost" size="icon">
+            <ArrowRight className="h-5 w-5" />
+          </Button>
+        </div>
+
+        <ScrollArea className="w-full" type="scroll">
+          <div className="flex flex-col gap-4 pb-4">
+            {popularGames.map((game) => (
+              <div 
+                key={game.id}
+                className="flex gap-4 items-center"
+              >
+                <img
+                  src={game.icon}
+                  alt={game.title}
+                  className="w-16 h-16 rounded-2xl object-cover"
+                />
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-medium text-gray-900 text-base truncate">
+                    {game.title}
+                  </h3>
+                  <p className="text-sm text-gray-500 truncate">
+                    {game.description}
+                  </p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-sm text-gray-600">{game.rating} ★</span>
+                    <span className="text-sm text-gray-600">{game.size}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-white">
       <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
@@ -431,6 +515,7 @@ export default function GamesPages() {
         <SponsoredSection />
         <CategorySection title="Popular Sports Games" games={games.filter(g => g.category.includes("Sports"))} />
         <CategorySection title="Trending Board Games" games={games.filter(g => g.category.includes("Board"))} />
+        <PopularGamesSection />
         <CategorySection title="Suggested For You" games={games} />
         
         <div className="px-4">
