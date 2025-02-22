@@ -31,6 +31,10 @@ const Search = lazy(() => import("./pages/Search"));
 const MarketplaceSearch = lazy(() => import("./pages/MarketplaceSearch"));
 const MarketplaceCategories = lazy(() => import("./pages/MarketplaceCategories"));
 const MarketplaceCart = lazy(() => import("./pages/MarketplaceCart"));
+const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminBanners = lazy(() => import("./pages/admin/AdminBanners"));
+const AdminTournaments = lazy(() => import("./pages/admin/AdminTournaments"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen p-8 space-y-4">
