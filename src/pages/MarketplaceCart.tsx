@@ -1,12 +1,11 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Minus, Plus, X, ArrowLeft, ChevronRight, Tag, CreditCard, Gift, Shield } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
 import { MarketplaceNav } from "@/components/marketplace/MarketplaceNav";
+import { CartHeader } from "@/components/marketplace/cart/CartHeader";
+import { CartItem } from "@/components/marketplace/cart/CartItem";
+import { PromoCodeSection } from "@/components/marketplace/cart/PromoCodeSection";
+import { OrderSummary, CheckoutButton } from "@/components/marketplace/cart/OrderSummary";
+import { EmptyCart } from "@/components/marketplace/cart/EmptyCart";
 
 interface CartItem {
   id: string;
@@ -52,7 +51,6 @@ const initialItems: CartItem[] = [
 ];
 
 export default function MarketplaceCart() {
-  const navigate = useNavigate();
   const [items, setItems] = useState<CartItem[]>(initialItems);
   const [promoCode, setPromoCode] = useState("");
   const [isPromoApplied, setIsPromoApplied] = useState(false);
@@ -81,191 +79,42 @@ export default function MarketplaceCart() {
 
   return (
     <div className="min-h-screen bg-gray-50/50">
-      {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
-        <div className="flex items-center gap-3 px-4 py-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={() => navigate(-1)}
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <h1 className="text-lg font-semibold">Shopping Cart ({items.length})</h1>
-        </div>
-      </div>
+      <CartHeader itemCount={items.length} />
 
-      {/* Content */}
       <div className="pt-[60px] pb-[180px]">
         {items.length > 0 ? (
           <div className="px-4 py-6 space-y-6">
-            {/* Cart Items */}
             <div className="space-y-4">
               {items.map((item) => (
-                <div
+                <CartItem
                   key={item.id}
-                  className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 animate-fade-in"
-                >
-                  <div className="flex gap-4">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-20 h-20 object-cover rounded-xl"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2">
-                        <div>
-                          <h3 className="font-medium truncate">{item.name}</h3>
-                          <p className="text-sm text-gray-500 mt-0.5">
-                            {item.color} · {item.size}
-                          </p>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 -mr-2 -mt-2 text-gray-400 hover:text-gray-600"
-                          onClick={() => removeItem(item.id)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      
-                      <div className="flex items-center justify-between mt-4">
-                        <div className="flex items-center bg-gray-50 rounded-lg">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 rounded-l-lg text-gray-500"
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          >
-                            <Minus className="h-3.5 w-3.5" />
-                          </Button>
-                          <span className="w-8 text-center text-sm font-medium">
-                            {item.quantity}
-                          </span>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 rounded-r-lg text-gray-500"
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          >
-                            <Plus className="h-3.5 w-3.5" />
-                          </Button>
-                        </div>
-                        <span className="font-semibold">${item.price * item.quantity}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  {...item}
+                  onQuantityChange={updateQuantity}
+                  onRemove={removeItem}
+                />
               ))}
             </div>
 
-            {/* Promo Code */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-              <div className="flex items-center gap-3">
-                <div className="relative flex-1">
-                  <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input
-                    type="text"
-                    placeholder="Enter promo code"
-                    value={promoCode}
-                    onChange={(e) => setPromoCode(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-                <Button 
-                  variant="outline"
-                  size="sm"
-                  onClick={applyPromoCode}
-                  disabled={isPromoApplied}
-                >
-                  {isPromoApplied ? "Applied" : "Apply"}
-                </Button>
-              </div>
-              {isPromoApplied && (
-                <p className="text-xs text-green-600 mt-2 flex items-center gap-1">
-                  <Badge className="h-4 bg-green-100 text-green-600 hover:bg-green-100">10% OFF</Badge>
-                  Promo code applied successfully!
-                </p>
-              )}
-            </div>
+            <PromoCodeSection
+              promoCode={promoCode}
+              isPromoApplied={isPromoApplied}
+              onPromoCodeChange={setPromoCode}
+              onApplyPromo={applyPromoCode}
+            />
 
-            {/* Order Summary */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="p-4">
-                <h3 className="font-semibold mb-4">Order Summary</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Subtotal</span>
-                    <span>${subtotal}</span>
-                  </div>
-                  {discount > 0 && (
-                    <div className="flex justify-between text-green-600">
-                      <span>Discount</span>
-                      <span>-${discount}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Shipping</span>
-                    <span>{shipping === 0 ? "Free" : `$${shipping}`}</span>
-                  </div>
-                  <div className="border-t border-gray-100 mt-3 pt-3 flex justify-between font-semibold">
-                    <span>Total</span>
-                    <span>${total}</span>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-gray-50/50 px-4 py-3 border-t border-gray-100">
-                <div className="flex items-center gap-2 text-xs text-gray-600">
-                  <Shield className="h-3.5 w-3.5" />
-                  <span>Secure checkout with buyer protection</span>
-                </div>
-              </div>
-            </div>
+            <OrderSummary
+              subtotal={subtotal}
+              discount={discount}
+              shipping={shipping}
+              total={total}
+            />
           </div>
         ) : (
-          <div className="px-4 py-12 text-center">
-            <div className="max-w-md mx-auto">
-              <img
-                src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400"
-                alt="Empty cart"
-                className="w-full h-48 object-cover rounded-2xl mb-6"
-              />
-              <h2 className="text-xl font-semibold mb-2">Your cart is empty</h2>
-              <p className="text-gray-600 mb-6">
-                Looks like you haven't added anything to your cart yet.
-              </p>
-              <Button
-                className="w-full"
-                onClick={() => navigate('/marketplace')}
-              >
-                Continue Shopping
-              </Button>
-            </div>
-          </div>
+          <EmptyCart />
         )}
       </div>
 
-      {/* Checkout Button */}
-      {items.length > 0 && (
-        <div className="fixed bottom-16 left-0 right-0 p-4 bg-gradient-to-t from-white via-white to-white/95">
-          <Button 
-            className="w-full h-12 text-base flex items-center justify-between px-6"
-            onClick={() => navigate('/checkout')}
-          >
-            <span className="flex items-center gap-2">
-              <CreditCard className="h-4 w-4" />
-              Proceed to Checkout
-            </span>
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-          <p className="text-xs text-center text-gray-500 mt-2">
-            Free shipping on orders over $500
-          </p>
-        </div>
-      )}
-
+      {items.length > 0 && <CheckoutButton total={total} />}
       <MarketplaceNav />
     </div>
   );
