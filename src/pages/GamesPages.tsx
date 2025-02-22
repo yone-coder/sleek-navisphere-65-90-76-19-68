@@ -447,31 +447,62 @@ export default function GamesPages() {
         </div>
 
         <ScrollArea className="w-full" type="scroll">
-          <div className="flex gap-4 pb-4">
-            {popularGames.map((game) => (
-              <div 
-                key={game.id}
-                className="flex-none w-[300px] flex gap-4 items-center"
-              >
-                <img
-                  src={game.icon}
-                  alt={game.title}
-                  className="w-16 h-16 rounded-2xl object-cover"
-                />
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-medium text-gray-900 text-base truncate">
-                    {game.title}
-                  </h3>
-                  <p className="text-sm text-gray-500 truncate">
-                    {game.description}
-                  </p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-sm text-gray-600">{game.rating} ★</span>
-                    <span className="text-sm text-gray-600">{game.size}</span>
+          <div className="flex gap-6 pb-4">
+            {/* First Column */}
+            <div className="flex-none w-[300px] space-y-4">
+              {popularGames.slice(0, 3).map((game) => (
+                <div 
+                  key={game.id}
+                  className="flex gap-4 items-center"
+                >
+                  <img
+                    src={game.icon}
+                    alt={game.title}
+                    className="w-16 h-16 rounded-2xl object-cover"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-gray-900 text-base truncate">
+                      {game.title}
+                    </h3>
+                    <p className="text-sm text-gray-500 truncate">
+                      {game.description}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-sm text-gray-600">{game.rating} ★</span>
+                      <span className="text-sm text-gray-600">{game.size}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            {/* Second Column */}
+            <div className="flex-none w-[300px] space-y-4">
+              {popularGames.slice(3, 6).map((game) => (
+                <div 
+                  key={game.id}
+                  className="flex gap-4 items-center"
+                >
+                  <img
+                    src={game.icon}
+                    alt={game.title}
+                    className="w-16 h-16 rounded-2xl object-cover"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-gray-900 text-base truncate">
+                      {game.title}
+                    </h3>
+                    <p className="text-sm text-gray-500 truncate">
+                      {game.description}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-sm text-gray-600">{game.rating} ★</span>
+                      <span className="text-sm text-gray-600">{game.size}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
