@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Minus, Plus, X, ArrowLeft, ChevronRight, Tag, CreditCard, Gift, Shield } from "lucide-react";
+import { Minus, Plus, X, ArrowLeft, ChevronRight, Tag, CreditCard, Gift, Shield, Truck, PackageCheck, Store, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,8 @@ interface CartItem {
     name: string;
     verified: boolean;
   };
+  deliveryEstimate: string;
+  stockStatus: "in_stock" | "low_stock" | "out_of_stock";
 }
 
 const initialItems: CartItem[] = [
@@ -34,7 +36,9 @@ const initialItems: CartItem[] = [
     seller: {
       name: "Pro Gaming Store",
       verified: true
-    }
+    },
+    deliveryEstimate: "2-4 days",
+    stockStatus: "in_stock"
   },
   {
     id: "2",
@@ -47,7 +51,9 @@ const initialItems: CartItem[] = [
     seller: {
       name: "Pro Gaming Store",
       verified: true
-    }
+    },
+    deliveryEstimate: "1-2 days",
+    stockStatus: "low_stock"
   }
 ];
 
@@ -56,11 +62,13 @@ export default function MarketplaceCart() {
   const [items, setItems] = useState<CartItem[]>(initialItems);
   const [promoCode, setPromoCode] = useState("");
   const [isPromoApplied, setIsPromoApplied] = useState(false);
+  const [savingForLater, setSavingForLater] = useState(false);
 
   const subtotal = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
   const discount = isPromoApplied ? subtotal * 0.1 : 0;
   const shipping = subtotal > 500 ? 0 : 15;
   const total = subtotal - discount + shipping;
+  const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
 
   const updateQuantity = (id: string, newQuantity: number) => {
     if (newQuantity < 1) return;
@@ -70,12 +78,27 @@ export default function MarketplaceCart() {
   };
 
   const removeItem = (id: string) => {
-    setItems(items.filter(item => item.id !== id));
+    setSavingForLater(true);
+    setTimeout(() => {
+      setItems(items.filter(item => item.id !== id));
+      setSavingForLater(false);
+    }, 500);
   };
 
   const applyPromoCode = () => {
     if (promoCode.toLowerCase() === "summer10") {
       setIsPromoApplied(true);
+    }
+  };
+
+  const getStockStatusBadge = (status: CartItem["stockStatus"]) => {
+    switch (status) {
+      case "in_stock":
+        return <Badge className="bg-green-100 text-green-700 hover:bg-green-100">In Stock</Badge>;
+      case "low_stock":
+        return <Badge className="bg-yellow-100 text-yellow-700 hover:bg-yellow-100">Low Stock</Badge>;
+      case "out_of_stock":
+        return <Badge className="bg-red-100 text-red-700 hover:bg-red-100">Out of Stock</Badge>;
     }
   };
 
@@ -92,14 +115,30 @@ export default function MarketplaceCart() {
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <h1 className="text-lg font-semibold">Shopping Cart ({items.length})</h1>
+          <h1 className="text-lg font-semibold">Shopping Cart ({totalItems} items)</h1>
+        </div>
+        {/* Progress Bar */}
+        <div className="h-1 w-full bg-gray-100">
+          <div className="h-full bg-primary transition-all duration-300"
+               style={{ width: items.length ? "50%" : "25%" }} />
         </div>
       </div>
 
       {/* Content */}
-      <div className="pt-[60px] pb-[180px]">
+      <div className="pt-[68px] pb-[180px]">
         {items.length > 0 ? (
           <div className="px-4 py-6 space-y-6">
+            {/* Delivery Status */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+              <div className="flex items-center gap-3 text-sm">
+                <Truck className="h-5 w-5 text-primary" />
+                <div className="flex-1">
+                  <p className="font-medium">Estimated Delivery</p>
+                  <p className="text-gray-600">All items will arrive between Feb 20 - Feb 24</p>
+                </div>
+              </div>
+            </div>
+
             {/* Cart Items */}
             <div className="space-y-4">
               {items.map((item) => (
@@ -108,11 +147,14 @@ export default function MarketplaceCart() {
                   className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 animate-fade-in"
                 >
                   <div className="flex gap-4">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-20 h-20 object-cover rounded-xl"
-                    />
+                    <div className="relative">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-20 h-20 object-cover rounded-xl"
+                      />
+                      {getStockStatusBadge(item.stockStatus)}
+                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
                         <div>
@@ -120,12 +162,20 @@ export default function MarketplaceCart() {
                           <p className="text-sm text-gray-500 mt-0.5">
                             {item.color} · {item.size}
                           </p>
+                          <div className="flex items-center gap-2 mt-1 text-xs text-gray-600">
+                            <Store className="h-3.5 w-3.5" />
+                            <span>{item.seller.name}</span>
+                            {item.seller.verified && (
+                              <Badge variant="secondary" className="h-4">Verified</Badge>
+                            )}
+                          </div>
                         </div>
                         <Button
                           variant="ghost"
                           size="icon"
                           className="h-8 w-8 -mr-2 -mt-2 text-gray-400 hover:text-gray-600"
                           onClick={() => removeItem(item.id)}
+                          disabled={savingForLater}
                         >
                           <X className="h-4 w-4" />
                         </Button>
@@ -153,7 +203,13 @@ export default function MarketplaceCart() {
                             <Plus className="h-3.5 w-3.5" />
                           </Button>
                         </div>
-                        <span className="font-semibold">${item.price * item.quantity}</span>
+                        <div className="text-right">
+                          <span className="font-semibold">${item.price * item.quantity}</span>
+                          <div className="flex items-center gap-1 text-xs text-gray-600 mt-1">
+                            <Clock className="h-3.5 w-3.5" />
+                            <span>Delivery in {item.deliveryEstimate}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -197,7 +253,7 @@ export default function MarketplaceCart() {
                 <h3 className="font-semibold mb-4">Order Summary</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Subtotal</span>
+                    <span className="text-gray-600">Subtotal ({totalItems} items)</span>
                     <span>${subtotal}</span>
                   </div>
                   {discount > 0 && (
@@ -212,7 +268,12 @@ export default function MarketplaceCart() {
                   </div>
                   <div className="border-t border-gray-100 mt-3 pt-3 flex justify-between font-semibold">
                     <span>Total</span>
-                    <span>${total}</span>
+                    <div className="text-right">
+                      <span className="text-lg">${total}</span>
+                      {shipping === 0 && (
+                        <p className="text-xs text-green-600">Free shipping applied</p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
