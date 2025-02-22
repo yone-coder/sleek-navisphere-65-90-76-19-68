@@ -11,7 +11,7 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Lazy load all pages
-const Home = lazy(() => import("./pages/Home"));
+const Home = lazy(() => import("./pages/Apps")); // Changed this line to import Apps as Home
 const Explore = lazy(() => import("./pages/Explore"));
 const Matches = lazy(() => import("./pages/Matches"));
 const Feeds = lazy(() => import("./pages/Feeds"));
@@ -70,6 +70,7 @@ const AppContent = () => {
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/apps" element={<Apps />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/matches" element={<Matches />} />
           <Route path="/match/:id" element={<MatchDetails />} />
@@ -86,7 +87,6 @@ const AppContent = () => {
           <Route path="/tournament/:id" element={<TournamentDetails />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/marketplace/product/:id" element={<ProductDetails />} />
-          <Route path="/apps" element={<Apps />} />
           <Route path="/search" element={<Search />} />
           
           {/* Admin Routes */}
