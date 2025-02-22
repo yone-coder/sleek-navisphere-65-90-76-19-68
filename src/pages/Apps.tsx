@@ -1,6 +1,5 @@
 import { Grid2X2, Wallet, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Search, Clock, Star, Sparkles, Filter, TrendingUp, Zap, Crown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
@@ -181,11 +180,9 @@ export default function Apps() {
 
   return (
     <div className="fixed inset-0 flex flex-col overflow-hidden">
-      <div className="flex-none">
-        <AppsHeader onOpenSearch={() => setIsSearchOpen(true)} />
-      </div>
+      <AppsHeader onOpenSearch={() => setIsSearchOpen(true)} />
       
-      <ScrollArea className="flex-1">
+      <div className="flex-1 overflow-y-auto">
         <div className="bg-gradient-to-b from-gray-50 to-white">
           <BannerSlider />
           
@@ -253,7 +250,7 @@ export default function Apps() {
             </div>
           </div>
         </div>
-      </ScrollArea>
+      </div>
 
       <SearchOverlay 
         isOpen={isSearchOpen} 
