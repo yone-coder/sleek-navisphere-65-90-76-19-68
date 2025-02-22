@@ -55,7 +55,7 @@ export const BannerSlider = () => {
           <CarouselContent>
             {banners.map((banner, index) => (
               <CarouselItem key={banner.id}>
-                <div className="relative w-full h-[280px] overflow-hidden group">
+                <div className="relative w-full aspect-[2/1] overflow-hidden group">
                   <div 
                     className="absolute inset-0 bg-cover bg-center scale-105 transition-transform duration-[12000ms] group-hover:scale-100" 
                     style={{ backgroundImage: `url(${banner.image})` }}
@@ -98,3 +98,4 @@ export const BannerSlider = () => {
     </div>
   );
 };
+
