@@ -1,5 +1,5 @@
 
-import { Home, Search, Grid, ShoppingCart, Clock, ChevronLeft } from 'lucide-react';
+import { Home, Search, Grid, ShoppingCart, Clock, ChevronLeft, UserRound } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Badge } from '../ui/badge';
@@ -36,10 +36,10 @@ export const MarketplaceNav = () => {
       badge: '2'
     },
     {
-      icon: Clock,
-      label: 'Recent',
-      isRecent: true,
-      color: 'from-rose-500 to-red-500'
+      icon: UserRound,
+      label: 'Profile',
+      path: '/profile',
+      color: 'from-slate-500 to-gray-500'
     }
   ];
 
@@ -50,6 +50,25 @@ export const MarketplaceNav = () => {
       
       {/* Navigation content */}
       <div className="relative max-w-screen-xl mx-auto">
+        {/* Back button with animation */}
+        <button
+          onClick={() => navigate(-1)}
+          className={cn(
+            "absolute left-4 -top-12",
+            "flex items-center gap-2 px-3 py-1.5",
+            "text-xs font-medium text-gray-600",
+            "bg-white/50 backdrop-blur-sm rounded-full",
+            "border border-gray-200/30 shadow-sm",
+            "transition-all duration-300 hover:bg-white/80",
+            "opacity-0 -translate-y-2",
+            location.pathname !== '/marketplace' && "opacity-100 translate-y-0"
+          )}
+          aria-label="Go back"
+        >
+          <ChevronLeft className="w-4 h-4" aria-hidden="true" />
+          Back
+        </button>
+
         <ul className="flex items-center justify-around py-3 px-4 relative z-10">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
