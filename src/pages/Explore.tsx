@@ -1,14 +1,17 @@
-
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  type CarouselApi,
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import GameCard from "@/components/games/GameCard";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 const games = {
   boardGames: [
@@ -177,76 +180,41 @@ const categories = [
   { id: "games", label: "Games" }
 ];
 
-const GameSection = ({ title, games }: { title: string; games: any[] }) => {
-  const navigate = useNavigate();
+interface GameSectionProps {
+  title: string;
+  games: any[];
+  onLike: (id: number) => void;
+  onShare: (id: number) => void;
+  likedGames: number[];
+}
 
-  const handleGameClick = (gameId: number, gameTitle: string) => {
-    navigate(`/tournaments?game=${gameId}&title=${encodeURIComponent(gameTitle)}`);
-  };
-
+const GameSection = ({ title, games, onLike, onShare, likedGames }: GameSectionProps) => {
   return (
     <div className="mb-8">
-      <div className="flex justify-between items-center px-4 mb-2">
-        <h1 className="text-xl font-bold">{title}</h1>
-        <i className="fas fa-arrow-right text-xl"></i>
+      <div className="flex justify-between items-center px-4 mb-4">
+        <div className="flex items-center gap-3">
+          <h1 className="text-xl font-bold">{title}</h1>
+          <Badge variant="secondary" className="rounded-full">
+            {games.length}
+          </Badge>
+        </div>
+        <Button variant="ghost" size="sm" className="text-sm">
+          See All
+        </Button>
       </div>
-      <div className="flex overflow-x-auto no-scrollbar">
-        <div className="flex space-x-3 px-4">
+      <ScrollArea className="w-full whitespace-nowrap">
+        <div className="flex space-x-4 px-4 pb-4">
           {games.map((game) => (
-            <div key={game.id} className="bg-white rounded-lg shadow-md overflow-hidden w-60 flex-shrink-0">
-              <div className="relative">
-                <img 
-                  src={game.image} 
-                  alt={`${game.title} board`} 
-                  className="h-32 w-full object-cover"
-                />
-                <img 
-                  src={game.profileImage} 
-                  alt="Profile picture of the user" 
-                  className="absolute bottom-0 left-2 transform translate-y-1/2 h-10 w-10 rounded-full border-2 border-white"
-                />
-              </div>
-              <div className="p-2 pt-6">
-                <div className="flex justify-between items-center mb-2">
-                  <div>
-                    <h2 className="text-sm font-bold">
-                      {game.title}
-                      {game.verified && (
-                        <span className="text-green-500 ml-1">
-                          <i className="fas fa-check-circle"></i>
-                        </span>
-                      )}
-                    </h2>
-                  </div>
-                  <button className="bg-blue-500 text-white text-xs px-2 py-1 rounded-md">
-                    + Follow
-                  </button>
-                </div>
-                <p className="text-gray-500 text-xs truncate-2-lines">
-                  {game.description}
-                </p>
-                <div className="mt-2 flex items-center justify-between text-gray-500 text-xs">
-                  <span>
-                    <i className="fas fa-heart"></i> {game.stats.likes}
-                  </span>
-                  <span>
-                    <i className="fas fa-comment"></i> {game.stats.comments}
-                  </span>
-                  <span>
-                    <i className="fas fa-share"></i> {game.stats.shares}
-                  </span>
-                </div>
-                <button 
-                  onClick={() => handleGameClick(game.id, game.title)}
-                  className="mt-2 w-full bg-blue-500 text-white py-1 rounded-md text-sm"
-                >
-                  View Tournaments
-                </button>
-              </div>
-            </div>
+            <GameCard
+              key={game.id}
+              game={game}
+              onLike={onLike}
+              onShare={onShare}
+              isLiked={likedGames.includes(game.id)}
+            />
           ))}
         </div>
-      </div>
+      </ScrollArea>
     </div>
   );
 };
@@ -254,18 +222,29 @@ const GameSection = ({ title, games }: { title: string; games: any[] }) => {
 export default function Explore() {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [api, setApi] = useState<CarouselApi>();
   const [activeCategory, setActiveCategory] = useState("all");
+  const [likedGames, setLikedGames] = useState<number[]>([]);
+  const { toast } = useToast();
 
-  useEffect(() => {
-    if (!api) {
-      return;
-    }
-
-    api.on("select", () => {
-      setCurrentSlide(api.selectedScrollSnap());
+  const handleLike = (gameId: number) => {
+    setLikedGames(prev => 
+      prev.includes(gameId) 
+        ? prev.filter(id => id !== gameId)
+        : [...prev, gameId]
+    );
+    
+    toast({
+      title: likedGames.includes(gameId) ? "Removed from favorites" : "Added to favorites",
+      description: "Your game preferences have been updated.",
     });
-  }, [api]);
+  };
+
+  const handleShare = (gameId: number) => {
+    toast({
+      title: "Share link copied!",
+      description: "Game link has been copied to your clipboard.",
+    });
+  };
 
   return (
     <div className="bg-gray-100">
@@ -281,7 +260,6 @@ export default function Explore() {
         </button>
       </header>
 
-      {/* Image Slider */}
       <div className="w-full relative">
         <Carousel
           opts={{
@@ -289,7 +267,6 @@ export default function Explore() {
             loop: true,
           }}
           className="w-full"
-          setApi={setApi}
         >
           <CarouselContent>
             {sliderImages.map((image, index) => (
@@ -325,7 +302,6 @@ export default function Explore() {
         </Carousel>
       </div>
 
-      {/* Categories Tab Switcher */}
       <div className="py-4">
         <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
           <div className="relative">
@@ -353,10 +329,34 @@ export default function Explore() {
       </div>
 
       <div className="space-y-4">
-        <GameSection title="Board Games" games={games.boardGames} />
-        <GameSection title="Arcade Games" games={games.arcadeGames} />
-        <GameSection title="Card Games" games={games.cardGames} />
-        <GameSection title="Puzzle Games" games={games.puzzleGames} />
+        <GameSection 
+          title="Board Games" 
+          games={games.boardGames} 
+          onLike={handleLike}
+          onShare={handleShare}
+          likedGames={likedGames}
+        />
+        <GameSection 
+          title="Arcade Games" 
+          games={games.arcadeGames} 
+          onLike={handleLike}
+          onShare={handleShare}
+          likedGames={likedGames}
+        />
+        <GameSection 
+          title="Card Games" 
+          games={games.cardGames} 
+          onLike={handleLike}
+          onShare={handleShare}
+          likedGames={likedGames}
+        />
+        <GameSection 
+          title="Puzzle Games" 
+          games={games.puzzleGames} 
+          onLike={handleLike}
+          onShare={handleShare}
+          likedGames={likedGames}
+        />
       </div>
 
       <style>{`
