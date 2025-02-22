@@ -2,72 +2,107 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
-  ChevronLeft, Trophy, Dices, Dice1, Grid3X3, PlaySquare
+  ChevronLeft, Gamepad2, Trophy
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface Game {
   id: string;
   title: string;
   description: string;
-  icon: React.ReactNode;
+  thumbnail: string;
   category: string;
+  rating: number;
+  downloads: string;
+  price?: string;
+  isFeatured?: boolean;
+  isEditorChoice?: boolean;
   route?: string;
-  status?: "Live" | "Popular" | "New" | "Coming Soon";
 }
 
 const games: Game[] = [
   {
     id: "chess",
-    title: "Chess",
-    description: "Classic strategy board game",
-    icon: <Dices className="w-6 h-6" />,
-    category: "Strategy",
-    route: "/games/chess",
-    status: "Live"
+    title: "Chess Master Pro",
+    description: "Challenge your mind with the ultimate chess experience",
+    thumbnail: "https://images.unsplash.com/photo-1582562124811-c09040d0a901",
+    category: "Board",
+    rating: 4.8,
+    downloads: "1M+",
+    isFeatured: true,
+    route: "/games/chess"
   },
   {
     id: "morpion",
     title: "Tic Tac Toe",
-    description: "Three-in-a-row game",
-    icon: <Grid3X3 className="w-6 h-6" />,
+    description: "Classic three-in-a-row with multiplayer",
+    thumbnail: "https://images.unsplash.com/photo-1498936178812-4b2e558d2937",
     category: "Casual",
-    route: "/games/morpion",
-    status: "Popular"
+    rating: 4.5,
+    downloads: "500K+",
+    isEditorChoice: true,
+    route: "/games/morpion"
   },
   {
     id: "domino",
-    title: "Dominoes",
-    description: "Tile-based matching game",
-    icon: <Dice1 className="w-6 h-6" />,
-    category: "Strategy",
-    status: "Coming Soon"
+    title: "Domino Masters",
+    description: "Strategic tile-matching multiplayer game",
+    thumbnail: "https://images.unsplash.com/photo-1501286353178-1ec881214838",
+    category: "Board",
+    rating: 4.3,
+    downloads: "100K+",
+    price: "Free"
   },
   {
-    id: "poker",
-    title: "Poker",
-    description: "Card game of skill",
-    icon: <PlaySquare className="w-6 h-6" />,
-    category: "Cards",
-    status: "New"
+    id: "puzzle",
+    title: "Brain Teaser",
+    description: "Mind-bending puzzles and challenges",
+    thumbnail: "https://images.unsplash.com/photo-1466721591366-2d5fba72006d",
+    category: "Puzzle",
+    rating: 4.7,
+    downloads: "250K+",
+    price: "Free"
   }
 ];
 
-const categories = ["All", "Strategy", "Cards", "Casual", "Puzzle"];
+const categories = [
+  "For you",
+  "Top charts",
+  "Kids",
+  "Premium",
+  "Categories",
+  "Editor's choice"
+];
 
 export default function GamesPages() {
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [activeTab, setActiveTab] = useState("For you");
 
-  const filteredGames = selectedCategory === "All" 
-    ? games 
-    : games.filter(game => game.category === selectedCategory);
+  const renderRating = (rating: number) => {
+    return (
+      <div className="flex items-center gap-1">
+        <span className="text-sm font-medium">{rating}</span>
+        <div className="flex items-center">
+          {[...Array(5)].map((_, i) => (
+            <div
+              key={i}
+              className={cn(
+                "w-2 h-2 rounded-full",
+                i < Math.floor(rating) ? "bg-yellow-400" : "bg-gray-200"
+              )}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50/50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
         <div className="flex items-center gap-3 px-4 py-3">
@@ -81,7 +116,7 @@ export default function GamesPages() {
           </Button>
           <div className="flex-1">
             <h1 className="text-lg font-semibold">Games</h1>
-            <p className="text-sm text-gray-500">Play with friends online</p>
+            <p className="text-sm text-gray-500">Discover amazing games</p>
           </div>
           <Button
             variant="outline"
@@ -98,17 +133,16 @@ export default function GamesPages() {
         <ScrollArea className="w-full" type="scroll">
           <div className="px-4 pb-3">
             <Tabs 
-              defaultValue="All" 
-              value={selectedCategory}
-              onValueChange={setSelectedCategory}
+              value={activeTab}
+              onValueChange={setActiveTab}
               className="w-full"
             >
-              <TabsList className="h-9 bg-gray-100/50">
+              <TabsList className="h-9 bg-transparent p-0 w-auto">
                 {categories.map((category) => (
                   <TabsTrigger
                     key={category}
                     value={category}
-                    className="text-sm"
+                    className="h-9 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
                   >
                     {category}
                   </TabsTrigger>
@@ -120,43 +154,103 @@ export default function GamesPages() {
         </ScrollArea>
       </div>
 
-      {/* Games Grid */}
-      <div className="pt-[116px] px-4 pb-24">
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
-          {filteredGames.map((game) => (
-            <Button
-              key={game.id}
-              variant="ghost"
-              className={cn(
-                "h-auto flex flex-col items-center gap-2 p-4",
-                "hover:bg-gray-100/80",
-                game.status === "Coming Soon" && "opacity-50 cursor-not-allowed"
-              )}
-              onClick={() => game.route && navigate(game.route)}
-              disabled={game.status === "Coming Soon"}
-            >
-              <div className={cn(
-                "w-12 h-12 rounded-2xl flex items-center justify-center",
-                game.category === "Strategy" && "bg-blue-500",
-                game.category === "Casual" && "bg-green-500",
-                game.category === "Cards" && "bg-purple-500",
-                game.category === "Puzzle" && "bg-orange-500"
-              )}>
-                {game.icon}
+      {/* Content */}
+      <div className="pt-[116px] pb-24">
+        {/* Featured Game */}
+        {games.find(game => game.isFeatured) && (
+          <div className="px-4 mb-8">
+            <h2 className="text-lg font-semibold mb-4">Featured Game</h2>
+            <div className="relative rounded-2xl overflow-hidden">
+              <img
+                src={games.find(game => game.isFeatured)?.thumbnail}
+                alt="Featured game"
+                className="w-full h-48 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                <h3 className="text-xl font-bold mb-1">
+                  {games.find(game => game.isFeatured)?.title}
+                </h3>
+                <p className="text-sm opacity-90">
+                  {games.find(game => game.isFeatured)?.description}
+                </p>
               </div>
-              <div className="text-center">
-                <p className="text-sm font-medium text-gray-900">{game.title}</p>
-                <p className="text-xs text-gray-500">{game.description}</p>
-              </div>
-              {game.status === "New" && (
-                <div className="absolute -top-1 -right-1">
-                  <div className="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">
-                    NEW
+            </div>
+          </div>
+        )}
+
+        {/* Editor's Choice */}
+        <div className="px-4 mb-8">
+          <h2 className="text-lg font-semibold mb-4">Editor's Choice</h2>
+          <div className="grid grid-cols-2 gap-4">
+            {games
+              .filter(game => game.isEditorChoice)
+              .map(game => (
+                <Button
+                  key={game.id}
+                  variant="ghost"
+                  className="h-auto p-0 w-full"
+                  onClick={() => game.route && navigate(game.route)}
+                >
+                  <div className="w-full text-left">
+                    <div className="relative aspect-[4/3] mb-2">
+                      <img
+                        src={game.thumbnail}
+                        alt={game.title}
+                        className="w-full h-full object-cover rounded-xl"
+                      />
+                      <Badge
+                        className="absolute top-2 left-2 bg-white/90 text-black"
+                        variant="secondary"
+                      >
+                        Editor's Choice
+                      </Badge>
+                    </div>
+                    <h3 className="font-semibold text-sm mb-1">{game.title}</h3>
+                    {renderRating(game.rating)}
                   </div>
+                </Button>
+              ))}
+          </div>
+        </div>
+
+        {/* All Games */}
+        <div className="px-4">
+          <h2 className="text-lg font-semibold mb-4">Popular Games</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {games.map(game => (
+              <Button
+                key={game.id}
+                variant="ghost"
+                className="h-auto p-0 w-full"
+                onClick={() => game.route && navigate(game.route)}
+              >
+                <div className="w-full text-left">
+                  <div className="aspect-[4/3] mb-2">
+                    <img
+                      src={game.thumbnail}
+                      alt={game.title}
+                      className="w-full h-full object-cover rounded-xl"
+                    />
+                  </div>
+                  <h3 className="font-semibold text-sm mb-1 truncate">
+                    {game.title}
+                  </h3>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-500">{game.downloads}</span>
+                    {game.price ? (
+                      <span className="text-xs font-medium">{game.price}</span>
+                    ) : (
+                      <Badge variant="secondary" className="text-[10px]">
+                        Free
+                      </Badge>
+                    )}
+                  </div>
+                  {renderRating(game.rating)}
                 </div>
-              )}
-            </Button>
-          ))}
+              </Button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
