@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -46,7 +45,13 @@ export const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const isMobile = useIsMobile();
+  
+  // Hide header on home page
+  if (location.pathname === '/') {
+    return null;
+  }
 
   // Filter languages based on search query
   const filteredLanguages = Object.entries(languageDetails).filter(([code, details]) => {

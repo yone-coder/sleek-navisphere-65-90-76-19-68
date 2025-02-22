@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
 import { SearchOverlay } from "@/components/search/SearchOverlay";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AppsHeader } from "@/components/apps/AppsHeader";
 
 const apps = [
   {
@@ -229,13 +230,14 @@ export default function Apps() {
 
   return (
     <>
+      <AppsHeader />
       <SearchOverlay 
         isOpen={isSearchOpen} 
         onClose={() => setIsSearchOpen(false)} 
         apps={apps}
       />
 
-      <ScrollArea className="h-screen">
+      <ScrollArea className="h-[calc(100vh-3.5rem)]">
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
           <div className="relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-violet-50" />
