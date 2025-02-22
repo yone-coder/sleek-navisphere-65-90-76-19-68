@@ -43,12 +43,12 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
           </div>
           
           <div className="flex items-center gap-3">
-            <Badge variant="secondary" className="px-2 py-1">
-              {favoriteApps.length} {favoriteApps.length === 1 ? 'app' : 'apps'}
+            <Badge variant="secondary" className="px-2 py-0.5 text-xs whitespace-nowrap">
+              {favoriteApps.length} apps
             </Badge>
             {totalUpdates > 0 && (
-              <Badge variant="destructive" className="animate-pulse">
-                {totalUpdates} {totalUpdates === 1 ? 'update' : 'updates'}
+              <Badge variant="destructive" className="animate-pulse px-2 py-0.5 text-xs whitespace-nowrap">
+                {totalUpdates} updates
               </Badge>
             )}
           </div>
