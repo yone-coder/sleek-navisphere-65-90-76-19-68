@@ -37,8 +37,8 @@ const AppCard = ({ app, isFavorite, onToggleFavorite }) => (
           </Badge>
         )}
       </div>
-      <div className="text-center w-full overflow-hidden">
-        <div className="flex items-center justify-center gap-1 mb-1">
+      <div className="text-center w-full overflow-hidden max-w-full">
+        <div className="flex items-center justify-center gap-1 mb-1 px-2">
           <span className="text-sm font-medium text-gray-700 truncate max-w-[120px]">{app.name}</span>
           {app.rating && (
             <div className="flex items-center gap-1 text-xs text-yellow-500 flex-shrink-0">
@@ -49,7 +49,7 @@ const AppCard = ({ app, isFavorite, onToggleFavorite }) => (
         </div>
         <p className="text-xs text-gray-500 mb-2 line-clamp-2 px-2">{app.description}</p>
         {app.lastUsed && (
-          <div className="text-[10px] text-gray-400 flex items-center justify-center gap-1">
+          <div className="text-[10px] text-gray-400 flex items-center justify-center gap-1 px-2">
             <Clock className="w-3 h-3 flex-shrink-0" />
             <span className="truncate max-w-[100px]">{app.lastUsed}</span>
           </div>
@@ -62,6 +62,7 @@ const AppCard = ({ app, isFavorite, onToggleFavorite }) => (
       className="absolute top-2 right-2 h-7 w-7 rounded-full hover:bg-gray-200 z-10"
       onClick={(e) => {
         e.stopPropagation();
+        e.preventDefault();
         onToggleFavorite(app.name);
       }}
     >
@@ -77,7 +78,7 @@ const AppCard = ({ app, isFavorite, onToggleFavorite }) => (
 
 export const AppGrid = ({ apps, favorites, onToggleFavorite }: AppGridProps) => {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 min-w-0">
       {apps.map((app) => (
         <Card key={app.name} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
           <AppCard
