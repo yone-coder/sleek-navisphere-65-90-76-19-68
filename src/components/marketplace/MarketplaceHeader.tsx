@@ -1,3 +1,4 @@
+
 import { Search, MapPin, Bell, Heart, X } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import {
@@ -57,32 +58,32 @@ export const MarketplaceHeader = ({
     <div className="relative">
       {/* Main header content */}
       <div className={cn(
-        "h-14 flex items-center gap-3 px-4 transition-all duration-300",
+        "h-12 flex items-center gap-2 px-3 transition-all duration-300",
         showSearchBar && "opacity-0 pointer-events-none"
       )}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button 
               variant="outline" 
-              className="h-9 gap-1 border-gray-200"
+              className="h-8 gap-1 border-gray-200 px-2"
             >
-              <MapPin className="w-4 h-4 text-gray-500" />
-              <span className="text-sm font-medium truncate max-w-[100px]">
+              <MapPin className="w-3.5 h-3.5 text-gray-500" />
+              <span className="text-xs font-medium truncate max-w-[80px]">
                 {selectedLocation.name}
               </span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-[280px]">
+          <DropdownMenuContent align="start" className="w-[240px]">
             {locations.map((location) => (
               <DropdownMenuItem
                 key={location.id}
                 onClick={() => setSelectedLocation(location)}
-                className="flex items-center gap-2 cursor-pointer"
+                className="flex items-center gap-2 cursor-pointer py-1.5"
               >
-                <MapPin className="w-4 h-4 text-gray-500" />
-                <span>{location.name}</span>
+                <MapPin className="w-3.5 h-3.5 text-gray-500" />
+                <span className="text-sm">{location.name}</span>
                 {selectedLocation.id === location.id && (
-                  <span className="ml-auto text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                  <span className="ml-auto text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full">
                     Selected
                   </span>
                 )}
@@ -92,45 +93,45 @@ export const MarketplaceHeader = ({
         </DropdownMenu>
 
         <div 
-          className="flex-1 max-w-2xl"
+          className="flex-1 max-w-lg"
           onClick={() => setShowSearchBar(true)}
         >
           <div className="relative cursor-pointer">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-            <div className="w-full h-9 pl-10 pr-4 flex items-center bg-gray-50 rounded-md border border-gray-200">
-              <span className="text-sm text-gray-500">Search marketplace...</span>
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-500" />
+            <div className="w-full h-8 pl-8 pr-3 flex items-center bg-gray-50 rounded-md border border-gray-200">
+              <span className="text-xs text-gray-500">Search marketplace...</span>
             </div>
           </div>
         </div>
 
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="relative h-9 w-9 border-gray-200">
-              <Bell className="h-4 w-4 text-gray-500" />
-              <Badge className="absolute -top-1 -right-1 h-4 min-w-4 p-0.5 flex items-center justify-center bg-red-500 text-[10px]">
+            <Button variant="outline" size="icon" className="relative h-8 w-8 border-gray-200">
+              <Bell className="h-3.5 w-3.5 text-gray-500" />
+              <Badge className="absolute -top-1 -right-1 h-3.5 min-w-3.5 p-0.5 flex items-center justify-center bg-red-500 text-[9px]">
                 2
               </Badge>
             </Button>
           </SheetTrigger>
-          <SheetContent side="right">
+          <SheetContent side="right" className="w-full sm:max-w-sm">
             <SheetHeader>
               <SheetTitle>Notifications</SheetTitle>
             </SheetHeader>
-            <div className="mt-4 space-y-3">
+            <div className="mt-4 space-y-2">
               {notifications.map((notification) => (
                 <div 
                   key={notification.id}
-                  className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  <div className="flex-1 space-y-1">
+                  <div className="flex-1 space-y-0.5">
                     <div className="flex items-center gap-2">
                       <p className="text-sm font-medium">{notification.title}</p>
                       {notification.isNew && (
-                        <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-[10px]">New</Badge>
+                        <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-[9px] px-1.5">New</Badge>
                       )}
                     </div>
-                    <p className="text-sm text-gray-500">{notification.message}</p>
-                    <p className="text-xs text-gray-400">{notification.time}</p>
+                    <p className="text-xs text-gray-500">{notification.message}</p>
+                    <p className="text-[10px] text-gray-400">{notification.time}</p>
                   </div>
                 </div>
               ))}
@@ -138,30 +139,30 @@ export const MarketplaceHeader = ({
           </SheetContent>
         </Sheet>
 
-        <Button variant="outline" size="icon" className="h-9 w-9 border-gray-200">
-          <Heart className="h-4 w-4 text-gray-500" />
+        <Button variant="outline" size="icon" className="h-8 w-8 border-gray-200">
+          <Heart className="h-3.5 w-3.5 text-gray-500" />
         </Button>
       </div>
 
       {/* Expandable search bar */}
       <div className={cn(
-        "absolute inset-0 flex items-center gap-2 px-4 bg-white transition-all duration-300",
+        "absolute inset-0 flex items-center gap-2 px-3 bg-white transition-all duration-300",
         !showSearchBar && "opacity-0 pointer-events-none"
       )}>
         <Button
           variant="ghost"
           size="icon"
-          className="h-9 w-9 shrink-0"
+          className="h-8 w-8 shrink-0"
           onClick={() => setShowSearchBar(false)}
         >
-          <X className="h-4 w-4" />
+          <X className="h-3.5 w-3.5" />
         </Button>
         <Input
           type="search"
           placeholder="Search marketplace..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="h-9"
+          className="h-8 text-xs"
           autoFocus
         />
       </div>
