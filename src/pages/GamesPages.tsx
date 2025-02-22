@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
-  ChevronLeft, Trophy, Search, Bell, Sparkles,
-  Gift, Crown, Filter, Command
+  ChevronLeft, Search, Bell, Sparkles,
+  Gift, Crown, Filter, Command, Settings, 
+  Gamepad2, Zap, Puzzle, Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -146,6 +147,32 @@ export default function GamesPages() {
                     size="icon"
                     className="h-8 w-8 rounded-full hover:bg-gray-100"
                   >
+                    <Gamepad2 className="h-4 w-4 text-gray-600" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuItem>
+                    <Zap className="mr-2 h-4 w-4" />
+                    Quick Play
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Star className="mr-2 h-4 w-4" />
+                    My Favorites
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Puzzle className="mr-2 h-4 w-4" />
+                    Game Suggestions
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="h-8 w-8 rounded-full hover:bg-gray-100"
+                  >
                     <Filter className="h-4 w-4 text-gray-600" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -174,22 +201,36 @@ export default function GamesPages() {
                 <Bell className="h-4 w-4 text-gray-600" />
                 {notifications > 0 && (
                   <Badge 
-                    className="absolute -right-0.5 -top-0.5 h-4 w-4 items-center justify-center rounded-full bg-red-500 p-0.5 text-[10px] font-medium text-white border-2 border-white"
+                    className="absolute -right-0.5 -top-0.5 h-4 w-4 items-center justify-center rounded-full bg-red-500 p-0.5 text-[10px] font-medium text-white border-2 border-white animate-pulse"
                   >
                     {notifications}
                   </Badge>
                 )}
               </Button>
 
-              <Button
-                variant="default"
-                size="sm"
-                className="gap-2 h-8 rounded-xl"
-                onClick={() => navigate("/tournaments")}
-              >
-                <Trophy className="w-4 h-4" />
-                Tournaments
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="h-8 w-8 rounded-full hover:bg-gray-100"
+                  >
+                    <Settings className="h-4 w-4 text-gray-600" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem>
+                    Game Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    Privacy Controls
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    Help & Support
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
 
