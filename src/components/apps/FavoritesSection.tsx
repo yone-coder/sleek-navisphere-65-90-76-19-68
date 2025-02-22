@@ -2,6 +2,7 @@
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useNavigate } from "react-router-dom";
 
 interface FavoritesSectionProps {
@@ -19,8 +20,13 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
 
   if (favoriteApps.length === 0) return null;
 
-  // Take only the first 4 favorite apps
-  const displayedApps = favoriteApps.slice(0, 4);
+  // Create groups of 4 apps
+  const groups = favoriteApps.reduce((acc, app, i) => {
+    const groupIndex = Math.floor(i / 4);
+    if (!acc[groupIndex]) acc[groupIndex] = [];
+    acc[groupIndex].push(app);
+    return acc;
+  }, [] as typeof favoriteApps[]);
 
   return (
     <div className="mb-8">
@@ -32,30 +38,40 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
           <h2 className="text-lg font-semibold text-gray-900">Favorites</h2>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-4 max-w-sm">
-        {displayedApps.map((app) => (
-          <Button
-            key={app.name}
-            variant="ghost"
-            className="relative flex flex-col items-center gap-3 p-4 h-auto group rounded-xl"
-            onClick={() => navigate(app.route)}
-          >
-            <div 
-              className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}
-            >
-              <app.icon className="w-10 h-10 text-white" />
-              {app.updates > 0 && (
-                <Badge className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5">
-                  {app.updates}
-                </Badge>
-              )}
+      <ScrollArea className="w-full">
+        <div className="flex gap-4 pb-4">
+          {groups.map((group, groupIndex) => (
+            <div key={groupIndex} className="flex-none w-[320px] first:ml-0">
+              <div className="grid grid-cols-4 gap-4">
+                {group.map((app) => (
+                  <Button
+                    key={app.name}
+                    variant="ghost"
+                    className="relative flex flex-col items-center gap-3 p-4 h-auto group rounded-xl"
+                    onClick={() => navigate(app.route)}
+                  >
+                    <div 
+                      className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}
+                    >
+                      <app.icon className="w-10 h-10 text-white" />
+                      {app.updates > 0 && (
+                        <Badge className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5">
+                          {app.updates}
+                        </Badge>
+                      )}
+                    </div>
+                    <span className="text-sm font-medium text-gray-700 text-center line-clamp-2">
+                      {app.name}
+                    </span>
+                  </Button>
+                ))}
+              </div>
             </div>
-            <span className="text-sm font-medium text-gray-700 text-center line-clamp-2">
-              {app.name}
-            </span>
-          </Button>
-        ))}
-      </div>
+          ))}
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </div>
   );
 };
+
