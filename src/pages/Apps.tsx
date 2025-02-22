@@ -1,26 +1,17 @@
-
-import { Grid2X2, Wallet, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Search, Clock, Star, Filter, TrendingUp, LayoutGrid, ListFilter } from "lucide-react";
+import { Grid2X2, Wallet, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
-import { SearchOverlay } from "@/components/search/SearchOverlay";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs } from "@/components/ui/tabs";
 import { AppsHeader } from "@/components/apps/AppsHeader";
 import { BannerSlider } from "@/components/BannerSlider";
 import { FavoritesSection } from "@/components/apps/FavoritesSection";
 import { AppGrid } from "@/components/apps/AppGrid";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { SearchOverlay } from "@/components/search/SearchOverlay";
+import { CategoryTabs } from "@/components/apps/CategoryTabs";
+import { AppControls } from "@/components/apps/AppControls";
+import { App, Category } from "@/components/apps/types";
 
-const apps = [
+const apps: App[] = [
   {
     name: "Marketplace",
     description: "Buy and sell gaming gear",
@@ -121,7 +112,7 @@ const apps = [
   }
 ];
 
-const categories = [
+const categories: Category[] = [
   { id: "all", label: "All Apps", icon: Grid2X2, count: apps.length },
   { id: "recent", label: "Recent", icon: Clock, count: apps.filter(app => app.status === "new").length },
   { id: "popular", label: "Popular", icon: Star, count: apps.filter(app => app.status === "popular").length },
@@ -184,6 +175,7 @@ export default function Apps() {
   };
 
   const favoriteApps = apps.filter(app => favorites.includes(app.name));
+  const updatesCount = apps.filter(app => app.updates > 0).length;
 
   return (
     <div className="fixed inset-0 flex flex-col overflow-hidden">
@@ -199,98 +191,20 @@ export default function Apps() {
 
               <div className="flex items-center justify-between mb-6">
                 <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-auto">
-                  <TabsList className="grid grid-cols-4 gap-4 bg-transparent h-auto p-0">
-                    {categories.map((category) => (
-                      <TabsTrigger
-                        key={category.id}
-                        value={category.id}
-                        className="flex flex-col items-center gap-2 p-3 data-[state=active]:bg-white rounded-xl border border-transparent data-[state=active]:border-gray-200 relative"
-                      >
-                        <category.icon className="w-5 h-5" />
-                        <span className="text-xs">{category.label}</span>
-                        {category.count && (
-                          <Badge 
-                            variant="secondary" 
-                            className="absolute -top-1 -right-1 text-[10px] h-5"
-                          >
-                            {category.count}
-                          </Badge>
-                        )}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
+                  <CategoryTabs categories={categories} />
                 </Tabs>
 
-                <div className="flex items-center gap-2">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="gap-2">
-                        <ListFilter className="w-4 h-4" />
-                        {selectedCategory}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48">
-                      <DropdownMenuLabel>Categories</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuGroup>
-                        {appCategories.map((category) => (
-                          <DropdownMenuItem
-                            key={category}
-                            onSelect={() => setSelectedCategory(category)}
-                          >
-                            {category}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="gap-2">
-                        <TrendingUp className="w-4 h-4" />
-                        Sort by
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onSelect={() => setSortBy("name")}>
-                        Name
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onSelect={() => setSortBy("rating")}>
-                        Rating
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onSelect={() => setSortBy("users")}>
-                        Users
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="gap-2"
-                    onClick={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
-                  >
-                    {viewMode === "grid" ? (
-                      <LayoutGrid className="w-4 h-4" />
-                    ) : (
-                      <Grid2X2 className="w-4 h-4" />
-                    )}
-                    View
-                  </Button>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className={`gap-2 ${showUpdatesOnly ? "bg-blue-50 border-blue-200 text-blue-600" : ""}`}
-                    onClick={() => setShowUpdatesOnly(!showUpdatesOnly)}
-                  >
-                    <Badge variant="secondary" className="h-5">
-                      {apps.filter(app => app.updates > 0).length}
-                    </Badge>
-                    Updates
-                  </Button>
-                </div>
+                <AppControls
+                  selectedCategory={selectedCategory}
+                  viewMode={viewMode}
+                  showUpdatesOnly={showUpdatesOnly}
+                  updatesCount={updatesCount}
+                  categories={appCategories}
+                  onCategoryChange={setSelectedCategory}
+                  onSortChange={setSortBy}
+                  onViewModeChange={setViewMode}
+                  onUpdatesToggle={() => setShowUpdatesOnly(!showUpdatesOnly)}
+                />
               </div>
 
               <AppGrid 
