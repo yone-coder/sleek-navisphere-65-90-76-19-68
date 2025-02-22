@@ -42,7 +42,7 @@ const apps: App[] = [
     name: "Games",
     description: "Play your favorite games",
     icon: Gamepad2,
-    route: "/games",
+    route: "/games-pages",
     color: "bg-violet-500",
     category: "Entertainment"
   },

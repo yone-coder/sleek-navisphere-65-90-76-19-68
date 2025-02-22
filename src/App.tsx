@@ -11,7 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 // Lazy load all pages
 const Apps = lazy(() => import("./pages/Apps"));
-const Explore = lazy(() => import("./pages/Explore"));
+const GamesPages = lazy(() => import("./pages/GamesPages"));
 const Matches = lazy(() => import("./pages/Matches"));
 const Feeds = lazy(() => import("./pages/Feeds"));
 const Profile = lazy(() => import("./pages/Profile"));
@@ -68,7 +68,7 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<Apps />} />
           <Route path="/apps" element={<Apps />} />
-          <Route path="/explore" element={<Explore />} />
+          <Route path="/games-pages" element={<GamesPages />} />
           <Route path="/matches" element={<Matches />} />
           <Route path="/match/:id" element={<MatchDetails />} />
           <Route path="/tournaments" element={<Tournaments />} />
