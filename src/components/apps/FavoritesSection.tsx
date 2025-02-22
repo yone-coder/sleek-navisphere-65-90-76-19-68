@@ -87,4 +87,3 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
     </div>
   );
 };
-
