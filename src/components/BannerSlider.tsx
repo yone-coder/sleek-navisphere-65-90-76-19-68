@@ -46,7 +46,7 @@ export const BannerSlider = () => {
   }, []);
 
   return (
-    <div className="container py-2">
+    <div className="px-4 py-2">
       <div className="w-full overflow-hidden rounded-2xl shadow-lg relative">
         <Carousel 
           opts={{ loop: true, align: "start" }} 
