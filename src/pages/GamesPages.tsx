@@ -278,69 +278,6 @@ export default function GamesPages() {
     </div>
   );
 
-  const PopularGamesSection = () => (
-    <div className="mb-8 bg-gray-900 py-6">
-      <div className="px-4">
-        <div className="flex items-center justify-between mb-1">
-          <h2 className="text-2xl font-medium text-white">Browse popular games</h2>
-          <Button variant="ghost" size="icon" className="text-white">
-            <ArrowRight className="h-6 w-6" />
-          </Button>
-        </div>
-        <p className="text-gray-400 text-lg mb-6">A great place to start</p>
-        
-        <div className="space-y-4">
-          {games.map(game => (
-            <div 
-              key={game.id}
-              className="flex items-start gap-4 cursor-pointer group"
-              onClick={() => game.route && navigate(game.route)}
-            >
-              <img
-                src={game.icon}
-                alt={`${game.title} icon`}
-                className="w-[72px] h-[72px] rounded-xl object-cover"
-              />
-              <div className="flex-1 min-w-0 py-1">
-                <h3 className="font-medium text-white mb-1 group-hover:text-gray-300 transition-colors">
-                  {game.title}
-                </h3>
-                <p className="text-sm text-gray-400 line-clamp-2 mb-1">
-                  {game.description}
-                </p>
-                <div className="flex items-center gap-3 text-sm text-gray-400">
-                  <div className="flex items-center gap-1">
-                    <span>{game.rating}</span>
-                    <Star className="w-3 h-3 fill-gray-400 text-gray-400" />
-                  </div>
-                  <span>{game.size}</span>
-                  {game.updateInfo && (
-                    <>
-                      <span>•</span>
-                      <Badge 
-                        variant="outline" 
-                        className="text-[10px] h-[18px] rounded-full border-blue-500 text-blue-400 px-2 py-0"
-                      >
-                        {game.updateInfo}
-                      </Badge>
-                    </>
-                  )}
-                </div>
-              </div>
-              <Button 
-                size="sm" 
-                variant="ghost"
-                className="h-9 px-4 text-blue-400 hover:text-blue-500 hover:bg-blue-500/10"
-              >
-                Install
-              </Button>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-
   return (
     <div className="min-h-screen bg-white">
       <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
@@ -406,7 +343,6 @@ export default function GamesPages() {
       </div>
 
       <div className="pt-4 pb-24">
-        <PopularGamesSection />
         <EventsSection />
         <CategorySection title="Popular Sports Games" games={games.filter(g => g.category.includes("Sports"))} />
         <CategorySection title="Trending Board Games" games={games.filter(g => g.category.includes("Board"))} />
