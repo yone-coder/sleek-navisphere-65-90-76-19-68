@@ -23,7 +23,7 @@ export const CategoryTabs = ({
   return (
     <Tabs 
       defaultValue="all" 
-      className="w-full"
+      className="w-full relative z-50"
       value={selectedCategory}
       onValueChange={setSelectedCategory}
     >
@@ -46,3 +46,4 @@ export const CategoryTabs = ({
 };
 
 export { categories };
+

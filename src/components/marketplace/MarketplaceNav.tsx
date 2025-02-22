@@ -33,7 +33,7 @@ export const MarketplaceNav = () => {
       label: 'Cart',
       path: '/marketplace/cart',
       color: 'from-emerald-500 to-green-500',
-      badge: '2' // This would normally come from a cart context/state
+      badge: '2'
     },
     {
       icon: Clock,
@@ -44,8 +44,8 @@ export const MarketplaceNav = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50">
-      {/* Glassmorphism backdrop */}
+    <nav className="fixed bottom-0 left-0 right-0 z-[60]">
+      {/* Glassmorphism backdrop with higher z-index */}
       <div className="absolute inset-0 bg-gradient-to-t from-white/95 to-white/75 backdrop-blur-lg border-t border-gray-200/30" />
       
       {/* Navigation content */}
@@ -69,79 +69,61 @@ export const MarketplaceNav = () => {
           Back
         </button>
 
-        <div className="max-w-2xl mx-auto px-4 py-2">
-          <ul className="flex items-center justify-between">
-            {navItems.map(({ icon: Icon, label, path, color, badge, isRecent }) => {
-              const isActive = path ? location.pathname === path : false;
-              const button = (
-                <button
-                  onClick={() => path && navigate(path)}
+        <ul className="container flex items-center justify-around py-2 relative z-10">
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            
+            const button = (
+              <button
+                key={item.label}
+                onClick={() => item.path && navigate(item.path)}
+                className={cn(
+                  "flex flex-col items-center gap-1 py-1 px-3",
+                  "transition-all duration-300 group relative"
+                )}
+              >
+                <div 
                   className={cn(
-                    "relative flex flex-col items-center justify-center gap-1 p-2 w-16",
-                    "transition-all duration-300 group",
-                    isActive ? "scale-105" : "hover:scale-105"
+                    "p-2 rounded-xl transition-all duration-300",
+                    "group-hover:scale-105",
+                    isActive && "bg-gradient-to-r shadow-lg",
+                    isActive && item.color
                   )}
                 >
-                  {/* Icon container with gradient background */}
-                  <div className="relative">
-                    <div className={cn(
-                      "absolute inset-0 rounded-full opacity-0 bg-gradient-to-tr",
-                      color,
-                      isActive ? "opacity-10" : "group-hover:opacity-5",
-                      "transition-opacity duration-300"
-                    )} />
-                    
-                    <Icon className={cn(
-                      "w-6 h-6 transition-colors duration-300",
-                      isActive ? "text-gray-900" : "text-gray-500 group-hover:text-gray-700"
-                    )} />
+                  <item.icon className={cn(
+                    "w-5 h-5 transition-colors duration-300",
+                    isActive ? "text-white" : "text-gray-500 group-hover:text-gray-700"
+                  )} />
+                </div>
+                <span className={cn(
+                  "text-[10px] font-medium transition-colors duration-300",
+                  isActive ? "text-gray-900" : "text-gray-500 group-hover:text-gray-700"
+                )}>
+                  {item.label}
+                </span>
+                {item.badge && (
+                  <Badge 
+                    className="absolute -top-1 -right-1 h-4 min-w-4 flex items-center justify-center bg-red-500 text-[10px]"
+                  >
+                    {item.badge}
+                  </Badge>
+                )}
+              </button>
+            );
 
-                    {/* Badge for cart items */}
-                    {badge && (
-                      <Badge 
-                        className={cn(
-                          "absolute -top-1.5 -right-1.5 h-4 min-w-4 p-0.5",
-                          "flex items-center justify-center rounded-full",
-                          "bg-red-500 text-[10px] font-medium text-white border-2 border-white"
-                        )}
-                      >
-                        {badge}
-                      </Badge>
-                    )}
-                  </div>
-
-                  {/* Label */}
-                  <span className={cn(
-                    "text-[10px] font-medium tracking-tight transition-colors duration-300",
-                    isActive ? "text-gray-900" : "text-gray-500 group-hover:text-gray-700"
-                  )}>
-                    {label}
-                  </span>
-
-                  {/* Active indicator */}
-                  {isActive && (
-                    <div className={cn(
-                      "absolute -bottom-2 left-1/2 -translate-x-1/2",
-                      "h-1 w-8 rounded-full bg-gradient-to-r",
-                      color
-                    )} />
-                  )}
-                </button>
-              );
-
-              return (
-                <li key={label}>
-                  {isRecent ? (
-                    <RecentScreens>{button}</RecentScreens>
-                  ) : (
-                    button
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+            return (
+              <li key={item.label}>
+                {item.isRecent ? (
+                  <RecentScreens>{button}</RecentScreens>
+                ) : (
+                  button
+                )}
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </nav>
   );
 };
+
