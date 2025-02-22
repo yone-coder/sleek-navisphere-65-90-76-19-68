@@ -270,7 +270,7 @@ const categories = [
 
 export default function GamesPages() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("For you");
+  const [activeTab, setActiveTab] = useState<'tournaments' | 'matches' | 'leaderboard'>('matches');
   const [searchQuery, setSearchQuery] = useState("");
   const [notifications] = useState(3);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -296,7 +296,7 @@ export default function GamesPages() {
       <ScrollArea className="w-full" type="scroll">
         <div className="flex px-4 gap-4 pb-4">
           {games.map(game => (
-            <div key={game.id} className="flex-none w-[280px]">
+            <div key={game.id} className="flex-none w-[280px] group hover:scale-[1.02] transition-all duration-300">
               <div 
                 className="relative aspect-video rounded-xl overflow-hidden mb-3 cursor-pointer"
                 onClick={() => game.route && navigate(game.route)}
@@ -304,8 +304,13 @@ export default function GamesPages() {
                 <img
                   src={game.thumbnail}
                   alt={game.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-110"
                 />
+                {game.updateInfo && (
+                  <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                    {game.updateInfo}
+                  </div>
+                )}
               </div>
               <div className="flex gap-3">
                 <img
@@ -329,105 +334,8 @@ export default function GamesPages() {
             </div>
           ))}
         </div>
-        <ScrollBar orientation="horizontal" />
+        <ScrollBar orientation="horizontal" className="bg-gray-100" />
       </ScrollArea>
-    </div>
-  );
-
-  const EventsSection = () => (
-    <div className="mb-8">
-      <h2 className="text-2xl font-medium text-gray-900 px-4 mb-4">Events happening now</h2>
-      <ScrollArea className="w-full" type="scroll">
-        <div className="flex px-4 gap-4 pb-4">
-          {gameEvents.map(event => (
-            <div key={event.id} className="flex-none w-[340px]">
-              <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-purple-500 to-pink-500">
-                <div className="absolute top-3 left-3 z-10">
-                  <Badge className="bg-black/50 text-white border-none backdrop-blur-sm">
-                    Ends in {event.endsIn}
-                  </Badge>
-                </div>
-                <img
-                  src={event.image}
-                  alt={event.title}
-                  className="w-full aspect-[5/3] object-cover mix-blend-overlay"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                  <h3 className="text-xl font-bold mb-1">{event.title}</h3>
-                  <p className="text-sm opacity-90 line-clamp-2 mb-2">
-                    {event.description}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 mt-3">
-                <img
-                  src={event.gameIcon}
-                  alt={event.gameTitle}
-                  className="w-12 h-12 rounded-xl"
-                />
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-medium text-gray-900 truncate">
-                    {event.gameTitle}
-                  </h4>
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
-                    <span className="truncate">{event.developer}</span>
-                    <span>•</span>
-                    <div className="flex items-center gap-1">
-                      <span>{event.rating}</span>
-                      <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                    </div>
-                  </div>
-                </div>
-                <Button className="h-9" size="sm">Install</Button>
-              </div>
-            </div>
-          ))}
-        </div>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
-    </div>
-  );
-
-  const SponsoredSection = () => (
-    <div className="mb-8">
-      <div className="px-4">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-medium text-gray-900 flex items-center gap-2">
-            Sponsored <span className="text-gray-500">•</span> Suggested for you
-          </h2>
-          <Button variant="ghost" size="icon" className="h-8 w-8">
-            <MoreVertical className="h-5 w-5" />
-          </Button>
-        </div>
-
-        <ScrollArea className="w-full" type="scroll">
-          <div className="flex gap-4 pb-4">
-            {sponsoredGames.map((game) => (
-              <div 
-                key={game.id}
-                className="flex-none w-[120px]"
-              >
-                <div className="relative mb-2">
-                  <img
-                    src={game.icon}
-                    alt={game.title}
-                    className="w-[120px] h-[120px] rounded-[24px] object-cover"
-                  />
-                </div>
-                <h3 className="text-gray-900 text-sm font-medium truncate mb-1">
-                  {game.title}
-                </h3>
-                <div className="flex items-center gap-1 text-gray-600 text-xs">
-                  <span>{game.rating}</span>
-                  <Star className="w-3 h-3 fill-gray-600 text-gray-600" />
-                </div>
-              </div>
-            ))}
-          </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-      </div>
     </div>
   );
 
@@ -450,15 +358,16 @@ export default function GamesPages() {
           <div className="flex gap-6 pb-4">
             {/* First Column */}
             <div className="flex-none w-[300px] space-y-4">
-              {popularGames.slice(0, 3).map((game) => (
+              {popularGames.slice(0, 3).map((game, index) => (
                 <div 
                   key={game.id}
-                  className="flex gap-4 items-center"
+                  className="flex gap-4 items-center p-3 rounded-xl hover:bg-gray-50 transition-all duration-300 cursor-pointer animate-fade-in"
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <img
                     src={game.icon}
                     alt={game.title}
-                    className="w-16 h-16 rounded-2xl object-cover"
+                    className="w-16 h-16 rounded-2xl object-cover transform transition-transform duration-300 hover:scale-105"
                   />
                   <div className="flex-1 min-w-0">
                     <h3 className="font-medium text-gray-900 text-base truncate">
@@ -478,15 +387,16 @@ export default function GamesPages() {
 
             {/* Second Column */}
             <div className="flex-none w-[300px] space-y-4">
-              {popularGames.slice(3, 6).map((game) => (
+              {popularGames.slice(3, 6).map((game, index) => (
                 <div 
                   key={game.id}
-                  className="flex gap-4 items-center"
+                  className="flex gap-4 items-center p-3 rounded-xl hover:bg-gray-50 transition-all duration-300 cursor-pointer animate-fade-in"
+                  style={{ animationDelay: `${(index + 3) * 100}ms` }}
                 >
                   <img
                     src={game.icon}
                     alt={game.title}
-                    className="w-16 h-16 rounded-2xl object-cover"
+                    className="w-16 h-16 rounded-2xl object-cover transform transition-transform duration-300 hover:scale-105"
                   />
                   <div className="flex-1 min-w-0">
                     <h3 className="font-medium text-gray-900 text-base truncate">
@@ -504,7 +414,10 @@ export default function GamesPages() {
               ))}
             </div>
           </div>
-          <ScrollBar orientation="horizontal" />
+          <ScrollBar 
+            orientation="horizontal" 
+            className="bg-gray-100"
+          />
         </ScrollArea>
       </div>
     </div>
@@ -517,17 +430,17 @@ export default function GamesPages() {
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8"
+            className="h-8 w-8 hover:bg-gray-100 transition-colors"
             onClick={() => navigate(-1)}
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
           
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <div className="flex-1 relative group">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 group-hover:text-gray-600 transition-colors" />
             <Input
               placeholder="Search for games"
-              className="w-full pl-10 bg-gray-50 border-none"
+              className="w-full pl-10 bg-gray-50 border-none hover:bg-gray-100 transition-colors focus:bg-white"
               value={searchQuery}
               onClick={() => setIsSearchOpen(true)}
               readOnly
@@ -537,12 +450,12 @@ export default function GamesPages() {
           <Button 
             variant="ghost" 
             size="icon" 
-            className="relative h-8 w-8"
+            className="relative h-8 w-8 hover:bg-gray-100 transition-colors"
           >
             <Bell className="h-4 w-4" />
             {notifications > 0 && (
               <Badge 
-                className="absolute -right-0.5 -top-0.5 h-4 w-4 items-center justify-center rounded-full bg-red-500 p-0.5 text-[10px] font-medium text-white border-2 border-white"
+                className="absolute -right-0.5 -top-0.5 h-4 w-4 items-center justify-center rounded-full bg-red-500 p-0.5 text-[10px] font-medium text-white border-2 border-white animate-pulse"
               >
                 {notifications}
               </Badge>
@@ -562,7 +475,11 @@ export default function GamesPages() {
                   <TabsTrigger
                     key={category}
                     value={category}
-                    className="px-4 h-9 data-[state=active]:bg-transparent data-[state=active]:text-blue-600"
+                    className={`
+                      px-4 h-9 data-[state=active]:bg-transparent 
+                      data-[state=active]:text-blue-600 transition-colors duration-200
+                      hover:text-blue-600
+                    `}
                   >
                     {category}
                   </TabsTrigger>
@@ -570,7 +487,7 @@ export default function GamesPages() {
               </TabsList>
             </Tabs>
           </div>
-          <ScrollBar orientation="horizontal" />
+          <ScrollBar orientation="horizontal" className="bg-gray-100" />
         </ScrollArea>
       </div>
 
@@ -583,19 +500,20 @@ export default function GamesPages() {
         <CategorySection title="Suggested For You" games={games} />
         
         <div className="px-4">
-          <h2 className="text-xl font-medium text-gray-900 mb-4">Top Free Games</h2>
+          <h2 className="text-xl font-bold mb-4">Top Free Games</h2>
           <div className="space-y-4">
             {games.map((game, index) => (
               <div 
                 key={game.id}
-                className="flex items-center gap-4 cursor-pointer"
+                className="flex items-center gap-4 cursor-pointer p-3 rounded-xl hover:bg-gray-50 transition-all duration-300 animate-fade-in"
+                style={{ animationDelay: `${index * 50}ms` }}
                 onClick={() => game.route && navigate(game.route)}
               >
                 <span className="text-lg font-medium text-gray-400 w-6">{index + 1}</span>
                 <img
                   src={game.icon}
                   alt={`${game.title} icon`}
-                  className="w-16 h-16 rounded-xl object-cover"
+                  className="w-16 h-16 rounded-xl object-cover transform transition-transform duration-300 hover:scale-105"
                 />
                 <div className="flex-1 min-w-0">
                   <h3 className="font-medium text-gray-900 truncate">{game.title}</h3>
