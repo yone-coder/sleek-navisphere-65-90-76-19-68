@@ -1,4 +1,4 @@
-import { Grid2X2, Wallet, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Search, Clock, Star, Sparkles, Filter, TrendingUp, Zap, Crown } from "lucide-react";
+import { Grid2X2, Wallet, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Search, Clock, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,7 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AppsHeader } from "@/components/apps/AppsHeader";
 import { BannerSlider } from "@/components/BannerSlider";
 import { FavoritesSection } from "@/components/apps/FavoritesSection";
-import { QuickActions } from "@/components/apps/QuickActions";
 import { AppGrid } from "@/components/apps/AppGrid";
 
 const apps = [
@@ -115,35 +114,8 @@ const apps = [
 const categories = [
   { id: "all", label: "All Apps", icon: Grid2X2, count: apps.length },
   { id: "recent", label: "Recent", icon: Clock, count: apps.filter(app => app.status === "new").length },
-  { id: "popular", label: "Popular", icon: TrendingUp, count: apps.filter(app => app.status === "popular").length },
+  { id: "popular", label: "Popular", icon: Star, count: apps.filter(app => app.status === "popular").length },
   { id: "favorites", label: "Favorites", icon: Star }
-];
-
-const quickActions = [
-  { 
-    name: "New Tournament", 
-    icon: Trophy, 
-    color: "bg-amber-500",
-    description: "Join competitive matches"
-  },
-  { 
-    name: "Quick Play", 
-    icon: Gamepad2, 
-    color: "bg-violet-500",
-    description: "Start gaming instantly"
-  },
-  { 
-    name: "Daily Rewards", 
-    icon: Gift, 
-    color: "bg-pink-500",
-    description: "Claim your rewards"
-  },
-  { 
-    name: "Premium", 
-    icon: Crown, 
-    color: "bg-yellow-500",
-    description: "Upgrade your account"
-  }
 ];
 
 export default function Apps() {
@@ -189,35 +161,6 @@ export default function Apps() {
           <div className="max-w-7xl mx-auto px-4">
             <div className="py-8">
               <FavoritesSection favoriteApps={favoriteApps} />
-
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-violet-500">
-                    <Grid2X2 className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
-                      Apps
-                    </h1>
-                    <p className="text-sm text-gray-500">Access all your gaming tools and services</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className={`rounded-xl transition-colors ${showUpdatesOnly ? 'bg-amber-100 text-amber-600' : 'hover:bg-gray-100'}`}
-                    onClick={() => setShowUpdatesOnly(!showUpdatesOnly)}
-                  >
-                    <Zap className="w-5 h-5" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="rounded-xl hover:bg-gray-100">
-                    <Filter className="w-5 h-5 text-gray-500" />
-                  </Button>
-                </div>
-              </div>
-
-              <QuickActions actions={quickActions} />
 
               <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="mb-8">
                 <TabsList className="grid grid-cols-4 gap-4 bg-transparent h-auto p-0">
