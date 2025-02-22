@@ -21,7 +21,7 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
   if (favoriteApps.length === 0) return null;
 
   return (
-    <div className="mb-8 w-full">
+    <div className="mb-8">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-500">
@@ -30,11 +30,11 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
           <h2 className="text-lg font-semibold text-gray-900">Favorites</h2>
         </div>
       </div>
-      <div className="relative w-full max-w-full">
-        <ScrollArea className="w-full max-w-full">
-          <div className="flex gap-4 pb-4">
+      <div className="relative">
+        <ScrollArea className="w-full">
+          <div className="flex pb-4">
             {favoriteApps.map((app) => (
-              <div key={app.name} className="w-[120px] shrink-0 first:ml-1 last:mr-1">
+              <div key={app.name} className="flex-none w-[120px] px-2 first:pl-0 last:pr-4">
                 <Button
                   variant="ghost"
                   className="relative flex flex-col items-center gap-3 p-4 h-auto w-full group rounded-xl"

@@ -1,4 +1,3 @@
-
 import { Grid2X2, Wallet, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Search, Clock, Star, Sparkles, Filter, TrendingUp, Zap, Crown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -181,80 +180,76 @@ export default function Apps() {
   const favoriteApps = apps.filter(app => favorites.includes(app.name));
 
   return (
-    <div className="relative flex flex-col h-screen max-h-screen w-full overflow-hidden">
-      <div className="flex-none z-10">
+    <div className="fixed inset-0 flex flex-col overflow-hidden">
+      <div className="flex-none">
         <AppsHeader onOpenSearch={() => setIsSearchOpen(true)} />
       </div>
       
-      <ScrollArea className="flex-1 w-full">
-        <div className="min-w-0 bg-gradient-to-b from-gray-50 to-white">
+      <ScrollArea className="flex-1">
+        <div className="bg-gradient-to-b from-gray-50 to-white">
           <BannerSlider />
           
-          <div className="relative w-full max-w-7xl mx-auto px-4">
+          <div className="max-w-7xl mx-auto px-4">
             <div className="py-8">
-              <div className="w-full overflow-hidden">
-                <FavoritesSection favoriteApps={favoriteApps} />
+              <FavoritesSection favoriteApps={favoriteApps} />
 
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-violet-500">
-                      <Grid2X2 className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
-                        Apps
-                      </h1>
-                      <p className="text-sm text-gray-500">Access all your gaming tools and services</p>
-                    </div>
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-violet-500">
+                    <Grid2X2 className="w-6 h-6 text-white" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className={`rounded-xl transition-colors ${showUpdatesOnly ? 'bg-amber-100 text-amber-600' : 'hover:bg-gray-100'}`}
-                      onClick={() => setShowUpdatesOnly(!showUpdatesOnly)}
-                    >
-                      <Zap className="w-5 h-5" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="rounded-xl hover:bg-gray-100">
-                      <Filter className="w-5 h-5 text-gray-500" />
-                    </Button>
+                  <div>
+                    <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
+                      Apps
+                    </h1>
+                    <p className="text-sm text-gray-500">Access all your gaming tools and services</p>
                   </div>
                 </div>
-
-                <QuickActions actions={quickActions} />
-
-                <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="mb-8">
-                  <TabsList className="grid grid-cols-4 gap-4 bg-transparent h-auto p-0">
-                    {categories.map((category) => (
-                      <TabsTrigger
-                        key={category.id}
-                        value={category.id}
-                        className="flex flex-col items-center gap-2 p-3 data-[state=active]:bg-white rounded-xl border border-transparent data-[state=active]:border-gray-200 relative"
-                      >
-                        <category.icon className="w-5 h-5" />
-                        <span className="text-xs">{category.label}</span>
-                        {category.count && (
-                          <Badge 
-                            variant="secondary" 
-                            className="absolute -top-1 -right-1 text-[10px] h-5"
-                          >
-                            {category.count}
-                          </Badge>
-                        )}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
-                </Tabs>
-
-                <div className="w-full min-w-0 overflow-hidden">
-                  <AppGrid 
-                    apps={filteredApps}
-                    favorites={favorites}
-                    onToggleFavorite={handleToggleFavorite}
-                  />
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className={`rounded-xl transition-colors ${showUpdatesOnly ? 'bg-amber-100 text-amber-600' : 'hover:bg-gray-100'}`}
+                    onClick={() => setShowUpdatesOnly(!showUpdatesOnly)}
+                  >
+                    <Zap className="w-5 h-5" />
+                  </Button>
+                  <Button variant="ghost" size="icon" className="rounded-xl hover:bg-gray-100">
+                    <Filter className="w-5 h-5 text-gray-500" />
+                  </Button>
                 </div>
               </div>
+
+              <QuickActions actions={quickActions} />
+
+              <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="mb-8">
+                <TabsList className="grid grid-cols-4 gap-4 bg-transparent h-auto p-0">
+                  {categories.map((category) => (
+                    <TabsTrigger
+                      key={category.id}
+                      value={category.id}
+                      className="flex flex-col items-center gap-2 p-3 data-[state=active]:bg-white rounded-xl border border-transparent data-[state=active]:border-gray-200 relative"
+                    >
+                      <category.icon className="w-5 h-5" />
+                      <span className="text-xs">{category.label}</span>
+                      {category.count && (
+                        <Badge 
+                          variant="secondary" 
+                          className="absolute -top-1 -right-1 text-[10px] h-5"
+                        >
+                          {category.count}
+                        </Badge>
+                      )}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+
+              <AppGrid 
+                apps={filteredApps}
+                favorites={favorites}
+                onToggleFavorite={handleToggleFavorite}
+              />
             </div>
           </div>
         </div>
