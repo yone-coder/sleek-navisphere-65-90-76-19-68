@@ -88,12 +88,11 @@ export const MarketplaceNav = () => {
               "bg-white/50 backdrop-blur-sm rounded-full",
               "border border-gray-200/30 shadow-sm",
               "transition-all duration-300 hover:bg-white/80",
-              "opacity-0 -translate-y-2",
-              location.pathname !== '/marketplace' && "opacity-100 translate-y-0"
+              "group"
             )}
             aria-label="Recent screens"
           >
-            <Clock className="w-4 h-4" aria-hidden="true" />
+            <Clock className="w-4 h-4 group-hover:text-gray-900" aria-hidden="true" />
             Recent
           </button>
         </RecentScreens>
