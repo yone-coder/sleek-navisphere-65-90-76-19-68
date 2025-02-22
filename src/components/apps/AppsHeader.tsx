@@ -35,15 +35,15 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center gap-4">
         {/* Search bar */}
-        <div className="flex flex-1 items-center gap-2 md:gap-4 max-w-2xl">
-          <div className="relative flex-1">
-            <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <div className="flex flex-1 items-center max-w-2xl">
+          <div className="relative flex-1 group">
+            <Search className="absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground/60 group-hover:text-muted-foreground/80 transition-colors duration-200" />
             <Input
               placeholder="Search apps, games, tournaments..."
-              className="pl-8 bg-muted/50 cursor-pointer"
+              className="pl-10 bg-muted/40 hover:bg-muted/60 transition-colors duration-200 cursor-pointer border-none h-11 text-sm"
               onClick={onOpenSearch}
               readOnly
             />
@@ -51,35 +51,43 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
         </div>
 
         {/* Right section */}
-        <div className="ml-auto flex items-center gap-4">
+        <div className="flex items-center gap-1.5">
           {/* Language Selector */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Globe className="h-5 w-5" />
+              <Button 
+                variant="ghost" 
+                size="icon"
+                className="rounded-full w-10 h-10 hover:bg-muted/60 transition-colors duration-200"
+              >
+                <Globe className="h-5 w-5 text-muted-foreground/70" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-40">
               {Object.entries(languageDetails).map(([code, details]) => (
                 <DropdownMenuItem
                   key={code}
                   onClick={() => setLanguage(code as Language)}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2.5 px-3 py-2"
                 >
-                  <span>{details.flag}</span>
-                  <span>{details.name}</span>
-                  {language === code && <Check className="ml-auto h-4 w-4" />}
+                  <span className="text-lg">{details.flag}</span>
+                  <span className="font-medium text-sm">{details.name}</span>
+                  {language === code && <Check className="ml-auto h-4 w-4 text-primary" />}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
 
           {/* Notifications */}
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="h-5 w-5" />
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="relative rounded-full w-10 h-10 hover:bg-muted/60 transition-colors duration-200"
+          >
+            <Bell className="h-5 w-5 text-muted-foreground/70" />
             {notifications > 0 && (
               <Badge 
-                className="absolute -right-1 -top-1 h-4 w-4 items-center justify-center rounded-full bg-red-500 p-2 text-[10px] text-white"
+                className="absolute -right-0.5 -top-0.5 h-5 w-5 items-center justify-center rounded-full bg-red-500 p-0.5 text-[11px] font-medium text-white border-2 border-background"
               >
                 {notifications}
               </Badge>
@@ -89,22 +97,25 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
           {/* Profile Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <Avatar className="h-8 w-8">
+              <Button 
+                variant="ghost" 
+                className="relative h-10 w-10 rounded-full hover:bg-muted/60 transition-colors duration-200 p-0.5"
+              >
+                <Avatar className="h-full w-full ring-2 ring-background">
                   <AvatarImage src={user.avatar} alt={user.name} />
                   <AvatarFallback>JD</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{user.name}</p>
-                  <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel className="px-3 py-2">
+                <div className="flex flex-col space-y-1.5">
+                  <p className="text-sm font-semibold leading-none">{user.name}</p>
+                  <p className="text-xs text-muted-foreground">{user.email}</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem className="px-3 py-2 gap-2 cursor-pointer">
                 Settings
               </DropdownMenuItem>
             </DropdownMenuContent>
