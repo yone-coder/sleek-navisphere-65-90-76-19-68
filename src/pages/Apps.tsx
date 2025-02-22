@@ -255,35 +255,33 @@ export default function Apps() {
                       </div>
                     </div>
                     <div className="relative w-full overflow-hidden">
-                      <div className="max-w-full">
-                        <ScrollArea orientation="horizontal" className="w-full whitespace-nowrap">
-                          <div className="flex gap-4">
-                            {favoriteApps.map((app) => (
-                              <div key={app.name} className="w-[120px] shrink-0 first:ml-1 last:mr-1">
-                                <Button
-                                  variant="ghost"
-                                  className="relative flex flex-col items-center gap-3 p-4 h-auto w-full group"
-                                  onClick={() => navigate(app.route)}
+                      <ScrollArea className="w-full">
+                        <div className="flex gap-4 pb-4">
+                          {favoriteApps.map((app) => (
+                            <div key={app.name} className="w-[120px] shrink-0 first:ml-1 last:mr-1">
+                              <Button
+                                variant="ghost"
+                                className="relative flex flex-col items-center gap-3 p-4 h-auto w-full group"
+                                onClick={() => navigate(app.route)}
+                              >
+                                <div 
+                                  className={`w-16 h-16 rounded-full ${app.color} flex items-center justify-center relative group-hover:scale-105 transition-transform duration-300`}
                                 >
-                                  <div 
-                                    className={`w-16 h-16 rounded-full ${app.color} flex items-center justify-center relative group-hover:scale-105 transition-transform duration-300`}
-                                  >
-                                    <app.icon className="w-8 h-8 text-white" />
-                                    {app.updates > 0 && (
-                                      <Badge className="absolute -top-1 -right-1 bg-red-500 text-[10px] h-5">
-                                        {app.updates}
-                                      </Badge>
-                                    )}
-                                  </div>
-                                  <span className="text-sm font-medium text-gray-700 text-center line-clamp-2">
-                                    {app.name}
-                                  </span>
-                                </Button>
-                              </div>
-                            ))}
-                          </div>
-                        </ScrollArea>
-                      </div>
+                                  <app.icon className="w-8 h-8 text-white" />
+                                  {app.updates > 0 && (
+                                    <Badge className="absolute -top-1 -right-1 bg-red-500 text-[10px] h-5">
+                                      {app.updates}
+                                    </Badge>
+                                  )}
+                                </div>
+                                <span className="text-sm font-medium text-gray-700 text-center line-clamp-2">
+                                  {app.name}
+                                </span>
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      </ScrollArea>
                     </div>
                   </div>
                 )}
