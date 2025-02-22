@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, ArrowLeft, X, Sparkle, Trending, Clock, History, Filter } from "lucide-react";
+import { Search, ArrowLeft, X, Sparkle, TrendingUp, Clock, History, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -152,7 +152,7 @@ const MarketplaceSearch = () => {
             {showTrending && (
               <div className="space-y-3 animate-fade-in">
                 <div className="flex items-center gap-2">
-                  <Trending className="w-4 h-4 text-gray-500" />
+                  <TrendingUp className="w-4 h-4 text-gray-500" />
                   <h2 className="text-sm font-medium text-gray-900">Trending Now</h2>
                 </div>
                 <div className="space-y-2">
