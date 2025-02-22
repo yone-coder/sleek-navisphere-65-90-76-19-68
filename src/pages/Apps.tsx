@@ -1,11 +1,13 @@
-import { Grid2X2, Wallet, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Search, Clock, Star, Sparkles } from "lucide-react";
+import { Grid2X2, Wallet, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Search, Clock, Star, Sparkles, Filter, TrendingUp, Zap, Crown } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from "react";
 import { SearchOverlay } from "@/components/search/SearchOverlay";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const apps = [
   {
@@ -14,7 +16,9 @@ const apps = [
     icon: ShoppingCart,
     route: "/marketplace",
     color: "bg-blue-500",
-    category: "Shopping"
+    category: "Shopping",
+    status: "popular",
+    users: "10K+"
   },
   {
     name: "Wallet",
@@ -22,7 +26,9 @@ const apps = [
     icon: Wallet,
     route: "/wallet",
     color: "bg-emerald-500",
-    category: "Finance"
+    category: "Finance",
+    status: "new",
+    users: "5K+"
   },
   {
     name: "Games",
@@ -98,12 +104,79 @@ const apps = [
   }
 ];
 
+const categories = [
+  { id: "all", label: "All Apps", icon: Grid2X2 },
+  { id: "recent", label: "Recent", icon: Clock },
+  { id: "popular", label: "Popular", icon: TrendingUp },
+  { id: "favorites", label: "Favorites", icon: Star }
+];
+
+const quickActions = [
+  { name: "New Tournament", icon: Trophy, color: "bg-amber-500" },
+  { name: "Quick Play", icon: Gamepad2, color: "bg-violet-500" },
+  { name: "Daily Rewards", icon: Gift, color: "bg-pink-500" },
+  { name: "Premium", icon: Crown, color: "bg-yellow-500" }
+];
+
+const AppCard = ({ app, isFavorite, onToggleFavorite }) => (
+  <Button
+    variant="ghost"
+    className="relative flex flex-col items-center gap-2 p-4 h-auto hover:bg-gray-50 w-full group"
+  >
+    <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative group-hover:scale-105 transition-transform duration-300`}>
+      <app.icon className="w-7 h-7 text-white" />
+      {app.status === "new" && (
+        <Badge className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5">NEW</Badge>
+      )}
+    </div>
+    <div className="text-center">
+      <span className="text-sm font-medium text-gray-700">
+        {app.name}
+      </span>
+      <p className="text-xs text-gray-500 mt-1">{app.description}</p>
+    </div>
+    <div className="absolute top-2 right-2">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="h-7 w-7 rounded-full hover:bg-gray-200"
+        onClick={(e) => {
+          e.stopPropagation();
+          onToggleFavorite(app.name);
+        }}
+      >
+        <Star className={`w-4 h-4 ${isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
+      </Button>
+    </div>
+    {app.users && (
+      <Badge variant="secondary" className="absolute bottom-2 right-2 text-[10px]">
+        {app.users} users
+      </Badge>
+    )}
+  </Button>
+);
+
 export default function Apps() {
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("all");
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const recentApps = apps.slice(0, 4);
-  const featuredApps = apps.slice(4, 7);
+  const filteredApps = apps.filter(app => {
+    if (activeTab === "favorites") return favorites.includes(app.name);
+    if (activeTab === "popular") return app.status === "popular";
+    if (activeTab === "recent") return app.status === "new";
+    return true;
+  });
+
+  const handleToggleFavorite = (appName: string) => {
+    setFavorites(prev => 
+      prev.includes(appName) 
+        ? prev.filter(name => name !== appName)
+        : [...prev, appName]
+    );
+  };
 
   return (
     <>
@@ -131,82 +204,71 @@ export default function Apps() {
                       <p className="text-sm text-gray-500">Access all your gaming tools and services</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <Button variant="ghost" size="icon" className="rounded-xl">
-                      <Star className="w-5 h-5 text-amber-500" />
+                  <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="icon" className="rounded-xl hover:bg-gray-100">
+                      <Filter className="w-5 h-5 text-gray-500" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="rounded-xl">
-                      <Clock className="w-5 h-5 text-blue-500" />
+                    <Button variant="ghost" size="icon" className="rounded-xl hover:bg-gray-100">
+                      <Zap className="w-5 h-5 text-amber-500" />
                     </Button>
                   </div>
                 </div>
 
                 <div className="relative max-w-2xl mx-auto mb-8">
                   <div 
-                    className="relative cursor-pointer"
+                    className="relative cursor-pointer group"
                     onClick={() => setIsSearchOpen(true)}
                   >
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
                     <Input
-                      readOnly
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search apps, categories, or features..."
-                      className="w-full pl-10 pr-4 h-11 bg-white/80 backdrop-blur-xl border-gray-200 rounded-xl cursor-pointer"
+                      className="w-full pl-10 pr-4 h-11 bg-white/80 backdrop-blur-xl border-gray-200 rounded-xl cursor-pointer group-hover:border-gray-300 transition-colors"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                  <Card className="p-4 border border-gray-100 rounded-xl bg-white/50 backdrop-blur-sm">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-blue-500" />
-                        <h3 className="font-medium text-gray-900">Recent Apps</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                  {quickActions.map((action) => (
+                    <Button
+                      key={action.name}
+                      variant="ghost"
+                      className="flex flex-col items-center gap-3 p-4 h-auto hover:bg-gray-50 group"
+                    >
+                      <div className={`${action.color} p-3 rounded-xl group-hover:scale-105 transition-transform duration-300`}>
+                        <action.icon className="w-6 h-6 text-white" />
                       </div>
-                    </div>
-                    <div className="grid grid-cols-4 gap-4">
-                      {recentApps.map((app) => (
-                        <Button
-                          key={`recent-${app.name}`}
-                          variant="ghost"
-                          className="flex flex-col items-center gap-2 p-2 h-auto hover:bg-gray-50"
-                          onClick={() => navigate(app.route)}
-                        >
-                          <div className={`w-12 h-12 rounded-2xl ${app.color} flex items-center justify-center`}>
-                            <app.icon className="w-6 h-6 text-white" />
-                          </div>
-                          <span className="text-xs font-medium text-gray-700 text-center">
-                            {app.name}
-                          </span>
-                        </Button>
-                      ))}
-                    </div>
-                  </Card>
+                      <span className="text-sm font-medium text-gray-700">{action.name}</span>
+                    </Button>
+                  ))}
+                </div>
 
-                  <Card className="p-4 border border-gray-100 rounded-xl bg-white/50 backdrop-blur-sm">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-amber-500" />
-                        <h3 className="font-medium text-gray-900">Featured Apps</h3>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-4 gap-4">
-                      {featuredApps.map((app) => (
-                        <Button
-                          key={`featured-${app.name}`}
-                          variant="ghost"
-                          className="flex flex-col items-center gap-2 p-2 h-auto hover:bg-gray-50"
-                          onClick={() => navigate(app.route)}
-                        >
-                          <div className={`w-12 h-12 rounded-2xl ${app.color} flex items-center justify-center`}>
-                            <app.icon className="w-6 h-6 text-white" />
-                          </div>
-                          <span className="text-xs font-medium text-gray-700 text-center">
-                            {app.name}
-                          </span>
-                        </Button>
-                      ))}
-                    </div>
-                  </Card>
+                <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="mb-8">
+                  <TabsList className="grid grid-cols-4 gap-4 bg-transparent h-auto p-0">
+                    {categories.map((category) => (
+                      <TabsTrigger
+                        key={category.id}
+                        value={category.id}
+                        className="flex flex-col items-center gap-2 p-3 data-[state=active]:bg-white rounded-xl border border-transparent data-[state=active]:border-gray-200"
+                      >
+                        <category.icon className="w-5 h-5" />
+                        <span className="text-xs">{category.label}</span>
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </Tabs>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                  {filteredApps.map((app) => (
+                    <Card key={app.name} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                      <AppCard
+                        app={app}
+                        isFavorite={favorites.includes(app.name)}
+                        onToggleFavorite={handleToggleFavorite}
+                      />
+                    </Card>
+                  ))}
                 </div>
               </div>
             </div>
