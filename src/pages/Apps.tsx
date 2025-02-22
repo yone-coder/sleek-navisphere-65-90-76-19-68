@@ -1,4 +1,5 @@
-import { Grid2X2, Wallet, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Search, Clock, Star } from "lucide-react";
+
+import { Grid2X2, Wallet, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Search, Clock, Star, Filter, TrendingUp, LayoutGrid, ListFilter } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +10,15 @@ import { AppsHeader } from "@/components/apps/AppsHeader";
 import { BannerSlider } from "@/components/BannerSlider";
 import { FavoritesSection } from "@/components/apps/FavoritesSection";
 import { AppGrid } from "@/components/apps/AppGrid";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const apps = [
   {
@@ -118,10 +128,25 @@ const categories = [
   { id: "favorites", label: "Favorites", icon: Star }
 ];
 
+const appCategories = [
+  "All",
+  "Shopping",
+  "Finance",
+  "Entertainment",
+  "Gaming",
+  "Analytics",
+  "Social",
+  "Communication",
+  "System"
+];
+
 export default function Apps() {
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [sortBy, setSortBy] = useState<"name" | "rating" | "users">("name");
   const [favorites, setFavorites] = useState<string[]>(() => {
     const saved = localStorage.getItem("favoriteApps");
     return saved ? JSON.parse(saved) : [];
@@ -137,7 +162,17 @@ export default function Apps() {
     if (activeTab === "favorites") return favorites.includes(app.name);
     if (activeTab === "popular") return app.status === "popular";
     if (activeTab === "recent") return app.status === "new";
+    if (selectedCategory !== "All") return app.category === selectedCategory;
     return true;
+  }).sort((a, b) => {
+    switch (sortBy) {
+      case "rating":
+        return (b.rating || 0) - (a.rating || 0);
+      case "users":
+        return (b.users?.replace("K+", "000") || "0").localeCompare(a.users?.replace("K+", "000") || "0");
+      default:
+        return a.name.localeCompare(b.name);
+    }
   });
 
   const handleToggleFavorite = (appName: string) => {
@@ -162,33 +197,107 @@ export default function Apps() {
             <div className="py-8">
               <FavoritesSection favoriteApps={favoriteApps} />
 
-              <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="mb-8">
-                <TabsList className="grid grid-cols-4 gap-4 bg-transparent h-auto p-0">
-                  {categories.map((category) => (
-                    <TabsTrigger
-                      key={category.id}
-                      value={category.id}
-                      className="flex flex-col items-center gap-2 p-3 data-[state=active]:bg-white rounded-xl border border-transparent data-[state=active]:border-gray-200 relative"
-                    >
-                      <category.icon className="w-5 h-5" />
-                      <span className="text-xs">{category.label}</span>
-                      {category.count && (
-                        <Badge 
-                          variant="secondary" 
-                          className="absolute -top-1 -right-1 text-[10px] h-5"
-                        >
-                          {category.count}
-                        </Badge>
-                      )}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
+              <div className="flex items-center justify-between mb-6">
+                <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-auto">
+                  <TabsList className="grid grid-cols-4 gap-4 bg-transparent h-auto p-0">
+                    {categories.map((category) => (
+                      <TabsTrigger
+                        key={category.id}
+                        value={category.id}
+                        className="flex flex-col items-center gap-2 p-3 data-[state=active]:bg-white rounded-xl border border-transparent data-[state=active]:border-gray-200 relative"
+                      >
+                        <category.icon className="w-5 h-5" />
+                        <span className="text-xs">{category.label}</span>
+                        {category.count && (
+                          <Badge 
+                            variant="secondary" 
+                            className="absolute -top-1 -right-1 text-[10px] h-5"
+                          >
+                            {category.count}
+                          </Badge>
+                        )}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </Tabs>
+
+                <div className="flex items-center gap-2">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm" className="gap-2">
+                        <ListFilter className="w-4 h-4" />
+                        {selectedCategory}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuLabel>Categories</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuGroup>
+                        {appCategories.map((category) => (
+                          <DropdownMenuItem
+                            key={category}
+                            onSelect={() => setSelectedCategory(category)}
+                          >
+                            {category}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm" className="gap-2">
+                        <TrendingUp className="w-4 h-4" />
+                        Sort by
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onSelect={() => setSortBy("name")}>
+                        Name
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onSelect={() => setSortBy("rating")}>
+                        Rating
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onSelect={() => setSortBy("users")}>
+                        Users
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                    onClick={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
+                  >
+                    {viewMode === "grid" ? (
+                      <LayoutGrid className="w-4 h-4" />
+                    ) : (
+                      <Grid2X2 className="w-4 h-4" />
+                    )}
+                    View
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className={`gap-2 ${showUpdatesOnly ? "bg-blue-50 border-blue-200 text-blue-600" : ""}`}
+                    onClick={() => setShowUpdatesOnly(!showUpdatesOnly)}
+                  >
+                    <Badge variant="secondary" className="h-5">
+                      {apps.filter(app => app.updates > 0).length}
+                    </Badge>
+                    Updates
+                  </Button>
+                </div>
+              </div>
 
               <AppGrid 
                 apps={filteredApps}
                 favorites={favorites}
                 onToggleFavorite={handleToggleFavorite}
+                viewMode={viewMode}
               />
             </div>
           </div>
