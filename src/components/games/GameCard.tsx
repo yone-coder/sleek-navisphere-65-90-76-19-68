@@ -1,170 +1,147 @@
 
-import { Star, Users, Clock, Heart, Share2, MessageSquare } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Heart, MessageSquare, Share2, Plus, Check, Bookmark } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Game } from "./types";
+import { useToast } from "@/hooks/use-toast";
 
 interface GameCardProps {
-  game: {
-    id: number;
-    title: string;
-    description: string;
-    image: string;
-    profileImage: string;
-    verified: boolean;
-    stats: {
-      likes: string;
-      comments: string;
-      shares: string;
-    };
-    difficulty?: "easy" | "medium" | "hard";
-    players?: number;
-    rating?: number;
-    playTime?: string;
-  };
-  isLiked?: boolean;
-  onLike?: (id: number) => void;
-  onShare?: (id: number) => void;
+  game: Game;
 }
 
-const difficultyColors = {
-  easy: "bg-green-500",
-  medium: "bg-yellow-500",
-  hard: "bg-red-500",
-};
+export const GameCard = ({ game }: GameCardProps) => {
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(game.bookmarked);
+  const { toast } = useToast();
 
-const GameCard = ({ game, isLiked, onLike, onShare }: GameCardProps) => {
-  const renderStars = (rating: number) => {
-    return Array(5)
-      .fill(0)
-      .map((_, index) => (
-        <Star
-          key={index}
-          className={cn(
-            "w-4 h-4",
-            index < Math.floor(rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-          )}
-        />
-      ));
+  const formatNumber = (num: number): string => {
+    if (num >= 1000) {
+      return `${(num / 1000).toFixed(1)}K`;
+    }
+    return num.toString();
+  };
+
+  const handleFollow = () => {
+    setIsFollowing(!isFollowing);
+    toast({
+      title: isFollowing ? "Unfollowed" : "Following",
+      description: `You are ${isFollowing ? "no longer following" : "now following"} ${game.title}`,
+    });
+  };
+
+  const handleBookmark = () => {
+    setIsBookmarked(!isBookmarked);
+    toast({
+      title: isBookmarked ? "Removed from bookmarks" : "Bookmarked",
+      description: `${game.title} has been ${isBookmarked ? "removed from" : "added to"} your bookmarks`,
+    });
+  };
+
+  const handleShare = () => {
+    const shareText = `Check out ${game.title} - ${game.description}`;
+    if (navigator.share) {
+      navigator.share({
+        title: game.title,
+        text: shareText,
+        url: window.location.href,
+      }).catch(console.error);
+    } else {
+      navigator.clipboard.writeText(shareText);
+      toast({
+        title: "Link copied!",
+        description: "Game details copied to clipboard",
+      });
+    }
   };
 
   return (
-    <div className="w-[280px] bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
-      <div className="relative">
+    <div className="w-[280px] shrink-0 bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="relative h-32">
         <img
-          src={game.image}
-          alt={game.title}
-          className="w-full h-40 object-cover"
+          src={game.coverImage}
+          alt={`${game.title} cover`}
+          className="w-full h-full object-cover"
         />
-        <div className="absolute top-2 left-2 flex gap-2">
-          {game.difficulty && (
+        <img
+          src={game.creatorImage}
+          alt="Creator"
+          className="absolute bottom-0 left-0 transform translate-x-3 translate-y-3 w-12 h-12 rounded-full border-2 border-white object-cover"
+        />
+        <button
+          onClick={handleBookmark}
+          className="absolute top-0 right-0 transform -translate-x-2 translate-y-2 bg-white p-1.5 rounded-full shadow-lg hover:bg-gray-50 transition-colors"
+        >
+          <Bookmark className={cn(
+            "w-3 h-3",
+            isBookmarked ? "fill-current" : "stroke-current"
+          )} />
+        </button>
+        <div className="absolute top-0 left-0 transform translate-x-2 translate-y-2 flex gap-1">
+          {game.type.map((type) => (
             <Badge
+              key={type}
+              variant="secondary"
               className={cn(
-                "text-white border-none",
-                difficultyColors[game.difficulty]
+                "text-white border-none text-[10px] px-1.5 py-0.5",
+                type.toLowerCase() === "1vs1" ? "bg-blue-500" : "bg-green-500"
               )}
             >
-              {game.difficulty}
+              {type}
             </Badge>
-          )}
+          ))}
         </div>
-        <img
-          src={game.profileImage}
-          alt="Creator"
-          className="absolute -bottom-4 left-4 w-12 h-12 rounded-full border-4 border-white"
-        />
       </div>
 
-      <div className="p-4 pt-6 flex-1 flex flex-col">
-        <div className="flex items-start justify-between mb-2">
-          <HoverCard>
-            <HoverCardTrigger>
-              <h3 className="font-bold hover:underline cursor-pointer">
-                {game.title}
-              </h3>
-            </HoverCardTrigger>
-            <HoverCardContent className="w-80">
-              <div className="space-y-2">
-                <h4 className="font-semibold">{game.title}</h4>
-                <p className="text-sm text-gray-600">{game.description}</p>
-              </div>
-            </HoverCardContent>
-          </HoverCard>
-          {game.verified && (
-            <Badge variant="secondary" className="ml-2">
-              Verified
-            </Badge>
-          )}
-        </div>
-
-        <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-          {game.description}
-        </p>
-
-        {game.rating && (
-          <div className="flex items-center gap-1 mb-2">
-            {renderStars(game.rating)}
-            <span className="text-sm text-gray-600 ml-1">
-              ({game.rating.toFixed(1)})
-            </span>
-          </div>
-        )}
-
-        <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
-          {game.players && (
-            <div className="flex items-center gap-1">
-              <Users className="w-4 h-4" />
-              <span>{game.players} players</span>
-            </div>
-          )}
-          {game.playTime && (
-            <div className="flex items-center gap-1">
-              <Clock className="w-4 h-4" />
-              <span>{game.playTime}</span>
-            </div>
-          )}
-        </div>
-
-        <div className="flex items-center justify-between mb-4 text-sm text-gray-600">
-          <Button
-            variant="ghost"
-            size="sm"
-            className={cn("flex items-center gap-1", 
-              isLiked && "text-red-500"
+      <div className="p-4">
+        <div className="flex justify-between items-center mb-2">
+          <div className="flex items-center gap-1">
+            <h2 className="text-lg font-bold">{game.title}</h2>
+            {game.verified && (
+              <Check className="w-4 h-4 text-green-500" />
             )}
-            onClick={() => onLike?.(game.id)}
-          >
-            <Heart className={cn("w-4 h-4", isLiked && "fill-current")} />
-            <span>{game.stats.likes}</span>
-          </Button>
+          </div>
           <Button
-            variant="ghost"
+            variant="default"
             size="sm"
-            className="flex items-center gap-1"
+            className={cn(
+              "gap-1 text-xs px-2 py-1 h-7",
+              isFollowing ? "bg-gray-200 text-gray-800 hover:bg-gray-300" : ""
+            )}
+            onClick={handleFollow}
           >
-            <MessageSquare className="w-4 h-4" />
-            <span>{game.stats.comments}</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex items-center gap-1"
-            onClick={() => onShare?.(game.id)}
-          >
-            <Share2 className="w-4 h-4" />
-            <span>{game.stats.shares}</span>
+            {isFollowing ? (
+              <Check className="w-3 h-3" />
+            ) : (
+              <Plus className="w-3 h-3" />
+            )}
+            {isFollowing ? "Following" : "Follow"}
           </Button>
         </div>
 
-        <Button className="w-full">Play Now</Button>
+        <p className="text-gray-700 mb-3 text-sm line-clamp-2">{game.description}</p>
+
+        <div className="flex items-center justify-between text-gray-600 mb-3 text-sm">
+          <button className="flex items-center gap-1 hover:text-gray-800">
+            <Heart className="w-3 h-3 text-red-500" />
+            <span>{formatNumber(game.likes)}</span>
+          </button>
+          <button className="flex items-center gap-1 hover:text-gray-800">
+            <MessageSquare className="w-3 h-3" />
+            <span>{formatNumber(game.comments)}</span>
+          </button>
+          <button 
+            className="flex items-center gap-1 hover:text-gray-800"
+            onClick={handleShare}
+          >
+            <Share2 className="w-3 h-3" />
+            <span>{formatNumber(game.shares)}</span>
+          </button>
+        </div>
+
+        <Button size="sm" className="w-full text-sm h-8">Play Now</Button>
       </div>
     </div>
   );
 };
-
-export default GameCard;
