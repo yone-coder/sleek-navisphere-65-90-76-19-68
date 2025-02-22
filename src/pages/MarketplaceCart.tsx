@@ -102,7 +102,7 @@ export default function MarketplaceCart() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50/50 max-w-screen">
+    <div className="min-h-screen bg-gray-50/50">
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
         <div className="flex items-center gap-3 px-4 py-2">
@@ -124,55 +124,57 @@ export default function MarketplaceCart() {
       </div>
 
       {/* Content */}
-      <div className="pt-[60px] pb-[140px]">
+      <div className="pt-[60px] pb-[140px] w-full">
         {items.length > 0 ? (
-          <div className="px-4 py-6 space-y-6 max-w-xl mx-auto">
+          <div className="container px-4 py-6 space-y-6 max-w-xl mx-auto">
             {/* Delivery Status */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 w-full overflow-hidden">
               <div className="flex items-center gap-3 text-sm">
-                <Truck className="h-5 w-5 text-primary" />
-                <div className="flex-1">
-                  <p className="font-medium">Estimated Delivery</p>
-                  <p className="text-gray-600">All items will arrive between Feb 20 - Feb 24</p>
+                <Truck className="h-5 w-5 text-primary shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium truncate">Estimated Delivery</p>
+                  <p className="text-gray-600 truncate">All items will arrive between Feb 20 - Feb 24</p>
                 </div>
               </div>
             </div>
 
             {/* Cart Items */}
-            <div className="space-y-4">
+            <div className="space-y-4 w-full">
               {items.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 animate-fade-in"
+                  className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 animate-fade-in w-full overflow-hidden"
                 >
                   <div className="flex gap-4">
-                    <div className="relative">
+                    <div className="relative shrink-0">
                       <img
                         src={item.image}
                         alt={item.name}
                         className="w-20 h-20 object-cover rounded-xl"
                       />
-                      {getStockStatusBadge(item.stockStatus)}
+                      <div className="absolute bottom-0 left-0">
+                        {getStockStatusBadge(item.stockStatus)}
+                      </div>
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
-                        <div>
+                        <div className="min-w-0 flex-1">
                           <h3 className="font-medium truncate">{item.name}</h3>
-                          <p className="text-sm text-gray-500 mt-0.5">
+                          <p className="text-sm text-gray-500 mt-0.5 truncate">
                             {item.color} · {item.size}
                           </p>
                           <div className="flex items-center gap-2 mt-1 text-xs text-gray-600">
-                            <Store className="h-3.5 w-3.5" />
-                            <span>{item.seller.name}</span>
+                            <Store className="h-3.5 w-3.5 shrink-0" />
+                            <span className="truncate">{item.seller.name}</span>
                             {item.seller.verified && (
-                              <Badge variant="secondary" className="h-4">Verified</Badge>
+                              <Badge variant="secondary" className="h-4 shrink-0">Verified</Badge>
                             )}
                           </div>
                         </div>
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 -mr-2 -mt-2 text-gray-400 hover:text-gray-600"
+                          className="h-8 w-8 -mr-2 -mt-2 text-gray-400 hover:text-gray-600 shrink-0"
                           onClick={() => removeItem(item.id)}
                           disabled={savingForLater}
                         >
@@ -181,7 +183,7 @@ export default function MarketplaceCart() {
                       </div>
                       
                       <div className="flex items-center justify-between mt-4">
-                        <div className="flex items-center bg-gray-50 rounded-lg">
+                        <div className="flex items-center bg-gray-50 rounded-lg shrink-0">
                           <Button
                             variant="ghost"
                             size="icon"
@@ -205,8 +207,8 @@ export default function MarketplaceCart() {
                         <div className="text-right">
                           <span className="font-semibold">${item.price * item.quantity}</span>
                           <div className="flex items-center gap-1 text-xs text-gray-600 mt-1">
-                            <Clock className="h-3.5 w-3.5" />
-                            <span>Delivery in {item.deliveryEstimate}</span>
+                            <Clock className="h-3.5 w-3.5 shrink-0" />
+                            <span className="truncate">Delivery in {item.deliveryEstimate}</span>
                           </div>
                         </div>
                       </div>
@@ -217,9 +219,9 @@ export default function MarketplaceCart() {
             </div>
 
             {/* Promo Code */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 w-full overflow-hidden">
               <div className="flex items-center gap-3">
-                <div className="relative flex-1">
+                <div className="relative flex-1 min-w-0">
                   <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     type="text"
@@ -232,6 +234,7 @@ export default function MarketplaceCart() {
                 <Button 
                   variant="outline"
                   size="sm"
+                  className="shrink-0"
                   onClick={applyPromoCode}
                   disabled={isPromoApplied}
                 >
@@ -241,13 +244,13 @@ export default function MarketplaceCart() {
               {isPromoApplied && (
                 <p className="text-xs text-green-600 mt-2 flex items-center gap-1">
                   <Badge className="h-4 bg-green-100 text-green-600 hover:bg-green-100">10% OFF</Badge>
-                  Promo code applied successfully!
+                  <span className="truncate">Promo code applied successfully!</span>
                 </p>
               )}
             </div>
 
             {/* Order Summary */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden w-full">
               <div className="p-4">
                 <h3 className="font-semibold mb-4">Order Summary</h3>
                 <div className="space-y-2 text-sm">
@@ -278,8 +281,8 @@ export default function MarketplaceCart() {
               </div>
               <div className="bg-gray-50/50 px-4 py-3 border-t border-gray-100">
                 <div className="flex items-center gap-2 text-xs text-gray-600">
-                  <Shield className="h-3.5 w-3.5" />
-                  <span>Secure checkout with buyer protection</span>
+                  <Shield className="h-3.5 w-3.5 shrink-0" />
+                  <span className="truncate">Secure checkout with buyer protection</span>
                 </div>
               </div>
             </div>
