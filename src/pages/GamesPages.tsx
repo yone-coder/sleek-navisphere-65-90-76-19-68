@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
@@ -36,6 +35,18 @@ interface Game {
   inAppPurchases?: boolean;
   route?: string;
   updateInfo?: string;
+}
+
+interface GameEvent {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  gameTitle: string;
+  gameIcon: string;
+  developer: string;
+  rating: number;
+  endsIn: string;
 }
 
 const games: Game[] = [
@@ -94,6 +105,31 @@ const games: Game[] = [
     size: "1.2GB",
     hasAds: false,
     inAppPurchases: true
+  }
+];
+
+const gameEvents: GameEvent[] = [
+  {
+    id: "valentine-event",
+    title: "Roses & Raids: Shadow Knight's Love Potion for Power!",
+    description: "Love is in the air, Shadow Knight, but the battle continues! Join our Valentine's special event.",
+    image: "https://images.unsplash.com/photo-1581375383680-903f6a661046",
+    gameTitle: "Shadow Knight: Ninja",
+    gameIcon: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
+    developer: "Fansipan Limi",
+    rating: 4.5,
+    endsIn: "3 days"
+  },
+  {
+    id: "winter-event",
+    title: "Chess Winter Championship",
+    description: "Compete in the seasonal tournament with special winter-themed boards",
+    image: "https://images.unsplash.com/photo-1513159446162-54eb8bdaa79b",
+    gameTitle: "Chess Master Pro",
+    gameIcon: "https://images.unsplash.com/photo-1586165368502-1bad197a6461",
+    developer: "Chess Studios",
+    rating: 4.8,
+    endsIn: "5 days"
   }
 ];
 
@@ -187,6 +223,61 @@ export default function GamesPages() {
     </div>
   );
 
+  const EventsSection = () => (
+    <div className="mb-8">
+      <h2 className="text-2xl font-medium text-gray-900 px-4 mb-4">Events happening now</h2>
+      <ScrollArea className="w-full" type="scroll">
+        <div className="flex px-4 gap-4 pb-4">
+          {gameEvents.map(event => (
+            <div key={event.id} className="flex-none w-[340px]">
+              <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-purple-500 to-pink-500">
+                <div className="absolute top-3 left-3 z-10">
+                  <Badge className="bg-black/50 text-white border-none backdrop-blur-sm">
+                    Ends in {event.endsIn}
+                  </Badge>
+                </div>
+                <img
+                  src={event.image}
+                  alt={event.title}
+                  className="w-full aspect-[5/3] object-cover mix-blend-overlay"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                  <h3 className="text-xl font-bold mb-1">{event.title}</h3>
+                  <p className="text-sm opacity-90 line-clamp-2 mb-2">
+                    {event.description}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 mt-3">
+                <img
+                  src={event.gameIcon}
+                  alt={event.gameTitle}
+                  className="w-12 h-12 rounded-xl"
+                />
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-medium text-gray-900 truncate">
+                    {event.gameTitle}
+                  </h4>
+                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <span className="truncate">{event.developer}</span>
+                    <span>•</span>
+                    <div className="flex items-center gap-1">
+                      <span>{event.rating}</span>
+                      <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                    </div>
+                  </div>
+                </div>
+                <Button className="h-9" size="sm">Install</Button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-white">
       <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
@@ -252,6 +343,7 @@ export default function GamesPages() {
       </div>
 
       <div className="pt-4 pb-24">
+        <EventsSection />
         <CategorySection title="Popular Sports Games" games={games.filter(g => g.category.includes("Sports"))} />
         <CategorySection title="Trending Board Games" games={games.filter(g => g.category.includes("Board"))} />
         <CategorySection title="Suggested For You" games={games} />
