@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Search, Grid, ListFilter, ChevronRight, Sparkles } from "lucide-react";
@@ -133,7 +134,7 @@ const MarketplaceCategories = () => {
           </div>
         </div>
 
-        <div className="px-2 py-1">
+        <div className="px-2 py-2">
           <CategoryTabs
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
@@ -141,10 +142,10 @@ const MarketplaceCategories = () => {
         </div>
       </div>
 
-      {/* Content - Tighter grid */}
-      <div className="pt-[84px] pb-16 px-2">
+      {/* Content - Adjusted spacing */}
+      <div className="pt-[96px] pb-20 px-3">
         <div className={cn(
-          "grid gap-2",
+          "grid gap-3",
           view === "grid" ? "grid-cols-2" : "grid-cols-1"
         )}>
           {filteredCategories.map((category) => (
@@ -176,7 +177,7 @@ const MarketplaceCategories = () => {
                   </div>
                 </div>
 
-                {/* Status Indicators - Smaller and more compact */}
+                {/* Status Indicators */}
                 <div className="absolute bottom-2 left-2 flex items-center gap-1.5">
                   {category.trending && (
                     <Badge variant="secondary" className="px-1.5 py-0.5 text-[10px] bg-white/20 text-white border-0">
@@ -206,3 +207,4 @@ const MarketplaceCategories = () => {
 };
 
 export default MarketplaceCategories;
+
