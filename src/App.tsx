@@ -22,7 +22,6 @@ const SignUp = lazy(() => import("./pages/SignUp"));
 const NewsDetail = lazy(() => import("./pages/NewsDetail"));
 const Tournaments = lazy(() => import("./pages/Tournaments"));
 const TournamentDetails = lazy(() => import("./pages/TournamentDetails"));
-const Games = lazy(() => import("./pages/Games"));
 const Gomoku = lazy(() => import("./pages/games/Gomoku"));
 const Morpion = lazy(() => import("./pages/games/Morpion"));
 const MatchDetails = lazy(() => import("./pages/MatchDetails"));
@@ -72,7 +71,7 @@ const AppContent = () => {
           <Route path="/matches" element={<Matches />} />
           <Route path="/match/:id" element={<MatchDetails />} />
           <Route path="/tournaments" element={<Tournaments />} />
-          <Route path="/games" element={<Games />} />
+          <Route path="/games" element={<GamesPages />} /> {/* Updated to use GamesPages */}
           <Route path="/games/gomoku" element={<Gomoku />} />
           <Route path="/games/morpion" element={<Morpion />} />
           <Route path="/feeds" element={<Feeds />} />
