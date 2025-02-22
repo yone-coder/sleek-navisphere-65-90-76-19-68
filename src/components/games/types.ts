@@ -11,4 +11,10 @@ export interface Game {
   comments: number;
   shares: number;
   bookmarked?: boolean;
+  rating?: number;
+  totalRatings?: number;
+  activePlayers?: number;
+  tournaments?: number;
+  avgGameTime?: string;
+  difficulty?: string;
 }
