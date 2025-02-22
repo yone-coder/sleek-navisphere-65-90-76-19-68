@@ -1,17 +1,15 @@
-
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { Header } from "./components/Header";
 import { BottomNav } from "./components/BottomNav";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Lazy load all pages
-const Home = lazy(() => import("./pages/Apps")); // Changed this line to import Apps as Home
+const Home = lazy(() => import("./pages/Apps"));
 const Explore = lazy(() => import("./pages/Explore"));
 const Matches = lazy(() => import("./pages/Matches"));
 const Feeds = lazy(() => import("./pages/Feeds"));
@@ -58,15 +56,12 @@ const queryClient = new QueryClient();
 
 const AppContent = () => {
   const location = useLocation();
-  const hideHeaderRoutes = ['/login', '/signup', '/explore', '/match', '/games/morpion', '/marketplace', '/apps', '/search'];
   const hideBottomNavRoutes = ['/marketplace'];
   const isAdminRoute = location.pathname.startsWith('/admin');
-  const shouldShowHeader = !hideHeaderRoutes.some(route => location.pathname.startsWith(route)) && !isAdminRoute;
   const shouldShowBottomNav = !isAdminRoute && !hideBottomNavRoutes.some(route => location.pathname.startsWith(route));
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
-      {shouldShowHeader && <Header />}
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
           <Route path="/" element={<Home />} />
