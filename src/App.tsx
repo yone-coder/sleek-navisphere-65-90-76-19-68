@@ -1,3 +1,4 @@
+
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -31,6 +32,7 @@ const Search = lazy(() => import("./pages/Search"));
 const MarketplaceSearch = lazy(() => import("./pages/MarketplaceSearch"));
 const MarketplaceCategories = lazy(() => import("./pages/MarketplaceCategories"));
 const MarketplaceCart = lazy(() => import("./pages/MarketplaceCart"));
+const MarketplaceAccount = lazy(() => import("./pages/MarketplaceAccount"));
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 const AdminBanners = lazy(() => import("./pages/admin/AdminBanners"));
@@ -86,6 +88,7 @@ const AppContent = () => {
           <Route path="/marketplace/categories/:id" element={<MarketplaceCategories />} />
           <Route path="/marketplace/product/:id" element={<ProductDetails />} />
           <Route path="/marketplace/cart" element={<MarketplaceCart />} />
+          <Route path="/marketplace/account" element={<MarketplaceAccount />} />
           <Route path="/search" element={<Search />} />
           
           {/* Admin Routes */}
