@@ -29,8 +29,8 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
   }, [] as typeof favoriteApps[]);
 
   return (
-    <div className="mb-8">
-      <div className="flex items-center justify-between mb-4">
+    <div className="mb-8 -mx-4 sm:-mx-6 md:-mx-8">
+      <div className="flex items-center justify-between mb-4 px-4 sm:px-6 md:px-8">
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-500">
             <Star className="w-5 h-5 text-white" />
@@ -39,7 +39,7 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
         </div>
       </div>
       <ScrollArea className="w-full">
-        <div className="flex gap-4 pb-4">
+        <div className="flex gap-4 pb-4 px-4 sm:px-6 md:px-8">
           {groups.map((group, groupIndex) => (
             <div key={groupIndex} className="flex-none w-[320px] first:ml-0">
               <div className="grid grid-cols-4 gap-4">
@@ -69,7 +69,7 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
             </div>
           ))}
         </div>
-        <ScrollBar orientation="horizontal" />
+        <ScrollBar orientation="horizontal" className="px-4 sm:px-6 md:px-8" />
       </ScrollArea>
     </div>
   );
