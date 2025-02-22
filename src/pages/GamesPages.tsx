@@ -133,6 +133,48 @@ const gameEvents: GameEvent[] = [
   }
 ];
 
+const sponsoredGames: Game[] = [
+  {
+    id: "candy-crush",
+    title: "Candy Crush Soda Saga",
+    description: "Match candies in this tasty puzzle adventure",
+    thumbnail: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
+    icon: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
+    category: ["Casual", "Puzzle"],
+    rating: 4.5,
+    downloads: "1B+",
+    size: "98MB",
+    hasAds: true,
+    inAppPurchases: true
+  },
+  {
+    id: "royal-match",
+    title: "Royal Match",
+    description: "Match-3 puzzle with royal twists",
+    thumbnail: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
+    icon: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
+    category: ["Casual", "Puzzle"],
+    rating: 4.7,
+    downloads: "100M+",
+    size: "156MB",
+    hasAds: true,
+    inAppPurchases: true
+  },
+  {
+    id: "duolingo",
+    title: "Duolingo: Language Lessons",
+    description: "Learn languages for free",
+    thumbnail: "https://images.unsplash.com/photo-1661875576025-0e5d61dec14f",
+    icon: "https://images.unsplash.com/photo-1661875576025-0e5d61dec14f",
+    category: ["Education", "Language"],
+    rating: 4.7,
+    downloads: "500M+",
+    size: "45MB",
+    hasAds: true,
+    inAppPurchases: true
+  }
+];
+
 const categories = [
   "Top charts",
   "Children",
@@ -278,6 +320,48 @@ export default function GamesPages() {
     </div>
   );
 
+  const SponsoredSection = () => (
+    <div className="mb-8">
+      <div className="px-4">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-medium text-gray-900 flex items-center gap-2">
+            Sponsored <span className="text-gray-500">•</span> Suggested for you
+          </h2>
+          <Button variant="ghost" size="icon" className="h-8 w-8">
+            <MoreVertical className="h-5 w-5" />
+          </Button>
+        </div>
+
+        <ScrollArea className="w-full" type="scroll">
+          <div className="flex gap-4 pb-4">
+            {sponsoredGames.map((game) => (
+              <div 
+                key={game.id}
+                className="flex-none w-[120px]"
+              >
+                <div className="relative mb-2">
+                  <img
+                    src={game.icon}
+                    alt={game.title}
+                    className="w-[120px] h-[120px] rounded-[24px] object-cover"
+                  />
+                </div>
+                <h3 className="text-gray-900 text-sm font-medium truncate mb-1">
+                  {game.title}
+                </h3>
+                <div className="flex items-center gap-1 text-gray-600 text-xs">
+                  <span>{game.rating}</span>
+                  <Star className="w-3 h-3 fill-gray-600 text-gray-600" />
+                </div>
+              </div>
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-white">
       <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
@@ -344,6 +428,7 @@ export default function GamesPages() {
 
       <div className="pt-4 pb-24">
         <EventsSection />
+        <SponsoredSection />
         <CategorySection title="Popular Sports Games" games={games.filter(g => g.category.includes("Sports"))} />
         <CategorySection title="Trending Board Games" games={games.filter(g => g.category.includes("Board"))} />
         <CategorySection title="Suggested For You" games={games} />
