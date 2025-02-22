@@ -60,17 +60,17 @@ export const BannerSlider = () => {
                     className="absolute inset-0 bg-cover bg-center scale-105 transition-transform duration-[12000ms] group-hover:scale-100" 
                     style={{ backgroundImage: `url(${banner.image})` }}
                   />
-                  <div className={`absolute inset-0 bg-gradient-to-r ${banner.gradient} transition-opacity duration-300`} />
-                  <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-16">
-                    <div className="max-w-2xl space-y-4">
-                      <h2 className="text-3xl md:text-4xl font-bold text-white opacity-90 tracking-tight animate-fade-in">
+                  <div className={`absolute inset-0 bg-gradient-to-r ${banner.gradient}`} />
+                  <div className="absolute inset-0 flex items-center px-6 sm:px-10 md:px-16">
+                    <div className="max-w-lg space-y-3 sm:space-y-4">
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white opacity-90 tracking-tight animate-fade-in">
                         {banner.title}
                       </h2>
-                      <p className="text-base md:text-lg text-white/80 animate-fade-in [animation-delay:200ms]">
+                      <p className="text-sm sm:text-base md:text-lg text-white/80 animate-fade-in [animation-delay:200ms] line-clamp-2">
                         {banner.description}
                       </p>
                       <Button 
-                        className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white border border-white/30 animate-fade-in [animation-delay:400ms]"
+                        className="mt-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white border border-white/30 animate-fade-in [animation-delay:400ms]"
                       >
                         {banner.cta}
                       </Button>
@@ -82,7 +82,7 @@ export const BannerSlider = () => {
           </CarouselContent>
         </Carousel>
         {/* Progress Indicators */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
           {banners.map((_, index) => (
             <div
               key={index}
@@ -98,4 +98,3 @@ export const BannerSlider = () => {
     </div>
   );
 };
-
