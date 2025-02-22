@@ -12,8 +12,19 @@ interface RecentScreen {
   timestamp: number;
 }
 
+const mockScreens: RecentScreen[] = [
+  { path: "/", title: "Home", timestamp: Date.now() - 1000 },
+  { path: "/profile", title: "Profile", timestamp: Date.now() - 2000 },
+  { path: "/games", title: "Games", timestamp: Date.now() - 3000 },
+  { path: "/matches", title: "Matches", timestamp: Date.now() - 4000 },
+  { path: "/wallet", title: "Wallet", timestamp: Date.now() - 5000 },
+  { path: "/tournaments", title: "Tournaments", timestamp: Date.now() - 6000 },
+  { path: "/marketplace", title: "Marketplace", timestamp: Date.now() - 7000 },
+  { path: "/feeds", title: "Feeds", timestamp: Date.now() - 8000 },
+];
+
 export function RecentScreens({ children }: { children: React.ReactNode }) {
-  const [recentScreens, setRecentScreens] = React.useState<RecentScreen[]>([]);
+  const [recentScreens, setRecentScreens] = React.useState<RecentScreen[]>(mockScreens);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -29,7 +40,7 @@ export function RecentScreens({ children }: { children: React.ReactNode }) {
         path: location.pathname, 
         title: pathTitle,
         timestamp: Date.now() 
-      }, ...newScreens].slice(0, 5); // Keep only last 5 screens
+      }, ...newScreens].slice(0, 8); // Keep last 8 screens
     });
   }, [location.pathname]);
 
@@ -38,18 +49,18 @@ export function RecentScreens({ children }: { children: React.ReactNode }) {
       <SheetTrigger asChild>
         {children}
       </SheetTrigger>
-      <SheetContent side="bottom" className="h-[40vh] p-0">
+      <SheetContent side="bottom" className="h-[60vh] p-0">
         <ScrollArea className="h-full">
           <div className="p-4">
             <div className="flex items-center gap-2 mb-4">
               <Clock className="w-5 h-5 text-muted-foreground" />
               <h2 className="text-lg font-semibold">Recent Screens</h2>
             </div>
-            <div className="flex gap-4 pb-4 overflow-x-auto">
-              {recentScreens.map((screen, index) => (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pb-4">
+              {recentScreens.map((screen) => (
                 <Card 
                   key={screen.path + screen.timestamp}
-                  className="flex-shrink-0 w-[200px] h-[150px] relative group cursor-pointer hover:shadow-lg transition-all duration-200"
+                  className="relative group cursor-pointer hover:shadow-lg transition-all duration-200 aspect-video"
                   onClick={() => {
                     navigate(screen.path);
                   }}
