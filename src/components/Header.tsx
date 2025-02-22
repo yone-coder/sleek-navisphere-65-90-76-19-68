@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -48,8 +49,8 @@ export const Header = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
   
-  // Hide header on home page
-  if (location.pathname === '/') {
+  // Hide header on home page and apps page
+  if (location.pathname === '/' || location.pathname === '/apps') {
     return null;
   }
 
