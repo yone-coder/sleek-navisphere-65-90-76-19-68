@@ -11,9 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import { GameSearchOverlay } from "@/components/search/GameSearchOverlay";
+import { useToast } from "@/hooks/use-toast";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,89 +20,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useToast } from "@/hooks/use-toast";
-
-const games = [
-  {
-    id: "chess",
-    title: "Chess Master Pro",
-    description: "Challenge your mind with the ultimate chess experience. Play against AI or compete with players worldwide in real-time matches.",
-    thumbnail: "https://images.unsplash.com/photo-1582562124811-c09040d0a901",
-    logo: "https://api.dicebear.com/7.x/initials/svg?seed=Chess",
-    category: "Board",
-    rating: 4.8,
-    downloads: "1M+",
-    isFeatured: true,
-    route: "/games/chess",
-    activePlayers: 15420,
-    tournaments: 32,
-    likes: 45200,
-    comments: 1200,
-    shares: 890,
-    verified: true
-  },
-  {
-    id: "morpion",
-    title: "Tic Tac Toe",
-    description: "Classic three-in-a-row with multiplayer",
-    thumbnail: "https://images.unsplash.com/photo-1498936178812-4b2e558d2937",
-    logo: "https://api.dicebear.com/7.x/initials/svg?seed=TicTacToe",
-    category: "Casual",
-    rating: 4.5,
-    downloads: "500K+",
-    isEditorChoice: true,
-    route: "/games/morpion",
-    activePlayers: 8765,
-    tournaments: 15,
-    likes: 23400,
-    comments: 678,
-    shares: 456,
-    verified: false
-  },
-  {
-    id: "domino",
-    title: "Domino Masters",
-    description: "Strategic tile-matching multiplayer game",
-    thumbnail: "https://images.unsplash.com/photo-1501286353178-1ec881214838",
-    logo: "https://api.dicebear.com/7.x/initials/svg?seed=Domino",
-    category: "Board",
-    rating: 4.3,
-    downloads: "100K+",
-    price: "Free",
-    activePlayers: 3456,
-    tournaments: 8,
-    likes: 12300,
-    comments: 345,
-    shares: 234,
-    verified: false
-  },
-  {
-    id: "puzzle",
-    title: "Brain Teaser",
-    description: "Mind-bending puzzles and challenges",
-    thumbnail: "https://images.unsplash.com/photo-1466721591366-2d5fba72006d",
-    logo: "https://api.dicebear.com/7.x/initials/svg?seed=Puzzle",
-    category: "Puzzle",
-    rating: 4.7,
-    downloads: "250K+",
-    price: "Free",
-    activePlayers: 5678,
-    tournaments: 12,
-    likes: 34500,
-    comments: 789,
-    shares: 567,
-    verified: true
-  }
-];
-
-const categories = [
-  "For you",
-  "Top charts",
-  "Kids",
-  "Premium",
-  "Categories",
-  "Editor's choice"
-];
+import { FeaturedGame } from "@/components/games/FeaturedGame";
+import { games, categories } from "@/data/games";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export default function GamesPages() {
   const navigate = useNavigate();
@@ -113,16 +33,6 @@ export default function GamesPages() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [savedGames, setSavedGames] = useState<string[]>([]);
   const { toast } = useToast();
-
-  const formatNumber = (num: number): string => {
-    if (num >= 1000000) {
-      return `${(num / 1000000).toFixed(1)}M`;
-    }
-    if (num >= 1000) {
-      return `${(num / 1000).toFixed(1)}K`;
-    }
-    return num.toString();
-  };
 
   const handleSaveGame = (gameId: string) => {
     setSavedGames(prev => {
@@ -140,6 +50,8 @@ export default function GamesPages() {
       return newSaved;
     });
   };
+
+  const featuredGame = games.find(game => game.isFeatured);
 
   const renderRating = (rating: number) => {
     return (
@@ -309,131 +221,14 @@ export default function GamesPages() {
       </div>
 
       <div className="pt-[116px] pb-24">
-        {games.find(game => game.isFeatured) && (
+        {featuredGame && (
           <div className="px-4 mb-8">
             <h2 className="text-lg font-semibold mb-4">Featured Game</h2>
-            <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600">
-              <div className="absolute inset-0">
-                <img
-                  src={games.find(game => game.isFeatured)?.thumbnail}
-                  alt="Featured game"
-                  className="w-full h-full object-cover opacity-80"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-              </div>
-              
-              <div className="relative p-6 text-white">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-white/10 backdrop-blur-sm">
-                      <img 
-                        src={games.find(game => game.isFeatured)?.logo}
-                        alt="Game logo"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-2xl font-bold">
-                          {games.find(game => game.isFeatured)?.title}
-                        </h3>
-                        {games.find(game => game.isFeatured)?.verified && (
-                          <Check className="w-5 h-5 text-blue-400" />
-                        )}
-                      </div>
-                      <p className="text-sm text-gray-200 max-w-xl">
-                        {games.find(game => game.isFeatured)?.description}
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => {
-                      const featuredGame = games.find(game => game.isFeatured);
-                      if (featuredGame) handleSaveGame(featuredGame.id);
-                    }}
-                    className="p-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-colors"
-                  >
-                    <Bookmark className={cn(
-                      "w-5 h-5",
-                      savedGames.includes(games.find(game => game.isFeatured)?.id || '') 
-                        ? "fill-white text-white" 
-                        : "text-white"
-                    )} />
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 mb-8">
-                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
-                    <div className="flex items-center gap-2 text-sm mb-1">
-                      <Users className="w-4 h-4" />
-                      <span>Active Players</span>
-                    </div>
-                    <span className="text-xl font-bold">
-                      {formatNumber(games.find(game => game.isFeatured)?.activePlayers || 0)}
-                    </span>
-                  </div>
-                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
-                    <div className="flex items-center gap-2 text-sm mb-1">
-                      <Trophy className="w-4 h-4 text-yellow-400" />
-                      <span>Tournaments</span>
-                    </div>
-                    <span className="text-xl font-bold">
-                      {formatNumber(games.find(game => game.isFeatured)?.tournaments || 0)}
-                    </span>
-                  </div>
-                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
-                    <div className="flex items-center gap-2 text-sm mb-1">
-                      <Heart className="w-4 h-4 text-red-400" />
-                      <span>Likes</span>
-                    </div>
-                    <span className="text-xl font-bold">
-                      {formatNumber(games.find(game => game.isFeatured)?.likes || 0)}
-                    </span>
-                  </div>
-                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
-                    <div className="flex items-center gap-2 text-sm mb-1">
-                      <MessageSquare className="w-4 h-4" />
-                      <span>Comments</span>
-                    </div>
-                    <span className="text-xl font-bold">
-                      {formatNumber(games.find(game => game.isFeatured)?.comments || 0)}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      <MessageSquare className="w-4 h-4" />
-                      <span>{formatNumber(games.find(game => game.isFeatured)?.comments || 0)}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Share2 className="w-4 h-4" />
-                      <span>{formatNumber(games.find(game => game.isFeatured)?.shares || 0)}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Button 
-                      variant="outline" 
-                      className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-                      onClick={() => navigate("/tournaments")}
-                    >
-                      <Trophy className="w-4 h-4 mr-2" />
-                      View Tournaments
-                    </Button>
-                    <Button 
-                      className="bg-white text-blue-600 hover:bg-white/90"
-                      onClick={() => {
-                        const featuredGame = games.find(game => game.isFeatured);
-                        if (featuredGame?.route) navigate(featuredGame.route);
-                      }}
-                    >
-                      Play Now
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <FeaturedGame
+              game={featuredGame}
+              onSave={handleSaveGame}
+              isSaved={savedGames.includes(featuredGame.id)}
+            />
           </div>
         )}
 
