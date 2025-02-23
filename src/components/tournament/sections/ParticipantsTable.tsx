@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -183,34 +182,36 @@ export function ParticipantsTable() {
             className="pl-8 h-9"
           />
         </div>
-        <div className="flex items-center gap-1">
-          <Button
-            variant="outline"
-            size="sm"
-            className={cn(
-              "h-9 px-2",
-              statusFilter === "all" && "bg-primary text-primary-foreground"
-            )}
-            onClick={() => setStatusFilter("all")}
-          >
-            <Filter className="h-4 w-4" />
-            <span className="ml-1">All</span>
-          </Button>
-          {(["confirmed", "pending", "withdrawn"] as const).map((status) => (
+        <ScrollArea className="w-auto max-w-[300px] whitespace-nowrap">
+          <div className="flex items-center gap-1 px-1">
             <Button
-              key={status}
               variant="outline"
               size="sm"
               className={cn(
-                "h-9 px-2",
-                statusFilter === status && "bg-primary text-primary-foreground"
+                "h-9 px-2 flex-shrink-0",
+                statusFilter === "all" && "bg-primary text-primary-foreground"
               )}
-              onClick={() => setStatusFilter(status)}
+              onClick={() => setStatusFilter("all")}
             >
-              {status}
+              <Filter className="h-4 w-4" />
+              <span className="ml-1">All</span>
             </Button>
-          ))}
-        </div>
+            {(["confirmed", "pending", "withdrawn"] as const).map((status) => (
+              <Button
+                key={status}
+                variant="outline"
+                size="sm"
+                className={cn(
+                  "h-9 px-2 flex-shrink-0",
+                  statusFilter === status && "bg-primary text-primary-foreground"
+                )}
+                onClick={() => setStatusFilter(status)}
+              >
+                {status}
+              </Button>
+            ))}
+          </div>
+        </ScrollArea>
       </div>
 
       <div className="border rounded-lg">
