@@ -215,84 +215,86 @@ export function ParticipantsTable() {
 
       <div className="border rounded-lg">
         <ScrollArea className="h-[calc(100vh-360px)] min-h-[300px]">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[60px]">Rank</TableHead>
-                <TableHead>Player</TableHead>
-                <TableHead className="w-[100px]">
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    className="h-8 px-2"
-                    onClick={() => handleSort("rating")}
-                  >
-                    Rating
-                    <ArrowUpDown className="h-3.5 w-3.5 ml-1" />
-                  </Button>
-                </TableHead>
-                <TableHead className="w-[140px]">
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    className="h-8 px-2"
-                    onClick={() => handleSort("winRate")}
-                  >
-                    Win Rate
-                    <ArrowUpDown className="h-3.5 w-3.5 ml-1" />
-                  </Button>
-                </TableHead>
-                <TableHead className="w-[100px]">Status</TableHead>
-                <TableHead className="w-[120px]">Last Active</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {paginatedParticipants.map((participant) => (
-                <TableRow key={participant.id} className="hover:bg-muted/50 cursor-pointer">
-                  <TableCell className="py-2 font-medium">{participant.rank}</TableCell>
-                  <TableCell className="py-2">
-                    <div className="flex items-center gap-2">
-                      <img 
-                        src={participant.avatar} 
-                        alt={participant.name}
-                        className="w-7 h-7 rounded-full object-cover"
-                      />
-                      <div>
-                        <div className="text-sm">{participant.name}</div>
-                        <div className="text-xs text-muted-foreground">{participant.country}</div>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-2 text-sm">{participant.rating}</TableCell>
-                  <TableCell className="py-2">
-                    <div className="flex items-center gap-2">
-                      <Progress 
-                        value={participant.winRate} 
-                        className="w-16 h-1.5"
-                      />
-                      <span className="text-xs text-muted-foreground">
-                        {participant.winRate}%
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-2">
-                    <Badge 
-                      variant="secondary"
-                      className={cn(
-                        "text-[11px] px-1.5 py-0.5",
-                        getStatusColor(participant.status)
-                      )}
+          <div className="min-w-[800px]">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[60px]">Rank</TableHead>
+                  <TableHead className="w-[250px]">Player</TableHead>
+                  <TableHead className="w-[100px]">
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className="h-8 px-2"
+                      onClick={() => handleSort("rating")}
                     >
-                      {participant.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="py-2 text-xs text-muted-foreground">
-                    {participant.lastActive}
-                  </TableCell>
+                      Rating
+                      <ArrowUpDown className="h-3.5 w-3.5 ml-1" />
+                    </Button>
+                  </TableHead>
+                  <TableHead className="w-[140px]">
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className="h-8 px-2"
+                      onClick={() => handleSort("winRate")}
+                    >
+                      Win Rate
+                      <ArrowUpDown className="h-3.5 w-3.5 ml-1" />
+                    </Button>
+                  </TableHead>
+                  <TableHead className="w-[100px]">Status</TableHead>
+                  <TableHead className="w-[120px]">Last Active</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {paginatedParticipants.map((participant) => (
+                  <TableRow key={participant.id} className="hover:bg-muted/50 cursor-pointer">
+                    <TableCell className="py-2 font-medium">{participant.rank}</TableCell>
+                    <TableCell className="py-2">
+                      <div className="flex items-center gap-2">
+                        <img 
+                          src={participant.avatar} 
+                          alt={participant.name}
+                          className="w-7 h-7 rounded-full object-cover"
+                        />
+                        <div>
+                          <div className="text-sm">{participant.name}</div>
+                          <div className="text-xs text-muted-foreground">{participant.country}</div>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-2 text-sm">{participant.rating}</TableCell>
+                    <TableCell className="py-2">
+                      <div className="flex items-center gap-2">
+                        <Progress 
+                          value={participant.winRate} 
+                          className="w-16 h-1.5"
+                        />
+                        <span className="text-xs text-muted-foreground">
+                          {participant.winRate}%
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-2">
+                      <Badge 
+                        variant="secondary"
+                        className={cn(
+                          "text-[11px] px-1.5 py-0.5",
+                          getStatusColor(participant.status)
+                        )}
+                      >
+                        {participant.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="py-2 text-xs text-muted-foreground">
+                      {participant.lastActive}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </ScrollArea>
       </div>
 
