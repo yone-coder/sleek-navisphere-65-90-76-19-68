@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
@@ -14,6 +13,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { GameSearchOverlay } from "@/components/search/GameSearchOverlay";
+import { TournamentCard } from "@/components/tournaments/TournamentCard";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,7 +22,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-// Use the same game data structure but modify for contests
 const contests = [
   {
     id: "chess-tournament",
@@ -68,6 +67,45 @@ const contests = [
   }
 ];
 
+const tournaments = [
+  {
+    id: "1",
+    title: "Summer Championship 2024",
+    start_date: "2024-06-01T10:00:00Z",
+    end_date: "2024-06-15T18:00:00Z",
+    status: "upcoming",
+    prize_pool: 5000,
+    max_participants: 128,
+    current_participants: 85,
+    banner_url: "https://images.unsplash.com/photo-1511512578047-dfb367046420",
+    game: "Chess"
+  },
+  {
+    id: "2",
+    title: "Spring Puzzle Rush",
+    start_date: "2024-04-15T14:00:00Z",
+    end_date: "2024-04-20T22:00:00Z",
+    status: "upcoming",
+    prize_pool: 2500,
+    max_participants: 256,
+    current_participants: 180,
+    banner_url: "https://images.unsplash.com/photo-1553481187-be93c21490a9",
+    game: "Puzzle"
+  },
+  {
+    id: "3",
+    title: "Winter Word Masters",
+    start_date: "2024-03-01T09:00:00Z",
+    end_date: "2024-03-10T20:00:00Z",
+    status: "in-progress",
+    prize_pool: 3000,
+    max_participants: 64,
+    current_participants: 64,
+    banner_url: "https://images.unsplash.com/photo-1559336197-ded8aaa244bc",
+    game: "Word"
+  }
+];
+
 export default function ContestsPage() {
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -75,6 +113,27 @@ export default function ContestsPage() {
   return (
     <div className="flex-1 overflow-auto bg-background">
       <div className="pt-4 pb-24">
+        {/* New Tournament Cards Section */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between px-4 mb-4">
+            <h2 className="text-xl font-medium text-foreground">Popular Tournaments</h2>
+            <Button variant="ghost" size="sm" className="text-blue-600 font-medium">
+              Browse All <ArrowRight className="w-4 h-4 ml-1" />
+            </Button>
+          </div>
+          
+          <ScrollArea className="w-full">
+            <div className="flex px-4 gap-4 pb-4">
+              {tournaments.map((tournament) => (
+                <div key={tournament.id} className="flex-none w-[300px]">
+                  <TournamentCard tournament={tournament} />
+                </div>
+              ))}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </div>
+
         {/* Featured Contests */}
         <div className="mb-8">
           <div className="flex items-center justify-between px-4 mb-4">
