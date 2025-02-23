@@ -976,10 +976,21 @@ export default function TournamentDetails() {
       <div className="fixed bottom-0 left-0 right-0 p-4 backdrop-blur-lg bg-background/80 border-t border-border/40">
         <div className="px-4 pt-2">
           <div className="flex items-center justify-between text-sm mb-2">
-            <span className="text-muted-foreground">Tournament Capacity</span>
-            <span className="font-medium">
-              {tournament?.current_participants || 0} / {tournament?.max_participants || 0}
-            </span>
+            <div className="flex items-center gap-2">
+              <Users className="h-4 w-4 text-muted-foreground" />
+              <span className="text-muted-foreground">
+                {tournament?.current_participants || 0}/{tournament?.max_participants || 0} Participants
+              </span>
+            </div>
+            <Badge 
+              variant="secondary" 
+              className={cn(
+                "animate-pulse",
+                getAvailableSpots() <= 0 ? "bg-red-100 text-red-800" : ""
+              )}
+            >
+              {getAvailableSpots() <= 0 ? "Tournament Full" : `${getAvailableSpots()} spots left`}
+            </Badge>
           </div>
           <Progress 
             value={getParticipantProgress()} 
