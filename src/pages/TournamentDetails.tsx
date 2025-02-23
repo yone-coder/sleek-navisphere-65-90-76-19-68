@@ -50,6 +50,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const sampleMatches: Match[] = [
   {
@@ -470,11 +478,31 @@ export default function TournamentDetails() {
   };
 
   const handleRegister = () => {
+    if (!tournament) {
+      toast({
+        title: "Error",
+        description: "Tournament details not available",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (getAvailableSpots() <= 0) {
+      toast({
+        title: "Tournament Full",
+        description: "No spots available. Join the waitlist instead?",
+        variant: "destructive",
+      });
+      return;
+    }
+
     toast({
-      title: "Registration request sent!",
-      description: "Check your email for confirmation.",
-      duration: 3000,
+      title: "Registration Successful! 🎉",
+      description: "Check your email for confirmation and next steps.",
+      duration: 5000,
     });
+
+    setNotificationsEnabled(true);
   };
 
   const formatDateRange = (startDate: string, endDate: string) => {
@@ -537,6 +565,69 @@ export default function TournamentDetails() {
     if (progress >= 50) return "bg-yellow-500";
     return "bg-blue-500";
   };
+
+  const RegisterButton = () => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button 
+          size="sm"
+          className="bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white gap-2 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+        >
+          <Trophy className="h-4 w-4" />
+          Register Now {tournament?.entry_fee ? `($${tournament.entry_fee})` : '(Free)'}
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Register for Tournament</DialogTitle>
+          <DialogDescription>
+            Join {tournament?.title || 'this tournament'} and compete for the prize pool!
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4 py-4">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-muted-foreground">Registration Fee:</span>
+            <span className="font-semibold">{tournament?.entry_fee ? `$${tournament.entry_fee}` : 'Free'}</span>
+          </div>
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-muted-foreground">Available Spots:</span>
+            <span className="font-semibold">{getAvailableSpots()} remaining</span>
+          </div>
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-muted-foreground">Tournament Start:</span>
+            <span className="font-semibold">
+              {tournament?.start_date ? format(new Date(tournament.start_date), 'PPP') : 'TBA'}
+            </span>
+          </div>
+          <Progress 
+            value={getParticipantProgress()} 
+            className={cn(
+              "h-2 transition-all duration-500", 
+              getParticipantProgressColor()
+            )} 
+          />
+          <p className="text-xs text-muted-foreground text-center">
+            {tournament?.current_participants || 0} out of {tournament?.max_participants || 0} spots filled
+          </p>
+          <div className="space-y-2">
+            <Button 
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500"
+              onClick={handleRegister}
+            >
+              Confirm Registration
+            </Button>
+            <Button 
+              variant="outline" 
+              className="w-full" 
+              onClick={() => window.open('https://discord.gg/tournament', '_blank')}
+            >
+              Join Discord Community
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
 
   if (isLoading) {
     return (
@@ -723,13 +814,7 @@ export default function TournamentDetails() {
                 Share
               </Button>
             </div>
-            <Button
-              size="sm"
-              className="bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white"
-              onClick={handleRegister}
-            >
-              Register Now
-            </Button>
+            <RegisterButton />
           </div>
         </div>
 
@@ -911,12 +996,7 @@ export default function TournamentDetails() {
       </div>
 
       <div className="sm:hidden fixed bottom-0 left-0 right-0 p-4 backdrop-blur-lg bg-background/80 border-t border-border/40">
-        <Button 
-          className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white"
-          onClick={handleRegister}
-        >
-          Register Now
-        </Button>
+        <RegisterButton />
       </div>
     </div>
   );
