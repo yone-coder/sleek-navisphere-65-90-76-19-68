@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate, Routes, Route, Outlet } from "react-router-dom";
 import { 
@@ -626,7 +627,7 @@ export default function GamesPages() {
             <MainContent />
           </>
         } />
-        <Route path="explore/*" element={<GamesExplore />} />
+        <Route path="game-search/*" element={<GamesExplore />} />
         <Route path="contest/*" element={<ContestsPage />} />
       </Routes>
 
