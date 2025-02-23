@@ -6,19 +6,16 @@ import { Match } from "@/components/matches/types";
 import { 
   ArrowLeft, 
   Search, 
-  Scroll,
-  CalendarClock, 
+  Share2, 
+  Heart, 
+  MessageSquare, 
+  Trophy, 
+  DollarSign, 
   Users,
-  Trophy,
-  DollarSign,
-  Heart,
-  MessageSquare,
-  Share2,
-  Copy,
-  UserPlus,
-  ChevronDown,
-  ChevronUp,
-  Loader2
+  CalendarClock,
+  Filter,
+  MoreVertical,
+  Bell
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -40,6 +37,8 @@ import {
 } from "@/components/ui/table";
 import { TournamentBrackets } from "@/components/tournament/sections/TournamentBrackets";
 import { TournamentRoadmap } from "@/components/tournament/sections/TournamentRoadmap";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 
 const sampleMatches: Match[] = [
   {
@@ -536,54 +535,117 @@ export default function TournamentDetails() {
 
   return (
     <div className="min-h-screen animate-fade-in">
-      {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg bg-background/80 border-b border-border/40">
-        <div className="h-16 px-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-foreground hover:bg-foreground/10"
-              onClick={() => navigate(-1)}
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <h1 className="text-lg font-semibold truncate max-w-[200px]">
-              {tournament?.title || "Tournament Details"}
-            </h1>
+      <div className="fixed top-0 left-0 right-0 z-50">
+        <div className="backdrop-blur-lg bg-background/80 border-b border-border/40">
+          <div className="h-16 px-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-foreground hover:bg-foreground/10"
+                onClick={() => navigate(-1)}
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <div>
+                <h1 className="text-lg font-semibold truncate max-w-[200px]">
+                  {tournament?.title || "Tournament Details"}
+                </h1>
+                <p className="text-xs text-muted-foreground">
+                  {tournament?.current_participants || 0} participants • {getStatusText()}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-foreground hover:bg-foreground/10"
+                onClick={() => toast({
+                  title: "Notifications enabled",
+                  description: "You'll receive updates about this tournament"
+                })}
+              >
+                <Bell className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className={cn(
+                  "text-foreground hover:bg-foreground/10",
+                  isLiked && "text-red-500"
+                )}
+                onClick={handleLike}
+              >
+                <Heart className="h-5 w-5" fill={isLiked ? "currentColor" : "none"} />
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-foreground hover:bg-foreground/10"
+                  >
+                    <MoreVertical className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>Tournament Actions</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleShare}>
+                    <Share2 className="mr-2 h-4 w-4" />
+                    Share Tournament
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => window.open('https://discord.gg/tournament', '_blank')}>
+                    <MessageSquare className="mr-2 h-4 w-4" />
+                    Join Discord
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Filter className="mr-2 h-4 w-4" />
+                    Filter Matches
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="text-red-500">
+                    Report Issue
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-foreground hover:bg-foreground/10"
-              onClick={handleShare}
-            >
-              <Share2 className="h-5 w-5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
+
+          <div className="px-4 py-2 border-t border-border/5 flex items-center justify-between text-sm overflow-x-auto no-scrollbar">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1 text-muted-foreground">
+                <Trophy className="h-4 w-4 text-yellow-500" />
+                <span>${tournament?.prize_pool?.toLocaleString() || "0"}</span>
+              </div>
+              <Separator orientation="vertical" className="h-4" />
+              <div className="flex items-center gap-1 text-muted-foreground">
+                <Users className="h-4 w-4 text-blue-500" />
+                <span>{tournament?.max_participants || 0} max</span>
+              </div>
+              <Separator orientation="vertical" className="h-4" />
+              <div className="flex items-center gap-1 text-muted-foreground">
+                <CalendarClock className="h-4 w-4 text-green-500" />
+                <span>
+                  {tournament && formatDateRange(tournament.start_date, tournament.end_date)}
+                </span>
+              </div>
+            </div>
+            <Badge 
+              variant="secondary" 
               className={cn(
-                "text-foreground hover:bg-foreground/10",
-                isLiked && "text-red-500"
+                "ml-4 whitespace-nowrap",
+                getAvailableSpots() <= 5 ? "bg-red-100 text-red-800" : ""
               )}
-              onClick={handleLike}
             >
-              <Heart className="h-5 w-5" fill={isLiked ? "currentColor" : "none"} />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-foreground hover:bg-foreground/10"
-            >
-              <Search className="h-5 w-5" />
-            </Button>
+              {getSpotsText()}
+            </Badge>
           </div>
         </div>
 
-        {/* Tabs Navigation */}
-        <div className="px-4 pb-2">
+        <div className="px-4 pb-2 backdrop-blur-lg bg-background/80">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <div className="w-full overflow-x-auto no-scrollbar">
               <TabsList className="w-full h-auto inline-flex whitespace-nowrap">
@@ -602,15 +664,13 @@ export default function TournamentDetails() {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="pt-28">
+      <div className="pt-36">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsContent value="overview">
             <div className="space-y-6">
               <BannerSlider />
               
               <div className="px-4">
-                {/* Tournament Stats */}
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div className="flex items-center p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20">
                     <Trophy className="h-8 w-8 text-yellow-500 mr-3 animate-bounce" />
@@ -630,7 +690,6 @@ export default function TournamentDetails() {
                   </div>
                 </div>
 
-                {/* Description and Details */}
                 <div className="space-y-4 mb-6">
                   <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                     The premier gaming event featuring the latest titles and top competitors from around the world.
@@ -649,7 +708,6 @@ export default function TournamentDetails() {
                   </div>
                 </div>
 
-                {/* Tournament Stats */}
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center text-gray-700 dark:text-gray-300">
                     <CalendarClock className="h-5 w-5 text-blue-500 mr-3" />
@@ -687,7 +745,6 @@ export default function TournamentDetails() {
                   </div>
                 </div>
 
-                {/* Action Buttons */}
                 <div className="flex flex-col gap-3 mb-6">
                   <Button 
                     className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5" 
@@ -706,7 +763,6 @@ export default function TournamentDetails() {
                   </Button>
                 </div>
 
-                {/* Social Stats */}
                 <div className="flex justify-around mb-6 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                   <div className="flex flex-col items-center">
                     <Heart className={cn(
