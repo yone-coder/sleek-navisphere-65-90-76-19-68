@@ -258,6 +258,8 @@ export default function TournamentDetails() {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("participants");
+  const [isLiked, setIsLiked] = useState(false);
+  const [showFullImage, setShowFullImage] = useState(false);
 
   const { data: tournament, isLoading } = useQuery({
     queryKey: ["tournament", id],
@@ -272,6 +274,36 @@ export default function TournamentDetails() {
       return data;
     },
   });
+
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+    toast.success(isLiked ? "Removed from favorites" : "Added to favorites");
+  };
+
+  const handleShare = async () => {
+    try {
+      const shareData = {
+        title: tournament?.title || 'Tournament Details',
+        text: `Check out this tournament: ${tournament?.title}`,
+        url: window.location.href,
+      };
+      
+      if (navigator.share) {
+        await navigator.share(shareData);
+        toast.success("Tournament shared successfully!");
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success("Tournament link copied to clipboard!");
+      }
+    } catch (err) {
+      console.error("Error sharing:", err);
+      toast.error("Failed to share tournament");
+    }
+  };
+
+  const handleRegister = () => {
+    toast.success("Registration request sent! Check your email for confirmation.");
+  };
 
   const formatDateRange = (startDate: string, endDate: string) => {
     const start = new Date(startDate);
@@ -319,7 +351,6 @@ export default function TournamentDetails() {
 
   return (
     <div className="min-h-screen animate-fade-in">
-      {/* Custom Header */}
       <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg bg-background/80 border-b border-border/40">
         <div className="h-16 px-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -331,44 +362,73 @@ export default function TournamentDetails() {
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <h1 className="text-lg font-semibold">{tournament?.title || "Tournament Details"}</h1>
+            <h1 className="text-lg font-semibold truncate max-w-[200px]">
+              {tournament?.title || "Tournament Details"}
+            </h1>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-foreground hover:bg-foreground/10"
-          >
-            <Search className="h-5 w-5" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-foreground hover:bg-foreground/10"
+              onClick={handleShare}
+            >
+              <Share2 className="h-5 w-5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className={cn(
+                "text-foreground hover:bg-foreground/10",
+                isLiked && "text-red-500"
+              )}
+              onClick={handleLike}
+            >
+              <Heart className="h-5 w-5" fill={isLiked ? "currentColor" : "none"} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-foreground hover:bg-foreground/10"
+            >
+              <Search className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </div>
 
       <div className="pt-16">
-        {/* Tournament Card */}
         <div className="bg-white dark:bg-gray-800">
-          <div className="relative">
+          <div className="relative group cursor-pointer" onClick={() => setShowFullImage(true)}>
             <img 
               src={tournament?.banner_url || "https://storage.googleapis.com/a1aa/image/BcP3itd2BEfYcAhKkd2UAUs_vV9N3Sl-reNN8Mi1FEo.jpg"}
               alt="Tournament banner" 
-              className="w-full h-48 object-cover"
+              className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
             />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
             <Badge 
-              className={cn("absolute top-4 right-4", getStatusColor(tournament?.status))}
+              className={cn(
+                "absolute top-4 right-4 shadow-lg",
+                getStatusColor(tournament?.status)
+              )}
               variant="default"
             >
               {getStatusText(tournament?.status)}
             </Badge>
-            <Badge className="absolute bottom-4 right-4" variant="default">
+            <Badge 
+              className="absolute bottom-4 right-4 bg-gradient-to-r from-blue-600 to-blue-400 shadow-lg" 
+              variant="default"
+            >
               Sponsored by Google
             </Badge>
             <div className="absolute bottom-2 left-2 flex items-center space-x-1">
               <img
                 src="https://storage.googleapis.com/a1aa/image/RW76eSv1bI06GoXLZPNVQlLvVFuloRbfcxmSiTYAc8E.jpg"
                 alt="Game icon"
-                className="w-8 h-8 rounded-full border border-white"
+                className="w-8 h-8 rounded-full border-2 border-white shadow-lg"
               />
-              <div className="bg-black bg-opacity-50 px-2 py-0.5 rounded backdrop-blur-sm">
-                <span className="text-white text-xs">{tournament?.game || "Chess"}</span>
+              <div className="bg-black/50 px-2 py-0.5 rounded backdrop-blur-sm">
+                <span className="text-white text-xs font-medium">{tournament?.game || "Chess"}</span>
               </div>
             </div>
           </div>
@@ -376,18 +436,41 @@ export default function TournamentDetails() {
           <div className="px-4">
             <div className="py-6">
               <div className="flex justify-between items-center mb-4">
-                <Badge variant="secondary">
-                  Game: {tournament?.game || "Chess"}
-                </Badge>
-                <Button variant="default" size="sm">
-                  <UserPlus className="h-4 w-4 mr-2" />
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary" className="animate-in fade-in-50">
+                    Game: {tournament?.game || "Chess"}
+                  </Badge>
+                  <Badge variant="outline" className="animate-in fade-in-50 delay-100">
+                    Skill Level: Advanced
+                  </Badge>
+                </div>
+                <Button 
+                  variant="default" 
+                  size="sm"
+                  className="group"
+                >
+                  <UserPlus className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
                   Follow
                 </Button>
               </div>
 
-              <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                The premier gaming event featuring the latest titles and top competitors from around the world.
-              </p>
+              <div className="space-y-4 mb-6">
+                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                  The premier gaming event featuring the latest titles and top competitors from around the world.
+                  Join us for an unforgettable experience of competitive gaming at its finest.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {["Competitive", "Professional", "Global", "Live Streamed", "Ranked"].map((tag) => (
+                    <Badge 
+                      key={tag} 
+                      variant="outline" 
+                      className="bg-blue-50 dark:bg-blue-900/20"
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
 
               <div className="space-y-3 mb-6">
                 <div className="flex items-center text-gray-700 dark:text-gray-300">
@@ -407,9 +490,9 @@ export default function TournamentDetails() {
                         {tournament?.current_participants || 0}/{tournament?.max_participants || 0} Participants
                       </span>
                     </div>
-                    <span className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                    <span className="text-sm text-blue-600 dark:text-blue-400 font-medium animate-pulse">
                       {tournament 
-                        ? `${tournament.max_participants - tournament.current_participants} left`
+                        ? `${tournament.max_participants - tournament.current_participants} spots left`
                         : "Loading..."}
                     </span>
                   </div>
@@ -423,46 +506,62 @@ export default function TournamentDetails() {
                 </div>
               </div>
 
-              <div className="flex justify-between mb-6">
-                <div className="flex items-center space-x-2">
-                  <Trophy className="h-5 w-5 text-yellow-500" />
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="flex items-center p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20">
+                  <Trophy className="h-8 w-8 text-yellow-500 mr-3 animate-bounce" />
                   <div>
                     <span className="text-sm text-gray-500 dark:text-gray-400">Prize Pool</span>
-                    <p className="font-bold text-gray-800 dark:text-white">
+                    <p className="font-bold text-xl text-gray-800 dark:text-white">
                       ${tournament?.prize_pool?.toLocaleString() || "0"}
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <DollarSign className="h-5 w-5 text-green-500" />
+                <div className="flex items-center p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
+                  <DollarSign className="h-8 w-8 text-green-500 mr-3" />
                   <div>
                     <span className="text-sm text-gray-500 dark:text-gray-400">Entry Fee</span>
-                    <p className="font-bold text-gray-800 dark:text-white">$75.00</p>
+                    <p className="font-bold text-xl text-gray-800 dark:text-white">$75.00</p>
                   </div>
                 </div>
               </div>
 
-              <div className="flex justify-around mb-6 space-x-4">
-                <div className="flex items-center space-x-1">
-                  <Heart className="h-4 w-4 text-red-500" />
-                  <span className="text-sm text-gray-700 dark:text-gray-300">1.2K</span>
+              <div className="flex justify-around mb-6 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                <div className="flex flex-col items-center">
+                  <Heart className={cn(
+                    "h-6 w-6 mb-1",
+                    isLiked ? "text-red-500 fill-current" : "text-gray-500"
+                  )} />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">1.2K</span>
                 </div>
-                <div className="flex items-center space-x-1">
-                  <MessageSquare className="h-4 w-4 text-blue-500" />
-                  <span className="text-sm text-gray-700 dark:text-gray-300">350</span>
+                <div className="flex flex-col items-center">
+                  <MessageSquare className="h-6 w-6 mb-1 text-blue-500" />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">350</span>
                 </div>
-                <div className="flex items-center space-x-1">
-                  <Share2 className="h-4 w-4 text-green-500" />
-                  <span className="text-sm text-gray-700 dark:text-gray-300">75</span>
+                <div className="flex flex-col items-center">
+                  <Share2 className="h-6 w-6 mb-1 text-green-500" />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">75</span>
                 </div>
-                <div className="flex items-center space-x-1">
-                  <Copy className="h-4 w-4 text-gray-500" />
+                <div className="flex flex-col items-center">
+                  <Trophy className="h-6 w-6 mb-1 text-yellow-500" />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Top 10</span>
                 </div>
               </div>
 
-              <div className="flex mb-6">
-                <Button className="w-full" size="lg">
+              <div className="flex flex-col gap-3 mb-6">
+                <Button 
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5" 
+                  size="lg"
+                  onClick={handleRegister}
+                >
                   Register Now
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full" 
+                  size="lg"
+                  onClick={() => window.open('https://discord.gg/tournament', '_blank')}
+                >
+                  Join Discord Community
                 </Button>
               </div>
 
