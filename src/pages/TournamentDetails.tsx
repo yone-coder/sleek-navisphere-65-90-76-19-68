@@ -640,9 +640,9 @@ export default function TournamentDetails() {
   return (
     <div className="min-h-screen animate-fade-in">
       <div className="fixed top-0 left-0 right-0 z-50">
-        <div className="backdrop-blur-lg bg-background/80 border-b border-border/40">
-          <div className="h-16 px-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
+        <div className="backdrop-blur-lg bg-background/80">
+          <div className="h-14 px-4 flex items-center justify-between border-b border-border/40">
+            <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
                 size="icon"
@@ -651,189 +651,33 @@ export default function TournamentDetails() {
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <div>
-                <h1 className="text-lg font-semibold truncate max-w-[200px]">
-                  {tournament?.title || "Tournament Details"}
-                </h1>
-                <p className="text-xs text-muted-foreground">
-                  {tournament?.current_participants || 0} participants • {getStatusText()}
-                </p>
+              <h1 className="text-base font-medium truncate max-w-[200px]">
+                {tournament?.title || "Tournament Details"}
+              </h1>
+            </div>
+          </div>
+
+          <div className="px-4 py-1">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <div className="w-full overflow-x-auto no-scrollbar">
+                <TabsList className="w-full h-auto inline-flex whitespace-nowrap">
+                  {["overview", "participants", "rules", "matches", "brackets", "faqs", "schedule", "roadmap"].map((tab) => (
+                    <TabsTrigger
+                      key={tab}
+                      value={tab}
+                      className="flex-shrink-0"
+                    >
+                      {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
               </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-foreground hover:bg-foreground/10"
-                onClick={() => toast({
-                  title: "Notifications enabled",
-                  description: "You'll receive updates about this tournament"
-                })}
-              >
-                <Bell className="h-5 w-5" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className={cn(
-                  "text-foreground hover:bg-foreground/10",
-                  isLiked && "text-red-500"
-                )}
-                onClick={handleLike}
-              >
-                <Heart className="h-5 w-5" fill={isLiked ? "currentColor" : "none"} />
-              </Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-foreground hover:bg-foreground/10"
-                  >
-                    <MoreVertical className="h-5 w-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>Tournament Actions</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleShare}>
-                    <Share2 className="mr-2 h-4 w-4" />
-                    Share Tournament
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <MessageSquare className="mr-2 h-4 w-4" />
-                    Join Discord
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-red-500">
-                    Report Issue
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+            </Tabs>
           </div>
-
-          <div className="px-4 py-2 border-t border-border/5">
-            <div className="flex items-center justify-between overflow-x-auto no-scrollbar">
-              <div className="flex items-center gap-4">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="hover:bg-yellow-50 transition-colors"
-                  onClick={() => toast({
-                    title: "Prize Pool Details",
-                    description: `Total prize pool of $${tournament?.prize_pool?.toLocaleString() || "0"} will be distributed among top performers.`
-                  })}
-                >
-                  <Trophy className="h-4 w-4 text-yellow-500 mr-2" />
-                  <span>${tournament?.prize_pool?.toLocaleString() || "0"}</span>
-                </Button>
-                <Separator orientation="vertical" className="h-4" />
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  className="hover:bg-blue-50 transition-colors"
-                  onClick={() => toast({
-                    title: "Participant Information",
-                    description: `${tournament?.current_participants || 0} players have registered out of ${tournament?.max_participants || 0} total spots.`
-                  })}
-                >
-                  <Users className="h-4 w-4 text-blue-500 mr-2" />
-                  <span>{tournament?.current_participants || 0}/{tournament?.max_participants || 0}</span>
-                </Button>
-                <Separator orientation="vertical" className="h-4" />
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  className="hover:bg-green-50 transition-colors"
-                  onClick={() => toast({
-                    title: "Tournament Schedule",
-                    description: tournament ? `Tournament runs from ${format(new Date(tournament.start_date), 'PPP')} to ${format(new Date(tournament.end_date), 'PPP')}` : "Dates to be announced"
-                  })}
-                >
-                  <CalendarClock className="h-4 w-4 text-green-500 mr-2" />
-                  <span>{tournament && formatDateRange(tournament.start_date, tournament.end_date)}</span>
-                </Button>
-              </div>
-              <Badge 
-                variant="secondary" 
-                className={cn(
-                  "ml-4 whitespace-nowrap animate-pulse",
-                  getAvailableSpots() <= 5 ? "bg-red-100 text-red-800 font-semibold" : ""
-                )}
-              >
-                {getSpotsText()}
-              </Badge>
-            </div>
-          </div>
-
-          <div className="px-4 py-2 border-t border-border/5 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                className={cn(
-                  "text-foreground hover:bg-foreground/10",
-                  notificationsEnabled && "text-blue-500"
-                )}
-                onClick={() => {
-                  setNotificationsEnabled(!notificationsEnabled);
-                  toast({
-                    title: notificationsEnabled ? "Notifications disabled" : "Notifications enabled",
-                    description: notificationsEnabled ? 
-                      "You won't receive updates about this tournament" :
-                      "You'll receive updates about this tournament",
-                    duration: 2000,
-                  });
-                }}
-              >
-                <Bell className="h-5 w-5" fill={notificationsEnabled ? "currentColor" : "none"} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className={cn(
-                  "text-foreground hover:bg-foreground/10",
-                  isLiked && "text-red-500"
-                )}
-                onClick={handleLike}
-              >
-                <Heart className="h-5 w-5" fill={isLiked ? "currentColor" : "none"} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleShare}
-              >
-                <Share2 className="h-5 w-5 mr-2" />
-                Share
-              </Button>
-            </div>
-            <RegisterButton />
-          </div>
-        </div>
-
-        <div className="px-4 pb-2 backdrop-blur-lg bg-background/80">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <div className="w-full overflow-x-auto no-scrollbar">
-              <TabsList className="w-full h-auto inline-flex whitespace-nowrap">
-                {["overview", "participants", "rules", "matches", "brackets", "faqs", "schedule", "roadmap"].map((tab) => (
-                  <TabsTrigger
-                    key={tab}
-                    value={tab}
-                    className="flex-shrink-0"
-                  >
-                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </div>
-          </Tabs>
         </div>
       </div>
 
-      <div className="pt-48">
+      <div className="pt-24">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsContent value="overview">
             <div className="space-y-6">
@@ -974,34 +818,20 @@ export default function TournamentDetails() {
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 p-4 backdrop-blur-lg bg-background/80 border-t border-border/40">
-        <div className="px-4 pt-2">
-          <div className="flex items-center justify-between text-sm mb-2">
-            <div className="flex items-center gap-2">
-              <Users className="h-4 w-4 text-muted-foreground" />
-              <span className="text-muted-foreground">
-                {tournament?.current_participants || 0}/{tournament?.max_participants || 0} Participants
-              </span>
-            </div>
-            <Badge 
-              variant="secondary" 
-              className={cn(
-                "animate-pulse",
-                getAvailableSpots() <= 0 ? "bg-red-100 text-red-800" : ""
-              )}
-            >
-              {getAvailableSpots() <= 0 ? "Tournament Full" : `${getAvailableSpots()} spots left`}
-            </Badge>
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <Users className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm text-muted-foreground">
+              {tournament?.current_participants || 0}/{tournament?.max_participants || 0}
+            </span>
           </div>
-          <Progress 
-            value={getParticipantProgress()} 
-            className={cn(
-              "h-1.5 transition-all duration-500", 
-              getParticipantProgressColor()
-            )} 
-          />
-        </div>
-        <div className="p-4">
-          <RegisterButton />
+          <Button 
+            size="sm"
+            className="bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white gap-2"
+          >
+            <Trophy className="h-4 w-4" />
+            Register Now
+          </Button>
         </div>
       </div>
     </div>
