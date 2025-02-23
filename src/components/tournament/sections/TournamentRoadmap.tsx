@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { RoadMap, CheckCircle2, Clock, AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { Map, CheckCircle2, Clock, AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -170,7 +170,7 @@ export function TournamentRoadmap() {
     <div className="space-y-8 p-4">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold flex items-center gap-2">
-          <RoadMap className="h-6 w-6 text-blue-500" />
+          <Map className="h-6 w-6 text-blue-500" />
           Tournament Roadmap
         </h2>
         <div className="flex gap-2">
