@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { 
   Search, 
@@ -182,7 +182,7 @@ export function ParticipantsTable() {
             className="pl-8 h-9"
           />
         </div>
-        <ScrollArea className="w-auto max-w-[300px] whitespace-nowrap">
+        <ScrollArea className="w-auto max-w-[300px]" orientation="horizontal">
           <div className="flex items-center gap-1 px-1">
             <Button
               variant="outline"
@@ -211,6 +211,7 @@ export function ParticipantsTable() {
               </Button>
             ))}
           </div>
+          <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </div>
 
