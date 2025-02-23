@@ -38,6 +38,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TournamentBrackets } from "@/components/tournament/sections/TournamentBrackets";
+import { TournamentRoadmap } from "@/components/tournament/sections/TournamentRoadmap";
 
 const sampleMatches: Match[] = [
   {
@@ -795,7 +796,11 @@ export default function TournamentDetails() {
                   <TournamentBrackets />
                 </TabsContent>
 
-                {["faqs", "schedule", "roadmap"].map((tab) => (
+                <TabsContent value="roadmap">
+                  <TournamentRoadmap />
+                </TabsContent>
+
+                {["faqs", "schedule"].map((tab) => (
                   <TabsContent key={tab} value={tab}>
                     <div className="p-4 text-center text-gray-500">
                       {tab.charAt(0).toUpperCase() + tab.slice(1)} content coming soon...
