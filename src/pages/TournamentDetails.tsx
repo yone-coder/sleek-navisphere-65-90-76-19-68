@@ -275,9 +275,42 @@ export default function TournamentDetails() {
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <h1 className="text-base font-medium truncate max-w-[200px]">
-                {tournament?.title || "Tournament Details"}
-              </h1>
+              <div>
+                <h1 className="text-base font-medium truncate max-w-[200px]">
+                  {tournament?.title || "Tournament Details"}
+                </h1>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <CalendarClock className="h-3 w-3" />
+                  <span>
+                    {tournament 
+                      ? formatDateRange(tournament.start_date, tournament.end_date)
+                      : "Loading..."}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="text-right">
+                <div className="flex items-center gap-1 text-xs text-yellow-500">
+                  <Trophy className="h-3 w-3" />
+                  <span>${tournament?.prize_pool?.toLocaleString() || "0"}</span>
+                </div>
+                <div className="flex items-center gap-1 text-xs text-green-500">
+                  <DollarSign className="h-3 w-3" />
+                  <span>Free Entry</span>
+                </div>
+              </div>
+              <Badge 
+                variant="outline"
+                className={cn(
+                  "uppercase text-xs",
+                  tournament?.status === "in-progress" && "bg-green-50 text-green-700 dark:bg-green-900/20",
+                  tournament?.status === "upcoming" && "bg-blue-50 text-blue-700 dark:bg-blue-900/20",
+                  tournament?.status === "completed" && "bg-gray-50 text-gray-700 dark:bg-gray-900/20"
+                )}
+              >
+                {tournament?.status || "Loading"}
+              </Badge>
             </div>
           </div>
 
