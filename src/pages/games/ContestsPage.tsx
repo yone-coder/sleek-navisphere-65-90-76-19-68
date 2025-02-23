@@ -158,7 +158,7 @@ export default function ContestsPage() {
   return (
     <div className="flex-1 overflow-auto bg-background">
       <div className="pt-4 pb-24">
-        {/* New Tournament Cards Section */}
+        {/* Popular Tournaments Section */}
         <div className="mb-8">
           <div className="flex items-center justify-between px-4 mb-4">
             <h2 className="text-xl font-medium text-foreground">Popular Tournaments</h2>
@@ -236,7 +236,7 @@ export default function ContestsPage() {
             <div className="flex px-4 gap-4 pb-4">
               {contests.map(contest => (
                 <div key={contest.id} className="flex-none w-[300px]">
-                  <div className="relative aspect-[16/9] rounded-xl overflow-hidden mb-3">
+                  <div className="relative aspect-[16/9] rounded-xl overflow-hidden">
                     <img
                       src={contest.thumbnail}
                       alt={contest.title}
@@ -261,27 +261,6 @@ export default function ContestsPage() {
                         </Badge>
                       </div>
                       <h3 className="text-lg font-semibold text-white truncate">{contest.title}</h3>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <img
-                      src={contest.icon}
-                      alt={`${contest.title} icon`}
-                      className="w-12 h-12 rounded-xl object-cover"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <Badge variant="secondary" className="bg-purple-500/10 text-purple-500 hover:bg-purple-500/20">
-                          {contest.category[0]}
-                        </Badge>
-                        <Badge variant="secondary" className="bg-blue-500/10 text-blue-500 hover:bg-blue-500/20">
-                          {contest.category[1]}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
-                        <Crown className="w-4 h-4 text-yellow-500" />
-                        <span>Starts in {contest.startsIn}</span>
-                      </div>
                     </div>
                   </div>
                 </div>
