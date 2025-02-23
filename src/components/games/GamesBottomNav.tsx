@@ -1,38 +1,26 @@
 
-import { Home, Compass, Radio, Wallet2, User } from "lucide-react";
+import { Gamepad2, Trophy, Compass } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   {
-    icon: Home,
-    label: "Home",
+    icon: Gamepad2,
+    label: "Games",
     path: "/games-pages",
     color: "from-blue-500 to-indigo-500"
+  },
+  {
+    icon: Trophy,
+    label: "Contest",
+    path: "/games-pages/contest",
+    color: "from-purple-500 to-pink-500"
   },
   {
     icon: Compass,
     label: "Explore",
     path: "/games-pages/explore",
-    color: "from-purple-500 to-pink-500"
-  },
-  {
-    icon: Radio,
-    label: "Live",
-    path: "/games-pages/live",
-    color: "from-red-500 to-orange-500"
-  },
-  {
-    icon: Wallet2,
-    label: "Wallet",
-    path: "/games-pages/wallet",
     color: "from-emerald-500 to-green-500"
-  },
-  {
-    icon: User,
-    label: "Profile",
-    path: "/games-pages/profile",
-    color: "from-amber-500 to-yellow-500"
   }
 ];
 
