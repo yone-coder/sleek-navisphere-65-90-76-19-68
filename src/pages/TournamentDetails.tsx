@@ -1,15 +1,61 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Loader2 } from "lucide-react";
+import { 
+  Loader2, 
+  ChevronUp, 
+  ChevronDown, 
+  ScrollText as Scroll
+} from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { format } from "date-fns";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { TournamentHeader } from "@/components/tournament/header/TournamentHeader";
 import { TournamentBanner } from "@/components/tournament/banner/TournamentBanner";
 import { TournamentStats } from "@/components/tournament/sections/TournamentStats";
 import { TournamentDescription } from "@/components/tournament/sections/TournamentDescription";
+import { cn } from "@/lib/utils";
+
+interface Match {
+  id: number;
+  championship: string;
+  phase: string;
+  status: string;
+  date: string;
+  time: string;
+  venue: string;
+  location: string;
+  opponents: Array<{
+    name: string;
+    photo: string;
+    country: string;
+    city: string;
+    rank: number;
+    stats: string;
+    wins: number;
+    losses: number;
+  }>;
+  spectators: number;
+  likes: number;
+  comments: number;
+  predictions: {
+    firstPlayer: number;
+    secondPlayer: number;
+  };
+}
 
 const sampleMatches: Match[] = [
   {
