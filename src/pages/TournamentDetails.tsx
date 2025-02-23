@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -357,7 +358,7 @@ export default function TournamentDetails() {
         </div>
       </div>
 
-      <div className="pt-24 pb-32">
+      <div className="pt-24 pb-48">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsContent value="overview">
             <div className="space-y-6">
