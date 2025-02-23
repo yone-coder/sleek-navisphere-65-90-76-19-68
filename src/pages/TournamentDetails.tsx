@@ -6,9 +6,6 @@ import { Match } from "@/components/matches/types";
 import { 
   ArrowLeft, 
   Search, 
-  Share2, 
-  Heart, 
-  MessageSquare, 
   Trophy, 
   DollarSign, 
   Users,
@@ -418,10 +415,7 @@ export default function TournamentDetails() {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("overview");
-  const [isLiked, setIsLiked] = useState(false);
-  const [showFullImage, setShowFullImage] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const { toast } = useToast();
 
   const { data: tournament, isLoading } = useQuery({
@@ -437,73 +431,6 @@ export default function TournamentDetails() {
       return data;
     },
   });
-
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    toast({
-      title: isLiked ? "Removed from favorites" : "Added to favorites",
-      duration: 2000,
-    });
-  };
-
-  const handleShare = async () => {
-    try {
-      const shareData = {
-        title: tournament?.title || 'Tournament Details',
-        text: `Check out this tournament: ${tournament?.title}`,
-        url: window.location.href,
-      };
-      
-      if (navigator.share) {
-        await navigator.share(shareData);
-        toast({
-          title: "Tournament shared successfully!",
-          duration: 2000,
-        });
-      } else {
-        await navigator.clipboard.writeText(window.location.href);
-        toast({
-          title: "Tournament link copied to clipboard!",
-          duration: 2000,
-        });
-      }
-    } catch (err) {
-      console.error("Error sharing:", err);
-      toast({
-        title: "Failed to share tournament",
-        variant: "destructive",
-        duration: 2000,
-      });
-    }
-  };
-
-  const handleRegister = () => {
-    if (!tournament) {
-      toast({
-        title: "Error",
-        description: "Tournament details not available",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (getAvailableSpots() <= 0) {
-      toast({
-        title: "Tournament Full",
-        description: "No spots available. Join the waitlist instead?",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    toast({
-      title: "Registration Successful! 🎉",
-      description: "Check your email for confirmation and next steps.",
-      duration: 5000,
-    });
-
-    setNotificationsEnabled(true);
-  };
 
   const formatDateRange = (startDate: string, endDate: string) => {
     const start = new Date(startDate);
@@ -587,7 +514,7 @@ export default function TournamentDetails() {
         <div className="space-y-4 py-4">
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">Prize Pool:</span>
-            <span className="font-semibold">{tournament?.prize_pool ? `$${tournament.prize_pool.toLocaleString()}` : 'Free'}</span>
+            <span className="font-semibold">{tournament?.prize_pool ? `$${tournament?.prize_pool.toLocaleString()}` : 'Free'}</span>
           </div>
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">Available Spots:</span>
@@ -612,7 +539,31 @@ export default function TournamentDetails() {
           <div className="space-y-2">
             <Button 
               className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500"
-              onClick={handleRegister}
+              onClick={() => {
+                if (!tournament) {
+                  toast({
+                    title: "Error",
+                    description: "Tournament details not available",
+                    variant: "destructive",
+                  });
+                  return;
+                }
+            
+                if (getAvailableSpots() <= 0) {
+                  toast({
+                    title: "Tournament Full",
+                    description: "No spots available. Join the waitlist instead?",
+                    variant: "destructive",
+                  });
+                  return;
+                }
+            
+                toast({
+                  title: "Registration Successful! 🎉",
+                  description: "Check your email for confirmation and next steps.",
+                  duration: 5000,
+                });
+              }}
             >
               Confirm Registration
             </Button>
@@ -656,7 +607,7 @@ export default function TournamentDetails() {
                   {tournament?.title || "Tournament Details"}
                 </h1>
                 <p className="text-xs text-muted-foreground">
-                  {tournament?.current_participants || 0} participants • {getStatusText()}
+                  {tournament?.current_participants || 0} participants • {getStatusText(tournament?.status)}
                 </p>
               </div>
             </div>
@@ -718,68 +669,23 @@ export default function TournamentDetails() {
             </div>
           </div>
 
-          <div className="px-4 py-2 border-t border-border/5 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                className={cn(
-                  "text-foreground hover:bg-foreground/10",
-                  notificationsEnabled && "text-blue-500"
-                )}
-                onClick={() => {
-                  setNotificationsEnabled(!notificationsEnabled);
-                  toast({
-                    title: notificationsEnabled ? "Notifications disabled" : "Notifications enabled",
-                    description: notificationsEnabled ? 
-                      "You won't receive updates about this tournament" :
-                      "You'll receive updates about this tournament",
-                    duration: 2000,
-                  });
-                }}
-              >
-                <Bell className="h-5 w-5" fill={notificationsEnabled ? "currentColor" : "none"} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className={cn(
-                  "text-foreground hover:bg-foreground/10",
-                  isLiked && "text-red-500"
-                )}
-                onClick={handleLike}
-              >
-                <Heart className="h-5 w-5" fill={isLiked ? "currentColor" : "none"} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleShare}
-              >
-                <Share2 className="h-5 w-5 mr-2" />
-                Share
-              </Button>
-            </div>
-            <RegisterButton />
+          <div className="px-4 pb-2">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <div className="w-full overflow-x-auto no-scrollbar">
+                <TabsList className="w-full h-auto inline-flex whitespace-nowrap">
+                  {["overview", "participants", "rules", "matches", "brackets", "faqs", "schedule", "roadmap"].map((tab) => (
+                    <TabsTrigger
+                      key={tab}
+                      value={tab}
+                      className="flex-shrink-0"
+                    >
+                      {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </div>
+            </Tabs>
           </div>
-        </div>
-
-        <div className="px-4 pb-2 backdrop-blur-lg bg-background/80">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <div className="w-full overflow-x-auto no-scrollbar">
-              <TabsList className="w-full h-auto inline-flex whitespace-nowrap">
-                {["overview", "participants", "rules", "matches", "brackets", "faqs", "schedule", "roadmap"].map((tab) => (
-                  <TabsTrigger
-                    key={tab}
-                    value={tab}
-                    className="flex-shrink-0"
-                  >
-                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </div>
-          </Tabs>
         </div>
       </div>
 
@@ -866,6 +772,66 @@ export default function TournamentDetails() {
 
                 <div className="flex justify-around mb-6 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                   <div className="flex flex-col items-center">
-                    <Heart className={cn(
-                      "h-6 w-6 mb-1",
-                      isLiked ? "text-red-50
+                    <Trophy className="h-6 w-6 mb-1 text-yellow-500" />
+                    <span className="text-sm text-gray-600 dark:text-gray-300">Prize Pool</span>
+                    <span className="font-semibold text-gray-800 dark:text-white">
+                      ${tournament?.prize_pool?.toLocaleString() || "0"}
+                    </span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <Users className="h-6 w-6 mb-1 text-blue-500" />
+                    <span className="text-sm text-gray-600 dark:text-gray-300">Participants</span>
+                    <span className="font-semibold text-gray-800 dark:text-white">
+                      {tournament?.current_participants || 0}/{tournament?.max_participants || 0}
+                    </span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <CalendarClock className="h-6 w-6 mb-1 text-green-500" />
+                    <span className="text-sm text-gray-600 dark:text-gray-300">Event Date</span>
+                    <span className="font-semibold text-gray-800 dark:text-white">
+                      {tournament ? formatDateRange(tournament.start_date, tournament.end_date) : "TBA"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">About the Event</h3>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                    Join us for the ultimate gaming showdown! This tournament brings together the best players from around the globe to compete in intense matches and claim the top prize. Whether you're a seasoned pro or just starting out, there's something for everyone at this event.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="participants">
+            <div className="px-4">
+              <ParticipantsTable />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="rules">
+            <div className="px-4">
+              <TournamentRulesCard />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="matches">
+            <div className="px-4">
+              <MatchesSection matches={sampleMatches} />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="brackets">
+            <div className="px-4">
+              <TournamentBrackets />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="faqs">
+            <div className="px-4">
+              <div className="space-y-4">
+                <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>
+                <div className="space-y-3">
+                  <div className="text-lg font-semibold">What is the prize pool distribution?</div>
+                  <p className="text-gray-600">The prize pool is distributed among the top 3 winners as follows: 50% for 1st place, 30% for 2nd place, and 20% for 3rd
