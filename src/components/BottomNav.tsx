@@ -12,6 +12,11 @@ export const BottomNav = () => {
   const isMobile = useIsMobile();
   const { t } = useLanguage();
 
+  // Hide the main bottom nav on games pages
+  if (location.pathname.includes('games-pages')) {
+    return null;
+  }
+
   const navItems = [
     { 
       icon: Home, 

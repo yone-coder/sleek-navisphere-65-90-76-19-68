@@ -21,6 +21,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+// Add this import at the top with other imports
+import { GamesBottomNav } from "@/components/games/GamesBottomNav";
+
 interface Game {
   id: string;
   title: string;
@@ -616,6 +619,9 @@ export default function GamesPages() {
         </div>
       </div>
 
+      {/* Add the new GamesBottomNav */}
+      <GamesBottomNav />
+      
       <GameSearchOverlay 
         isOpen={isSearchOpen} 
         onClose={() => setIsSearchOpen(false)} 
