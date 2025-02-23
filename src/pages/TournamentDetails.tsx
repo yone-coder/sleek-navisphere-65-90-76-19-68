@@ -574,7 +574,7 @@ export default function TournamentDetails() {
           className="bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white gap-2 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
         >
           <Trophy className="h-4 w-4" />
-          Register Now {tournament?.entry_fee ? `($${tournament.entry_fee})` : '(Free)'}
+          Register Now {tournament?.prize_pool ? `($${tournament.prize_pool})` : '(Free)'}
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -586,8 +586,8 @@ export default function TournamentDetails() {
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Registration Fee:</span>
-            <span className="font-semibold">{tournament?.entry_fee ? `$${tournament.entry_fee}` : 'Free'}</span>
+            <span className="text-muted-foreground">Prize Pool:</span>
+            <span className="font-semibold">{tournament?.prize_pool ? `$${tournament.prize_pool.toLocaleString()}` : 'Free'}</span>
           </div>
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">Available Spots:</span>
