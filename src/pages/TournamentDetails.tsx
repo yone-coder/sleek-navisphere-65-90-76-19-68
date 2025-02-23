@@ -296,29 +296,17 @@ export default function TournamentDetails() {
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="text-right">
-                <div className="flex items-center gap-1 text-xs text-yellow-500">
-                  <Trophy className="h-3 w-3" />
-                  <span>{tournament ? formatPrizePool(tournament.prize_pool) : "$0"}</span>
-                </div>
-                <div className="flex items-center gap-1 text-xs text-green-500">
-                  <DollarSign className="h-3 w-3" />
-                  <span>Free Entry</span>
-                </div>
-              </div>
-              <Badge 
-                variant="outline"
-                className={cn(
-                  "uppercase text-xs",
-                  tournament?.status === "in-progress" && "bg-green-50 text-green-700 dark:bg-green-900/20",
-                  tournament?.status === "upcoming" && "bg-blue-50 text-blue-700 dark:bg-blue-900/20",
-                  tournament?.status === "completed" && "bg-gray-50 text-gray-700 dark:bg-gray-900/20"
-                )}
-              >
-                {tournament?.status || "Loading"}
-              </Badge>
-            </div>
+            <Badge 
+              variant="outline"
+              className={cn(
+                "uppercase text-xs",
+                tournament?.status === "in-progress" && "bg-green-50 text-green-700 dark:bg-green-900/20",
+                tournament?.status === "upcoming" && "bg-blue-50 text-blue-700 dark:bg-blue-900/20",
+                tournament?.status === "completed" && "bg-gray-50 text-gray-700 dark:bg-gray-900/20"
+              )}
+            >
+              {tournament?.status || "Loading"}
+            </Badge>
           </div>
 
           <div className="px-4 py-1">
