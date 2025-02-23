@@ -1,29 +1,64 @@
-
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { 
+  ChevronLeft, Search, Bell, Sparkles,
+  Gift, Crown, Filter, Command, Settings, 
+  Gamepad2, Zap, Puzzle, Star, ArrowRight,
+  MoreVertical, Download
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { GameSearchOverlay } from "@/components/search/GameSearchOverlay";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+// Add this import at the top with other imports
 import { GamesBottomNav } from "@/components/games/GamesBottomNav";
-import { GamesHeader } from "@/components/games/GamesHeader";
-import { GamesCategoryNav } from "@/components/games/GamesCategoryNav";
-import { EventsSection } from "@/components/games/EventsSection";
-import { SponsoredGamesSection } from "@/components/games/SponsoredGamesSection";
-import { PopularGamesSection } from "@/components/games/PopularGamesSection";
-import { CategorySection } from "@/components/games/CategorySection";
-import { GameListItem } from "@/components/games/GameListItem";
-import { Game, GameEvent } from "@/components/games/types";
+
+interface Game {
+  id: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  icon?: string;
+  category: string[];
+  rating: number;
+  downloads: string;
+  size?: string;
+  hasAds?: boolean;
+  inAppPurchases?: boolean;
+  route?: string;
+  updateInfo?: string;
+}
+
+interface GameEvent {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  gameTitle: string;
+  gameIcon: string;
+  developer: string;
+  rating: number;
+  endsIn: string;
+}
 
 const games: Game[] = [
   {
     id: "chess",
     title: "Chess Master Pro",
     description: "Challenge your mind with the ultimate chess experience",
-    coverImage: "https://images.unsplash.com/photo-1582562124811-c09040d0a901",
-    creatorImage: "https://images.unsplash.com/photo-1586165368502-1bad197a6461",
+    thumbnail: "https://images.unsplash.com/photo-1582562124811-c09040d0a901",
     icon: "https://images.unsplash.com/photo-1586165368502-1bad197a6461",
-    verified: true,
-    type: ["Board", "Strategy"],
-    likes: 1000,
-    comments: 100,
-    shares: 50,
     category: ["Board", "Strategy"],
     rating: 4.8,
     downloads: "1M+",
@@ -37,14 +72,8 @@ const games: Game[] = [
     id: "morpion",
     title: "Tic Tac Toe",
     description: "Classic three-in-a-row with multiplayer",
-    coverImage: "https://images.unsplash.com/photo-1498936178812-4b2e558d2937",
-    creatorImage: "https://images.unsplash.com/photo-1611996575749-79a3a250f948",
+    thumbnail: "https://images.unsplash.com/photo-1498936178812-4b2e558d2937",
     icon: "https://images.unsplash.com/photo-1611996575749-79a3a250f948",
-    verified: false,
-    type: ["Casual", "Strategy"],
-    likes: 500,
-    comments: 200,
-    shares: 100,
     category: ["Casual", "Strategy"],
     rating: 4.5,
     downloads: "500K+",
@@ -58,14 +87,8 @@ const games: Game[] = [
     id: "word-puzzle",
     title: "Word Masters",
     description: "Brain-teasing word puzzles",
-    coverImage: "https://images.unsplash.com/photo-1466921583968-f07aa80c526e",
-    creatorImage: "https://images.unsplash.com/photo-1544396821-4dd40b938ad3",
+    thumbnail: "https://images.unsplash.com/photo-1466921583968-f07aa80c526e",
     icon: "https://images.unsplash.com/photo-1544396821-4dd40b938ad3",
-    verified: true,
-    type: ["Word", "Puzzle"],
-    likes: 300,
-    comments: 150,
-    shares: 75,
     category: ["Word", "Puzzle"],
     rating: 4.3,
     downloads: "100K+",
@@ -77,14 +100,8 @@ const games: Game[] = [
     id: "sports-game",
     title: "Ultimate Football",
     description: "Realistic football simulation",
-    coverImage: "https://images.unsplash.com/photo-1552667466-07770ae110d0",
-    creatorImage: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55",
+    thumbnail: "https://images.unsplash.com/photo-1552667466-07770ae110d0",
     icon: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55",
-    verified: true,
-    type: ["Sports", "Simulation"],
-    likes: 800,
-    comments: 300,
-    shares: 150,
     category: ["Sports", "Simulation"],
     rating: 4.7,
     downloads: "5M+",
@@ -124,14 +141,8 @@ const sponsoredGames: Game[] = [
     id: "candy-crush",
     title: "Candy Crush Soda Saga",
     description: "Match candies in this tasty puzzle adventure",
-    coverImage: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
-    creatorImage: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
+    thumbnail: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
     icon: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
-    verified: true,
-    type: ["Casual", "Puzzle"],
-    likes: 1200,
-    comments: 250,
-    shares: 125,
     category: ["Casual", "Puzzle"],
     rating: 4.5,
     downloads: "1B+",
@@ -143,14 +154,8 @@ const sponsoredGames: Game[] = [
     id: "royal-match",
     title: "Royal Match",
     description: "Match-3 puzzle with royal twists",
-    coverImage: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
-    creatorImage: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
+    thumbnail: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
     icon: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
-    verified: true,
-    type: ["Casual", "Puzzle"],
-    likes: 1500,
-    comments: 275,
-    shares: 175,
     category: ["Casual", "Puzzle"],
     rating: 4.7,
     downloads: "100M+",
@@ -162,14 +167,8 @@ const sponsoredGames: Game[] = [
     id: "duolingo",
     title: "Duolingo: Language Lessons",
     description: "Learn languages for free",
-    coverImage: "https://images.unsplash.com/photo-1661875576025-0e5d61dec14f",
-    creatorImage: "https://images.unsplash.com/photo-1661875576025-0e5d61dec14f",
+    thumbnail: "https://images.unsplash.com/photo-1661875576025-0e5d61dec14f",
     icon: "https://images.unsplash.com/photo-1661875576025-0e5d61dec14f",
-    verified: true,
-    type: ["Education", "Language"],
-    likes: 1800,
-    comments: 300,
-    shares: 180,
     category: ["Education", "Language"],
     rating: 4.7,
     downloads: "500M+",
@@ -184,14 +183,8 @@ const popularGames: Game[] = [
     id: "free-fire-naruto",
     title: "Free Fire x NARUTO SHIPPUDEN",
     description: "Battle other players around the world in a survival shooter",
-    coverImage: "https://images.unsplash.com/photo-1612404730960-5c71577fca11",
-    creatorImage: "https://images.unsplash.com/photo-1612404730960-5c71577fca11",
+    thumbnail: "https://images.unsplash.com/photo-1612404730960-5c71577fca11",
     icon: "https://images.unsplash.com/photo-1612404730960-5c71577fca11",
-    verified: true,
-    type: ["Action", "Shooter"],
-    likes: 1300,
-    comments: 280,
-    shares: 135,
     category: ["Action", "Shooter"],
     rating: 4.4,
     downloads: "100M+",
@@ -201,14 +194,8 @@ const popularGames: Game[] = [
     id: "mobile-legends",
     title: "Mobile Legends: Bang Bang",
     description: "Play the 5v5 MOBA game on mobile with players worldwide.",
-    coverImage: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
-    creatorImage: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
+    thumbnail: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
     icon: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
-    verified: true,
-    type: ["Strategy", "MOBA"],
-    likes: 1400,
-    comments: 290,
-    shares: 145,
     category: ["Strategy", "MOBA"],
     rating: 3.9,
     downloads: "500M+",
@@ -218,14 +205,8 @@ const popularGames: Game[] = [
     id: "candy-crush",
     title: "Candy Crush Saga",
     description: "Match 3 candies to blast sugar! Spread jam & master the sweetest of puzzle games",
-    coverImage: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
-    creatorImage: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
+    thumbnail: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
     icon: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
-    verified: true,
-    type: ["Casual", "Puzzle"],
-    likes: 1500,
-    comments: 300,
-    shares: 155,
     category: ["Casual", "Puzzle"],
     rating: 4.6,
     downloads: "1B+",
@@ -235,14 +216,8 @@ const popularGames: Game[] = [
     id: "pubg-mobile",
     title: "PUBG MOBILE: Miramar",
     description: "Battle royale game with intense multiplayer combat",
-    coverImage: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
-    creatorImage: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
+    thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
     icon: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
-    verified: true,
-    type: ["Action", "Shooter"],
-    likes: 1600,
-    comments: 310,
-    shares: 165,
     category: ["Action", "Shooter"],
     rating: 4.2,
     downloads: "1B+",
@@ -252,14 +227,8 @@ const popularGames: Game[] = [
     id: "subway-surfers",
     title: "Subway Surfers",
     description: "Run and dodge trains in this endless runner game",
-    coverImage: "https://images.unsplash.com/photo-1533236897111-3e94666b2edf",
-    creatorImage: "https://images.unsplash.com/photo-1533236897111-3e94666b2edf",
+    thumbnail: "https://images.unsplash.com/photo-1533236897111-3e94666b2edf",
     icon: "https://images.unsplash.com/photo-1533236897111-3e94666b2edf",
-    verified: true,
-    type: ["Casual", "Runner"],
-    likes: 1700,
-    comments: 320,
-    shares: 175,
     category: ["Casual", "Runner"],
     rating: 4.5,
     downloads: "1B+",
@@ -269,14 +238,8 @@ const popularGames: Game[] = [
     id: "genshin-impact",
     title: "Genshin Impact",
     description: "Open-world action RPG with stunning visuals",
-    coverImage: "https://images.unsplash.com/photo-1624085568108-36410cef3028",
-    creatorImage: "https://images.unsplash.com/photo-1624085568108-36410cef3028",
+    thumbnail: "https://images.unsplash.com/photo-1624085568108-36410cef3028",
     icon: "https://images.unsplash.com/photo-1624085568108-36410cef3028",
-    verified: true,
-    type: ["RPG", "Adventure"],
-    likes: 1800,
-    comments: 330,
-    shares: 185,
     category: ["RPG", "Adventure"],
     rating: 4.3,
     downloads: "500M+",
@@ -309,48 +272,354 @@ const categories = [
 ];
 
 export default function GamesPages() {
-  const [activeCategory, setActiveCategory] = useState(categories[0]);
-  const [searchQuery] = useState("");
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("For you");
+  const [searchQuery, setSearchQuery] = useState("");
   const [notifications] = useState(3);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const renderRating = (rating: number) => {
+    return (
+      <div className="flex items-center gap-1">
+        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+        <span className="text-sm font-medium">{rating}</span>
+      </div>
+    );
+  };
+
+  const CategorySection = ({ title, games }: { title: string, games: Game[] }) => (
+    <div className="mb-8">
+      <div className="flex items-center justify-between px-4 mb-4">
+        <h2 className="text-xl font-medium text-gray-900">{title}</h2>
+        <Button variant="ghost" size="sm" className="text-blue-600 font-medium">
+          More <ArrowRight className="w-4 h-4 ml-1" />
+        </Button>
+      </div>
+      
+      <ScrollArea className="w-full" type="scroll">
+        <div className="flex px-4 gap-4 pb-4">
+          {games.map(game => (
+            <div key={game.id} className="flex-none w-[280px]">
+              <div 
+                className="relative aspect-video rounded-xl overflow-hidden mb-3 cursor-pointer"
+                onClick={() => game.route && navigate(game.route)}
+              >
+                <img
+                  src={game.thumbnail}
+                  alt={game.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex gap-3">
+                <img
+                  src={game.icon}
+                  alt={`${game.title} icon`}
+                  className="w-12 h-12 rounded-xl object-cover"
+                />
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-medium text-gray-900 truncate">{game.title}</h3>
+                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <span>{game.category[0]}</span>
+                    <span>•</span>
+                    <span>{game.size}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {renderRating(game.rating)}
+                    <span className="text-xs text-gray-500">({game.downloads})</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
+    </div>
+  );
+
+  const EventsSection = () => (
+    <div className="mb-8">
+      <h2 className="text-2xl font-medium text-gray-900 px-4 mb-4">Events happening now</h2>
+      <ScrollArea className="w-full" type="scroll">
+        <div className="flex px-4 gap-4 pb-4">
+          {gameEvents.map(event => (
+            <div key={event.id} className="flex-none w-[340px]">
+              <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-purple-500 to-pink-500">
+                <div className="absolute top-3 left-3 z-10">
+                  <Badge className="bg-black/50 text-white border-none backdrop-blur-sm">
+                    Ends in {event.endsIn}
+                  </Badge>
+                </div>
+                <img
+                  src={event.image}
+                  alt={event.title}
+                  className="w-full aspect-[5/3] object-cover mix-blend-overlay"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                  <h3 className="text-xl font-bold mb-1">{event.title}</h3>
+                  <p className="text-sm opacity-90 line-clamp-2 mb-2">
+                    {event.description}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 mt-3">
+                <img
+                  src={event.gameIcon}
+                  alt={event.gameTitle}
+                  className="w-12 h-12 rounded-xl"
+                />
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-medium text-gray-900 truncate">
+                    {event.gameTitle}
+                  </h4>
+                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <span className="truncate">{event.developer}</span>
+                    <span>•</span>
+                    <div className="flex items-center gap-1">
+                      <span>{event.rating}</span>
+                      <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                    </div>
+                  </div>
+                </div>
+                <Button className="h-9" size="sm">Install</Button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
+    </div>
+  );
+
+  const SponsoredSection = () => (
+    <div className="mb-8">
+      <div className="px-4">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-medium text-gray-900 flex items-center gap-2">
+            Sponsored <span className="text-gray-500">•</span> Suggested for you
+          </h2>
+          <Button variant="ghost" size="icon" className="h-8 w-8">
+            <MoreVertical className="h-5 w-5" />
+          </Button>
+        </div>
+
+        <ScrollArea className="w-full" type="scroll">
+          <div className="flex gap-4 pb-4">
+            {sponsoredGames.map((game) => (
+              <div 
+                key={game.id}
+                className="flex-none w-[120px]"
+              >
+                <div className="relative mb-2">
+                  <img
+                    src={game.icon}
+                    alt={game.title}
+                    className="w-[120px] h-[120px] rounded-[24px] object-cover"
+                  />
+                </div>
+                <h3 className="text-gray-900 text-sm font-medium truncate mb-1">
+                  {game.title}
+                </h3>
+                <div className="flex items-center gap-1 text-gray-600 text-xs">
+                  <span>{game.rating}</span>
+                  <Star className="w-3 h-3 fill-gray-600 text-gray-600" />
+                </div>
+              </div>
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </div>
+    </div>
+  );
+
+  const PopularGamesSection = () => (
+    <div className="mb-8">
+      <div className="px-4">
+        <div className="flex items-center justify-between mb-4">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-semibold text-gray-900">
+              Browse popular games
+            </h2>
+            <p className="text-gray-500">A great place to start</p>
+          </div>
+          <Button variant="ghost" size="icon">
+            <ArrowRight className="h-5 w-5" />
+          </Button>
+        </div>
+
+        <ScrollArea className="w-full" type="scroll">
+          <div className="flex gap-6 pb-4">
+            {/* First Column */}
+            <div className="flex-none w-[300px] space-y-4">
+              {popularGames.slice(0, 3).map((game) => (
+                <div 
+                  key={game.id}
+                  className="flex gap-4 items-center"
+                >
+                  <img
+                    src={game.icon}
+                    alt={game.title}
+                    className="w-16 h-16 rounded-2xl object-cover"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-gray-900 text-base truncate">
+                      {game.title}
+                    </h3>
+                    <p className="text-sm text-gray-500 truncate">
+                      {game.description}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-sm text-gray-600">{game.rating} ★</span>
+                      <span className="text-sm text-gray-600">{game.size}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Second Column */}
+            <div className="flex-none w-[300px] space-y-4">
+              {popularGames.slice(3, 6).map((game) => (
+                <div 
+                  key={game.id}
+                  className="flex gap-4 items-center"
+                >
+                  <img
+                    src={game.icon}
+                    alt={game.title}
+                    className="w-16 h-16 rounded-2xl object-cover"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-gray-900 text-base truncate">
+                      {game.title}
+                    </h3>
+                    <p className="text-sm text-gray-500 truncate">
+                      {game.description}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-sm text-gray-600">{game.rating} ★</span>
+                      <span className="text-sm text-gray-600">{game.size}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-white">
       <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
-        <GamesHeader 
-          searchQuery={searchQuery}
-          notifications={notifications}
-          onSearchClick={() => setIsSearchOpen(true)}
-        />
-        <GamesCategoryNav 
-          categories={categories}
-          activeCategory={activeCategory}
-          onCategoryChange={setActiveCategory}
-        />
+        <div className="flex items-center gap-3 px-4 py-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => navigate(-1)}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <Input
+              placeholder="Search for games"
+              className="w-full pl-10 bg-gray-50 border-none"
+              value={searchQuery}
+              onClick={() => setIsSearchOpen(true)}
+              readOnly
+            />
+          </div>
+
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="relative h-8 w-8"
+          >
+            <Bell className="h-4 w-4" />
+            {notifications > 0 && (
+              <Badge 
+                className="absolute -right-0.5 -top-0.5 h-4 w-4 items-center justify-center rounded-full bg-red-500 p-0.5 text-[10px] font-medium text-white border-2 border-white"
+              >
+                {notifications}
+              </Badge>
+            )}
+          </Button>
+        </div>
+
+        <ScrollArea className="w-full" type="scroll">
+          <div className="px-4 pb-3">
+            <Tabs 
+              value={activeTab}
+              onValueChange={setActiveTab}
+              className="w-full"
+            >
+              <TabsList className="h-9 bg-transparent p-0 w-auto">
+                {categories.map((category) => (
+                  <TabsTrigger
+                    key={category}
+                    value={category}
+                    className="px-4 h-9 data-[state=active]:bg-transparent data-[state=active]:text-blue-600"
+                  >
+                    {category}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </div>
 
       <div className="pt-4 pb-24">
-        <EventsSection events={gameEvents} />
-        <SponsoredGamesSection games={sponsoredGames} />
-        <CategorySection title="Popular Sports Games" games={games.filter(g => g.type.includes("Sports"))} />
-        <CategorySection title="Trending Board Games" games={games.filter(g => g.type.includes("Board"))} />
-        <PopularGamesSection games={popularGames} />
+        <EventsSection />
+        <SponsoredSection />
+        <CategorySection title="Popular Sports Games" games={games.filter(g => g.category.includes("Sports"))} />
+        <CategorySection title="Trending Board Games" games={games.filter(g => g.category.includes("Board"))} />
+        <PopularGamesSection />
         <CategorySection title="Suggested For You" games={games} />
         
         <div className="px-4">
           <h2 className="text-xl font-medium text-gray-900 mb-4">Top Free Games</h2>
           <div className="space-y-4">
             {games.map((game, index) => (
-              <GameListItem 
+              <div 
                 key={game.id}
-                game={game}
-                index={index}
-              />
+                className="flex items-center gap-4 cursor-pointer"
+                onClick={() => game.route && navigate(game.route)}
+              >
+                <span className="text-lg font-medium text-gray-400 w-6">{index + 1}</span>
+                <img
+                  src={game.icon}
+                  alt={`${game.title} icon`}
+                  className="w-16 h-16 rounded-xl object-cover"
+                />
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-medium text-gray-900 truncate">{game.title}</h3>
+                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <span>{game.category[0]}</span>
+                    <span>•</span>
+                    <span>{game.downloads}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {renderRating(game.rating)}
+                    <span className="text-xs text-gray-500">{game.size}</span>
+                  </div>
+                </div>
+                <Button className="w-20" size="sm">Install</Button>
+              </div>
             ))}
           </div>
         </div>
       </div>
 
+      {/* Add the new GamesBottomNav */}
       <GamesBottomNav />
       
       <GameSearchOverlay 
