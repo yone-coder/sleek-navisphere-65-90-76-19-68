@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Routes, Route, Outlet } from "react-router-dom";
 import { 
   ChevronLeft, Search, Bell, Sparkles,
   Gift, Crown, Filter, Command, Settings, 
@@ -13,6 +13,9 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { GameSearchOverlay } from "@/components/search/GameSearchOverlay";
+import { GamesBottomNav } from "@/components/games/GamesBottomNav";
+import GamesExplore from "./games/GamesExplore";
+import ContestsPage from "./games/ContestsPage";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,9 +23,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-// Add this import at the top with other imports
-import { GamesBottomNav } from "@/components/games/GamesBottomNav";
 
 interface Game {
   id: string;
@@ -513,113 +513,126 @@ export default function GamesPages() {
     </div>
   );
 
+  const MainContent = () => (
+    <div className="pt-4 pb-24">
+      <EventsSection />
+      <SponsoredSection />
+      <CategorySection title="Popular Sports Games" games={games.filter(g => g.category.includes("Sports"))} />
+      <CategorySection title="Trending Board Games" games={games.filter(g => g.category.includes("Board"))} />
+      <PopularGamesSection />
+      <CategorySection title="Suggested For You" games={games} />
+      
+      <div className="px-4">
+        <h2 className="text-xl font-medium text-gray-900 mb-4">Top Free Games</h2>
+        <div className="space-y-4">
+          {games.map((game, index) => (
+            <div 
+              key={game.id}
+              className="flex items-center gap-4 cursor-pointer"
+              onClick={() => game.route && navigate(game.route)}
+            >
+              <span className="text-lg font-medium text-gray-400 w-6">{index + 1}</span>
+              <img
+                src={game.icon}
+                alt={`${game.title} icon`}
+                className="w-16 h-16 rounded-xl object-cover"
+              />
+              <div className="flex-1 min-w-0">
+                <h3 className="font-medium text-gray-900 truncate">{game.title}</h3>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <span>{game.category[0]}</span>
+                  <span>•</span>
+                  <span>{game.downloads}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  {renderRating(game.rating)}
+                  <span className="text-xs text-gray-500">{game.size}</span>
+                </div>
+              </div>
+              <Button className="w-20" size="sm">Install</Button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-white">
-      <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
-        <div className="flex items-center gap-3 px-4 py-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={() => navigate(-1)}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            <Input
-              placeholder="Search for games"
-              className="w-full pl-10 bg-gray-50 border-none"
-              value={searchQuery}
-              onClick={() => setIsSearchOpen(true)}
-              readOnly
-            />
-          </div>
-
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="relative h-8 w-8"
-          >
-            <Bell className="h-4 w-4" />
-            {notifications > 0 && (
-              <Badge 
-                className="absolute -right-0.5 -top-0.5 h-4 w-4 items-center justify-center rounded-full bg-red-500 p-0.5 text-[10px] font-medium text-white border-2 border-white"
-              >
-                {notifications}
-              </Badge>
-            )}
-          </Button>
-        </div>
-
-        <ScrollArea className="w-full" type="scroll">
-          <div className="px-4 pb-3">
-            <Tabs 
-              value={activeTab}
-              onValueChange={setActiveTab}
-              className="w-full"
-            >
-              <TabsList className="h-9 bg-transparent p-0 w-auto">
-                {categories.map((category) => (
-                  <TabsTrigger
-                    key={category}
-                    value={category}
-                    className="px-4 h-9 data-[state=active]:bg-transparent data-[state=active]:text-blue-600"
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
+                <div className="flex items-center gap-3 px-4 py-3">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => navigate(-1)}
                   >
-                    {category}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
-          </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-      </div>
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  
+                  <div className="flex-1 relative">
+                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <Input
+                      placeholder="Search for games"
+                      className="w-full pl-10 bg-gray-50 border-none"
+                      value={searchQuery}
+                      onClick={() => setIsSearchOpen(true)}
+                      readOnly
+                    />
+                  </div>
 
-      <div className="pt-4 pb-24">
-        <EventsSection />
-        <SponsoredSection />
-        <CategorySection title="Popular Sports Games" games={games.filter(g => g.category.includes("Sports"))} />
-        <CategorySection title="Trending Board Games" games={games.filter(g => g.category.includes("Board"))} />
-        <PopularGamesSection />
-        <CategorySection title="Suggested For You" games={games} />
-        
-        <div className="px-4">
-          <h2 className="text-xl font-medium text-gray-900 mb-4">Top Free Games</h2>
-          <div className="space-y-4">
-            {games.map((game, index) => (
-              <div 
-                key={game.id}
-                className="flex items-center gap-4 cursor-pointer"
-                onClick={() => game.route && navigate(game.route)}
-              >
-                <span className="text-lg font-medium text-gray-400 w-6">{index + 1}</span>
-                <img
-                  src={game.icon}
-                  alt={`${game.title} icon`}
-                  className="w-16 h-16 rounded-xl object-cover"
-                />
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-medium text-gray-900 truncate">{game.title}</h3>
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
-                    <span>{game.category[0]}</span>
-                    <span>•</span>
-                    <span>{game.downloads}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {renderRating(game.rating)}
-                    <span className="text-xs text-gray-500">{game.size}</span>
-                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="relative h-8 w-8"
+                  >
+                    <Bell className="h-4 w-4" />
+                    {notifications > 0 && (
+                      <Badge 
+                        className="absolute -right-0.5 -top-0.5 h-4 w-4 items-center justify-center rounded-full bg-red-500 p-0.5 text-[10px] font-medium text-white border-2 border-white"
+                      >
+                        {notifications}
+                      </Badge>
+                    )}
+                  </Button>
                 </div>
-                <Button className="w-20" size="sm">Install</Button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
 
-      {/* Add the new GamesBottomNav */}
+                <ScrollArea className="w-full" type="scroll">
+                  <div className="px-4 pb-3">
+                    <Tabs 
+                      value={activeTab}
+                      onValueChange={setActiveTab}
+                      className="w-full"
+                    >
+                      <TabsList className="h-9 bg-transparent p-0 w-auto">
+                        {categories.map((category) => (
+                          <TabsTrigger
+                            key={category}
+                            value={category}
+                            className="px-4 h-9 data-[state=active]:bg-transparent data-[state=active]:text-blue-600"
+                          >
+                            {category}
+                          </TabsTrigger>
+                        ))}
+                      </TabsList>
+                    </Tabs>
+                  </div>
+                  <ScrollBar orientation="horizontal" />
+                </ScrollArea>
+              </div>
+              <MainContent />
+            </>
+          }
+        />
+        <Route path="explore" element={<GamesExplore />} />
+        <Route path="contest" element={<ContestsPage />} />
+      </Routes>
+
       <GamesBottomNav />
       
       <GameSearchOverlay 
