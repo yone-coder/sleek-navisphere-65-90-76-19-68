@@ -260,6 +260,36 @@ export default function TournamentDetails() {
     });
   };
 
+  const getStatusText = (status?: string) => {
+    switch (status) {
+      case 'in-progress':
+        return 'Ongoing';
+      case 'upcoming':
+        return 'Soon';
+      case 'completed':
+        return 'Ended';
+      case 'closed':
+        return 'Closed';
+      default:
+        return 'Loading';
+    }
+  };
+
+  const getStatusColor = (status?: string) => {
+    switch (status) {
+      case 'in-progress':
+        return 'bg-green-50 text-green-700 dark:bg-green-900/20';
+      case 'upcoming':
+        return 'bg-blue-50 text-blue-700 dark:bg-blue-900/20';
+      case 'completed':
+        return 'bg-gray-50 text-gray-700 dark:bg-gray-900/20';
+      case 'closed':
+        return 'bg-red-50 text-red-700 dark:bg-red-900/20';
+      default:
+        return 'bg-gray-50 text-gray-700 dark:bg-gray-900/20';
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen pt-14 flex items-center justify-center">
@@ -299,13 +329,11 @@ export default function TournamentDetails() {
             <Badge 
               variant="outline"
               className={cn(
-                "uppercase text-xs",
-                tournament?.status === "in-progress" && "bg-green-50 text-green-700 dark:bg-green-900/20",
-                tournament?.status === "upcoming" && "bg-blue-50 text-blue-700 dark:bg-blue-900/20",
-                tournament?.status === "completed" && "bg-gray-50 text-gray-700 dark:bg-gray-900/20"
+                "text-[10px] px-1.5 py-0.5 animate-pulse transition-colors duration-300",
+                getStatusColor(tournament?.status)
               )}
             >
-              {tournament?.status || "Loading"}
+              {getStatusText(tournament?.status)}
             </Badge>
           </div>
 
