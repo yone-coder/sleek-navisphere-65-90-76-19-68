@@ -135,66 +135,66 @@ export function ParticipantsTable() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="grid grid-cols-4 gap-4">
-        <div className="p-4 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-lg">
-          <div className="flex items-center gap-2 text-blue-600">
-            <Users className="h-5 w-5" />
-            <span className="text-sm font-medium">Total Players</span>
+    <div className="space-y-4 p-4">
+      <div className="grid grid-cols-4 gap-3">
+        <div className="p-3 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-lg">
+          <div className="flex items-center gap-1.5 text-blue-600">
+            <Users className="h-4 w-4" />
+            <span className="text-xs font-medium">Total Players</span>
           </div>
-          <p className="text-2xl font-bold mt-2">{participants.length}</p>
+          <p className="text-lg font-bold mt-1">{participants.length}</p>
         </div>
-        <div className="p-4 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-lg">
-          <div className="flex items-center gap-2 text-green-600">
-            <Trophy className="h-5 w-5" />
-            <span className="text-sm font-medium">Confirmed</span>
+        <div className="p-3 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-lg">
+          <div className="flex items-center gap-1.5 text-green-600">
+            <Trophy className="h-4 w-4" />
+            <span className="text-xs font-medium">Confirmed</span>
           </div>
-          <p className="text-2xl font-bold mt-2">
+          <p className="text-lg font-bold mt-1">
             {participants.filter(p => p.status === "confirmed").length}
           </p>
         </div>
-        <div className="p-4 bg-gradient-to-br from-yellow-500/20 to-yellow-600/20 rounded-lg">
-          <div className="flex items-center gap-2 text-yellow-600">
-            <CalendarDays className="h-5 w-5" />
-            <span className="text-sm font-medium">Pending</span>
+        <div className="p-3 bg-gradient-to-br from-yellow-500/20 to-yellow-600/20 rounded-lg">
+          <div className="flex items-center gap-1.5 text-yellow-600">
+            <CalendarDays className="h-4 w-4" />
+            <span className="text-xs font-medium">Pending</span>
           </div>
-          <p className="text-2xl font-bold mt-2">
+          <p className="text-lg font-bold mt-1">
             {participants.filter(p => p.status === "pending").length}
           </p>
         </div>
-        <div className="p-4 bg-gradient-to-br from-red-500/20 to-red-600/20 rounded-lg">
-          <div className="flex items-center gap-2 text-red-600">
-            <UserX className="h-5 w-5" />
-            <span className="text-sm font-medium">Withdrawn</span>
+        <div className="p-3 bg-gradient-to-br from-red-500/20 to-red-600/20 rounded-lg">
+          <div className="flex items-center gap-1.5 text-red-600">
+            <UserX className="h-4 w-4" />
+            <span className="text-xs font-medium">Withdrawn</span>
           </div>
-          <p className="text-2xl font-bold mt-2">
+          <p className="text-lg font-bold mt-1">
             {participants.filter(p => p.status === "withdrawn").length}
           </p>
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search by name or country..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9"
+            className="pl-8 h-9"
           />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <Button
             variant="outline"
             size="sm"
             className={cn(
-              "gap-2",
+              "h-9 px-2",
               statusFilter === "all" && "bg-primary text-primary-foreground"
             )}
             onClick={() => setStatusFilter("all")}
           >
             <Filter className="h-4 w-4" />
-            All
+            <span className="ml-1">All</span>
           </Button>
           {(["confirmed", "pending", "withdrawn"] as const).map((status) => (
             <Button
@@ -202,7 +202,7 @@ export function ParticipantsTable() {
               variant="outline"
               size="sm"
               className={cn(
-                "gap-2",
+                "h-9 px-2",
                 statusFilter === status && "bg-primary text-primary-foreground"
               )}
               onClick={() => setStatusFilter(status)}
@@ -213,77 +213,80 @@ export function ParticipantsTable() {
         </div>
       </div>
 
-      <div className="border rounded-lg overflow-hidden">
-        <ScrollArea className="h-[450px]">
+      <div className="border rounded-lg">
+        <ScrollArea className="h-[calc(100vh-360px)] min-h-[300px]">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Rank</TableHead>
+                <TableHead className="w-[60px]">Rank</TableHead>
                 <TableHead>Player</TableHead>
-                <TableHead>
+                <TableHead className="w-[100px]">
                   <Button 
                     variant="ghost" 
                     size="sm"
-                    className="gap-2"
+                    className="h-8 px-2"
                     onClick={() => handleSort("rating")}
                   >
                     Rating
-                    <ArrowUpDown className="h-4 w-4" />
+                    <ArrowUpDown className="h-3.5 w-3.5 ml-1" />
                   </Button>
                 </TableHead>
-                <TableHead>
+                <TableHead className="w-[140px]">
                   <Button 
                     variant="ghost" 
                     size="sm"
-                    className="gap-2"
+                    className="h-8 px-2"
                     onClick={() => handleSort("winRate")}
                   >
                     Win Rate
-                    <ArrowUpDown className="h-4 w-4" />
+                    <ArrowUpDown className="h-3.5 w-3.5 ml-1" />
                   </Button>
                 </TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Last Active</TableHead>
+                <TableHead className="w-[100px]">Status</TableHead>
+                <TableHead className="w-[120px]">Last Active</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {paginatedParticipants.map((participant) => (
                 <TableRow key={participant.id} className="hover:bg-muted/50 cursor-pointer">
-                  <TableCell className="font-medium">{participant.rank}</TableCell>
-                  <TableCell>
+                  <TableCell className="py-2 font-medium">{participant.rank}</TableCell>
+                  <TableCell className="py-2">
                     <div className="flex items-center gap-2">
                       <img 
                         src={participant.avatar} 
                         alt={participant.name}
-                        className="w-8 h-8 rounded-full object-cover"
+                        className="w-7 h-7 rounded-full object-cover"
                       />
                       <div>
-                        <div>{participant.name}</div>
-                        <div className="text-sm text-muted-foreground">{participant.country}</div>
+                        <div className="text-sm">{participant.name}</div>
+                        <div className="text-xs text-muted-foreground">{participant.country}</div>
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>{participant.rating}</TableCell>
-                  <TableCell>
+                  <TableCell className="py-2 text-sm">{participant.rating}</TableCell>
+                  <TableCell className="py-2">
                     <div className="flex items-center gap-2">
                       <Progress 
                         value={participant.winRate} 
-                        className="w-20 h-2"
+                        className="w-16 h-1.5"
                       />
-                      <span className="text-sm text-muted-foreground">
+                      <span className="text-xs text-muted-foreground">
                         {participant.winRate}%
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="py-2">
                     <Badge 
                       variant="secondary"
-                      className={cn(getStatusColor(participant.status))}
+                      className={cn(
+                        "text-[11px] px-1.5 py-0.5",
+                        getStatusColor(participant.status)
+                      )}
                     >
                       {participant.status}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
+                  <TableCell className="py-2 text-xs text-muted-foreground">
                     {participant.lastActive}
                   </TableCell>
                 </TableRow>
@@ -294,21 +297,23 @@ export function ParticipantsTable() {
       </div>
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between pt-2">
           <Button
             variant="outline"
             size="sm"
+            className="h-8 px-2"
             onClick={() => setPage(p => Math.max(1, p - 1))}
             disabled={page === 1}
           >
             Previous
           </Button>
-          <span className="text-sm text-muted-foreground">
+          <span className="text-xs text-muted-foreground">
             Page {page} of {totalPages}
           </span>
           <Button
             variant="outline"
             size="sm"
+            className="h-8 px-2"
             onClick={() => setPage(p => Math.min(totalPages, p + 1))}
             disabled={page === totalPages}
           >
