@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -413,6 +412,8 @@ export default function TournamentDetails() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isLiked, setIsLiked] = useState(false);
   const [showFullImage, setShowFullImage] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const { toast } = useToast();
 
   const { data: tournament, isLoading } = useQuery({
@@ -626,34 +627,109 @@ export default function TournamentDetails() {
             </div>
           </div>
 
-          <div className="px-4 py-2 border-t border-border/5 flex items-center justify-between text-sm overflow-x-auto no-scrollbar">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <Trophy className="h-4 w-4 text-yellow-500" />
-                <span>${tournament?.prize_pool?.toLocaleString() || "0"}</span>
+          <div className="px-4 py-2 border-t border-border/5">
+            <div className="flex items-center justify-between overflow-x-auto no-scrollbar">
+              <div className="flex items-center gap-4">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="hover:bg-yellow-50 transition-colors"
+                  onClick={() => toast({
+                    title: "Prize Pool Details",
+                    description: `Total prize pool of $${tournament?.prize_pool?.toLocaleString() || "0"} will be distributed among top performers.`
+                  })}
+                >
+                  <Trophy className="h-4 w-4 text-yellow-500 mr-2" />
+                  <span>${tournament?.prize_pool?.toLocaleString() || "0"}</span>
+                </Button>
+                <Separator orientation="vertical" className="h-4" />
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  className="hover:bg-blue-50 transition-colors"
+                  onClick={() => toast({
+                    title: "Participant Information",
+                    description: `${tournament?.current_participants || 0} players have registered out of ${tournament?.max_participants || 0} total spots.`
+                  })}
+                >
+                  <Users className="h-4 w-4 text-blue-500 mr-2" />
+                  <span>{tournament?.current_participants || 0}/{tournament?.max_participants || 0}</span>
+                </Button>
+                <Separator orientation="vertical" className="h-4" />
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  className="hover:bg-green-50 transition-colors"
+                  onClick={() => toast({
+                    title: "Tournament Schedule",
+                    description: tournament ? `Tournament runs from ${format(new Date(tournament.start_date), 'PPP')} to ${format(new Date(tournament.end_date), 'PPP')}` : "Dates to be announced"
+                  })}
+                >
+                  <CalendarClock className="h-4 w-4 text-green-500 mr-2" />
+                  <span>{tournament && formatDateRange(tournament.start_date, tournament.end_date)}</span>
+                </Button>
               </div>
-              <Separator orientation="vertical" className="h-4" />
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <Users className="h-4 w-4 text-blue-500" />
-                <span>{tournament?.max_participants || 0} max</span>
-              </div>
-              <Separator orientation="vertical" className="h-4" />
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <CalendarClock className="h-4 w-4 text-green-500" />
-                <span>
-                  {tournament && formatDateRange(tournament.start_date, tournament.end_date)}
-                </span>
-              </div>
+              <Badge 
+                variant="secondary" 
+                className={cn(
+                  "ml-4 whitespace-nowrap animate-pulse",
+                  getAvailableSpots() <= 5 ? "bg-red-100 text-red-800 font-semibold" : ""
+                )}
+              >
+                {getSpotsText()}
+              </Badge>
             </div>
-            <Badge 
-              variant="secondary" 
-              className={cn(
-                "ml-4 whitespace-nowrap",
-                getAvailableSpots() <= 5 ? "bg-red-100 text-red-800" : ""
-              )}
+          </div>
+
+          <div className="px-4 py-2 border-t border-border/5 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(
+                  "text-foreground hover:bg-foreground/10",
+                  notificationsEnabled && "text-blue-500"
+                )}
+                onClick={() => {
+                  setNotificationsEnabled(!notificationsEnabled);
+                  toast({
+                    title: notificationsEnabled ? "Notifications disabled" : "Notifications enabled",
+                    description: notificationsEnabled ? 
+                      "You won't receive updates about this tournament" :
+                      "You'll receive updates about this tournament",
+                    duration: 2000,
+                  });
+                }}
+              >
+                <Bell className="h-5 w-5" fill={notificationsEnabled ? "currentColor" : "none"} />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(
+                  "text-foreground hover:bg-foreground/10",
+                  isLiked && "text-red-500"
+                )}
+                onClick={handleLike}
+              >
+                <Heart className="h-5 w-5" fill={isLiked ? "currentColor" : "none"} />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleShare}
+              >
+                <Share2 className="h-5 w-5 mr-2" />
+                Share
+              </Button>
+            </div>
+            <Button
+              size="sm"
+              className="bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white"
+              onClick={handleRegister}
             >
-              {getSpotsText()}
-            </Badge>
+              Register Now
+            </Button>
           </div>
         </div>
 
@@ -676,7 +752,7 @@ export default function TournamentDetails() {
         </div>
       </div>
 
-      <div className="pt-36">
+      <div className="pt-48">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsContent value="overview">
             <div className="space-y-6">
@@ -832,6 +908,15 @@ export default function TournamentDetails() {
             </TabsContent>
           ))}
         </Tabs>
+      </div>
+
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 p-4 backdrop-blur-lg bg-background/80 border-t border-border/40">
+        <Button 
+          className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white"
+          onClick={handleRegister}
+        >
+          Register Now
+        </Button>
       </div>
     </div>
   );
