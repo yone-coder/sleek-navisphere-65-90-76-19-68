@@ -1,4 +1,3 @@
-
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -36,6 +35,7 @@ const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 const AdminBanners = lazy(() => import("./pages/admin/AdminBanners"));
 const AdminTournaments = lazy(() => import("./pages/admin/AdminTournaments"));
+const GamesProfile = lazy(() => import("./pages/games/GamesProfile"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen p-8 space-y-4">
@@ -102,6 +102,7 @@ const AppContent = () => {
             <Route path="system" element={<div className="p-8">System Management (Coming Soon)</div>} />
           </Route>
           
+          <Route path="/games-pages/profile" element={<GamesProfile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
