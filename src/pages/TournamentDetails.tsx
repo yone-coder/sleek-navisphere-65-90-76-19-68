@@ -341,7 +341,9 @@ export default function TournamentDetails() {
               <div className="px-4">
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div className="flex items-center p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20">
-                    <Trophy className="h-8 w-8 text-yellow-500 mr-3" />
+                    <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
+                      <Trophy className="h-8 w-8 text-yellow-500" />
+                    </div>
                     <div>
                       <span className="text-sm text-gray-500 dark:text-gray-300">Prize Pool</span>
                       <p className="font-bold text-xl text-gray-800 dark:text-white">
@@ -350,7 +352,9 @@ export default function TournamentDetails() {
                     </div>
                   </div>
                   <div className="flex items-center p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
-                    <DollarSign className="h-8 w-8 text-green-500 mr-3" />
+                    <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
+                      <DollarSign className="h-8 w-8 text-green-500" />
+                    </div>
                     <div>
                       <span className="text-sm text-gray-500 dark:text-gray-300">Entry Fee</span>
                       <p className="font-bold text-xl text-gray-800 dark:text-white">Free</p>
