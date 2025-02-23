@@ -28,6 +28,7 @@ import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
+import { useToast } from "@/hooks/use-toast";
 
 const sampleMatches: Match[] = [
   {
@@ -260,6 +261,7 @@ export default function TournamentDetails() {
   const [activeTab, setActiveTab] = useState("participants");
   const [isLiked, setIsLiked] = useState(false);
   const [showFullImage, setShowFullImage] = useState(false);
+  const { toast } = useToast();
 
   const { data: tournament, isLoading } = useQuery({
     queryKey: ["tournament", id],
@@ -277,7 +279,10 @@ export default function TournamentDetails() {
 
   const handleLike = () => {
     setIsLiked(!isLiked);
-    toast.success(isLiked ? "Removed from favorites" : "Added to favorites");
+    toast({
+      title: isLiked ? "Removed from favorites" : "Added to favorites",
+      duration: 2000,
+    });
   };
 
   const handleShare = async () => {
@@ -290,19 +295,33 @@ export default function TournamentDetails() {
       
       if (navigator.share) {
         await navigator.share(shareData);
-        toast.success("Tournament shared successfully!");
+        toast({
+          title: "Tournament shared successfully!",
+          duration: 2000,
+        });
       } else {
         await navigator.clipboard.writeText(window.location.href);
-        toast.success("Tournament link copied to clipboard!");
+        toast({
+          title: "Tournament link copied to clipboard!",
+          duration: 2000,
+        });
       }
     } catch (err) {
       console.error("Error sharing:", err);
-      toast.error("Failed to share tournament");
+      toast({
+        title: "Failed to share tournament",
+        variant: "destructive",
+        duration: 2000,
+      });
     }
   };
 
   const handleRegister = () => {
-    toast.success("Registration request sent! Check your email for confirmation.");
+    toast({
+      title: "Registration request sent!",
+      description: "Check your email for confirmation.",
+      duration: 3000,
+    });
   };
 
   const formatDateRange = (startDate: string, endDate: string) => {
@@ -339,6 +358,31 @@ export default function TournamentDetails() {
       default:
         return 'Upcoming';
     }
+  };
+
+  const getParticipantProgress = () => {
+    if (!tournament) return 0;
+    return (tournament.current_participants / tournament.max_participants) * 100;
+  };
+
+  const getAvailableSpots = () => {
+    if (!tournament) return 0;
+    return tournament.max_participants - tournament.current_participants;
+  };
+
+  const getSpotsText = () => {
+    const spots = getAvailableSpots();
+    if (spots <= 0) return "Tournament Full";
+    if (spots <= 5) return `Only ${spots} spots left!`;
+    return `${spots} spots available`;
+  };
+
+  const getParticipantProgressColor = () => {
+    const progress = getParticipantProgress();
+    if (progress >= 90) return "bg-red-500";
+    if (progress >= 75) return "bg-orange-500";
+    if (progress >= 50) return "bg-yellow-500";
+    return "bg-blue-500";
   };
 
   if (isLoading) {
@@ -486,23 +530,34 @@ export default function TournamentDetails() {
                   <div className="flex items-center justify-between text-gray-700 dark:text-gray-300">
                     <div className="flex items-center">
                       <Users className="h-5 w-5 text-blue-500 mr-3" />
-                      <span className="text-sm">
+                      <span className="text-sm font-medium">
                         {tournament?.current_participants || 0}/{tournament?.max_participants || 0} Participants
                       </span>
                     </div>
-                    <span className="text-sm text-blue-600 dark:text-blue-400 font-medium animate-pulse">
-                      {tournament 
-                        ? `${tournament.max_participants - tournament.current_participants} spots left`
-                        : "Loading..."}
-                    </span>
+                    <Badge 
+                      variant="secondary" 
+                      className={cn(
+                        "animate-pulse",
+                        getAvailableSpots() <= 5 ? "bg-red-100 text-red-800 dark:bg-red-900/30" : ""
+                      )}
+                    >
+                      {getSpotsText()}
+                    </Badge>
                   </div>
-                  <Progress 
-                    value={tournament 
-                      ? (tournament.current_participants / tournament.max_participants) * 100
-                      : 0
-                    } 
-                    className="h-2" 
-                  />
+                  <div className="relative">
+                    <Progress 
+                      value={getParticipantProgress()} 
+                      className={cn("h-2 transition-all duration-500", getParticipantProgressColor())} 
+                    />
+                    <div className="absolute -top-1 left-0 w-full flex justify-between text-xs text-gray-500">
+                      <span>0%</span>
+                      <span>50%</span>
+                      <span>100%</span>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {tournament?.current_participants} players have joined this tournament
+                  </p>
                 </div>
               </div>
 
