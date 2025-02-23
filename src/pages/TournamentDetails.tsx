@@ -701,13 +701,9 @@ export default function TournamentDetails() {
                     <Share2 className="mr-2 h-4 w-4" />
                     Share Tournament
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => window.open('https://discord.gg/tournament', '_blank')}>
+                  <DropdownMenuItem>
                     <MessageSquare className="mr-2 h-4 w-4" />
                     Join Discord
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Filter className="mr-2 h-4 w-4" />
-                    Filter Matches
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="text-red-500">
@@ -995,7 +991,7 @@ export default function TournamentDetails() {
         </Tabs>
       </div>
 
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 p-4 backdrop-blur-lg bg-background/80 border-t border-border/40">
+      <div className="fixed bottom-0 left-0 right-0 p-4 backdrop-blur-lg bg-background/80 border-t border-border/40">
         <RegisterButton />
       </div>
     </div>
