@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   createBrowserRouter,
@@ -7,7 +8,7 @@ import Home from "@/pages/Home";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import GamesPages from "@/pages/GamesPages";
-import Search from "@/pages/games/Search";
+import SearchPage from "@/pages/games/Search";
 import Profile from "@/pages/games/Profile";
 
 const router = createBrowserRouter([
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/games-pages/search",
-    element: <Search />
+    element: <SearchPage />
   },
   {
     path: "/games-pages/profile",

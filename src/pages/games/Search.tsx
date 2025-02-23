@@ -1,13 +1,14 @@
-
 import { useState } from "react";
-import { Search, GameController, Trophy, Radio, Target, Tag, TrendingUp, History, X, Filter } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { 
+  SearchIcon, Gamepad2, Trophy, Radio, Target, Tag, TrendingUp, History, X, Filter 
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { GameCard } from "@/components/games/GameCard";
+import GameCard from "@/components/games/GameCard";
 import { Game } from "@/components/games/types";
-import { useNavigate } from "react-router-dom";
 
 const popularSearches = [
   "Action RPG", "Battle Royale", "Racing", "Strategy", "MMO", "FPS", "MOBA"
@@ -18,10 +19,10 @@ const categories = [
   { name: "Live Games", icon: Radio, color: "bg-red-500" },
   { name: "Trending", icon: TrendingUp, color: "bg-blue-500" },
   { name: "Popular", icon: Target, color: "bg-green-500" },
-  { name: "New", icon: GameController, color: "bg-amber-500" }
+  { name: "New", icon: Gamepad2, color: "bg-amber-500" }
 ];
 
-export default function Search() {
+export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchHistory] = useState<string[]>(["League of Legends", "CS:GO", "Valorant"]);
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ export default function Search() {
       <div className="sticky top-0 z-50 bg-black/95 border-b border-white/10">
         <div className="max-w-2xl mx-auto px-4 py-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
             <Input
               type="search"
               placeholder="Search games, tournaments, or players..."
@@ -126,7 +127,7 @@ export default function Search() {
               <div className="grid gap-4">
                 {/* Example search results */}
                 <div className="text-center text-gray-400 py-8">
-                  <GameController className="h-12 w-12 mx-auto mb-3 text-gray-500" />
+                  <Gamepad2 className="h-12 w-12 mx-auto mb-3 text-gray-500" />
                   <p>No results found for "{searchQuery}"</p>
                   <p className="text-sm">Try searching for something else</p>
                 </div>

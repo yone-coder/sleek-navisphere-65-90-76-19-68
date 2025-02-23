@@ -1,8 +1,8 @@
-
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { 
-  Trophy, Star, Users, GameController, Settings, ChevronRight, 
-  Shield, Hexagon, BadgeCheck, Clock, Heart, Gamepad2 
+  Trophy, Star, Users, Gamepad2, Settings, ChevronRight, 
+  Shield, Hexagon, BadgeCheck, Clock, Heart
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ import { Progress } from "@/components/ui/progress";
 const achievements = [
   { id: 1, name: "First Victory", description: "Win your first game", progress: 100, icon: Trophy },
   { id: 2, name: "Social Butterfly", description: "Add 10 friends", progress: 60, icon: Users },
-  { id: 3, name: "Gaming Legend", description: "Play 100 games", progress: 45, icon: GameController },
+  { id: 3, name: "Gaming Legend", description: "Play 100 games", progress: 45, icon: Gamepad2 },
 ];
 
 const stats = [
@@ -25,6 +25,7 @@ const stats = [
 
 export default function Profile() {
   const [activeTab, setActiveTab] = useState("overview");
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-black/95">
