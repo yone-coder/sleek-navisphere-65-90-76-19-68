@@ -40,7 +40,7 @@ import {
 import { TournamentHeader } from "@/components/tournament/header/TournamentHeader";
 import { TournamentBanner } from "@/components/tournament/banner/TournamentBanner";
 import { TournamentStats } from "@/components/tournament/sections/TournamentStats";
-import { TournamentRulesCard } from "@/components/tournament/rules/TournamentRules";
+import { TournamentRules } from "@/components/tournament/rules/TournamentRules";
 import { ParticipantsTable } from "@/components/tournament/participants/ParticipantsTable";
 import { TournamentMatches } from "@/components/tournament/matches/TournamentMatches";
 
@@ -354,7 +354,7 @@ export default function TournamentDetails() {
                 </TabsContent>
 
                 <TabsContent value="rules">
-                  <TournamentRulesCard />
+                  <TournamentRules />
                 </TabsContent>
 
                 <TabsContent value="matches">

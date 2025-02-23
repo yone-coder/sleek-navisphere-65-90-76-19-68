@@ -1,7 +1,6 @@
-import * as React from "react";
+
 import { useState } from "react";
 import { Scroll, ChevronDown, ChevronUp } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 const rules = [
   {
@@ -50,7 +49,7 @@ const rules = [
   }
 ];
 
-const TournamentRulesCard = () => {
+export function TournamentRules() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   const toggleSection = (section: string) => {
@@ -96,15 +95,7 @@ const TournamentRulesCard = () => {
             </div>
           ))}
         </div>
-
-        <div className="my-6 border-t border-slate-200"></div>
-        
-        <div className="text-sm text-slate-500">
-          <p>All rules are subject to interpretation by the tournament committee. Additional rules may be announced before the tournament. Players are responsible for staying updated on any rule changes.</p>
-        </div>
       </div>
     </div>
   );
-};
-
-export { TournamentRulesCard as TournamentRules };
+}
