@@ -10,22 +10,6 @@ import { GamesCategoryNav } from "@/components/games/GamesCategoryNav";
 import { GameListItem } from "@/components/games/GameListItem";
 import { Game } from "@/components/games/types";
 
-interface Game {
-  id: string;
-  title: string;
-  description: string;
-  thumbnail: string;
-  icon?: string;
-  category: string[];
-  rating: number;
-  downloads: string;
-  size?: string;
-  hasAds?: boolean;
-  inAppPurchases?: boolean;
-  route?: string;
-  updateInfo?: string;
-}
-
 interface GameEvent {
   id: string;
   title: string;
@@ -43,16 +27,23 @@ const games: Game[] = [
     id: "chess",
     title: "Chess Master Pro",
     description: "Challenge your mind with the ultimate chess experience",
+    coverImage: "https://images.unsplash.com/photo-1582562124811-c09040d0a901",
     thumbnail: "https://images.unsplash.com/photo-1582562124811-c09040d0a901",
     icon: "https://images.unsplash.com/photo-1586165368502-1bad197a6461",
     category: ["Board", "Strategy"],
+    type: ["Board", "Strategy"],
     rating: 4.8,
     downloads: "1M+",
     size: "45MB",
     hasAds: false,
     inAppPurchases: true,
     route: "/games/chess",
-    updateInfo: "Major Update"
+    updateInfo: "Major Update",
+    creatorImage: "",
+    verified: true,
+    likes: 0,
+    comments: 0,
+    shares: 0
   },
   {
     id: "morpion",
@@ -61,6 +52,7 @@ const games: Game[] = [
     thumbnail: "https://images.unsplash.com/photo-1498936178812-4b2e558d2937",
     icon: "https://images.unsplash.com/photo-1611996575749-79a3a250f948",
     category: ["Casual", "Strategy"],
+    type: ["Casual", "Strategy"],
     rating: 4.5,
     downloads: "500K+",
     size: "28MB",
@@ -76,6 +68,7 @@ const games: Game[] = [
     thumbnail: "https://images.unsplash.com/photo-1466921583968-f07aa80c526e",
     icon: "https://images.unsplash.com/photo-1544396821-4dd40b938ad3",
     category: ["Word", "Puzzle"],
+    type: ["Word", "Puzzle"],
     rating: 4.3,
     downloads: "100K+",
     size: "32MB",
@@ -89,6 +82,7 @@ const games: Game[] = [
     thumbnail: "https://images.unsplash.com/photo-1552667466-07770ae110d0",
     icon: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55",
     category: ["Sports", "Simulation"],
+    type: ["Sports", "Simulation"],
     rating: 4.7,
     downloads: "5M+",
     size: "1.2GB",
@@ -130,6 +124,7 @@ const sponsoredGames: Game[] = [
     thumbnail: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
     icon: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
     category: ["Casual", "Puzzle"],
+    type: ["Casual", "Puzzle"],
     rating: 4.5,
     downloads: "1B+",
     size: "98MB",
@@ -143,6 +138,7 @@ const sponsoredGames: Game[] = [
     thumbnail: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
     icon: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
     category: ["Casual", "Puzzle"],
+    type: ["Casual", "Puzzle"],
     rating: 4.7,
     downloads: "100M+",
     size: "156MB",
@@ -156,6 +152,7 @@ const sponsoredGames: Game[] = [
     thumbnail: "https://images.unsplash.com/photo-1661875576025-0e5d61dec14f",
     icon: "https://images.unsplash.com/photo-1661875576025-0e5d61dec14f",
     category: ["Education", "Language"],
+    type: ["Education", "Language"],
     rating: 4.7,
     downloads: "500M+",
     size: "45MB",
@@ -172,6 +169,7 @@ const popularGames: Game[] = [
     thumbnail: "https://images.unsplash.com/photo-1612404730960-5c71577fca11",
     icon: "https://images.unsplash.com/photo-1612404730960-5c71577fca11",
     category: ["Action", "Shooter"],
+    type: ["Action", "Shooter"],
     rating: 4.4,
     downloads: "100M+",
     size: "326MB"
@@ -183,6 +181,7 @@ const popularGames: Game[] = [
     thumbnail: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
     icon: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
     category: ["Strategy", "MOBA"],
+    type: ["Strategy", "MOBA"],
     rating: 3.9,
     downloads: "500M+",
     size: "156MB"
@@ -194,6 +193,7 @@ const popularGames: Game[] = [
     thumbnail: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
     icon: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
     category: ["Casual", "Puzzle"],
+    type: ["Casual", "Puzzle"],
     rating: 4.6,
     downloads: "1B+",
     size: "85MB"
@@ -205,6 +205,7 @@ const popularGames: Game[] = [
     thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
     icon: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
     category: ["Action", "Shooter"],
+    type: ["Action", "Shooter"],
     rating: 4.2,
     downloads: "1B+",
     size: "772MB"
@@ -216,6 +217,7 @@ const popularGames: Game[] = [
     thumbnail: "https://images.unsplash.com/photo-1533236897111-3e94666b2edf",
     icon: "https://images.unsplash.com/photo-1533236897111-3e94666b2edf",
     category: ["Casual", "Runner"],
+    type: ["Casual", "Runner"],
     rating: 4.5,
     downloads: "1B+",
     size: "128MB"
@@ -227,6 +229,7 @@ const popularGames: Game[] = [
     thumbnail: "https://images.unsplash.com/photo-1624085568108-36410cef3028",
     icon: "https://images.unsplash.com/photo-1624085568108-36410cef3028",
     category: ["RPG", "Adventure"],
+    type: ["RPG", "Adventure"],
     rating: 4.3,
     downloads: "500M+",
     size: "15GB"

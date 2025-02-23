@@ -28,20 +28,20 @@ export const GameListItem = ({ game, index, onNavigate }: GameListItemProps) => 
         <span className="text-lg font-medium text-gray-400 w-6">{index + 1}</span>
       )}
       <img
-        src={game.icon}
+        src={game.icon || game.thumbnail || game.coverImage}
         alt={`${game.title} icon`}
         className="w-16 h-16 rounded-xl object-cover"
       />
       <div className="flex-1 min-w-0">
         <h3 className="font-medium text-gray-900 truncate">{game.title}</h3>
         <div className="flex items-center gap-2 text-sm text-gray-500">
-          <span>{game.category[0]}</span>
+          <span>{game.category?.[0] || game.type[0]}</span>
           <span>•</span>
-          <span>{game.downloads}</span>
+          <span>{game.downloads || "New"}</span>
         </div>
         <div className="flex items-center gap-2">
-          {renderRating(game.rating)}
-          <span className="text-xs text-gray-500">{game.size}</span>
+          {game.rating && renderRating(game.rating)}
+          {game.size && <span className="text-xs text-gray-500">{game.size}</span>}
         </div>
       </div>
       <Button className="w-20" size="sm">Install</Button>
