@@ -1,9 +1,10 @@
 
 import React, { useEffect, useState } from 'react';
-import { CalendarIcon, Users, Trophy, DollarSign } from 'lucide-react';
+import { CalendarIcon, Users, Trophy, DollarSign, Heart, Share2, GiftIcon, Globe } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
+import { toast } from "sonner";
 
 interface Tournament {
   id: string;
@@ -26,6 +27,7 @@ interface TournamentCardProps {
 export const TournamentCard = ({ className, tournament }: TournamentCardProps) => {
   const [countdown, setCountdown] = useState('');
   const [isHovered, setIsHovered] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const navigate = useNavigate();
   const targetDate = tournament ? new Date(tournament.start_date).getTime() : new Date('2025-02-12T17:45:00').getTime();
 
@@ -62,6 +64,32 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
   const getProgressBarColor = (current: number, max: number) => {
     const remainingPercentage = ((max - current) / max) * 100;
     return remainingPercentage < 50 ? '#ea384c' : 'rgb(37 99 235)';
+  };
+
+  const handleShare = async () => {
+    try {
+      const shareData = {
+        title: tournament?.title || '2025 Summer Championship',
+        text: `Check out this tournament: ${tournament?.title}`,
+        url: window.location.href,
+      };
+      
+      if (navigator.share) {
+        await navigator.share(shareData);
+        toast.success("Tournament shared successfully!");
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success("Tournament link copied to clipboard!");
+      }
+    } catch (err) {
+      console.error("Error sharing:", err);
+      toast.error("Failed to share tournament");
+    }
+  };
+
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+    toast.success(isLiked ? "Removed from favorites" : "Added to favorites");
   };
 
   useEffect(() => {
@@ -117,29 +145,63 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         
-        <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-0.5 rounded-full text-xs animate-pulse">
-          {countdown}
+        {/* Quick Action Buttons */}
+        <div className="absolute top-2 right-2 flex items-center space-x-2">
+          <button 
+            onClick={handleLike}
+            className={cn(
+              "p-1.5 rounded-full backdrop-blur-sm transition-all duration-300 transform hover:scale-110",
+              isLiked ? "bg-red-500 text-white" : "bg-black/50 text-white hover:bg-red-500/80"
+            )}
+          >
+            <Heart className="h-3.5 w-3.5" fill={isLiked ? "white" : "none"} />
+          </button>
+          <button 
+            onClick={handleShare}
+            className="p-1.5 rounded-full bg-black/50 text-white backdrop-blur-sm transition-all duration-300 transform hover:scale-110 hover:bg-blue-500/80"
+          >
+            <Share2 className="h-3.5 w-3.5" />
+          </button>
         </div>
-        <div className={cn(
-          "absolute top-2 right-2 text-white px-2 py-0.5 rounded-full text-xs",
-          "transform transition-transform duration-300 ease-bounce",
-          "hover:scale-110",
-          getStatusColor(tournament?.status)
-        )}>
-          {getStatusText(tournament?.status)}
-        </div>
-        <div className="absolute bottom-2 right-2 bg-blue-600 text-white px-2 py-0.5 rounded-full text-xs transform transition-all duration-300 hover:scale-105">
-          Sponsored by Google
-        </div>
-        <div className="absolute bottom-2 left-2 flex items-center space-x-1 transform transition-all duration-300 hover:scale-105">
-          <img
-            src="https://storage.googleapis.com/a1aa/image/RW76eSv1bI06GoXLZPNVQlLvVFuloRbfcxmSiTYAc8E.jpg"
-            alt="Game icon"
-            className="w-6 h-6 rounded-full border-2 border-white/50 group-hover:border-white transition-all duration-300"
-          />
-          <div className="bg-black/50 px-2 py-0.5 rounded backdrop-blur-sm group-hover:bg-black/70 transition-colors duration-300">
-            <span className="text-white text-xs">{tournament?.game || "Chess"}</span>
+
+        {/* Status Tags */}
+        <div className="absolute top-2 left-2 flex flex-col gap-2">
+          <div className="bg-red-600 text-white px-2 py-0.5 rounded-full text-xs animate-pulse">
+            {countdown}
           </div>
+          <div className={cn(
+            "text-white px-2 py-0.5 rounded-full text-xs",
+            "transform transition-transform duration-300 ease-bounce",
+            getStatusColor(tournament?.status)
+          )}>
+            {getStatusText(tournament?.status)}
+          </div>
+        </div>
+
+        {/* Tournament Info Tags */}
+        <div className="absolute bottom-2 left-2 flex items-center space-x-2">
+          <div className="flex items-center space-x-1">
+            <img
+              src="https://storage.googleapis.com/a1aa/image/RW76eSv1bI06GoXLZPNVQlLvVFuloRbfcxmSiTYAc8E.jpg"
+              alt="Game icon"
+              className="w-6 h-6 rounded-full border-2 border-white/50 group-hover:border-white transition-all duration-300"
+            />
+            <div className="bg-black/50 px-2 py-0.5 rounded backdrop-blur-sm group-hover:bg-black/70 transition-colors duration-300">
+              <span className="text-white text-xs">{tournament?.game || "Chess"}</span>
+            </div>
+          </div>
+          <div className="flex items-center space-x-1">
+            <Globe className="w-4 h-4 text-white" />
+            <div className="bg-black/50 px-2 py-0.5 rounded backdrop-blur-sm">
+              <span className="text-white text-xs">Online</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Sponsored Tag */}
+        <div className="absolute bottom-2 right-2 bg-gradient-to-r from-blue-600 to-blue-400 text-white px-2 py-0.5 rounded-full text-xs transform transition-all duration-300 hover:scale-105 flex items-center gap-1">
+          <GiftIcon className="w-3 h-3" />
+          <span>Sponsored</span>
         </div>
       </div>
 
