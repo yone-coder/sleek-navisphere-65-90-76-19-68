@@ -405,43 +405,6 @@ export default function TournamentDetails() {
                   </div>
                 </div>
 
-                <div className="space-y-3 mb-6">
-                  <div className="flex items-center text-gray-700 dark:text-gray-300">
-                    <CalendarClock className="h-5 w-5 text-blue-500 mr-3" />
-                    <span className="text-sm">
-                      {tournament 
-                        ? formatDateRange(tournament.start_date, tournament.end_date)
-                        : "Loading..."}
-                    </span>
-                  </div>
-                  
-                  <div className="flex flex-col space-y-2">
-                    <div className="flex items-center justify-between text-gray-700 dark:text-gray-300">
-                      <div className="flex items-center">
-                        <Users className="h-5 w-5 text-blue-500 mr-3" />
-                        <span className="text-sm font-medium">
-                          {tournament?.current_participants || 0}/{tournament?.max_participants || 0} Participants
-                        </span>
-                      </div>
-                      <Badge 
-                        variant="secondary" 
-                        className={cn(
-                          "animate-pulse",
-                          getAvailableSpotsCount() <= 5 ? "bg-red-100 text-red-800 dark:bg-red-900/30" : ""
-                        )}
-                      >
-                        {getSpotsText()}
-                      </Badge>
-                    </div>
-                    <div className="relative">
-                      <Progress 
-                        value={getParticipantProgress()} 
-                        className={cn("h-2 transition-all duration-500", getParticipantProgressColor())} 
-                      />
-                    </div>
-                  </div>
-                </div>
-
                 <div className="flex justify-around mb-6 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                   <div className="flex flex-col items-center">
                     <Heart className={cn(
