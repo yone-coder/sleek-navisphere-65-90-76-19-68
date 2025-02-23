@@ -19,7 +19,7 @@ const navItems = [
   {
     icon: Compass,
     label: "Explore",
-    path: "/games/explore",
+    path: "/games-pages/explore",
     color: "from-emerald-500 to-green-500"
   }
 ];
