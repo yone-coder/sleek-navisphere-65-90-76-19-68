@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -62,8 +61,6 @@ interface Match {
     secondPlayer: number;
   };
 }
-
-// Remove local TournamentHeader and TournamentBanner components as they're now imported
 
 const sampleMatches: Match[] = [
   {
