@@ -37,6 +37,298 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+const ParticipantsTable = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filter, setFilter] = useState("all");
+  const [sort, setSort] = useState("rank");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const participants = [
+    {
+      id: 1,
+      name: "Alex Johnson",
+      rank: "#1",
+      avatar: "https://storage.googleapis.com/a1aa/image/u9QlGEQDPW0dq8Wric7AsU_j7PkzMnKLIgLMlSRCv5I.jpg",
+      country: "USA",
+      rating: 2800,
+      winRate: 85,
+      status: "confirmed",
+      lastActive: "2 hours ago",
+      totalMatches: 254,
+      achievements: ["Tournament Winner", "Perfect Score", "Top Player"],
+      team: "Cloud9",
+      joinDate: "2024-01-15"
+    },
+    {
+      id: 2,
+      name: "Maria Rodriguez",
+      rank: "#2",
+      avatar: "https://storage.googleapis.com/a1aa/image/iG3N08MIvjY6mNComFBnnpKsPY-e90lt6EILTZH3NF8.jpg",
+      country: "Spain",
+      rating: 2750,
+      winRate: 82,
+      status: "confirmed",
+      lastActive: "5 mins ago",
+      totalMatches: 198,
+      achievements: ["Semi-finalist", "Most Improved"],
+      team: "Fnatic",
+      joinDate: "2024-01-20"
+    },
+    {
+      id: 3,
+      name: "James Wilson",
+      rank: "#3",
+      avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36",
+      country: "UK",
+      rating: 2700,
+      winRate: 79,
+      status: "pending",
+      lastActive: "1 day ago",
+      totalMatches: 167,
+      achievements: ["Rising Star"],
+      team: "Team Liquid",
+      joinDate: "2024-02-01"
+    }
+  ];
+
+  const filteredParticipants = participants
+    .filter(p => {
+      if (filter === "confirmed") return p.status === "confirmed";
+      if (filter === "pending") return p.status === "pending";
+      if (searchQuery) {
+        return p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+               p.country.toLowerCase().includes(searchQuery.toLowerCase()) ||
+               p.team.toLowerCase().includes(searchQuery.toLowerCase());
+      }
+      return true;
+    })
+    .sort((a, b) => {
+      switch (sort) {
+        case "rank":
+          return parseInt(a.rank.slice(1)) - parseInt(b.rank.slice(1));
+        case "rating":
+          return b.rating - a.rating;
+        case "winRate":
+          return b.winRate - a.winRate;
+        case "name":
+          return a.name.localeCompare(b.name);
+        default:
+          return 0;
+      }
+    });
+
+  return (
+    <div className="space-y-6">
+      {/* Header Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+          <div className="text-sm text-muted-foreground">Total Participants</div>
+          <div className="text-2xl font-bold">{participants.length}</div>
+          <div className="text-xs text-green-600 mt-1">+5 this week</div>
+        </div>
+        <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+          <div className="text-sm text-muted-foreground">Average Rating</div>
+          <div className="text-2xl font-bold">
+            {Math.round(participants.reduce((acc, p) => acc + p.rating, 0) / participants.length)}
+          </div>
+          <div className="text-xs text-blue-600 mt-1">Top 5%</div>
+        </div>
+        <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+          <div className="text-sm text-muted-foreground">Active Now</div>
+          <div className="text-2xl font-bold">12</div>
+          <div className="text-xs text-green-600 mt-1">High activity</div>
+        </div>
+        <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+          <div className="text-sm text-muted-foreground">Countries</div>
+          <div className="text-2xl font-bold">24</div>
+          <div className="text-xs text-blue-600 mt-1">Global reach</div>
+        </div>
+      </div>
+
+      {/* Controls */}
+      <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
+        <div className="flex flex-1 gap-4">
+          <div className="relative flex-1 max-w-sm">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+            <input
+              placeholder="Search participants..."
+              className="pl-8 h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <Select value={filter} onValueChange={setFilter}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Participants</SelectItem>
+              <SelectItem value="confirmed">Confirmed Only</SelectItem>
+              <SelectItem value="pending">Pending Only</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={sort} onValueChange={setSort}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="rank">Rank</SelectItem>
+              <SelectItem value="rating">Rating</SelectItem>
+              <SelectItem value="winRate">Win Rate</SelectItem>
+              <SelectItem value="name">Name</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex gap-2">
+          <Badge variant="outline" className="bg-green-50 text-green-700">
+            Confirmed: {participants.filter(p => p.status === "confirmed").length}
+          </Badge>
+          <Badge variant="outline" className="bg-yellow-50 text-yellow-700">
+            Pending: {participants.filter(p => p.status === "pending").length}
+          </Badge>
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="border rounded-lg overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Rank</TableHead>
+              <TableHead>Player</TableHead>
+              <TableHead>Team</TableHead>
+              <TableHead>Country</TableHead>
+              <TableHead>Rating</TableHead>
+              <TableHead>Win Rate</TableHead>
+              <TableHead>Achievements</TableHead>
+              <TableHead>Status</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredParticipants.map((participant) => (
+              <TableRow 
+                key={participant.id} 
+                className="hover:bg-muted/50 cursor-pointer group"
+              >
+                <TableCell className="font-medium">{participant.rank}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <div className="relative">
+                      <img 
+                        src={participant.avatar} 
+                        alt={participant.name}
+                        className="w-8 h-8 rounded-full object-cover ring-2 ring-offset-2 ring-blue-500"
+                      />
+                      <div className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-green-500 border-2 border-white" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span>{participant.name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        Active {participant.lastActive}
+                      </span>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Badge variant="outline" className="font-semibold">
+                    {participant.team}
+                  </Badge>
+                </TableCell>
+                <TableCell>{participant.country}</TableCell>
+                <TableCell>
+                  <div className="font-mono">{participant.rating}</div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <Progress 
+                      value={participant.winRate} 
+                      className="w-20 h-2"
+                    />
+                    <span className="text-sm text-muted-foreground">
+                      {participant.winRate}%
+                    </span>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-1 flex-wrap">
+                    {participant.achievements.map((achievement, i) => (
+                      <Badge 
+                        key={i}
+                        variant="outline" 
+                        className="bg-blue-50 text-blue-700 text-xs"
+                      >
+                        {achievement}
+                      </Badge>
+                    ))}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Badge 
+                    variant={participant.status === "confirmed" ? "default" : "secondary"}
+                    className={cn(
+                      participant.status === "confirmed" 
+                        ? "bg-green-500" 
+                        : "bg-yellow-500"
+                    )}
+                  >
+                    {participant.status}
+                  </Badge>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-between items-center">
+        <div className="text-sm text-muted-foreground">
+          Showing {Math.min(10, filteredParticipants.length)} of {filteredParticipants.length} participants
+        </div>
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious href="#" />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#" isActive>1</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">2</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">3</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext href="#" />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </div>
+    </div>
+  );
+};
 
 const sampleMatches: Match[] = [
   {
@@ -204,136 +496,6 @@ const rules = [
     ]
   }
 ];
-
-const ParticipantsTable = () => {
-  const participants = [
-    {
-      id: 1,
-      name: "Alex Johnson",
-      rank: "#1",
-      avatar: "https://storage.googleapis.com/a1aa/image/u9QlGEQDPW0dq8Wric7AsU_j7PkzMnKLIgLMlSRCv5I.jpg",
-      country: "USA",
-      rating: 2800,
-      winRate: 85,
-      status: "confirmed"
-    },
-    {
-      id: 2,
-      name: "Maria Rodriguez",
-      rank: "#2",
-      avatar: "https://storage.googleapis.com/a1aa/image/iG3N08MIvjY6mNComFBnnpKsPY-e90lt6EILTZH3NF8.jpg",
-      country: "Spain",
-      rating: 2750,
-      winRate: 82,
-      status: "confirmed"
-    },
-    {
-      id: 3,
-      name: "James Wilson",
-      rank: "#3",
-      avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36",
-      country: "UK",
-      rating: 2700,
-      winRate: 79,
-      status: "pending"
-    }
-  ];
-
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Tournament Participants</h3>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="bg-green-50 text-green-700">
-            Confirmed: 28
-          </Badge>
-          <Badge variant="outline" className="bg-yellow-50 text-yellow-700">
-            Pending: 12
-          </Badge>
-        </div>
-      </div>
-
-      <div className="border rounded-lg overflow-hidden">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Rank</TableHead>
-              <TableHead>Player</TableHead>
-              <TableHead>Country</TableHead>
-              <TableHead>Rating</TableHead>
-              <TableHead>Win Rate</TableHead>
-              <TableHead>Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {participants.map((participant) => (
-              <TableRow key={participant.id} className="hover:bg-muted/50 cursor-pointer">
-                <TableCell className="font-medium">{participant.rank}</TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <img 
-                      src={participant.avatar} 
-                      alt={participant.name}
-                      className="w-8 h-8 rounded-full object-cover"
-                    />
-                    <span>{participant.name}</span>
-                  </div>
-                </TableCell>
-                <TableCell>{participant.country}</TableCell>
-                <TableCell>{participant.rating}</TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <Progress 
-                      value={participant.winRate} 
-                      className="w-20 h-2"
-                    />
-                    <span className="text-sm text-muted-foreground">
-                      {participant.winRate}%
-                    </span>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Badge 
-                    variant={participant.status === "confirmed" ? "default" : "secondary"}
-                    className={cn(
-                      participant.status === "confirmed" 
-                        ? "bg-green-500" 
-                        : "bg-yellow-500"
-                    )}
-                  >
-                    {participant.status}
-                  </Badge>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-
-      <div className="mt-6 p-4 bg-muted/20 rounded-lg">
-        <h4 className="font-medium mb-4">Quick Stats</h4>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="p-3 bg-white rounded-lg shadow-sm">
-            <div className="text-sm text-muted-foreground">Average Rating</div>
-            <div className="text-2xl font-bold">2750</div>
-          </div>
-          <div className="p-3 bg-white rounded-lg shadow-sm">
-            <div className="text-sm text-muted-foreground">Top Country</div>
-            <div className="text-2xl font-bold">USA</div>
-          </div>
-          <div className="p-3 bg-white rounded-lg shadow-sm">
-            <div className="text-sm text-muted-foreground">Total Prize Claims</div>
-            <div className="text-2xl font-bold">$45K</div>
-          </div>
-          <div className="p-3 bg-white rounded-lg shadow-sm">
-            <div className="text-sm text-muted-foreground">Avg. Win Rate</div>
-            <div className="text-2xl font-bold">82%</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const TournamentRulesCard = () => {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
@@ -701,107 +863,4 @@ export default function TournamentDetails() {
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="flex items-center p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20">
-                  <Trophy className="h-8 w-8 text-yellow-500 mr-3 animate-bounce" />
-                  <div>
-                    <span className="text-sm text-gray-500 dark:text-gray-300">Prize Pool</span>
-                    <p className="font-bold text-xl text-gray-800 dark:text-white">
-                      ${tournament?.prize_pool?.toLocaleString() || "0"}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
-                  <DollarSign className="h-8 w-8 text-green-500 mr-3" />
-                  <div>
-                    <span className="text-sm text-gray-500 dark:text-gray-300">Entry Fee</span>
-                    <p className="font-bold text-xl text-gray-800 dark:text-white">$75.00</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-around mb-6 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                <div className="flex flex-col items-center">
-                  <Heart className={cn(
-                    "h-6 w-6 mb-1",
-                    isLiked ? "text-red-500 fill-current" : "text-gray-500"
-                  )} />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">1.2K</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <MessageSquare className="h-6 w-6 mb-1 text-blue-500" />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">350</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <Share2 className="h-6 w-6 mb-1 text-green-500" />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">75</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <Trophy className="h-6 w-6 mb-1 text-yellow-500" />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Top 10</span>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-3 mb-6">
-                <Button 
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5" 
-                  size="lg"
-                  onClick={handleRegister}
-                >
-                  Register Now
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="w-full" 
-                  size="lg"
-                  onClick={() => window.open('https://discord.gg/tournament', '_blank')}
-                >
-                  Join Discord Community
-                </Button>
-              </div>
-
-              <Tabs defaultValue="participants" className="w-full">
-                <div className="w-full overflow-x-auto no-scrollbar">
-                  <TabsList className="w-full h-auto inline-flex whitespace-nowrap">
-                    {["participants", "rules", "matches", "faqs", "schedule", "brackets", "roadmap"].map((tab) => (
-                      <TabsTrigger
-                        key={tab}
-                        value={tab}
-                        onClick={() => setActiveTab(tab)}
-                        className="flex-shrink-0"
-                      >
-                        {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
-                </div>
-
-                <TabsContent value="participants">
-                  <ParticipantsTable />
-                </TabsContent>
-
-                <TabsContent value="rules">
-                  <TournamentRulesCard />
-                </TabsContent>
-
-                <TabsContent value="matches">
-                  <div className="space-y-12 -mx-4">
-                    <MatchesSection matches={sampleMatches} title="Quarter Finals" />
-                    <MatchesSection matches={sampleMatches} title="Group Stage" />
-                    <MatchesSection matches={sampleMatches} title="Qualifiers" />
-                  </div>
-                </TabsContent>
-
-                {["participants", "faqs", "schedule", "brackets", "roadmap"].map((tab) => (
-                  <TabsContent key={tab} value={tab}>
-                    <div className="p-4 text-center text-gray-500">
-                      {tab.charAt(0).toUpperCase() + tab.slice(1)} content coming soon...
-                    </div>
-                  </TabsContent>
-                ))}
-              </Tabs>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+                  <
