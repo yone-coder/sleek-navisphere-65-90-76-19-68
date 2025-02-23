@@ -106,6 +106,51 @@ const tournaments = [
   }
 ];
 
+const sponsoredGames = [
+  {
+    id: "candy-crush",
+    title: "Candy Crush Tournament",
+    description: "Match candies in this tasty tournament adventure",
+    thumbnail: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
+    icon: "https://images.unsplash.com/photo-1596450514735-111a2fe02935",
+    category: ["Casual", "Puzzle"],
+    rating: 4.5,
+    downloads: "1B+",
+    size: "98MB",
+    hasAds: true,
+    inAppPurchases: true,
+    prize: "$5,000"
+  },
+  {
+    id: "royal-match",
+    title: "Royal Match Championship",
+    description: "Match-3 puzzle with royal prize pools",
+    thumbnail: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
+    icon: "https://images.unsplash.com/photo-1580234811497-9df7fd2f357e",
+    category: ["Casual", "Puzzle"],
+    rating: 4.7,
+    downloads: "100M+",
+    size: "156MB",
+    hasAds: true,
+    inAppPurchases: true,
+    prize: "$2,500"
+  },
+  {
+    id: "duolingo",
+    title: "Language Masters Challenge",
+    description: "Learn and compete in language challenges",
+    thumbnail: "https://images.unsplash.com/photo-1661875576025-0e5d61dec14f",
+    icon: "https://images.unsplash.com/photo-1661875576025-0e5d61dec14f",
+    category: ["Education", "Language"],
+    rating: 4.7,
+    downloads: "500M+",
+    size: "45MB",
+    hasAds: true,
+    inAppPurchases: true,
+    prize: "$1,000"
+  }
+];
+
 export default function ContestsPage() {
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -132,6 +177,50 @@ export default function ContestsPage() {
             </div>
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
+        </div>
+
+        {/* Sponsored Section */}
+        <div className="mb-8">
+          <div className="px-4">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-medium text-gray-900 flex items-center gap-2">
+                Sponsored <span className="text-gray-500">•</span> Suggested for you
+              </h2>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <MoreVertical className="h-5 w-5" />
+              </Button>
+            </div>
+
+            <ScrollArea className="w-full" type="scroll">
+              <div className="flex gap-4 pb-4">
+                {sponsoredGames.map((game) => (
+                  <div 
+                    key={game.id}
+                    className="flex-none w-[120px]"
+                  >
+                    <div className="relative mb-2">
+                      <img
+                        src={game.icon}
+                        alt={game.title}
+                        className="w-[120px] h-[120px] rounded-[24px] object-cover"
+                      />
+                      <Badge className="absolute top-2 right-2 bg-green-500">
+                        {game.prize}
+                      </Badge>
+                    </div>
+                    <h3 className="text-gray-900 text-sm font-medium truncate mb-1">
+                      {game.title}
+                    </h3>
+                    <div className="flex items-center gap-1 text-gray-600 text-xs">
+                      <span>{game.rating}</span>
+                      <Star className="w-3 h-3 fill-gray-600 text-gray-600" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+          </div>
         </div>
 
         {/* Featured Contests */}
