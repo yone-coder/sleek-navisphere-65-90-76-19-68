@@ -404,28 +404,6 @@ export default function TournamentDetails() {
                     ))}
                   </div>
                 </div>
-
-                <div className="flex justify-around mb-6 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                  <div className="flex flex-col items-center">
-                    <Heart className={cn(
-                      "h-6 w-6 mb-1",
-                      isLiked ? "text-red-500 fill-current" : "text-gray-500"
-                    )} />
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">1.2K</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <MessageSquare className="h-6 w-6 mb-1 text-blue-500" />
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">350</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <Share2 className="h-6 w-6 mb-1 text-green-500" />
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">75</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <Trophy className="h-6 w-6 mb-1 text-yellow-500" />
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Top 10</span>
-                  </div>
-                </div>
               </div>
             </div>
           </TabsContent>
