@@ -25,6 +25,7 @@ interface TournamentCardProps {
 
 export const TournamentCard = ({ className, tournament }: TournamentCardProps) => {
   const [countdown, setCountdown] = useState('');
+  const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
   const targetDate = tournament ? new Date(tournament.start_date).getTime() : new Date('2025-02-12T17:45:00').getTime();
 
@@ -60,7 +61,7 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
 
   const getProgressBarColor = (current: number, max: number) => {
     const remainingPercentage = ((max - current) / max) * 100;
-    return remainingPercentage < 50 ? '#ea384c' : 'rgb(37 99 235)'; // red if less than 50% spots remaining
+    return remainingPercentage < 50 ? '#ea384c' : 'rgb(37 99 235)';
   };
 
   useEffect(() => {
@@ -94,42 +95,62 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
   };
 
   return (
-    <div className={cn("overflow-hidden shadow-md bg-white dark:bg-gray-800 transition-all duration-300 hover:shadow-lg", className)}>
-      <div className="relative h-32">
+    <div 
+      className={cn(
+        "group overflow-hidden rounded-xl shadow-md bg-white dark:bg-gray-800",
+        "transition-all duration-300 ease-in-out transform",
+        "hover:shadow-xl hover:-translate-y-1",
+        "dark:hover:shadow-2xl dark:hover:shadow-blue-500/10",
+        className
+      )}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="relative h-32 overflow-hidden">
         <img
           src={tournament?.banner_url || "https://storage.googleapis.com/a1aa/image/1KrFqMU9yacw7XaUF67L6MaKLpXyjGHzZqDa24FBdig.jpg"}
           alt="Tournament banner"
-          className="w-full h-full object-cover"
+          className={cn(
+            "w-full h-full object-cover transition-transform duration-700 ease-in-out",
+            isHovered && "scale-110"
+          )}
         />
-        <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-0.5 rounded-full text-xs">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        
+        <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-0.5 rounded-full text-xs animate-pulse">
           {countdown}
         </div>
-        <div className={cn("absolute top-2 right-2 text-white px-2 py-0.5 rounded-full text-xs", getStatusColor(tournament?.status))}>
+        <div className={cn(
+          "absolute top-2 right-2 text-white px-2 py-0.5 rounded-full text-xs",
+          "transform transition-transform duration-300 ease-bounce",
+          "hover:scale-110",
+          getStatusColor(tournament?.status)
+        )}>
           {getStatusText(tournament?.status)}
         </div>
-        <div className="absolute bottom-2 right-2 bg-blue-600 text-white px-2 py-0.5 rounded-full text-xs">
+        <div className="absolute bottom-2 right-2 bg-blue-600 text-white px-2 py-0.5 rounded-full text-xs transform transition-all duration-300 hover:scale-105">
           Sponsored by Google
         </div>
-        <div className="absolute bottom-2 left-2 flex items-center space-x-1">
+        <div className="absolute bottom-2 left-2 flex items-center space-x-1 transform transition-all duration-300 hover:scale-105">
           <img
             src="https://storage.googleapis.com/a1aa/image/RW76eSv1bI06GoXLZPNVQlLvVFuloRbfcxmSiTYAc8E.jpg"
             alt="Game icon"
-            className="w-6 h-6 rounded-full border border-white"
+            className="w-6 h-6 rounded-full border-2 border-white/50 group-hover:border-white transition-all duration-300"
           />
-          <div className="bg-black bg-opacity-50 px-2 py-0.5 rounded backdrop-blur-sm">
+          <div className="bg-black/50 px-2 py-0.5 rounded backdrop-blur-sm group-hover:bg-black/70 transition-colors duration-300">
             <span className="text-white text-xs">{tournament?.game || "Chess"}</span>
           </div>
         </div>
       </div>
 
-      <div className="p-3">
-        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1">
+      <div className="p-3 transform transition-all duration-300 group-hover:bg-gray-50 dark:group-hover:bg-gray-800/80">
+        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1 transition-colors duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400">
           {tournament?.title || "2025 Summer Championship"}
         </h3>
 
         <div className="space-y-2 mb-2">
-          <div className="flex items-center text-gray-600 dark:text-gray-300">
-            <CalendarIcon className="h-3 w-3 text-blue-500 mr-1" />
+          <div className="flex items-center text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300">
+            <CalendarIcon className="h-3 w-3 text-blue-500 mr-1 group-hover:scale-110 transition-transform duration-300" />
             <span className="text-xs">
               {tournament 
                 ? formatDateRange(tournament.start_date, tournament.end_date)
@@ -137,23 +158,23 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <div className="flex items-center text-gray-600 dark:text-gray-300">
-              <Users className="h-3 w-3 text-blue-500 mr-1" />
+            <div className="flex items-center text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300">
+              <Users className="h-3 w-3 text-blue-500 mr-1 group-hover:scale-110 transition-transform duration-300" />
               <span className="text-xs">
                 {tournament 
                   ? `${tournament.current_participants}/${tournament.max_participants}`
                   : "128/256"}
               </span>
             </div>
-            <span className="text-xs text-blue-600 dark:text-blue-400">
+            <span className="text-xs text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors duration-300">
               {tournament 
                 ? `${tournament.max_participants - tournament.current_participants} left`
                 : "128 left"}
             </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
+          <div className="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700 overflow-hidden">
             <div 
-              className="h-1.5 rounded-full transition-all duration-300" 
+              className="h-1.5 rounded-full transition-all duration-700 ease-in-out transform origin-left"
               style={{ 
                 width: tournament 
                   ? `${(tournament.current_participants / tournament.max_participants) * 100}%`
@@ -167,8 +188,8 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
         </div>
 
         <div className="flex justify-between mb-2 text-xs">
-          <div className="flex items-center space-x-1">
-            <Trophy className="h-3 w-3 text-yellow-500" />
+          <div className="flex items-center space-x-1 group-hover:scale-105 transition-transform duration-300">
+            <Trophy className="h-3 w-3 text-yellow-500 animate-pulse" />
             <div>
               <span className="text-gray-500 dark:text-gray-400">Prize</span>
               <p className="font-semibold text-gray-800 dark:text-white">
@@ -176,8 +197,8 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-1">
-            <DollarSign className="h-3 w-3 text-green-500" />
+          <div className="flex items-center space-x-1 group-hover:scale-105 transition-transform duration-300">
+            <DollarSign className="h-3 w-3 text-green-500 animate-pulse" />
             <div>
               <span className="text-gray-500 dark:text-gray-400">Entry</span>
               <p className="font-semibold text-gray-800 dark:text-white">$75</p>
@@ -185,13 +206,13 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
           </div>
         </div>
 
-        <div className="flex space-x-2 text-xs">
-          <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-2 rounded-md transition-colors duration-300">
+        <div className="flex space-x-2 text-xs opacity-90 group-hover:opacity-100 transition-opacity duration-300">
+          <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-2 rounded-md transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25">
             Register
           </button>
           <button 
             onClick={() => navigate(`/tournament/${tournament?.id || '1'}`)}
-            className="flex-1 bg-transparent hover:bg-blue-50 text-blue-600 dark:text-blue-400 font-medium py-1 px-2 border border-blue-600 rounded-md transition-colors duration-300 dark:hover:bg-gray-700 dark:border-blue-400"
+            className="flex-1 bg-transparent hover:bg-blue-50 text-blue-600 dark:text-blue-400 font-medium py-1 px-2 border border-blue-600 rounded-md transition-all duration-300 transform hover:scale-105 hover:shadow-lg dark:hover:bg-gray-700 dark:border-blue-400"
           >
             Details
           </button>
