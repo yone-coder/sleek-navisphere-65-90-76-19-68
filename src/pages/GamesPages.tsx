@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { GameSearchOverlay } from "@/components/search/GameSearchOverlay";
 import { GamesBottomNav } from "@/components/games/GamesBottomNav";
@@ -8,7 +9,7 @@ import { SponsoredGamesSection } from "@/components/games/SponsoredGamesSection"
 import { PopularGamesSection } from "@/components/games/PopularGamesSection";
 import { CategorySection } from "@/components/games/CategorySection";
 import { GameListItem } from "@/components/games/GameListItem";
-import { Game } from "@/components/games/types";
+import { Game, GameEvent } from "@/components/games/types";
 
 const games: Game[] = [
   {
