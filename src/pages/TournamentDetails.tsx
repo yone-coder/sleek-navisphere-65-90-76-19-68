@@ -12,13 +12,7 @@ import {
   Share2,
   Heart,
   CalendarClock,
-  DollarSign,
-  Filter,
-  MoreVertical,
-  Bell,
-  ScrollText,
-  ChevronUpIcon,
-  ChevronDownIcon
+  DollarSign
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -31,34 +25,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { TournamentBrackets } from "@/components/tournament/sections/TournamentBrackets";
+  TournamentBrackets } from "@/components/tournament/sections/TournamentBrackets";
 import { TournamentRoadmap } from "@/components/tournament/sections/TournamentRoadmap";
 import { ParticipantsTable } from "@/components/tournament/sections/ParticipantsTable";
 import { TournamentRulesCard } from "@/components/tournament/sections/TournamentRulesCard";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Separator } from "@/components/ui/separator";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 const sampleMatches: Match[] = [
   {
@@ -223,6 +193,10 @@ export default function TournamentDetails() {
     return `${spots} spots available`;
   };
 
+  const formatDateRange = (startDate: string, endDate: string) => {
+    return `${format(new Date(startDate), 'MMM d, yyyy')} - ${format(new Date(endDate), 'MMM d, yyyy')}`;
+  };
+
   const handleShare = async () => {
     try {
       const shareData = {
@@ -331,7 +305,7 @@ export default function TournamentDetails() {
                     <DollarSign className="h-8 w-8 text-green-500 mr-3" />
                     <div>
                       <span className="text-sm text-gray-500 dark:text-gray-300">Spots Left</span>
-                      <p className="font-bold text-xl text-gray-800 dark:text-white">{getAvailableSpots()}</p>
+                      <p className="font-bold text-xl text-gray-800 dark:text-white">{getSpotsText()}</p>
                     </div>
                   </div>
                 </div>
@@ -376,7 +350,7 @@ export default function TournamentDetails() {
                         variant="secondary" 
                         className={cn(
                           "animate-pulse",
-                          getAvailableSpots() <= 5 ? "bg-red-100 text-red-800 dark:bg-red-900/30" : ""
+                          getSpotsText() <= 5 ? "bg-red-100 text-red-800 dark:bg-red-900/30" : ""
                         )}
                       >
                         {getSpotsText()}
