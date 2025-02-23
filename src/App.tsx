@@ -1,3 +1,4 @@
+
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -13,7 +14,6 @@ const Apps = lazy(() => import("./pages/Apps"));
 const GamesPages = lazy(() => import("./pages/GamesPages"));
 const Matches = lazy(() => import("./pages/Matches"));
 const Feeds = lazy(() => import("./pages/Feeds"));
-const Profile = lazy(() => import("./pages/Profile"));
 const Wallet = lazy(() => import("./pages/Wallet"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Login = lazy(() => import("./pages/Login"));
@@ -35,8 +35,7 @@ const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 const AdminBanners = lazy(() => import("./pages/admin/AdminBanners"));
 const AdminTournaments = lazy(() => import("./pages/admin/AdminTournaments"));
-
-const Profile = lazy(() => import("./pages/games/Profile"));
+const GamesProfile = lazy(() => import("./pages/games/Profile"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen p-8 space-y-4">
@@ -72,11 +71,11 @@ const AppContent = () => {
           <Route path="/matches" element={<Matches />} />
           <Route path="/match/:id" element={<MatchDetails />} />
           <Route path="/tournaments" element={<Tournaments />} />
-          <Route path="/games" element={<GamesPages />} /> {/* Updated to use GamesPages */}
+          <Route path="/games" element={<GamesPages />} />
           <Route path="/games/gomoku" element={<Gomoku />} />
           <Route path="/games/morpion" element={<Morpion />} />
           <Route path="/feeds" element={<Feeds />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<GamesProfile />} />
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
@@ -103,7 +102,7 @@ const AppContent = () => {
             <Route path="system" element={<div className="p-8">System Management (Coming Soon)</div>} />
           </Route>
           
-          <Route path="/games-pages/profile" element={<Profile />} />
+          <Route path="/games-pages/profile" element={<GamesProfile />} />
           
           <Route path="*" element={<NotFound />} />
         </Routes>
