@@ -40,7 +40,7 @@ const mockTournament = {
   start_date: "2025-01-15",
   end_date: "2025-02-28",
   game: "League of Legends",
-  status: "in-progress" as const,
+  status: "in-progress",
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
   position: 1
@@ -341,7 +341,7 @@ export default function TournamentDetails() {
               <div className="px-4">
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div className="flex items-center p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20">
-                    <Trophy className="h-8 w-8 text-yellow-500 mr-3 animate-bounce" />
+                    <Trophy className="h-8 w-8 text-yellow-500 mr-3" />
                     <div>
                       <span className="text-sm text-gray-500 dark:text-gray-300">Prize Pool</span>
                       <p className="font-bold text-xl text-gray-800 dark:text-white">
