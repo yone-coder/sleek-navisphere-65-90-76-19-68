@@ -30,6 +30,15 @@ import { TournamentRoadmap } from "@/components/tournament/sections/TournamentRo
 import { ParticipantsTable } from "@/components/tournament/sections/ParticipantsTable";
 import { TournamentRulesCard } from "@/components/tournament/sections/TournamentRulesCard";
 
+const formatPrizePool = (amount: number): string => {
+  if (amount >= 1000000) {
+    return `$${(amount / 1000000).toFixed(1)}M`;
+  } else if (amount >= 1000) {
+    return `$${(amount / 1000).toFixed(0)}K`;
+  }
+  return `$${amount}`;
+};
+
 const mockTournament = {
   id: "1",
   title: "Winter Championship 2025",
@@ -291,7 +300,7 @@ export default function TournamentDetails() {
               <div className="text-right">
                 <div className="flex items-center gap-1 text-xs text-yellow-500">
                   <Trophy className="h-3 w-3" />
-                  <span>${tournament?.prize_pool?.toLocaleString() || "0"}</span>
+                  <span>{tournament ? formatPrizePool(tournament.prize_pool) : "$0"}</span>
                 </div>
                 <div className="flex items-center gap-1 text-xs text-green-500">
                   <DollarSign className="h-3 w-3" />
@@ -344,10 +353,10 @@ export default function TournamentDetails() {
                     <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
                       <Trophy className="h-8 w-8 text-yellow-500" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <span className="text-sm text-gray-500 dark:text-gray-300">Prize Pool</span>
-                      <p className="font-bold text-xl text-gray-800 dark:text-white">
-                        ${tournament?.prize_pool?.toLocaleString() || "0"}
+                      <p className="font-bold text-xl text-gray-800 dark:text-white truncate">
+                        {tournament ? formatPrizePool(tournament.prize_pool) : "$0"}
                       </p>
                     </div>
                   </div>
@@ -355,9 +364,9 @@ export default function TournamentDetails() {
                     <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
                       <DollarSign className="h-8 w-8 text-green-500" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <span className="text-sm text-gray-500 dark:text-gray-300">Entry Fee</span>
-                      <p className="font-bold text-xl text-gray-800 dark:text-white">Free</p>
+                      <p className="font-bold text-xl text-gray-800 dark:text-white truncate">Free</p>
                     </div>
                   </div>
                 </div>
