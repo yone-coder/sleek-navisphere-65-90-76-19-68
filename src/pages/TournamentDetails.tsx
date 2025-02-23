@@ -445,7 +445,7 @@ export default function TournamentDetails() {
         </div>
       </div>
 
-      <div className="pt-24">
+      <div className="pt-24 pb-32">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsContent value="overview">
             <div className="space-y-6">
@@ -585,17 +585,28 @@ export default function TournamentDetails() {
         </Tabs>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 p-4 backdrop-blur-lg bg-background/80 border-t border-border/40">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <Users className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">
-              {tournament?.current_participants || 0}/{tournament?.max_participants || 0}
-            </span>
+      <div className="fixed bottom-0 left-0 right-0 backdrop-blur-lg bg-background/80 border-t border-border/40">
+        <div className="p-4 space-y-2">
+          <div className="flex flex-col space-y-2">
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center gap-2">
+                <Users className="h-4 w-4 text-muted-foreground" />
+                <span className="text-muted-foreground">
+                  {tournament?.current_participants || 0}/{tournament?.max_participants || 0} Participants
+                </span>
+              </div>
+              <span className="text-sm font-medium">
+                {getSpotsText()}
+              </span>
+            </div>
+            <Progress 
+              value={getParticipantProgress()} 
+              className={cn("h-2 transition-all duration-500", getParticipantProgressColor())} 
+            />
           </div>
           <Button 
             size="sm"
-            className="bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white gap-2"
+            className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white gap-2"
           >
             <Trophy className="h-4 w-4" />
             Register Now
