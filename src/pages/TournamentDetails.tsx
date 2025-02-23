@@ -1,43 +1,15 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { MatchesSection } from "@/components/matches/MatchesSection";
-import { Match } from "@/components/matches/types";
-import { 
-  ArrowLeft, 
-  Search, 
-  Scroll,
-  CalendarClock, 
-  Users,
-  Trophy,
-  DollarSign,
-  Heart,
-  MessageSquare,
-  Share2,
-  Copy,
-  UserPlus,
-  ChevronDown,
-  ChevronUp,
-  Loader2
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
+import { Loader2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { TournamentHeader } from "@/components/tournament/header/TournamentHeader";
+import { TournamentBanner } from "@/components/tournament/banner/TournamentBanner";
 import { TournamentStats } from "@/components/tournament/sections/TournamentStats";
+import { TournamentDescription } from "@/components/tournament/sections/TournamentDescription";
 
 const sampleMatches: Match[] = [
   {
@@ -653,7 +625,9 @@ export default function TournamentDetails() {
           />
 
           <div className="px-4">
-            <div className="py-6">
+            <div className="py-6 space-y-6">
+              <TournamentDescription tournament={tournament} />
+              
               <TournamentStats 
                 tournament={tournament}
                 onRegister={handleRegister}
