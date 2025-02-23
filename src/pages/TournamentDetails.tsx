@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -15,7 +16,11 @@ import {
   CalendarClock,
   Filter,
   MoreVertical,
-  Bell
+  Bell,
+  Loader,
+  ScrollText,
+  ChevronUpIcon,
+  ChevronDownIcon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -37,7 +42,14 @@ import {
 } from "@/components/ui/table";
 import { TournamentBrackets } from "@/components/tournament/sections/TournamentBrackets";
 import { TournamentRoadmap } from "@/components/tournament/sections/TournamentRoadmap";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 
 const sampleMatches: Match[] = [
@@ -348,7 +360,7 @@ const TournamentRulesCard = () => {
     <div className="w-full max-w-2xl mx-auto shadow-lg">
       <div className="bg-slate-800 text-white p-4">
         <div className="flex items-center gap-2">
-          <Scroll className="h-5 w-5" />
+          <ScrollText className="h-5 w-5" />
           <h2 className="text-lg font-bold">Official Tournament Rule Book</h2>
         </div>
       </div>
@@ -363,8 +375,8 @@ const TournamentRulesCard = () => {
               >
                 <span className="font-semibold text-slate-800">{section.title}</span>
                 {expandedSection === section.id ? 
-                  <ChevronUp className="h-5 w-5 text-slate-500" /> : 
-                  <ChevronDown className="h-5 w-5 text-slate-500" />
+                  <ChevronUpIcon className="h-5 w-5 text-slate-500" /> : 
+                  <ChevronDownIcon className="h-5 w-5 text-slate-500" />
                 }
               </button>
               
@@ -528,7 +540,7 @@ export default function TournamentDetails() {
   if (isLoading) {
     return (
       <div className="min-h-screen pt-14 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin" />
+        <Loader className="w-8 h-8 animate-spin" />
       </div>
     );
   }
