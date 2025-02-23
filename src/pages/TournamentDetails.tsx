@@ -5,10 +5,6 @@ import {
   Loader2, 
   ChevronUp, 
   ChevronDown,
-  ArrowLeft,
-  Share2,
-  Heart,
-  Search,
   ScrollText as Scroll
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -61,6 +57,53 @@ interface Match {
     secondPlayer: number;
   };
 }
+
+const rules = [
+  {
+    id: 'general',
+    title: 'General Rules',
+    rules: [
+      'All matches will be played on the latest tournament patch (v2.34)',
+      'Players must arrive 30 minutes before scheduled match time',
+      'Match results are final once submitted to tournament officials',
+      'Players must use tournament-provided equipment',
+      'Unsportsmanlike conduct will result in immediate disqualification'
+    ]
+  },
+  {
+    id: 'competition',
+    title: 'Competition Format',
+    rules: [
+      'Double elimination bracket system',
+      'Best-of-three matches for all rounds except finals',
+      'Finals will be best-of-five',
+      'Map selection alternates between players, loser picks next map',
+      'No map may be played twice in the same match'
+    ]
+  },
+  {
+    id: 'conduct',
+    title: 'Player Conduct',
+    rules: [
+      'Players must maintain professional behavior at all times',
+      'Verbal abuse of opponents or officials is prohibited',
+      'Intentional disconnects without approval will count as a forfeit',
+      'Players may not receive coaching during matches',
+      'All disputes must be reported to tournament officials immediately'
+    ]
+  },
+  {
+    id: 'technical',
+    title: 'Technical Rules',
+    rules: [
+      'In case of technical failure, match may be paused up to 15 minutes',
+      'Only approved peripherals may be used (list available at check-in)',
+      'Settings must be configured before match start',
+      'Recording software must be approved by tournament officials',
+      'Streaming is prohibited during tournament hours'
+    ]
+  }
+];
 
 const sampleMatches: Match[] = [
   {
@@ -182,53 +225,6 @@ const sampleMatches: Match[] = [
   }
 ];
 
-const rules = [
-  {
-    id: 'general',
-    title: 'General Rules',
-    rules: [
-      'All matches will be played on the latest tournament patch (v2.34)',
-      'Players must arrive 30 minutes before scheduled match time',
-      'Match results are final once submitted to tournament officials',
-      'Players must use tournament-provided equipment',
-      'Unsportsmanlike conduct will result in immediate disqualification'
-    ]
-  },
-  {
-    id: 'competition',
-    title: 'Competition Format',
-    rules: [
-      'Double elimination bracket system',
-      'Best-of-three matches for all rounds except finals',
-      'Finals will be best-of-five',
-      'Map selection alternates between players, loser picks next map',
-      'No map may be played twice in the same match'
-    ]
-  },
-  {
-    id: 'conduct',
-    title: 'Player Conduct',
-    rules: [
-      'Players must maintain professional behavior at all times',
-      'Verbal abuse of opponents or officials is prohibited',
-      'Intentional disconnects without approval will count as a forfeit',
-      'Players may not receive coaching during matches',
-      'All disputes must be reported to tournament officials immediately'
-    ]
-  },
-  {
-    id: 'technical',
-    title: 'Technical Rules',
-    rules: [
-      'In case of technical failure, match may be paused up to 15 minutes',
-      'Only approved peripherals may be used (list available at check-in)',
-      'Settings must be configured before match start',
-      'Recording software must be approved by tournament officials',
-      'Streaming is prohibited during tournament hours'
-    ]
-  }
-];
-
 const ParticipantsTable = () => {
   const participants = [
     {
@@ -333,28 +329,6 @@ const ParticipantsTable = () => {
           </TableBody>
         </Table>
       </div>
-
-      <div className="mt-6 p-4 bg-muted/20 rounded-lg">
-        <h4 className="font-medium mb-4">Quick Stats</h4>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="p-3 bg-white rounded-lg shadow-sm">
-            <div className="text-sm text-muted-foreground">Average Rating</div>
-            <div className="text-2xl font-bold">2750</div>
-          </div>
-          <div className="p-3 bg-white rounded-lg shadow-sm">
-            <div className="text-sm text-muted-foreground">Top Country</div>
-            <div className="text-2xl font-bold">USA</div>
-          </div>
-          <div className="p-3 bg-white rounded-lg shadow-sm">
-            <div className="text-sm text-muted-foreground">Total Prize Claims</div>
-            <div className="text-2xl font-bold">$45K</div>
-          </div>
-          <div className="p-3 bg-white rounded-lg shadow-sm">
-            <div className="text-sm text-muted-foreground">Avg. Win Rate</div>
-            <div className="text-2xl font-bold">82%</div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
@@ -410,106 +384,6 @@ const TournamentRulesCard = () => {
         
         <div className="text-sm text-slate-500">
           <p>All rules are subject to interpretation by the tournament committee. Additional rules may be announced before the tournament. Players are responsible for staying updated on any rule changes.</p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const TournamentHeader = ({
-  title,
-  isLiked,
-  onBack,
-  onShare,
-  onLike,
-}) => {
-  return (
-    <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg bg-background/80 border-b border-border/40">
-      <div className="h-16 px-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-foreground hover:bg-foreground/10"
-            onClick={onBack}
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="text-lg font-semibold truncate max-w-[200px]">
-            {title}
-          </h1>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-foreground hover:bg-foreground/10"
-            onClick={onShare}
-          >
-            <Share2 className="h-5 w-5" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className={cn(
-              "text-foreground hover:bg-foreground/10",
-              isLiked && "text-red-500"
-            )}
-            onClick={onLike}
-          >
-            <Heart className="h-5 w-5" fill={isLiked ? "currentColor" : "none"} />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-foreground hover:bg-foreground/10"
-          >
-            <Search className="h-5 w-5" />
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const TournamentBanner = ({
-  bannerUrl,
-  statusColor,
-  statusText,
-  game,
-  onImageClick,
-}) => {
-  return (
-    <div className="relative group cursor-pointer" onClick={onImageClick}>
-      <img 
-        src={bannerUrl}
-        alt="Tournament banner" 
-        className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
-      />
-      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-      <Badge 
-        className={cn(
-          "absolute top-4 right-4 shadow-lg",
-          statusColor
-        )}
-        variant="default"
-      >
-        {statusText}
-      </Badge>
-      <Badge 
-        className="absolute bottom-4 right-4 bg-gradient-to-r from-blue-600 to-blue-400 shadow-lg" 
-        variant="default"
-      >
-        Sponsored by Google
-      </Badge>
-      <div className="absolute bottom-2 left-2 flex items-center space-x-1">
-        <img
-          src="https://storage.googleapis.com/a1aa/image/RW76eSv1bI06GoXLZPNVQlLvVFuloRbfcxmSiTYAc8E.jpg"
-          alt="Game icon"
-          className="w-8 h-8 rounded-full border-2 border-white shadow-lg"
-        />
-        <div className="bg-black/50 px-2 py-0.5 rounded backdrop-blur-sm">
-          <span className="text-white text-xs font-medium">{game || "Chess"}</span>
         </div>
       </div>
     </div>
@@ -586,12 +460,6 @@ export default function TournamentDetails() {
     });
   };
 
-  const formatDateRange = (startDate: string, endDate: string) => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    return `${format(start, 'MMM dd')} - ${format(end, 'MMM dd')}, ${format(end, 'yyyy')}`;
-  };
-
   const getStatusColor = (status?: string) => {
     switch (status) {
       case 'in-progress':
@@ -620,31 +488,6 @@ export default function TournamentDetails() {
       default:
         return 'Upcoming';
     }
-  };
-
-  const getParticipantProgress = () => {
-    if (!tournament) return 0;
-    return (tournament.current_participants / tournament.max_participants) * 100;
-  };
-
-  const getAvailableSpots = () => {
-    if (!tournament) return 0;
-    return tournament.max_participants - tournament.current_participants;
-  };
-
-  const getSpotsText = () => {
-    const spots = getAvailableSpots();
-    if (spots <= 0) return "Tournament Full";
-    if (spots <= 5) return `Only ${spots} spots left!`;
-    return `${spots} spots available`;
-  };
-
-  const getParticipantProgressColor = () => {
-    const progress = getParticipantProgress();
-    if (progress >= 90) return "bg-red-500";
-    if (progress >= 75) return "bg-orange-500";
-    if (progress >= 50) return "bg-yellow-500";
-    return "bg-blue-500";
   };
 
   if (isLoading) {
