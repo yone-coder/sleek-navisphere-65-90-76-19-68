@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Search } from "lucide-react";
+import { ArrowLeft, Search, Send } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 type NavigationHeaderProps = {
@@ -54,19 +54,34 @@ export function NavigationHeader({
             )}
           </div>
 
-          <Button 
-            variant="ghost" 
-            size="icon"
-            className={`
-              transition-colors duration-300
-              ${scrolled 
-                ? 'text-gray-700 hover:bg-gray-100' 
-                : 'text-white bg-black/20 hover:bg-black/30'}
-              backdrop-blur-sm rounded-full
-            `}
-          >
-            <Search className="h-5 w-5" />
-          </Button>
+          <div className="flex gap-2 pointer-events-auto">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              className={`
+                transition-colors duration-300
+                ${scrolled 
+                  ? 'text-gray-700 hover:bg-gray-100' 
+                  : 'text-white bg-black/20 hover:bg-black/30'}
+                backdrop-blur-sm rounded-full
+              `}
+            >
+              <Search className="h-5 w-5" />
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              className={`
+                transition-colors duration-300
+                ${scrolled 
+                  ? 'text-gray-700 hover:bg-gray-100' 
+                  : 'text-white bg-black/20 hover:bg-black/30'}
+                backdrop-blur-sm rounded-full
+              `}
+            >
+              <Send className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </div>
     </div>
