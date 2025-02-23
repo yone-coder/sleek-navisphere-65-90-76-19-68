@@ -584,14 +584,13 @@ export default function TournamentDetails() {
 
         {/* Tabs Navigation */}
         <div className="px-4 pb-2">
-          <Tabs defaultValue="overview" className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <div className="w-full overflow-x-auto no-scrollbar">
               <TabsList className="w-full h-auto inline-flex whitespace-nowrap">
                 {["overview", "participants", "rules", "matches", "brackets", "faqs", "schedule", "roadmap"].map((tab) => (
                   <TabsTrigger
                     key={tab}
                     value={tab}
-                    onClick={() => setActiveTab(tab)}
                     className="flex-shrink-0"
                   >
                     {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -605,7 +604,7 @@ export default function TournamentDetails() {
 
       {/* Main Content */}
       <div className="pt-28">
-        <Tabs defaultValue="overview" className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsContent value="overview">
             <div className="space-y-6">
               <BannerSlider />
