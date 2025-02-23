@@ -150,6 +150,22 @@ const sampleMatches: Match[] = [
   }
 ];
 
+const mockTournament = {
+  id: "1",
+  title: "Winter Championship 2025",
+  banner_url: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
+  prize_pool: 100000,
+  current_participants: 95,
+  max_participants: 128,
+  start_date: "2025-01-15",
+  end_date: "2025-02-28",
+  game: "League of Legends",
+  status: "in-progress" as const,
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+  position: 1
+};
+
 export default function TournamentDetails() {
   const { id } = useParams();
   const { t } = useLanguage();
@@ -158,17 +174,13 @@ export default function TournamentDetails() {
   const [isLiked, setIsLiked] = useState(false);
   const { toast } = useToast();
 
+  // Mock the query response with our mock data
   const { data: tournament, isLoading } = useQuery({
     queryKey: ["tournament", id],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("tournaments")
-        .select("*")
-        .eq("id", id)
-        .single();
-      
-      if (error) throw error;
-      return data;
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      return mockTournament;
     },
   });
 
