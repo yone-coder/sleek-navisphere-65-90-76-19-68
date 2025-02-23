@@ -974,7 +974,24 @@ export default function TournamentDetails() {
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 p-4 backdrop-blur-lg bg-background/80 border-t border-border/40">
-        <RegisterButton />
+        <div className="px-4 pt-2">
+          <div className="flex items-center justify-between text-sm mb-2">
+            <span className="text-muted-foreground">Tournament Capacity</span>
+            <span className="font-medium">
+              {tournament?.current_participants || 0} / {tournament?.max_participants || 0}
+            </span>
+          </div>
+          <Progress 
+            value={getParticipantProgress()} 
+            className={cn(
+              "h-1.5 transition-all duration-500", 
+              getParticipantProgressColor()
+            )} 
+          />
+        </div>
+        <div className="p-4">
+          <RegisterButton />
+        </div>
       </div>
     </div>
   );
