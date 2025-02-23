@@ -1,8 +1,12 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ChevronLeft, Search, Bell } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { GameSearchOverlay } from "@/components/search/GameSearchOverlay";
 import { ContestSection } from "@/components/contests/ContestSection";
+import { GamesBottomNav } from "@/components/games/GamesBottomNav";
 
 // 1. Gaming Contests
 const gamingContests = [
@@ -281,28 +285,77 @@ const funContests = [
 ];
 
 export default function ContestsPage() {
+  const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [notifications] = useState(3);
 
   return (
-    <div className="flex-1 overflow-auto bg-background">
-      <div className="pt-4 pb-24">
-        <ContestSection title="Gaming Contests" contests={gamingContests} />
-        <ContestSection title="Creative Contests" contests={creativeContests} />
-        <ContestSection title="Writing & Storytelling" contests={writingContests} />
-        <ContestSection title="Social Media Challenges" contests={socialContests} />
-        <ContestSection title="Business & Startup" contests={businessContests} />
-        <ContestSection title="Tech & Coding" contests={techContests} />
-        <ContestSection title="Fitness & Sports" contests={fitnessContests} />
-        <ContestSection title="Music & Performance" contests={musicContests} />
-        <ContestSection title="Educational Contests" contests={educationalContests} />
-        <ContestSection title="Photography & Videography" contests={photographyContests} />
-        <ContestSection title="Food & Cooking" contests={cookingContests} />
-        <ContestSection title="Fashion & Beauty" contests={fashionContests} />
-        <ContestSection title="Pet & Animal Contests" contests={petContests} />
-        <ContestSection title="Charity & Social Impact" contests={charityContests} />
-        <ContestSection title="Random & Fun Contests" contests={funContests} />
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="sticky top-0 z-50 bg-background border-b border-border">
+        <div className="flex items-center gap-3 px-4 py-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => navigate(-1)}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Search contests"
+              className="w-full pl-10 bg-muted border-none"
+              value=""
+              onClick={() => setIsSearchOpen(true)}
+              readOnly
+            />
+          </div>
+
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="relative h-8 w-8"
+          >
+            <Bell className="h-4 w-4" />
+            {notifications > 0 && (
+              <Badge 
+                className="absolute -right-0.5 -top-0.5 h-4 w-4 items-center justify-center rounded-full bg-red-500 p-0.5 text-[10px] font-medium text-white border-2 border-white"
+              >
+                {notifications}
+              </Badge>
+            )}
+          </Button>
+        </div>
       </div>
 
+      {/* Main Content */}
+      <div className="flex-1 overflow-auto">
+        <div className="pt-4 pb-24">
+          <ContestSection title="Gaming Contests" contests={gamingContests} />
+          <ContestSection title="Creative Contests" contests={creativeContests} />
+          <ContestSection title="Writing & Storytelling" contests={writingContests} />
+          <ContestSection title="Social Media Challenges" contests={socialContests} />
+          <ContestSection title="Business & Startup" contests={businessContests} />
+          <ContestSection title="Tech & Coding" contests={techContests} />
+          <ContestSection title="Fitness & Sports" contests={fitnessContests} />
+          <ContestSection title="Music & Performance" contests={musicContests} />
+          <ContestSection title="Educational Contests" contests={educationalContests} />
+          <ContestSection title="Photography & Videography" contests={photographyContests} />
+          <ContestSection title="Food & Cooking" contests={cookingContests} />
+          <ContestSection title="Fashion & Beauty" contests={fashionContests} />
+          <ContestSection title="Pet & Animal Contests" contests={petContests} />
+          <ContestSection title="Charity & Social Impact" contests={charityContests} />
+          <ContestSection title="Random & Fun Contests" contests={funContests} />
+        </div>
+      </div>
+
+      {/* Bottom Navigation */}
+      <GamesBottomNav />
+
+      {/* Search Overlay */}
       <GameSearchOverlay 
         isOpen={isSearchOpen} 
         onClose={() => setIsSearchOpen(false)} 
