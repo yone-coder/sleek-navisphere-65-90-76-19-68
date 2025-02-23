@@ -30,6 +30,22 @@ import { TournamentRoadmap } from "@/components/tournament/sections/TournamentRo
 import { ParticipantsTable } from "@/components/tournament/sections/ParticipantsTable";
 import { TournamentRulesCard } from "@/components/tournament/sections/TournamentRulesCard";
 
+const mockTournament = {
+  id: "1",
+  title: "Winter Championship 2025",
+  banner_url: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
+  prize_pool: 100000,
+  current_participants: 95,
+  max_participants: 128,
+  start_date: "2025-01-15",
+  end_date: "2025-02-28",
+  game: "League of Legends",
+  status: "in-progress" as const,
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+  position: 1
+};
+
 const sampleMatches: Match[] = [
   {
     id: 1,
@@ -150,22 +166,6 @@ const sampleMatches: Match[] = [
   }
 ];
 
-const mockTournament = {
-  id: "1",
-  title: "Winter Championship 2025",
-  banner_url: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
-  prize_pool: 100000,
-  current_participants: 95,
-  max_participants: 128,
-  start_date: "2025-01-15",
-  end_date: "2025-02-28",
-  game: "League of Legends",
-  status: "in-progress" as const,
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
-  position: 1
-};
-
 export default function TournamentDetails() {
   const { id } = useParams();
   const { t } = useLanguage();
@@ -174,11 +174,9 @@ export default function TournamentDetails() {
   const [isLiked, setIsLiked] = useState(false);
   const { toast } = useToast();
 
-  // Mock the query response with our mock data
   const { data: tournament, isLoading } = useQuery({
     queryKey: ["tournament", id],
     queryFn: async () => {
-      // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 500));
       return mockTournament;
     },
@@ -354,8 +352,8 @@ export default function TournamentDetails() {
                   <div className="flex items-center p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
                     <DollarSign className="h-8 w-8 text-green-500 mr-3" />
                     <div>
-                      <span className="text-sm text-gray-500 dark:text-gray-300">Spots Left</span>
-                      <p className="font-bold text-xl text-gray-800 dark:text-white">{getSpotsText()}</p>
+                      <span className="text-sm text-gray-500 dark:text-gray-300">Entry Fee</span>
+                      <p className="font-bold text-xl text-gray-800 dark:text-white">Free</p>
                     </div>
                   </div>
                 </div>
