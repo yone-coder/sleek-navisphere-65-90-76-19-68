@@ -1,20 +1,34 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { MatchesSection } from "@/components/matches/MatchesSection";
+import { Match } from "@/components/matches/types";
 import { 
-  Loader2, 
-  ChevronUp, 
+  ArrowLeft, 
+  Search, 
+  Scroll,
+  CalendarClock, 
+  Users,
+  Trophy,
+  DollarSign,
+  Heart,
+  MessageSquare,
+  Share2,
+  Copy,
+  UserPlus,
   ChevronDown,
-  ScrollText as Scroll
+  ChevronUp,
+  Loader2
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { format } from "date-fns";
+import { useToast } from "@/hooks/use-toast";
 import {
   Table,
   TableBody,
@@ -23,87 +37,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { TournamentHeader } from "@/components/tournament/header/TournamentHeader";
-import { TournamentBanner } from "@/components/tournament/banner/TournamentBanner";
-import { TournamentStats } from "@/components/tournament/sections/TournamentStats";
-import { TournamentDescription } from "@/components/tournament/sections/TournamentDescription";
-import { MatchesSection } from "@/components/tournament/sections/MatchesSection";
-import { cn } from "@/lib/utils";
-
-interface Match {
-  id: number;
-  championship: string;
-  phase: string;
-  status: string;
-  date: string;
-  time: string;
-  venue: string;
-  location: string;
-  opponents: Array<{
-    name: string;
-    photo: string;
-    country: string;
-    city: string;
-    rank: number;
-    stats: string;
-    wins: number;
-    losses: number;
-  }>;
-  spectators: number;
-  likes: number;
-  comments: number;
-  predictions: {
-    firstPlayer: number;
-    secondPlayer: number;
-  };
-}
-
-const rules = [
-  {
-    id: 'general',
-    title: 'General Rules',
-    rules: [
-      'All matches will be played on the latest tournament patch (v2.34)',
-      'Players must arrive 30 minutes before scheduled match time',
-      'Match results are final once submitted to tournament officials',
-      'Players must use tournament-provided equipment',
-      'Unsportsmanlike conduct will result in immediate disqualification'
-    ]
-  },
-  {
-    id: 'competition',
-    title: 'Competition Format',
-    rules: [
-      'Double elimination bracket system',
-      'Best-of-three matches for all rounds except finals',
-      'Finals will be best-of-five',
-      'Map selection alternates between players, loser picks next map',
-      'No map may be played twice in the same match'
-    ]
-  },
-  {
-    id: 'conduct',
-    title: 'Player Conduct',
-    rules: [
-      'Players must maintain professional behavior at all times',
-      'Verbal abuse of opponents or officials is prohibited',
-      'Intentional disconnects without approval will count as a forfeit',
-      'Players may not receive coaching during matches',
-      'All disputes must be reported to tournament officials immediately'
-    ]
-  },
-  {
-    id: 'technical',
-    title: 'Technical Rules',
-    rules: [
-      'In case of technical failure, match may be paused up to 15 minutes',
-      'Only approved peripherals may be used (list available at check-in)',
-      'Settings must be configured before match start',
-      'Recording software must be approved by tournament officials',
-      'Streaming is prohibited during tournament hours'
-    ]
-  }
-];
 
 const sampleMatches: Match[] = [
   {
@@ -225,6 +158,53 @@ const sampleMatches: Match[] = [
   }
 ];
 
+const rules = [
+  {
+    id: 'general',
+    title: 'General Rules',
+    rules: [
+      'All matches will be played on the latest tournament patch (v2.34)',
+      'Players must arrive 30 minutes before scheduled match time',
+      'Match results are final once submitted to tournament officials',
+      'Players must use tournament-provided equipment',
+      'Unsportsmanlike conduct will result in immediate disqualification'
+    ]
+  },
+  {
+    id: 'competition',
+    title: 'Competition Format',
+    rules: [
+      'Double elimination bracket system',
+      'Best-of-three matches for all rounds except finals',
+      'Finals will be best-of-five',
+      'Map selection alternates between players, loser picks next map',
+      'No map may be played twice in the same match'
+    ]
+  },
+  {
+    id: 'conduct',
+    title: 'Player Conduct',
+    rules: [
+      'Players must maintain professional behavior at all times',
+      'Verbal abuse of opponents or officials is prohibited',
+      'Intentional disconnects without approval will count as a forfeit',
+      'Players may not receive coaching during matches',
+      'All disputes must be reported to tournament officials immediately'
+    ]
+  },
+  {
+    id: 'technical',
+    title: 'Technical Rules',
+    rules: [
+      'In case of technical failure, match may be paused up to 15 minutes',
+      'Only approved peripherals may be used (list available at check-in)',
+      'Settings must be configured before match start',
+      'Recording software must be approved by tournament officials',
+      'Streaming is prohibited during tournament hours'
+    ]
+  }
+];
+
 const ParticipantsTable = () => {
   const participants = [
     {
@@ -328,6 +308,28 @@ const ParticipantsTable = () => {
             ))}
           </TableBody>
         </Table>
+      </div>
+
+      <div className="mt-6 p-4 bg-muted/20 rounded-lg">
+        <h4 className="font-medium mb-4">Quick Stats</h4>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="p-3 bg-white rounded-lg shadow-sm">
+            <div className="text-sm text-muted-foreground">Average Rating</div>
+            <div className="text-2xl font-bold">2750</div>
+          </div>
+          <div className="p-3 bg-white rounded-lg shadow-sm">
+            <div className="text-sm text-muted-foreground">Top Country</div>
+            <div className="text-2xl font-bold">USA</div>
+          </div>
+          <div className="p-3 bg-white rounded-lg shadow-sm">
+            <div className="text-sm text-muted-foreground">Total Prize Claims</div>
+            <div className="text-2xl font-bold">$45K</div>
+          </div>
+          <div className="p-3 bg-white rounded-lg shadow-sm">
+            <div className="text-sm text-muted-foreground">Avg. Win Rate</div>
+            <div className="text-2xl font-bold">82%</div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -460,6 +462,12 @@ export default function TournamentDetails() {
     });
   };
 
+  const formatDateRange = (startDate: string, endDate: string) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    return `${format(start, 'MMM dd')} - ${format(end, 'MMM dd')}, ${format(end, 'yyyy')}`;
+  };
+
   const getStatusColor = (status?: string) => {
     switch (status) {
       case 'in-progress':
@@ -490,6 +498,31 @@ export default function TournamentDetails() {
     }
   };
 
+  const getParticipantProgress = () => {
+    if (!tournament) return 0;
+    return (tournament.current_participants / tournament.max_participants) * 100;
+  };
+
+  const getAvailableSpots = () => {
+    if (!tournament) return 0;
+    return tournament.max_participants - tournament.current_participants;
+  };
+
+  const getSpotsText = () => {
+    const spots = getAvailableSpots();
+    if (spots <= 0) return "Tournament Full";
+    if (spots <= 5) return `Only ${spots} spots left!`;
+    return `${spots} spots available`;
+  };
+
+  const getParticipantProgressColor = () => {
+    const progress = getParticipantProgress();
+    if (progress >= 90) return "bg-red-500";
+    if (progress >= 75) return "bg-orange-500";
+    if (progress >= 50) return "bg-yellow-500";
+    return "bg-blue-500";
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen pt-14 flex items-center justify-center">
@@ -500,32 +533,230 @@ export default function TournamentDetails() {
 
   return (
     <div className="min-h-screen animate-fade-in">
-      <TournamentHeader
-        title={tournament?.title || "Tournament Details"}
-        isLiked={isLiked}
-        onBack={() => navigate(-1)}
-        onShare={handleShare}
-        onLike={handleLike}
-      />
+      <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg bg-background/80 border-b border-border/40">
+        <div className="h-16 px-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-foreground hover:bg-foreground/10"
+              onClick={() => navigate(-1)}
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <h1 className="text-lg font-semibold truncate max-w-[200px]">
+              {tournament?.title || "Tournament Details"}
+            </h1>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-foreground hover:bg-foreground/10"
+              onClick={handleShare}
+            >
+              <Share2 className="h-5 w-5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className={cn(
+                "text-foreground hover:bg-foreground/10",
+                isLiked && "text-red-500"
+              )}
+              onClick={handleLike}
+            >
+              <Heart className="h-5 w-5" fill={isLiked ? "currentColor" : "none"} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-foreground hover:bg-foreground/10"
+            >
+              <Search className="h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+      </div>
 
       <div className="pt-16">
         <div className="bg-white dark:bg-gray-800">
-          <TournamentBanner
-            bannerUrl={tournament?.banner_url || "https://storage.googleapis.com/a1aa/image/BcP3itd2BEfYcAhKkd2UAUs_vV9N3Sl-reNN8Mi1FEo.jpg"}
-            statusColor={getStatusColor(tournament?.status)}
-            statusText={getStatusText(tournament?.status)}
-            game={tournament?.game}
-            onImageClick={() => setShowFullImage(true)}
-          />
+          <div className="relative group cursor-pointer" onClick={() => setShowFullImage(true)}>
+            <img 
+              src={tournament?.banner_url || "https://storage.googleapis.com/a1aa/image/BcP3itd2BEfYcAhKkd2UAUs_vV9N3Sl-reNN8Mi1FEo.jpg"}
+              alt="Tournament banner" 
+              className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+            <Badge 
+              className={cn(
+                "absolute top-4 right-4 shadow-lg",
+                getStatusColor(tournament?.status)
+              )}
+              variant="default"
+            >
+              {getStatusText(tournament?.status)}
+            </Badge>
+            <Badge 
+              className="absolute bottom-4 right-4 bg-gradient-to-r from-blue-600 to-blue-400 shadow-lg" 
+              variant="default"
+            >
+              Sponsored by Google
+            </Badge>
+            <div className="absolute bottom-2 left-2 flex items-center space-x-1">
+              <img
+                src="https://storage.googleapis.com/a1aa/image/RW76eSv1bI06GoXLZPNVQlLvVFuloRbfcxmSiTYAc8E.jpg"
+                alt="Game icon"
+                className="w-8 h-8 rounded-full border-2 border-white shadow-lg"
+              />
+              <div className="bg-black/50 px-2 py-0.5 rounded backdrop-blur-sm">
+                <span className="text-white text-xs font-medium">{tournament?.game || "Chess"}</span>
+              </div>
+            </div>
+          </div>
 
           <div className="px-4">
-            <div className="py-6 space-y-6">
-              <TournamentDescription tournament={tournament} />
-              
-              <TournamentStats 
-                tournament={tournament}
-                onRegister={handleRegister}
-              />
+            <div className="py-6">
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary" className="animate-in fade-in-50">
+                    Game: {tournament?.game || "Chess"}
+                  </Badge>
+                  <Badge variant="outline" className="animate-in fade-in-50 delay-100">
+                    Skill Level: Advanced
+                  </Badge>
+                </div>
+                <Button 
+                  variant="default" 
+                  size="sm"
+                  className="group"
+                >
+                  <UserPlus className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
+                  Follow
+                </Button>
+              </div>
+
+              <div className="space-y-4 mb-6">
+                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                  The premier gaming event featuring the latest titles and top competitors from around the world.
+                  Join us for an unforgettable experience of competitive gaming at its finest.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {["Competitive", "Professional", "Global", "Live Streamed", "Ranked"].map((tag) => (
+                    <Badge 
+                      key={tag} 
+                      variant="outline" 
+                      className="bg-blue-50 dark:bg-blue-900/20"
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center text-gray-700 dark:text-gray-300">
+                  <CalendarClock className="h-5 w-5 text-blue-500 mr-3" />
+                  <span className="text-sm">
+                    {tournament 
+                      ? formatDateRange(tournament.start_date, tournament.end_date)
+                      : "Loading..."}
+                  </span>
+                </div>
+                
+                <div className="flex flex-col space-y-2">
+                  <div className="flex items-center justify-between text-gray-700 dark:text-gray-300">
+                    <div className="flex items-center">
+                      <Users className="h-5 w-5 text-blue-500 mr-3" />
+                      <span className="text-sm font-medium">
+                        {tournament?.current_participants || 0}/{tournament?.max_participants || 0} Participants
+                      </span>
+                    </div>
+                    <Badge 
+                      variant="secondary" 
+                      className={cn(
+                        "animate-pulse",
+                        getAvailableSpots() <= 5 ? "bg-red-100 text-red-800 dark:bg-red-900/30" : ""
+                      )}
+                    >
+                      {getSpotsText()}
+                    </Badge>
+                  </div>
+                  <div className="relative">
+                    <Progress 
+                      value={getParticipantProgress()} 
+                      className={cn("h-2 transition-all duration-500", getParticipantProgressColor())} 
+                    />
+                    <div className="absolute -top-1 left-0 w-full flex justify-between text-xs text-gray-500">
+                      <span>0%</span>
+                      <span>50%</span>
+                      <span>100%</span>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {tournament?.current_participants} players have joined this tournament
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="flex items-center p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20">
+                  <Trophy className="h-8 w-8 text-yellow-500 mr-3 animate-bounce" />
+                  <div>
+                    <span className="text-sm text-gray-500 dark:text-gray-300">Prize Pool</span>
+                    <p className="font-bold text-xl text-gray-800 dark:text-white">
+                      ${tournament?.prize_pool?.toLocaleString() || "0"}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
+                  <DollarSign className="h-8 w-8 text-green-500 mr-3" />
+                  <div>
+                    <span className="text-sm text-gray-500 dark:text-gray-300">Entry Fee</span>
+                    <p className="font-bold text-xl text-gray-800 dark:text-white">$75.00</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-around mb-6 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                <div className="flex flex-col items-center">
+                  <Heart className={cn(
+                    "h-6 w-6 mb-1",
+                    isLiked ? "text-red-500 fill-current" : "text-gray-500"
+                  )} />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">1.2K</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <MessageSquare className="h-6 w-6 mb-1 text-blue-500" />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">350</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <Share2 className="h-6 w-6 mb-1 text-green-500" />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">75</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <Trophy className="h-6 w-6 mb-1 text-yellow-500" />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Top 10</span>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-3 mb-6">
+                <Button 
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5" 
+                  size="lg"
+                  onClick={handleRegister}
+                >
+                  Register Now
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full" 
+                  size="lg"
+                  onClick={() => window.open('https://discord.gg/tournament', '_blank')}
+                >
+                  Join Discord Community
+                </Button>
+              </div>
 
               <Tabs defaultValue="participants" className="w-full">
                 <div className="w-full overflow-x-auto no-scrollbar">
@@ -559,7 +790,7 @@ export default function TournamentDetails() {
                   </div>
                 </TabsContent>
 
-                {["faqs", "schedule", "brackets", "roadmap"].map((tab) => (
+                {["participants", "faqs", "schedule", "brackets", "roadmap"].map((tab) => (
                   <TabsContent key={tab} value={tab}>
                     <div className="p-4 text-center text-gray-500">
                       {tab.charAt(0).toUpperCase() + tab.slice(1)} content coming soon...
