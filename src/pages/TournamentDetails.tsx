@@ -37,6 +37,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { TournamentBrackets } from "@/components/tournament/sections/TournamentBrackets";
 
 const sampleMatches: Match[] = [
   {
@@ -761,7 +762,7 @@ export default function TournamentDetails() {
               <Tabs defaultValue="participants" className="w-full">
                 <div className="w-full overflow-x-auto no-scrollbar">
                   <TabsList className="w-full h-auto inline-flex whitespace-nowrap">
-                    {["participants", "rules", "matches", "faqs", "schedule", "brackets", "roadmap"].map((tab) => (
+                    {["participants", "rules", "matches", "brackets", "faqs", "schedule", "roadmap"].map((tab) => (
                       <TabsTrigger
                         key={tab}
                         value={tab}
@@ -790,7 +791,11 @@ export default function TournamentDetails() {
                   </div>
                 </TabsContent>
 
-                {["participants", "faqs", "schedule", "brackets", "roadmap"].map((tab) => (
+                <TabsContent value="brackets">
+                  <TournamentBrackets />
+                </TabsContent>
+
+                {["faqs", "schedule", "roadmap"].map((tab) => (
                   <TabsContent key={tab} value={tab}>
                     <div className="p-4 text-center text-gray-500">
                       {tab.charAt(0).toUpperCase() + tab.slice(1)} content coming soon...
