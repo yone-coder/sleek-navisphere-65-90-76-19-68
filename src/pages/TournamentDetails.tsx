@@ -853,8 +853,8 @@ export default function TournamentDetails() {
                   <div className="flex items-center p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
                     <DollarSign className="h-8 w-8 text-green-500 mr-3" />
                     <div>
-                      <span className="text-sm text-gray-500 dark:text-gray-300">Entry Fee</span>
-                      <p className="font-bold text-xl text-gray-800 dark:text-white">$75.00</p>
+                      <span className="text-sm text-gray-500 dark:text-gray-300">Spots Left</span>
+                      <p className="font-bold text-xl text-gray-800 dark:text-white">{getAvailableSpots()}</p>
                     </div>
                   </div>
                 </div>
@@ -912,24 +912,6 @@ export default function TournamentDetails() {
                       />
                     </div>
                   </div>
-                </div>
-
-                <div className="flex flex-col gap-3 mb-6">
-                  <Button 
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5" 
-                    size="lg"
-                    onClick={handleRegister}
-                  >
-                    Register Now
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    className="w-full" 
-                    size="lg"
-                    onClick={() => window.open('https://discord.gg/tournament', '_blank')}
-                  >
-                    Join Discord Community
-                  </Button>
                 </div>
 
                 <div className="flex justify-around mb-6 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
