@@ -5,18 +5,17 @@ import { MatchesSection } from "@/components/matches/MatchesSection";
 import { Match } from "@/components/matches/types";
 import { 
   ArrowLeft, 
-  Search, 
-  Share2, 
-  Heart, 
-  MessageSquare, 
   Trophy, 
-  DollarSign, 
   Users,
+  Loader,
+  MessageSquare,
+  Share2,
+  Heart,
   CalendarClock,
+  DollarSign,
   Filter,
   MoreVertical,
   Bell,
-  Loader,
   ScrollText,
   ChevronUpIcon,
   ChevronDownIcon
@@ -187,9 +186,6 @@ export default function TournamentDetails() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("overview");
   const [isLiked, setIsLiked] = useState(false);
-  const [showFullImage, setShowFullImage] = useState(false);
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const { toast } = useToast();
 
   const { data: tournament, isLoading } = useQuery({
@@ -206,12 +202,25 @@ export default function TournamentDetails() {
     },
   });
 
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    toast({
-      title: isLiked ? "Removed from favorites" : "Added to favorites",
-      duration: 2000,
-    });
+  const getParticipantProgress = () => {
+    if (!tournament) return 0;
+    return (tournament.current_participants / tournament.max_participants) * 100;
+  };
+
+  const getParticipantProgressColor = () => {
+    const progress = getParticipantProgress();
+    if (progress >= 90) return "bg-red-500";
+    if (progress >= 75) return "bg-orange-500";
+    if (progress >= 50) return "bg-yellow-500";
+    return "bg-blue-500";
+  };
+
+  const getSpotsText = () => {
+    if (!tournament) return "Loading...";
+    const spots = tournament.max_participants - tournament.current_participants;
+    if (spots <= 0) return "Tournament Full";
+    if (spots <= 5) return `Only ${spots} spots left!`;
+    return `${spots} spots available`;
   };
 
   const handleShare = async () => {
@@ -245,157 +254,13 @@ export default function TournamentDetails() {
     }
   };
 
-  const handleRegister = () => {
-    if (!tournament) {
-      toast({
-        title: "Error",
-        description: "Tournament details not available",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (getAvailableSpots() <= 0) {
-      toast({
-        title: "Tournament Full",
-        description: "No spots available. Join the waitlist instead?",
-        variant: "destructive",
-      });
-      return;
-    }
-
+  const handleLike = () => {
+    setIsLiked(!isLiked);
     toast({
-      title: "Registration Successful! 🎉",
-      description: "Check your email for confirmation and next steps.",
-      duration: 5000,
+      title: isLiked ? "Removed from favorites" : "Added to favorites",
+      duration: 2000,
     });
-
-    setNotificationsEnabled(true);
   };
-
-  const formatDateRange = (startDate: string, endDate: string) => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    return `${format(start, 'MMM dd')} - ${format(end, 'MMM dd')}, ${format(end, 'yyyy')}`;
-  };
-
-  const getStatusColor = (status?: string) => {
-    switch (status) {
-      case 'in-progress':
-        return 'bg-green-600';
-      case 'upcoming':
-        return 'bg-blue-600';
-      case 'closed':
-        return 'bg-red-600';
-      case 'completed':
-        return 'bg-gray-600';
-      default:
-        return 'bg-blue-600';
-    }
-  };
-
-  const getStatusText = (status?: string) => {
-    switch (status) {
-      case 'in-progress':
-        return 'Live';
-      case 'upcoming':
-        return 'Upcoming';
-      case 'closed':
-        return 'Closed';
-      case 'completed':
-        return 'Completed';
-      default:
-        return 'Upcoming';
-    }
-  };
-
-  const getParticipantProgress = () => {
-    if (!tournament) return 0;
-    return (tournament.current_participants / tournament.max_participants) * 100;
-  };
-
-  const getAvailableSpots = () => {
-    if (!tournament) return 0;
-    return tournament.max_participants - tournament.current_participants;
-  };
-
-  const getSpotsText = () => {
-    const spots = getAvailableSpots();
-    if (spots <= 0) return "Tournament Full";
-    if (spots <= 5) return `Only ${spots} spots left!`;
-    return `${spots} spots available`;
-  };
-
-  const getParticipantProgressColor = () => {
-    const progress = getParticipantProgress();
-    if (progress >= 90) return "bg-red-500";
-    if (progress >= 75) return "bg-orange-500";
-    if (progress >= 50) return "bg-yellow-500";
-    return "bg-blue-500";
-  };
-
-  const RegisterButton = () => (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button 
-          size="sm"
-          className="bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white gap-2 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
-        >
-          <Trophy className="h-4 w-4" />
-          Register Now {tournament?.prize_pool ? `($${tournament.prize_pool})` : '(Free)'}
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Register for Tournament</DialogTitle>
-          <DialogDescription>
-            Join {tournament?.title || 'this tournament'} and compete for the prize pool!
-          </DialogDescription>
-        </DialogHeader>
-        <div className="space-y-4 py-4">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Prize Pool:</span>
-            <span className="font-semibold">{tournament?.prize_pool ? `$${tournament.prize_pool.toLocaleString()}` : 'Free'}</span>
-          </div>
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Available Spots:</span>
-            <span className="font-semibold">{getAvailableSpots()} remaining</span>
-          </div>
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Tournament Start:</span>
-            <span className="font-semibold">
-              {tournament?.start_date ? format(new Date(tournament.start_date), 'PPP') : 'TBA'}
-            </span>
-          </div>
-          <Progress 
-            value={getParticipantProgress()} 
-            className={cn(
-              "h-2 transition-all duration-500", 
-              getParticipantProgressColor()
-            )} 
-          />
-          <p className="text-xs text-muted-foreground text-center">
-            {tournament?.current_participants || 0} out of {tournament?.max_participants || 0} spots filled
-          </p>
-          <div className="space-y-2">
-            <Button 
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500"
-              onClick={handleRegister}
-            >
-              Confirm Registration
-            </Button>
-            <Button 
-              variant="outline" 
-              className="w-full" 
-              onClick={() => window.open('https://discord.gg/tournament', '_blank')}
-            >
-              Join Discord Community
-            </Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
 
   if (isLoading) {
     return (
@@ -586,7 +451,7 @@ export default function TournamentDetails() {
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 backdrop-blur-lg bg-background/80 border-t border-border/40">
-        <div className="p-4 space-y-2">
+        <div className="p-4 space-y-4">
           <div className="flex flex-col space-y-2">
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center gap-2">
@@ -604,6 +469,43 @@ export default function TournamentDetails() {
               className={cn("h-2 transition-all duration-500", getParticipantProgressColor())} 
             />
           </div>
+          
+          <div className="grid grid-cols-3 gap-2">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => navigate(`/tournament/${id}/comments`)}
+              className="flex-1"
+            >
+              <MessageSquare className="h-4 w-4 mr-2" />
+              <span>350</span>
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={handleShare}
+              className="flex-1"
+            >
+              <Share2 className="h-4 w-4 mr-2" />
+              <span>Share</span>
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={handleLike}
+              className={cn(
+                "flex-1",
+                isLiked && "text-red-500 hover:text-red-600"
+              )}
+            >
+              <Heart className={cn(
+                "h-4 w-4 mr-2",
+                isLiked && "fill-current"
+              )} />
+              <span>1.2K</span>
+            </Button>
+          </div>
+
           <Button 
             size="sm"
             className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white gap-2"
