@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { CalendarIcon, Users, Trophy, DollarSign } from 'lucide-react';
 import { cn } from "@/lib/utils";
@@ -55,6 +56,11 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
       default:
         return 'Upcoming';
     }
+  };
+
+  const getProgressBarColor = (current: number, max: number) => {
+    const remainingPercentage = ((max - current) / max) * 100;
+    return remainingPercentage < 50 ? '#ea384c' : 'rgb(37 99 235)'; // red if less than 50% spots remaining
   };
 
   useEffect(() => {
@@ -147,11 +153,14 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
           </div>
           <div className="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
             <div 
-              className="bg-blue-600 h-1.5 rounded-full" 
+              className="h-1.5 rounded-full transition-all duration-300" 
               style={{ 
                 width: tournament 
                   ? `${(tournament.current_participants / tournament.max_participants) * 100}%`
-                  : "50%" 
+                  : "50%",
+                backgroundColor: tournament 
+                  ? getProgressBarColor(tournament.current_participants, tournament.max_participants)
+                  : 'rgb(37 99 235)'
               }}
             ></div>
           </div>
