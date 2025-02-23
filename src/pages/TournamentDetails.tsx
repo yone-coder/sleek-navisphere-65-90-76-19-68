@@ -185,9 +185,14 @@ export default function TournamentDetails() {
     return "bg-blue-500";
   };
 
+  const getAvailableSpotsCount = () => {
+    if (!tournament) return 0;
+    return tournament.max_participants - tournament.current_participants;
+  };
+
   const getSpotsText = () => {
     if (!tournament) return "Loading...";
-    const spots = tournament.max_participants - tournament.current_participants;
+    const spots = getAvailableSpotsCount();
     if (spots <= 0) return "Tournament Full";
     if (spots <= 5) return `Only ${spots} spots left!`;
     return `${spots} spots available`;
@@ -350,7 +355,7 @@ export default function TournamentDetails() {
                         variant="secondary" 
                         className={cn(
                           "animate-pulse",
-                          getSpotsText() <= 5 ? "bg-red-100 text-red-800 dark:bg-red-900/30" : ""
+                          getAvailableSpotsCount() <= 5 ? "bg-red-100 text-red-800 dark:bg-red-900/30" : ""
                         )}
                       >
                         {getSpotsText()}
