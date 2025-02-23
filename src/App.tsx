@@ -1,3 +1,4 @@
+
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -12,6 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 const Apps = lazy(() => import("./pages/Apps"));
 const GamesPages = lazy(() => import("./pages/GamesPages"));
 const ContestsPage = lazy(() => import("./pages/games/ContestsPage"));
+const GamesExplore = lazy(() => import("./pages/games/GamesExplore"));
 const Matches = lazy(() => import("./pages/Matches"));
 const Feeds = lazy(() => import("./pages/Feeds"));
 const Profile = lazy(() => import("./pages/Profile"));
@@ -70,10 +72,11 @@ const AppContent = () => {
           <Route path="/apps" element={<Apps />} />
           <Route path="/games-pages" element={<GamesPages />} />
           <Route path="/games-pages/contest" element={<ContestsPage />} />
+          <Route path="/games-pages/game-search" element={<GamesExplore />} />
           <Route path="/matches" element={<Matches />} />
           <Route path="/match/:id" element={<MatchDetails />} />
           <Route path="/tournaments" element={<Tournaments />} />
-          <Route path="/games" element={<GamesPages />} /> {/* Updated to use GamesPages */}
+          <Route path="/games" element={<GamesPages />} />
           <Route path="/games/gomoku" element={<Gomoku />} />
           <Route path="/games/morpion" element={<Morpion />} />
           <Route path="/feeds" element={<Feeds />} />
