@@ -1,10 +1,15 @@
+
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { 
   Loader2, 
   ChevronUp, 
-  ChevronDown, 
+  ChevronDown,
+  ArrowLeft,
+  Share2,
+  Heart,
+  Search,
   ScrollText as Scroll
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -27,6 +32,7 @@ import { TournamentHeader } from "@/components/tournament/header/TournamentHeade
 import { TournamentBanner } from "@/components/tournament/banner/TournamentBanner";
 import { TournamentStats } from "@/components/tournament/sections/TournamentStats";
 import { TournamentDescription } from "@/components/tournament/sections/TournamentDescription";
+import { MatchesSection } from "@/components/tournament/sections/MatchesSection";
 import { cn } from "@/lib/utils";
 
 interface Match {
@@ -56,6 +62,8 @@ interface Match {
     secondPlayer: number;
   };
 }
+
+// Remove local TournamentHeader and TournamentBanner components as they're now imported
 
 const sampleMatches: Match[] = [
   {
@@ -711,7 +719,7 @@ export default function TournamentDetails() {
                   </div>
                 </TabsContent>
 
-                {["participants", "faqs", "schedule", "brackets", "roadmap"].map((tab) => (
+                {["faqs", "schedule", "brackets", "roadmap"].map((tab) => (
                   <TabsContent key={tab} value={tab}>
                     <div className="p-4 text-center text-gray-500">
                       {tab.charAt(0).toUpperCase() + tab.slice(1)} content coming soon...
