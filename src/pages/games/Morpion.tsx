@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Settings2, Undo2, RotateCcw, Volume2, VolumeX, Clock } from 'lucide-react';
 import { GameLobby } from '@/components/games/GameLobby';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from "@/components/ui/use-toast";
 import type { GameRoom } from '@/types/game';
+import type { Database } from '@/integrations/supabase/types';
 
 const Gomoku = () => {
   const [boardSize, setBoardSize] = useState(30);
@@ -67,7 +69,18 @@ const Gomoku = () => {
             filter: `id=eq.${gameRoom.id}`
           },
           (payload) => {
-            setGameRoom(payload.new as GameRoom);
+            const newGameRoom = {
+              ...payload.new,
+              status: payload.new.status as GameRoom['status'],
+              current_player: payload.new.current_player as 'X' | 'O',
+              board: payload.new.board as string[][],
+              last_move: payload.new.last_move as GameRoom['last_move']
+            } satisfies GameRoom;
+            
+            setGameRoom(newGameRoom);
+            if (newGameRoom.board) {
+              setBoard(newGameRoom.board);
+            }
           }
         )
         .subscribe();
