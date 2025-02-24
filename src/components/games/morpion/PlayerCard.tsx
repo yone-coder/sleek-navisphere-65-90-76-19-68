@@ -33,7 +33,7 @@ const PlayerCard = ({
       <div className="relative">
         <Avatar 
           name={player} 
-          size={window.innerWidth >= 768 ? 'sm' : 'xs'} 
+          size="sm"
           hasPhoto={hasPhoto} 
         />
         <div className={`
