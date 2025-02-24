@@ -14,11 +14,12 @@ const Morpion = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameMode, setGameMode] = useState<GameMode | null>(null);
 
-  const gameState = useGameState({
+  // Only initialize game state when the game has started
+  const gameState = gameStarted ? useGameState({
     boardSize,
     player1,
     player2
-  });
+  }) : null;
 
   const handleSelectMode = (mode: GameMode, roomId?: string) => {
     setGameMode(mode);
@@ -40,7 +41,7 @@ const Morpion = () => {
       isSettingsOpen={isSettingsOpen}
       setZoom={setZoom}
       setIsSettingsOpen={setIsSettingsOpen}
-      {...gameState}
+      {...gameState!}
     />
   );
 };
