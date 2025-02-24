@@ -2,17 +2,68 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface UserProfile {
+  name: string;
+  email: string;
+  subtitle: string;
+  avatar: string;
+}
 
 export const ProfileCard = () => {
   const navigate = useNavigate();
-  // This should be replaced with your actual auth check
-  const isAuthenticated = false;
-  const user = isAuthenticated ? {
-    name: "Danny Rico",
-    email: "danny@example.com",
-    subtitle: "Apple Account, iCloud, and more",
-    avatar: "https://github.com/shadcn.png",
-  } : null;
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session?.user) {
+        setIsAuthenticated(true);
+        // Get user profile data from auth metadata or user table
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+
+        setUser({
+          name: profile?.full_name || session.user.email?.split('@')[0] || 'User',
+          email: session.user.email || '',
+          subtitle: "Apple Account, iCloud, and more",
+          avatar: profile?.avatar_url || session.user.user_metadata?.avatar_url || "https://github.com/shadcn.png",
+        });
+      } else {
+        setIsAuthenticated(false);
+        setUser(null);
+      }
+    };
+
+    checkAuth();
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        setIsAuthenticated(true);
+        setUser({
+          name: session.user.email?.split('@')[0] || 'User',
+          email: session.user.email || '',
+          subtitle: "Apple Account, iCloud, and more",
+          avatar: session.user.user_metadata?.avatar_url || "https://github.com/shadcn.png",
+        });
+      } else {
+        setIsAuthenticated(false);
+        setUser(null);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <div className="container px-4 py-2">
