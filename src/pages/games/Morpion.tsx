@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Settings2, Undo2, RotateCcw, Volume2, VolumeX, Clock } from 'lucide-react';
 
@@ -15,7 +16,7 @@ const Gomoku = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [zoom, setZoom] = useState(100);
   const [hoveredCell, setHoveredCell] = useState(null);
-  const [timeLeft, setTimeLeft] = useState({ X: 300, O: 300 });
+  const [timeLeft, setTimeLeft] = useState({ X: 300, O: 300 }); // 5 minutes per player
   const [isTimerRunning, setIsTimerRunning] = useState(true);
   const [inactivityTime, setInactivityTime] = useState(15);
   const [winningLine, setWinningLine] = useState(null);
@@ -414,7 +415,7 @@ const Gomoku = () => {
               onClick={() => setSoundEnabled(!soundEnabled)}
               className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition duration-300 shadow-md border border-gray-200"
             >
-              <Settings2 size={14} className="md:w-4 md:h-4" />
+              {soundEnabled ? <Volume2 size={14} className="md:w-4 md:h-4" /> : <VolumeX size={14} className="md:w-4 md:h-4" />}
             </button>
 
             <button 
@@ -432,6 +433,13 @@ const Gomoku = () => {
               className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition duration-300 shadow-md border border-gray-200"
             >
               <RotateCcw size={14} className="md:w-4 md:h-4" />
+            </button>
+
+            <button 
+              onClick={() => setIsSettingsOpen(true)}
+              className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition duration-300 shadow-md border border-gray-200"
+            >
+              <Settings2 size={14} className="md:w-4 md:h-4" />
             </button>
           </div>
         </div>
@@ -669,22 +677,4 @@ const Gomoku = () => {
                 >
                   {soundEnabled ? 'Sound On' : 'Sound Off'}
                 </button>
-              </div>
-
-              <div className="flex justify-end">
-                <button
-                  onClick={() => setIsSettingsOpen(false)}
-                  className="bg-gray-100 text-gray-700 px-4 md:px-6 py-2 rounded-full hover:bg-gray-200 transition duration-300 shadow-md font-medium text-sm md:text-base"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default Gomoku;
+              </
