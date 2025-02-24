@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -5,6 +6,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { 
   Search, 
@@ -13,8 +21,16 @@ import {
   CalendarDays,
   Trophy,
   Users,
-  UserX
+  UserX,
+  MoreHorizontal,
+  MessageSquare,
+  UserPlus,
+  Shield,
+  Medal,
+  Flag,
+  BadgeCheck
 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 type Participant = {
   id: number;
@@ -28,6 +44,9 @@ type Participant = {
   joinDate: string;
   lastActive: string;
   achievements: number;
+  role?: "admin" | "mod" | "vip";
+  isVerified?: boolean;
+  streak?: number;
 };
 
 export function ParticipantsTable() {
@@ -36,6 +55,8 @@ export function ParticipantsTable() {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [statusFilter, setStatusFilter] = useState<Participant["status"] | "all">("all");
   const [page, setPage] = useState(1);
+  const [selectedParticipants, setSelectedParticipants] = useState<number[]>([]);
+  const { toast } = useToast();
   const itemsPerPage = 10;
 
   const participants: Participant[] = [
@@ -50,7 +71,10 @@ export function ParticipantsTable() {
       status: "confirmed",
       joinDate: "2024-01-15",
       lastActive: "2024-02-28",
-      achievements: 12
+      achievements: 12,
+      role: "admin",
+      isVerified: true,
+      streak: 5
     },
     {
       id: 2,
@@ -63,7 +87,10 @@ export function ParticipantsTable() {
       status: "confirmed",
       joinDate: "2024-01-16",
       lastActive: "2024-02-27",
-      achievements: 9
+      achievements: 9,
+      role: "vip",
+      isVerified: true,
+      streak: 3
     },
     {
       id: 3,
@@ -76,7 +103,8 @@ export function ParticipantsTable() {
       status: "pending",
       joinDate: "2024-01-18",
       lastActive: "2024-02-26",
-      achievements: 7
+      achievements: 7,
+      streak: 0
     },
     {
       id: 4,
@@ -89,7 +117,8 @@ export function ParticipantsTable() {
       status: "withdrawn",
       joinDate: "2024-01-20",
       lastActive: "2024-02-15",
-      achievements: 5
+      achievements: 5,
+      streak: 1
     }
   ];
 
@@ -99,6 +128,41 @@ export function ParticipantsTable() {
     } else {
       setSortField(field);
       setSortDirection("desc");
+    }
+  };
+
+  const toggleParticipantSelection = (id: number) => {
+    setSelectedParticipants(prev => 
+      prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]
+    );
+  };
+
+  const handleAction = (action: string, participantId: number) => {
+    const participant = participants.find(p => p.id === participantId);
+    if (!participant) return;
+
+    switch (action) {
+      case "message":
+        toast({
+          title: `Messaging ${participant.name}`,
+          description: "Opening chat window...",
+          duration: 2000,
+        });
+        break;
+      case "friend":
+        toast({
+          title: `Friend Request Sent`,
+          description: `Request sent to ${participant.name}`,
+          duration: 2000,
+        });
+        break;
+      case "report":
+        toast({
+          title: "Report Submitted",
+          description: "We'll review this player soon",
+          duration: 2000,
+        });
+        break;
     }
   };
 
@@ -130,6 +194,19 @@ export function ParticipantsTable() {
         return "bg-red-500";
       default:
         return "bg-gray-500";
+    }
+  };
+
+  const getRoleBadge = (role?: Participant["role"]) => {
+    switch (role) {
+      case "admin":
+        return <Badge variant="secondary" className="bg-red-500/10 text-red-500">Admin</Badge>;
+      case "mod":
+        return <Badge variant="secondary" className="bg-purple-500/10 text-purple-500">Mod</Badge>;
+      case "vip":
+        return <Badge variant="secondary" className="bg-amber-500/10 text-amber-500">VIP</Badge>;
+      default:
+        return null;
     }
   };
 
@@ -182,7 +259,7 @@ export function ParticipantsTable() {
             className="pl-8 h-9"
           />
         </div>
-        <ScrollArea className="w-auto max-w-[300px]" orientation="horizontal">
+        <ScrollArea className="max-w-[300px]">
           <div className="flex items-center gap-1 px-1">
             <Button
               variant="outline"
@@ -211,7 +288,7 @@ export function ParticipantsTable() {
               </Button>
             ))}
           </div>
-          <ScrollBar orientation="horizontal" />
+          <ScrollBar />
         </ScrollArea>
       </div>
 
@@ -222,7 +299,7 @@ export function ParticipantsTable() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[60px]">Rank</TableHead>
-                  <TableHead className="w-[250px]">Player</TableHead>
+                  <TableHead className="w-[280px]">Player</TableHead>
                   <TableHead className="w-[100px]">
                     <Button 
                       variant="ghost" 
@@ -247,31 +324,75 @@ export function ParticipantsTable() {
                   </TableHead>
                   <TableHead className="w-[100px]">Status</TableHead>
                   <TableHead className="w-[120px]">Last Active</TableHead>
+                  <TableHead className="w-[80px]"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {paginatedParticipants.map((participant) => (
-                  <TableRow key={participant.id} className="hover:bg-muted/50 cursor-pointer">
-                    <TableCell className="py-2 font-medium">{participant.rank}</TableCell>
+                  <TableRow 
+                    key={participant.id} 
+                    className={cn(
+                      "hover:bg-muted/50 cursor-pointer transition-colors",
+                      selectedParticipants.includes(participant.id) && "bg-muted"
+                    )}
+                    onClick={() => toggleParticipantSelection(participant.id)}
+                  >
+                    <TableCell className="py-2 font-medium">
+                      <div className="flex items-center gap-1">
+                        {participant.rank}
+                        {participant.streak > 2 && (
+                          <Badge variant="secondary" className="bg-orange-500/10 text-orange-500 px-1.5">
+                            🔥 {participant.streak}
+                          </Badge>
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell className="py-2">
                       <div className="flex items-center gap-2">
-                        <img 
-                          src={participant.avatar} 
-                          alt={participant.name}
-                          className="w-7 h-7 rounded-full object-cover"
-                        />
+                        <div className="relative">
+                          <img 
+                            src={participant.avatar} 
+                            alt={participant.name}
+                            className="w-7 h-7 rounded-full object-cover ring-2 ring-offset-2 ring-offset-background ring-blue-500/20"
+                          />
+                          {participant.isVerified && (
+                            <Badge 
+                              className="absolute -bottom-1 -right-1 w-3.5 h-3.5 p-0 bg-blue-500"
+                            >
+                              <BadgeCheck className="w-3 h-3 text-white" />
+                            </Badge>
+                          )}
+                        </div>
                         <div>
-                          <div className="text-sm">{participant.name}</div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-medium">{participant.name}</span>
+                            {getRoleBadge(participant.role)}
+                          </div>
                           <div className="text-xs text-muted-foreground">{participant.country}</div>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="py-2 text-sm">{participant.rating}</TableCell>
+                    <TableCell className="py-2">
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm tabular-nums">{participant.rating}</span>
+                        {participant.achievements > 0 && (
+                          <Badge variant="secondary" className="bg-purple-500/10 text-purple-500 px-1.5">
+                            <Medal className="w-3 h-3 mr-0.5" />
+                            {participant.achievements}
+                          </Badge>
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell className="py-2">
                       <div className="flex items-center gap-2">
                         <Progress 
                           value={participant.winRate} 
-                          className="w-16 h-1.5"
+                          className={cn(
+                            "w-16 h-1.5",
+                            participant.winRate >= 80 ? "bg-green-200" :
+                            participant.winRate >= 60 ? "bg-blue-200" :
+                            "bg-orange-200"
+                          )}
                         />
                         <span className="text-xs text-muted-foreground">
                           {participant.winRate}%
@@ -291,6 +412,31 @@ export function ParticipantsTable() {
                     </TableCell>
                     <TableCell className="py-2 text-xs text-muted-foreground">
                       {participant.lastActive}
+                    </TableCell>
+                    <TableCell className="py-2">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild onClick={e => e.stopPropagation()}>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-48">
+                          <DropdownMenuItem onClick={() => handleAction("message", participant.id)}>
+                            <MessageSquare className="h-4 w-4 mr-2" /> Message
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleAction("friend", participant.id)}>
+                            <UserPlus className="h-4 w-4 mr-2" /> Add Friend
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem onClick={() => handleAction("report", participant.id)}>
+                            <Flag className="h-4 w-4 mr-2" /> Report Player
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))}
