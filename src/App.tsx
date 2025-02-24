@@ -1,3 +1,4 @@
+
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -60,9 +61,10 @@ const queryClient = new QueryClient();
 
 const AppContent = () => {
   const location = useLocation();
-  const hideBottomNavRoutes = ['/marketplace'];
+  const hideBottomNavRoutes = ['/marketplace', '/games/'];
   const isAdminRoute = location.pathname.startsWith('/admin');
-  const shouldShowBottomNav = !isAdminRoute && !hideBottomNavRoutes.some(route => location.pathname.startsWith(route));
+  const shouldShowBottomNav = !isAdminRoute && 
+    !hideBottomNavRoutes.some(route => location.pathname.startsWith(route));
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
