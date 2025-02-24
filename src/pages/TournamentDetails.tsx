@@ -212,6 +212,14 @@ export default function TournamentDetails() {
     return "bg-blue-500";
   };
 
+  const getProgressStatus = () => {
+    const progress = getParticipantProgress();
+    if (progress >= 90) return "Almost Full!";
+    if (progress >= 75) return "Filling Fast!";
+    if (progress >= 50) return "Active";
+    return "Open";
+  };
+
   const getAvailableSpotsCount = () => {
     if (!tournament) return 0;
     return tournament.max_participants - tournament.current_participants;
@@ -562,24 +570,56 @@ export default function TournamentDetails() {
 
       <div className="fixed bottom-0 left-0 right-0 backdrop-blur-lg bg-background/80 border-t border-border/40">
         <div className="p-4 space-y-4">
-          <div className="flex flex-col space-y-2">
-            <div className="flex items-center justify-between text-sm">
+          <div className="flex flex-col space-y-3">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-muted-foreground" />
-                <span className="text-muted-foreground">
-                  {tournament?.current_participants || 0}/{tournament?.max_participants || 0} Participants
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium">
+                    {tournament?.current_participants || 0}/{tournament?.max_participants || 0}
+                  </span>
+                  <span className="text-xs text-muted-foreground">Participants</span>
+                </div>
+              </div>
+              <div className="flex flex-col items-end">
+                <Badge 
+                  variant="outline" 
+                  className={cn(
+                    "px-2 py-0.5 text-[10px]",
+                    getParticipantProgress() >= 90 ? "bg-red-100 text-red-700 dark:bg-red-900/20" :
+                    getParticipantProgress() >= 75 ? "bg-orange-100 text-orange-700 dark:bg-orange-900/20" :
+                    getParticipantProgress() >= 50 ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20" :
+                    "bg-blue-100 text-blue-700 dark:bg-blue-900/20"
+                  )}
+                >
+                  {getProgressStatus()}
+                </Badge>
+                <span className="text-xs text-muted-foreground mt-1">
+                  {getSpotsText()}
                 </span>
               </div>
-              <span className="text-sm font-medium">
-                {getSpotsText()}
-              </span>
             </div>
-            <Progress 
-              value={getParticipantProgress()} 
-              className={cn("h-2 transition-all duration-500", getParticipantProgressColor())} 
-            />
+
+            <div className="relative">
+              <Progress 
+                value={getParticipantProgress()} 
+                className="h-2.5 transition-all duration-500" 
+              />
+              {getParticipantProgress() >= 75 && (
+                <div className="absolute -top-1 right-0 transform translate-x-1/2 -translate-y-full">
+                  <div className="animate-bounce">
+                    <Badge 
+                      variant="outline" 
+                      className="bg-red-100 text-red-700 dark:bg-red-900/20 text-[10px]"
+                    >
+                      Limited Spots!
+                    </Badge>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-          
+
           <div className="grid grid-cols-3 gap-2">
             <Button 
               variant="outline" 
