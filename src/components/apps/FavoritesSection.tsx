@@ -1,12 +1,12 @@
 
-import { Star, Info, X } from "lucide-react";
+import { Star, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useNavigate } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Card } from "@/components/ui/card";
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 
 interface FavoritesSectionProps {
   favoriteApps: Array<{
@@ -16,12 +16,10 @@ interface FavoritesSectionProps {
     route: string;
     updates?: number;
   }>;
-  onFavoritesChange?: (apps: string[]) => void;
 }
 
-export const FavoritesSection = ({ favoriteApps, onFavoritesChange }: FavoritesSectionProps) => {
+export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
   const navigate = useNavigate();
-  const [selectedApp, setSelectedApp] = useState<string | null>(null);
 
   if (favoriteApps.length === 0) return null;
 
@@ -35,14 +33,36 @@ export const FavoritesSection = ({ favoriteApps, onFavoritesChange }: FavoritesS
     return acc;
   }, [] as typeof favoriteApps[]);
 
-  const handleRemove = (appName: string) => {
-    const newFavorites = favoriteApps.filter(app => app.name !== appName);
-    onFavoritesChange?.(newFavorites.map(app => app.name));
-    setSelectedApp(null);
-  };
-
   return (
     <div className="mb-8 -mx-4 sm:-mx-6 md:-mx-8">
+      <style>
+        {`
+          @keyframes scrollText {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(0); }
+            75% { transform: translateX(calc(-100% + 70px)); }
+            100% { transform: translateX(0); }
+          }
+          .scrolling-text.needs-scroll {
+            animation: scrollText 8s 1;
+          }
+          .scrolling-text.needs-scroll:not(:hover) {
+            text-overflow: ellipsis;
+            overflow: hidden;
+          }
+          .scrolling-text.needs-scroll:hover {
+            animation-play-state: running;
+            overflow: visible;
+          }
+          .name-container {
+            display: flex;
+            justify-content: flex-start;
+          }
+          .name-container.center {
+            justify-content: center;
+          }
+        `}
+      </style>
       <div className="flex items-center justify-between mb-4 px-4 sm:px-6 md:px-8">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
@@ -70,12 +90,11 @@ export const FavoritesSection = ({ favoriteApps, onFavoritesChange }: FavoritesS
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Click an app to remove it from favorites</p>
+              <p>These are your favorite apps for quick access</p>
             </TooltipContent>
           </Tooltip>
         </div>
       </div>
-
       <ScrollArea className="w-full">
         <div className="flex gap-4 pb-4 px-4 sm:px-6 md:px-8">
           {groups.map((group, groupIndex) => (
@@ -88,46 +107,51 @@ export const FavoritesSection = ({ favoriteApps, onFavoritesChange }: FavoritesS
               }}
             >
               <div className="grid grid-cols-4 gap-4">
-                {group.map((app) => (
-                  <Card 
-                    key={app.name}
-                    onClick={() => setSelectedApp(selectedApp === app.name ? null : app.name)}
-                    className="overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-transparent border-0 cursor-pointer relative group"
-                  >
-                    <div className="relative w-full overflow-hidden">
-                      <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
-                        {selectedApp === app.name && (
-                          <Button
-                            variant="destructive"
-                            size="icon"
-                            className="absolute -right-2 -top-2 h-6 w-6 z-10 rounded-full shadow-lg"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleRemove(app.name);
-                            }}
-                          >
-                            <X className="h-3 w-3" />
-                          </Button>
-                        )}
-                        <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
-                          <app.icon className="w-8 h-8 text-white" strokeWidth={2} />
-                          {app.updates > 0 && (
-                            <Badge 
-                              className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5"
+                {group.map((app) => {
+                  // Random delay between 5-15 seconds for second animation
+                  const randomDelay = Math.floor(Math.random() * 10000) + 5000;
+                  
+                  return (
+                    <Card 
+                      key={app.name} 
+                      className="overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-transparent border-0"
+                      onClick={() => navigate(app.route)}
+                    >
+                      <div className="relative w-full overflow-hidden">
+                        <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
+                          <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
+                            <app.icon className="w-8 h-8 text-white" strokeWidth={2} />
+                            {app.updates > 0 && (
+                              <Badge 
+                                className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5"
+                              >
+                                {app.updates}
+                              </Badge>
+                            )}
+                          </div>
+                          <div className={`w-[70px] overflow-hidden h-5 name-container ${app.name.length <= 8 ? 'center' : ''}`}>
+                            <span 
+                              className={`text-sm font-medium text-gray-700 scrolling-text whitespace-nowrap ${app.name.length > 8 ? 'needs-scroll inline-block' : 'text-center w-full block'}`}
+                              ref={(el) => {
+                                if (el && app.name.length > 8) {
+                                  // First animation on mount
+                                  el.style.animation = 'scrollText 8s 1';
+                                  
+                                  // Second random animation
+                                  setTimeout(() => {
+                                    el.style.animation = 'scrollText 8s 1';
+                                  }, randomDelay);
+                                }
+                              }}
                             >
-                              {app.updates}
-                            </Badge>
-                          )}
-                        </div>
-                        <div className={`w-[70px] overflow-hidden h-5 flex justify-center`}>
-                          <span className="text-sm font-medium text-gray-700 text-center truncate">
-                            {app.name}
-                          </span>
+                              {app.name}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Card>
-                ))}
+                    </Card>
+                  );
+                })}
               </div>
             </div>
           ))}
