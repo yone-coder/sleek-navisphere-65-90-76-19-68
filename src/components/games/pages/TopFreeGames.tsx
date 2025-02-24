@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Game } from '@/types/game';
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
@@ -13,6 +13,11 @@ interface TopFreeGamesProps {
 
 const TopFreeGames: React.FC<TopFreeGamesProps> = ({ games, isLoading }) => {
   const navigate = useNavigate();
+  const [loadedImages, setLoadedImages] = useState<{ [key: string]: boolean }>({});
+
+  const handleImageLoad = (gameId: string) => {
+    setLoadedImages(prev => ({ ...prev, [gameId]: true }));
+  };
 
   const renderRating = (rating: number) => {
     return (
@@ -56,11 +61,19 @@ const TopFreeGames: React.FC<TopFreeGamesProps> = ({ games, isLoading }) => {
             onClick={() => game.route && navigate(game.route)}
           >
             <span className="text-lg font-medium text-gray-400 w-6">{index + 1}</span>
-            <img
-              src={game.icon}
-              alt={`${game.title} icon`}
-              className="w-16 h-16 rounded-xl object-cover"
-            />
+            <div className="relative w-16 h-16">
+              {!loadedImages[game.id] && (
+                <Skeleton className="absolute inset-0 w-16 h-16 rounded-xl" />
+              )}
+              <img
+                src={game.icon}
+                alt={`${game.title} icon`}
+                className={`w-16 h-16 rounded-xl object-cover ${
+                  !loadedImages[game.id] ? 'invisible' : ''
+                }`}
+                onLoad={() => handleImageLoad(game.id)}
+              />
+            </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-medium text-gray-900 truncate">{game.title}</h3>
               <div className="flex items-center gap-2 text-sm text-gray-500">

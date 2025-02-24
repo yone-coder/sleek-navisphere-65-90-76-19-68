@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Game } from '@/types/game';
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -12,6 +11,13 @@ interface PopularGamesProps {
 }
 
 const PopularGames: React.FC<PopularGamesProps> = ({ games, isLoading }) => {
+  // Keep track of which images have loaded
+  const [loadedImages, setLoadedImages] = useState<{ [key: string]: boolean }>({});
+
+  const handleImageLoad = (gameId: string) => {
+    setLoadedImages(prev => ({ ...prev, [gameId]: true }));
+  };
+
   if (isLoading) {
     return (
       <div className="mb-8">
@@ -91,11 +97,19 @@ const PopularGames: React.FC<PopularGamesProps> = ({ games, isLoading }) => {
                   key={game.id}
                   className="flex gap-4 items-center"
                 >
-                  <img
-                    src={game.icon}
-                    alt={game.title}
-                    className="w-16 h-16 rounded-2xl object-cover"
-                  />
+                  <div className="relative w-16 h-16">
+                    {!loadedImages[game.id] && (
+                      <Skeleton className="absolute inset-0 w-16 h-16 rounded-2xl" />
+                    )}
+                    <img
+                      src={game.icon}
+                      alt={game.title}
+                      className={`w-16 h-16 rounded-2xl object-cover ${
+                        !loadedImages[game.id] ? 'invisible' : ''
+                      }`}
+                      onLoad={() => handleImageLoad(game.id)}
+                    />
+                  </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-medium text-gray-900 text-base truncate">
                       {game.title}
@@ -119,11 +133,19 @@ const PopularGames: React.FC<PopularGamesProps> = ({ games, isLoading }) => {
                   key={game.id}
                   className="flex gap-4 items-center"
                 >
-                  <img
-                    src={game.icon}
-                    alt={game.title}
-                    className="w-16 h-16 rounded-2xl object-cover"
-                  />
+                  <div className="relative w-16 h-16">
+                    {!loadedImages[game.id] && (
+                      <Skeleton className="absolute inset-0 w-16 h-16 rounded-2xl" />
+                    )}
+                    <img
+                      src={game.icon}
+                      alt={game.title}
+                      className={`w-16 h-16 rounded-2xl object-cover ${
+                        !loadedImages[game.id] ? 'invisible' : ''
+                      }`}
+                      onLoad={() => handleImageLoad(game.id)}
+                    />
+                  </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-medium text-gray-900 text-base truncate">
                       {game.title}
@@ -148,4 +170,3 @@ const PopularGames: React.FC<PopularGamesProps> = ({ games, isLoading }) => {
 };
 
 export default PopularGames;
-
