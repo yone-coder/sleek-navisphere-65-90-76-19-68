@@ -65,10 +65,18 @@ export const ProfileCard = () => {
     };
   }, []);
 
+  const handleClick = () => {
+    if (isAuthenticated) {
+      navigate('/profile');
+    } else {
+      navigate('/login');
+    }
+  };
+
   return (
     <div className="container px-4 py-2">
       <button 
-        onClick={() => navigate('/login')} 
+        onClick={handleClick}
         className="flex items-center gap-3 w-full py-2 hover:bg-muted/60 transition-colors duration-200 rounded-lg"
       >
         <Avatar className="h-10 w-10">
