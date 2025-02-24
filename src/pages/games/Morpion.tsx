@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Settings2, Undo2, RotateCcw, Volume2, VolumeX, Clock } from 'lucide-react';
 import { GameLobby } from '@/components/games/GameLobby';
@@ -31,17 +32,16 @@ const Morpion = () => {
     try {
       const { data, error } = await supabase
         .from('game_rooms')
-        .insert([
-          {
-            status: 'waiting',
-            current_player: 'X',
-            board: [
-              ['', '', ''],
-              ['', '', ''],
-              ['', '', ''],
-            ],
-          },
-        ])
+        .insert({
+          status: 'waiting',
+          current_player: 'X',
+          board: [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', ''],
+          ],
+          code: Math.random().toString(36).substring(2, 8).toUpperCase()
+        })
         .select()
         .single();
 
@@ -68,26 +68,16 @@ const Morpion = () => {
     }
   };
 
-  const joinGame = async (code: string) => {
+  const joinGame = async (joinCode: string) => {
     setIsJoining(true);
     try {
       const { data: existingRoom, error: roomError } = await supabase
         .from('game_rooms')
         .select('*')
-        .eq('code', code)
+        .eq('code', joinCode)
         .single();
 
-      if (roomError) {
-        console.error('Error fetching game room:', roomError);
-        toast({
-          title: "Error",
-          description: "Failed to fetch game room. Please try again.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      if (!existingRoom) {
+      if (roomError || !existingRoom) {
         toast({
           title: "Error",
           description: "Game room not found.",
@@ -105,16 +95,20 @@ const Morpion = () => {
         return;
       }
 
-      // Update the game room to add the player
-      const { data, error } = await supabase
+      const user = await supabase.auth.getUser();
+      const userId = user.data.user?.id;
+
+      const { data: updatedRoom, error } = await supabase
         .from('game_rooms')
-        .update({ player2_id: supabase.auth.getUser().then(({ data }) => data.user?.id), status: 'playing' })
-        .eq('code', code)
+        .update({ 
+          player2_id: userId, 
+          status: 'playing' 
+        })
+        .eq('code', joinCode)
         .select()
         .single();
 
       if (error) {
-        console.error('Error joining game:', error);
         toast({
           title: "Error",
           description: "Failed to join game. Please try again.",
@@ -123,15 +117,14 @@ const Morpion = () => {
         return;
       }
 
-      setGameRoom(data as GameRoom);
-      setBoard((data as GameRoom).board);
-      setCode((data as GameRoom).code);
+      setGameRoom(updatedRoom as GameRoom);
+      setBoard((updatedRoom as GameRoom).board);
+      setCode((updatedRoom as GameRoom).code);
       setPlayerSymbol('O');
       toast({
         title: "Success",
         description: "Game joined successfully!",
       });
-
     } finally {
       setIsJoining(false);
     }
@@ -148,38 +141,27 @@ const Morpion = () => {
             table: 'game_rooms',
             filter: `id=eq.${gameRoom.id}`
           },
-          (payload: RealtimePostgresChangesPayload<{
-            id: string;
-            code: string;
-            status: 'waiting' | 'playing' | 'finished';
-            player1_id: string | null;
-            player2_id: string | null;
-            current_player: 'X' | 'O';
-            winner: string | null;
-            board: string[][];
-            created_at: string;
-            last_move: { row: number; col: number } | null;
-            time_left_x: number;
-            time_left_o: number;
-          }>) => {
+          (payload: RealtimePostgresChangesPayload<Database['public']['Tables']['game_rooms']['Row']>) => {
+            if (!payload.new) return;
+            
             const newGameRoom: GameRoom = {
               id: payload.new.id,
               code: payload.new.code,
-              status: payload.new.status,
+              status: payload.new.status as GameRoom['status'],
               player1_id: payload.new.player1_id,
               player2_id: payload.new.player2_id,
-              current_player: payload.new.current_player,
+              current_player: payload.new.current_player as 'X' | 'O',
               winner: payload.new.winner,
-              board: Array.isArray(payload.new.board) ? payload.new.board : [],
+              board: Array.isArray(payload.new.board) ? payload.new.board as string[][] : [],
               created_at: payload.new.created_at,
-              last_move: payload.new.last_move,
+              last_move: payload.new.last_move as GameRoom['last_move'],
               time_left_x: payload.new.time_left_x,
               time_left_o: payload.new.time_left_o
             };
             
             setGameRoom(newGameRoom);
             if (Array.isArray(payload.new.board)) {
-              setBoard(payload.new.board);
+              setBoard(payload.new.board as string[][]);
             }
           }
         )
@@ -200,7 +182,7 @@ const Morpion = () => {
       toast({
         title: "Not your turn",
         description: "Please wait for your turn.",
-        variant: "warning",
+        variant: "destructive",
       });
       return;
     }
@@ -211,7 +193,6 @@ const Morpion = () => {
 
     setBoard(newBoard);
 
-    // Optimistically update the local state
     const nextPlayer = gameRoom.current_player === 'X' ? 'O' : 'X';
 
     setGameRoom(prevGameRoom => {
@@ -224,8 +205,7 @@ const Morpion = () => {
       };
     });
 
-    // Update the game room in the database
-    const { data: updatedRoom, error } = await supabase
+    const { error } = await supabase
       .from('game_rooms')
       .update({
         board: newBoard,
@@ -254,28 +234,29 @@ const Morpion = () => {
   };
 
   return (
-    <GameLobby
-      code={code}
-      gameRoom={gameRoom}
-      board={board}
-      playerSymbol={playerSymbol}
-      isMuted={isMuted}
-      showSettings={showSettings}
-      isLoading={isLoading}
-      isCreating={isCreating}
-      isJoining={isJoining}
-      audioRef={audioRef}
-      createGame={createGame}
-      joinGame={joinGame}
-      handleCellClick={handleCellClick}
-      setIsMuted={setIsMuted}
-      setShowSettings={setShowSettings}
-      setIsLoading={setIsLoading}
-      setIsCreating={setIsCreating}
-      setIsJoining={setIsJoining}
-      setTimeLeftX={setTimeLeftX}
-      setTimeLeftO={setTimeLeftO}
-    />
+    <div className="container mx-auto px-4 py-8">
+      <GameLobby
+        gameRoom={gameRoom}
+        board={board}
+        playerSymbol={playerSymbol}
+        isMuted={isMuted}
+        showSettings={showSettings}
+        isLoading={isLoading}
+        isCreating={isCreating}
+        isJoining={isJoining}
+        audioRef={audioRef}
+        createGame={createGame}
+        joinGame={joinGame}
+        handleCellClick={handleCellClick}
+        setIsMuted={setIsMuted}
+        setShowSettings={setShowSettings}
+        setIsLoading={setIsLoading}
+        setIsCreating={setIsCreating}
+        setIsJoining={setIsJoining}
+        setTimeLeftX={setTimeLeftX}
+        setTimeLeftO={setTimeLeftO}
+      />
+    </div>
   );
 };
 
