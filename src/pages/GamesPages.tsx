@@ -8,7 +8,7 @@ import ContestsPage from "./games/ContestsPage";
 import Morpion from "./games/Morpion";
 import GamesHeader from "@/components/games/pages/GamesHeader";
 import EventsSection from "@/components/games/pages/EventsSection";
-import SponsoredGames from "@/components/games/pages/SponseredGames";
+import SponsoredGames from "@/components/games/pages/SponsoredGames";
 import CategorySection from "@/components/games/pages/CategorySection";
 import PopularGames from "@/components/games/pages/PopularGames";
 import TopFreeGames from "@/components/games/pages/TopFreeGames";
