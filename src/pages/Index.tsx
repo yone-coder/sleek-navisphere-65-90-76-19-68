@@ -3,8 +3,9 @@ import { useState } from "react";
 import { Store, Trophy, BookOpen, Wallet, PiggyBank } from "lucide-react";
 import { AppGrid } from "@/components/apps/AppGrid";
 import { FavoritesSection } from "@/components/apps/FavoritesSection";
+import type { App } from "@/components/apps/types";
 
-const apps = [
+const apps: App[] = [
   {
     name: "Shopr",
     description: "Your ultimate marketplace for buying and selling",
@@ -60,7 +61,7 @@ const apps = [
   }
 ];
 
-const Index = () => {
+export default function Index() {
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const favoriteApps = apps.filter(app => favorites.includes(app.name));
@@ -80,9 +81,8 @@ const Index = () => {
         apps={apps}
         favorites={favorites}
         onToggleFavorite={handleToggleFavorite}
+        viewMode="grid"
       />
     </div>
   );
-};
-
-export default Index;
+}

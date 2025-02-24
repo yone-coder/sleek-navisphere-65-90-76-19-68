@@ -1,20 +1,8 @@
-
 import { Star, Clock } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
-interface App {
-  name: string;
-  description: string;
-  icon: any;
-  color: string;
-  status?: string;
-  users?: string;
-  lastUsed?: string;
-  rating?: number;
-  updates?: number;
-}
+import type { App } from "./types";
 
 interface AppGridProps {
   apps: App[];
