@@ -209,45 +209,15 @@ export function ParticipantsTable() {
     }
   };
 
+  const counts = {
+    all: participants.length,
+    confirmed: participants.filter(p => p.status === "confirmed").length,
+    pending: participants.filter(p => p.status === "pending").length,
+    withdrawn: participants.filter(p => p.status === "withdrawn").length
+  };
+
   return (
     <div className="space-y-4 px-4">
-      <div className="grid grid-cols-4 gap-2">
-        <div className="p-2 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-lg">
-          <div className="flex items-center gap-1.5 text-blue-600">
-            <Users className="h-3.5 w-3.5" />
-            <span className="text-xs font-medium">Total Players</span>
-          </div>
-          <p className="text-base font-bold">{participants.length}</p>
-        </div>
-        <div className="p-2 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-lg">
-          <div className="flex items-center gap-1.5 text-green-600">
-            <Trophy className="h-3.5 w-3.5" />
-            <span className="text-xs font-medium">Confirmed</span>
-          </div>
-          <p className="text-base font-bold">
-            {participants.filter(p => p.status === "confirmed").length}
-          </p>
-        </div>
-        <div className="p-2 bg-gradient-to-br from-yellow-500/20 to-yellow-600/20 rounded-lg">
-          <div className="flex items-center gap-1.5 text-yellow-600">
-            <CalendarDays className="h-3.5 w-3.5" />
-            <span className="text-xs font-medium">Pending</span>
-          </div>
-          <p className="text-base font-bold">
-            {participants.filter(p => p.status === "pending").length}
-          </p>
-        </div>
-        <div className="p-2 bg-gradient-to-br from-red-500/20 to-red-600/20 rounded-lg">
-          <div className="flex items-center gap-1.5 text-red-600">
-            <UserX className="h-3.5 w-3.5" />
-            <span className="text-xs font-medium">Withdrawn</span>
-          </div>
-          <p className="text-base font-bold">
-            {participants.filter(p => p.status === "withdrawn").length}
-          </p>
-        </div>
-      </div>
-
       <div className="flex items-center gap-2">
         <div className="relative flex-1">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
@@ -258,7 +228,7 @@ export function ParticipantsTable() {
             className="pl-7 h-8 text-sm"
           />
         </div>
-        <ScrollArea className="max-w-[300px]">
+        <ScrollArea className="max-w-[400px]">
           <div className="flex items-center gap-1">
             <Button
               variant="outline"
@@ -269,23 +239,45 @@ export function ParticipantsTable() {
               )}
               onClick={() => setStatusFilter("all")}
             >
-              <Filter className="h-3.5 w-3.5" />
-              <span className="ml-1">All</span>
+              <Users className="h-3.5 w-3.5" />
+              <span className="ml-1">All ({counts.all})</span>
             </Button>
-            {(["confirmed", "pending", "withdrawn"] as const).map((status) => (
-              <Button
-                key={status}
-                variant="outline"
-                size="sm"
-                className={cn(
-                  "h-8 px-2 text-xs flex-shrink-0",
-                  statusFilter === status && "bg-primary text-primary-foreground"
-                )}
-                onClick={() => setStatusFilter(status)}
-              >
-                {status}
-              </Button>
-            ))}
+            <Button
+              variant="outline"
+              size="sm"
+              className={cn(
+                "h-8 px-2 text-xs flex-shrink-0",
+                statusFilter === "confirmed" && "bg-primary text-primary-foreground"
+              )}
+              onClick={() => setStatusFilter("confirmed")}
+            >
+              <Trophy className="h-3.5 w-3.5" />
+              <span className="ml-1">Confirmed ({counts.confirmed})</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className={cn(
+                "h-8 px-2 text-xs flex-shrink-0",
+                statusFilter === "pending" && "bg-primary text-primary-foreground"
+              )}
+              onClick={() => setStatusFilter("pending")}
+            >
+              <CalendarDays className="h-3.5 w-3.5" />
+              <span className="ml-1">Pending ({counts.pending})</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className={cn(
+                "h-8 px-2 text-xs flex-shrink-0",
+                statusFilter === "withdrawn" && "bg-primary text-primary-foreground"
+              )}
+              onClick={() => setStatusFilter("withdrawn")}
+            >
+              <UserX className="h-3.5 w-3.5" />
+              <span className="ml-1">Withdrawn ({counts.withdrawn})</span>
+            </Button>
           </div>
           <ScrollBar orientation="horizontal" className="invisible" />
         </ScrollArea>
