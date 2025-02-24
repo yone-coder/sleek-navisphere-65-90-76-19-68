@@ -4,7 +4,7 @@ import { useGameState } from '@/components/games/morpion/hooks/useGameState';
 import GameLayout from '@/components/games/morpion/GameLayout';
 import GameMenu from '@/components/games/morpion/GameMenu';
 import { GameMode } from '@/components/games/morpion/types';
-import { calculateBotMove } from './components/games/morpion/utils/botUtils';
+import { calculateBotMove } from '@/components/games/morpion/utils/botUtils';
 
 const GameComponent = ({ 
   boardSize,
