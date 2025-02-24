@@ -25,7 +25,7 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
   const totalUpdates = favoriteApps.reduce((sum, app) => sum + (app.updates || 0), 0);
 
   const truncateName = (name: string) => {
-    return name.length > 6 ? `${name.slice(0, 6)}...` : name;
+    return name.length > 8 ? `${name.slice(0, 8)}...` : name;
   };
 
   // Create groups of 4 apps
