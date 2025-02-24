@@ -1,4 +1,4 @@
-import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe, Heart, Newspaper } from "lucide-react";
+import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe, Heart, Newspaper, Building } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Tabs } from "@/components/ui/tabs";
@@ -12,6 +12,52 @@ import { AppControls } from "@/components/apps/AppControls";
 import { App, Category } from "@/components/apps/types";
 
 const apps: App[] = [
+  {
+    name: "Flora",
+    description: "Order fresh flowers & cakes for delivery",
+    icon: Store,
+    route: "/flora",
+    color: "bg-pink-500",
+    category: "Shopping",
+    status: "new",
+    users: "3.8K+",
+    lastUsed: "30 mins ago",
+    rating: 4.7,
+    updates: 2
+  },
+  {
+    name: "Munch",
+    description: "Discover and order from top food franchises",
+    icon: Store,
+    route: "/food-franchises",
+    color: "bg-orange-500",
+    category: "Food",
+    users: "9.4K+",
+    rating: 4.8,
+    updates: 1
+  },
+  {
+    name: "Boltz",
+    description: "Fast and reliable delivery services",
+    icon: Store,
+    route: "/delivery",
+    color: "bg-yellow-500",
+    category: "Services",
+    status: "popular",
+    users: "11.2K+",
+    lastUsed: "15 mins ago",
+    rating: 4.9
+  },
+  {
+    name: "Domus",
+    description: "Find and rent your perfect property",
+    icon: Building,
+    route: "/property",
+    color: "bg-blue-500",
+    category: "Real Estate",
+    users: "7.6K+",
+    rating: 4.6
+  },
   {
     name: "Evnto",
     description: "Discover and host amazing seminars & conferences",
@@ -292,7 +338,10 @@ const appCategories = [
   "Work",
   "Business",
   "Content",
-  "Nonprofit"
+  "Nonprofit",
+  "Food",
+  "Services",
+  "Real Estate"
 ];
 
 export default function Apps() {
