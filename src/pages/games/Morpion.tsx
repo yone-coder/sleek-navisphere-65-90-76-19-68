@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import PlayerCard from '../../components/games/morpion/PlayerCard';
-import GameBoard from '../../components/games/morpion/GameBoard';
-import GameControls from '../../components/games/morpion/GameControls';
-import GameSettings from '../../components/games/morpion/GameSettings';
+import { Settings2, Undo2, RotateCcw, Volume2, VolumeX, Clock } from 'lucide-react';
 
-const Morpion = () => {
+const Gomoku = () => {
   const [boardSize, setBoardSize] = useState(30);
   const [board, setBoard] = useState([]);
   const [currentPlayer, setCurrentPlayer] = useState('X');
@@ -18,7 +15,7 @@ const Morpion = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [zoom, setZoom] = useState(100);
   const [hoveredCell, setHoveredCell] = useState(null);
-  const [timeLeft, setTimeLeft] = useState({ X: 300, O: 300 });
+  const [timeLeft, setTimeLeft] = useState({ X: 300, O: 300 }); // 5 minutes per player
   const [isTimerRunning, setIsTimerRunning] = useState(true);
   const [inactivityTime, setInactivityTime] = useState(15);
   const [winningLine, setWinningLine] = useState(null);
@@ -105,7 +102,7 @@ const Morpion = () => {
     }
 
     if (navigator.vibrate) {
-      navigator.vibrate(40);
+      navigator.vibrate(40); // 40ms vibration - short and crisp
     }
 
     const newBoard = JSON.parse(JSON.stringify(board));
@@ -132,7 +129,7 @@ const Morpion = () => {
     if (checkWinner(newBoard, row, col)) {
       if (soundEnabled) {
         if (navigator.vibrate) {
-          navigator.vibrate([50, 50, 100]);
+          navigator.vibrate([50, 50, 100]); // Victory pattern: short-pause-long
         }
         winAudioRef.current.play().catch(() => {});
       }
@@ -329,7 +326,7 @@ const Morpion = () => {
     );
   };
 
-  const PlayerCard = ({ player, symbol, isTop, timeLeft, isCurrentPlayer, inactivityTime }) => {
+  const PlayerCard = ({ player, symbol, isTop }) => {
     const hasPhoto = !player.toLowerCase().includes('guest');
 
     return (
@@ -353,7 +350,7 @@ const Morpion = () => {
             <span className="text-[10px] md:text-xs font-bold">{symbol}</span>
           </div>
           <div className="text-[10px] md:text-xs font-medium mt-0.5 text-center">
-            {formatTime(timeLeft)}
+            {formatTime(timeLeft[symbol])}
           </div>
         </div>
 
@@ -417,22 +414,8 @@ const Morpion = () => {
     <div className="flex flex-col items-center bg-gray-50 h-screen w-full overflow-hidden pb-8">
       <div className="w-full bg-white shadow-md px-2 md:px-4 py-1">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <PlayerCard
-            player={player2}
-            symbol="O"
-            isTop={true}
-            timeLeft={timeLeft.O}
-            isCurrentPlayer={currentPlayer === 'O'}
-            inactivityTime={currentPlayer === 'O' ? inactivityTime : undefined}
-          />
-          <PlayerCard
-            player={player1}
-            symbol="X"
-            isTop={false}
-            timeLeft={timeLeft.X}
-            isCurrentPlayer={currentPlayer === 'X'}
-            inactivityTime={currentPlayer === 'X' ? inactivityTime : undefined}
-          />
+          <PlayerCard player={player2} symbol="O" isTop={true} />
+          <PlayerCard player={player1} symbol="X" isTop={false} />
         </div>
       </div>
 
@@ -707,4 +690,4 @@ const Morpion = () => {
   );
 };
 
-export default Morpion;
+export default Gomoku;

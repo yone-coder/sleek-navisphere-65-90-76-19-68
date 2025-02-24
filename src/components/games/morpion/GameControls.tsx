@@ -4,43 +4,39 @@ import { Volume2, VolumeX, Undo2, RotateCcw, Settings2 } from 'lucide-react';
 
 interface GameControlsProps {
   soundEnabled: boolean;
+  setSoundEnabled: (enabled: boolean) => void;
+  undoMove: () => void;
+  resetGame: () => void;
+  setIsSettingsOpen: (open: boolean) => void;
   gameHistory: any[];
-  onToggleSound: () => void;
-  onUndo: () => void;
-  onReset: () => void;
-  onOpenSettings: () => void;
   moves: number;
-  timeLeft: { [key: string]: number };
+  timeLeft: { X: number; O: number };
+  currentPlayer: 'X' | 'O';
 }
 
-const GameControls: React.FC<GameControlsProps> = ({
+const GameControls = ({
   soundEnabled,
+  setSoundEnabled,
+  undoMove,
+  resetGame,
+  setIsSettingsOpen,
   gameHistory,
-  onToggleSound,
-  onUndo,
-  onReset,
-  onOpenSettings,
   moves,
-  timeLeft
-}) => {
-  const formatTime = (seconds: number): string => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-  };
-
+  timeLeft,
+  currentPlayer
+}: GameControlsProps) => {
   return (
     <div className="w-full bg-white shadow-md px-2 md:px-4 py-2 flex justify-between items-center">
       <div className="flex items-center gap-1 md:gap-2">
         <button 
-          onClick={onToggleSound}
+          onClick={() => setSoundEnabled(!soundEnabled)}
           className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition duration-300 shadow-md border border-gray-200"
         >
           {soundEnabled ? <Volume2 size={14} className="md:w-4 md:h-4" /> : <VolumeX size={14} className="md:w-4 md:h-4" />}
         </button>
 
         <button 
-          onClick={onUndo}
+          onClick={undoMove}
           disabled={gameHistory.length === 0}
           className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center transition duration-300
             ${gameHistory.length === 0 ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-100 shadow-md border border-gray-200'}
@@ -50,14 +46,14 @@ const GameControls: React.FC<GameControlsProps> = ({
         </button>
 
         <button 
-          onClick={onReset}
+          onClick={resetGame}
           className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition duration-300 shadow-md border border-gray-200"
         >
           <RotateCcw size={14} className="md:w-4 md:h-4" />
         </button>
 
         <button 
-          onClick={onOpenSettings}
+          onClick={() => setIsSettingsOpen(true)}
           className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition duration-300 shadow-md border border-gray-200"
         >
           <Settings2 size={14} className="md:w-4 md:h-4" />
@@ -80,7 +76,7 @@ const GameControls: React.FC<GameControlsProps> = ({
             <div>
               <span className="text-sm text-gray-500">Avg Time/Move:</span>
               <span className="ml-2 font-medium">
-                {moves > 1 ? Math.round((300 - timeLeft['X']) / moves) : 0}s
+                {moves > 1 ? Math.round((300 - timeLeft[currentPlayer]) / moves) : 0}s
               </span>
             </div>
           </div>
