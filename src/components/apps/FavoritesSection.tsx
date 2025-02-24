@@ -43,7 +43,7 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
             100% { transform: translateX(0); }
           }
           .scrolling-text.needs-scroll {
-            animation: scrollText 8s infinite;
+            animation: scrollText 8s 2;
           }
           .scrolling-text:hover {
             animation-play-state: paused;
@@ -112,7 +112,7 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
                             </Badge>
                           )}
                         </div>
-                        <div className="w-[70px] overflow-hidden">
+                        <div className="w-[70px] overflow-hidden flex items-center justify-center h-5">
                           <span 
                             className={`text-sm font-medium text-gray-700 scrolling-text whitespace-nowrap ${app.name.length > 8 ? 'needs-scroll inline-block' : 'text-center w-full block'}`}
                           >
