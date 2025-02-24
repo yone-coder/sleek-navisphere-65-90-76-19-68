@@ -2,19 +2,34 @@
 import { useRef, useEffect } from 'react';
 
 export const useGameAudio = (soundEnabled: boolean, inactivityTime: number, winner: string | null) => {
-  const moveAudioRef = useRef(new Audio('/api/placeholder/audio'));
-  const winAudioRef = useRef(new Audio('/api/placeholder/audio'));
-  const warningAudioRef = useRef(new Audio('/api/placeholder/audio'));
+  const moveAudioXRef = useRef(new Audio('/sounds/move-x.mp3'));
+  const moveAudioORef = useRef(new Audio('/sounds/move-o.mp3'));
+  const winAudioRef = useRef(new Audio('/sounds/win.mp3'));
+  const warningAudioRef = useRef(new Audio('/sounds/warning.mp3'));
+
+  // Set default volume for all sounds
+  useEffect(() => {
+    moveAudioXRef.current.volume = 0.6;
+    moveAudioORef.current.volume = 0.6;
+    winAudioRef.current.volume = 0.7;
+    warningAudioRef.current.volume = 0.5;
+  }, []);
 
   useEffect(() => {
     if (inactivityTime === 5 && soundEnabled && !winner) {
-      warningAudioRef.current.play().catch(() => {});
+      warningAudioRef.current.play().catch(() => {
+        console.log('Warning sound failed to play');
+      });
     }
   }, [inactivityTime, soundEnabled, winner]);
 
-  const playMoveSound = () => {
+  const playMoveSound = (player: 'X' | 'O') => {
     if (soundEnabled) {
-      moveAudioRef.current.play().catch(() => {});
+      const audio = player === 'X' ? moveAudioXRef.current : moveAudioORef.current;
+      audio.currentTime = 0; // Reset audio to start
+      audio.play().catch(() => {
+        console.log(`${player} move sound failed to play`);
+      });
     }
   };
 
@@ -23,7 +38,9 @@ export const useGameAudio = (soundEnabled: boolean, inactivityTime: number, winn
       if (navigator.vibrate) {
         navigator.vibrate([50, 50, 100]);
       }
-      winAudioRef.current.play().catch(() => {});
+      winAudioRef.current.play().catch(() => {
+        console.log('Win sound failed to play');
+      });
     }
   };
 
@@ -32,4 +49,3 @@ export const useGameAudio = (soundEnabled: boolean, inactivityTime: number, winn
     playWinSound
   };
 };
-

@@ -71,7 +71,7 @@ export const useGameState = ({ boardSize }: UseGameStateProps) => {
     const newBoard = JSON.parse(JSON.stringify(board));
     newBoard[row][col] = currentPlayer;
 
-    playMoveSound();
+    playMoveSound(currentPlayer);
 
     setGameHistory([...gameHistory, {
       board: JSON.parse(JSON.stringify(board)),
