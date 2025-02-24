@@ -188,8 +188,11 @@ export default function TournamentDetails() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("overview");
   const [isLiked, setIsLiked] = useState(false);
-  const { toast } = useToast();
+  const [likeCount, setLikeCount] = useState(1234);
   const [shareCount, setShareCount] = useState(245);
+  const [commentCount, setCommentCount] = useState(350);
+  const [isLikeAnimating, setIsLikeAnimating] = useState(false);
+  const { toast } = useToast();
 
   const { data: tournament, isLoading } = useQuery({
     queryKey: ["tournament", id],
@@ -272,6 +275,9 @@ export default function TournamentDetails() {
 
   const handleLike = () => {
     setIsLiked(!isLiked);
+    setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
+    setIsLikeAnimating(true);
+    setTimeout(() => setIsLikeAnimating(false), 500);
     toast({
       title: isLiked ? "Removed from favorites" : "Added to favorites",
       duration: 2000,
@@ -306,6 +312,15 @@ export default function TournamentDetails() {
       default:
         return 'bg-gray-50 text-gray-700 dark:bg-gray-900/20';
     }
+  };
+
+  const formatCount = (count: number) => {
+    if (count >= 1000000) {
+      return `${(count / 1000000).toFixed(1)}M`;
+    } else if (count >= 1000) {
+      return `${(count / 1000).toFixed(1)}K`;
+    }
+    return count.toString();
   };
 
   if (isLoading) {
@@ -626,33 +641,61 @@ export default function TournamentDetails() {
               size="sm"
               onClick={handleLike}
               className={cn(
-                "flex-1",
-                isLiked && "text-red-500 hover:text-red-600"
+                "flex-1 relative overflow-hidden transition-all duration-300",
+                isLiked ? "border-pink-500 text-pink-500 hover:text-pink-600 hover:border-pink-600" 
+                       : "hover:border-pink-500/50"
               )}
             >
-              <Heart className={cn(
-                "h-4 w-4 mr-2",
-                isLiked && "fill-current"
-              )} />
-              <span>1.2K</span>
+              <div className="flex items-center justify-center gap-2">
+                <Heart 
+                  className={cn(
+                    "h-4 w-4 transition-all duration-300",
+                    isLiked && "fill-current",
+                    isLikeAnimating && "animate-ping"
+                  )} 
+                />
+                <span className="font-medium">{formatCount(likeCount)}</span>
+              </div>
+              {isLiked && (
+                <div 
+                  className="absolute inset-0 bg-pink-500/10 animate-fade-out"
+                  style={{ animationDuration: '0.5s' }}
+                />
+              )}
             </Button>
+
             <Button 
               variant="outline" 
               size="sm"
               onClick={() => navigate(`/tournament/${id}/comments`)}
-              className="flex-1"
+              className={cn(
+                "flex-1 hover:border-blue-500/50 transition-all duration-300",
+                "group"
+              )}
             >
-              <MessageSquare className="h-4 w-4 mr-2" />
-              <span>350</span>
+              <div className="flex items-center justify-center gap-2">
+                <MessageSquare className="h-4 w-4 group-hover:text-blue-500 transition-colors duration-300" />
+                <span className="font-medium group-hover:text-blue-500 transition-colors duration-300">
+                  {formatCount(commentCount)}
+                </span>
+              </div>
             </Button>
+
             <Button 
               variant="outline" 
               size="sm"
               onClick={handleShare}
-              className="flex-1"
+              className={cn(
+                "flex-1 hover:border-green-500/50 transition-all duration-300",
+                "group relative overflow-hidden"
+              )}
             >
-              <Share2 className="h-4 w-4 mr-2" />
-              <span>{shareCount}</span>
+              <div className="flex items-center justify-center gap-2">
+                <Share2 className="h-4 w-4 group-hover:text-green-500 transition-colors duration-300" />
+                <span className="font-medium group-hover:text-green-500 transition-colors duration-300">
+                  {formatCount(shareCount)}
+                </span>
+              </div>
             </Button>
           </div>
 
