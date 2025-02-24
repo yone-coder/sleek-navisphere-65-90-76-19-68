@@ -85,9 +85,9 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
                     onClick={() => navigate(app.route)}
                   >
                     <div 
-                      className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative transition-transform duration-200 group-hover:shadow-lg group-hover:-translate-y-1`}
+                      className={`w-16 h-16 rounded-2xl ${app.color} flex items-center justify-center relative transition-transform duration-200 group-hover:shadow-lg group-hover:-translate-y-1`}
                     >
-                      <app.icon className="w-10 h-10 text-white transition-transform duration-200 group-hover:scale-110" />
+                      <app.icon className="w-10 h-10 text-white stroke-[1.5]" />
                       {app.updates > 0 && (
                         <Badge 
                           className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5 animate-bounce"
