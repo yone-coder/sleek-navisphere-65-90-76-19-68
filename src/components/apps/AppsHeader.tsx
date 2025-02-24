@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useLanguage, Language } from "@/contexts/LanguageContext";
+import { useUser, SignInButton } from "@clerk/clerk-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,12 +23,8 @@ interface AppsHeaderProps {
 export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
   const [notifications, setNotifications] = useState(3);
   const { language, setLanguage, t } = useLanguage();
-  const user = {
-    name: "John Doe",
-    email: "john@example.com",
-    avatar: "https://github.com/shadcn.png",
-  };
-
+  const { isSignedIn, user } = useUser();
+  
   const languageDetails = {
     en: { name: "English", flag: "🇬🇧" },
     fr: { name: "Français", flag: "🇫🇷" },
@@ -37,33 +34,45 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between gap-4">
-        {/* Left: Profile Menu */}
+        {/* Left: Profile Menu or Sign In Button */}
         <div className="flex items-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+          {isSignedIn ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  className="relative h-10 w-10 rounded-full hover:bg-muted/60 transition-colors duration-200 p-0.5"
+                >
+                  <Avatar className="h-full w-full ring-2 ring-background">
+                    <AvatarImage src={user.imageUrl} alt={user.fullName || ''} />
+                    <AvatarFallback>{user.firstName?.charAt(0) || 'U'}</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56">
+                <DropdownMenuLabel className="px-3 py-2">
+                  <div className="flex flex-col space-y-1.5">
+                    <p className="text-sm font-semibold leading-none">{user.fullName}</p>
+                    <p className="text-xs text-muted-foreground">{user.primaryEmailAddress?.emailAddress}</p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="px-3 py-2 gap-2 cursor-pointer">
+                  Settings
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <SignInButton mode="modal">
               <Button 
-                variant="ghost" 
-                className="relative h-10 w-10 rounded-full hover:bg-muted/60 transition-colors duration-200 p-0.5"
+                variant="outline"
+                size="sm"
+                className="font-medium"
               >
-                <Avatar className="h-full w-full ring-2 ring-background">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback>JD</AvatarFallback>
-                </Avatar>
+                Sign in
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-56">
-              <DropdownMenuLabel className="px-3 py-2">
-                <div className="flex flex-col space-y-1.5">
-                  <p className="text-sm font-semibold leading-none">{user.name}</p>
-                  <p className="text-xs text-muted-foreground">{user.email}</p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="px-3 py-2 gap-2 cursor-pointer">
-                Settings
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </SignInButton>
+          )}
         </div>
 
         {/* Middle: Search bar */}
