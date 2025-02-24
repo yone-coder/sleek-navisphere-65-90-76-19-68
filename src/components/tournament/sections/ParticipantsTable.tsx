@@ -216,7 +216,7 @@ export function ParticipantsTable() {
       </div>
 
       <div className="border rounded-lg">
-        <ScrollArea className="h-[calc(100vh-360px)] min-h-[300px]">
+        <ScrollArea className="max-h-[400px]">
           <div className="min-w-[800px]">
             <Table>
               <TableHeader>

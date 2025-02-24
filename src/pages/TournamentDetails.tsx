@@ -36,6 +36,7 @@ import { TournamentRoadmap } from "@/components/tournament/sections/TournamentRo
 import { ParticipantsTable } from "@/components/tournament/sections/ParticipantsTable";
 import { TournamentRulesCard } from "@/components/tournament/sections/TournamentRulesCard";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { TournamentCommentsPanel } from "@/components/tournament/sections/TournamentCommentsPanel";
 
 const formatPrizePool = (amount: number): string => {
   if (amount >= 1000000) {
@@ -192,6 +193,7 @@ export default function TournamentDetails() {
   const [shareCount, setShareCount] = useState(245);
   const [commentCount, setCommentCount] = useState(350);
   const [isLikeAnimating, setIsLikeAnimating] = useState(false);
+  const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
   const { toast } = useToast();
 
   const { data: tournament, isLoading } = useQuery({
@@ -667,7 +669,7 @@ export default function TournamentDetails() {
             <Button 
               variant="outline" 
               size="sm"
-              onClick={() => navigate(`/tournament/${id}/comments`)}
+              onClick={() => setIsCommentsPanelOpen(true)}
               className={cn(
                 "flex-1 hover:border-blue-500/50 transition-all duration-300",
                 "group"
@@ -708,6 +710,11 @@ export default function TournamentDetails() {
           </Button>
         </div>
       </div>
+
+      <TournamentCommentsPanel 
+        open={isCommentsPanelOpen} 
+        onOpenChange={setIsCommentsPanelOpen}
+      />
     </div>
   );
 }
