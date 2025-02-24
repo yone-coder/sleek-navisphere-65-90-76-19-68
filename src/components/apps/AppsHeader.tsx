@@ -9,14 +9,14 @@ interface AppsHeaderProps {
 
 export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
   return (
-    <header className="sticky top-0 z-50 w-full">
+    <header className="sticky top-0 z-50 w-full bg-transparent">
       <div className="container flex flex-col py-3">
         <div className="flex items-center gap-2 w-full max-w-3xl mx-auto">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-[16px] w-[16px] -translate-y-1/2 text-muted-foreground/60" />
             <Input
               placeholder="Search apps, documents, and more..."
-              className="pl-8 pr-28 hover:bg-muted/10 transition-colors duration-200 cursor-pointer border-none h-9 text-sm rounded-full shadow-sm"
+              className="pl-8 pr-28 bg-transparent hover:bg-muted/10 transition-colors duration-200 cursor-pointer border-none h-9 text-sm rounded-full shadow-sm"
               onClick={onOpenSearch}
               readOnly
             />
