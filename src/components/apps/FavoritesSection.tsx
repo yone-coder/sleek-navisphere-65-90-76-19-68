@@ -38,12 +38,15 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
         {`
           @keyframes scrollText {
             0% { transform: translateX(0); }
-            40% { transform: translateX(calc(-100% + 70px)); }
-            60% { transform: translateX(calc(-100% + 70px)); }
+            25% { transform: translateX(0); }
+            75% { transform: translateX(calc(-100% + 70px)); }
             100% { transform: translateX(0); }
           }
-          .scroll-on-hover:hover .scrolling-text {
-            animation: scrollText 3s ease-in-out;
+          .scrolling-text {
+            animation: scrollText 8s infinite;
+          }
+          .scrolling-text:hover {
+            animation-play-state: paused;
           }
         `}
       </style>
@@ -109,8 +112,8 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
                             </Badge>
                           )}
                         </div>
-                        <div className="w-[70px] overflow-hidden scroll-on-hover">
-                          <span className="text-sm font-medium text-gray-700 scrolling-text whitespace-nowrap text-center block">
+                        <div className="w-[70px] overflow-hidden">
+                          <span className="text-sm font-medium text-gray-700 scrolling-text whitespace-nowrap inline-block">
                             {app.name}
                           </span>
                         </div>
