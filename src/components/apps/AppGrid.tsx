@@ -1,7 +1,9 @@
+
 import { Star, Clock } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 import type { App } from "./types";
 
 interface AppGridProps {
@@ -11,8 +13,8 @@ interface AppGridProps {
   viewMode?: "grid" | "list";
 }
 
-const AppCard = ({ app, isFavorite, onToggleFavorite }) => (
-  <div className="relative w-full overflow-hidden">
+const AppCard = ({ app, isFavorite, onToggleFavorite, onClick }) => (
+  <div className="relative w-full overflow-hidden" onClick={onClick}>
     <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
       <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
         <app.icon className="w-7 h-7 text-white" />
@@ -61,8 +63,8 @@ const AppCard = ({ app, isFavorite, onToggleFavorite }) => (
   </div>
 );
 
-const AppList = ({ app, isFavorite, onToggleFavorite }) => (
-  <div className="relative w-full p-3 hover:bg-gray-50 rounded-lg transition-colors">
+const AppList = ({ app, isFavorite, onToggleFavorite, onClick }) => (
+  <div className="relative w-full p-3 hover:bg-gray-50 rounded-lg transition-colors" onClick={onClick}>
     <div className="flex items-center gap-4">
       <div className={`w-12 h-12 rounded-xl ${app.color} flex items-center justify-center relative flex-shrink-0`}>
         <app.icon className="w-6 h-6 text-white" />
@@ -108,7 +110,18 @@ const AppList = ({ app, isFavorite, onToggleFavorite }) => (
 );
 
 export const AppGrid = ({ apps, favorites, onToggleFavorite, viewMode = "grid" }: AppGridProps) => {
+  const navigate = useNavigate();
   const AppComponent = viewMode === "grid" ? AppCard : AppList;
+  
+  const handleAppClick = (app: App) => {
+    // For games, navigate to game details page
+    if (app.category === "Gaming") {
+      const gameId = app.name.toLowerCase().replace(/\s+/g, '-');
+      navigate(`/games/${gameId}`);
+    } else {
+      navigate(app.route);
+    }
+  };
   
   return (
     <div className={
@@ -125,6 +138,7 @@ export const AppGrid = ({ apps, favorites, onToggleFavorite, viewMode = "grid" }
             app={app}
             isFavorite={favorites.includes(app.name)}
             onToggleFavorite={onToggleFavorite}
+            onClick={() => handleAppClick(app)}
           />
         </Card>
       ))}
