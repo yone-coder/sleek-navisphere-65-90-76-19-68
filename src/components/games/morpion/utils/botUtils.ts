@@ -29,51 +29,85 @@ export const calculateBotMove = (
           continue;
         }
         let score = 0;
+        let hasThreatsNearby = false;
         
-        // Check surrounding cells
-        for (let di = -1; di <= 1; di++) {
-          for (let dj = -1; dj <= 1; dj++) {
-            if (di === 0 && dj === 0) continue;
-            let playerCount = 0;
-            let botCount = 0;
-            let blocked = 0;
+        // Check surrounding cells in all 8 directions
+        const directions = [
+          [-1, 0], [1, 0], // vertical
+          [0, -1], [0, 1], // horizontal
+          [-1, -1], [1, 1], // diagonal \
+          [-1, 1], [1, -1]  // diagonal /
+        ];
+
+        for (const [di, dj] of directions) {
+          let playerCount = 0;
+          let botCount = 0;
+          let emptyBefore = false;
+          let emptyAfter = false;
+          
+          // Check 5 cells in this direction
+          for (let step = -4; step <= 4; step++) {
+            const row = i + di * step;
+            const col = j + dj * step;
             
-            // Look in both directions
-            for (let step = -4; step <= 4; step++) {
-              const row = i + di * step;
-              const col = j + dj * step;
-              
-              if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) continue;
-              
-              if (board[row][col] === 'X') playerCount++;
-              else if (board[row][col] === 'O') botCount++;
-              else if (step === -1 || step === 1) blocked++;
-            }
+            if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) continue;
             
-            // Ultra defensive scoring
-            // Highest priority: Block opponent's potential wins
-            if (playerCount >= 3) {
-              score += Math.pow(playerCount, 3) * 100;
+            const cell = board[row][col];
+            if (cell === 'X') {
+              playerCount++;
+              // Reset consecutive count if there's a gap
+              if (playerCount === 3 && (emptyBefore || emptyAfter)) {
+                hasThreatsNearby = true;
+              }
+            } else if (cell === 'O') {
+              botCount++;
+            } else {
+              // Track empty spaces before and after the sequence
+              if (step < 0) emptyBefore = true;
+              if (step > 0) emptyAfter = true;
             }
-            
-            // Medium priority: Defend against potential threats
-            if (playerCount >= 2 && blocked === 0) {
-              score += Math.pow(playerCount, 2) * 50;
-            }
-            
-            // Lower priority: Build own moves
-            if (botCount >= 3) {
-              score += Math.pow(botCount, 2) * 30;
-            }
-            
-            // Bonus for moves that both block and build
-            if (playerCount > 0 && botCount > 0) {
-              score += (playerCount + botCount) * 10;
-            }
+          }
+
+          // Ultra defensive scoring
+          // Immediate block needed (opponent has 4 in a row)
+          if (playerCount >= 4) {
+            score += 100000;
+          }
+          // Critical defense (opponent has 3 in a row with space)
+          else if (playerCount === 3 && (emptyBefore || emptyAfter)) {
+            score += 10000;
+          }
+          // Potential threat (opponent has 2 in a row with spaces)
+          else if (playerCount === 2 && emptyBefore && emptyAfter) {
+            score += 1000;
+          }
+
+          // Offensive scoring
+          // Bot can win next move
+          if (botCount >= 4) {
+            score += 50000;
+          }
+          // Bot has strong position (3 in a row with space)
+          else if (botCount === 3 && (emptyBefore || emptyAfter)) {
+            score += 5000;
+          }
+          // Bot building position (2 in a row with spaces)
+          else if (botCount === 2 && emptyBefore && emptyAfter) {
+            score += 500;
+          }
+
+          // Bonus for moves that both defend and attack
+          if (playerCount > 0 && botCount > 0) {
+            score += (playerCount + botCount) * 100;
+          }
+
+          // Extra bonus for moves near threats
+          if (hasThreatsNearby) {
+            score *= 1.5;
           }
         }
 
-        // Add position-based scoring (prefer moves closer to the last move)
+        // Position-based scoring (prefer moves closer to the last move)
         if (lastMove) {
           const distance = Math.abs(i - lastMove.row) + Math.abs(j - lastMove.col);
           score += Math.max(0, (10 - distance) * 5);
