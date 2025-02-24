@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Mic, Camera, Settings, Command } from "lucide-react";
+import { Search, Mic, Camera, Settings } from "lucide-react";
 
 interface AppsHeaderProps {
   onOpenSearch: () => void;
@@ -47,23 +47,6 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
               </Button>
             </div>
           </div>
-        </div>
-        <div className="flex items-center justify-center mt-2 text-xs text-muted-foreground/70">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-6 px-2 gap-1.5 text-xs font-normal hover:bg-white/50"
-          >
-            <Command className="h-3 w-3" />
-            Press
-            <kbd className="pointer-events-none inline-flex h-4 select-none items-center gap-1 rounded border bg-white/50 px-1.5 font-mono text-[10px] font-medium opacity-100">
-              ⌘
-            </kbd>
-            <kbd className="pointer-events-none inline-flex h-4 select-none items-center gap-1 rounded border bg-white/50 px-1.5 font-mono text-[10px] font-medium opacity-100">
-              K
-            </kbd>
-            to search
-          </Button>
         </div>
       </div>
     </header>
