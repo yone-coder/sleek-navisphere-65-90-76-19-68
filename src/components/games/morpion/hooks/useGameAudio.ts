@@ -7,13 +7,13 @@ export const useGameAudio = (soundEnabled: boolean, inactivityTime: number, winn
   const winAudioRef = useRef<HTMLAudioElement | null>(null);
   const warningAudioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Initialize audio elements
+  // Initialize audio elements with online sound effects
   useEffect(() => {
-    // Create new audio elements
-    moveAudioXRef.current = new Audio('/sounds/move-x.mp3');
-    moveAudioORef.current = new Audio('/sounds/move-o.mp3');
-    winAudioRef.current = new Audio('/sounds/win.mp3');
-    warningAudioRef.current = new Audio('/sounds/warning.mp3');
+    // Create new audio elements with online sources
+    moveAudioXRef.current = new Audio('https://www.soundjay.com/button/button-09.mp3');
+    moveAudioORef.current = new Audio('https://www.soundjay.com/button/button-30.mp3');
+    winAudioRef.current = new Audio('https://www.soundjay.com/button/button-16.mp3');
+    warningAudioRef.current = new Audio('https://www.soundjay.com/button/beep-01a.mp3');
 
     // Set volumes
     if (moveAudioXRef.current) moveAudioXRef.current.volume = 0.6;
