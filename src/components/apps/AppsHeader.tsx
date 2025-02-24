@@ -9,7 +9,7 @@ interface AppsHeaderProps {
 
 export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
   return (
-    <header className="sticky top-0 z-50 w-full">
+    <header className="sticky top-0 z-50 w-full backdrop-blur-sm bg-white/70">
       <div className="container flex flex-col py-3">
         <div className="flex items-center gap-2 w-full max-w-3xl mx-auto">
           <div className="relative flex-1">
