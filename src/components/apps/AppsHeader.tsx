@@ -16,7 +16,7 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
             <Search className="absolute left-3 top-1/2 h-[16px] w-[16px] -translate-y-1/2 text-muted-foreground/60" />
             <Input
               placeholder="Search apps, documents, and more..."
-              className="pl-8 pr-28 bg-muted/30 hover:bg-muted/40 transition-colors duration-200 cursor-pointer border-none h-9 text-sm rounded-full shadow-sm"
+              className="pl-8 pr-28 hover:bg-muted/10 transition-colors duration-200 cursor-pointer border-none h-9 text-sm rounded-full shadow-sm"
               onClick={onOpenSearch}
               readOnly
             />
