@@ -3,7 +3,7 @@ import React from 'react';
 import { Game } from '@/types/game';
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Star } from "lucide-react";
+import { Star, MoreVertical } from "lucide-react";
 
 interface SponsoredGamesProps {
   games: Game[];
@@ -54,4 +54,3 @@ const SponsoredGames: React.FC<SponsoredGamesProps> = ({ games }) => {
 };
 
 export default SponsoredGames;
-
