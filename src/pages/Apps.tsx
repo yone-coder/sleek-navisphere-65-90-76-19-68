@@ -10,6 +10,7 @@ import { SearchOverlay } from "@/components/search/SearchOverlay";
 import { CategoryTabs } from "@/components/apps/CategoryTabs";
 import { AppControls } from "@/components/apps/AppControls";
 import { App, Category } from "@/components/apps/types";
+import { SuggestionsSection } from "@/components/apps/SuggestionsSection";
 
 const apps: App[] = [
   {
@@ -389,6 +390,10 @@ export default function Apps() {
 
   const favoriteApps = apps.filter(app => favorites.includes(app.name));
   const updatesCount = apps.filter(app => app.updates > 0).length;
+  
+  const suggestedApps = apps
+    .filter(app => app.rating && app.rating >= 4.8)
+    .slice(0, 8);
 
   return (
     <div className="fixed inset-0 flex flex-col overflow-hidden">
@@ -401,6 +406,8 @@ export default function Apps() {
           <div className="max-w-7xl mx-auto px-4">
             <div className="py-8">
               <FavoritesSection favoriteApps={favoriteApps} />
+              
+              <SuggestionsSection suggestedApps={suggestedApps} />
 
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div className="flex-1 min-w-0">
