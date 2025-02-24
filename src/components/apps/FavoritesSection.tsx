@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useNavigate } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Card } from "@/components/ui/card";
 
 interface FavoritesSectionProps {
   favoriteApps: Array<{
@@ -78,29 +79,25 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
             >
               <div className="grid grid-cols-4 gap-4">
                 {group.map((app) => (
-                  <Button
-                    key={app.name}
-                    variant="ghost"
-                    className="relative flex flex-col items-center gap-3 p-4 h-auto hover:scale-105 transition-transform duration-200 group rounded-xl hover:bg-gray-50"
-                    onClick={() => navigate(app.route)}
-                  >
-                    <div 
-                      className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative transition-transform duration-200 group-hover:shadow-lg group-hover:-translate-y-1`}
-                    >
-                      <app.icon className="w-7 h-7 text-white stroke-[2]" />
-                      {app.updates > 0 && (
-                        <Badge 
-                          className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5 animate-bounce"
-                          style={{ animationDuration: '2s' }}
-                        >
-                          {app.updates}
-                        </Badge>
-                      )}
+                  <Card key={app.name} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                    <div className="relative w-full overflow-hidden">
+                      <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
+                        <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
+                          <app.icon className="w-8 h-8 text-white" strokeWidth={2} />
+                          {app.updates > 0 && (
+                            <Badge 
+                              className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5"
+                            >
+                              {app.updates}
+                            </Badge>
+                          )}
+                        </div>
+                        <span className="text-sm font-medium text-gray-700 text-center line-clamp-2">
+                          {app.name}
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-sm font-medium text-gray-700 text-center line-clamp-2 group-hover:text-gray-900 transition-colors duration-200">
-                      {app.name}
-                    </span>
-                  </Button>
+                  </Card>
                 ))}
               </div>
             </div>
