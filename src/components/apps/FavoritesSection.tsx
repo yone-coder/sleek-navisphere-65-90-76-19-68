@@ -43,23 +43,11 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
             75% { transform: translateX(calc(-100% + 70px)); }
             100% { transform: translateX(0); }
           }
-          .scrolling-text.needs-scroll {
+          .scrolling-text {
             animation: scrollText 8s 1;
           }
-          .scrolling-text.needs-scroll:not(:hover) {
-            text-overflow: ellipsis;
-            overflow: hidden;
-          }
-          .scrolling-text.needs-scroll:hover {
-            animation-play-state: running;
-            overflow: visible;
-          }
-          .name-container {
-            display: flex;
-            justify-content: flex-start;
-          }
-          .name-container.center {
-            justify-content: center;
+          .scrolling-text:hover {
+            animation-play-state: paused;
           }
         `}
       </style>
@@ -107,51 +95,35 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
               }}
             >
               <div className="grid grid-cols-4 gap-4">
-                {group.map((app) => {
-                  // Random delay between 5-15 seconds for second animation
-                  const randomDelay = Math.floor(Math.random() * 10000) + 5000;
-                  
-                  return (
-                    <Card 
-                      key={app.name} 
-                      className="overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-transparent border-0"
-                      onClick={() => navigate(app.route)}
-                    >
-                      <div className="relative w-full overflow-hidden">
-                        <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
-                          <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
-                            <app.icon className="w-8 h-8 text-white" strokeWidth={2} />
-                            {app.updates > 0 && (
-                              <Badge 
-                                className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5"
-                              >
-                                {app.updates}
-                              </Badge>
-                            )}
-                          </div>
-                          <div className={`w-[70px] overflow-hidden h-5 name-container ${app.name.length <= 8 ? 'center' : ''}`}>
-                            <span 
-                              className={`text-sm font-medium text-gray-700 scrolling-text whitespace-nowrap ${app.name.length > 8 ? 'needs-scroll inline-block' : 'text-center w-full block'}`}
-                              ref={(el) => {
-                                if (el && app.name.length > 8) {
-                                  // First animation on mount
-                                  el.style.animation = 'scrollText 8s 1';
-                                  
-                                  // Second random animation
-                                  setTimeout(() => {
-                                    el.style.animation = 'scrollText 8s 1';
-                                  }, randomDelay);
-                                }
-                              }}
+                {group.map((app) => (
+                  <Card 
+                    key={app.name} 
+                    className="overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-transparent border-0"
+                    onClick={() => navigate(app.route)}
+                  >
+                    <div className="relative w-full overflow-hidden">
+                      <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
+                        <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
+                          <app.icon className="w-8 h-8 text-white" strokeWidth={2} />
+                          {app.updates > 0 && (
+                            <Badge 
+                              className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5"
                             >
-                              {app.name}
-                            </span>
-                          </div>
+                              {app.updates}
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="w-[70px] overflow-hidden h-5">
+                          <span 
+                            className={`text-sm font-medium text-gray-700 scrolling-text text-center block whitespace-nowrap`}
+                          >
+                            {app.name}
+                          </span>
                         </div>
                       </div>
-                    </Card>
-                  );
-                })}
+                    </div>
+                  </Card>
+                ))}
               </div>
             </div>
           ))}
