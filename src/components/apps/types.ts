@@ -1,9 +1,10 @@
+
 import { LucideIcon } from "lucide-react";
 
 export interface App {
   name: string;
   description: string;
-  icon: LucideIcon;
+  icon: LucideIcon | (() => JSX.Element);
   route: string;
   color: string;
   category: string;
