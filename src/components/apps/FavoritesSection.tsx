@@ -42,7 +42,7 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
             75% { transform: translateX(calc(-100% + 70px)); }
             100% { transform: translateX(0); }
           }
-          .scrolling-text {
+          .scrolling-text.needs-scroll {
             animation: scrollText 8s infinite;
           }
           .scrolling-text:hover {
@@ -113,7 +113,9 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
                           )}
                         </div>
                         <div className="w-[70px] overflow-hidden">
-                          <span className="text-sm font-medium text-gray-700 scrolling-text whitespace-nowrap inline-block">
+                          <span 
+                            className={`text-sm font-medium text-gray-700 scrolling-text whitespace-nowrap inline-block ${app.name.length > 8 ? 'needs-scroll' : ''}`}
+                          >
                             {app.name}
                           </span>
                         </div>
