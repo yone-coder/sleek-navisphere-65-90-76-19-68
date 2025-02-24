@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useLanguage, Language } from "@/contexts/LanguageContext";
-import { useUser, SignInButton } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,7 +23,9 @@ interface AppsHeaderProps {
 export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
   const [notifications, setNotifications] = useState(3);
   const { language, setLanguage, t } = useLanguage();
-  const { isSignedIn, user } = useUser();
+  const navigate = useNavigate();
+  // Temporary auth state until you provide your auth context
+  const isAuthenticated = false; 
   
   const languageDetails = {
     en: { name: "English", flag: "🇬🇧" },
@@ -36,7 +38,7 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
       <div className="container flex h-16 items-center justify-between gap-4">
         {/* Left: Profile Menu or Sign In Button */}
         <div className="flex items-center">
-          {isSignedIn ? (
+          {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button 
@@ -44,16 +46,16 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
                   className="relative h-10 w-10 rounded-full hover:bg-muted/60 transition-colors duration-200 p-0.5"
                 >
                   <Avatar className="h-full w-full ring-2 ring-background">
-                    <AvatarImage src={user.imageUrl} alt={user.fullName || ''} />
-                    <AvatarFallback>{user.firstName?.charAt(0) || 'U'}</AvatarFallback>
+                    <AvatarImage src="" alt="User" />
+                    <AvatarFallback>U</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-56">
                 <DropdownMenuLabel className="px-3 py-2">
                   <div className="flex flex-col space-y-1.5">
-                    <p className="text-sm font-semibold leading-none">{user.fullName}</p>
-                    <p className="text-xs text-muted-foreground">{user.primaryEmailAddress?.emailAddress}</p>
+                    <p className="text-sm font-semibold leading-none">User Name</p>
+                    <p className="text-xs text-muted-foreground">user@example.com</p>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -63,15 +65,14 @@ export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <SignInButton mode="modal">
-              <Button 
-                variant="outline"
-                size="sm"
-                className="font-medium"
-              >
-                Sign in
-              </Button>
-            </SignInButton>
+            <Button 
+              variant="outline"
+              size="sm"
+              className="font-medium"
+              onClick={() => navigate('/login')}
+            >
+              Sign in
+            </Button>
           )}
         </div>
 
