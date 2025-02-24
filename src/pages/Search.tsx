@@ -3,10 +3,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SearchOverlay } from "@/components/search/SearchOverlay";
 import { 
-  Trophy, // Import Lucide icons directly
+  Trophy,
   Swords,
   Store,
-  GamepadIcon
+  GamepadIcon,
+  ShoppingCart,
+  MessagesSquare,
+  Wallet,
+  Users,
+  Settings,
+  LayoutGrid
 } from "lucide-react";
 
 const mockApps = [
@@ -16,7 +22,9 @@ const mockApps = [
     category: "Gaming",
     route: "/tournaments",
     color: "bg-purple-500",
-    icon: Trophy // Use Lucide icon component directly
+    icon: Trophy,
+    rating: 4.8,
+    users: "10K+"
   },
   {
     name: "Matches",
@@ -24,7 +32,9 @@ const mockApps = [
     category: "Gaming",
     route: "/matches",
     color: "bg-blue-500",
-    icon: Swords
+    icon: Swords,
+    rating: 4.5,
+    updates: 3
   },
   {
     name: "Marketplace",
@@ -32,7 +42,9 @@ const mockApps = [
     category: "Shopping",
     route: "/marketplace",
     color: "bg-green-500",
-    icon: Store
+    icon: Store,
+    rating: 4.9,
+    users: "50K+"
   },
   {
     name: "Games",
@@ -40,7 +52,60 @@ const mockApps = [
     category: "Gaming",
     route: "/games",
     color: "bg-red-500",
-    icon: GamepadIcon
+    icon: GamepadIcon,
+    rating: 4.7
+  },
+  {
+    name: "Cart",
+    description: "View your shopping cart",
+    category: "Shopping",
+    route: "/cart",
+    color: "bg-orange-500",
+    icon: ShoppingCart,
+    lastUsed: "2 hours ago"
+  },
+  {
+    name: "Chat",
+    description: "Connect with other gamers",
+    category: "Social",
+    route: "/chat",
+    color: "bg-indigo-500",
+    icon: MessagesSquare,
+    updates: 5
+  },
+  {
+    name: "Wallet",
+    description: "Manage your gaming wallet",
+    category: "Finance",
+    route: "/wallet",
+    color: "bg-emerald-500",
+    icon: Wallet
+  },
+  {
+    name: "Community",
+    description: "Join gaming communities",
+    category: "Social",
+    route: "/community",
+    color: "bg-pink-500",
+    icon: Users,
+    users: "100K+"
+  },
+  {
+    name: "Settings",
+    description: "Customize your experience",
+    category: "System",
+    route: "/settings",
+    color: "bg-gray-500",
+    icon: Settings
+  },
+  {
+    name: "Dashboard",
+    description: "View your gaming statistics",
+    category: "System",
+    route: "/dashboard",
+    color: "bg-cyan-500",
+    icon: LayoutGrid,
+    lastUsed: "Just now"
   }
 ];
 

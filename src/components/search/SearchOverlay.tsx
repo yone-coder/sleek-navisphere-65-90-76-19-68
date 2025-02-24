@@ -29,6 +29,10 @@ interface AppItem {
   route: string;
   color: string;
   icon: LucideIcon;
+  rating?: number;
+  users?: string;
+  updates?: number;
+  lastUsed?: string;
 }
 
 interface SearchOverlayProps {
