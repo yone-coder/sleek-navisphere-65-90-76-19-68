@@ -109,7 +109,7 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
                             </Badge>
                           )}
                         </div>
-                        <div className="w-full overflow-hidden scroll-on-hover flex justify-center">
+                        <div className="w-[70px] overflow-hidden scroll-on-hover flex justify-center">
                           <span className="text-sm font-medium text-gray-700 scrolling-text whitespace-nowrap">
                             {app.name}
                           </span>
