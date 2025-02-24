@@ -114,7 +114,7 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
                         </div>
                         <div className="w-[70px] overflow-hidden">
                           <span 
-                            className={`text-sm font-medium text-gray-700 scrolling-text whitespace-nowrap inline-block ${app.name.length > 8 ? 'needs-scroll' : ''}`}
+                            className={`text-sm font-medium text-gray-700 scrolling-text whitespace-nowrap ${app.name.length > 8 ? 'needs-scroll inline-block' : 'text-center w-full block'}`}
                           >
                             {app.name}
                           </span>
