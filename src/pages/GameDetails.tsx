@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -30,6 +29,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { TournamentCard } from "@/components/tournaments/TournamentCard";
 
 const mockGame = {
   id: "1",
@@ -65,6 +65,33 @@ const mockGame = {
     }
   }
 };
+
+const mockTournaments = [
+  {
+    id: "1",
+    title: "Winter Championship 2025",
+    start_date: "2025-01-15",
+    end_date: "2025-02-15",
+    status: "upcoming",
+    prize_pool: 10000,
+    max_participants: 128,
+    current_participants: 64,
+    banner_url: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
+    game: "League of Legends"
+  },
+  {
+    id: "2",
+    title: "Spring Tournament 2025",
+    start_date: "2025-03-01",
+    end_date: "2025-03-31",
+    status: "upcoming",
+    prize_pool: 15000,
+    max_participants: 256,
+    current_participants: 128,
+    banner_url: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
+    game: "League of Legends"
+  }
+];
 
 export default function GameDetails() {
   const { id } = useParams();
@@ -230,7 +257,7 @@ export default function GameDetails() {
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <div className="w-full overflow-x-auto no-scrollbar">
                 <TabsList className="w-full h-auto inline-flex whitespace-nowrap">
-                  {["overview", "details", "reviews", "achievements", "news", "dlc"].map((tab) => (
+                  {["overview", "details", "tournaments", "achievements", "news", "dlc"].map((tab) => (
                     <TabsTrigger
                       key={tab}
                       value={tab}
@@ -393,7 +420,22 @@ export default function GameDetails() {
             </div>
           </TabsContent>
 
-          {["details", "reviews", "achievements", "news", "dlc"].map((tab) => (
+          <TabsContent value="tournaments">
+            <div className="p-4">
+              <h2 className="text-xl font-bold mb-4">Upcoming Tournaments</h2>
+              <div className="space-y-4">
+                {mockTournaments.map((tournament) => (
+                  <TournamentCard 
+                    key={tournament.id} 
+                    tournament={tournament}
+                    className="w-full"
+                  />
+                ))}
+              </div>
+            </div>
+          </TabsContent>
+
+          {["details", "achievements", "news", "dlc"].map((tab) => (
             <TabsContent key={tab} value={tab}>
               <div className="p-4 text-center text-gray-500">
                 {tab.charAt(0).toUpperCase() + tab.slice(1)} content coming soon...
