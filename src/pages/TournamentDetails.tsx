@@ -192,7 +192,7 @@ export default function TournamentDetails() {
   const [likeCount, setLikeCount] = useState(1234);
   const [shareCount, setShareCount] = useState(245);
   const [commentCount, setCommentCount] = useState(350);
-  const [isLikeAnimating, setIsLikeAnimating] = useState(false);
+  const [isLikeAnimating, setIsLikeAnimating] useState(false);
   const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
   const { toast } = useToast();
 
@@ -392,7 +392,7 @@ export default function TournamentDetails() {
         </div>
       </div>
 
-      <div className="pt-24 pb-48">
+      <div className={cn("pt-24", activeTab === "overview" ? "pb-48" : "pb-4")}>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsContent value="overview">
             <div className="space-y-6">
@@ -585,131 +585,133 @@ export default function TournamentDetails() {
         </Tabs>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 backdrop-blur-lg bg-background/80 border-t border-border/40">
-        <div className="p-4 space-y-4">
-          <div className="flex flex-col space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-muted-foreground" />
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium">
-                    {tournament?.current_participants || 0}/{tournament?.max_participants || 0}
-                  </span>
-                  <span className="text-xs text-muted-foreground">Participants</span>
-                </div>
-              </div>
-              <div className="flex flex-col items-end">
-                <Badge 
-                  variant="outline" 
-                  className={cn(
-                    "px-2 py-0.5 text-[10px]",
-                    getParticipantProgress() >= 90 ? "bg-red-100 text-red-700 dark:bg-red-900/20" :
-                    getParticipantProgress() >= 75 ? "bg-orange-100 text-orange-700 dark:bg-orange-900/20" :
-                    getParticipantProgress() >= 50 ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20" :
-                    "bg-blue-100 text-blue-700 dark:bg-blue-900/20"
-                  )}
-                >
-                  {getProgressStatus()}
-                </Badge>
-                <span className="text-xs text-muted-foreground mt-1">
-                  {getSpotsText()}
-                </span>
-              </div>
-            </div>
-
-            <div className="relative">
-              <Progress 
-                value={getParticipantProgress()} 
-                className="h-2.5 transition-all duration-500" 
-              />
-              {getParticipantProgress() >= 75 && (
-                <div className="absolute -top-1 right-0 transform translate-x-1/2 -translate-y-full">
-                  <div className="animate-bounce">
-                    <Badge 
-                      variant="outline" 
-                      className="bg-red-100 text-red-700 dark:bg-red-900/20 text-[10px]"
-                    >
-                      Limited Spots!
-                    </Badge>
+      {activeTab === "overview" && (
+        <div className="fixed bottom-0 left-0 right-0 backdrop-blur-lg bg-background/80 border-t border-border/40">
+          <div className="p-4 space-y-4">
+            <div className="flex flex-col space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Users className="h-4 w-4 text-muted-foreground" />
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium">
+                      {tournament?.current_participants || 0}/{tournament?.max_participants || 0}
+                    </span>
+                    <span className="text-xs text-muted-foreground">Participants</span>
                   </div>
                 </div>
-              )}
+                <div className="flex flex-col items-end">
+                  <Badge 
+                    variant="outline" 
+                    className={cn(
+                      "px-2 py-0.5 text-[10px]",
+                      getParticipantProgress() >= 90 ? "bg-red-100 text-red-700 dark:bg-red-900/20" :
+                      getParticipantProgress() >= 75 ? "bg-orange-100 text-orange-700 dark:bg-orange-900/20" :
+                      getParticipantProgress() >= 50 ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20" :
+                      "bg-blue-100 text-blue-700 dark:bg-blue-900/20"
+                    )}
+                  >
+                    {getProgressStatus()}
+                  </Badge>
+                  <span className="text-xs text-muted-foreground mt-1">
+                    {getSpotsText()}
+                  </span>
+                </div>
+              </div>
+
+              <div className="relative">
+                <Progress 
+                  value={getParticipantProgress()} 
+                  className="h-2.5 transition-all duration-500" 
+                />
+                {getParticipantProgress() >= 75 && (
+                  <div className="absolute -top-1 right-0 transform translate-x-1/2 -translate-y-full">
+                    <div className="animate-bounce">
+                      <Badge 
+                        variant="outline" 
+                        className="bg-red-100 text-red-700 dark:bg-red-900/20 text-[10px]"
+                      >
+                        Limited Spots!
+                      </Badge>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
+
+            <div className="grid grid-cols-3 gap-2">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={handleLike}
+                className={cn(
+                  "flex-1 relative overflow-hidden transition-all duration-300",
+                  isLiked ? "border-pink-500 text-pink-500 hover:text-pink-600 hover:border-pink-600" 
+                         : "hover:border-pink-500/50"
+                )}
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <Heart 
+                    className={cn(
+                      "h-4 w-4 transition-all duration-300",
+                      isLiked && "fill-current",
+                      isLikeAnimating && "animate-ping"
+                    )} 
+                  />
+                  <span className="font-medium">{formatCount(likeCount)}</span>
+                </div>
+                {isLiked && (
+                  <div 
+                    className="absolute inset-0 bg-pink-500/10 animate-fade-out"
+                    style={{ animationDuration: '0.5s' }}
+                  />
+                )}
+              </Button>
+
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setIsCommentsPanelOpen(true)}
+                className={cn(
+                  "flex-1 hover:border-blue-500/50 transition-all duration-300",
+                  "group"
+                )}
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <MessageSquare className="h-4 w-4 group-hover:text-blue-500 transition-colors duration-300" />
+                  <span className="font-medium group-hover:text-blue-500 transition-colors duration-300">
+                    {formatCount(commentCount)}
+                  </span>
+                </div>
+              </Button>
+
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={handleShare}
+                className={cn(
+                  "flex-1 hover:border-green-500/50 transition-all duration-300",
+                  "group relative overflow-hidden"
+                )}
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <Share2 className="h-4 w-4 group-hover:text-green-500 transition-colors duration-300" />
+                  <span className="font-medium group-hover:text-green-500 transition-colors duration-300">
+                    {formatCount(shareCount)}
+                  </span>
+                </div>
+              </Button>
+            </div>
+
+            <Button 
+              size="sm"
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white gap-2"
+            >
+              <Trophy className="h-4 w-4" />
+              Register Now
+            </Button>
           </div>
-
-          <div className="grid grid-cols-3 gap-2">
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={handleLike}
-              className={cn(
-                "flex-1 relative overflow-hidden transition-all duration-300",
-                isLiked ? "border-pink-500 text-pink-500 hover:text-pink-600 hover:border-pink-600" 
-                       : "hover:border-pink-500/50"
-              )}
-            >
-              <div className="flex items-center justify-center gap-2">
-                <Heart 
-                  className={cn(
-                    "h-4 w-4 transition-all duration-300",
-                    isLiked && "fill-current",
-                    isLikeAnimating && "animate-ping"
-                  )} 
-                />
-                <span className="font-medium">{formatCount(likeCount)}</span>
-              </div>
-              {isLiked && (
-                <div 
-                  className="absolute inset-0 bg-pink-500/10 animate-fade-out"
-                  style={{ animationDuration: '0.5s' }}
-                />
-              )}
-            </Button>
-
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => setIsCommentsPanelOpen(true)}
-              className={cn(
-                "flex-1 hover:border-blue-500/50 transition-all duration-300",
-                "group"
-              )}
-            >
-              <div className="flex items-center justify-center gap-2">
-                <MessageSquare className="h-4 w-4 group-hover:text-blue-500 transition-colors duration-300" />
-                <span className="font-medium group-hover:text-blue-500 transition-colors duration-300">
-                  {formatCount(commentCount)}
-                </span>
-              </div>
-            </Button>
-
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={handleShare}
-              className={cn(
-                "flex-1 hover:border-green-500/50 transition-all duration-300",
-                "group relative overflow-hidden"
-              )}
-            >
-              <div className="flex items-center justify-center gap-2">
-                <Share2 className="h-4 w-4 group-hover:text-green-500 transition-colors duration-300" />
-                <span className="font-medium group-hover:text-green-500 transition-colors duration-300">
-                  {formatCount(shareCount)}
-                </span>
-              </div>
-            </Button>
-          </div>
-
-          <Button 
-            size="sm"
-            className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white gap-2"
-          >
-            <Trophy className="h-4 w-4" />
-            Register Now
-          </Button>
         </div>
-      </div>
+      )}
 
       <TournamentCommentsPanel 
         open={isCommentsPanelOpen} 
