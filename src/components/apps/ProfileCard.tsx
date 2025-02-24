@@ -5,14 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Shield, ShieldCheck, User } from "lucide-react";
+import { CheckCircle2, Shield, User } from "lucide-react";
 
 interface UserProfile {
   name: string;
   email: string;
   subtitle: string;
   avatar: string;
-  verificationStatus?: "verified" | "ultra_verified" | "non_verified";
+  verificationStatus?: "verified" | "non_verified";
 }
 
 export const ProfileCard = () => {
@@ -37,7 +37,7 @@ export const ProfileCard = () => {
           email: session.user.email || '',
           subtitle: "Apple Account, iCloud, and more",
           avatar: profile?.avatar_url || session.user.user_metadata?.avatar_url || "https://github.com/shadcn.png",
-          verificationStatus: "ultra_verified" // Mock status
+          verificationStatus: "verified" // Mock status
         });
       } else {
         setIsAuthenticated(false);
@@ -55,7 +55,7 @@ export const ProfileCard = () => {
           email: session.user.email || '',
           subtitle: "Apple Account, iCloud, and more",
           avatar: session.user.user_metadata?.avatar_url || "https://github.com/shadcn.png",
-          verificationStatus: "ultra_verified" // Mock status
+          verificationStatus: "verified" // Mock status
         });
       } else {
         setIsAuthenticated(false);
@@ -78,13 +78,6 @@ export const ProfileCard = () => {
 
   const getVerificationBadge = (status: UserProfile["verificationStatus"]) => {
     switch (status) {
-      case "ultra_verified":
-        return (
-          <div className="flex items-center gap-1 bg-gradient-to-r from-blue-500/10 to-purple-500/10 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full text-xs font-medium">
-            <ShieldCheck className="h-3.5 w-3.5" />
-            <span>Ultra Verified</span>
-          </div>
-        );
       case "verified":
         return (
           <div className="flex items-center gap-1 text-green-600 dark:text-green-400">
