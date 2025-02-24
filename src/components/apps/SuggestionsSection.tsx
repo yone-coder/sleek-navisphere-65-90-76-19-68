@@ -6,6 +6,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useNavigate } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Card } from "@/components/ui/card";
+import { useEffect, useRef } from "react";
 
 interface SuggestionsSectionProps {
   suggestedApps: Array<{
@@ -22,9 +23,9 @@ export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) =
 
   if (suggestedApps.length === 0) return null;
 
-  // Create groups of 8 apps (4 per row)
+  // Create groups of 4 apps
   const groups = suggestedApps.reduce((acc, app, i) => {
-    const groupIndex = Math.floor(i / 8);
+    const groupIndex = Math.floor(i / 4);
     if (!acc[groupIndex]) acc[groupIndex] = [];
     acc[groupIndex].push(app);
     return acc;
@@ -92,13 +93,13 @@ export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) =
           {groups.map((group, groupIndex) => (
             <div 
               key={groupIndex} 
-              className="flex-none w-[640px] first:ml-0 animate-fade-in"
+              className="flex-none w-[320px] first:ml-0 animate-fade-in"
               style={{ 
                 animationDelay: `${groupIndex * 100}ms`,
                 animationFillMode: 'backwards'
               }}
             >
-              <div className="grid grid-rows-2 grid-cols-4 gap-4">
+              <div className="grid grid-cols-4 gap-4">
                 {group.map((app) => {
                   const randomDelay = Math.floor(Math.random() * 10000) + 5000;
                   
@@ -123,6 +124,14 @@ export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) =
                           <div className={`w-[70px] overflow-hidden h-5 name-container ${app.name.length <= 8 ? 'center' : ''}`}>
                             <span 
                               className={`text-sm font-medium text-gray-700 scrolling-text whitespace-nowrap ${app.name.length > 8 ? 'needs-scroll inline-block' : 'text-center w-full block'}`}
+                              ref={(el) => {
+                                if (el && app.name.length > 8) {
+                                  el.style.animation = 'scrollText 8s 1';
+                                  setTimeout(() => {
+                                    el.style.animation = 'scrollText 8s 1';
+                                  }, randomDelay);
+                                }
+                              }}
                             >
                               {app.name}
                             </span>
