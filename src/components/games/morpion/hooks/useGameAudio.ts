@@ -7,15 +7,15 @@ export const useGameAudio = (soundEnabled: boolean, inactivityTime: number, winn
   const winAudioRef = useRef(new Audio('/sounds/win.mp3'));
   const warningAudioRef = useRef(new Audio('/sounds/warning.mp3'));
 
-  // Set default volume for all sounds
+  // Initialize audio and handle warning sound
   useEffect(() => {
+    // Set default volumes
     moveAudioXRef.current.volume = 0.6;
     moveAudioORef.current.volume = 0.6;
     winAudioRef.current.volume = 0.7;
     warningAudioRef.current.volume = 0.5;
-  }, []);
 
-  useEffect(() => {
+    // Play warning sound when needed
     if (inactivityTime === 5 && soundEnabled && !winner) {
       warningAudioRef.current.play().catch(() => {
         console.log('Warning sound failed to play');
