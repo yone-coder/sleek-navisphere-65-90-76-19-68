@@ -21,7 +21,7 @@ const apps: App[] = [
       <img 
         src="/lovable-uploads/44c5c93d-ace1-4feb-a49b-db4a8a02f987.png" 
         alt="Morpion"
-        className="w-6 h-6"
+        className="w-[80%] h-[80%]"
       />
     ),
     route: "/games/morpion",
