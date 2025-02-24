@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Settings2, Undo2, RotateCcw, Volume2, VolumeX, Clock } from 'lucide-react';
+import { GameLobby } from '@/components/games/GameLobby';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from "@/components/ui/use-toast";
+import type { GameRoom } from '@/types/game';
 
 const Gomoku = () => {
   const [boardSize, setBoardSize] = useState(30);
@@ -25,6 +29,169 @@ const Gomoku = () => {
   const moveAudioRef = useRef(new Audio('/api/placeholder/audio'));
   const winAudioRef = useRef(new Audio('/api/placeholder/audio'));
   const warningAudioRef = useRef(new Audio('/api/placeholder/audio'));
+
+  const [gameRoom, setGameRoom] = useState<GameRoom | null>(null);
+  const [playerId, setPlayerId] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (gameRoom?.id) {
+      const gameChannel = supabase.channel(`game:${gameRoom.id}`);
+
+      gameChannel
+        .on('presence', { event: 'sync' }, () => {
+          console.log('Presence sync');
+        })
+        .on('broadcast', { event: 'game_move' }, ({ payload }) => {
+          if (payload.playerId !== playerId) {
+            handleMove(payload.row, payload.col, true);
+          }
+        })
+        .subscribe();
+
+      return () => {
+        gameChannel.unsubscribe();
+      };
+    }
+  }, [gameRoom?.id]);
+
+  useEffect(() => {
+    if (gameRoom?.id) {
+      const subscription = supabase
+        .from(`game_rooms:id=eq.${gameRoom.id}`)
+        .on('UPDATE', (payload) => {
+          setGameRoom(payload.new as GameRoom);
+        })
+        .subscribe();
+
+      return () => {
+        supabase.removeSubscription(subscription);
+      };
+    }
+  }, [gameRoom?.id]);
+
+  const handleJoinGame = async (gameId: string, newPlayerId: string) => {
+    setPlayerId(newPlayerId);
+    const { data } = await supabase
+      .from('game_rooms')
+      .select()
+      .eq('id', gameId)
+      .single();
+    
+    if (data) {
+      setGameRoom(data);
+      setBoard(data.board);
+      setCurrentPlayer(data.current_player);
+      if (data.last_move) {
+        setLastMove(data.last_move);
+      }
+      setTimeLeft({
+        X: data.time_left_x,
+        O: data.time_left_o
+      });
+    }
+  };
+
+  const handleMove = async (row: number, col: number, isOpponentMove = false) => {
+    if (!gameRoom || !playerId) return;
+    
+    if (!isOpponentMove) {
+      // Check if it's player's turn
+      const isPlayer1 = playerId === gameRoom.player1_id;
+      const canMove = (isPlayer1 && currentPlayer === 'X') || (!isPlayer1 && currentPlayer === 'O');
+      
+      if (!canMove) {
+        toast({
+          title: "Not your turn",
+          description: "Please wait for your opponent",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
+    // Original handleClick logic
+    if (board[row][col] || winner || !isTimerRunning) return;
+
+    if (!isValidSecondMove(row, col)) {
+      setHoveredCell({ row, col, invalid: true });
+      setTimeout(() => setHoveredCell(null), 500);
+      return;
+    }
+
+    if (navigator.vibrate) {
+      navigator.vibrate(40);
+    }
+
+    const newBoard = JSON.parse(JSON.stringify(board));
+    newBoard[row][col] = currentPlayer;
+
+    if (soundEnabled) {
+      moveAudioRef.current.play().catch(() => {});
+    }
+
+    setGameHistory([...gameHistory, {
+      board: JSON.parse(JSON.stringify(board)),
+      currentPlayer,
+      moves,
+      lastMove,
+      timeLeft: { ...timeLeft },
+      inactivityTime
+    }]);
+
+    setBoard(newBoard);
+    setLastMove({ row, col });
+    setMoves(moves + 1);
+    setInactivityTime(15);
+
+    if (!isOpponentMove) {
+      // Broadcast move to other player
+      const gameChannel = supabase.channel(`game:${gameRoom.id}`);
+      gameChannel.send({
+        type: 'broadcast',
+        event: 'game_move',
+        payload: { row, col, playerId }
+      });
+
+      // Update game state in database
+      await supabase
+        .from('game_rooms')
+        .update({
+          board: newBoard,
+          current_player: currentPlayer === 'X' ? 'O' : 'X',
+          last_move: { row, col },
+          time_left_x: timeLeft.X,
+          time_left_o: timeLeft.O
+        })
+        .eq('id', gameRoom.id);
+    }
+
+    if (checkWinner(newBoard, row, col)) {
+      if (soundEnabled) {
+        if (navigator.vibrate) {
+          navigator.vibrate([50, 50, 100]);
+        }
+        winAudioRef.current.play().catch(() => {});
+      }
+      setWinner(currentPlayer);
+      
+      if (!isOpponentMove) {
+        await supabase
+          .from('game_rooms')
+          .update({
+            status: 'finished',
+            winner: currentPlayer
+          })
+          .eq('id', gameRoom.id);
+      }
+      
+      setTimeout(() => {
+        setShowWinnerPopup(true);
+      }, 1500);
+    } else {
+      setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
+    }
+  };
 
   useEffect(() => {
     resetGame();
@@ -93,53 +260,7 @@ const Gomoku = () => {
   };
 
   const handleClick = (row, col) => {
-    if (board[row][col] || winner || !isTimerRunning) return;
-
-    if (!isValidSecondMove(row, col)) {
-      setHoveredCell({ row, col, invalid: true });
-      setTimeout(() => setHoveredCell(null), 500);
-      return;
-    }
-
-    if (navigator.vibrate) {
-      navigator.vibrate(40); // 40ms vibration - short and crisp
-    }
-
-    const newBoard = JSON.parse(JSON.stringify(board));
-    newBoard[row][col] = currentPlayer;
-
-    if (soundEnabled) {
-      moveAudioRef.current.play().catch(() => {});
-    }
-
-    setGameHistory([...gameHistory, {
-      board: JSON.parse(JSON.stringify(board)),
-      currentPlayer,
-      moves,
-      lastMove,
-      timeLeft: { ...timeLeft },
-      inactivityTime
-    }]);
-
-    setBoard(newBoard);
-    setLastMove({ row, col });
-    setMoves(moves + 1);
-    setInactivityTime(15);
-
-    if (checkWinner(newBoard, row, col)) {
-      if (soundEnabled) {
-        if (navigator.vibrate) {
-          navigator.vibrate([50, 50, 100]); // Victory pattern: short-pause-long
-        }
-        winAudioRef.current.play().catch(() => {});
-      }
-      setWinner(currentPlayer);
-      setTimeout(() => {
-        setShowWinnerPopup(true);
-      }, 1500);
-    } else {
-      setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
-    }
+    handleMove(row, col);
   };
 
   const checkWinner = (board, row, col) => {
@@ -410,6 +531,10 @@ const Gomoku = () => {
     );
   };
 
+  if (!gameRoom || !playerId) {
+    return <GameLobby onJoinGame={handleJoinGame} />;
+  }
+
   return (
     <div className="flex flex-col items-center bg-gray-50 h-screen w-full overflow-hidden pb-8">
       <div className="w-full bg-white shadow-md px-2 md:px-4 py-1">
@@ -648,46 +773,4 @@ const Gomoku = () => {
                   onClick={() => setIsTimerRunning(!isTimerRunning)}
                   className={`w-full px-3 md:px-4 py-2 rounded-lg font-medium transition duration-300 text-sm md:text-base
                     ${isTimerRunning 
-                      ? 'bg-green-100 text-green-800 hover:bg-green-200' 
-                      : 'bg-red-100 text-red-800 hover:bg-red-200'
-                    }
-                  `}
-                >
-                  {isTimerRunning ? 'Timer Running' : 'Timer Paused'}
-                </button>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Sound Effects
-                </label>
-                <button
-                  onClick={() => setSoundEnabled(!soundEnabled)}
-                  className={`w-full px-3 md:px-4 py-2 rounded-lg font-medium transition duration-300 text-sm md:text-base
-                    ${soundEnabled 
-                      ? 'bg-blue-100 text-blue-800 hover:bg-blue-200' 
-                      : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                    }
-                  `}
-                >
-                  {soundEnabled ? 'Sound On' : 'Sound Off'}
-                </button>
-              </div>
-
-              <div className="flex justify-end mt-6">
-                <button
-                  onClick={() => setIsSettingsOpen(false)}
-                  className="bg-gray-100 text-gray-700 px-4 md:px-6 py-2 rounded-full hover:bg-gray-200 transition duration-300 shadow-md font-medium text-sm md:text-base"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default Gomoku;
+                      ? 'bg-green-100 text-green-800 hover:bg-
