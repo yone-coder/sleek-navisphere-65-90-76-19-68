@@ -79,7 +79,11 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
             >
               <div className="grid grid-cols-4 gap-4">
                 {group.map((app) => (
-                  <Card key={app.name} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                  <Card 
+                    key={app.name} 
+                    className="overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-transparent border-0"
+                    onClick={() => navigate(app.route)}
+                  >
                     <div className="relative w-full overflow-hidden">
                       <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
                         <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
