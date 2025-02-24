@@ -48,6 +48,13 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
           .scrolling-text:hover {
             animation-play-state: paused;
           }
+          .name-container {
+            display: flex;
+            justify-content: flex-start;
+          }
+          .name-container.center {
+            justify-content: center;
+          }
         `}
       </style>
       <div className="flex items-center justify-between mb-4 px-4 sm:px-6 md:px-8">
@@ -112,7 +119,7 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
                             </Badge>
                           )}
                         </div>
-                        <div className="w-[70px] overflow-hidden flex items-center justify-center h-5">
+                        <div className={`w-[70px] overflow-hidden h-5 name-container ${app.name.length <= 8 ? 'center' : ''}`}>
                           <span 
                             className={`text-sm font-medium text-gray-700 scrolling-text whitespace-nowrap ${app.name.length > 8 ? 'needs-scroll inline-block' : 'text-center w-full block'}`}
                           >
