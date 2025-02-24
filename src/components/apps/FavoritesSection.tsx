@@ -24,10 +24,6 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
 
   const totalUpdates = favoriteApps.reduce((sum, app) => sum + (app.updates || 0), 0);
 
-  const truncateName = (name: string) => {
-    return name.length > 8 ? `${name.slice(0, 8)}...` : name;
-  };
-
   // Create groups of 4 apps
   const groups = favoriteApps.reduce((acc, app, i) => {
     const groupIndex = Math.floor(i / 4);
@@ -100,16 +96,9 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
                             </Badge>
                           )}
                         </div>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className="text-sm font-medium text-gray-700 text-center min-w-0 w-full px-1 truncate">
-                              {truncateName(app.name)}
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>{app.name}</p>
-                          </TooltipContent>
-                        </Tooltip>
+                        <span className="text-sm font-medium text-gray-700 text-center line-clamp-2">
+                          {app.name}
+                        </span>
                       </div>
                     </div>
                   </Card>
