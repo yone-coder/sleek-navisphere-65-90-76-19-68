@@ -72,6 +72,8 @@ export const useGameWinner = ({ boardSize }: UseGameWinnerProps) => {
         positions.forEach(([r, c]) => {
           board[r][c] = `${symbol}_WIN`;
         });
+        
+        setWinner(symbol);
         return true;
       }
       return false;

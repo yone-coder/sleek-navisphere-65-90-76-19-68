@@ -53,6 +53,10 @@ export const useGameBoard = ({ boardSize }: UseGameBoardProps) => {
     return lastState;
   };
 
+  useState(() => {
+    resetBoard();
+  }, []); // Initialize board when component mounts
+
   return {
     board,
     setBoard,
