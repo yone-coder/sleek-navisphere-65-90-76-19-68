@@ -1,27 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Settings2, Undo2, RotateCcw, Volume2, VolumeX, Clock } from 'lucide-react';
+import { Clock, Volume2, VolumeX, Undo2, RotateCcw, Settings2 } from 'lucide-react';
+import PlayerCard from '@/components/games/morpion/PlayerCard';
+import GameBoard from '@/components/games/morpion/GameBoard';
+import GameControls from '@/components/games/morpion/GameControls';
+import GameSettings from '@/components/games/morpion/GameSettings';
+import WinnerPopup from '@/components/games/morpion/WinnerPopup';
+import { Position, WinningLine, TimeLeft, GameHistory } from '@/components/games/morpion/types';
+import { formatTime, getInitials, getAvatarColor } from '@/components/games/morpion/utils';
 
 const Gomoku = () => {
   const [boardSize, setBoardSize] = useState(30);
-  const [board, setBoard] = useState([]);
-  const [currentPlayer, setCurrentPlayer] = useState('X');
+  const [board, setBoard] = useState<string[][]>([]);
+  const [currentPlayer, setCurrentPlayer] = useState<'X' | 'O'>('X');
   const [moves, setMoves] = useState(0);
-  const [winner, setWinner] = useState(null);
+  const [winner, setWinner] = useState<string | null>(null);
   const [player1, setPlayer1] = useState('Guest10816');
   const [player2, setPlayer2] = useState('Guest');
-  const [lastMove, setLastMove] = useState(null);
-  const [gameHistory, setGameHistory] = useState([]);
+  const [lastMove, setLastMove] = useState<Position | null>(null);
+  const [gameHistory, setGameHistory] = useState<GameHistory[]>([]);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [zoom, setZoom] = useState(100);
-  const [hoveredCell, setHoveredCell] = useState(null);
-  const [timeLeft, setTimeLeft] = useState({ X: 300, O: 300 }); // 5 minutes per player
+  const [hoveredCell, setHoveredCell] = useState<Position | null>(null);
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ X: 300, O: 300 }); // 5 minutes per player
   const [isTimerRunning, setIsTimerRunning] = useState(true);
   const [inactivityTime, setInactivityTime] = useState(15);
-  const [winningLine, setWinningLine] = useState(null);
+  const [winningLine, setWinningLine] = useState<WinningLine | null>(null);
   const [showWinnerPopup, setShowWinnerPopup] = useState(false);
 
-  const boardRef = useRef(null);
+  const boardRef = useRef<HTMLDivElement>(null);
   const moveAudioRef = useRef(new Audio('/api/placeholder/audio'));
   const winAudioRef = useRef(new Audio('/api/placeholder/audio'));
   const warningAudioRef = useRef(new Audio('/api/placeholder/audio'));
@@ -74,13 +81,7 @@ const Gomoku = () => {
     }
   }, [timeLeft, currentPlayer]);
 
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-  };
-
-  const isValidSecondMove = (row, col) => {
+  const isValidSecondMove = (row: number, col: number) => {
     if (moves !== 1) return true;
 
     const centerRow = Math.floor(boardSize / 2);
@@ -92,7 +93,7 @@ const Gomoku = () => {
     return rowDiff <= 3 && colDiff <= 3;
   };
 
-  const handleClick = (row, col) => {
+  const handleClick = (row: number, col: number) => {
     if (board[row][col] || winner || !isTimerRunning) return;
 
     if (!isValidSecondMove(row, col)) {
@@ -102,7 +103,7 @@ const Gomoku = () => {
     }
 
     if (navigator.vibrate) {
-      navigator.vibrate(40); // 40ms vibration - short and crisp
+      navigator.vibrate(40);
     }
 
     const newBoard = JSON.parse(JSON.stringify(board));
@@ -129,7 +130,7 @@ const Gomoku = () => {
     if (checkWinner(newBoard, row, col)) {
       if (soundEnabled) {
         if (navigator.vibrate) {
-          navigator.vibrate([50, 50, 100]); // Victory pattern: short-pause-long
+          navigator.vibrate([50, 50, 100]);
         }
         winAudioRef.current.play().catch(() => {});
       }
@@ -142,7 +143,7 @@ const Gomoku = () => {
     }
   };
 
-  const checkWinner = (board, row, col) => {
+  const checkWinner = (board: string[][], row: number, col: number) => {
     const directions = [
       [0, 1], // horizontal
       [1, 0], // vertical
@@ -212,37 +213,6 @@ const Gomoku = () => {
     });
   };
 
-  useEffect(() => {
-    const centerGrid = () => {
-      if (boardRef.current) {
-        const centerPos = Math.floor(boardSize / 2);
-        const cellSizeInPixels = 1.5 * 16 * (zoom/100);
-        const validAreaSize = 7;
-        const offsetCells = Math.floor(validAreaSize / 2);
-        
-        // Get container dimensions
-        const containerWidth = boardRef.current.clientWidth;
-        const containerHeight = boardRef.current.clientHeight;
-        
-        // Calculate the target position at the start of the grid
-        const targetCellX = 0; // Start from the left
-        const targetCellY = 0; // Start from the top
-        
-        // Set scroll position
-        boardRef.current.scrollLeft = targetCellX;
-        boardRef.current.scrollTop = targetCellY;
-      }
-    };
-
-    // Center immediately
-    centerGrid();
-    
-    // Also center after a short delay to handle any layout shifts
-    const timer = setTimeout(centerGrid, 100);
-    
-    return () => clearTimeout(timer);
-  }, [boardSize, zoom]);
-
   const resetGame = () => {
     const newBoard = Array(boardSize).fill(null).map(() => Array(boardSize).fill(null));
     const centerPos = Math.floor(boardSize / 2);
@@ -273,149 +243,26 @@ const Gomoku = () => {
     setWinner(null);
   };
 
-  const getInitials = (name) => {
-    if (!name) return '?';
-    const words = name.split(' ');
-    if (words.length >= 2) {
-      return `${words[0][0]}${words[1][0]}`.toUpperCase();
-    }
-    return name.slice(0, 2).toUpperCase();
-  };
-
-  const getAvatarColor = (name) => {
-    const colors = [
-      'bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-yellow-500', 
-      'bg-pink-500', 'bg-indigo-500', 'bg-teal-500', 'bg-orange-500'
-    ];
-    
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-      hash = name.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    
-    return colors[Math.abs(hash) % colors.length];
-  };
-
-  const Avatar = ({ name, size = 'md', hasPhoto = false }) => {
-    const initials = getInitials(name);
-    const bgColor = getAvatarColor(name);
-    const sizeClasses = {
-      sm: 'w-8 h-8 text-sm',
-      md: 'w-12 h-12 text-base',
-      lg: 'w-16 h-16 text-lg'
-    };
-
-    if (hasPhoto) {
-      return (
-        <img
-          src={`/api/placeholder/64/64`}
-          alt={`${name}'s avatar`}
-          className={`${sizeClasses[size]} rounded-full object-cover ring-2 ring-white`}
-        />
-      );
-    }
-
-    return (
-      <div className={`
-        ${sizeClasses[size]} ${bgColor} 
-        rounded-full flex items-center justify-center 
-        text-white font-semibold ring-2 ring-white
-      `}>
-        {initials}
-      </div>
-    );
-  };
-
-  const PlayerCard = ({ player, symbol, isTop }) => {
-    const hasPhoto = !player.toLowerCase().includes('guest');
-
-    return (
-      <div className={`
-        flex items-center gap-2 md:gap-3 p-1 md:p-2 rounded-lg
-        ${currentPlayer === symbol ? 'bg-blue-100 ring-2 ring-blue-400' : 'bg-white'}
-        transition-all duration-300 shadow-md
-      `}>
-        <div className="relative">
-          <Avatar 
-            name={player} 
-            size={window.innerWidth >= 768 ? 'sm' : 'xs'} 
-            hasPhoto={hasPhoto} 
-          />
-          <div className={`
-            absolute -bottom-1 -right-1 w-3 h-3 md:w-4 md:h-4 rounded-full 
-            flex items-center justify-center
-            ${symbol === 'X' ? 'bg-black text-white' : 'bg-red-500 text-white'}
-            ring-2 ring-white
-          `}>
-            <span className="text-[10px] md:text-xs font-bold">{symbol}</span>
-          </div>
-          <div className="text-[10px] md:text-xs font-medium mt-0.5 text-center">
-            {formatTime(timeLeft[symbol])}
-          </div>
-        </div>
-
-        <div className="flex flex-col">
-          <div className="flex items-center gap-1">
-            <span className="font-bold text-xs md:text-sm truncate max-w-[60px] md:max-w-[80px]">
-              {player}
-            </span>
-            {symbol === currentPlayer && (
-              <div className={`
-                text-[10px] px-1 py-0.5 rounded-full font-medium hidden md:flex items-center gap-1
-                ${inactivityTime <= 5 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}
-              `}>
-                <Clock size={8} className={inactivityTime <= 5 ? 'animate-pulse' : ''} />
-                <span>{inactivityTime}s</span>
-              </div>
-            )}
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="text-[10px] md:text-xs text-gray-600">
-              {isTop ? 'Opponent' : 'You'}
-            </span>
-            {symbol === currentPlayer && (
-              <div className={`
-                md:hidden text-[10px] px-1 py-0.5 rounded-full font-medium flex items-center gap-1
-                ${inactivityTime <= 5 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}
-              `}>
-                <Clock size={8} className={inactivityTime <= 5 ? 'animate-pulse' : ''} />
-                <span>{inactivityTime}s</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const getCellContent = (cell) => {
-    if (cell?.includes('_WIN')) {
-      return (
-        <span className={`
-          text-base md:text-xl font-bold
-          ${cell.startsWith('X') ? 'text-blue-600' : 'text-red-600'}
-          animate-pulse
-        `}>
-          {cell.split('_')[0]}
-        </span>
-      );
-    }
-    return (
-      <span className={`
-        text-sm md:text-base font-bold transition-all duration-300 transform scale-100
-        ${cell === 'X' ? 'text-black' : 'text-red-500'}
-      `}>
-        {cell}
-      </span>
-    );
-  };
-
   return (
     <div className="flex flex-col items-center bg-gray-50 h-screen w-full overflow-hidden pb-8">
       <div className="w-full bg-white shadow-md px-2 md:px-4 py-1">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <PlayerCard player={player2} symbol="O" isTop={true} />
-          <PlayerCard player={player1} symbol="X" isTop={false} />
+          <PlayerCard 
+            player={player2} 
+            symbol="O" 
+            isTop={true}
+            currentPlayer={currentPlayer}
+            timeLeft={timeLeft}
+            inactivityTime={inactivityTime}
+          />
+          <PlayerCard 
+            player={player1} 
+            symbol="X" 
+            isTop={false}
+            currentPlayer={currentPlayer}
+            timeLeft={timeLeft}
+            inactivityTime={inactivityTime}
+          />
         </div>
       </div>
 
@@ -429,263 +276,57 @@ const Gomoku = () => {
         }}
       >
         <div className="py-2 md:py-4 h-full flex justify-center items-center min-h-[400px]">
-          <div 
-            className="grid relative"
-            style={{
-              gridTemplateColumns: `repeat(${boardSize}, ${1.5 * (zoom/100)}rem)`,
-              gridTemplateRows: `repeat(${boardSize}, ${1.5 * (zoom/100)}rem)`,
-              backgroundImage: 'linear-gradient(to right, #D6B88E 1px, transparent 1px), linear-gradient(to bottom, #D6B88E 1px, transparent 1px)',
-              backgroundSize: `${1.5 * (zoom/100)}rem ${1.5 * (zoom/100)}rem`,
-              width: `${boardSize * 1.5 * (zoom/100)}rem`,
-              height: `${boardSize * 1.5 * (zoom/100)}rem`
-            }}
-          >
-            {winningLine && (
-              <div
-                className="absolute z-20 bg-current transition-all duration-500 ease-out animate-scale-in"
-                style={{
-                  height: '4px',
-                  width: winningLine.width,
-                  left: `${(winningLine.positions[0][1] + 0.5) * 1.5 * (zoom/100)}rem`,
-                  top: `${(winningLine.positions[0][0] + 0.5) * 1.5 * (zoom/100)}rem`,
-                  transform: `rotate(${winningLine.angle}rad)`,
-                  transformOrigin: 'left center',
-                  backgroundColor: winningLine.color,
-                  opacity: 0.6,
-                  boxShadow: `0 0 10px ${winningLine.color}`
-                }}
-              />
-            )}
-
-            {board.map((row, rowIndex) =>
-              row.map((cell, colIndex) => (
-                <div
-                  key={`${rowIndex}-${colIndex}`}
-                  className={`
-                    flex items-center justify-center cursor-pointer relative z-10
-                    ${lastMove && lastMove.row === rowIndex && lastMove.col === colIndex ? 'bg-blue-100 bg-opacity-50' : ''}
-                    ${!cell && !winner ? 'hover:bg-blue-50' : ''}
-                    ${hoveredCell?.row === rowIndex && hoveredCell?.col === colIndex ? 
-                      hoveredCell?.invalid ? 'bg-red-100' : 'bg-blue-50' : ''}
-                    ${moves === 1 && isValidSecondMove(rowIndex, colIndex) && !cell ? 'ring-2 ring-blue-300 ring-inset' : ''}
-                  `}
-                  style={{
-                    width: `${1.5 * (zoom/100)}rem`,
-                    height: `${1.5 * (zoom/100)}rem`
-                  }}
-                  onClick={() => handleClick(rowIndex, colIndex)}
-                  onMouseEnter={() => !cell && setHoveredCell({ row: rowIndex, col: colIndex })}
-                  onMouseLeave={() => setHoveredCell(null)}
-                >
-                  {getCellContent(cell)}
-                </div>
-              ))
-            )}
-
-            {moves === 1 && hoveredCell && !isValidSecondMove(hoveredCell.row, hoveredCell.col) && (
-              <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none">
-                <div className="text-red-500 text-sm bg-white bg-opacity-80 px-2 py-1 rounded shadow">
-                  Place move closer to center
-                </div>
-              </div>
-            )}
-          </div>
+          <GameBoard
+            board={board}
+            boardSize={boardSize}
+            zoom={zoom}
+            lastMove={lastMove}
+            winningLine={winningLine}
+            hoveredCell={hoveredCell}
+            moves={moves}
+            winner={winner}
+            isValidSecondMove={isValidSecondMove}
+            handleClick={handleClick}
+            setHoveredCell={setHoveredCell}
+          />
         </div>
       </div>
 
-      <div className="w-full bg-white shadow-md px-2 md:px-4 py-2 flex justify-between items-center">
-        <div className="flex items-center gap-1 md:gap-2">
-          <button 
-            onClick={() => setSoundEnabled(!soundEnabled)}
-            className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition duration-300 shadow-md border border-gray-200"
-          >
-            {soundEnabled ? <Volume2 size={14} className="md:w-4 md:h-4" /> : <VolumeX size={14} className="md:w-4 md:h-4" />}
-          </button>
+      <GameControls
+        soundEnabled={soundEnabled}
+        setSoundEnabled={setSoundEnabled}
+        undoMove={undoMove}
+        resetGame={resetGame}
+        setIsSettingsOpen={setIsSettingsOpen}
+        gameHistory={gameHistory}
+        moves={moves}
+        timeLeft={timeLeft}
+        currentPlayer={currentPlayer}
+      />
 
-          <button 
-            onClick={undoMove}
-            disabled={gameHistory.length === 0}
-            className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center transition duration-300
-              ${gameHistory.length === 0 ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-100 shadow-md border border-gray-200'}
-            `}
-          >
-            <Undo2 size={14} className="md:w-4 md:h-4" />
-          </button>
+      <GameSettings
+        isSettingsOpen={isSettingsOpen}
+        setIsSettingsOpen={setIsSettingsOpen}
+        zoom={zoom}
+        setZoom={setZoom}
+        isTimerRunning={isTimerRunning}
+        setIsTimerRunning={setIsTimerRunning}
+        soundEnabled={soundEnabled}
+        setSoundEnabled={setSoundEnabled}
+      />
 
-          <button 
-            onClick={resetGame}
-            className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition duration-300 shadow-md border border-gray-200"
-          >
-            <RotateCcw size={14} className="md:w-4 md:h-4" />
-          </button>
-
-          <button 
-            onClick={() => setIsSettingsOpen(true)}
-            className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition duration-300 shadow-md border border-gray-200"
-          >
-            <Settings2 size={14} className="md:w-4 md:h-4" />
-          </button>
-        </div>
-
-        <div className="hidden md:flex items-center gap-2">
-          <div className="bg-white px-3 py-1 rounded-lg shadow-md border border-gray-200">
-            <span className="font-medium">Moves:</span> {moves}
-          </div>
-
-          <div className="bg-white px-3 py-1 rounded-lg shadow-md border border-gray-200">
-            <div className="flex gap-4">
-              <div>
-                <span className="text-sm text-gray-500">Win Rate:</span>
-                <span className="ml-2 font-medium">
-                  {Math.round((moves > 0 ? (moves - gameHistory.length) / moves : 0) * 100)}%
-                </span>
-              </div>
-              <div>
-                <span className="text-sm text-gray-500">Avg Time/Move:</span>
-                <span className="ml-2 font-medium">
-                  {moves > 1 ? Math.round((300 - timeLeft[currentPlayer]) / moves) : 0}s
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="md:hidden text-sm bg-white px-2 py-1 rounded shadow-sm">
-          <span className="font-medium">{moves}</span> moves
-        </div>
-      </div>
-
-      {winner && showWinnerPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white p-4 md:p-8 rounded-xl shadow-2xl max-w-xs md:max-w-md w-full">
-            <div className="text-center">
-              <div className="text-4xl md:text-6xl mb-2 md:mb-4">
-                {winner === 'X' ? '🏆' : '🎉'}
-              </div>
-              <h2 className="text-xl md:text-3xl font-bold mb-1 md:mb-2 text-gray-800">
-                {winner === 'X' ? player1 : player2} Wins!
-              </h2>
-              <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6">
-                Game completed in {moves} moves and {formatTime(300 - timeLeft[winner])}
-              </p>
-
-              <div className="bg-gray-50 p-3 md:p-4 rounded-lg mb-4 md:mb-6 text-sm md:text-base">
-                <div className="grid grid-cols-2 gap-2 md:gap-4">
-                  <div className="text-left">
-                    <div className="text-xs md:text-sm text-gray-500">Total Time</div>
-                    <div className="font-medium">{formatTime(300 - timeLeft['X'] + 300 - timeLeft['O'])}</div>
-                  </div>
-                  <div className="text-left">
-                    <div className="text-xs md:text-sm text-gray-500">Avg Move Time</div>
-                    <div className="font-medium">{Math.round((300 - timeLeft[winner]) / moves)}s</div>
-                  </div>
-                  <div className="text-left">
-                    <div className="text-xs md:text-sm text-gray-500">Winning Streak</div>
-                    <div className="font-medium">1</div>
-                  </div>
-                  <div className="text-left">
-                    <div className="text-xs md:text-sm text-gray-500">Best Move</div>
-                    <div className="font-medium">
-                      ({lastMove?.row}, {lastMove?.col})
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex gap-2 md:gap-4 justify-center">
-                <button 
-                  onClick={() => {
-                    setShowWinnerPopup(false);
-                    resetGame();
-                  }}
-                  className="bg-blue-500 text-white px-4 md:px-6 py-2 md:py-3 rounded-full hover:bg-blue-600 transition duration-300 shadow-md font-medium text-sm md:text-base"
-                >
-                  Play Again
-                </button>
-                <button 
-                  onClick={() => {
-                    setShowWinnerPopup(false);
-                    setIsSettingsOpen(true);
-                  }}
-                  className="bg-gray-100 text-gray-700 px-4 md:px-6 py-2 md:py-3 rounded-full hover:bg-gray-200 transition duration-300 shadow-md font-medium text-sm md:text-base"
-                >
-                  Settings
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {isSettingsOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white p-4 md:p-8 rounded-xl shadow-2xl max-w-xs md:max-w-md w-full">
-            <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Game Settings</h2>
-
-            <div className="space-y-4 md:space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Board Zoom
-                </label>
-                <div className="flex items-center gap-4">
-                  <input
-                    type="range"
-                    min="50"
-                    max="150"
-                    value={zoom}
-                    onChange={(e) => setZoom(parseInt(e.target.value))}
-                    className="w-full"
-                  />
-                  <span className="text-sm font-medium w-10 text-right">{zoom}%</span>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Game Timer
-                </label>
-                <button
-                  onClick={() => setIsTimerRunning(!isTimerRunning)}
-                  className={`w-full px-3 md:px-4 py-2 rounded-lg font-medium transition duration-300 text-sm md:text-base
-                    ${isTimerRunning 
-                      ? 'bg-green-100 text-green-800 hover:bg-green-200' 
-                      : 'bg-red-100 text-red-800 hover:bg-red-200'
-                    }
-                  `}
-                >
-                  {isTimerRunning ? 'Timer Running' : 'Timer Paused'}
-                </button>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Sound Effects
-                </label>
-                <button
-                  onClick={() => setSoundEnabled(!soundEnabled)}
-                  className={`w-full px-3 md:px-4 py-2 rounded-lg font-medium transition duration-300 text-sm md:text-base
-                    ${soundEnabled 
-                      ? 'bg-blue-100 text-blue-800 hover:bg-blue-200' 
-                      : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                    }
-                  `}
-                >
-                  {soundEnabled ? 'Sound On' : 'Sound Off'}
-                </button>
-              </div>
-
-              <div className="flex justify-end mt-6">
-                <button
-                  onClick={() => setIsSettingsOpen(false)}
-                  className="bg-gray-100 text-gray-700 px-4 md:px-6 py-2 rounded-full hover:bg-gray-200 transition duration-300 shadow-md font-medium text-sm md:text-base"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <WinnerPopup
+        showWinnerPopup={showWinnerPopup}
+        winner={winner || ''}
+        player1={player1}
+        player2={player2}
+        moves={moves}
+        timeLeft={timeLeft}
+        lastMove={lastMove}
+        resetGame={resetGame}
+        setShowWinnerPopup={setShowWinnerPopup}
+        setIsSettingsOpen={setIsSettingsOpen}
+      />
     </div>
   );
 };

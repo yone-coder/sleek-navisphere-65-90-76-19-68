@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Volume2, VolumeX, Undo2, RotateCcw, Settings2 } from 'lucide-react';
+import { TimeLeft } from './types';
 
 interface GameControlsProps {
   soundEnabled: boolean;
@@ -10,7 +11,7 @@ interface GameControlsProps {
   setIsSettingsOpen: (open: boolean) => void;
   gameHistory: any[];
   moves: number;
-  timeLeft: { X: number; O: number };
+  timeLeft: TimeLeft;
   currentPlayer: 'X' | 'O';
 }
 
@@ -91,3 +92,4 @@ const GameControls = ({
 };
 
 export default GameControls;
+
