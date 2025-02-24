@@ -194,6 +194,8 @@ export const useMorpionGame = () => {
     timeLeftO,
     setTimeLeftX,
     setTimeLeftO,
+    setGameRoom,
+    setBoard,
     createGame,
     joinGame,
     handleCellClick,
