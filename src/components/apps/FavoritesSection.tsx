@@ -102,7 +102,7 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
                         </div>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <span className="text-sm font-medium text-gray-700 text-center w-full">
+                            <span className="text-sm font-medium text-gray-700 text-center min-w-0 w-full px-1 truncate">
                               {truncateName(app.name)}
                             </span>
                           </TooltipTrigger>
