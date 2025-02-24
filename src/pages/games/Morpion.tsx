@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Settings2, Undo2, RotateCcw, Volume2, VolumeX, Clock } from 'lucide-react';
 
@@ -677,4 +676,22 @@ const Gomoku = () => {
                 >
                   {soundEnabled ? 'Sound On' : 'Sound Off'}
                 </button>
-              </
+              </div>
+
+              <div className="flex justify-end mt-6">
+                <button
+                  onClick={() => setIsSettingsOpen(false)}
+                  className="bg-gray-100 text-gray-700 px-4 md:px-6 py-2 rounded-full hover:bg-gray-200 transition duration-300 shadow-md font-medium text-sm md:text-base"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Gomoku;
