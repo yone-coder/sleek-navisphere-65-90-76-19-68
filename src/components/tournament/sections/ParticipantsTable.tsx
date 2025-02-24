@@ -210,8 +210,8 @@ export function ParticipantsTable() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="sticky top-[7.5rem] z-10 bg-background/80 backdrop-blur-lg p-4 border-b">
+    <div className="relative flex flex-col min-h-0">
+      <div className="sticky top-[7.5rem] z-30 bg-background/80 backdrop-blur-lg p-4 border-b">
         <div className="grid grid-cols-4 gap-3">
           <div className="p-3 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-lg">
             <div className="flex items-center gap-1.5 text-blue-600">
@@ -293,10 +293,10 @@ export function ParticipantsTable() {
         </div>
       </div>
 
-      <div className="px-4">
-        <div className="border rounded-lg">
+      <div className="flex-1 px-4 pb-4 relative z-20">
+        <div className="border rounded-lg overflow-hidden bg-background">
           <Table>
-            <TableHeader className="sticky top-0 z-20 bg-background/80 backdrop-blur-lg">
+            <TableHeader className="sticky top-0 z-20 bg-background">
               <TableRow>
                 <TableHead className="w-[60px]">Rank</TableHead>
                 <TableHead className="w-[280px]">Player</TableHead>
@@ -327,7 +327,7 @@ export function ParticipantsTable() {
                 <TableHead className="w-[80px]"></TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="relative z-10">
               {paginatedParticipants.map((participant) => (
                 <TableRow 
                   key={participant.id} 
@@ -445,7 +445,7 @@ export function ParticipantsTable() {
         </div>
 
         {totalPages > 1 && (
-          <div className="flex items-center justify-between py-4">
+          <div className="sticky bottom-0 left-0 right-0 flex items-center justify-between py-4 bg-background/80 backdrop-blur-lg mt-2 z-20">
             <Button
               variant="outline"
               size="sm"
