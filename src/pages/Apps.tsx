@@ -122,6 +122,7 @@ export default function Apps() {
     if (activeTab === "favorites") return favorites.includes(app.name);
     if (activeTab === "popular") return app.status === "popular";
     if (activeTab === "recent") return app.status === "new";
+    if (activeTab === "shopping") return app.category === "Shopping";
     return true;
   });
 
