@@ -39,13 +39,17 @@ export const useGameBoard = ({ boardSize }: UseGameBoardProps) => {
   };
 
   const undoMove = () => {
-    if (gameHistory.length === 0) return;
-    const lastState = gameHistory[gameHistory.length - 1];
-    setBoard(lastState.board);
-    setCurrentPlayer(lastState.currentPlayer);
-    setMoves(lastState.moves);
-    setLastMove(lastState.lastMove);
-    setGameHistory(gameHistory.slice(0, -1));
+    let lastState = null;
+    
+    if (gameHistory.length > 0) {
+      lastState = gameHistory[gameHistory.length - 1];
+      setBoard(lastState.board);
+      setCurrentPlayer(lastState.currentPlayer);
+      setMoves(lastState.moves);
+      setLastMove(lastState.lastMove);
+      setGameHistory(gameHistory.slice(0, -1));
+    }
+    
     return lastState;
   };
 
@@ -67,4 +71,3 @@ export const useGameBoard = ({ boardSize }: UseGameBoardProps) => {
     undoMove
   };
 };
-

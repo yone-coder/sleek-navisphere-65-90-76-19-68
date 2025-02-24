@@ -37,6 +37,7 @@ export const useGameState = ({ boardSize }: UseGameStateProps) => {
     winner,
     setWinner,
     winningLine,
+    setWinningLine,
     showWinnerPopup,
     setShowWinnerPopup,
     checkWinner
@@ -100,9 +101,9 @@ export const useGameState = ({ boardSize }: UseGameStateProps) => {
   const resetGame = () => {
     resetBoard();
     setWinner(null);
+    setWinningLine(null);
     resetTimer();
     setShowWinnerPopup(false);
-    setWinningLine(null);
   };
 
   return {
@@ -129,4 +130,3 @@ export const useGameState = ({ boardSize }: UseGameStateProps) => {
     isValidSecondMove
   };
 };
-

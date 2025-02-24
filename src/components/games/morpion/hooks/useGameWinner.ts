@@ -82,9 +82,9 @@ export const useGameWinner = ({ boardSize }: UseGameWinnerProps) => {
     winner,
     setWinner,
     winningLine,
+    setWinningLine,
     showWinnerPopup,
     setShowWinnerPopup,
     checkWinner
   };
 };
-
