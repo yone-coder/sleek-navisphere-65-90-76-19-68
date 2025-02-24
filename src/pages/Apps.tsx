@@ -1,4 +1,4 @@
-import { Grid2X2, Wallet, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star } from "lucide-react";
+import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Tabs } from "@/components/ui/tabs";
@@ -13,30 +13,61 @@ import { App, Category } from "@/components/apps/types";
 
 const apps: App[] = [
   {
-    name: "Marketplace",
-    description: "Buy and sell gaming gear",
-    icon: ShoppingCart,
+    name: "Shopr",
+    description: "Your ultimate marketplace for buying and selling",
+    icon: Store,
     route: "/marketplace",
-    color: "bg-blue-500",
+    color: "bg-emerald-500",
     category: "Shopping",
     status: "popular",
-    users: "10K+",
+    users: "12.5K+",
     lastUsed: "2 hours ago",
     rating: 4.8,
     updates: 2
   },
   {
-    name: "Wallet",
-    description: "Manage your balance",
-    icon: Wallet,
-    route: "/wallet",
-    color: "bg-emerald-500",
-    category: "Finance",
-    status: "new",
-    users: "5K+",
+    name: "Winnr",
+    description: "Compete in tournaments and win prizes",
+    icon: Trophy,
+    route: "/tournaments",
+    color: "bg-amber-500",
+    category: "Gaming",
+    status: "popular",
+    users: "8.2K+",
     lastUsed: "1 day ago",
-    rating: 4.5,
+    rating: 4.7,
     updates: 1
+  },
+  {
+    name: "LernX",
+    description: "Learn new skills with interactive online courses",
+    icon: BookOpen,
+    route: "/courses",
+    color: "bg-blue-500",
+    category: "Education",
+    users: "15.3K+",
+    rating: 4.9
+  },
+  {
+    name: "Zendy",
+    description: "Fast and secure money transfers worldwide",
+    icon: Wallet,
+    route: "/transfer",
+    color: "bg-violet-500",
+    category: "Finance",
+    users: "9.1K+",
+    rating: 4.6,
+    updates: 3
+  },
+  {
+    name: "FundX",
+    description: "Crowdfunding platform for innovative projects",
+    icon: PiggyBank,
+    route: "/crowdfunding",
+    color: "bg-rose-500",
+    category: "Finance",
+    users: "6.8K+",
+    rating: 4.5
   },
   {
     name: "Games",
@@ -45,14 +76,6 @@ const apps: App[] = [
     route: "/games-pages",
     color: "bg-violet-500",
     category: "Entertainment"
-  },
-  {
-    name: "Tournaments",
-    description: "Join competitive matches",
-    icon: Trophy,
-    route: "/tournaments",
-    color: "bg-amber-500",
-    category: "Gaming"
   },
   {
     name: "Activity",
@@ -128,7 +151,8 @@ const appCategories = [
   "Analytics",
   "Social",
   "Communication",
-  "System"
+  "System",
+  "Education"
 ];
 
 export default function Apps() {
