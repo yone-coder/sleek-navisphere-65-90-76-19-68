@@ -5,6 +5,30 @@ import GameLayout from '@/components/games/morpion/GameLayout';
 import GameMenu from '@/components/games/morpion/GameMenu';
 import { GameMode } from '@/components/games/morpion/types';
 
+const DummyGameState = {
+  board: [],
+  currentPlayer: 'X',
+  moves: 0,
+  winner: null,
+  lastMove: null,
+  gameHistory: [],
+  soundEnabled: true,
+  timeLeft: { X: 300, O: 300 },
+  isTimerRunning: false,
+  inactivityTime: 15,
+  winningLine: null,
+  showWinnerPopup: false,
+  hoveredCell: null,
+  setSoundEnabled: () => {},
+  setIsTimerRunning: () => {},
+  setShowWinnerPopup: () => {},
+  setHoveredCell: () => {},
+  handleClick: () => {},
+  undoMove: () => {},
+  resetGame: () => {},
+  isValidSecondMove: () => false
+};
+
 const Morpion = () => {
   const [boardSize, setBoardSize] = useState(30);
   const [zoom, setZoom] = useState(100);
@@ -14,8 +38,8 @@ const Morpion = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameMode, setGameMode] = useState<GameMode | null>(null);
 
-  // Always initialize game state, but only use it when game has started
-  const gameState = useGameState({
+  // Use dummy state when game hasn't started
+  const gameState = !gameStarted ? DummyGameState : useGameState({
     boardSize,
     player1,
     player2
