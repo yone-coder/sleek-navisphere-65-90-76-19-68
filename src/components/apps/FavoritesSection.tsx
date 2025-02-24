@@ -85,10 +85,9 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
                     onClick={() => navigate(app.route)}
                   >
                     <div 
-                      className={`w-12 h-12 rounded-xl ${app.color} flex items-center justify-center relative transition-transform duration-200 group-hover:shadow-lg group-hover:-translate-y-1`}
+                      className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative transition-transform duration-200 group-hover:shadow-lg group-hover:-translate-y-1`}
                     >
-                      {/* Using the exact same icon setup as AppGrid */}
-                      <app.icon className="w-6 h-6 text-white" />
+                      <app.icon className="w-7 h-7 text-white stroke-[2]" />
                       {app.updates > 0 && (
                         <Badge 
                           className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5 animate-bounce"
