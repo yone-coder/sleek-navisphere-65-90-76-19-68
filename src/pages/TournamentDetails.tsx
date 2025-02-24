@@ -192,7 +192,7 @@ export default function TournamentDetails() {
   const [likeCount, setLikeCount] = useState(1234);
   const [shareCount, setShareCount] = useState(245);
   const [commentCount, setCommentCount] = useState(350);
-  const [isLikeAnimating, setIsLikeAnimating] useState(false);
+  const [isLikeAnimating, setIsLikeAnimating] = useState(false);
   const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
   const { toast } = useToast();
 
