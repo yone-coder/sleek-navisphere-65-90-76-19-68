@@ -2,49 +2,92 @@
 import { useRef, useEffect, useCallback } from 'react';
 
 export const useGameAudio = (soundEnabled: boolean, inactivityTime: number, winner: string | null) => {
-  const moveAudioXRef = useRef(new Audio('/sounds/move-x.mp3'));
-  const moveAudioORef = useRef(new Audio('/sounds/move-o.mp3'));
-  const winAudioRef = useRef(new Audio('/sounds/win.mp3'));
-  const warningAudioRef = useRef(new Audio('/sounds/warning.mp3'));
+  const moveAudioXRef = useRef<HTMLAudioElement | null>(null);
+  const moveAudioORef = useRef<HTMLAudioElement | null>(null);
+  const winAudioRef = useRef<HTMLAudioElement | null>(null);
+  const warningAudioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Initialize audio volumes
+  // Initialize audio elements
   useEffect(() => {
-    moveAudioXRef.current.volume = 0.6;
-    moveAudioORef.current.volume = 0.6;
-    winAudioRef.current.volume = 0.7;
-    warningAudioRef.current.volume = 0.5;
+    // Create new audio elements
+    moveAudioXRef.current = new Audio('/sounds/move-x.mp3');
+    moveAudioORef.current = new Audio('/sounds/move-o.mp3');
+    winAudioRef.current = new Audio('/sounds/win.mp3');
+    warningAudioRef.current = new Audio('/sounds/warning.mp3');
+
+    // Set volumes
+    if (moveAudioXRef.current) moveAudioXRef.current.volume = 0.6;
+    if (moveAudioORef.current) moveAudioORef.current.volume = 0.6;
+    if (winAudioRef.current) winAudioRef.current.volume = 0.7;
+    if (warningAudioRef.current) warningAudioRef.current.volume = 0.5;
+
+    // Preload audio files
+    const preloadAudio = async () => {
+      try {
+        await Promise.all([
+          moveAudioXRef.current?.load(),
+          moveAudioORef.current?.load(),
+          winAudioRef.current?.load(),
+          warningAudioRef.current?.load()
+        ]);
+        console.log('Audio files loaded successfully');
+      } catch (error) {
+        console.error('Error loading audio files:', error);
+      }
+    };
+
+    preloadAudio();
+
+    // Cleanup
+    return () => {
+      moveAudioXRef.current = null;
+      moveAudioORef.current = null;
+      winAudioRef.current = null;
+      warningAudioRef.current = null;
+    };
   }, []); // Run only once on mount
 
   // Handle warning sound
   useEffect(() => {
-    if (!soundEnabled || !inactivityTime || winner) return;
+    if (!soundEnabled || !inactivityTime || winner || !warningAudioRef.current) return;
 
     if (inactivityTime === 5) {
-      warningAudioRef.current.play().catch(() => {
-        console.log('Warning sound failed to play');
-      });
+      const playWarning = async () => {
+        try {
+          await warningAudioRef.current?.play();
+        } catch (error) {
+          console.log('Warning sound failed to play:', error);
+        }
+      };
+      playWarning();
     }
   }, [inactivityTime, soundEnabled, winner]);
 
-  const playMoveSound = useCallback((player: 'X' | 'O') => {
+  const playMoveSound = useCallback(async (player: 'X' | 'O') => {
     if (!soundEnabled) return;
     
     const audio = player === 'X' ? moveAudioXRef.current : moveAudioORef.current;
-    audio.currentTime = 0; // Reset audio to start
-    audio.play().catch(() => {
-      console.log(`${player} move sound failed to play`);
-    });
+    if (!audio) return;
+
+    try {
+      audio.currentTime = 0;
+      await audio.play();
+    } catch (error) {
+      console.log(`${player} move sound failed to play:`, error);
+    }
   }, [soundEnabled]);
 
-  const playWinSound = useCallback(() => {
-    if (!soundEnabled) return;
+  const playWinSound = useCallback(async () => {
+    if (!soundEnabled || !winAudioRef.current) return;
 
-    if (navigator.vibrate) {
-      navigator.vibrate([50, 50, 100]);
+    try {
+      if (navigator.vibrate) {
+        navigator.vibrate([50, 50, 100]);
+      }
+      await winAudioRef.current.play();
+    } catch (error) {
+      console.log('Win sound failed to play:', error);
     }
-    winAudioRef.current.play().catch(() => {
-      console.log('Win sound failed to play');
-    });
   }, [soundEnabled]);
 
   return {
