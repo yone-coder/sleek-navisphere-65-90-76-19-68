@@ -12,7 +12,6 @@ export const useGameAudio = (soundEnabled: boolean, inactivityTime: number, winn
     const createAudioElement = (src: string, volume: number) => {
       const audio = new Audio(src);
       audio.volume = volume;
-      // Preload the audio file
       audio.preload = 'auto';
       return audio;
     };
@@ -23,7 +22,7 @@ export const useGameAudio = (soundEnabled: boolean, inactivityTime: number, winn
     winAudioRef.current = createAudioElement('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3', 0.7);
     warningAudioRef.current = createAudioElement('https://assets.mixkit.co/active_storage/sfx/953/953-preview.mp3', 0.5);
 
-    // Create duplicate audio elements for rapid playback
+    // Preload audio files
     const preloadAudio = async () => {
       try {
         await Promise.all([
@@ -54,36 +53,30 @@ export const useGameAudio = (soundEnabled: boolean, inactivityTime: number, winn
     if (!soundEnabled || !inactivityTime || winner || !warningAudioRef.current) return;
 
     if (inactivityTime === 5) {
-      const playWarning = async () => {
-        try {
-          await warningAudioRef.current?.play();
-        } catch (error) {
-          console.log('Warning sound failed to play:', error);
-        }
-      };
-      playWarning();
+      try {
+        warningAudioRef.current.currentTime = 0;
+        warningAudioRef.current.play();
+      } catch (error) {
+        console.log('Warning sound failed to play:', error);
+      }
     }
   }, [inactivityTime, soundEnabled, winner]);
 
-  const playMoveSound = useCallback(async (player: 'X' | 'O') => {
+  const playMoveSound = useCallback((player: 'X' | 'O') => {
     if (!soundEnabled) return;
     
     const audio = player === 'X' ? moveAudioXRef.current : moveAudioORef.current;
     if (!audio) return;
 
     try {
-      // Reset audio to start and play immediately
       audio.currentTime = 0;
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        await playPromise;
-      }
+      audio.play();
     } catch (error) {
       console.log(`${player} move sound failed to play:`, error);
     }
   }, [soundEnabled]);
 
-  const playWinSound = useCallback(async () => {
+  const playWinSound = useCallback(() => {
     if (!soundEnabled || !winAudioRef.current) return;
 
     try {
@@ -91,10 +84,7 @@ export const useGameAudio = (soundEnabled: boolean, inactivityTime: number, winn
         navigator.vibrate([50, 50, 100]);
       }
       winAudioRef.current.currentTime = 0;
-      const playPromise = winAudioRef.current.play();
-      if (playPromise !== undefined) {
-        await playPromise;
-      }
+      winAudioRef.current.play();
     } catch (error) {
       console.log('Win sound failed to play:', error);
     }
