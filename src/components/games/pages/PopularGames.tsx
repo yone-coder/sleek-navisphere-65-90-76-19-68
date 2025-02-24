@@ -91,4 +91,3 @@ const PopularGames: React.FC<PopularGamesProps> = ({ games }) => {
 };
 
 export default PopularGames;
-
