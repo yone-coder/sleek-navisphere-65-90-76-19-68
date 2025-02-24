@@ -12,7 +12,13 @@ import {
   Share2,
   Heart,
   CalendarClock,
-  DollarSign
+  DollarSign,
+  MapPin,
+  Globe,
+  GamepadIcon,
+  Clock,
+  Users2,
+  Calendar
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -29,6 +35,7 @@ import {
 import { TournamentRoadmap } from "@/components/tournament/sections/TournamentRoadmap";
 import { ParticipantsTable } from "@/components/tournament/sections/ParticipantsTable";
 import { TournamentRulesCard } from "@/components/tournament/sections/TournamentRulesCard";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 const formatPrizePool = (amount: number): string => {
   if (amount >= 1000000) {
@@ -367,6 +374,7 @@ export default function TournamentDetails() {
               <BannerSlider />
               
               <div className="px-4">
+                {/* Stats Grid */}
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div className="flex items-center p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20">
                     <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
@@ -390,22 +398,129 @@ export default function TournamentDetails() {
                   </div>
                 </div>
 
-                <div className="space-y-4 mb-6">
-                  <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
-                    The premier gaming event featuring the latest titles and top competitors from around the world.
-                    Join us for an unforgettable experience of competitive gaming at its finest.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {["Competitive", "Professional", "Global", "Live Streamed", "Ranked"].map((tag) => (
-                      <Badge 
-                        key={tag} 
-                        variant="outline" 
-                        className="bg-blue-50 dark:bg-blue-900/20"
-                      >
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
+                {/* Tournament Details */}
+                <div className="space-y-6 mb-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">Tournament Details</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center gap-2">
+                          <GamepadIcon className="h-4 w-4 text-muted-foreground" />
+                          <div className="space-y-1">
+                            <p className="text-sm text-muted-foreground">Game</p>
+                            <p className="text-sm font-medium">{tournament?.game}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Globe className="h-4 w-4 text-muted-foreground" />
+                          <div className="space-y-1">
+                            <p className="text-sm text-muted-foreground">Region</p>
+                            <p className="text-sm font-medium">International</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <MapPin className="h-4 w-4 text-muted-foreground" />
+                          <div className="space-y-1">
+                            <p className="text-sm text-muted-foreground">Location</p>
+                            <p className="text-sm font-medium">Online & LAN Finals</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Users2 className="h-4 w-4 text-muted-foreground" />
+                          <div className="space-y-1">
+                            <p className="text-sm text-muted-foreground">Team Size</p>
+                            <p className="text-sm font-medium">5v5</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-4 w-4 text-muted-foreground" />
+                          <div className="space-y-1">
+                            <p className="text-sm text-muted-foreground">Check-in Time</p>
+                            <p className="text-sm font-medium">30 mins before</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Clock className="h-4 w-4 text-muted-foreground" />
+                          <div className="space-y-1">
+                            <p className="text-sm text-muted-foreground">Match Duration</p>
+                            <p className="text-sm font-medium">~45 mins</p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Description */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">About Tournament</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Join us for an epic gaming showdown in the {tournament?.title}! This premier tournament 
+                        brings together the most skilled players from around the world to compete for glory 
+                        and incredible prizes. Whether you're a seasoned pro or an ambitious newcomer, 
+                        this tournament offers an unforgettable competitive experience.
+                      </p>
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {["Competitive", "Professional", "Global", "Live Streamed", "Ranked", "Official"].map((tag) => (
+                          <Badge 
+                            key={tag} 
+                            variant="outline" 
+                            className="bg-blue-50 dark:bg-blue-900/20"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Tournament Timeline */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">Important Dates</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-4">
+                          <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
+                            <Calendar className="h-5 w-5 text-blue-600" />
+                          </div>
+                          <div>
+                            <p className="font-medium">Registration Opens</p>
+                            <p className="text-sm text-muted-foreground">
+                              {format(new Date(tournament?.start_date || new Date()), 'MMM d, yyyy')}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <div className="h-10 w-10 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center">
+                            <Clock className="h-5 w-5 text-orange-600" />
+                          </div>
+                          <div>
+                            <p className="font-medium">Group Stage Begins</p>
+                            <p className="text-sm text-muted-foreground">
+                              {format(new Date(tournament?.start_date || new Date()), 'MMM d, yyyy')}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <div className="h-10 w-10 rounded-full bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center">
+                            <Trophy className="h-5 w-5 text-purple-600" />
+                          </div>
+                          <div>
+                            <p className="font-medium">Finals</p>
+                            <p className="text-sm text-muted-foreground">
+                              {format(new Date(tournament?.end_date || new Date()), 'MMM d, yyyy')}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
             </div>
