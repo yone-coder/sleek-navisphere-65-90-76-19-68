@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -183,6 +182,7 @@ export default function TournamentDetails() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isLiked, setIsLiked] = useState(false);
   const { toast } = useToast();
+  const [shareCount, setShareCount] = useState(245);
 
   const { data: tournament, isLoading } = useQuery({
     queryKey: ["tournament", id],
@@ -232,12 +232,14 @@ export default function TournamentDetails() {
       
       if (navigator.share) {
         await navigator.share(shareData);
+        setShareCount(prev => prev + 1);
         toast({
           title: "Tournament shared successfully!",
           duration: 2000,
         });
       } else {
         await navigator.clipboard.writeText(window.location.href);
+        setShareCount(prev => prev + 1);
         toast({
           title: "Tournament link copied to clipboard!",
           duration: 2000,
@@ -495,7 +497,7 @@ export default function TournamentDetails() {
               className="flex-1"
             >
               <Share2 className="h-4 w-4 mr-2" />
-              <span>Share</span>
+              <span>{shareCount}</span>
             </Button>
           </div>
 
