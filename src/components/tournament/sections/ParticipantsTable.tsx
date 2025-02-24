@@ -218,70 +218,69 @@ export function ParticipantsTable() {
 
   return (
     <div className="space-y-4 px-4">
-      <div className="flex items-center gap-2">
-        <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-          <Input
-            placeholder="Search by name or country..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-7 h-8 text-sm"
-          />
-        </div>
-        <ScrollArea className="max-w-[400px]">
-          <div className="flex items-center gap-1">
-            <Button
-              variant="outline"
-              size="sm"
-              className={cn(
-                "h-8 px-2 text-xs flex-shrink-0",
-                statusFilter === "all" && "bg-primary text-primary-foreground"
-              )}
-              onClick={() => setStatusFilter("all")}
-            >
-              <Users className="h-3.5 w-3.5" />
-              <span className="ml-1">All ({counts.all})</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className={cn(
-                "h-8 px-2 text-xs flex-shrink-0",
-                statusFilter === "confirmed" && "bg-primary text-primary-foreground"
-              )}
-              onClick={() => setStatusFilter("confirmed")}
-            >
-              <Trophy className="h-3.5 w-3.5" />
-              <span className="ml-1">Confirmed ({counts.confirmed})</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className={cn(
-                "h-8 px-2 text-xs flex-shrink-0",
-                statusFilter === "pending" && "bg-primary text-primary-foreground"
-              )}
-              onClick={() => setStatusFilter("pending")}
-            >
-              <CalendarDays className="h-3.5 w-3.5" />
-              <span className="ml-1">Pending ({counts.pending})</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className={cn(
-                "h-8 px-2 text-xs flex-shrink-0",
-                statusFilter === "withdrawn" && "bg-primary text-primary-foreground"
-              )}
-              onClick={() => setStatusFilter("withdrawn")}
-            >
-              <UserX className="h-3.5 w-3.5" />
-              <span className="ml-1">Withdrawn ({counts.withdrawn})</span>
-            </Button>
-          </div>
-          <ScrollBar orientation="horizontal" className="invisible" />
-        </ScrollArea>
+      <div className="relative">
+        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+        <Input
+          placeholder="Search by name or country..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-7 h-8 text-sm"
+        />
       </div>
+
+      <ScrollArea className="max-w-[400px]">
+        <div className="flex items-center gap-1">
+          <Button
+            variant="outline"
+            size="sm"
+            className={cn(
+              "h-8 px-2 text-xs flex-shrink-0",
+              statusFilter === "all" && "bg-primary text-primary-foreground"
+            )}
+            onClick={() => setStatusFilter("all")}
+          >
+            <Users className="h-3.5 w-3.5" />
+            <span className="ml-1">All ({counts.all})</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className={cn(
+              "h-8 px-2 text-xs flex-shrink-0",
+              statusFilter === "confirmed" && "bg-primary text-primary-foreground"
+            )}
+            onClick={() => setStatusFilter("confirmed")}
+          >
+            <Trophy className="h-3.5 w-3.5" />
+            <span className="ml-1">Confirmed ({counts.confirmed})</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className={cn(
+              "h-8 px-2 text-xs flex-shrink-0",
+              statusFilter === "pending" && "bg-primary text-primary-foreground"
+            )}
+            onClick={() => setStatusFilter("pending")}
+          >
+            <CalendarDays className="h-3.5 w-3.5" />
+            <span className="ml-1">Pending ({counts.pending})</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className={cn(
+              "h-8 px-2 text-xs flex-shrink-0",
+              statusFilter === "withdrawn" && "bg-primary text-primary-foreground"
+            )}
+            onClick={() => setStatusFilter("withdrawn")}
+          >
+            <UserX className="h-3.5 w-3.5" />
+            <span className="ml-1">Withdrawn ({counts.withdrawn})</span>
+          </Button>
+        </div>
+        <ScrollBar orientation="horizontal" className="invisible" />
+      </ScrollArea>
 
       <ScrollArea className="w-full border rounded-lg bg-background">
         <div className="min-w-[900px]">
