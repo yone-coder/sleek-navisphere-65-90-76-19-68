@@ -1,12 +1,12 @@
 
 import { LucideIcon } from "lucide-react";
 
-export type IconComponent = LucideIcon | (() => JSX.Element);
+export type IconComponent = LucideIcon;
 
 export interface App {
   name: string;
   description: string;
-  icon: IconComponent;
+  icon: LucideIcon;
   route: string;
   color: string;
   category: string;

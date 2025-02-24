@@ -4,12 +4,15 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { Badge } from "@/components/ui/badge";
+import { CheckCircle2, Shield, ShieldCheck, User } from "lucide-react";
 
 interface UserProfile {
   name: string;
   email: string;
   subtitle: string;
   avatar: string;
+  verificationStatus?: "verified" | "ultra_verified" | "non_verified";
 }
 
 export const ProfileCard = () => {
@@ -23,7 +26,6 @@ export const ProfileCard = () => {
       
       if (session?.user) {
         setIsAuthenticated(true);
-        // Get user profile data from auth metadata or user table
         const { data: profile } = await supabase
           .from('profiles')
           .select('*')
@@ -35,6 +37,7 @@ export const ProfileCard = () => {
           email: session.user.email || '',
           subtitle: "Apple Account, iCloud, and more",
           avatar: profile?.avatar_url || session.user.user_metadata?.avatar_url || "https://github.com/shadcn.png",
+          verificationStatus: "ultra_verified" // Mock status
         });
       } else {
         setIsAuthenticated(false);
@@ -44,7 +47,6 @@ export const ProfileCard = () => {
 
     checkAuth();
 
-    // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) {
         setIsAuthenticated(true);
@@ -53,6 +55,7 @@ export const ProfileCard = () => {
           email: session.user.email || '',
           subtitle: "Apple Account, iCloud, and more",
           avatar: session.user.user_metadata?.avatar_url || "https://github.com/shadcn.png",
+          verificationStatus: "ultra_verified" // Mock status
         });
       } else {
         setIsAuthenticated(false);
@@ -73,55 +76,59 @@ export const ProfileCard = () => {
     }
   };
 
+  const getVerificationBadge = (status: UserProfile["verificationStatus"]) => {
+    switch (status) {
+      case "ultra_verified":
+        return (
+          <div className="flex items-center gap-1 bg-gradient-to-r from-blue-500/10 to-purple-500/10 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full text-xs font-medium">
+            <ShieldCheck className="h-3.5 w-3.5" />
+            <span>Ultra Verified</span>
+          </div>
+        );
+      case "verified":
+        return (
+          <div className="flex items-center gap-1 text-green-600 dark:text-green-400">
+            <CheckCircle2 className="h-4 w-4" />
+            <span className="text-xs">Verified</span>
+          </div>
+        );
+      case "non_verified":
+        return (
+          <div className="flex items-center gap-1 text-muted-foreground/70">
+            <Shield className="h-3.5 w-3.5" />
+            <span className="text-xs">Not Verified</span>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="container px-4 py-2">
       <button 
         onClick={handleClick}
-        className="flex items-center gap-3 w-full py-2 hover:bg-muted/60 transition-colors duration-200 rounded-lg"
+        className="group flex items-center gap-3 w-full py-2 hover:bg-muted/60 transition-all duration-200 rounded-lg"
       >
-        <Avatar className="h-10 w-10">
+        <Avatar className="h-10 w-10 ring-2 ring-primary/5">
           {isAuthenticated && user ? (
             <AvatarImage src={user.avatar} alt={user.name} />
           ) : (
             <AvatarFallback className="bg-muted-foreground/10">
-              <svg 
-                width="20" 
-                height="20" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-                className="text-muted-foreground/60"
-              >
-                <path 
-                  d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path 
-                  d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <User className="h-5 w-5 text-muted-foreground/60" />
             </AvatarFallback>
           )}
         </Avatar>
-        <div className="flex flex-col items-start">
-          {isAuthenticated && user ? (
-            <>
-              <span className="text-sm font-medium">{user.name}</span>
-              <span className="text-xs text-muted-foreground">{user.subtitle}</span>
-            </>
-          ) : (
-            <>
-              <span className="text-sm font-medium">Sign in</span>
-              <span className="text-xs text-muted-foreground">Access your account and data</span>
-            </>
-          )}
+        <div className="flex flex-col items-start min-w-0">
+          <div className="flex items-center gap-2 w-full">
+            <span className="text-sm font-medium truncate">{isAuthenticated && user ? user.name : "Sign in"}</span>
+            {isAuthenticated && user?.verificationStatus && (
+              getVerificationBadge(user.verificationStatus)
+            )}
+          </div>
+          <span className="text-xs text-muted-foreground">
+            {isAuthenticated && user ? user.subtitle : "Access your account and data"}
+          </span>
         </div>
         <div className="ml-auto">
           <Button variant="ghost" size="icon" className="h-8 w-8">
