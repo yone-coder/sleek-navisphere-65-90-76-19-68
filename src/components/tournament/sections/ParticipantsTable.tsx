@@ -211,7 +211,7 @@ export function ParticipantsTable() {
 
   return (
     <div className="relative flex flex-col min-h-0">
-      <div className="sticky top-[7.5rem] z-30 bg-background/80 backdrop-blur-lg p-4 border-b">
+      <div className="sticky top-[7.5rem] z-30 bg-background/80 backdrop-blur-lg p-4 border-b border-border/40">
         <div className="grid grid-cols-4 gap-3">
           <div className="p-3 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-lg">
             <div className="flex items-center gap-1.5 text-blue-600">
@@ -327,7 +327,7 @@ export function ParticipantsTable() {
                 <TableHead className="w-[80px]"></TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="relative z-10">
+            <TableBody>
               {paginatedParticipants.map((participant) => (
                 <TableRow 
                   key={participant.id} 
