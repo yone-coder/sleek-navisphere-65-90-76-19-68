@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Position, GameHistory, TimeLeft } from '../types';
+import { Position, GameHistory } from '../types';
 
 interface UseGameBoardProps {
   boardSize: number;
@@ -15,15 +15,30 @@ export const useGameBoard = ({ boardSize }: UseGameBoardProps) => {
   const [hoveredCell, setHoveredCell] = useState<Position | null>(null);
 
   const isValidSecondMove = (row: number, col: number) => {
-    if (moves !== 1) return true;
+    if (moves === 1) {
+      const centerRow = Math.floor(boardSize / 2);
+      const centerCol = Math.floor(boardSize / 2);
+      const rowDiff = Math.abs(row - centerRow);
+      const colDiff = Math.abs(col - centerCol);
+      return rowDiff <= 3 && colDiff <= 3;
+    }
 
-    const centerRow = Math.floor(boardSize / 2);
-    const centerCol = Math.floor(boardSize / 2);
+    // For moves after the second one, check proximity to existing checks
+    const existingChecks = [];
+    for (let i = 0; i < boardSize; i++) {
+      for (let j = 0; j < boardSize; j++) {
+        if (board[i][j]) {
+          existingChecks.push({ row: i, col: j });
+        }
+      }
+    }
 
-    const rowDiff = Math.abs(row - centerRow);
-    const colDiff = Math.abs(col - centerCol);
-
-    return rowDiff <= 3 && colDiff <= 3;
+    // Check if the move is within 2 spaces of any existing check
+    return existingChecks.some(check => {
+      const rowDiff = Math.abs(row - check.row);
+      const colDiff = Math.abs(col - check.col);
+      return rowDiff <= 2 && colDiff <= 2;
+    });
   };
 
   const resetBoard = () => {
