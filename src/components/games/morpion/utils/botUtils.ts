@@ -20,62 +20,63 @@ export const calculateBotMove = (
     return rowDiff <= 3 && colDiff <= 3;
   };
 
-  // Function to evaluate threat level in a direction
-  const evaluateDirection = (row: number, col: number, dx: number, dy: number, symbol: string): number => {
-    let count = 0;
-    let openEnds = 0;
-    let consecutive = 0;
-    let maxConsecutive = 0;
+  // Function to detect three in a row threats
+  const detectThreeInARow = (symbol: string): { row: number; col: number } | null => {
+    for (let i = 0; i < boardSize; i++) {
+      for (let j = 0; j < boardSize; j++) {
+        if (board[i][j]) continue;
 
-    // Check both directions
-    for (let direction = -1; direction <= 1; direction += 2) {
-      let x = row;
-      let y = col;
-      let spaces = 0;
-      consecutive = 0;
-      
-      // Look 4 spaces in each direction
-      for (let step = 0; step < 4; step++) {
-        x += dx * direction;
-        y += dy * direction;
-        
-        if (x < 0 || x >= boardSize || y < 0 || y >= boardSize) break;
-        
-        if (board[x][y] === symbol) {
-          consecutive++;
-          count++;
-        } else if (board[x][y] === '') {
-          spaces++;
-          if (consecutive > 0) break;
-        } else {
-          break;
+        // Check all 8 directions
+        const directions = [
+          [-1, -1], [-1, 0], [-1, 1],
+          [0, -1],           [0, 1],
+          [1, -1],  [1, 0],  [1, 1]
+        ];
+
+        for (const [dx, dy] of directions) {
+          let count = 0;
+          let openEnds = 0;
+
+          // Check backward
+          let x = i - dx;
+          let y = j - dy;
+          while (x >= 0 && x < boardSize && y >= 0 && y < boardSize && board[x][y] === symbol) {
+            count++;
+            x -= dx;
+            y -= dy;
+          }
+          if (x >= 0 && x < boardSize && y >= 0 && y < boardSize && board[x][y] === '') {
+            openEnds++;
+          }
+
+          // Check forward
+          x = i + dx;
+          y = j + dy;
+          while (x >= 0 && x < boardSize && y >= 0 && y < boardSize && board[x][y] === symbol) {
+            count++;
+            x += dx;
+            y += dy;
+          }
+          if (x >= 0 && x < boardSize && y >= 0 && y < boardSize && board[x][y] === '') {
+            openEnds++;
+          }
+
+          if (count >= 3 && openEnds > 0) {
+            return { row: i, col: j };
+          }
         }
       }
-      
-      maxConsecutive = Math.max(maxConsecutive, consecutive);
-      if (spaces > 0) openEnds++;
     }
-
-    // Calculate threat level
-    if (count >= 4) return 100000;  // Immediate threat
-    if (count === 3 && openEnds === 2) return 50000;  // Strong threat
-    if (count === 3 && openEnds === 1) return 10000;  // Moderate threat
-    if (count === 2 && openEnds === 2) return 5000;   // Potential threat
-    
-    return count * 100 + openEnds * 50;  // Base score
+    return null;
   };
 
-  // Function to check for immediate win or block with enhanced threat detection
-  const checkImmediateWinOrBlock = (symbol: string): { row: number; col: number } | null => {
-    let bestMove = null;
-    let maxThreat = 0;
-
+  // Check for immediate win
+  const checkWin = (symbol: string): { row: number; col: number } | null => {
     for (let i = 0; i < boardSize; i++) {
       for (let j = 0; j < boardSize; j++) {
         if (!board[i][j]) {
-          // Temporarily place the symbol
+          // Try placing the symbol
           board[i][j] = symbol;
-          let totalThreat = 0;
           
           // Check all 8 directions
           const directions = [
@@ -84,81 +85,51 @@ export const calculateBotMove = (
             [1, -1],  [1, 0],  [1, 1]
           ];
 
-          let isWinning = false;
           for (const [dx, dy] of directions) {
             let count = 1;
-            let openEnds = 0;
             
-            // Check in positive direction
+            // Check forward
             let x = i + dx;
             let y = j + dy;
-            let blocked = false;
-            while (x >= 0 && x < boardSize && y >= 0 && y < boardSize && !blocked) {
-              if (board[x][y] === symbol) {
-                count++;
-              } else if (board[x][y] === '') {
-                openEnds++;
-                blocked = true;
-              } else {
-                blocked = true;
-              }
+            while (x >= 0 && x < boardSize && y >= 0 && y < boardSize && board[x][y] === symbol) {
+              count++;
               x += dx;
               y += dy;
             }
 
-            // Check in negative direction
+            // Check backward
             x = i - dx;
             y = j - dy;
-            blocked = false;
-            while (x >= 0 && x < boardSize && y >= 0 && y < boardSize && !blocked) {
-              if (board[x][y] === symbol) {
-                count++;
-              } else if (board[x][y] === '') {
-                openEnds++;
-                blocked = true;
-              } else {
-                blocked = true;
-              }
+            while (x >= 0 && x < boardSize && y >= 0 && y < boardSize && board[x][y] === symbol) {
+              count++;
               x -= dx;
               y -= dy;
             }
 
             if (count >= 5) {
-              isWinning = true;
-              break;
+              board[i][j] = '';
+              return { row: i, col: j };
             }
-
-            // Calculate threat level
-            let threatLevel = count * 100;
-            if (count >= 3 && openEnds > 0) {
-              threatLevel *= (openEnds + 1);  // Bonus for open ends
-            }
-            totalThreat += threatLevel;
           }
-
-          // Remove the temporary symbol
-          board[i][j] = '';
-
-          if (isWinning) return { row: i, col: j };
           
-          if (totalThreat > maxThreat) {
-            maxThreat = totalThreat;
-            bestMove = { row: i, col: j };
-          }
+          board[i][j] = '';
         }
       }
     }
-
-    return maxThreat >= 1000 ? bestMove : null;  // Only return if significant threat
+    return null;
   };
 
   // First priority: Check for immediate win
-  const winningMove = checkImmediateWinOrBlock('O');
+  const winningMove = checkWin('O');
   if (winningMove) return winningMove;
 
-  // Second priority: Block opponent's win or strong threat
-  const blockingMove = checkImmediateWinOrBlock('X');
+  // Second priority: Block opponent's win
+  const blockingMove = checkWin('X');
   if (blockingMove) return blockingMove;
+
+  // Third priority: Block three in a row threats
+  const blockThree = detectThreeInARow('X');
+  if (blockThree) return blockThree;
 
   // Get all valid moves with scores
   const validMoves: { row: number; col: number; score: number }[] = [];
@@ -168,31 +139,44 @@ export const calculateBotMove = (
         if (board.flat().filter(Boolean).length === 1 && !isValidSecondMove(i, j)) {
           continue;
         }
+
         let score = 0;
         
-        // Check all 8 directions for threats and opportunities
+        // Check all 8 directions for strategic value
         const directions = [
           [-1, -1], [-1, 0], [-1, 1],
           [0, -1],           [0, 1],
           [1, -1],  [1, 0],  [1, 1]
         ];
 
-        // Evaluate threats and opportunities in each direction
         for (const [dx, dy] of directions) {
-          // Defensive evaluation (opponent's threats)
-          const defensiveScore = evaluateDirection(i, j, dx, dy, 'X');
-          score += defensiveScore * 1.2;  // Slightly prioritize defense
+          // Count consecutive pieces and empty spaces
+          let botPieces = 0;
+          let playerPieces = 0;
+          let emptySpaces = 0;
 
-          // Offensive evaluation (bot's opportunities)
-          const offensiveScore = evaluateDirection(i, j, dx, dy, 'O');
-          score += offensiveScore;
+          for (let step = -4; step <= 4; step++) {
+            const x = i + dx * step;
+            const y = j + dy * step;
+            
+            if (x >= 0 && x < boardSize && y >= 0 && y < boardSize) {
+              if (board[x][y] === 'O') botPieces++;
+              else if (board[x][y] === 'X') playerPieces++;
+              else emptySpaces++;
+            }
+          }
+
+          // Scoring based on piece configuration
+          if (botPieces >= 2) score += botPieces * 100;
+          if (playerPieces >= 2) score += playerPieces * 80;
+          score += emptySpaces * 10;
         }
 
-        // Positional scoring
+        // Position-based scoring
         const centerRow = Math.floor(boardSize / 2);
         const centerCol = Math.floor(boardSize / 2);
         const distanceToCenter = Math.abs(i - centerRow) + Math.abs(j - centerCol);
-        score += Math.max(0, (10 - distanceToCenter) * 100);
+        score += Math.max(0, (10 - distanceToCenter) * 50);
 
         // Difficulty adjustments
         const randomFactor = difficulty === 'easy' ? 0.5 : 
