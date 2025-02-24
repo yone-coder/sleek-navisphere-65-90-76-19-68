@@ -34,7 +34,8 @@ export const calculateBotMove = (
         for (let di = -1; di <= 1; di++) {
           for (let dj = -1; dj <= 1; dj++) {
             if (di === 0 && dj === 0) continue;
-            let count = 0;
+            let playerCount = 0;
+            let botCount = 0;
             let blocked = 0;
             
             // Look in both directions
@@ -44,26 +45,43 @@ export const calculateBotMove = (
               
               if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) continue;
               
-              if (board[row][col] === 'O') count++;
-              else if (board[row][col] === 'X') blocked++;
+              if (board[row][col] === 'X') playerCount++;
+              else if (board[row][col] === 'O') botCount++;
+              else if (step === -1 || step === 1) blocked++;
             }
             
-            // Scoring based on patterns
-            if (blocked === 0) {
-              score += Math.pow(count, 2) * 10;
+            // Ultra defensive scoring
+            // Highest priority: Block opponent's potential wins
+            if (playerCount >= 3) {
+              score += Math.pow(playerCount, 3) * 100;
             }
-            if (blocked > 0 && count > 0) {
-              score += count * 5;
+            
+            // Medium priority: Defend against potential threats
+            if (playerCount >= 2 && blocked === 0) {
+              score += Math.pow(playerCount, 2) * 50;
             }
-            if (blocked > 0 && count === 0) {
-              score += blocked * 3;
+            
+            // Lower priority: Build own moves
+            if (botCount >= 3) {
+              score += Math.pow(botCount, 2) * 30;
+            }
+            
+            // Bonus for moves that both block and build
+            if (playerCount > 0 && botCount > 0) {
+              score += (playerCount + botCount) * 10;
             }
           }
         }
 
-        // Add randomness based on difficulty
-        const randomFactor = difficulty === 'easy' ? 0.5 : 
-                           difficulty === 'medium' ? 0.3 : 0.1;
+        // Add position-based scoring (prefer moves closer to the last move)
+        if (lastMove) {
+          const distance = Math.abs(i - lastMove.row) + Math.abs(j - lastMove.col);
+          score += Math.max(0, (10 - distance) * 5);
+        }
+
+        // Add minimal randomness based on difficulty
+        const randomFactor = difficulty === 'easy' ? 0.3 : 
+                           difficulty === 'medium' ? 0.15 : 0.05;
         score += Math.random() * score * randomFactor;
 
         validMoves.push({ row: i, col: j, score });

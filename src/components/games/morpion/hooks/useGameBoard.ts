@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Position, GameHistory, TimeLeft } from '../types';
 
 interface UseGameBoardProps {
@@ -53,7 +53,7 @@ export const useGameBoard = ({ boardSize }: UseGameBoardProps) => {
     return lastState;
   };
 
-  useState(() => {
+  useEffect(() => {
     resetBoard();
   }, []); // Initialize board when component mounts
 
