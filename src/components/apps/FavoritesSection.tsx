@@ -34,6 +34,19 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
 
   return (
     <div className="mb-8 -mx-4 sm:-mx-6 md:-mx-8">
+      <style>
+        {`
+          @keyframes scrollText {
+            0% { transform: translateX(0); }
+            40% { transform: translateX(calc(-100% + 70px)); }
+            60% { transform: translateX(calc(-100% + 70px)); }
+            100% { transform: translateX(0); }
+          }
+          .scroll-on-hover:hover .scrolling-text {
+            animation: scrollText 3s ease-in-out;
+          }
+        `}
+      </style>
       <div className="flex items-center justify-between mb-4 px-4 sm:px-6 md:px-8">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
@@ -96,9 +109,11 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
                             </Badge>
                           )}
                         </div>
-                        <span className="text-sm font-medium text-gray-700 text-center line-clamp-2">
-                          {app.name}
-                        </span>
+                        <div className="w-full overflow-hidden scroll-on-hover">
+                          <span className="text-sm font-medium text-gray-700 text-center block scrolling-text whitespace-nowrap">
+                            {app.name}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </Card>
