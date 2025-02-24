@@ -13,7 +13,7 @@ export const BottomNav = () => {
   const { t } = useLanguage();
 
   // Hide the main bottom nav on games pages and tournament pages
-  if (location.pathname.includes('games-pages') || location.pathname.includes('tournament')) {
+  if (location.pathname.includes('games-pages') || location.pathname.includes('tournament') || location.pathname.includes('morpion')) {
     return null;
   }
 
