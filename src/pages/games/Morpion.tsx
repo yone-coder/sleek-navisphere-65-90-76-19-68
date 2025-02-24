@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Settings2, Undo2, RotateCcw, Volume2, VolumeX, Clock } from 'lucide-react';
+import PlayerCard from '../../components/games/morpion/PlayerCard';
+import GameBoard from '../../components/games/morpion/GameBoard';
+import GameControls from '../../components/games/morpion/GameControls';
+import GameSettings from '../../components/games/morpion/GameSettings';
 
-const Gomoku = () => {
+const Morpion = () => {
   const [boardSize, setBoardSize] = useState(30);
   const [board, setBoard] = useState([]);
   const [currentPlayer, setCurrentPlayer] = useState('X');
@@ -15,7 +18,7 @@ const Gomoku = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [zoom, setZoom] = useState(100);
   const [hoveredCell, setHoveredCell] = useState(null);
-  const [timeLeft, setTimeLeft] = useState({ X: 300, O: 300 }); // 5 minutes per player
+  const [timeLeft, setTimeLeft] = useState({ X: 300, O: 300 });
   const [isTimerRunning, setIsTimerRunning] = useState(true);
   const [inactivityTime, setInactivityTime] = useState(15);
   const [winningLine, setWinningLine] = useState(null);
@@ -102,7 +105,7 @@ const Gomoku = () => {
     }
 
     if (navigator.vibrate) {
-      navigator.vibrate(40); // 40ms vibration - short and crisp
+      navigator.vibrate(40);
     }
 
     const newBoard = JSON.parse(JSON.stringify(board));
@@ -129,7 +132,7 @@ const Gomoku = () => {
     if (checkWinner(newBoard, row, col)) {
       if (soundEnabled) {
         if (navigator.vibrate) {
-          navigator.vibrate([50, 50, 100]); // Victory pattern: short-pause-long
+          navigator.vibrate([50, 50, 100]);
         }
         winAudioRef.current.play().catch(() => {});
       }
@@ -326,7 +329,7 @@ const Gomoku = () => {
     );
   };
 
-  const PlayerCard = ({ player, symbol, isTop }) => {
+  const PlayerCard = ({ player, symbol, isTop, timeLeft, isCurrentPlayer, inactivityTime }) => {
     const hasPhoto = !player.toLowerCase().includes('guest');
 
     return (
@@ -350,7 +353,7 @@ const Gomoku = () => {
             <span className="text-[10px] md:text-xs font-bold">{symbol}</span>
           </div>
           <div className="text-[10px] md:text-xs font-medium mt-0.5 text-center">
-            {formatTime(timeLeft[symbol])}
+            {formatTime(timeLeft)}
           </div>
         </div>
 
@@ -414,8 +417,22 @@ const Gomoku = () => {
     <div className="flex flex-col items-center bg-gray-50 h-screen w-full overflow-hidden pb-8">
       <div className="w-full bg-white shadow-md px-2 md:px-4 py-1">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <PlayerCard player={player2} symbol="O" isTop={true} />
-          <PlayerCard player={player1} symbol="X" isTop={false} />
+          <PlayerCard
+            player={player2}
+            symbol="O"
+            isTop={true}
+            timeLeft={timeLeft.O}
+            isCurrentPlayer={currentPlayer === 'O'}
+            inactivityTime={currentPlayer === 'O' ? inactivityTime : undefined}
+          />
+          <PlayerCard
+            player={player1}
+            symbol="X"
+            isTop={false}
+            timeLeft={timeLeft.X}
+            isCurrentPlayer={currentPlayer === 'X'}
+            inactivityTime={currentPlayer === 'X' ? inactivityTime : undefined}
+          />
         </div>
       </div>
 
@@ -690,4 +707,4 @@ const Gomoku = () => {
   );
 };
 
-export default Gomoku;
+export default Morpion;
