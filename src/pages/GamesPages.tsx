@@ -44,7 +44,7 @@ export default function GamesPages() {
         games={games.filter(g => g.category.includes("Board"))}
         isLoading={isLoading}
       />
-      <PopularGames games={popularGames} />
+      <PopularGames games={popularGames} isLoading={isLoading} />
       <CategorySection title="Suggested For You" games={games} isLoading={isLoading} />
       <TopFreeGames games={games} isLoading={isLoading} />
     </div>
