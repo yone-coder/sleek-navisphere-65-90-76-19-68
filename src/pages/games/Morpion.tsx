@@ -101,6 +101,10 @@ const Gomoku = () => {
       return;
     }
 
+    if (navigator.vibrate) {
+      navigator.vibrate(40); // 40ms vibration - short and crisp
+    }
+
     const newBoard = JSON.parse(JSON.stringify(board));
     newBoard[row][col] = currentPlayer;
 
@@ -124,6 +128,9 @@ const Gomoku = () => {
 
     if (checkWinner(newBoard, row, col)) {
       if (soundEnabled) {
+        if (navigator.vibrate) {
+          navigator.vibrate([50, 50, 100]); // Victory pattern: short-pause-long
+        }
         winAudioRef.current.play().catch(() => {});
       }
       setWinner(currentPlayer);
