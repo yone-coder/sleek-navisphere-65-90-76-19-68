@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, X, History, ArrowLeft, Filter, Tag, Star, Command } from "lucide-react";
+import { Search, X, History, ArrowLeft, Filter, Tag, Star, Command, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -21,6 +20,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
+import { ScrollBar } from "@/components/ui/scroll-area";
 
 interface AppItem {
   name: string;
@@ -89,6 +90,10 @@ export function SearchOverlay({ isOpen, onClose, apps }: SearchOverlayProps) {
     acc[key].push(app);
     return acc;
   }, {} as Record<string, AppItem[]>);
+
+  const suggestedApps = apps
+    .filter(app => app.rating >= 4.5 || app.lastUsed === "Just now")
+    .slice(0, 6);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -253,6 +258,58 @@ export function SearchOverlay({ isOpen, onClose, apps }: SearchOverlayProps) {
 
         <ScrollArea className="flex-1 px-4">
           <div className="max-w-2xl mx-auto py-4 space-y-6">
+            {!searchQuery && suggestedApps.length > 0 && (
+              <div className="space-y-3 -mx-4 px-4">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-amber-500" />
+                  <h3 className="font-medium text-sm text-gray-900">Suggested Apps</h3>
+                </div>
+                <div className="relative">
+                  <ScrollArea className="w-full whitespace-nowrap rounded-lg pb-4">
+                    <div className="flex gap-3">
+                      {suggestedApps.map((app) => (
+                        <Card
+                          key={app.name}
+                          className="flex-none w-[140px] p-4 hover:bg-gray-50 transition-colors cursor-pointer"
+                          onClick={() => {
+                            navigate(app.route);
+                            onClose();
+                          }}
+                        >
+                          <div className="flex flex-col items-center gap-3 text-center">
+                            <div className={`w-12 h-12 rounded-2xl ${app.color} flex items-center justify-center relative`}>
+                              <app.icon className="w-6 h-6 text-white" />
+                              {app.updates && (
+                                <Badge 
+                                  variant="secondary" 
+                                  className="absolute -top-2 -right-2 bg-red-500 text-white h-5 min-w-5 flex items-center justify-center p-0"
+                                >
+                                  {app.updates}
+                                </Badge>
+                              )}
+                            </div>
+                            <div className="space-y-1 w-full">
+                              <h4 className="font-medium text-sm truncate">{app.name}</h4>
+                              {app.rating && (
+                                <div className="flex items-center justify-center gap-1 text-xs text-amber-500">
+                                  <Star className="w-3 h-3 fill-current" />
+                                  <span>{app.rating}</span>
+                                </div>
+                              )}
+                              {app.lastUsed && (
+                                <p className="text-xs text-gray-400">{app.lastUsed}</p>
+                              )}
+                            </div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                    <ScrollBar orientation="horizontal" />
+                  </ScrollArea>
+                </div>
+              </div>
+            )}
+
             {!searchQuery && favorites.length > 0 && (
               <div className="space-y-3">
                 <h3 className="font-medium text-sm text-gray-900">Favorites</h3>
