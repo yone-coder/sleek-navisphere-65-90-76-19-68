@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Heart, MessageSquare, Share2, Plus, Check, Bookmark } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -62,11 +63,15 @@ const GameCard = ({ game }: GameCardProps) => {
           src={game.coverImage}
           alt={`${game.title} cover`}
           className="w-full h-full object-cover"
+          loading="lazy"
+          decoding="async"
         />
         <img
           src={game.creatorImage}
           alt="Creator"
           className="absolute bottom-0 left-0 transform translate-x-3 translate-y-3 w-12 h-12 rounded-full border-2 border-white object-cover"
+          loading="lazy"
+          decoding="async"
         />
         <button
           onClick={handleBookmark}

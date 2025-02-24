@@ -34,6 +34,8 @@ const SponsoredGames: React.FC<SponsoredGamesProps> = ({ games }) => {
                     src={game.icon}
                     alt={game.title}
                     className="w-[120px] h-[120px] rounded-[24px] object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <h3 className="text-gray-900 text-sm font-medium truncate mb-1">

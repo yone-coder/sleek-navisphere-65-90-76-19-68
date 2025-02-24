@@ -28,6 +28,8 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events }) => {
                   src={event.image}
                   alt={event.title}
                   className="w-full aspect-[5/3] object-cover mix-blend-overlay"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
@@ -42,6 +44,8 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events }) => {
                   src={event.gameIcon}
                   alt={event.gameTitle}
                   className="w-12 h-12 rounded-xl"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="flex-1 min-w-0">
                   <h4 className="font-medium text-gray-900 truncate">
@@ -68,4 +72,3 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events }) => {
 };
 
 export default EventsSection;
-

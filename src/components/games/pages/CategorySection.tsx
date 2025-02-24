@@ -44,6 +44,8 @@ const CategorySection: React.FC<CategorySectionProps> = ({ title, games }) => {
                   src={game.thumbnail}
                   alt={game.title}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className="flex gap-3">
@@ -51,6 +53,8 @@ const CategorySection: React.FC<CategorySectionProps> = ({ title, games }) => {
                   src={game.icon}
                   alt={`${game.title} icon`}
                   className="w-12 h-12 rounded-xl object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="flex-1 min-w-0">
                   <h3 className="font-medium text-gray-900 truncate">{game.title}</h3>
@@ -61,7 +65,7 @@ const CategorySection: React.FC<CategorySectionProps> = ({ title, games }) => {
                   </div>
                   <div className="flex items-center gap-2">
                     {renderRating(game.rating)}
-                    <span className="text-xs text-gray-500">({game.downloads})</span>
+                    <span className="text-xs text-gray-500">{game.downloads}</span>
                   </div>
                 </div>
               </div>
@@ -75,4 +79,3 @@ const CategorySection: React.FC<CategorySectionProps> = ({ title, games }) => {
 };
 
 export default CategorySection;
-
