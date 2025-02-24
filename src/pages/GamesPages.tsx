@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Routes, Route, Outlet } from "react-router-dom";
 import { 
@@ -17,6 +16,7 @@ import { GameSearchOverlay } from "@/components/search/GameSearchOverlay";
 import { GamesBottomNav } from "@/components/games/GamesBottomNav";
 import GamesExplore from "./games/GamesExplore";
 import ContestsPage from "./games/ContestsPage";
+import Gomoku from "./games/Gomoku";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -629,6 +629,7 @@ export default function GamesPages() {
         } />
         <Route path="game-search/*" element={<GamesExplore />} />
         <Route path="contest/*" element={<ContestsPage />} />
+        <Route path="morpion" element={<Gomoku />} />
       </Routes>
 
       <GamesBottomNav />
