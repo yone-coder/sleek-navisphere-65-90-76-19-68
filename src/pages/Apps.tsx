@@ -19,7 +19,7 @@ const apps: App[] = [
     description: "Classic Tic-tac-toe game with a modern twist",
     icon: () => (
       <img 
-        src="/lovable-uploads/7751a0aa-bb1f-47c5-b434-e63e68dbc0d0.png" 
+        src="/lovable-uploads/44c5c93d-ace1-4feb-a49b-db4a8a02f987.png" 
         alt="Morpion"
         className="w-6 h-6"
       />
