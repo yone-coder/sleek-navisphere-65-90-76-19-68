@@ -1,4 +1,4 @@
-import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe } from "lucide-react";
+import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe, Heart, Newspaper } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Tabs } from "@/components/ui/tabs";
@@ -12,6 +12,74 @@ import { AppControls } from "@/components/apps/AppControls";
 import { App, Category } from "@/components/apps/types";
 
 const apps: App[] = [
+  {
+    name: "Evnto",
+    description: "Discover and host amazing seminars & conferences",
+    icon: Calendar,
+    route: "/events",
+    color: "bg-blue-500",
+    category: "Business",
+    status: "new",
+    users: "5.2K+",
+    lastUsed: "1 hour ago",
+    rating: 4.8,
+    updates: 2
+  },
+  {
+    name: "Novus",
+    description: "Premium newsletters for passionate readers",
+    icon: Mail,
+    route: "/newsletters",
+    color: "bg-indigo-500",
+    category: "Content",
+    users: "8.7K+",
+    rating: 4.6,
+    updates: 1
+  },
+  {
+    name: "Stash",
+    description: "Buy and sell high-quality study notes",
+    icon: BookOpen,
+    route: "/study-notes",
+    color: "bg-emerald-500",
+    category: "Education",
+    status: "popular",
+    users: "16.3K+",
+    lastUsed: "2 hours ago",
+    rating: 4.9
+  },
+  {
+    name: "Careo",
+    description: "Support and manage nonprofit fundraising",
+    icon: Heart,
+    route: "/fundraising",
+    color: "bg-pink-500",
+    category: "Nonprofit",
+    users: "4.8K+",
+    rating: 4.7
+  },
+  {
+    name: "Rise",
+    description: "Smart investment platform for everyone",
+    icon: PiggyBank,
+    route: "/invest",
+    color: "bg-purple-500",
+    category: "Finance",
+    status: "popular",
+    users: "12.9K+",
+    rating: 4.8,
+    updates: 3
+  },
+  {
+    name: "Druck",
+    description: "Create and sell custom printed products",
+    icon: Store,
+    route: "/print",
+    color: "bg-cyan-500",
+    category: "Business",
+    users: "7.1K+",
+    rating: 4.5
+  },
   {
     name: "Skilt",
     description: "Connect with top freelancers worldwide",
@@ -222,7 +290,9 @@ const appCategories = [
   "System",
   "Education",
   "Work",
-  "Business"
+  "Business",
+  "Content",
+  "Nonprofit"
 ];
 
 export default function Apps() {
