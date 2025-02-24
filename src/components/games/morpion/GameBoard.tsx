@@ -33,7 +33,7 @@ const GameBoard = ({
     if (cell?.includes('_WIN')) {
       return (
         <span className={`
-          text-base md:text-xl font-bold
+          text-xl md:text-3xl lg:text-4xl font-bold
           ${cell.startsWith('X') ? 'text-blue-600' : 'text-red-600'}
           animate-pulse
         `}>
@@ -43,7 +43,7 @@ const GameBoard = ({
     }
     return (
       <span className={`
-        text-sm md:text-base font-bold transition-all duration-300 transform scale-100
+        text-lg md:text-2xl lg:text-3xl font-bold transition-all duration-300 transform scale-100
         ${cell === 'X' ? 'text-black' : 'text-red-500'}
       `}>
         {cell}
