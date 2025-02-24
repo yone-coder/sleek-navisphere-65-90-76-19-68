@@ -45,8 +45,14 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
           .scrolling-text.needs-scroll {
             animation: scrollText 8s 2;
           }
-          .scrolling-text:hover {
-            animation-play-state: paused;
+          .scrolling-text.needs-scroll:not(:hover) {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            animation: none;
+          }
+          .scrolling-text.needs-scroll:hover {
+            animation-play-state: running;
+            overflow: visible;
           }
           .name-container {
             display: flex;
@@ -122,6 +128,11 @@ export const FavoritesSection = ({ favoriteApps }: FavoritesSectionProps) => {
                         <div className={`w-[70px] overflow-hidden h-5 name-container ${app.name.length <= 8 ? 'center' : ''}`}>
                           <span 
                             className={`text-sm font-medium text-gray-700 scrolling-text whitespace-nowrap ${app.name.length > 8 ? 'needs-scroll inline-block' : 'text-center w-full block'}`}
+                            onMouseEnter={(e) => {
+                              if (app.name.length > 8) {
+                                e.currentTarget.style.animation = 'scrollText 8s 2';
+                              }
+                            }}
                           >
                             {app.name}
                           </span>
