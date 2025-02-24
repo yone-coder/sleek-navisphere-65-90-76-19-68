@@ -1,4 +1,4 @@
-import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank } from "lucide-react";
+import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Tabs } from "@/components/ui/tabs";
@@ -12,6 +12,74 @@ import { AppControls } from "@/components/apps/AppControls";
 import { App, Category } from "@/components/apps/types";
 
 const apps: App[] = [
+  {
+    name: "Skilt",
+    description: "Connect with top freelancers worldwide",
+    icon: Briefcase,
+    route: "/freelance",
+    color: "bg-sky-500",
+    category: "Work",
+    status: "new",
+    users: "7.3K+",
+    lastUsed: "5 mins ago",
+    rating: 4.7,
+    updates: 2
+  },
+  {
+    name: "Vocar",
+    description: "Find your dream job opportunity",
+    icon: Search,
+    route: "/jobs",
+    color: "bg-purple-500",
+    category: "Work",
+    users: "18.9K+",
+    rating: 4.8,
+    updates: 1
+  },
+  {
+    name: "GoTix",
+    description: "Book tickets for events and shows",
+    icon: Ticket,
+    route: "/tickets",
+    color: "bg-yellow-500",
+    category: "Entertainment",
+    status: "popular",
+    users: "21.4K+",
+    lastUsed: "3 hours ago",
+    rating: 4.9
+  },
+  {
+    name: "Resby",
+    description: "Easy scheduling and booking platform",
+    icon: Calendar,
+    route: "/booking",
+    color: "bg-green-500",
+    category: "Business",
+    users: "11.2K+",
+    rating: 4.6
+  },
+  {
+    name: "TrdeX",
+    description: "Trade cryptocurrencies securely",
+    icon: Bitcoin,
+    route: "/crypto",
+    color: "bg-orange-500",
+    category: "Finance",
+    status: "popular",
+    users: "14.7K+",
+    rating: 4.8,
+    updates: 3
+  },
+  {
+    name: "Tribr",
+    description: "Build and manage your community",
+    icon: Globe,
+    route: "/community",
+    color: "bg-indigo-500",
+    category: "Social",
+    users: "9.8K+",
+    rating: 4.7
+  },
   {
     name: "Shopr",
     description: "Your ultimate marketplace for buying and selling",
@@ -152,7 +220,9 @@ const appCategories = [
   "Social",
   "Communication",
   "System",
-  "Education"
+  "Education",
+  "Work",
+  "Business"
 ];
 
 export default function Apps() {
