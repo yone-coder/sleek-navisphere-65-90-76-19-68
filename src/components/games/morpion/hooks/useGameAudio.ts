@@ -10,10 +10,10 @@ export const useGameAudio = (soundEnabled: boolean, inactivityTime: number, winn
   // Initialize audio elements with online sound effects
   useEffect(() => {
     // Create new audio elements with online sources
-    moveAudioXRef.current = new Audio('https://cdn.freesound.org/previews/242/242501_1627374-lq.mp3');
-    moveAudioORef.current = new Audio('https://cdn.freesound.org/previews/242/242503_1627374-lq.mp3');
-    winAudioRef.current = new Audio('https://cdn.freesound.org/previews/277/277021_5324223-lq.mp3');
-    warningAudioRef.current = new Audio('https://cdn.freesound.org/previews/411/411642_5121236-lq.mp3');
+    moveAudioXRef.current = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
+    moveAudioORef.current = new Audio('https://assets.mixkit.co/active_storage/sfx/2572/2572-preview.mp3');
+    winAudioRef.current = new Audio('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3');
+    warningAudioRef.current = new Audio('https://assets.mixkit.co/active_storage/sfx/953/953-preview.mp3');
 
     // Set volumes
     if (moveAudioXRef.current) moveAudioXRef.current.volume = 0.6;
