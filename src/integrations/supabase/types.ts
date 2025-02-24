@@ -9,6 +9,51 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      game_rooms: {
+        Row: {
+          board: Json
+          code: string
+          created_at: string
+          current_player: string
+          id: string
+          last_move: Json | null
+          player1_id: string | null
+          player2_id: string | null
+          status: string
+          time_left_o: number
+          time_left_x: number
+          winner: string | null
+        }
+        Insert: {
+          board: Json
+          code: string
+          created_at?: string
+          current_player?: string
+          id?: string
+          last_move?: Json | null
+          player1_id?: string | null
+          player2_id?: string | null
+          status?: string
+          time_left_o?: number
+          time_left_x?: number
+          winner?: string | null
+        }
+        Update: {
+          board?: Json
+          code?: string
+          created_at?: string
+          current_player?: string
+          id?: string
+          last_move?: Json | null
+          player1_id?: string | null
+          player2_id?: string | null
+          status?: string
+          time_left_o?: number
+          time_left_x?: number
+          winner?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
