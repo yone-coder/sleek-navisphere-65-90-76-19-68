@@ -210,124 +210,123 @@ export function ParticipantsTable() {
   };
 
   return (
-    <ScrollArea className="h-[calc(100vh-14rem)] w-full">
-      <div className="min-w-[900px] px-4">
-        <div className="space-y-4">
-          <div className="grid grid-cols-4 gap-2">
-            <div className="p-2 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-lg">
-              <div className="flex items-center gap-1.5 text-blue-600">
-                <Users className="h-3.5 w-3.5" />
-                <span className="text-xs font-medium">Total Players</span>
-              </div>
-              <p className="text-base font-bold">{participants.length}</p>
-            </div>
-            <div className="p-2 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-lg">
-              <div className="flex items-center gap-1.5 text-green-600">
-                <Trophy className="h-3.5 w-3.5" />
-                <span className="text-xs font-medium">Confirmed</span>
-              </div>
-              <p className="text-base font-bold">
-                {participants.filter(p => p.status === "confirmed").length}
-              </p>
-            </div>
-            <div className="p-2 bg-gradient-to-br from-yellow-500/20 to-yellow-600/20 rounded-lg">
-              <div className="flex items-center gap-1.5 text-yellow-600">
-                <CalendarDays className="h-3.5 w-3.5" />
-                <span className="text-xs font-medium">Pending</span>
-              </div>
-              <p className="text-base font-bold">
-                {participants.filter(p => p.status === "pending").length}
-              </p>
-            </div>
-            <div className="p-2 bg-gradient-to-br from-red-500/20 to-red-600/20 rounded-lg">
-              <div className="flex items-center gap-1.5 text-red-600">
-                <UserX className="h-3.5 w-3.5" />
-                <span className="text-xs font-medium">Withdrawn</span>
-              </div>
-              <p className="text-base font-bold">
-                {participants.filter(p => p.status === "withdrawn").length}
-              </p>
-            </div>
+    <div className="space-y-4 px-4">
+      <div className="grid grid-cols-4 gap-2">
+        <div className="p-2 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-lg">
+          <div className="flex items-center gap-1.5 text-blue-600">
+            <Users className="h-3.5 w-3.5" />
+            <span className="text-xs font-medium">Total Players</span>
           </div>
+          <p className="text-base font-bold">{participants.length}</p>
+        </div>
+        <div className="p-2 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-lg">
+          <div className="flex items-center gap-1.5 text-green-600">
+            <Trophy className="h-3.5 w-3.5" />
+            <span className="text-xs font-medium">Confirmed</span>
+          </div>
+          <p className="text-base font-bold">
+            {participants.filter(p => p.status === "confirmed").length}
+          </p>
+        </div>
+        <div className="p-2 bg-gradient-to-br from-yellow-500/20 to-yellow-600/20 rounded-lg">
+          <div className="flex items-center gap-1.5 text-yellow-600">
+            <CalendarDays className="h-3.5 w-3.5" />
+            <span className="text-xs font-medium">Pending</span>
+          </div>
+          <p className="text-base font-bold">
+            {participants.filter(p => p.status === "pending").length}
+          </p>
+        </div>
+        <div className="p-2 bg-gradient-to-br from-red-500/20 to-red-600/20 rounded-lg">
+          <div className="flex items-center gap-1.5 text-red-600">
+            <UserX className="h-3.5 w-3.5" />
+            <span className="text-xs font-medium">Withdrawn</span>
+          </div>
+          <p className="text-base font-bold">
+            {participants.filter(p => p.status === "withdrawn").length}
+          </p>
+        </div>
+      </div>
 
-          <div className="flex items-center gap-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-              <Input
-                placeholder="Search by name or country..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-7 h-8 text-sm"
-              />
-            </div>
-            <ScrollArea className="max-w-[300px]">
-              <div className="flex items-center gap-1">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className={cn(
-                    "h-8 px-2 text-xs flex-shrink-0",
-                    statusFilter === "all" && "bg-primary text-primary-foreground"
-                  )}
-                  onClick={() => setStatusFilter("all")}
-                >
-                  <Filter className="h-3.5 w-3.5" />
-                  <span className="ml-1">All</span>
-                </Button>
-                {(["confirmed", "pending", "withdrawn"] as const).map((status) => (
-                  <Button
-                    key={status}
-                    variant="outline"
+      <div className="flex items-center gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+          <Input
+            placeholder="Search by name or country..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-7 h-8 text-sm"
+          />
+        </div>
+        <ScrollArea className="max-w-[300px]">
+          <div className="flex items-center gap-1">
+            <Button
+              variant="outline"
+              size="sm"
+              className={cn(
+                "h-8 px-2 text-xs flex-shrink-0",
+                statusFilter === "all" && "bg-primary text-primary-foreground"
+              )}
+              onClick={() => setStatusFilter("all")}
+            >
+              <Filter className="h-3.5 w-3.5" />
+              <span className="ml-1">All</span>
+            </Button>
+            {(["confirmed", "pending", "withdrawn"] as const).map((status) => (
+              <Button
+                key={status}
+                variant="outline"
+                size="sm"
+                className={cn(
+                  "h-8 px-2 text-xs flex-shrink-0",
+                  statusFilter === status && "bg-primary text-primary-foreground"
+                )}
+                onClick={() => setStatusFilter(status)}
+              >
+                {status}
+              </Button>
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" className="invisible" />
+        </ScrollArea>
+      </div>
+
+      <ScrollArea className="w-full border rounded-lg bg-background">
+        <div className="min-w-[900px]">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[50px] py-2">Rank</TableHead>
+                <TableHead className="w-[250px] py-2">Player</TableHead>
+                <TableHead className="w-[90px] py-2">
+                  <Button 
+                    variant="ghost" 
                     size="sm"
-                    className={cn(
-                      "h-8 px-2 text-xs flex-shrink-0",
-                      statusFilter === status && "bg-primary text-primary-foreground"
-                    )}
-                    onClick={() => setStatusFilter(status)}
+                    className="h-7 px-2 -ml-2 text-xs"
+                    onClick={() => handleSort("rating")}
                   >
-                    {status}
+                    Rating
+                    <ArrowUpDown className="h-3 w-3 ml-1" />
                   </Button>
-                ))}
-              </div>
-              <ScrollBar orientation="horizontal" className="invisible" />
-            </ScrollArea>
-          </div>
-
-          <div className="border rounded-lg overflow-hidden bg-background">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[50px] py-2">Rank</TableHead>
-                  <TableHead className="w-[250px] py-2">Player</TableHead>
-                  <TableHead className="w-[90px] py-2">
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      className="h-7 px-2 -ml-2 text-xs"
-                      onClick={() => handleSort("rating")}
-                    >
-                      Rating
-                      <ArrowUpDown className="h-3 w-3 ml-1" />
-                    </Button>
-                  </TableHead>
-                  <TableHead className="w-[120px] py-2">
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      className="h-7 px-2 -ml-2 text-xs"
-                      onClick={() => handleSort("winRate")}
-                    >
-                      Win Rate
-                      <ArrowUpDown className="h-3 w-3 ml-1" />
-                    </Button>
-                  </TableHead>
-                  <TableHead className="w-[90px] py-2">Status</TableHead>
-                  <TableHead className="w-[110px] py-2">Last Active</TableHead>
-                  <TableHead className="w-[70px] py-2"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {paginatedParticipants.map((participant) => (
+                </TableHead>
+                <TableHead className="w-[120px] py-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="h-7 px-2 -ml-2 text-xs"
+                    onClick={() => handleSort("winRate")}
+                  >
+                    Win Rate
+                    <ArrowUpDown className="h-3 w-3 ml-1" />
+                  </Button>
+                </TableHead>
+                <TableHead className="w-[90px] py-2">Status</TableHead>
+                <TableHead className="w-[110px] py-2">Last Active</TableHead>
+                <TableHead className="w-[70px] py-2"></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {paginatedParticipants.map((participant) => (
                   <TableRow 
                     key={participant.id} 
                     className={cn(
@@ -439,38 +438,37 @@ export function ParticipantsTable() {
                     </TableCell>
                   </TableRow>
                 ))}
-              </TableBody>
-            </Table>
-          </div>
-
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between py-3">
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-7 px-2 text-xs"
-                onClick={() => setPage(p => Math.max(1, p - 1))}
-                disabled={page === 1}
-              >
-                Previous
-              </Button>
-              <span className="text-xs text-muted-foreground">
-                Page {page} of {totalPages}
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-7 px-2 text-xs"
-                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-              >
-                Next
-              </Button>
-            </div>
-          )}
+            </TableBody>
+          </Table>
         </div>
-      </div>
-      <ScrollBar orientation="horizontal" />
-    </ScrollArea>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between py-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-7 px-2 text-xs"
+            onClick={() => setPage(p => Math.max(1, p - 1))}
+            disabled={page === 1}
+          >
+            Previous
+          </Button>
+          <span className="text-xs text-muted-foreground">
+            Page {page} of {totalPages}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-7 px-2 text-xs"
+            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}
+          >
+            Next
+          </Button>
+        </div>
+      )}
+    </div>
   );
 }
