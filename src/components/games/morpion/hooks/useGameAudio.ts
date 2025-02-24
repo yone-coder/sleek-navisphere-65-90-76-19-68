@@ -9,19 +9,21 @@ export const useGameAudio = (soundEnabled: boolean, inactivityTime: number, winn
 
   // Initialize audio elements with online sound effects
   useEffect(() => {
-    // Create new audio elements with online sources
-    moveAudioXRef.current = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
-    moveAudioORef.current = new Audio('https://assets.mixkit.co/active_storage/sfx/2572/2572-preview.mp3');
-    winAudioRef.current = new Audio('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3');
-    warningAudioRef.current = new Audio('https://assets.mixkit.co/active_storage/sfx/953/953-preview.mp3');
+    const createAudioElement = (src: string, volume: number) => {
+      const audio = new Audio(src);
+      audio.volume = volume;
+      // Preload the audio file
+      audio.preload = 'auto';
+      return audio;
+    };
 
-    // Set volumes
-    if (moveAudioXRef.current) moveAudioXRef.current.volume = 0.6;
-    if (moveAudioORef.current) moveAudioORef.current.volume = 0.6;
-    if (winAudioRef.current) winAudioRef.current.volume = 0.7;
-    if (warningAudioRef.current) warningAudioRef.current.volume = 0.5;
+    // Create and preload audio elements
+    moveAudioXRef.current = createAudioElement('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3', 0.6);
+    moveAudioORef.current = createAudioElement('https://assets.mixkit.co/active_storage/sfx/2572/2572-preview.mp3', 0.6);
+    winAudioRef.current = createAudioElement('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3', 0.7);
+    warningAudioRef.current = createAudioElement('https://assets.mixkit.co/active_storage/sfx/953/953-preview.mp3', 0.5);
 
-    // Preload audio files
+    // Create duplicate audio elements for rapid playback
     const preloadAudio = async () => {
       try {
         await Promise.all([
@@ -70,8 +72,12 @@ export const useGameAudio = (soundEnabled: boolean, inactivityTime: number, winn
     if (!audio) return;
 
     try {
+      // Reset audio to start and play immediately
       audio.currentTime = 0;
-      await audio.play();
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        await playPromise;
+      }
     } catch (error) {
       console.log(`${player} move sound failed to play:`, error);
     }
@@ -84,7 +90,11 @@ export const useGameAudio = (soundEnabled: boolean, inactivityTime: number, winn
       if (navigator.vibrate) {
         navigator.vibrate([50, 50, 100]);
       }
-      await winAudioRef.current.play();
+      winAudioRef.current.currentTime = 0;
+      const playPromise = winAudioRef.current.play();
+      if (playPromise !== undefined) {
+        await playPromise;
+      }
     } catch (error) {
       console.log('Win sound failed to play:', error);
     }
