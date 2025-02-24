@@ -1,5 +1,4 @@
-
-import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe, Heart, Newspaper, Building } from "lucide-react";
+import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe, Heart, Newspaper, Building, XCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Tabs } from "@/components/ui/tabs";
@@ -15,6 +14,19 @@ import { SuggestionsSection } from "@/components/apps/SuggestionsSection";
 import { ProfileCard } from "@/components/apps/ProfileCard";
 
 const apps: App[] = [
+  {
+    name: "Morpion",
+    description: "Classic Tic-tac-toe game with a modern twist",
+    icon: XCircle,
+    route: "/games/morpion",
+    color: "bg-indigo-500",
+    category: "Gaming",
+    status: "new",
+    users: "1.2K+",
+    lastUsed: "5 mins ago",
+    rating: 4.8,
+    updates: 1
+  },
   {
     name: "Flora",
     description: "Order fresh flowers & cakes for delivery",
