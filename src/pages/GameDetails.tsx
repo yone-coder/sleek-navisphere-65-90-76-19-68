@@ -30,6 +30,8 @@ import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { TournamentCard } from "@/components/tournaments/TournamentCard";
+import { MatchCard } from "@/components/matches/MatchCard";
+import type { Match } from "@/components/matches/types";
 
 const mockGame = {
   id: "1",
@@ -72,7 +74,7 @@ const mockTournaments = [
     title: "Winter Championship 2025",
     start_date: "2025-01-15",
     end_date: "2025-02-15",
-    status: "upcoming",
+    status: "upcoming" as const,
     prize_pool: 10000,
     max_participants: 128,
     current_participants: 64,
@@ -84,12 +86,93 @@ const mockTournaments = [
     title: "Spring Tournament 2025",
     start_date: "2025-03-01",
     end_date: "2025-03-31",
-    status: "upcoming",
+    status: "upcoming" as const,
     prize_pool: 15000,
     max_participants: 256,
     current_participants: 128,
     banner_url: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
     game: "League of Legends"
+  }
+];
+
+const mockMatches: Match[] = [
+  {
+    id: 1,
+    championship: "World Championship",
+    phase: "Quarterfinals",
+    status: "live",
+    date: "2025-02-12",
+    time: "17:45:00",
+    venue: "Madison Square Garden",
+    location: "New York, USA",
+    opponents: [
+      {
+        name: "Alex Johnson",
+        photo: "https://storage.googleapis.com/a1aa/image/u9QlGEQDPW0dq8Wric7AsU_j7PkzMnKLIgLMlSRCv5I.jpg",
+        country: "USA",
+        city: "New York",
+        rank: 1,
+        stats: "Top Player",
+        wins: 42,
+        losses: 12
+      },
+      {
+        name: "Maria Rodriguez",
+        photo: "https://storage.googleapis.com/a1aa/image/iG3N08MIvjY6mNComFBnnpKsPY-e90lt6EILTZH3NF8.jpg",
+        country: "Spain",
+        city: "Miami",
+        rank: 2,
+        stats: "Rising Star",
+        wins: 38,
+        losses: 15
+      }
+    ],
+    spectators: 2500,
+    likes: 1200,
+    comments: 458,
+    predictions: {
+      firstPlayer: 65,
+      secondPlayer: 35
+    }
+  },
+  {
+    id: 2,
+    championship: "Pro League Finals",
+    phase: "Semifinals",
+    status: "upcoming",
+    date: "2025-02-13",
+    time: "19:00:00",
+    venue: "O2 Arena",
+    location: "London, UK",
+    opponents: [
+      {
+        name: "James Wilson",
+        photo: "https://images.unsplash.com/photo-1599566150163-29194dcaad36",
+        country: "UK",
+        city: "London",
+        rank: 3,
+        stats: "Veteran",
+        wins: 36,
+        losses: 14
+      },
+      {
+        name: "Sofia Chen",
+        photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
+        country: "China",
+        city: "Shanghai",
+        rank: 4,
+        stats: "Champion",
+        wins: 40,
+        losses: 10
+      }
+    ],
+    spectators: 1800,
+    likes: 950,
+    comments: 324,
+    predictions: {
+      firstPlayer: 45,
+      secondPlayer: 55
+    }
   }
 ];
 
@@ -257,7 +340,7 @@ export default function GameDetails() {
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <div className="w-full overflow-x-auto no-scrollbar">
                 <TabsList className="w-full h-auto inline-flex whitespace-nowrap">
-                  {["overview", "details", "tournaments", "achievements", "news", "dlc"].map((tab) => (
+                  {["overview", "details", "tournaments", "matches", "news", "dlc"].map((tab) => (
                     <TabsTrigger
                       key={tab}
                       value={tab}
@@ -435,7 +518,21 @@ export default function GameDetails() {
             </div>
           </TabsContent>
 
-          {["details", "achievements", "news", "dlc"].map((tab) => (
+          <TabsContent value="matches">
+            <div className="p-4">
+              <h2 className="text-xl font-bold mb-4">Recent Matches</h2>
+              <div className="space-y-4">
+                {mockMatches.map((match) => (
+                  <MatchCard 
+                    key={match.id} 
+                    match={match}
+                  />
+                ))}
+              </div>
+            </div>
+          </TabsContent>
+
+          {["details", "news", "dlc"].map((tab) => (
             <TabsContent key={tab} value={tab}>
               <div className="p-4 text-center text-gray-500">
                 {tab.charAt(0).toUpperCase() + tab.slice(1)} content coming soon...
