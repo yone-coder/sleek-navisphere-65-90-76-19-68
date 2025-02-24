@@ -57,15 +57,23 @@ const Gomoku = () => {
 
   useEffect(() => {
     if (gameRoom?.id) {
-      const subscription = supabase
-        .from(`game_rooms:id=eq.${gameRoom.id}`)
-        .on('UPDATE', (payload) => {
-          setGameRoom(payload.new as GameRoom);
-        })
+      const channel = supabase.channel('schema-db-changes')
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'game_rooms',
+            filter: `id=eq.${gameRoom.id}`
+          },
+          (payload) => {
+            setGameRoom(payload.new as GameRoom);
+          }
+        )
         .subscribe();
 
       return () => {
-        supabase.removeSubscription(subscription);
+        channel.unsubscribe();
       };
     }
   }, [gameRoom?.id]);
