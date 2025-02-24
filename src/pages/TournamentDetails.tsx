@@ -467,6 +467,21 @@ export default function TournamentDetails() {
             <Button 
               variant="outline" 
               size="sm"
+              onClick={handleLike}
+              className={cn(
+                "flex-1",
+                isLiked && "text-red-500 hover:text-red-600"
+              )}
+            >
+              <Heart className={cn(
+                "h-4 w-4 mr-2",
+                isLiked && "fill-current"
+              )} />
+              <span>1.2K</span>
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
               onClick={() => navigate(`/tournament/${id}/comments`)}
               className="flex-1"
             >
@@ -481,21 +496,6 @@ export default function TournamentDetails() {
             >
               <Share2 className="h-4 w-4 mr-2" />
               <span>Share</span>
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={handleLike}
-              className={cn(
-                "flex-1",
-                isLiked && "text-red-500 hover:text-red-600"
-              )}
-            >
-              <Heart className={cn(
-                "h-4 w-4 mr-2",
-                isLiked && "fill-current"
-              )} />
-              <span>1.2K</span>
             </Button>
           </div>
 
