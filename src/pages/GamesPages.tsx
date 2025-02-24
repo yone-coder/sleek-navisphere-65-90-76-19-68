@@ -20,22 +20,33 @@ export default function GamesPages() {
   const [searchQuery, setSearchQuery] = useState("");
   const [notifications] = useState(3);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Simulate loading state
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const MainContent = () => (
     <div className="pt-4 pb-24">
-      <EventsSection events={gameEvents} />
-      <SponsoredGames games={sponsoredGames} />
+      <EventsSection events={gameEvents} isLoading={isLoading} />
+      <SponsoredGames games={sponsoredGames} isLoading={isLoading} />
       <CategorySection 
         title="Popular Sports Games" 
-        games={games.filter(g => g.category.includes("Sports"))} 
+        games={games.filter(g => g.category.includes("Sports"))}
+        isLoading={isLoading}
       />
       <CategorySection 
         title="Trending Board Games" 
-        games={games.filter(g => g.category.includes("Board"))} 
+        games={games.filter(g => g.category.includes("Board"))}
+        isLoading={isLoading}
       />
-      <PopularGames games={popularGames} />
-      <CategorySection title="Suggested For You" games={games} />
-      <TopFreeGames games={games} />
+      <PopularGames games={popularGames} isLoading={isLoading} />
+      <CategorySection title="Suggested For You" games={games} isLoading={isLoading} />
+      <TopFreeGames games={games} isLoading={isLoading} />
     </div>
   );
 
@@ -70,4 +81,3 @@ export default function GamesPages() {
     </div>
   );
 }
-

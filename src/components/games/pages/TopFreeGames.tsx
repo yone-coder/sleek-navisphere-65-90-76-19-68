@@ -4,12 +4,14 @@ import { Game } from '@/types/game';
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface TopFreeGamesProps {
   games: Game[];
+  isLoading?: boolean;
 }
 
-const TopFreeGames: React.FC<TopFreeGamesProps> = ({ games }) => {
+const TopFreeGames: React.FC<TopFreeGamesProps> = ({ games, isLoading }) => {
   const navigate = useNavigate();
 
   const renderRating = (rating: number) => {
@@ -20,6 +22,28 @@ const TopFreeGames: React.FC<TopFreeGamesProps> = ({ games }) => {
       </div>
     );
   };
+
+  if (isLoading) {
+    return (
+      <div className="px-4">
+        <Skeleton className="h-7 w-48 mb-4" />
+        <div className="space-y-4">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="flex items-center gap-4">
+              <Skeleton className="w-6 h-6" />
+              <Skeleton className="w-16 h-16 rounded-xl" />
+              <div className="flex-1">
+                <Skeleton className="h-5 w-3/4 mb-2" />
+                <Skeleton className="h-4 w-1/2 mb-2" />
+                <Skeleton className="h-4 w-24" />
+              </div>
+              <Skeleton className="w-20 h-9" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="px-4">
@@ -58,4 +82,3 @@ const TopFreeGames: React.FC<TopFreeGamesProps> = ({ games }) => {
 };
 
 export default TopFreeGames;
-

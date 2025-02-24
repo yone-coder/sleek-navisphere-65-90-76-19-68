@@ -5,13 +5,15 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ArrowRight, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface CategorySectionProps {
   title: string;
   games: Game[];
+  isLoading?: boolean;
 }
 
-const CategorySection: React.FC<CategorySectionProps> = ({ title, games }) => {
+const CategorySection: React.FC<CategorySectionProps> = ({ title, games, isLoading }) => {
   const navigate = useNavigate();
 
   const renderRating = (rating: number) => {
@@ -22,6 +24,35 @@ const CategorySection: React.FC<CategorySectionProps> = ({ title, games }) => {
       </div>
     );
   };
+
+  if (isLoading) {
+    return (
+      <div className="mb-8">
+        <div className="flex items-center justify-between px-4 mb-4">
+          <Skeleton className="h-7 w-48" />
+          <Skeleton className="h-9 w-24" />
+        </div>
+        <ScrollArea className="w-full" type="scroll">
+          <div className="flex px-4 gap-4 pb-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex-none w-[280px]">
+                <Skeleton className="w-full aspect-video rounded-xl mb-3" />
+                <div className="flex gap-3">
+                  <Skeleton className="w-12 h-12 rounded-xl" />
+                  <div className="flex-1">
+                    <Skeleton className="h-5 w-3/4 mb-2" />
+                    <Skeleton className="h-4 w-1/2 mb-2" />
+                    <Skeleton className="h-4 w-24" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </div>
+    );
+  }
 
   return (
     <div className="mb-8">

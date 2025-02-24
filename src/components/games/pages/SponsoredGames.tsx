@@ -4,12 +4,39 @@ import { Game } from '@/types/game';
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Star, MoreVertical } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface SponsoredGamesProps {
   games: Game[];
+  isLoading?: boolean;
 }
 
-const SponsoredGames: React.FC<SponsoredGamesProps> = ({ games }) => {
+const SponsoredGames: React.FC<SponsoredGamesProps> = ({ games, isLoading }) => {
+  if (isLoading) {
+    return (
+      <div className="mb-8">
+        <div className="px-4">
+          <div className="flex items-center justify-between mb-4">
+            <Skeleton className="h-6 w-48" />
+            <Skeleton className="h-8 w-8 rounded-lg" />
+          </div>
+          <ScrollArea className="w-full" type="scroll">
+            <div className="flex gap-4 pb-4">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="flex-none w-[120px]">
+                  <Skeleton className="w-[120px] h-[120px] rounded-[24px] mb-2" />
+                  <Skeleton className="h-4 w-full mb-1" />
+                  <Skeleton className="h-3 w-16" />
+                </div>
+              ))}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mb-8">
       <div className="px-4">
