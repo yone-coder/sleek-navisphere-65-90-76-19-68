@@ -388,6 +388,10 @@ export default function Apps() {
     );
   };
 
+  const handleFavoritesChange = (newFavorites: string[]) => {
+    setFavorites(newFavorites);
+  };
+
   const favoriteApps = apps.filter(app => favorites.includes(app.name));
   const updatesCount = apps.filter(app => app.updates > 0).length;
   
@@ -405,7 +409,10 @@ export default function Apps() {
           
           <div className="max-w-7xl mx-auto px-4">
             <div className="py-8">
-              <FavoritesSection favoriteApps={favoriteApps} />
+              <FavoritesSection 
+                favoriteApps={favoriteApps} 
+                onFavoritesChange={handleFavoritesChange}
+              />
               
               <SuggestionsSection suggestedApps={suggestedApps} />
 
