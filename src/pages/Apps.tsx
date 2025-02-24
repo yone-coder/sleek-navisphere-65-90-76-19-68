@@ -11,6 +11,7 @@ import { CategoryTabs } from "@/components/apps/CategoryTabs";
 import { AppControls } from "@/components/apps/AppControls";
 import { App, Category } from "@/components/apps/types";
 import { SuggestionsSection } from "@/components/apps/SuggestionsSection";
+import { ProfileCard } from "@/components/apps/ProfileCard";
 
 const apps: App[] = [
   {
@@ -401,6 +402,7 @@ export default function Apps() {
       
       <div className="flex-1 overflow-y-auto">
         <div className="bg-gradient-to-b from-gray-50 to-white">
+          <ProfileCard />
           <BannerSlider />
           
           <div className="max-w-7xl mx-auto px-4">
