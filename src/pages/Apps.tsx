@@ -1,3 +1,4 @@
+
 import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe, Heart, Newspaper, Building } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -398,10 +399,10 @@ export default function Apps() {
 
   return (
     <div className="fixed inset-0 flex flex-col overflow-hidden">
-      <AppsHeader onOpenSearch={() => setIsSearchOpen(true)} />
-      
-      <div className="flex-1 overflow-y-auto">
-        <div className="bg-gradient-to-b from-gray-50 to-white">
+      <div className="flex-1 overflow-y-auto bg-gradient-to-b from-gray-50 to-white">
+        <AppsHeader onOpenSearch={() => setIsSearchOpen(true)} />
+        
+        <div>
           <ProfileCard />
           <BannerSlider />
           
