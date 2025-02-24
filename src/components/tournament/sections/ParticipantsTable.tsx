@@ -211,88 +211,88 @@ export function ParticipantsTable() {
 
   return (
     <ScrollArea className="h-[calc(100vh-14rem)] w-full">
-      <div className="min-w-[900px]">
-        <div className="p-3 grid grid-cols-4 gap-2">
-          <div className="p-2 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-lg">
-            <div className="flex items-center gap-1.5 text-blue-600">
-              <Users className="h-3.5 w-3.5" />
-              <span className="text-xs font-medium">Total Players</span>
+      <div className="min-w-[900px] px-4">
+        <div className="space-y-4">
+          <div className="grid grid-cols-4 gap-2">
+            <div className="p-2 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-lg">
+              <div className="flex items-center gap-1.5 text-blue-600">
+                <Users className="h-3.5 w-3.5" />
+                <span className="text-xs font-medium">Total Players</span>
+              </div>
+              <p className="text-base font-bold">{participants.length}</p>
             </div>
-            <p className="text-base font-bold">{participants.length}</p>
-          </div>
-          <div className="p-2 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-lg">
-            <div className="flex items-center gap-1.5 text-green-600">
-              <Trophy className="h-3.5 w-3.5" />
-              <span className="text-xs font-medium">Confirmed</span>
+            <div className="p-2 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-lg">
+              <div className="flex items-center gap-1.5 text-green-600">
+                <Trophy className="h-3.5 w-3.5" />
+                <span className="text-xs font-medium">Confirmed</span>
+              </div>
+              <p className="text-base font-bold">
+                {participants.filter(p => p.status === "confirmed").length}
+              </p>
             </div>
-            <p className="text-base font-bold">
-              {participants.filter(p => p.status === "confirmed").length}
-            </p>
-          </div>
-          <div className="p-2 bg-gradient-to-br from-yellow-500/20 to-yellow-600/20 rounded-lg">
-            <div className="flex items-center gap-1.5 text-yellow-600">
-              <CalendarDays className="h-3.5 w-3.5" />
-              <span className="text-xs font-medium">Pending</span>
+            <div className="p-2 bg-gradient-to-br from-yellow-500/20 to-yellow-600/20 rounded-lg">
+              <div className="flex items-center gap-1.5 text-yellow-600">
+                <CalendarDays className="h-3.5 w-3.5" />
+                <span className="text-xs font-medium">Pending</span>
+              </div>
+              <p className="text-base font-bold">
+                {participants.filter(p => p.status === "pending").length}
+              </p>
             </div>
-            <p className="text-base font-bold">
-              {participants.filter(p => p.status === "pending").length}
-            </p>
-          </div>
-          <div className="p-2 bg-gradient-to-br from-red-500/20 to-red-600/20 rounded-lg">
-            <div className="flex items-center gap-1.5 text-red-600">
-              <UserX className="h-3.5 w-3.5" />
-              <span className="text-xs font-medium">Withdrawn</span>
+            <div className="p-2 bg-gradient-to-br from-red-500/20 to-red-600/20 rounded-lg">
+              <div className="flex items-center gap-1.5 text-red-600">
+                <UserX className="h-3.5 w-3.5" />
+                <span className="text-xs font-medium">Withdrawn</span>
+              </div>
+              <p className="text-base font-bold">
+                {participants.filter(p => p.status === "withdrawn").length}
+              </p>
             </div>
-            <p className="text-base font-bold">
-              {participants.filter(p => p.status === "withdrawn").length}
-            </p>
           </div>
-        </div>
 
-        <div className="px-3 py-2 flex items-center gap-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-            <Input
-              placeholder="Search by name or country..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-7 h-8 text-sm"
-            />
-          </div>
-          <ScrollArea className="max-w-[300px]">
-            <div className="flex items-center gap-1">
-              <Button
-                variant="outline"
-                size="sm"
-                className={cn(
-                  "h-8 px-2 text-xs flex-shrink-0",
-                  statusFilter === "all" && "bg-primary text-primary-foreground"
-                )}
-                onClick={() => setStatusFilter("all")}
-              >
-                <Filter className="h-3.5 w-3.5" />
-                <span className="ml-1">All</span>
-              </Button>
-              {(["confirmed", "pending", "withdrawn"] as const).map((status) => (
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+              <Input
+                placeholder="Search by name or country..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-7 h-8 text-sm"
+              />
+            </div>
+            <ScrollArea className="max-w-[300px]">
+              <div className="flex items-center gap-1">
                 <Button
-                  key={status}
                   variant="outline"
                   size="sm"
                   className={cn(
                     "h-8 px-2 text-xs flex-shrink-0",
-                    statusFilter === status && "bg-primary text-primary-foreground"
+                    statusFilter === "all" && "bg-primary text-primary-foreground"
                   )}
-                  onClick={() => setStatusFilter(status)}
+                  onClick={() => setStatusFilter("all")}
                 >
-                  {status}
+                  <Filter className="h-3.5 w-3.5" />
+                  <span className="ml-1">All</span>
                 </Button>
-              ))}
-            </div>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
-        </div>
+                {(["confirmed", "pending", "withdrawn"] as const).map((status) => (
+                  <Button
+                    key={status}
+                    variant="outline"
+                    size="sm"
+                    className={cn(
+                      "h-8 px-2 text-xs flex-shrink-0",
+                      statusFilter === status && "bg-primary text-primary-foreground"
+                    )}
+                    onClick={() => setStatusFilter(status)}
+                  >
+                    {status}
+                  </Button>
+                ))}
+              </div>
+              <ScrollBar orientation="horizontal" className="invisible" />
+            </ScrollArea>
+          </div>
 
-        <div className="px-3">
           <div className="border rounded-lg overflow-hidden bg-background">
             <Table>
               <TableHeader>
@@ -470,7 +470,7 @@ export function ParticipantsTable() {
           )}
         </div>
       </div>
-      <ScrollBar />
+      <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );
 }
