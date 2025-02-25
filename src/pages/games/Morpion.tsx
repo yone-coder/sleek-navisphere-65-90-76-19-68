@@ -17,12 +17,14 @@ const Morpion = () => {
   
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const mode = searchParams.get('mode') as GameMode;
+  const mode = searchParams.get('mode') as GameMode | null;
 
   useEffect(() => {
     if (mode) {
+      console.log('Setting game mode:', mode);
       setGameMode(mode);
       if (mode === 'bot') {
+        console.log('Setting player2 to Bot');
         setPlayer2('Bot');
       }
     }
@@ -39,7 +41,8 @@ const Morpion = () => {
     currentPlayer,
     lastMove,
     winner,
-    handleClick
+    handleClick,
+    moves
   } = gameState;
 
   // Bot move effect
@@ -75,7 +78,7 @@ const Morpion = () => {
       lastMove={lastMove}
       winningLine={null}
       hoveredCell={null}
-      moves={0}
+      moves={moves}
       winner={winner}
       gameHistory={[]}
       soundEnabled={true}
