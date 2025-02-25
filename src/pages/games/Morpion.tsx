@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { useGameState } from '@/components/games/morpion/hooks/useGameState';
 import GameLayout from '@/components/games/morpion/GameLayout';
-import GameMenu from '@/components/games/morpion/GameMenu';
 import { GameMode } from '@/components/games/morpion/types';
 import { calculateBotMove } from '@/components/games/morpion/utils/botUtils';
 
@@ -65,38 +64,22 @@ const Morpion = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [player1] = useState('Guest10816');
   const [player2, setPlayer2] = useState('Guest');
-  const [gameStarted, setGameStarted] = useState(false);
-  const [gameMode, setGameMode] = useState<GameMode | null>(null);
+  const [gameMode, setGameMode] = useState<GameMode>('local'); // Default to local mode
   const [difficulty, setDifficulty] = useState('medium');
 
-  // Get query parameters to check if we should start game directly
+  // Get query parameters to check if we should set specific game mode
   const queryParams = new URLSearchParams(window.location.search);
-  const directStart = queryParams.get('start');
   const mode = queryParams.get('mode') as GameMode;
 
-  // Effect to handle direct game start
+  // Effect to handle mode from URL
   useEffect(() => {
-    if (directStart && mode) {
-      handleSelectMode(mode);
+    if (mode) {
+      setGameMode(mode);
+      if (mode === 'bot') {
+        setPlayer2('Bot');
+      }
     }
-  }, [directStart, mode]);
-
-  const handleSelectMode = (mode: GameMode, roomId?: string, options?: { difficulty?: string }) => {
-    setGameMode(mode);
-    setGameStarted(true);
-    
-    if (mode === 'bot') {
-      setPlayer2('Bot');
-      setDifficulty(options?.difficulty || 'medium');
-    }
-    
-    console.log(`Starting game in ${mode} mode${roomId ? ` with room ${roomId}` : ''}`);
-  };
-
-  // Show menu if game hasn't started and we're not doing a direct start
-  if (!gameStarted && !directStart) {
-    return <GameMenu onSelectMode={handleSelectMode} />;
-  }
+  }, [mode]);
 
   return (
     <GameComponent
