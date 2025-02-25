@@ -1,12 +1,12 @@
 
 import { LucideIcon } from "lucide-react";
 
-export type IconComponent = LucideIcon;
+export type IconComponent = LucideIcon | (() => JSX.Element);
 
 export interface App {
   name: string;
   description: string;
-  icon: LucideIcon;
+  icon: IconComponent;
   route: string;
   color: string;
   category: string;
@@ -22,4 +22,18 @@ export interface Category {
   label: string;
   icon: LucideIcon;
   count?: number;
+}
+
+export type AppCategory = (typeof appCategories)[number];
+
+export interface AppControlsProps {
+  selectedCategory: string;
+  viewMode: "grid" | "list";
+  showUpdatesOnly: boolean;
+  updatesCount: number;
+  categories: readonly string[];
+  onCategoryChange: (category: string) => void;
+  onSortChange: (sort: "name" | "rating" | "users") => void;
+  onViewModeChange: (mode: "grid" | "list") => void;
+  onUpdatesToggle: () => void;
 }
