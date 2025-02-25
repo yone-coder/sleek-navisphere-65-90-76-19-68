@@ -17,7 +17,7 @@ const GameMenu = ({ onSelectMode }: GameMenuProps) => {
         className="w-full bg-blue-600 hover:bg-blue-700 h-16 text-lg"
       >
         <Users className="h-6 w-6 mr-2" />
-        Player vs Player (Local)
+        Play Locally
       </Button>
 
       <Button
@@ -26,7 +26,7 @@ const GameMenu = ({ onSelectMode }: GameMenuProps) => {
         className="w-full bg-purple-600 hover:bg-purple-700 h-16 text-lg"
       >
         <Bot className="h-6 w-6 mr-2" />
-        Player vs Bot (AI)
+        VS Bot
       </Button>
 
       <Button
@@ -35,7 +35,7 @@ const GameMenu = ({ onSelectMode }: GameMenuProps) => {
         className="w-full bg-green-600 hover:bg-green-700 h-16 text-lg"
       >
         <Globe className="h-6 w-6 mr-2" />
-        Online Multiplayer (PvP)
+        Play Online
       </Button>
     </div>
   );
