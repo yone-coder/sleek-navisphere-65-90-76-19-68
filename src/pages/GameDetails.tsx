@@ -7,6 +7,7 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
 import { GameHeaderNav } from "@/components/games/details/GameHeaderNav";
 import { GameTabNav } from "@/components/games/details/GameTabNav";
+import { FloatingStats } from "@/components/games/details/FloatingStats";
 import { GameOverviewSection } from "@/components/games/details/sections/overview/GameOverviewSection";
 import { GameTournamentsSection } from "@/components/games/details/sections/tournaments/GameTournamentsSection";
 import { GameMatchesSection } from "@/components/games/details/sections/matches/GameMatchesSection";
@@ -315,7 +316,12 @@ export default function GameDetails() {
         </div>
       </div>
 
-      <div className="pt-24 pb-4">
+      <FloatingStats 
+        currentPlayers={game?.current_players}
+        totalPlayers={game?.total_players}
+      />
+
+      <div className="pt-24 pb-4 md:pr-72">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsContent value="overview">
             <GameOverviewSection game={game} />
