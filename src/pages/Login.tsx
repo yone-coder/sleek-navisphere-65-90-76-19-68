@@ -75,16 +75,16 @@ export default function Login() {
   return (
     <div>
       <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b">
-        <div className="container mx-auto">
+        <div className="px-2">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <Button 
                 variant="ghost" 
                 size="icon" 
                 onClick={() => navigate(-1)}
-                className="hover:bg-gray-100 transition-colors"
+                className="hover:bg-gray-100 transition-colors rounded-full"
               >
-                <ChevronLeft className="h-5 w-5" />
+                <ChevronLeft className="h-6 w-6" />
               </Button>
               <div>
                 <h1 className="text-lg font-semibold">Sign In</h1>
