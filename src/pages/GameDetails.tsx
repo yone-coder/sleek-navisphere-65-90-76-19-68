@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import GameMenu from "@/components/games/morpion/GameMenu";
 import { Button } from "@/components/ui/button";
+import { MatchmakingDialog } from "@/components/games/morpion/MatchmakingDialog";
 
 export default function GameDetails() {
   const { id } = useParams();
@@ -29,6 +30,7 @@ export default function GameDetails() {
   const [activeTab, setActiveTab] = useState("overview");
   const [showModeSelect, setShowModeSelect] = useState(false);
   const [showOnlineOptions, setShowOnlineOptions] = useState(false);
+  const [showMatchmaking, setShowMatchmaking] = useState(false);
 
   const { data: game, isLoading } = useQuery({
     queryKey: ["game", id],
@@ -49,16 +51,17 @@ export default function GameDetails() {
 
   const handleOnlineOption = (option: 'create' | 'find' | 'invite') => {
     setShowOnlineOptions(false);
-    setShowModeSelect(false);
-
+    
     switch (option) {
       case 'create':
+        setShowModeSelect(false);
         navigate('/games/morpion?start=true&mode=online&create=true');
         break;
       case 'find':
-        navigate('/games/morpion?start=true&mode=online&find=true');
+        setShowMatchmaking(true);
         break;
       case 'invite':
+        setShowModeSelect(false);
         navigate('/games/morpion?start=true&mode=online&invite=true');
         break;
     }
@@ -184,6 +187,16 @@ export default function GameDetails() {
             </Button>
           </div>
         </DialogContent>
+      </Dialog>
+
+      <Dialog 
+        open={showMatchmaking} 
+        onOpenChange={(open) => {
+          setShowMatchmaking(open);
+          if (!open) setShowOnlineOptions(false);
+        }}
+      >
+        <MatchmakingDialog onClose={() => setShowMatchmaking(false)} />
       </Dialog>
     </div>
   );
