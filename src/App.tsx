@@ -1,4 +1,3 @@
-
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -9,8 +8,9 @@ import { BottomNav } from "./components/BottomNav";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// Lazy load all pages
+// Lazy load pages
 const Apps = lazy(() => import("./pages/Apps"));
+const Login = lazy(() => import("./pages/Login"));
 const GamesPages = lazy(() => import("./pages/GamesPages"));
 const ContestsPage = lazy(() => import("./pages/games/ContestsPage"));
 const GamesExplore = lazy(() => import("./pages/games/GamesExplore"));
@@ -19,7 +19,6 @@ const Feeds = lazy(() => import("./pages/Feeds"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Wallet = lazy(() => import("./pages/Wallet"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const Login = lazy(() => import("./pages/Login"));
 const SignUp = lazy(() => import("./pages/SignUp"));
 const NewsDetail = lazy(() => import("./pages/NewsDetail"));
 const Tournaments = lazy(() => import("./pages/Tournaments"));
@@ -57,7 +56,15 @@ const LoadingFallback = () => (
   </div>
 );
 
-const queryClient = new QueryClient();
+// Create a new QueryClient instance
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      retry: 1,
+    },
+  },
+});
 
 const AppContent = () => {
   const location = useLocation();
@@ -72,6 +79,7 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<Apps />} />
           <Route path="/apps" element={<Apps />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/games-pages" element={<GamesPages />} />
           <Route path="/games-pages/contest" element={<ContestsPage />} />
           <Route path="/games-pages/game-search" element={<GamesExplore />} />
@@ -85,7 +93,6 @@ const AppContent = () => {
           <Route path="/feeds" element={<Feeds />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/wallet" element={<Wallet />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/tournament/:id" element={<TournamentDetails />} />
@@ -119,18 +126,20 @@ const AppContent = () => {
   );
 };
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <LanguageProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AppContent />
-        </BrowserRouter>
-      </LanguageProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  return (
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <LanguageProvider>
+            <Toaster />
+            <Sonner />
+            <AppContent />
+          </LanguageProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
+  );
+};
 
 export default App;
