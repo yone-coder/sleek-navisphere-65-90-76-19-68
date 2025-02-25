@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useGameState } from '@/components/games/morpion/hooks/useGameState';
 import GameLayout from '@/components/games/morpion/GameLayout';
 import { GameMode } from '@/components/games/morpion/types';
@@ -73,28 +74,29 @@ const GameComponent: React.FC<GameComponentProps> = ({
 };
 
 const Morpion = () => {
+  const [searchParams] = useSearchParams();
   const [boardSize] = useState(30);
   const [zoom, setZoom] = useState(100);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [player1] = useState('Guest10816');
   const [player2, setPlayer2] = useState('Guest');
-  const [gameMode, setGameMode] = useState<GameMode>('local'); // Default to local mode
+  const [gameMode, setGameMode] = useState<GameMode>('local');
   const [difficulty, setDifficulty] = useState('medium');
 
-  // Get query parameters to check if we should set specific game mode
-  const queryParams = new URLSearchParams(window.location.search);
-  const mode = queryParams.get('mode') as GameMode;
-
-  // Effect to handle mode from URL
   useEffect(() => {
-    if (mode) {
+    const mode = searchParams.get('mode') as GameMode;
+    const start = searchParams.get('start');
+    
+    console.log('URL params:', { mode, start });
+    
+    if (mode && start === 'true') {
       console.log('Setting game mode from URL:', mode);
       setGameMode(mode);
       if (mode === 'bot') {
         setPlayer2('Bot');
       }
     }
-  }, [mode]);
+  }, [searchParams]);
 
   return (
     <GameComponent
