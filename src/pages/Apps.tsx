@@ -1,5 +1,7 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Tabs } from "@/components/ui/tabs";
 import { AppsHeader } from "@/components/apps/AppsHeader";
 import { BannerSlider } from "@/components/BannerSlider";
 import { FavoritesSection } from "@/components/apps/FavoritesSection";
@@ -10,13 +12,13 @@ import { AppControls } from "@/components/apps/AppControls";
 import { SuggestionsSection } from "@/components/apps/SuggestionsSection";
 import { ProfileCard } from "@/components/apps/ProfileCard";
 import { apps, categories, appCategories } from "@/components/apps/data/appsData";
-import type { App } from "@/components/apps/types";
+import type { App, AppCategory } from "@/components/apps/types";
 
 export default function Apps() {
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState<AppCategory>("All");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortBy, setSortBy] = useState<"name" | "rating" | "users">("name");
   const [favorites, setFavorites] = useState<string[]>(() => {
@@ -90,7 +92,7 @@ export default function Apps() {
                     showUpdatesOnly={showUpdatesOnly}
                     updatesCount={updatesCount}
                     categories={appCategories}
-                    onCategoryChange={setSelectedCategory}
+                    onCategoryChange={category => setSelectedCategory(category as AppCategory)}
                     onSortChange={setSortBy}
                     onViewModeChange={setViewMode}
                     onUpdatesToggle={() => setShowUpdatesOnly(!showUpdatesOnly)}

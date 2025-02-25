@@ -10,7 +10,7 @@ export interface App {
   route: string;
   color: string;
   category: string;
-  status?: string;
+  status?: "new" | "popular";
   users?: string;
   lastUsed?: string;
   rating?: number;
@@ -24,14 +24,14 @@ export interface Category {
   count?: number;
 }
 
-export type AppCategory = (typeof appCategories)[number];
+export type AppCategory = "All" | "Shopping" | "Finance" | "Entertainment" | "Gaming" | "Analytics" | "Social" | "Communication" | "System" | "Education" | "Work" | "Business" | "Content" | "Nonprofit" | "Food" | "Services" | "Real Estate";
 
 export interface AppControlsProps {
   selectedCategory: string;
   viewMode: "grid" | "list";
   showUpdatesOnly: boolean;
   updatesCount: number;
-  categories: readonly string[];
+  categories: readonly AppCategory[];
   onCategoryChange: (category: string) => void;
   onSortChange: (sort: "name" | "rating" | "users") => void;
   onViewModeChange: (mode: "grid" | "list") => void;
