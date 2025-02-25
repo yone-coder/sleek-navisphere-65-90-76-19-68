@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useGameState } from '@/components/games/morpion/hooks/useGameState';
 import GameLayout from '@/components/games/morpion/GameLayout';
-import { GameMode } from '@/components/games/morpion/types';
+import type { GameMode } from '@/components/games/morpion/types';
 import { calculateBotMove } from '@/components/games/morpion/utils/botUtils';
 
 interface GameComponentProps {
@@ -40,14 +40,22 @@ const GameComponent: React.FC<GameComponentProps> = ({
     currentPlayer,
     lastMove,
     winner,
-    handleClick
+    handleClick,
+    resetBoard
   } = gameState;
+
+  // Reset effect when gameMode changes
+  useEffect(() => {
+    console.log('Game mode changed:', gameMode);
+    resetBoard();
+  }, [gameMode, resetBoard]);
 
   // Bot move effect
   useEffect(() => {
     if (gameMode === 'bot' && currentPlayer === 'O' && !winner) {
+      console.log('Bot turn detected', { currentPlayer, gameMode });
       const timer = setTimeout(() => {
-        console.log('Bot is thinking...', { currentPlayer, gameMode });
+        console.log('Bot is thinking...');
         const botMove = calculateBotMove(board, lastMove, boardSize, difficulty);
         console.log('Bot decided move:', botMove);
         if (botMove) {
