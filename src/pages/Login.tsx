@@ -1,12 +1,25 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Github, Twitter, Facebook, Mail, Apple, ChevronLeft, HelpCircle } from "lucide-react";
+import { 
+  Github, 
+  Twitter, 
+  Facebook, 
+  Mail, 
+  Apple, 
+  ChevronLeft, 
+  HelpCircle, 
+  Eye,
+  EyeOff,
+  Lock,
+  User,
+  AlertCircle
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function Login() {
@@ -17,6 +30,15 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [lastEmail, setLastEmail] = useState("");
+
+  useEffect(() => {
+    // Check if there's a saved email
+    const savedEmail = localStorage.getItem("lastLoginEmail");
+    if (savedEmail) {
+      setLastEmail(savedEmail);
+    }
+  }, []);
 
   const handleSocialLogin = async (provider: string) => {
     try {
@@ -47,6 +69,16 @@ export default function Login() {
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!email || !password) {
+      toast({
+        title: "Missing Fields",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       setIsLoading(true);
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -55,6 +87,13 @@ export default function Login() {
       });
 
       if (error) throw error;
+
+      // Save email if remember me is checked
+      if (rememberMe) {
+        localStorage.setItem("lastLoginEmail", email);
+      } else {
+        localStorage.removeItem("lastLoginEmail");
+      }
 
       toast({
         title: "Success",
@@ -102,7 +141,7 @@ export default function Login() {
                     description: "Contact our support team for assistance with signing in.",
                   });
                 }}
-                className="hover:bg-gray-100 transition-colors"
+                className="hover:bg-gray-100 transition-colors rounded-full"
               >
                 <HelpCircle className="h-5 w-5" />
               </Button>
@@ -121,59 +160,88 @@ export default function Login() {
       <div className="min-h-screen flex items-center justify-center px-4 py-12 pb-24 pt-20">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold">Welcome Back</h2>
-            <p className="mt-2 text-muted-foreground">Sign in to your account to continue</p>
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
+              Welcome Back
+            </h2>
+            <p className="mt-2 text-muted-foreground">
+              Sign in to your account to continue
+            </p>
           </div>
 
           <div className="mt-8 space-y-6">
+            {lastEmail && (
+              <div className="bg-blue-50 p-4 rounded-lg flex items-center gap-3 animate-fade-in">
+                <User className="h-5 w-5 text-blue-500" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium">Welcome back!</p>
+                  <p className="text-xs text-muted-foreground">{lastEmail}</p>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setLastEmail("");
+                    localStorage.removeItem("lastLoginEmail");
+                  }}
+                >
+                  Change
+                </Button>
+              </div>
+            )}
+
             <div className="grid grid-cols-2 gap-4">
               <Button 
                 variant="outline" 
-                className="w-full gap-2"
+                className="w-full gap-2 relative overflow-hidden group"
                 onClick={() => handleSocialLogin('Google')}
                 disabled={isLoading}
               >
                 <Mail className="h-4 w-4" />
-                Google
+                <span className="relative z-10">Google</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Button>
               <Button 
                 variant="outline" 
-                className="w-full gap-2"
+                className="w-full gap-2 relative overflow-hidden group"
                 onClick={() => handleSocialLogin('Apple')}
                 disabled={isLoading}
               >
                 <Apple className="h-4 w-4" />
-                Apple
+                <span className="relative z-10">Apple</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-500/10 to-black/10 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Button>
             </div>
 
             <div className="grid grid-cols-3 gap-4">
               <Button 
                 variant="outline" 
-                className="w-full gap-2"
+                className="w-full gap-2 relative overflow-hidden group"
                 onClick={() => handleSocialLogin('Github')}
                 disabled={isLoading}
               >
                 <Github className="h-4 w-4" />
-                Github
+                <span className="relative z-10">Github</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Button>
               <Button 
                 variant="outline" 
-                className="w-full gap-2"
+                className="w-full gap-2 relative overflow-hidden group"
                 onClick={() => handleSocialLogin('Twitter')}
                 disabled={isLoading}
               >
                 <Twitter className="h-4 w-4" />
-                Twitter
+                <span className="relative z-10">Twitter</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Button>
               <Button 
                 variant="outline" 
-                className="w-full gap-2"
+                className="w-full gap-2 relative overflow-hidden group"
                 onClick={() => handleSocialLogin('Facebook')}
                 disabled={isLoading}
               >
                 <Facebook className="h-4 w-4" />
-                Facebook
+                <span className="relative z-10">Facebook</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-indigo-600/10 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Button>
             </div>
 
@@ -189,53 +257,67 @@ export default function Login() {
             </div>
 
             <form onSubmit={handleEmailLogin} className="space-y-6">
-              <div>
-                <Label htmlFor="email">
-                  <Mail className="h-4 w-4 inline mr-2" />
-                  Email Address
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="mt-1"
-                  disabled={isLoading}
-                />
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  <Link
-                    to="/forgot-password"
-                    className="text-sm font-medium text-primary hover:underline"
-                  >
-                    Forgot Password?
-                  </Link>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="email" className="flex items-center gap-2">
+                    <Mail className="h-4 w-4" />
+                    Email Address
+                  </Label>
+                  <div className="mt-1 relative">
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="name@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="pr-10"
+                      disabled={isLoading}
+                    />
+                    {email && !email.includes('@') && (
+                      <AlertCircle className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-red-500" />
+                    )}
+                  </div>
                 </div>
-                <div className="relative mt-1">
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="pr-10"
-                    disabled={isLoading}
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3"
-                    onClick={() => setShowPassword(!showPassword)}
-                    disabled={isLoading}
-                  >
-                    {showPassword ? "Hide" : "Show"}
-                  </Button>
+
+                <div>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="password" className="flex items-center gap-2">
+                      <Lock className="h-4 w-4" />
+                      Password
+                    </Label>
+                    <Link
+                      to="/forgot-password"
+                      className="text-sm font-medium text-primary hover:underline"
+                    >
+                      Forgot Password?
+                    </Link>
+                  </div>
+                  <div className="relative mt-1">
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      className="pr-10"
+                      disabled={isLoading}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-0 top-0 h-full px-3"
+                      onClick={() => setShowPassword(!showPassword)}
+                      disabled={isLoading}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <Eye className="h-4 w-4 text-muted-foreground" />
+                      )}
+                    </Button>
+                  </div>
                 </div>
               </div>
 
@@ -255,16 +337,23 @@ export default function Login() {
 
               <Button 
                 type="submit" 
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90"
+                className="w-full relative overflow-hidden group"
                 disabled={isLoading}
               >
-                {isLoading ? "Signing in..." : "Sign in"}
+                <span className="relative z-10">
+                  {isLoading ? "Signing in..." : "Sign in"}
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500" />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Button>
             </form>
 
             <p className="text-center text-sm text-muted-foreground">
               Don't have an account?{' '}
-              <Link to="/signup" className="font-medium text-primary hover:underline">
+              <Link 
+                to="/signup" 
+                className="font-medium text-primary hover:underline"
+              >
                 Sign up
               </Link>
             </p>
