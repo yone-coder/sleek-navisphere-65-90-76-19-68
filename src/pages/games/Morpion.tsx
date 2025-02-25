@@ -66,27 +66,24 @@ const GameComponent = ({
 };
 
 const Morpion = () => {
-  const [boardSize, setBoardSize] = useState(30);
+  const [boardSize] = useState(30);
   const [zoom, setZoom] = useState(100);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [player1] = useState('Guest10816');
   const [player2, setPlayer2] = useState('Guest');
-  const [gameMode, setGameMode] = useState<GameMode>('local');
-  const [difficulty, setDifficulty] = useState('medium');
+  const [gameMode, setGameMode] = useState<GameMode | null>(null);
+  const [difficulty] = useState('medium');
 
-  // Get query parameters to check if we should set specific game mode
-  const queryParams = new URLSearchParams(window.location.search);
-  const mode = queryParams.get('mode') as GameMode;
-
-  // Effect to handle mode from URL
-  useEffect(() => {
-    if (mode) {
-      setGameMode(mode);
-      if (mode === 'bot') {
-        setPlayer2('Bot');
-      }
+  const handleModeSelect = (mode: GameMode) => {
+    setGameMode(mode);
+    if (mode === 'bot') {
+      setPlayer2('Bot');
     }
-  }, [mode]);
+  };
+
+  if (!gameMode) {
+    return <GameMenu onSelectMode={handleModeSelect} />;
+  }
 
   return (
     <GameComponent
