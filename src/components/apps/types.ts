@@ -1,9 +1,7 @@
 
 import { LucideIcon } from "lucide-react";
 
-export type IconComponent = LucideIcon;
-
-export interface ImageIcon {
+export interface IconImage {
   component: 'img';
   props: {
     src: string;
@@ -12,10 +10,12 @@ export interface ImageIcon {
   };
 }
 
+export type AppIcon = LucideIcon | IconImage;
+
 export interface App {
   name: string;
   description: string;
-  icon: LucideIcon | ImageIcon;
+  icon: AppIcon;
   route: string;
   color: string;
   category: string;
@@ -25,6 +25,8 @@ export interface App {
   rating?: number;
   updates?: number;
 }
+
+export type AppItem = App;
 
 export interface Category {
   id: string;

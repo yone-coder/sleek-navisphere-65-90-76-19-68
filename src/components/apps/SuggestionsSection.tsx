@@ -4,14 +4,22 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useNavigate } from "react-router-dom";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { Card } from "@/components/ui/card";
-import { App } from "./types";
+import { App, AppIcon } from "./types";
 import { cn } from "@/lib/utils";
 
 interface SuggestionsSectionProps {
   suggestedApps: App[];
 }
+
+const AppIcon = ({ icon, className }: { icon: AppIcon; className?: string }) => {
+  if ('component' in icon) {
+    return <img {...icon.props} className={cn(className, icon.props.className)} />;
+  }
+  const IconComponent = icon;
+  return <IconComponent className={cn(className, "text-white")} strokeWidth={2} />;
+};
 
 export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) => {
   const navigate = useNavigate();
@@ -71,16 +79,18 @@ export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) =
             </Badge>
           </div>
           
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <Info className="h-4 w-4 text-gray-500" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Apps you might be interested in</p>
-            </TooltipContent>
-          </Tooltip>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <Info className="h-4 w-4 text-gray-500" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Apps you might be interested in</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
       <ScrollArea className="w-full">
@@ -107,10 +117,7 @@ export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) =
                       <div className="relative w-full overflow-hidden">
                         <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
                           <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
-                            {'component' in app.icon 
-                              ? <img {...app.icon.props} className={cn("w-[80%] h-[80%]", app.icon.props.className)} />
-                              : <app.icon className="w-8 h-8 text-white" strokeWidth={2} />
-                            }
+                            <AppIcon icon={app.icon} className="w-8 h-8" />
                             {app.updates > 0 && (
                               <Badge 
                                 className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5"
