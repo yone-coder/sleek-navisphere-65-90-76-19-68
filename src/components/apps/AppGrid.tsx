@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { App } from "./types";
 import { Button } from "@/components/ui/button";
@@ -16,8 +17,8 @@ export const AppGrid = ({ apps, favorites, onToggleFavorite, viewMode }: AppGrid
     if ('component' in icon && icon.component === 'img') {
       return <img {...icon.props} />;
     }
-    const IconComponent = icon;
-    return <IconComponent className="w-6 h-6" />;
+    // If it's not an img component, it must be a LucideIcon
+    return <icon className="w-6 h-6" />;
   };
 
   return (
@@ -44,7 +45,10 @@ export const AppGrid = ({ apps, favorites, onToggleFavorite, viewMode }: AppGrid
                 "w-12 h-12 rounded-full flex items-center justify-center text-white",
                 app.color
               )}>
-                {renderIcon(app.icon)}
+                {'component' in app.icon 
+                  ? <img {...app.icon.props} />
+                  : <app.icon className="w-6 h-6" />
+                }
               </div>
             </div>
             <div className="flex flex-col flex-1 min-w-0">
