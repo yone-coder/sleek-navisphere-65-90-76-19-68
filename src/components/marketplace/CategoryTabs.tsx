@@ -46,4 +46,3 @@ export const CategoryTabs = ({
 };
 
 export { categories };
-
