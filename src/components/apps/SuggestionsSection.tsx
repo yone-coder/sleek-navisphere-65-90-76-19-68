@@ -4,12 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useNavigate } from "react-router-dom";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Card } from "@/components/ui/card";
-import { type App } from "./types";
+import { useEffect, useRef } from "react";
 
 interface SuggestionsSectionProps {
-  suggestedApps: App[];
+  suggestedApps: Array<{
+    name: string;
+    icon: any;
+    color: string;
+    route: string;
+    updates?: number;
+  }>;
 }
 
 export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) => {
@@ -17,12 +23,13 @@ export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) =
 
   if (suggestedApps.length === 0) return null;
 
+  // Create groups of 4 apps
   const groups = suggestedApps.reduce((acc, app, i) => {
     const groupIndex = Math.floor(i / 4);
     if (!acc[groupIndex]) acc[groupIndex] = [];
     acc[groupIndex].push(app);
     return acc;
-  }, [] as App[][]);
+  }, [] as typeof suggestedApps[]);
 
   return (
     <div className="mb-8 -mx-4 sm:-mx-6 md:-mx-8">
@@ -69,18 +76,16 @@ export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) =
             </Badge>
           </div>
           
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <Info className="h-4 w-4 text-gray-500" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Apps you might be interested in</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Info className="h-4 w-4 text-gray-500" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Apps you might be interested in</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
       <ScrollArea className="w-full">
@@ -97,7 +102,6 @@ export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) =
               <div className="grid grid-cols-4 gap-4">
                 {group.map((app) => {
                   const randomDelay = Math.floor(Math.random() * 10000) + 5000;
-                  const IconComponent = app.icon;
                   
                   return (
                     <Card 
@@ -108,7 +112,7 @@ export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) =
                       <div className="relative w-full overflow-hidden">
                         <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
                           <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
-                            {IconComponent && <IconComponent size={32} color="white" />}
+                            <app.icon className="w-8 h-8 text-white" strokeWidth={2} />
                             {app.updates > 0 && (
                               <Badge 
                                 className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5"

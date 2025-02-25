@@ -1,25 +1,16 @@
 
-import { type Icon as LucideIcon, type LucideProps } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 
-export interface IconImage {
-  component: 'img';
-  props: {
-    src: string;
-    alt: string;
-    className?: string;
-  };
-}
-
-export type AppIcon = React.ComponentType<LucideProps>;
+export type IconComponent = LucideIcon;
 
 export interface App {
   name: string;
   description: string;
-  icon: AppIcon;
+  icon: LucideIcon;
   route: string;
   color: string;
   category: string;
-  status?: "new" | "popular";
+  status?: string;
   users?: string;
   lastUsed?: string;
   rating?: number;
@@ -29,8 +20,6 @@ export interface App {
 export interface Category {
   id: string;
   label: string;
-  icon?: AppIcon;
+  icon: LucideIcon;
   count?: number;
 }
-
-export type AppItem = App;

@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import type { App } from "./types";
-import { cn } from "@/lib/utils";
 
 interface AppGridProps {
   apps: App[];
@@ -18,10 +17,7 @@ const AppCard = ({ app, isFavorite, onToggleFavorite, onClick }) => (
   <div className="relative w-full overflow-hidden" onClick={onClick}>
     <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
       <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
-        {'component' in app.icon 
-          ? <img {...app.icon.props} className={cn("w-[80%] h-[80%]", app.icon.props.className)} />
-          : <app.icon className="w-7 h-7 text-white" />
-        }
+        <app.icon className="w-7 h-7 text-white" />
         {app.updates > 0 && (
           <Badge className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5">
             {app.updates} NEW
@@ -71,10 +67,7 @@ const AppList = ({ app, isFavorite, onToggleFavorite, onClick }) => (
   <div className="relative w-full p-3 hover:bg-gray-50 rounded-lg transition-colors" onClick={onClick}>
     <div className="flex items-center gap-4">
       <div className={`w-12 h-12 rounded-xl ${app.color} flex items-center justify-center relative flex-shrink-0`}>
-        {'component' in app.icon 
-          ? <img {...app.icon.props} className={cn("w-[80%] h-[80%]", app.icon.props.className)} />
-          : <app.icon className="w-6 h-6 text-white" />
-        }
+        <app.icon className="w-6 h-6 text-white" />
         {app.updates > 0 && (
           <Badge className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5">
             {app.updates}
