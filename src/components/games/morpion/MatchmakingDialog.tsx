@@ -37,6 +37,8 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
         return;
       }
 
+      console.log('Starting matchmaking for user:', user.id);
+
       // Start the search timer
       timer = window.setInterval(() => {
         setSearchTime(prev => prev + 1);
@@ -46,7 +48,7 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
         // First try to join an existing room
         const { data: existingRoom, error: findError } = await supabase
           .from('game_rooms')
-          .select()
+          .select('*')
           .eq('status', 'waiting')
           .is('player2_id', null)
           .neq('player1_id', user.id) // Don't join own room
@@ -60,7 +62,24 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
           console.log('Found existing room:', existingRoom.id);
           currentRoomId = existingRoom.id;
 
-          // Join existing room
+          // Subscribe to room updates first
+          roomSubscription = supabase.channel('game_room_' + existingRoom.id)
+            .on('postgres_changes', {
+              event: 'UPDATE',
+              schema: 'public',
+              table: 'game_rooms',
+              filter: `id=eq.${existingRoom.id}`,
+            }, async (payload) => {
+              console.log('Room updated:', payload);
+              if (payload.new.status === 'playing' && 
+                  payload.new.player2_id === user.id && 
+                  payload.new.player1_id) {
+                handleMatchFound(existingRoom.id);
+              }
+            })
+            .subscribe();
+
+          // Then try to join the room
           const { error: joinError } = await supabase
             .from('game_rooms')
             .update({ 
@@ -75,22 +94,10 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
             throw joinError;
           }
 
-          // Subscribe to room updates to confirm join
-          roomSubscription = supabase.channel('game_room_' + existingRoom.id)
-            .on('postgres_changes', {
-              event: 'UPDATE',
-              schema: 'public',
-              table: 'game_rooms',
-              filter: `id=eq.${existingRoom.id}`,
-            }, async (payload) => {
-              console.log('Room updated:', payload);
-              if (payload.new.status === 'playing' && payload.new.player2_id === user.id) {
-                handleMatchFound(existingRoom.id);
-              }
-            })
-            .subscribe();
+          console.log('Successfully joined room:', existingRoom.id);
           
         } else {
+          console.log('No existing rooms found, creating new room');
           // Create new room
           const { data: newRoom, error: createError } = await supabase
             .from('game_rooms')
@@ -120,7 +127,9 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
               filter: `id=eq.${newRoom.id}`,
             }, async (payload) => {
               console.log('Room updated:', payload);
-              if (payload.new.status === 'playing' && payload.new.player2_id) {
+              if (payload.new.status === 'playing' && 
+                  payload.new.player2_id && 
+                  payload.new.player1_id === user.id) {
                 handleMatchFound(newRoom.id);
               }
             })
@@ -145,11 +154,11 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
       // Double check the room status
       const { data: room } = await supabase
         .from('game_rooms')
-        .select()
+        .select('*')
         .eq('id', roomId)
-        .single();
+        .maybeSingle();
 
-      if (!room || room.status !== 'playing') {
+      if (!room || room.status !== 'playing' || !room.player1_id || !room.player2_id) {
         console.log('Invalid room state:', room);
         return;
       }
@@ -178,6 +187,7 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
 
     // Cleanup function
     return () => {
+      console.log('Cleaning up matchmaking...');
       isSubscribed = false;
       clearInterval(timer);
       if (roomSubscription) {
