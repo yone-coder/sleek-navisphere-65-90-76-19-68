@@ -1,7 +1,8 @@
+
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Loader } from "lucide-react";
+import { Loader, Plus, Search, UserPlus } from "lucide-react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
 import { GameHeaderNav } from "@/components/games/details/GameHeaderNav";
@@ -19,6 +20,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import GameMenu from "@/components/games/morpion/GameMenu";
+import { Button } from "@/components/ui/button";
 
 export default function GameDetails() {
   const { id } = useParams();
@@ -26,6 +28,7 @@ export default function GameDetails() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("overview");
   const [showModeSelect, setShowModeSelect] = useState(false);
+  const [showOnlineOptions, setShowOnlineOptions] = useState(false);
 
   const { data: game, isLoading } = useQuery({
     queryKey: ["game", id],
@@ -35,9 +38,30 @@ export default function GameDetails() {
     },
   });
 
-  const handleGameModeSelect = (mode: 'local' | 'bot' | 'online', roomId?: string) => {
+  const handleGameModeSelect = (mode: 'local' | 'bot' | 'online' | 'blitz', roomId?: string) => {
+    if (mode === 'online') {
+      setShowOnlineOptions(true);
+      return;
+    }
     setShowModeSelect(false);
     navigate(`/games/morpion?start=true&mode=${mode}${roomId ? `&roomId=${roomId}` : ''}`);
+  };
+
+  const handleOnlineOption = (option: 'create' | 'find' | 'invite') => {
+    setShowOnlineOptions(false);
+    setShowModeSelect(false);
+
+    switch (option) {
+      case 'create':
+        navigate('/games/morpion?start=true&mode=online&create=true');
+        break;
+      case 'find':
+        navigate('/games/morpion?start=true&mode=online&find=true');
+        break;
+      case 'invite':
+        navigate('/games/morpion?start=true&mode=online&invite=true');
+        break;
+    }
   };
 
   if (isLoading) {
@@ -114,6 +138,51 @@ export default function GameDetails() {
             <DialogTitle>Select Game Mode</DialogTitle>
           </DialogHeader>
           <GameMenu onSelectMode={handleGameModeSelect} />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showOnlineOptions} onOpenChange={setShowOnlineOptions}>
+        <DialogContent className="max-w-lg p-6">
+          <DialogHeader>
+            <DialogTitle>Online Multiplayer Options</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 mt-4">
+            <Button
+              onClick={() => handleOnlineOption('create')}
+              className="w-full h-14 text-lg font-medium relative overflow-hidden group"
+              size="lg"
+            >
+              <div className="relative z-10 flex items-center justify-center gap-2">
+                <Plus className="h-5 w-5" />
+                <span>Create a Room</span>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500 transition-opacity" />
+            </Button>
+
+            <Button
+              onClick={() => handleOnlineOption('find')}
+              className="w-full h-14 text-lg font-medium relative overflow-hidden group"
+              size="lg"
+            >
+              <div className="relative z-10 flex items-center justify-center gap-2">
+                <Search className="h-5 w-5" />
+                <span>Find a Match</span>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-500 transition-opacity" />
+            </Button>
+
+            <Button
+              onClick={() => handleOnlineOption('invite')}
+              className="w-full h-14 text-lg font-medium relative overflow-hidden group"
+              size="lg"
+            >
+              <div className="relative z-10 flex items-center justify-center gap-2">
+                <UserPlus className="h-5 w-5" />
+                <span>Invite a Friend</span>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-emerald-500 transition-opacity" />
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
