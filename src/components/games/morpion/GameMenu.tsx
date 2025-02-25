@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { GameMode } from './types';
-import { Bot, Globe, Users } from 'lucide-react';
+import { Bot, Globe, Users, Timer } from 'lucide-react';
 
 interface GameMenuProps {
   onSelectMode: (mode: GameMode) => void;
@@ -10,35 +10,60 @@ interface GameMenuProps {
 
 const GameMenu = ({ onSelectMode }: GameMenuProps) => {
   return (
-    <div className="p-6 space-y-4">
-      <Button
-        onClick={() => onSelectMode('local')}
-        size="lg"
-        className="w-full bg-blue-600 hover:bg-blue-700 h-16 text-lg"
-      >
-        <Users className="h-6 w-6 mr-2" />
-        Player vs Player (Local)
-      </Button>
+    <div className="p-6 space-y-4 max-w-xl mx-auto">
+      <div className="grid gap-4">
+        <Button
+          onClick={() => onSelectMode('local')}
+          size="lg"
+          className="w-full bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 
+            h-16 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl
+            transition-all duration-300 ease-in-out transform hover:scale-[1.02]
+            flex items-center justify-center space-x-3 group"
+        >
+          <Users className="h-6 w-6 transition-transform group-hover:scale-110" />
+          <span>Player vs Player (Local)</span>
+        </Button>
 
-      <Button
-        onClick={() => onSelectMode('bot')}
-        size="lg"
-        className="w-full bg-purple-600 hover:bg-purple-700 h-16 text-lg"
-      >
-        <Bot className="h-6 w-6 mr-2" />
-        Player vs Bot (AI)
-      </Button>
+        <Button
+          onClick={() => onSelectMode('bot')}
+          size="lg"
+          className="w-full bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700
+            h-16 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl
+            transition-all duration-300 ease-in-out transform hover:scale-[1.02]
+            flex items-center justify-center space-x-3 group"
+        >
+          <Bot className="h-6 w-6 transition-transform group-hover:scale-110" />
+          <span>Player vs Bot (AI)</span>
+        </Button>
 
-      <Button
-        onClick={() => onSelectMode('online')}
-        size="lg"
-        className="w-full bg-green-600 hover:bg-green-700 h-16 text-lg"
-      >
-        <Globe className="h-6 w-6 mr-2" />
-        Online Multiplayer (PvP)
-      </Button>
+        <Button
+          onClick={() => onSelectMode('online')}
+          size="lg"
+          className="w-full bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700
+            h-16 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl
+            transition-all duration-300 ease-in-out transform hover:scale-[1.02]
+            flex items-center justify-center space-x-3 group"
+        >
+          <Globe className="h-6 w-6 transition-transform group-hover:scale-110" />
+          <span>Online Multiplayer (PvP)</span>
+        </Button>
+
+        <Button
+          onClick={() => onSelectMode('blitz')}
+          size="lg"
+          className="w-full bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700
+            h-16 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl
+            transition-all duration-300 ease-in-out transform hover:scale-[1.02]
+            flex items-center justify-center space-x-3 group
+            animate-fade-in"
+        >
+          <Timer className="h-6 w-6 transition-transform group-hover:scale-110" />
+          <span>Blitz Mode (Speed Morpion)</span>
+        </Button>
+      </div>
     </div>
   );
 };
 
 export default GameMenu;
+
