@@ -1,4 +1,3 @@
-
 export interface Position {
   row: number;
   col: number;
@@ -26,7 +25,7 @@ export interface GameHistory {
   inactivityTime: number;
 }
 
-export type GameMode = 'local' | 'online' | 'bot';
+export type GameMode = 'local' | 'bot' | 'online' | 'blitz';
 
 export interface Room {
   id: string;

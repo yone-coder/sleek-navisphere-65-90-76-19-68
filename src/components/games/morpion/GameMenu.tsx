@@ -2,41 +2,73 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { GameMode } from './types';
-import { Bot, Globe, Users } from 'lucide-react';
+import { Bot, Globe, Users, Timer } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface GameMenuProps {
   onSelectMode: (mode: GameMode) => void;
 }
 
 const GameMenu = ({ onSelectMode }: GameMenuProps) => {
+  const navigate = useNavigate();
+
+  const handleModeSelect = (mode: GameMode) => {
+    onSelectMode(mode);
+    navigate(`/games/morpion?mode=${mode}`);
+  };
+
   return (
-    <div className="p-6 space-y-4">
-      <Button
-        onClick={() => onSelectMode('local')}
-        size="lg"
-        className="w-full bg-blue-600 hover:bg-blue-700 h-16 text-lg"
-      >
-        <Users className="h-6 w-6 mr-2" />
-        Play Locally
-      </Button>
+    <div className="p-4 sm:p-6 space-y-4 w-full max-w-lg mx-auto">
+      <div className="grid gap-3">
+        <Button
+          onClick={() => handleModeSelect('local')}
+          size="lg"
+          className="w-full bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 
+            h-14 sm:h-16 text-base sm:text-lg font-medium rounded-xl shadow-lg hover:shadow-xl
+            transition-all duration-300 ease-in-out transform hover:scale-[1.02]
+            flex items-center justify-center space-x-2 sm:space-x-3 group"
+        >
+          <Users className="h-5 w-5 sm:h-6 sm:w-6 transition-transform group-hover:scale-110" />
+          <span>Player vs Player (Local)</span>
+        </Button>
 
-      <Button
-        onClick={() => onSelectMode('bot')}
-        size="lg"
-        className="w-full bg-purple-600 hover:bg-purple-700 h-16 text-lg"
-      >
-        <Bot className="h-6 w-6 mr-2" />
-        VS Bot
-      </Button>
+        <Button
+          onClick={() => handleModeSelect('bot')}
+          size="lg"
+          className="w-full bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700
+            h-14 sm:h-16 text-base sm:text-lg font-medium rounded-xl shadow-lg hover:shadow-xl
+            transition-all duration-300 ease-in-out transform hover:scale-[1.02]
+            flex items-center justify-center space-x-2 sm:space-x-3 group"
+        >
+          <Bot className="h-5 w-5 sm:h-6 sm:w-6 transition-transform group-hover:scale-110" />
+          <span>Player vs Bot (AI)</span>
+        </Button>
 
-      <Button
-        onClick={() => onSelectMode('online')}
-        size="lg"
-        className="w-full bg-green-600 hover:bg-green-700 h-16 text-lg"
-      >
-        <Globe className="h-6 w-6 mr-2" />
-        Play Online
-      </Button>
+        <Button
+          onClick={() => handleModeSelect('online')}
+          size="lg"
+          className="w-full bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700
+            h-14 sm:h-16 text-base sm:text-lg font-medium rounded-xl shadow-lg hover:shadow-xl
+            transition-all duration-300 ease-in-out transform hover:scale-[1.02]
+            flex items-center justify-center space-x-2 sm:space-x-3 group"
+        >
+          <Globe className="h-5 w-5 sm:h-6 sm:w-6 transition-transform group-hover:scale-110" />
+          <span>Online Multiplayer (PvP)</span>
+        </Button>
+
+        <Button
+          onClick={() => handleModeSelect('blitz')}
+          size="lg"
+          className="w-full bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700
+            h-14 sm:h-16 text-base sm:text-lg font-medium rounded-xl shadow-lg hover:shadow-xl
+            transition-all duration-300 ease-in-out transform hover:scale-[1.02]
+            flex items-center justify-center space-x-2 sm:space-x-3 group
+            animate-fade-in"
+        >
+          <Timer className="h-5 w-5 sm:h-6 sm:w-6 transition-transform group-hover:scale-110" />
+          <span>Blitz Mode (Speed Morpion)</span>
+        </Button>
+      </div>
     </div>
   );
 };
