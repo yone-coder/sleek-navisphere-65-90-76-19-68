@@ -284,25 +284,33 @@ export default function SignUp() {
               <div className="grid grid-cols-2 gap-4">
                 <Button
                   variant={signupMethod === 'email' ? 'default' : 'outline'}
-                  className="w-full gap-2 relative overflow-hidden group"
+                  className={`w-full gap-2 relative overflow-hidden group ${
+                    signupMethod === 'email' ? 'text-white' : ''
+                  }`}
                   onClick={() => setSignupMethod('email')}
                 >
-                  <Mail className="h-4 w-4" />
-                  <span className="relative z-10">Email</span>
                   {signupMethod === 'email' && (
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500" />
                   )}
+                  <div className="relative z-10 flex items-center gap-2">
+                    <Mail className="h-4 w-4" />
+                    <span>Email</span>
+                  </div>
                 </Button>
                 <Button
                   variant={signupMethod === 'phone' ? 'default' : 'outline'}
-                  className="w-full gap-2 relative overflow-hidden group"
+                  className={`w-full gap-2 relative overflow-hidden group ${
+                    signupMethod === 'phone' ? 'text-white' : ''
+                  }`}
                   onClick={() => setSignupMethod('phone')}
                 >
-                  <PhoneCall className="h-4 w-4" />
-                  <span className="relative z-10">Phone</span>
                   {signupMethod === 'phone' && (
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500" />
                   )}
+                  <div className="relative z-10 flex items-center gap-2">
+                    <PhoneCall className="h-4 w-4" />
+                    <span>Phone</span>
+                  </div>
                 </Button>
               </div>
 
