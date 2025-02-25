@@ -1,5 +1,4 @@
 
-import { motion } from "framer-motion";
 import { App } from "./types";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
@@ -13,28 +12,18 @@ interface AppGridProps {
 }
 
 export const AppGrid = ({ apps, favorites, onToggleFavorite, viewMode }: AppGridProps) => {
-  const renderIcon = (icon: App["icon"]) => {
-    if ('component' in icon && icon.component === 'img') {
-      return <img {...icon.props} />;
-    }
-    // If it's not an img component, it must be a LucideIcon
-    return <icon className="w-6 h-6" />;
-  };
-
   return (
     <div className={cn(
       "grid gap-4",
       viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-1"
     )}>
       {apps.map((app) => (
-        <motion.div
+        <div
           key={app.name}
           className={cn(
-            "rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col",
+            "rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col hover:shadow-lg transition-shadow",
             viewMode === "list" ? "flex-row items-center gap-4" : ""
           )}
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
         >
           <div className={cn(
             "p-4 flex flex-col flex-1",
@@ -46,7 +35,7 @@ export const AppGrid = ({ apps, favorites, onToggleFavorite, viewMode }: AppGrid
                 app.color
               )}>
                 {'component' in app.icon 
-                  ? <img {...app.icon.props} />
+                  ? <img {...app.icon.props} className={cn("w-[80%] h-[80%]", app.icon.props.className)} />
                   : <app.icon className="w-6 h-6" />
                 }
               </div>
@@ -77,7 +66,7 @@ export const AppGrid = ({ apps, favorites, onToggleFavorite, viewMode }: AppGrid
               <Star className="h-4 w-4" />
             </Button>
           </div>
-        </motion.div>
+        </div>
       ))}
     </div>
   );
