@@ -10,7 +10,7 @@ export interface IconImage {
   };
 }
 
-export type AppIcon = LucideIcon | IconImage;
+export type AppIcon = LucideIcon;
 
 export interface App {
   name: string;
@@ -33,5 +33,4 @@ export interface Category {
   count?: number;
 }
 
-// Make AppItem exactly the same as App
 export type AppItem = App;
