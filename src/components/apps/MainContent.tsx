@@ -3,7 +3,7 @@ import { CategoryTabs } from "@/components/apps/CategoryTabs";
 import { AppControls } from "@/components/apps/AppControls";
 import { AppGrid } from "@/components/apps/AppGrid";
 import { App } from "@/components/apps/types";
-import { appCategories } from "@/data/categories";
+import { appCategories, categories } from "@/data/categories";
 
 interface MainContentProps {
   activeTab: string;
@@ -48,7 +48,7 @@ export const MainContent = ({
       <div className="py-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div className="flex-1 min-w-0">
-            <CategoryTabs />
+            <CategoryTabs categories={categories} />
           </div>
 
           <div className="flex-shrink-0">
