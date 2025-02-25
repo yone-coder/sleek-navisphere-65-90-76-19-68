@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -9,6 +10,7 @@ import type { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
 type GameRoom = Database['public']['Tables']['game_rooms']['Row'];
+type RealtimeGameRoom = RealtimePostgresChangesPayload<GameRoom>;
 
 interface MatchmakingDialogProps {
   onClose: () => void;
@@ -57,18 +59,17 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
 
     const searchForMatch = async (userId: string) => {
       try {
-        // First, try to join an existing room
-        const { data: availableRooms } = await supabase
+        const { data: rooms } = await supabase
           .from('game_rooms')
-          .select()
+          .select('*')
           .eq('status', 'waiting')
           .is('player2_id', null)
           .neq('player1_id', userId)
           .order('created_at', { ascending: true })
           .limit(1);
 
-        if (availableRooms && availableRooms.length > 0) {
-          const room = availableRooms[0];
+        if (rooms && rooms.length > 0) {
+          const room = rooms[0];
           await joinRoom(room.id, userId);
           return;
         }
@@ -82,12 +83,17 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
               status: 'waiting',
               board: Array(30).fill(null).map(() => Array(30).fill(null)),
               code: Math.random().toString(36).substring(7),
-              current_player: 'X'
+              current_player: 'X',
+              time_left_x: 300,
+              time_left_o: 300,
+              winner: null,
+              last_move: null
             })
             .select()
             .single();
 
           if (createError) throw createError;
+          if (!newRoom) throw new Error('Failed to create room');
 
           currentRoomId = newRoom.id;
           console.log('Created new room:', newRoom.id);
@@ -97,6 +103,11 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
         }
       } catch (error) {
         console.error('Error in matchmaking:', error);
+        toast({
+          title: "Matchmaking Error",
+          description: "Failed to find or create a game. Please try again.",
+          variant: "destructive"
+        });
       }
     };
 
@@ -117,14 +128,18 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
           .single();
 
         if (joinError) throw joinError;
+        if (!room) throw new Error('Failed to join room');
 
-        if (room) {
-          currentRoomId = room.id;
-          console.log('Joined room:', room.id);
-          await handleMatchFound(room.id);
-        }
+        currentRoomId = room.id;
+        console.log('Joined room:', room.id);
+        await handleMatchFound(room.id);
       } catch (error) {
         console.error('Error joining room:', error);
+        toast({
+          title: "Join Error",
+          description: "Failed to join the game. Please try again.",
+          variant: "destructive"
+        });
       }
     };
 
@@ -142,33 +157,46 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
             table: 'game_rooms',
             filter: `id=eq.${roomId}`
           },
-          async (payload: RealtimePostgresChangesPayload<GameRoom>) => {
-            const newRoom = payload.new;
+          async (payload: RealtimeGameRoom) => {
+            const newRoom = payload.new as GameRoom;
+            if (!newRoom) return;
+            
             console.log('Room update:', newRoom);
             
-            if (newRoom.status === 'playing' && newRoom.player1_id && newRoom.player2_id) {
-              if (newRoom.player1_id === userId || newRoom.player2_id === userId) {
-                await handleMatchFound(roomId);
-              }
+            if (newRoom.status === 'playing' && 
+                newRoom.player1_id && 
+                newRoom.player2_id && 
+                (newRoom.player1_id === userId || newRoom.player2_id === userId)) {
+              await handleMatchFound(roomId);
             }
           }
         )
         .subscribe();
+
+      console.log('Subscribed to room:', roomId);
     };
 
     const handleMatchFound = async (roomId: string) => {
       if (!isSubscribed) return;
       
       try {
-        const { data: room } = await supabase
+        const { data: room, error } = await supabase
           .from('game_rooms')
-          .select()
+          .select('*')
           .eq('id', roomId)
           .single();
 
-        if (!room || !room.player1_id || !room.player2_id) return;
+        if (error) throw error;
+        if (!room) throw new Error('Room not found');
 
+        if (room.status !== 'playing' || !room.player1_id || !room.player2_id) {
+          console.log('Invalid room state:', room);
+          return;
+        }
+
+        console.log('Match confirmed! Room:', room);
         setSearchState("found");
+
         await new Promise(resolve => setTimeout(resolve, 1000));
         if (!isSubscribed) return;
         
@@ -184,6 +212,11 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
         });
       } catch (error) {
         console.error('Error handling match:', error);
+        toast({
+          title: "Connection Error",
+          description: "Failed to connect to the game. Please try again.",
+          variant: "destructive"
+        });
       }
     };
 
