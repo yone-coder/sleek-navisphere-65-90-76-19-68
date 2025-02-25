@@ -55,6 +55,17 @@ export const useGameState = ({ boardSize }: UseGameStateProps) => {
 
   const { playMoveSound, playWinSound } = useGameAudio(soundEnabled, inactivityTime, winner);
 
+  const vibrate = (pattern: number | number[]) => {
+    try {
+      // Check if vibration is supported and available
+      if ('vibrate' in navigator) {
+        navigator.vibrate(pattern);
+      }
+    } catch (error) {
+      console.log('Vibration not supported');
+    }
+  };
+
   const handleClick = (row: number, col: number) => {
     if (board[row][col] || winner || !isTimerRunning) return;
 
@@ -64,10 +75,8 @@ export const useGameState = ({ boardSize }: UseGameStateProps) => {
       return;
     }
 
-    // Vibrate on move
-    if (navigator.vibrate) {
-      navigator.vibrate(40); // Short vibration for regular moves
-    }
+    // Vibrate immediately when a valid move is made
+    vibrate(40);
 
     const newBoard = JSON.parse(JSON.stringify(board));
     newBoard[row][col] = currentPlayer;
@@ -90,10 +99,8 @@ export const useGameState = ({ boardSize }: UseGameStateProps) => {
 
     if (checkWinner(newBoard, row, col)) {
       playWinSound();
-      // Different vibration pattern for winning move
-      if (navigator.vibrate) {
-        navigator.vibrate([50, 50, 100]); // Pattern: vibrate-pause-vibrate
-      }
+      // Victory vibration pattern
+      vibrate([50, 50, 100]);
       setWinner(currentPlayer);
       setTimeout(() => {
         setShowWinnerPopup(true);
