@@ -1,4 +1,173 @@
 
+// Constants for players
+const HUMAN = 'X';  // Human player
+const AI = 'O';     // Bot player
+
+// Function to check if there are moves left in the given area
+const isMovesLeft = (board: string[][], centerRow: number, centerCol: number, range: number) => {
+  const startRow = Math.max(0, centerRow - range);
+  const endRow = Math.min(board.length - 1, centerRow + range);
+  const startCol = Math.max(0, centerCol - range);
+  const endCol = Math.min(board.length - 1, centerCol + range);
+
+  for (let i = startRow; i <= endRow; i++) {
+    for (let j = startCol; j <= endCol; j++) {
+      if (!board[i][j]) return true;
+    }
+  }
+  return false;
+};
+
+// Function to evaluate the board state
+const evaluate = (board: string[][], lastMove: { row: number; col: number }) => {
+  const directions = [
+    [0, 1],  // horizontal
+    [1, 0],  // vertical
+    [1, 1],  // diagonal
+    [1, -1]  // anti-diagonal
+  ];
+
+  for (const [dx, dy] of directions) {
+    let count = 1;
+    let forward = true;
+    let backward = true;
+    
+    for (let i = 1; i < 5; i++) {
+      // Check forward direction
+      if (forward) {
+        const newRow = lastMove.row + (dx * i);
+        const newCol = lastMove.col + (dy * i);
+        if (newRow >= 0 && newRow < board.length && 
+            newCol >= 0 && newCol < board.length) {
+          if (board[newRow][newCol] === board[lastMove.row][lastMove.col]) {
+            count++;
+          } else {
+            forward = false;
+          }
+        } else {
+          forward = false;
+        }
+      }
+
+      // Check backward direction
+      if (backward) {
+        const newRow = lastMove.row - (dx * i);
+        const newCol = lastMove.col - (dy * i);
+        if (newRow >= 0 && newRow < board.length && 
+            newCol >= 0 && newCol < board.length) {
+          if (board[newRow][newCol] === board[lastMove.row][lastMove.col]) {
+            count++;
+          } else {
+            backward = false;
+          }
+        } else {
+          backward = false;
+        }
+      }
+    }
+
+    if (count >= 5) {
+      return board[lastMove.row][lastMove.col] === AI ? 1000 : -1000;
+    }
+  }
+
+  return 0;
+};
+
+// Minimax function with alpha-beta pruning
+const minimax = (
+  board: string[][],
+  depth: number,
+  alpha: number,
+  beta: number,
+  isMax: boolean,
+  centerRow: number,
+  centerCol: number,
+  lastMove: { row: number; col: number } | null
+): number => {
+  if (depth === 0 || !lastMove) return 0;
+  
+  const score = evaluate(board, lastMove);
+  if (score === 1000 || score === -1000) return score;
+  
+  if (!isMovesLeft(board, centerRow, centerCol, 3)) return 0;
+
+  if (isMax) {
+    let best = -Infinity;
+    const range = 3;
+    const startRow = Math.max(0, centerRow - range);
+    const endRow = Math.min(board.length - 1, centerRow + range);
+    const startCol = Math.max(0, centerCol - range);
+    const endCol = Math.min(board.length - 1, centerCol + range);
+
+    for (let i = startRow; i <= endRow; i++) {
+      for (let j = startCol; j <= endCol; j++) {
+        if (!board[i][j]) {
+          board[i][j] = AI;
+          best = Math.max(best, minimax(board, depth - 1, alpha, beta, false, i, j, { row: i, col: j }));
+          board[i][j] = '';
+          alpha = Math.max(alpha, best);
+          if (beta <= alpha) break;
+        }
+      }
+    }
+    return best;
+  } else {
+    let best = Infinity;
+    const range = 3;
+    const startRow = Math.max(0, centerRow - range);
+    const endRow = Math.min(board.length - 1, centerRow + range);
+    const startCol = Math.max(0, centerCol - range);
+    const endCol = Math.min(board.length - 1, centerCol + range);
+
+    for (let i = startRow; i <= endRow; i++) {
+      for (let j = startCol; j <= endCol; j++) {
+        if (!board[i][j]) {
+          board[i][j] = HUMAN;
+          best = Math.min(best, minimax(board, depth - 1, alpha, beta, true, i, j, { row: i, col: j }));
+          board[i][j] = '';
+          beta = Math.min(beta, best);
+          if (beta <= alpha) break;
+        }
+      }
+    }
+    return best;
+  }
+};
+
+// Function to find the best move
+const findBestMove = (
+  board: string[][],
+  centerRow: number,
+  centerCol: number,
+  lastMove: { row: number; col: number } | null
+): { row: number; col: number } | null => {
+  let bestVal = -Infinity;
+  let bestMove = null;
+  const range = 3;
+  const startRow = Math.max(0, centerRow - range);
+  const endRow = Math.min(board.length - 1, centerRow + range);
+  const startCol = Math.max(0, centerCol - range);
+  const endCol = Math.min(board.length - 1, centerCol + range);
+
+  for (let i = startRow; i <= endRow; i++) {
+    for (let j = startCol; j <= endCol; j++) {
+      if (!board[i][j]) {
+        board[i][j] = AI;
+        const moveVal = minimax(board, 3, -Infinity, Infinity, false, i, j, { row: i, col: j });
+        board[i][j] = '';
+
+        if (moveVal > bestVal) {
+          bestVal = moveVal;
+          bestMove = { row: i, col: j };
+        }
+      }
+    }
+  }
+
+  return bestMove;
+};
+
 export const calculateBotMove = (
   board: string[][],
   lastMove: { row: number; col: number } | null,
@@ -11,16 +180,16 @@ export const calculateBotMove = (
     return { row: center, col: center };
   }
 
-  // Function to check if a position is valid for second move
-  const isValidSecondMove = (row: number, col: number) => {
-    const centerRow = Math.floor(boardSize / 2);
-    const centerCol = Math.floor(boardSize / 2);
-    const rowDiff = Math.abs(row - centerRow);
-    const colDiff = Math.abs(col - centerCol);
-    return rowDiff <= 3 && colDiff <= 3;
-  };
+  // For hard difficulty, use minimax
+  if (difficulty === 'hard') {
+    return findBestMove(board, lastMove.row, lastMove.col, lastMove);
+  }
 
-  // Function to detect three in a row threats
+  // For easier difficulties, use the existing strategy
+  const centerRow = lastMove.row;
+  const centerCol = lastMove.col;
+
+  // Function to detect threats
   const detectThreeInARow = (symbol: string): { row: number; col: number } | null => {
     for (let i = 0; i < boardSize; i++) {
       for (let j = 0; j < boardSize; j++) {
@@ -120,67 +289,32 @@ export const calculateBotMove = (
   };
 
   // First priority: Check for immediate win
-  const winningMove = checkWin('O');
+  const winningMove = detectThreeInARow('O');
   if (winningMove) return winningMove;
 
   // Second priority: Block opponent's win
-  const blockingMove = checkWin('X');
+  const blockingMove = detectThreeInARow('X');
   if (blockingMove) return blockingMove;
-
-  // Third priority: Block three in a row threats
-  const blockThree = detectThreeInARow('X');
-  if (blockThree) return blockThree;
 
   // Get all valid moves with scores
   const validMoves: { row: number; col: number; score: number }[] = [];
-  for (let i = 0; i < boardSize; i++) {
-    for (let j = 0; j < boardSize; j++) {
-      if (!board[i][j]) {
-        if (board.flat().filter(Boolean).length === 1 && !isValidSecondMove(i, j)) {
-          continue;
-        }
+  const range = 3;
+  const startRow = Math.max(0, centerRow - range);
+  const endRow = Math.min(boardSize - 1, centerRow + range);
+  const startCol = Math.max(0, centerCol - range);
+  const endCol = Math.min(boardSize - 1, centerCol + range);
 
+  for (let i = startRow; i <= endRow; i++) {
+    for (let j = startCol; j <= endCol; j++) {
+      if (!board[i][j]) {
         let score = 0;
         
-        // Check all 8 directions for strategic value
-        const directions = [
-          [-1, -1], [-1, 0], [-1, 1],
-          [0, -1],           [0, 1],
-          [1, -1],  [1, 0],  [1, 1]
-        ];
-
-        for (const [dx, dy] of directions) {
-          // Count consecutive pieces and empty spaces
-          let botPieces = 0;
-          let playerPieces = 0;
-          let emptySpaces = 0;
-
-          for (let step = -4; step <= 4; step++) {
-            const x = i + dx * step;
-            const y = j + dy * step;
-            
-            if (x >= 0 && x < boardSize && y >= 0 && y < boardSize) {
-              if (board[x][y] === 'O') botPieces++;
-              else if (board[x][y] === 'X') playerPieces++;
-              else emptySpaces++;
-            }
-          }
-
-          // Scoring based on piece configuration
-          if (botPieces >= 2) score += botPieces * 100;
-          if (playerPieces >= 2) score += playerPieces * 80;
-          score += emptySpaces * 10;
-        }
-
         // Position-based scoring
-        const centerRow = Math.floor(boardSize / 2);
-        const centerCol = Math.floor(boardSize / 2);
-        const distanceToCenter = Math.abs(i - centerRow) + Math.abs(j - centerCol);
-        score += Math.max(0, (10 - distanceToCenter) * 50);
+        const distanceFromCenter = Math.abs(i - centerRow) + Math.abs(j - centerCol);
+        score += Math.max(0, (6 - distanceFromCenter) * 50);
 
         // Difficulty adjustments
-        const randomFactor = difficulty === 'easy' ? 0.5 : 
-                           difficulty === 'medium' ? 0.25 : 0.1;
+        const randomFactor = difficulty === 'easy' ? 0.5 : 0.25;
         score += Math.random() * score * randomFactor;
 
         validMoves.push({ row: i, col: j, score });
