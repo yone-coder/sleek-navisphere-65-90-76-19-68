@@ -80,10 +80,10 @@ const minimax = (
       for (let j = 0; j < boardSize; j++) {
         if (!board[i][j] && isValidMove(board, i, j, boardSize)) {
           board[i][j] = 'O';
-          const eval = minimax(board, depth - 1, alpha, beta, false, boardSize);
+          const evaluation = minimax(board, depth - 1, alpha, beta, false, boardSize);
           board[i][j] = '';
-          maxEval = Math.max(maxEval, eval);
-          alpha = Math.max(alpha, eval);
+          maxEval = Math.max(maxEval, evaluation);
+          alpha = Math.max(alpha, evaluation);
           if (beta <= alpha) break;
         }
       }
@@ -95,10 +95,10 @@ const minimax = (
       for (let j = 0; j < boardSize; j++) {
         if (!board[i][j] && isValidMove(board, i, j, boardSize)) {
           board[i][j] = 'X';
-          const eval = minimax(board, depth - 1, alpha, beta, true, boardSize);
+          const evaluation = minimax(board, depth - 1, alpha, beta, true, boardSize);
           board[i][j] = '';
-          minEval = Math.min(minEval, eval);
-          beta = Math.min(beta, eval);
+          minEval = Math.min(minEval, evaluation);
+          beta = Math.min(beta, evaluation);
           if (beta <= alpha) break;
         }
       }
