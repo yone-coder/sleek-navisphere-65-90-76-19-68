@@ -60,7 +60,7 @@ export const MainContent = ({
               categories={appCategories}
               onCategoryChange={onCategoryChange}
               onSortChange={onSortChange}
-              onViewModeChange={onViewModeChange}
+              onViewModeChange={onViewModeMode}
               onUpdatesToggle={onUpdatesToggle}
             />
           </div>
