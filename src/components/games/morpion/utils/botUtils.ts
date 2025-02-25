@@ -5,192 +5,174 @@ export const calculateBotMove = (
   boardSize: number,
   difficulty: string
 ): { row: number; col: number } | null => {
-  // If it's the first move, play near the center
   if (!lastMove) {
+    // First move: Always play center for optimal strategy
     const center = Math.floor(boardSize / 2);
     return { row: center, col: center };
   }
 
-  // Function to check if a position is valid for second move
-  const isValidSecondMove = (row: number, col: number) => {
-    const centerRow = Math.floor(boardSize / 2);
-    const centerCol = Math.floor(boardSize / 2);
-    const rowDiff = Math.abs(row - centerRow);
-    const colDiff = Math.abs(col - centerCol);
-    return rowDiff <= 3 && colDiff <= 3;
-  };
+  // Minimax with alpha-beta pruning
+  let bestScore = -Infinity;
+  let bestMove: { row: number; col: number } | null = null;
 
-  // Function to detect three in a row threats
-  const detectThreeInARow = (symbol: string): { row: number; col: number } | null => {
+  // Helper function to evaluate board state
+  const evaluateBoard = (board: string[][], depth: number): number => {
+    // Check for wins in all directions from each position
     for (let i = 0; i < boardSize; i++) {
       for (let j = 0; j < boardSize; j++) {
-        if (board[i][j]) continue;
+        if (!board[i][j]) continue;
 
-        // Check all 8 directions
         const directions = [
-          [-1, -1], [-1, 0], [-1, 1],
-          [0, -1],           [0, 1],
-          [1, -1],  [1, 0],  [1, 1]
+          [1, 0], [0, 1], [1, 1], [1, -1]
         ];
 
         for (const [dx, dy] of directions) {
-          let count = 0;
-          let openEnds = 0;
-
-          // Check backward
-          let x = i - dx;
-          let y = j - dy;
-          while (x >= 0 && x < boardSize && y >= 0 && y < boardSize && board[x][y] === symbol) {
-            count++;
-            x -= dx;
-            y -= dy;
-          }
-          if (x >= 0 && x < boardSize && y >= 0 && y < boardSize && board[x][y] === '') {
-            openEnds++;
-          }
-
-          // Check forward
-          x = i + dx;
-          y = j + dy;
-          while (x >= 0 && x < boardSize && y >= 0 && y < boardSize && board[x][y] === symbol) {
+          let count = 1;
+          let x = i + dx;
+          let y = j + dy;
+          
+          // Count in forward direction
+          while (x >= 0 && x < boardSize && y >= 0 && y < boardSize && board[x][y] === board[i][j]) {
             count++;
             x += dx;
             y += dy;
           }
-          if (x >= 0 && x < boardSize && y >= 0 && y < boardSize && board[x][y] === '') {
-            openEnds++;
+          
+          // Count in backward direction
+          x = i - dx;
+          y = j - dy;
+          while (x >= 0 && x < boardSize && y >= 0 && y < boardSize && board[x][y] === board[i][j]) {
+            count++;
+            x -= dx;
+            y -= dy;
           }
 
-          if (count >= 3 && openEnds > 0) {
-            return { row: i, col: j };
+          if (count >= 5) {
+            return board[i][j] === 'O' ? 1000 - depth : depth - 1000;
           }
         }
       }
     }
-    return null;
+    return 0;
   };
 
-  // Check for immediate win
-  const checkWin = (symbol: string): { row: number; col: number } | null => {
-    for (let i = 0; i < boardSize; i++) {
-      for (let j = 0; j < boardSize; j++) {
-        if (!board[i][j]) {
-          // Try placing the symbol
-          board[i][j] = symbol;
-          
-          // Check all 8 directions
-          const directions = [
-            [-1, -1], [-1, 0], [-1, 1],
-            [0, -1],           [0, 1],
-            [1, -1],  [1, 0],  [1, 1]
-          ];
+  // Minimax function with alpha-beta pruning
+  const minimax = (
+    board: string[][],
+    depth: number,
+    alpha: number,
+    beta: number,
+    isMaximizing: boolean
+  ): number => {
+    const evaluation = evaluateBoard(board, depth);
+    if (evaluation !== 0) return evaluation;
+    if (depth >= 6) return 0; // Limit depth for performance
 
-          for (const [dx, dy] of directions) {
-            let count = 1;
-            
-            // Check forward
-            let x = i + dx;
-            let y = j + dy;
-            while (x >= 0 && x < boardSize && y >= 0 && y < boardSize && board[x][y] === symbol) {
-              count++;
-              x += dx;
-              y += dy;
-            }
-
-            // Check backward
-            x = i - dx;
-            y = j - dy;
-            while (x >= 0 && x < boardSize && y >= 0 && y < boardSize && board[x][y] === symbol) {
-              count++;
-              x -= dx;
-              y -= dy;
-            }
-
-            if (count >= 5) {
-              board[i][j] = '';
-              return { row: i, col: j };
-            }
+    if (isMaximizing) {
+      let maxEvaluation = -Infinity;
+      for (let i = 0; i < boardSize; i++) {
+        for (let j = 0; j < boardSize; j++) {
+          if (!board[i][j] && isValidMove(i, j, board)) {
+            board[i][j] = 'O';
+            const evaluation = minimax(board, depth + 1, alpha, beta, false);
+            board[i][j] = '';
+            maxEvaluation = Math.max(maxEvaluation, evaluation);
+            alpha = Math.max(alpha, evaluation);
+            if (beta <= alpha) break;
           }
-          
-          board[i][j] = '';
         }
       }
+      return maxEvaluation;
+    } else {
+      let minEvaluation = Infinity;
+      for (let i = 0; i < boardSize; i++) {
+        for (let j = 0; j < boardSize; j++) {
+          if (!board[i][j] && isValidMove(i, j, board)) {
+            board[i][j] = 'X';
+            const evaluation = minimax(board, depth + 1, alpha, beta, true);
+            board[i][j] = '';
+            minEvaluation = Math.min(minEvaluation, evaluation);
+            beta = Math.min(beta, evaluation);
+            if (beta <= alpha) break;
+          }
+        }
+      }
+      return minEvaluation;
     }
-    return null;
   };
 
-  // First priority: Check for immediate win
-  const winningMove = checkWin('O');
-  if (winningMove) return winningMove;
+  // Helper to check if a move is valid based on proximity to existing moves
+  const isValidMove = (row: number, col: number, board: string[][]): boolean => {
+    // First few moves should be near the center
+    if (countMoves(board) < 3) {
+      const center = Math.floor(boardSize / 2);
+      const rowDiff = Math.abs(row - center);
+      const colDiff = Math.abs(col - center);
+      return rowDiff <= 3 && colDiff <= 3;
+    }
 
-  // Second priority: Block opponent's win
-  const blockingMove = checkWin('X');
-  if (blockingMove) return blockingMove;
+    // After that, moves should be adjacent to existing ones
+    const directions = [
+      [-1, -1], [-1, 0], [-1, 1],
+      [0, -1],          [0, 1],
+      [1, -1],  [1, 0],  [1, 1]
+    ];
 
-  // Third priority: Block three in a row threats
-  const blockThree = detectThreeInARow('X');
-  if (blockThree) return blockThree;
+    for (const [dx, dy] of directions) {
+      const newRow = row + dx;
+      const newCol = col + dy;
+      if (
+        newRow >= 0 && newRow < boardSize &&
+        newCol >= 0 && newCol < boardSize &&
+        board[newRow][newCol]
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
 
-  // Get all valid moves with scores
-  const validMoves: { row: number; col: number; score: number }[] = [];
+  // Helper to count total moves on board
+  const countMoves = (board: string[][]): number => {
+    return board.flat().filter(Boolean).length;
+  };
+
+  // Find best move using minimax
   for (let i = 0; i < boardSize; i++) {
     for (let j = 0; j < boardSize; j++) {
-      if (!board[i][j]) {
-        if (board.flat().filter(Boolean).length === 1 && !isValidSecondMove(i, j)) {
-          continue;
+      if (!board[i][j] && isValidMove(i, j, board)) {
+        board[i][j] = 'O';
+        const score = minimax(board, 0, -Infinity, Infinity, false);
+        board[i][j] = '';
+
+        if (score > bestScore) {
+          bestScore = score;
+          bestMove = { row: i, col: j };
         }
-
-        let score = 0;
-        
-        // Check all 8 directions for strategic value
-        const directions = [
-          [-1, -1], [-1, 0], [-1, 1],
-          [0, -1],           [0, 1],
-          [1, -1],  [1, 0],  [1, 1]
-        ];
-
-        for (const [dx, dy] of directions) {
-          // Count consecutive pieces and empty spaces
-          let botPieces = 0;
-          let playerPieces = 0;
-          let emptySpaces = 0;
-
-          for (let step = -4; step <= 4; step++) {
-            const x = i + dx * step;
-            const y = j + dy * step;
-            
-            if (x >= 0 && x < boardSize && y >= 0 && y < boardSize) {
-              if (board[x][y] === 'O') botPieces++;
-              else if (board[x][y] === 'X') playerPieces++;
-              else emptySpaces++;
-            }
-          }
-
-          // Scoring based on piece configuration
-          if (botPieces >= 2) score += botPieces * 100;
-          if (playerPieces >= 2) score += playerPieces * 80;
-          score += emptySpaces * 10;
-        }
-
-        // Position-based scoring
-        const centerRow = Math.floor(boardSize / 2);
-        const centerCol = Math.floor(boardSize / 2);
-        const distanceToCenter = Math.abs(i - centerRow) + Math.abs(j - centerCol);
-        score += Math.max(0, (10 - distanceToCenter) * 50);
-
-        // Difficulty adjustments
-        const randomFactor = difficulty === 'easy' ? 0.5 : 
-                           difficulty === 'medium' ? 0.25 : 0.1;
-        score += Math.random() * score * randomFactor;
-
-        validMoves.push({ row: i, col: j, score });
       }
     }
   }
 
-  if (validMoves.length === 0) return null;
+  // If no move found (shouldn't happen), play near last move
+  if (!bestMove && lastMove) {
+    const directions = [
+      [-1, -1], [-1, 0], [-1, 1],
+      [0, -1],          [0, 1],
+      [1, -1],  [1, 0],  [1, 1]
+    ];
 
-  // Sort by score and pick the best move
-  validMoves.sort((a, b) => b.score - a.score);
-  return validMoves[0];
+    for (const [dx, dy] of directions) {
+      const newRow = lastMove.row + dx;
+      const newCol = lastMove.col + dy;
+      if (
+        newRow >= 0 && newRow < boardSize &&
+        newCol >= 0 && newCol < boardSize &&
+        !board[newRow][newCol]
+      ) {
+        return { row: newRow, col: newCol };
+      }
+    }
+  }
+
+  return bestMove;
 };
