@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
@@ -12,6 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 // Lazy load pages
 const Apps = lazy(() => import("./pages/Apps"));
 const Login = lazy(() => import("./pages/Login"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const GamesPages = lazy(() => import("./pages/GamesPages"));
 const ContestsPage = lazy(() => import("./pages/games/ContestsPage"));
 const GamesExplore = lazy(() => import("./pages/games/GamesExplore"));
@@ -81,6 +83,7 @@ const AppContent = () => {
           <Route path="/" element={<Apps />} />
           <Route path="/apps" element={<Apps />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/games-pages" element={<GamesPages />} />
           <Route path="/games-pages/contest" element={<ContestsPage />} />
           <Route path="/games-pages/game-search" element={<GamesExplore />} />
