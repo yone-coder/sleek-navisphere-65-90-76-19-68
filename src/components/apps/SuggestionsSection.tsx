@@ -7,15 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Card } from "@/components/ui/card";
 import { useEffect, useRef } from "react";
+import { App } from "./types";
+import { cn } from "@/lib/utils";
 
 interface SuggestionsSectionProps {
-  suggestedApps: Array<{
-    name: string;
-    icon: any;
-    color: string;
-    route: string;
-    updates?: number;
-  }>;
+  suggestedApps: App[];
 }
 
 export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) => {
@@ -29,7 +25,7 @@ export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) =
     if (!acc[groupIndex]) acc[groupIndex] = [];
     acc[groupIndex].push(app);
     return acc;
-  }, [] as typeof suggestedApps[]);
+  }, [] as App[][]);
 
   return (
     <div className="mb-8 -mx-4 sm:-mx-6 md:-mx-8">
@@ -100,47 +96,38 @@ export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) =
               }}
             >
               <div className="grid grid-cols-4 gap-4">
-                {group.map((app) => {
-                  const randomDelay = Math.floor(Math.random() * 10000) + 5000;
-                  
-                  return (
-                    <Card 
-                      key={app.name} 
-                      className="overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-transparent border-0"
-                      onClick={() => navigate(app.route)}
-                    >
-                      <div className="relative w-full overflow-hidden">
-                        <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
-                          <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
-                            <app.icon className="w-8 h-8 text-white" strokeWidth={2} />
-                            {app.updates > 0 && (
-                              <Badge 
-                                className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5"
-                              >
-                                {app.updates}
-                              </Badge>
-                            )}
-                          </div>
-                          <div className={`w-[70px] overflow-hidden h-5 name-container ${app.name.length <= 8 ? 'center' : ''}`}>
-                            <span 
-                              className={`text-sm font-medium text-gray-700 scrolling-text whitespace-nowrap ${app.name.length > 8 ? 'needs-scroll inline-block' : 'text-center w-full block'}`}
-                              ref={(el) => {
-                                if (el && app.name.length > 8) {
-                                  el.style.animation = 'scrollText 8s 1';
-                                  setTimeout(() => {
-                                    el.style.animation = 'scrollText 8s 1';
-                                  }, randomDelay);
-                                }
-                              }}
+                {group.map((app) => (
+                  <Card 
+                    key={app.name} 
+                    className="overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-transparent border-0"
+                    onClick={() => navigate(app.route)}
+                  >
+                    <div className="relative w-full overflow-hidden">
+                      <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
+                        <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
+                          {'component' in app.icon 
+                            ? <img {...app.icon.props} className={cn("w-[80%] h-[80%]", app.icon.props.className)} />
+                            : <app.icon className="w-8 h-8 text-white" strokeWidth={2} />
+                          }
+                          {app.updates > 0 && (
+                            <Badge 
+                              className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5"
                             >
-                              {app.name}
-                            </span>
-                          </div>
+                              {app.updates}
+                            </Badge>
+                          )}
+                        </div>
+                        <div className={`w-[70px] overflow-hidden h-5 name-container ${app.name.length <= 8 ? 'center' : ''}`}>
+                          <span 
+                            className={`text-sm font-medium text-gray-700 scrolling-text whitespace-nowrap ${app.name.length > 8 ? 'needs-scroll' : 'text-center w-full block'}`}
+                          >
+                            {app.name}
+                          </span>
                         </div>
                       </div>
-                    </Card>
-                  );
-                })}
+                    </div>
+                  </Card>
+                ))}
               </div>
             </div>
           ))}
