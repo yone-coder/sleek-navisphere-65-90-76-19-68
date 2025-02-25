@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useGameState } from '@/components/games/morpion/hooks/useGameState';
 import GameLayout from '@/components/games/morpion/GameLayout';
+import GameMenu from '@/components/games/morpion/GameMenu';
 import { GameMode } from '@/components/games/morpion/types';
 import { calculateBotMove } from '@/components/games/morpion/utils/botUtils';
 
@@ -32,9 +33,15 @@ const GameComponent = ({
 
   // Bot move effect
   useEffect(() => {
+    console.log('Bot effect running:', { gameMode, currentPlayer, winner });
+    
     if (gameMode === 'bot' && currentPlayer === 'O' && !winner) {
+      console.log('Bot is thinking...');
+      
       const timer = setTimeout(() => {
         const botMove = calculateBotMove(board, lastMove, boardSize, difficulty);
+        console.log('Bot move calculated:', botMove);
+        
         if (botMove) {
           handleClick(botMove.row, botMove.col);
         }
@@ -42,7 +49,7 @@ const GameComponent = ({
 
       return () => clearTimeout(timer);
     }
-  }, [board, currentPlayer, lastMove, winner, gameMode, difficulty]);
+  }, [board, currentPlayer, lastMove, winner, gameMode, difficulty, boardSize, handleClick]);
 
   return (
     <GameLayout
@@ -64,7 +71,7 @@ const Morpion = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [player1] = useState('Guest10816');
   const [player2, setPlayer2] = useState('Guest');
-  const [gameMode, setGameMode] = useState<GameMode>('local'); // Default to local mode
+  const [gameMode, setGameMode] = useState<GameMode>('local');
   const [difficulty, setDifficulty] = useState('medium');
 
   // Get query parameters to check if we should set specific game mode

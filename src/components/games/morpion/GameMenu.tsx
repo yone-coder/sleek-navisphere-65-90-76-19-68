@@ -5,7 +5,7 @@ import { GameMode } from './types';
 import { Bot, Globe, Users } from 'lucide-react';
 
 interface GameMenuProps {
-  onSelectMode: (mode: GameMode, roomId?: string) => void;
+  onSelectMode: (mode: GameMode) => void;
 }
 
 const GameMenu = ({ onSelectMode }: GameMenuProps) => {
