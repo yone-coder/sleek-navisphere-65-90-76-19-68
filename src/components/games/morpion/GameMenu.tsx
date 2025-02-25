@@ -8,7 +8,7 @@ interface GameMenuProps {
   onSelectMode: (mode: GameMode, roomId?: string) => void;
 }
 
-export const GameMenu = ({ onSelectMode }: GameMenuProps) => {
+const GameMenu = ({ onSelectMode }: GameMenuProps) => {
   return (
     <div className="p-6 space-y-4">
       <Button
@@ -40,3 +40,5 @@ export const GameMenu = ({ onSelectMode }: GameMenuProps) => {
     </div>
   );
 };
+
+export default GameMenu;

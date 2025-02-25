@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -19,7 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { GameMenu } from "@/components/games/morpion/GameMenu";
+import GameMenu from "@/components/games/morpion/GameMenu";
 
 export default function GameDetails() {
   const { id } = useParams();
