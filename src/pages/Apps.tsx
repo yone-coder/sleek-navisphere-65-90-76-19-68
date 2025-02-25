@@ -1,6 +1,5 @@
 
 import { useState } from "react";
-import { Grid2X2, Star, Clock } from "lucide-react";
 import { AppsHeader } from "@/components/apps/AppsHeader";
 import { BannerSlider } from "@/components/BannerSlider";
 import { FavoritesSection } from "@/components/apps/FavoritesSection";
@@ -15,6 +14,7 @@ import { useFavorites } from "@/components/apps/hooks/useFavorites";
 import { categories } from "@/components/apps/data/categories";
 import { appCategories } from "@/components/apps/data/appCategories";
 import { apps } from "@/data/apps";
+import type { AppCategory } from "@/components/apps/types";
 
 export default function Apps() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -60,7 +60,7 @@ export default function Apps() {
 
                 <div className="flex-shrink-0">
                   <AppControls
-                    selectedCategory={selectedCategory}
+                    selectedCategory={selectedCategory as AppCategory}
                     viewMode={viewMode}
                     showUpdatesOnly={showUpdatesOnly}
                     updatesCount={updatesCount}
