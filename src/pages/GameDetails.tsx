@@ -1,4 +1,3 @@
-<lov-code>
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -19,16 +18,7 @@ import {
   Users2,
   Calendar,
   Filter,
-  Search,
-  TrendingUp,
-  ChartLine,
-  BarChart,
-  Users as UsersIcon,
-  ActivitySquare,
-  LineChart,
-  ArrowUpRight,
-  ArrowDownRight,
-  Gauge
+  Search
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -54,26 +44,6 @@ import {
 } from "@/components/ui/select";
 import { NewsCard } from "@/components/news/NewsCard";
 import type { NewsArticle } from "@/components/news/types";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  LineChart as RechartsLineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  Cell
-} from "recharts";
 
 const mockGame = {
   id: "1",
@@ -463,28 +433,6 @@ export default function GameDetails() {
     );
   }
 
-  const playerData = [
-    { name: "Jan", count: 95000 },
-    { name: "Feb", count: 102000 },
-    { name: "Mar", count: 108000 },
-    { name: "Apr", count: 115000 },
-    { name: "May", count: 125000 },
-    { name: "Jun", count: 128000 },
-  ];
-
-  const serverData = [
-    { name: "NA", players: 45000, uptime: 99.9 },
-    { name: "EU", players: 52000, uptime: 99.8 },
-    { name: "ASIA", players: 31000, uptime: 99.7 },
-  ];
-
-  const matchData = [
-    { type: "Ranked", matches: 25000 },
-    { type: "Casual", matches: 35000 },
-    { type: "Custom", matches: 15000 },
-    { type: "Tournament", matches: 5000 },
-  ];
-
   return (
     <div className="min-h-screen animate-fade-in">
       <div className="fixed top-0 left-0 right-0 z-50">
@@ -524,7 +472,7 @@ export default function GameDetails() {
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <div className="w-full overflow-x-auto no-scrollbar">
                 <TabsList className="w-full h-auto inline-flex whitespace-nowrap">
-                  {["overview", "stats", "tournaments", "matches", "news", "dlc"].map((tab) => (
+                  {["overview", "details", "tournaments", "matches", "news", "dlc"].map((tab) => (
                     <TabsTrigger
                       key={tab}
                       value={tab}
@@ -801,7 +749,86 @@ export default function GameDetails() {
             </div>
           </TabsContent>
 
-          <TabsContent value="stats">
-            <div className="p-4 space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card className="bg-gradient-to-br from-purple-500
+          {["details", "dlc"].map((tab) => (
+            <TabsContent key={tab} value={tab}>
+              <div className="p-4 text-center text-gray-500">
+                {tab.charAt(0).toUpperCase() + tab.slice(1)} content coming soon...
+              </div>
+            </TabsContent>
+          ))}
+        </Tabs>
+      </div>
+
+      {activeTab === "overview" && (
+        <div className="fixed bottom-0 left-0 right-0 backdrop-blur-lg bg-background/80 border-t border-border/40">
+          <div className="p-2 space-y-2">
+            <div className="grid grid-cols-3 gap-1.5">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={handleLike}
+                className={cn(
+                  "flex-1 relative overflow-hidden transition-all duration-300 h-7 min-h-0",
+                  isLiked ? "border-pink-500 text-pink-500 hover:text-pink-600 hover:border-pink-600" 
+                         : "hover:border-pink-500/50"
+                )}
+              >
+                <div className="flex items-center justify-center gap-1.5">
+                  <Heart 
+                    className={cn(
+                      "h-3.5 w-3.5 transition-all duration-300",
+                      isLiked && "fill-current",
+                      isLikeAnimating && "animate-ping"
+                    )} 
+                  />
+                  <span className="text-xs font-medium">{formatCount(likeCount)}</span>
+                </div>
+                {isLiked && (
+                  <div 
+                    className="absolute inset-0 bg-pink-500/10 animate-fade-out"
+                    style={{ animationDuration: '0.5s' }}
+                  />
+                )}
+              </Button>
+
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={handleShare}
+                className="flex-1 hover:border-green-500/50 transition-all duration-300 group relative overflow-hidden h-7 min-h-0"
+              >
+                <div className="flex items-center justify-center gap-1.5">
+                  <Share2 className="h-3.5 w-3.5 group-hover:text-green-500 transition-colors duration-300" />
+                  <span className="text-xs font-medium group-hover:text-green-500 transition-colors duration-300">
+                    {formatCount(shareCount)}
+                  </span>
+                </div>
+              </Button>
+
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="flex-1 hover:border-blue-500/50 transition-all duration-300 group h-7 min-h-0"
+              >
+                <div className="flex items-center justify-center gap-1.5">
+                  <DollarSign className="h-3.5 w-3.5 group-hover:text-blue-500 transition-colors duration-300" />
+                  <span className="text-xs font-medium group-hover:text-blue-500 transition-colors duration-300">
+                    {formatCount(downloadCount)}
+                  </span>
+                </div>
+              </Button>
+            </div>
+
+            <Button 
+              size="sm"
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white gap-1.5 h-7 min-h-0 text-xs"
+            >
+              <GamepadIcon className="h-3.5 w-3.5" />
+              Play Now
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
