@@ -2,21 +2,32 @@
 import React, { useState, useEffect } from 'react';
 import { useGameState } from '@/components/games/morpion/hooks/useGameState';
 import GameLayout from '@/components/games/morpion/GameLayout';
-import GameMenu from '@/components/games/morpion/GameMenu';
 import { GameMode } from '@/components/games/morpion/types';
 import { calculateBotMove } from '@/components/games/morpion/utils/botUtils';
+import { useLocation } from 'react-router-dom';
 
-const GameComponent = ({ 
-  boardSize,
-  zoom,
-  isSettingsOpen,
-  player1,
-  player2,
-  gameMode,
-  difficulty,
-  setZoom,
-  setIsSettingsOpen
-}) => {
+const Morpion = () => {
+  const [boardSize] = useState(30);
+  const [zoom, setZoom] = useState(100);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [player1] = useState('Guest10816');
+  const [player2, setPlayer2] = useState('Guest');
+  const [gameMode, setGameMode] = useState<GameMode>('local');
+  const [difficulty] = useState('medium');
+  
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const mode = searchParams.get('mode') as GameMode;
+
+  useEffect(() => {
+    if (mode) {
+      setGameMode(mode);
+      if (mode === 'bot') {
+        setPlayer2('Bot');
+      }
+    }
+  }, [mode]);
+
   const gameState = useGameState({
     boardSize,
     player1,
@@ -45,7 +56,7 @@ const GameComponent = ({
         if (botMove) {
           handleClick(botMove.row, botMove.col);
         }
-      }, 750); // Add a small delay to make it feel more natural
+      }, 750);
 
       return () => clearTimeout(timer);
     }
@@ -55,47 +66,32 @@ const GameComponent = ({
     <GameLayout
       player1={player1}
       player2={player2}
+      board={board}
       boardSize={boardSize}
       zoom={zoom}
+      currentPlayer={currentPlayer}
+      timeLeft={{ X: 300, O: 300 }}
+      inactivityTime={15}
+      lastMove={lastMove}
+      winningLine={null}
+      hoveredCell={null}
+      moves={0}
+      winner={winner}
+      gameHistory={[]}
+      soundEnabled={true}
       isSettingsOpen={isSettingsOpen}
-      setZoom={setZoom}
+      showWinnerPopup={false}
+      isTimerRunning={true}
+      isValidSecondMove={() => true}
+      handleClick={handleClick}
+      setHoveredCell={() => {}}
+      setSoundEnabled={() => {}}
+      undoMove={() => {}}
+      resetGame={() => {}}
       setIsSettingsOpen={setIsSettingsOpen}
-      {...gameState}
-    />
-  );
-};
-
-const Morpion = () => {
-  const [boardSize] = useState(30);
-  const [zoom, setZoom] = useState(100);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [player1] = useState('Guest10816');
-  const [player2, setPlayer2] = useState('Guest');
-  const [gameMode, setGameMode] = useState<GameMode | null>(null);
-  const [difficulty] = useState('medium');
-
-  const handleModeSelect = (mode: GameMode) => {
-    setGameMode(mode);
-    if (mode === 'bot') {
-      setPlayer2('Bot');
-    }
-  };
-
-  if (!gameMode) {
-    return <GameMenu onSelectMode={handleModeSelect} />;
-  }
-
-  return (
-    <GameComponent
-      boardSize={boardSize}
-      zoom={zoom}
-      isSettingsOpen={isSettingsOpen}
-      player1={player1}
-      player2={player2}
-      gameMode={gameMode}
-      difficulty={difficulty}
+      setShowWinnerPopup={() => {}}
       setZoom={setZoom}
-      setIsSettingsOpen={setIsSettingsOpen}
+      setIsTimerRunning={() => {}}
     />
   );
 };

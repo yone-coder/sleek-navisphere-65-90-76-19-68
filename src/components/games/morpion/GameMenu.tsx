@@ -3,17 +3,25 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { GameMode } from './types';
 import { Bot, Globe, Users, Timer } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface GameMenuProps {
   onSelectMode: (mode: GameMode) => void;
 }
 
 const GameMenu = ({ onSelectMode }: GameMenuProps) => {
+  const navigate = useNavigate();
+
+  const handleModeSelect = (mode: GameMode) => {
+    onSelectMode(mode);
+    navigate(`/games/morpion?mode=${mode}`);
+  };
+
   return (
     <div className="p-4 sm:p-6 space-y-4 w-full max-w-lg mx-auto">
       <div className="grid gap-3">
         <Button
-          onClick={() => onSelectMode('local')}
+          onClick={() => handleModeSelect('local')}
           size="lg"
           className="w-full bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 
             h-14 sm:h-16 text-base sm:text-lg font-medium rounded-xl shadow-lg hover:shadow-xl
@@ -25,7 +33,7 @@ const GameMenu = ({ onSelectMode }: GameMenuProps) => {
         </Button>
 
         <Button
-          onClick={() => onSelectMode('bot')}
+          onClick={() => handleModeSelect('bot')}
           size="lg"
           className="w-full bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700
             h-14 sm:h-16 text-base sm:text-lg font-medium rounded-xl shadow-lg hover:shadow-xl
@@ -37,7 +45,7 @@ const GameMenu = ({ onSelectMode }: GameMenuProps) => {
         </Button>
 
         <Button
-          onClick={() => onSelectMode('online')}
+          onClick={() => handleModeSelect('online')}
           size="lg"
           className="w-full bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700
             h-14 sm:h-16 text-base sm:text-lg font-medium rounded-xl shadow-lg hover:shadow-xl
@@ -49,7 +57,7 @@ const GameMenu = ({ onSelectMode }: GameMenuProps) => {
         </Button>
 
         <Button
-          onClick={() => onSelectMode('blitz')}
+          onClick={() => handleModeSelect('blitz')}
           size="lg"
           className="w-full bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700
             h-14 sm:h-16 text-base sm:text-lg font-medium rounded-xl shadow-lg hover:shadow-xl
