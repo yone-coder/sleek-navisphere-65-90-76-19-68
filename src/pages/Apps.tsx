@@ -1,4 +1,3 @@
-
 import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe, Heart, Newspaper, Building } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -18,14 +17,13 @@ const apps: App[] = [
   {
     name: "Morpion",
     description: "Classic Tic-tac-toe game with a modern twist",
-    icon: {
-      component: "img",
-      props: {
-        src: "/lovable-uploads/44c5c93d-ace1-4feb-a49b-db4a8a02f987.png",
-        alt: "Morpion",
-        className: "w-[80%] h-[80%]"
-      }
-    },
+    icon: () => (
+      <img 
+        src="/lovable-uploads/44c5c93d-ace1-4feb-a49b-db4a8a02f987.png" 
+        alt="Morpion"
+        className="w-[80%] h-[80%]"
+      />
+    ),
     route: "/games/morpion",
     color: "bg-indigo-500",
     category: "Gaming",
