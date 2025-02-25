@@ -42,6 +42,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { NewsCard } from "@/components/news/NewsCard";
+import type { NewsArticle } from "@/components/news/types";
 
 const mockGame = {
   id: "1",
@@ -260,6 +262,48 @@ const mockMatches: Match[] = [
     predictions: {
       firstPlayer: 40,
       secondPlayer: 60
+    }
+  }
+];
+
+const mockNews: NewsArticle[] = [
+  {
+    id: "1",
+    title: "Major Update Coming to League of Legends",
+    excerpt: "Riot Games announces groundbreaking changes coming to League of Legends in the next patch, including new champions and map updates.",
+    content: "Full article content here...",
+    category: "Updates",
+    date: "2024-02-15",
+    image: "https://images.unsplash.com/photo-1542751371-adc38448a05e",
+    author: {
+      name: "Alex Turner",
+      avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36"
+    }
+  },
+  {
+    id: "2",
+    title: "Pro Players React to Latest Balance Changes",
+    excerpt: "Professional players share their thoughts on the recent balance changes and how they might affect the competitive scene.",
+    content: "Full article content here...",
+    category: "Esports",
+    date: "2024-02-14",
+    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+    author: {
+      name: "Sarah Chen",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330"
+    }
+  },
+  {
+    id: "3",
+    title: "Community Spotlight: Player-Created Content",
+    excerpt: "Highlighting the most creative and innovative content created by the League of Legends community this month.",
+    content: "Full article content here...",
+    category: "Community",
+    date: "2024-02-13",
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
+    author: {
+      name: "Mike Johnson",
+      avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36"
     }
   }
 ];
@@ -687,7 +731,25 @@ export default function GameDetails() {
             </div>
           </TabsContent>
 
-          {["details", "news", "dlc"].map((tab) => (
+          <TabsContent value="news">
+            <div className="p-4 space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold">Latest News</h2>
+                <Button variant="outline" size="sm">
+                  <Filter className="w-4 h-4 mr-2" />
+                  Filter News
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {mockNews.map((news) => (
+                  <NewsCard key={news.id} news={news} />
+                ))}
+              </div>
+            </div>
+          </TabsContent>
+
+          {["details", "dlc"].map((tab) => (
             <TabsContent key={tab} value={tab}>
               <div className="p-4 text-center text-gray-500">
                 {tab.charAt(0).toUpperCase() + tab.slice(1)} content coming soon...
