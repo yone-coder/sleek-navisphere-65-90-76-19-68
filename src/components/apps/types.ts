@@ -1,5 +1,5 @@
 
-import { type LucideIcon } from "lucide-react";
+import { type Icon as LucideIcon } from "lucide-react";
 
 export interface IconImage {
   component: 'img';
@@ -10,7 +10,7 @@ export interface IconImage {
   };
 }
 
-export type AppIcon = LucideIcon;
+export type AppIcon = typeof LucideIcon;
 
 export interface App {
   name: string;
@@ -29,7 +29,7 @@ export interface App {
 export interface Category {
   id: string;
   label: string;
-  icon?: LucideIcon;
+  icon?: AppIcon;
   count?: number;
 }
 
