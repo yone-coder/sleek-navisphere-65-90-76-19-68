@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe, Heart, Building } from "lucide-react";
 import type { App } from "../types";
@@ -14,7 +13,7 @@ export const apps: App[] = [
         className="w-[80%] h-[80%]"
       />
     ),
-    route: "/games/morpion",
+    route: "/games/morpion-details",
     color: "bg-indigo-500",
     category: "Gaming",
     status: "new",

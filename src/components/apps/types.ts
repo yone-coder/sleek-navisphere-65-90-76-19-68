@@ -37,3 +37,5 @@ export interface AppControlsProps {
   onViewModeChange: (mode: "grid" | "list") => void;
   onUpdatesToggle: () => void;
 }
+
+export type AppItem = App;

@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
@@ -90,8 +89,9 @@ const AppContent = () => {
           <Route path="/tournaments" element={<Tournaments />} />
           <Route path="/games" element={<GamesPages />} />
           <Route path="/games/:id" element={<GameDetails />} />
-          <Route path="/games/gomoku" element={<Gomoku />} />
+          <Route path="/games/morpion-details" element={<GameDetails />} />
           <Route path="/games/morpion" element={<Morpion />} />
+          <Route path="/games/gomoku" element={<Gomoku />} />
           <Route path="/feeds" element={<Feeds />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/wallet" element={<Wallet />} />
