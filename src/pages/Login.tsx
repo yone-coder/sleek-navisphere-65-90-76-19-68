@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Github, Twitter, Facebook, Mail, Apple, ArrowLeft } from "lucide-react";
+import { Github, Twitter, Facebook, Mail, Apple, ChevronLeft, HelpCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function Login() {
@@ -75,16 +75,46 @@ export default function Login() {
   return (
     <div>
       <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b">
-        <div className="flex items-center h-14 px-4">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={() => navigate(-1)}
-            className="mr-3"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="text-lg font-semibold">Sign In</h1>
+        <div className="container mx-auto">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-3">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => navigate(-1)}
+                className="hover:bg-gray-100 transition-colors"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </Button>
+              <div>
+                <h1 className="text-lg font-semibold">Sign In</h1>
+                <p className="text-sm text-muted-foreground">Access your account</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  toast({
+                    title: "Need help?",
+                    description: "Contact our support team for assistance with signing in.",
+                  });
+                }}
+                className="hover:bg-gray-100 transition-colors"
+              >
+                <HelpCircle className="h-5 w-5" />
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={() => navigate('/signup')}
+                className="hidden sm:flex"
+              >
+                Create account
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
