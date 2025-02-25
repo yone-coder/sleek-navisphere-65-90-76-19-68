@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Loader2, Users, Gamepad2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface MatchmakingDialogProps {
   onClose: () => void;
@@ -17,21 +18,86 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
   const { toast } = useToast();
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setSearchTime(prev => prev + 1);
-    }, 1000);
+    let timer: number;
+    let roomSubscription: ReturnType<typeof supabase.channel>;
+    
+    const startMatchmaking = async () => {
+      // Start the search timer
+      timer = window.setInterval(() => {
+        setSearchTime(prev => prev + 1);
+      }, 1000);
 
-    // Simulate finding a match after a random time between 5-15 seconds
-    const matchTimeout = setTimeout(() => {
+      try {
+        // First try to join an existing room
+        const { data: existingRoom } = await supabase
+          .from('game_rooms')
+          .select()
+          .eq('status', 'waiting')
+          .is('player2_id', null)
+          .limit(1)
+          .single();
+
+        if (existingRoom) {
+          // Join existing room
+          const { error: joinError } = await supabase
+            .from('game_rooms')
+            .update({ 
+              player2_id: (await supabase.auth.getUser()).data.user?.id,
+              status: 'playing'
+            })
+            .eq('id', existingRoom.id);
+
+          if (joinError) throw joinError;
+          
+          handleMatchFound(existingRoom.id);
+        } else {
+          // Create new room
+          const { data: newRoom, error: createError } = await supabase
+            .from('game_rooms')
+            .insert({
+              player1_id: (await supabase.auth.getUser()).data.user?.id,
+              status: 'waiting',
+              board: Array(30).fill(null).map(() => Array(30).fill(null)),
+              code: Math.random().toString(36).substring(7),
+              current_player: 'X'
+            })
+            .select()
+            .single();
+
+          if (createError) throw createError;
+
+          // Subscribe to room updates
+          roomSubscription = supabase.channel('game_room_' + newRoom.id)
+            .on('postgres_changes', {
+              event: 'UPDATE',
+              schema: 'public',
+              table: 'game_rooms',
+              filter: `id=eq.${newRoom.id}`,
+            }, async (payload) => {
+              if (payload.new.player2_id) {
+                handleMatchFound(newRoom.id);
+              }
+            })
+            .subscribe();
+        }
+      } catch (error) {
+        console.error('Matchmaking error:', error);
+        toast({
+          title: "Matchmaking Error",
+          description: "Failed to find or create a game. Please try again.",
+          variant: "destructive"
+        });
+        onClose();
+      }
+    };
+
+    const handleMatchFound = async (roomId: string) => {
       setSearchState("found");
       
-      // Simulate connection process
       setTimeout(() => {
         setSearchState("connecting");
         
-        // Navigate to game after connection
         setTimeout(() => {
-          const roomId = Math.random().toString(36).substring(7);
           onClose();
           navigate(`/games/morpion?start=true&mode=online&roomId=${roomId}`);
           toast({
@@ -40,13 +106,19 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
           });
         }, 1500);
       }, 1000);
-    }, Math.random() * 10000 + 5000);
+    };
 
+    // Start the matchmaking process
+    startMatchmaking();
+
+    // Cleanup function
     return () => {
       clearInterval(timer);
-      clearTimeout(matchTimeout);
+      if (roomSubscription) {
+        roomSubscription.unsubscribe();
+      }
     };
-  }, []);
+  }, [navigate, onClose, toast]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
