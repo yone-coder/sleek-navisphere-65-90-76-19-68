@@ -64,8 +64,9 @@ export const useGameState = ({ boardSize }: UseGameStateProps) => {
       return;
     }
 
+    // Vibrate on move
     if (navigator.vibrate) {
-      navigator.vibrate(40);
+      navigator.vibrate(40); // Short vibration for regular moves
     }
 
     const newBoard = JSON.parse(JSON.stringify(board));
@@ -89,6 +90,10 @@ export const useGameState = ({ boardSize }: UseGameStateProps) => {
 
     if (checkWinner(newBoard, row, col)) {
       playWinSound();
+      // Different vibration pattern for winning move
+      if (navigator.vibrate) {
+        navigator.vibrate([50, 50, 100]); // Pattern: vibrate-pause-vibrate
+      }
       setWinner(currentPlayer);
       setTimeout(() => {
         setShowWinnerPopup(true);
