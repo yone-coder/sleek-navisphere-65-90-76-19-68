@@ -1,146 +1,79 @@
-
-import { Star, Clock } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { motion } from "framer-motion";
+import { App } from "./types";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { useNavigate } from "react-router-dom";
-import type { App } from "./types";
+import { Star } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface AppGridProps {
   apps: App[];
   favorites: string[];
   onToggleFavorite: (appName: string) => void;
-  viewMode?: "grid" | "list";
+  viewMode: "grid" | "list";
 }
 
-const AppCard = ({ app, isFavorite, onToggleFavorite, onClick }) => (
-  <div className="relative w-full overflow-hidden" onClick={onClick}>
-    <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
-      <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
-        <app.icon className="w-7 h-7 text-white" />
-        {app.updates > 0 && (
-          <Badge className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5">
-            {app.updates} NEW
-          </Badge>
-        )}
-      </div>
-      <div className="text-center w-full overflow-hidden">
-        <div className="flex items-center justify-center gap-1 mb-1">
-          <span className="text-sm font-medium text-gray-700 truncate max-w-[120px]">{app.name}</span>
-          {app.rating && (
-            <div className="flex items-center gap-1 text-xs text-yellow-500 flex-shrink-0">
-              <Star className="w-3 h-3 fill-yellow-400" />
-              {app.rating}
-            </div>
-          )}
-        </div>
-        <p className="text-xs text-gray-500 mb-2 line-clamp-2 px-2">{app.description}</p>
-        {app.lastUsed && (
-          <div className="text-[10px] text-gray-400 flex items-center justify-center gap-1">
-            <Clock className="w-3 h-3" />
-            <span className="truncate max-w-[100px]">{app.lastUsed}</span>
-          </div>
-        )}
-      </div>
-    </div>
-    <Button
-      variant="ghost"
-      size="icon"
-      className="absolute top-2 right-2 h-7 w-7 rounded-full hover:bg-gray-200"
-      onClick={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        onToggleFavorite(app.name);
-      }}
-    >
-      <Star className={`w-4 h-4 ${isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
-    </Button>
-    {app.users && (
-      <Badge variant="secondary" className="absolute bottom-2 right-2 text-[10px]">
-        {app.users} users
-      </Badge>
-    )}
-  </div>
-);
-
-const AppList = ({ app, isFavorite, onToggleFavorite, onClick }) => (
-  <div className="relative w-full p-3 hover:bg-gray-50 rounded-lg transition-colors" onClick={onClick}>
-    <div className="flex items-center gap-4">
-      <div className={`w-12 h-12 rounded-xl ${app.color} flex items-center justify-center relative flex-shrink-0`}>
-        <app.icon className="w-6 h-6 text-white" />
-        {app.updates > 0 && (
-          <Badge className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5">
-            {app.updates}
-          </Badge>
-        )}
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-sm font-medium text-gray-700 truncate">{app.name}</span>
-          {app.rating && (
-            <div className="flex items-center gap-1 text-xs text-yellow-500">
-              <Star className="w-3 h-3 fill-yellow-400" />
-              {app.rating}
-            </div>
-          )}
-        </div>
-        <p className="text-xs text-gray-500 line-clamp-1">{app.description}</p>
-      </div>
-      <div className="flex items-center gap-3">
-        {app.users && (
-          <Badge variant="secondary" className="text-[10px]">
-            {app.users} users
-          </Badge>
-        )}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 rounded-full hover:bg-gray-200"
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onToggleFavorite(app.name);
-          }}
-        >
-          <Star className={`w-4 h-4 ${isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
-        </Button>
-      </div>
-    </div>
-  </div>
-);
-
-export const AppGrid = ({ apps, favorites, onToggleFavorite, viewMode = "grid" }: AppGridProps) => {
-  const navigate = useNavigate();
-  const AppComponent = viewMode === "grid" ? AppCard : AppList;
-  
-  const handleAppClick = (app: App) => {
-    // For games, navigate to game details page
-    if (app.category === "Gaming") {
-      const gameId = app.name.toLowerCase().replace(/\s+/g, '-');
-      navigate(`/games/${gameId}`);
-    } else {
-      navigate(app.route);
+export const AppGrid = ({ apps, favorites, onToggleFavorite, viewMode }: AppGridProps) => {
+  const renderIcon = (icon: App["icon"]) => {
+    if ('component' in icon && icon.component === 'img') {
+      return <img {...icon.props} />;
     }
+    const IconComponent = icon;
+    return <IconComponent className="w-6 h-6" />;
   };
-  
+
   return (
-    <div className={
-      viewMode === "grid" 
-        ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 min-w-0 w-full"
-        : "flex flex-col gap-2 min-w-0 w-full"
-    }>
+    <div className={cn(
+      "grid gap-4",
+      viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-1"
+    )}>
       {apps.map((app) => (
-        <Card 
-          key={app.name} 
-          className={`overflow-hidden hover:shadow-lg transition-shadow duration-300 ${viewMode === "list" ? "border-0 shadow-none hover:shadow-none" : ""}`}
+        <motion.div
+          key={app.name}
+          className={cn(
+            "rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col",
+            viewMode === "list" ? "flex-row items-center gap-4" : ""
+          )}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
         >
-          <AppComponent
-            app={app}
-            isFavorite={favorites.includes(app.name)}
-            onToggleFavorite={onToggleFavorite}
-            onClick={() => handleAppClick(app)}
-          />
-        </Card>
+          <div className={cn(
+            "p-4 flex flex-col flex-1",
+            viewMode === "list" ? "flex-row items-center gap-4" : ""
+          )}>
+            <div className="relative">
+              <div className={cn(
+                "w-12 h-12 rounded-full flex items-center justify-center text-white",
+                app.color
+              )}>
+                {renderIcon(app.icon)}
+              </div>
+            </div>
+            <div className="flex flex-col flex-1 min-w-0">
+              <h3 className="font-semibold text-sm line-clamp-1">{app.name}</h3>
+              <p className="text-xs text-gray-500 line-clamp-1">{app.description}</p>
+            </div>
+          </div>
+          <div className="flex items-center justify-between gap-2 border-t border-gray-100 bg-gray-50 px-3 py-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-xs font-medium rounded-md h-auto px-2 py-1 hover:bg-gray-100"
+              onClick={() => window.open(app.route, "_blank")}
+            >
+              Open
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className={cn(
+                "h-7 w-7 rounded-md hover:bg-gray-100",
+                favorites.includes(app.name) ? "text-yellow-500" : "text-gray-400"
+              )}
+              onClick={() => onToggleFavorite(app.name)}
+            >
+              <Star className="h-4 w-4" />
+            </Button>
+          </div>
+        </motion.div>
       ))}
     </div>
   );
