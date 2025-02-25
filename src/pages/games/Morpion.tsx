@@ -41,11 +41,10 @@ const GameComponent: React.FC<GameComponentProps> = ({
     lastMove,
     winner,
     handleClick,
-    resetBoard,
     resetGame
   } = gameState;
 
-  // Reset effect when gameMode changes
+  // Reset when game mode changes
   useEffect(() => {
     console.log('Game mode changed:', gameMode);
     resetGame();
@@ -93,6 +92,7 @@ const Morpion = () => {
   const [gameMode, setGameMode] = useState<GameMode>('local');
   const [difficulty, setDifficulty] = useState('medium');
 
+  // Handle mode changes from URL
   useEffect(() => {
     const mode = searchParams.get('mode') as GameMode;
     const start = searchParams.get('start');
