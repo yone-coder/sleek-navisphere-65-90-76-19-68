@@ -14,7 +14,7 @@ interface GameMenuProps {
   onSelectMode: (mode: GameMode, roomId?: string) => void;
 }
 
-const GameMenu: React.FC<GameMenuProps> = ({ onSelectMode }) => {
+export const GameMenu = ({ onSelectMode }: GameMenuProps) => {
   const [showCreateRoom, setShowCreateRoom] = useState(false);
   const [roomName, setRoomName] = useState('');
   const [playerName, setPlayerName] = useState('');
@@ -190,5 +190,3 @@ const GameMenu: React.FC<GameMenuProps> = ({ onSelectMode }) => {
     </div>
   );
 };
-
-export default GameMenu;
