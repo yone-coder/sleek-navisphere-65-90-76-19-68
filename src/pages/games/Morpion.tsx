@@ -1,24 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { useGameState } from '@/components/games/morpion/hooks/useGameState';
 import GameLayout from '@/components/games/morpion/GameLayout';
-import type { GameMode } from '@/components/games/morpion/types';
+import { GameMode } from '@/components/games/morpion/types';
 import { calculateBotMove } from '@/components/games/morpion/utils/botUtils';
 
-interface GameComponentProps {
-  boardSize: number;
-  zoom: number;
-  isSettingsOpen: boolean;
-  player1: string;
-  player2: string;
-  gameMode: GameMode;
-  difficulty: string;
-  setZoom: (zoom: number) => void;
-  setIsSettingsOpen: (open: boolean) => void;
-}
-
-const GameComponent: React.FC<GameComponentProps> = ({ 
+const GameComponent = ({ 
   boardSize,
   zoom,
   isSettingsOpen,
@@ -40,32 +27,22 @@ const GameComponent: React.FC<GameComponentProps> = ({
     currentPlayer,
     lastMove,
     winner,
-    handleClick,
-    resetGame
+    handleClick
   } = gameState;
-
-  // Reset when game mode changes
-  useEffect(() => {
-    console.log('Game mode changed:', gameMode);
-    resetGame();
-  }, [gameMode, resetGame]);
 
   // Bot move effect
   useEffect(() => {
     if (gameMode === 'bot' && currentPlayer === 'O' && !winner) {
-      console.log('Bot turn detected', { currentPlayer, gameMode });
       const timer = setTimeout(() => {
-        console.log('Bot is thinking...');
         const botMove = calculateBotMove(board, lastMove, boardSize, difficulty);
-        console.log('Bot decided move:', botMove);
         if (botMove) {
           handleClick(botMove.row, botMove.col);
         }
-      }, 750);
+      }, 750); // Add a small delay to make it feel more natural
 
       return () => clearTimeout(timer);
     }
-  }, [board, currentPlayer, lastMove, winner, gameMode, difficulty, boardSize, handleClick]);
+  }, [board, currentPlayer, lastMove, winner, gameMode, difficulty]);
 
   return (
     <GameLayout
@@ -76,37 +53,33 @@ const GameComponent: React.FC<GameComponentProps> = ({
       isSettingsOpen={isSettingsOpen}
       setZoom={setZoom}
       setIsSettingsOpen={setIsSettingsOpen}
-      resetGame={resetGame}
       {...gameState}
     />
   );
 };
 
 const Morpion = () => {
-  const [searchParams] = useSearchParams();
-  const [boardSize] = useState(30);
+  const [boardSize, setBoardSize] = useState(30);
   const [zoom, setZoom] = useState(100);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [player1] = useState('Guest10816');
   const [player2, setPlayer2] = useState('Guest');
-  const [gameMode, setGameMode] = useState<GameMode>('local');
+  const [gameMode, setGameMode] = useState<GameMode>('local'); // Default to local mode
   const [difficulty, setDifficulty] = useState('medium');
 
-  // Handle mode changes from URL
+  // Get query parameters to check if we should set specific game mode
+  const queryParams = new URLSearchParams(window.location.search);
+  const mode = queryParams.get('mode') as GameMode;
+
+  // Effect to handle mode from URL
   useEffect(() => {
-    const mode = searchParams.get('mode') as GameMode;
-    const start = searchParams.get('start');
-    
-    console.log('URL params:', { mode, start });
-    
-    if (mode && start === 'true') {
-      console.log('Setting game mode from URL:', mode);
+    if (mode) {
       setGameMode(mode);
       if (mode === 'bot') {
         setPlayer2('Bot');
       }
     }
-  }, [searchParams]);
+  }, [mode]);
 
   return (
     <GameComponent

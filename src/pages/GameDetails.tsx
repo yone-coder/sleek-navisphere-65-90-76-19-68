@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -38,7 +37,6 @@ export default function GameDetails() {
 
   const handleGameModeSelect = (mode: 'local' | 'bot' | 'online', roomId?: string) => {
     setShowModeSelect(false);
-    // Add start=true to force a fresh game state
     navigate(`/games/morpion?start=true&mode=${mode}${roomId ? `&roomId=${roomId}` : ''}`);
   };
 

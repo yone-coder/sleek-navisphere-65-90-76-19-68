@@ -1,5 +1,5 @@
 
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { Position, TimeLeft, WinningLine, GameHistory } from '../types';
 import { useGameBoard } from './useGameBoard';
 import { useGameTimer } from './useGameTimer';
@@ -12,7 +12,7 @@ interface UseGameStateProps {
   player2: string;
 }
 
-export const useGameState = ({ boardSize, player1, player2 }: UseGameStateProps) => {
+export const useGameState = ({ boardSize }: UseGameStateProps) => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   
   const {
@@ -29,7 +29,7 @@ export const useGameState = ({ boardSize, player1, player2 }: UseGameStateProps)
     hoveredCell,
     setHoveredCell,
     isValidSecondMove,
-    resetBoard: resetGameBoard,
+    resetBoard,
     undoMove
   } = useGameBoard({ boardSize });
 
@@ -55,15 +55,7 @@ export const useGameState = ({ boardSize, player1, player2 }: UseGameStateProps)
 
   const { playMoveSound, playWinSound } = useGameAudio(soundEnabled, inactivityTime, winner);
 
-  const resetGame = useCallback(() => {
-    resetGameBoard();
-    setWinner(null);
-    setWinningLine(null);
-    resetTimer();
-    setShowWinnerPopup(false);
-  }, [resetGameBoard, setWinner, setWinningLine, resetTimer, setShowWinnerPopup]);
-
-  const handleClick = useCallback((row: number, col: number) => {
+  const handleClick = (row: number, col: number) => {
     if (board[row][col] || winner || !isTimerRunning) return;
 
     if (!isValidSecondMove(row, col)) {
@@ -104,8 +96,15 @@ export const useGameState = ({ boardSize, player1, player2 }: UseGameStateProps)
     } else {
       setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
     }
-  }, [board, winner, isTimerRunning, currentPlayer, moves, lastMove, timeLeft, inactivityTime, 
-      gameHistory, playMoveSound, playWinSound, isValidSecondMove, checkWinner]);
+  };
+
+  const resetGame = () => {
+    resetBoard();
+    setWinner(null);
+    setWinningLine(null);
+    resetTimer();
+    setShowWinnerPopup(false);
+  };
 
   return {
     board,
@@ -127,7 +126,6 @@ export const useGameState = ({ boardSize, player1, player2 }: UseGameStateProps)
     setHoveredCell,
     handleClick,
     undoMove,
-    resetBoard: resetGameBoard,
     resetGame,
     isValidSecondMove
   };
