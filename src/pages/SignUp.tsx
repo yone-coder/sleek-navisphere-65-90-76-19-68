@@ -217,53 +217,56 @@ export default function SignUp() {
         return (
           <div className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
-              <Button
-                variant="outline"
-                className="w-full gap-2"
-                onClick={() => handleSocialSignUp("google")}
+              <Button 
+                variant="outline" 
+                className="w-full gap-2 relative overflow-hidden group bg-white"
+                onClick={() => handleSocialSignUp('google')}
                 disabled={isLoading}
               >
-                <Mail className="h-4 w-4" />
-                Google
+                <div className="relative z-10 flex items-center gap-2">
+                  <Mail className="h-4 w-4 text-red-500" />
+                  <span className="bg-gradient-to-r from-blue-500 via-green-500 to-red-500 bg-clip-text text-transparent font-medium">
+                    Google
+                  </span>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-green-500/5 to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Button>
-              <Button
-                variant="outline"
-                className="w-full gap-2"
-                onClick={() => handleSocialSignUp("apple")}
+              <Button 
+                variant="outline" 
+                className="w-full gap-2 relative overflow-hidden group bg-white"
+                onClick={() => handleSocialSignUp('apple')}
                 disabled={isLoading}
               >
-                <Apple className="h-4 w-4" />
-                Apple
+                <div className="relative z-10 flex items-center gap-2">
+                  <Apple className="h-4 w-4" />
+                  <span className="font-medium">Apple</span>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-500/5 to-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Button>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
-              <Button
-                variant="outline"
-                className="w-full gap-2"
-                onClick={() => handleSocialSignUp("github")}
+            <div className="grid grid-cols-2 gap-4">
+              <Button 
+                variant="outline" 
+                className="w-full gap-2 relative overflow-hidden group bg-black hover:bg-black/90"
+                onClick={() => handleSocialSignUp('twitter')}
                 disabled={isLoading}
               >
-                <Github className="h-4 w-4" />
-                Github
+                <div className="relative z-10 flex items-center gap-2">
+                  <span className="font-bold text-white">𝕏</span>
+                  <span className="text-white font-medium">Sign up</span>
+                </div>
               </Button>
-              <Button
-                variant="outline"
-                className="w-full gap-2"
-                onClick={() => handleSocialSignUp("twitter")}
+              <Button 
+                variant="outline" 
+                className="w-full gap-2 relative overflow-hidden group bg-[#1877f2] hover:bg-[#1877f2]/90 border-none"
+                onClick={() => handleSocialSignUp('facebook')}
                 disabled={isLoading}
               >
-                <Twitter className="h-4 w-4" />
-                Twitter
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full gap-2"
-                onClick={() => handleSocialSignUp("facebook")}
-                disabled={isLoading}
-              >
-                <Facebook className="h-4 w-4" />
-                Facebook
+                <div className="relative z-10 flex items-center gap-2">
+                  <Facebook className="h-4 w-4 text-white" />
+                  <span className="text-white font-medium">Facebook</span>
+                </div>
               </Button>
             </div>
 
