@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -33,7 +32,6 @@ export default function Login() {
   const [lastEmail, setLastEmail] = useState("");
 
   useEffect(() => {
-    // Check if there's a saved email
     const savedEmail = localStorage.getItem("lastLoginEmail");
     if (savedEmail) {
       setLastEmail(savedEmail);
@@ -88,7 +86,6 @@ export default function Login() {
 
       if (error) throw error;
 
-      // Save email if remember me is checked
       if (rememberMe) {
         localStorage.setItem("lastLoginEmail", email);
       } else {
@@ -192,56 +189,54 @@ export default function Login() {
             <div className="grid grid-cols-2 gap-4">
               <Button 
                 variant="outline" 
-                className="w-full gap-2 relative overflow-hidden group"
+                className="w-full gap-2 relative overflow-hidden group bg-white"
                 onClick={() => handleSocialLogin('Google')}
                 disabled={isLoading}
               >
-                <Mail className="h-4 w-4" />
-                <span className="relative z-10">Google</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative z-10 flex items-center gap-2">
+                  <Mail className="h-4 w-4 text-red-500" />
+                  <span className="bg-gradient-to-r from-blue-500 via-green-500 to-red-500 bg-clip-text text-transparent font-medium">
+                    Google
+                  </span>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-green-500/5 to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Button>
               <Button 
                 variant="outline" 
-                className="w-full gap-2 relative overflow-hidden group"
+                className="w-full gap-2 relative overflow-hidden group bg-white"
                 onClick={() => handleSocialLogin('Apple')}
                 disabled={isLoading}
               >
-                <Apple className="h-4 w-4" />
-                <span className="relative z-10">Apple</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-500/10 to-black/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative z-10 flex items-center gap-2">
+                  <Apple className="h-4 w-4" />
+                  <span className="font-medium">Apple</span>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-500/5 to-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Button>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <Button 
                 variant="outline" 
-                className="w-full gap-2 relative overflow-hidden group"
-                onClick={() => handleSocialLogin('Github')}
-                disabled={isLoading}
-              >
-                <Github className="h-4 w-4" />
-                <span className="relative z-10">Github</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </Button>
-              <Button 
-                variant="outline" 
-                className="w-full gap-2 relative overflow-hidden group"
+                className="w-full gap-2 relative overflow-hidden group bg-black hover:bg-black/90"
                 onClick={() => handleSocialLogin('Twitter')}
                 disabled={isLoading}
               >
-                <Twitter className="h-4 w-4" />
-                <span className="relative z-10">Twitter</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative z-10 flex items-center gap-2">
+                  <span className="font-bold text-white">𝕏</span>
+                  <span className="text-white font-medium">Sign in</span>
+                </div>
               </Button>
               <Button 
                 variant="outline" 
-                className="w-full gap-2 relative overflow-hidden group"
+                className="w-full gap-2 relative overflow-hidden group bg-[#1877f2] hover:bg-[#1877f2]/90 border-none"
                 onClick={() => handleSocialLogin('Facebook')}
                 disabled={isLoading}
               >
-                <Facebook className="h-4 w-4" />
-                <span className="relative z-10">Facebook</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-indigo-600/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative z-10 flex items-center gap-2">
+                  <Facebook className="h-4 w-4 text-white" />
+                  <span className="text-white font-medium">Facebook</span>
+                </div>
               </Button>
             </div>
 
