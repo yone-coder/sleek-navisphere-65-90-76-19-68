@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,18 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Eye, EyeOff, Mail, Apple, Info, ChevronLeft, Check, HelpCircle } from "lucide-react";
+import { 
+  Eye, 
+  EyeOff, 
+  Mail, 
+  Apple, 
+  Info, 
+  ChevronLeft, 
+  Check, 
+  HelpCircle,
+  Facebook,
+  PhoneCall
+} from "lucide-react";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import zxcvbn from "zxcvbn";
 import { supabase } from "@/integrations/supabase/client";
@@ -268,59 +278,64 @@ export default function SignUp() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <Button
-                variant={signupMethod === 'email' ? 'default' : 'outline'}
-                className="w-full gap-2"
-                onClick={() => setSignupMethod('email')}
-              >
-                <Mail className="h-4 w-4" />
-                Email
-              </Button>
-              <Button
-                variant={signupMethod === 'phone' ? 'default' : 'outline'}
-                className="w-full gap-2"
-                onClick={() => setSignupMethod('phone')}
-              >
-                <svg 
-                  className="h-4 w-4" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke="currentColor"
+              <div className="grid grid-cols-2 gap-4">
+                <Button
+                  variant={signupMethod === 'email' ? 'default' : 'outline'}
+                  className="w-full gap-2 relative overflow-hidden group"
+                  onClick={() => setSignupMethod('email')}
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                Phone
-              </Button>
-            </div>
+                  <Mail className="h-4 w-4" />
+                  <span className="relative z-10">Email</span>
+                  {signupMethod === 'email' && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500" />
+                  )}
+                </Button>
+                <Button
+                  variant={signupMethod === 'phone' ? 'default' : 'outline'}
+                  className="w-full gap-2 relative overflow-hidden group"
+                  onClick={() => setSignupMethod('phone')}
+                >
+                  <PhoneCall className="h-4 w-4" />
+                  <span className="relative z-10">Phone</span>
+                  {signupMethod === 'phone' && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500" />
+                  )}
+                </Button>
+              </div>
 
-            {signupMethod === 'email' ? (
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={isLoading}
-                  className="mt-1"
-                />
-              </div>
-            ) : (
-              <div>
-                <Label htmlFor="phone">Phone Number</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="+1 (555) 000-0000"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  disabled={isLoading}
-                  className="mt-1"
-                />
-              </div>
-            )}
+              {signupMethod === 'email' ? (
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="flex items-center gap-2">
+                    <Mail className="h-4 w-4" />
+                    Email
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="name@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={isLoading}
+                    className="mt-1"
+                  />
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Label htmlFor="phone" className="flex items-center gap-2">
+                    <PhoneCall className="h-4 w-4" />
+                    Phone Number
+                  </Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    placeholder="+1 (555) 000-0000"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    disabled={isLoading}
+                    className="mt-1"
+                  />
+                </div>
+              )}
 
             <Button
               onClick={handleSendVerification}
@@ -647,370 +662,7 @@ export default function SignUp() {
             ))}
           </div>
 
-          {step === 1 && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-2 gap-4">
-                <Button 
-                  variant="outline" 
-                  className="w-full gap-2 relative overflow-hidden group bg-white"
-                  onClick={() => handleSocialSignUp('google')}
-                  disabled={isLoading}
-                >
-                  <div className="relative z-10 flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-red-500" />
-                    <span className="bg-gradient-to-r from-blue-500 via-green-500 to-red-500 bg-clip-text text-transparent font-medium">
-                      Google
-                    </span>
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-green-500/5 to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="w-full gap-2 relative overflow-hidden group bg-white"
-                  onClick={() => handleSocialSignUp('apple')}
-                  disabled={isLoading}
-                >
-                  <div className="relative z-10 flex items-center gap-2">
-                    <Apple className="h-4 w-4" />
-                    <span className="font-medium">Apple</span>
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-gray-500/5 to-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Button>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <Button 
-                  variant="outline" 
-                  className="w-full gap-2 relative overflow-hidden group bg-black hover:bg-black/90"
-                  onClick={() => handleSocialSignUp('twitter')}
-                  disabled={isLoading}
-                >
-                  <div className="relative z-10 flex items-center gap-2">
-                    <span className="font-bold text-white">𝕏</span>
-                    <span className="text-white font-medium">Sign up</span>
-                  </div>
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="w-full gap-2 relative overflow-hidden group bg-[#1877f2] hover:bg-[#1877f2]/90 border-none"
-                  onClick={() => handleSocialSignUp('facebook')}
-                  disabled={isLoading}
-                >
-                  <div className="relative z-10 flex items-center gap-2">
-                    <span className="text-white font-medium">Facebook</span>
-                  </div>
-                </Button>
-              </div>
-
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
-                    Or continue with
-                  </span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <Button
-                  variant={signupMethod === 'email' ? 'default' : 'outline'}
-                  className="w-full gap-2 relative overflow-hidden group"
-                  onClick={() => setSignupMethod('email')}
-                >
-                  <Mail className="h-4 w-4" />
-                  <span className="relative z-10">Email</span>
-                  {signupMethod === 'email' && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500" />
-                  )}
-                </Button>
-                <Button
-                  variant={signupMethod === 'phone' ? 'default' : 'outline'}
-                  className="w-full gap-2 relative overflow-hidden group"
-                  onClick={() => setSignupMethod('phone')}
-                >
-                  <svg 
-                    className="h-4 w-4" 
-                    fill="none" 
-                    viewBox="0 0 24 24" 
-                    stroke="currentColor"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                  <span className="relative z-10">Phone</span>
-                  {signupMethod === 'phone' && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500" />
-                  )}
-                </Button>
-              </div>
-
-              {signupMethod === 'email' ? (
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="flex items-center gap-2">
-                    <Mail className="h-4 w-4" />
-                    Email
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="name@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={isLoading}
-                    className="mt-1"
-                  />
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  <Label htmlFor="phone" className="flex items-center gap-2">
-                    <svg 
-                      className="h-4 w-4" 
-                      fill="none" 
-                      viewBox="0 0 24 24" 
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    Phone Number
-                  </Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="+1 (555) 000-0000"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    disabled={isLoading}
-                    className="mt-1"
-                  />
-                </div>
-              )}
-
-              <Button
-                onClick={handleSendVerification}
-                className="w-full relative overflow-hidden group"
-                disabled={(!email && !phoneNumber) || isLoading}
-              >
-                <span className="relative z-10">
-                  {isLoading ? "Sending..." : "Send Verification Code"}
-                </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500" />
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </Button>
-            </div>
-          )}
-
-          {step === 2 && (
-            <div className="space-y-6">
-              <div>
-                <Label className="text-center block mb-4">
-                  Enter the verification code sent to {signupMethod === 'email' ? email : phoneNumber}
-                </Label>
-                <div className="flex justify-center">
-                  <InputOTP
-                    maxLength={6}
-                    value={verificationCode}
-                    onChange={setVerificationCode}
-                    containerClassName="flex items-center gap-2"
-                    className="flex items-center gap-2"
-                  >
-                    <InputOTPGroup>
-                      {Array.from({ length: 6 }).map((_, index) => (
-                        <InputOTPSlot
-                          key={index}
-                          index={index}
-                          className="w-10 h-12 text-center text-lg border-2"
-                        />
-                      ))}
-                    </InputOTPGroup>
-                  </InputOTP>
-                </div>
-                <p className="text-center text-sm text-muted-foreground mt-4">
-                  Didn't receive the code?{' '}
-                  {resendTimer > 0 ? (
-                    <span className="text-muted-foreground">
-                      Wait {resendTimer}s to resend
-                    </span>
-                  ) : (
-                    <Button 
-                      variant="link" 
-                      className="p-0 h-auto font-semibold" 
-                      onClick={handleSendVerification}
-                      disabled={isLoading || resendTimer > 0}
-                    >
-                      Resend
-                    </Button>
-                  )}
-                </p>
-              </div>
-
-              <div className="flex gap-4">
-                <Button
-                  variant="outline"
-                  onClick={() => setStep(1)}
-                  className="flex-1"
-                  disabled={isLoading}
-                >
-                  Back
-                </Button>
-                <Button
-                  onClick={handleVerifyCode}
-                  className="flex-1 relative overflow-hidden group"
-                  disabled={verificationCode.length !== 6 || isLoading}
-                >
-                  <span className="relative z-10">
-                    {isLoading ? "Verifying..." : "Verify"}
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {step === 3 && (
-            <div className="space-y-6">
-              <div>
-                <Label htmlFor="password">Create Password</Label>
-                <div className="relative mt-1">
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    disabled={isLoading}
-                    className="pr-10"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3"
-                    onClick={() => setShowPassword(!showPassword)}
-                    disabled={isLoading}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground" />
-                    )}
-                  </Button>
-                </div>
-                {password && (
-                  <div className="space-y-2 mt-2">
-                    <Progress 
-                      value={(passwordStrength.score + 1) * 20} 
-                      className={`h-1 ${strengthColor[passwordStrength.score as keyof typeof strengthColor]}`}
-                    />
-                    <p className="text-xs text-muted-foreground flex items-center gap-1">
-                      <Info className="h-3 w-3" />
-                      Password strength: {getPasswordStrengthText()}
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <Label htmlFor="confirm-password">Confirm Password</Label>
-                <div className="relative mt-1">
-                  <Input
-                    id="confirm-password"
-                    type={showConfirmPassword ? "text" : "password"}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    disabled={isLoading}
-                    className="pr-10"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    disabled={isLoading}
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground" />
-                    )}
-                  </Button>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <Button
-                  variant="outline"
-                  onClick={() => setStep(2)}
-                  className="flex-1"
-                  disabled={isLoading}
-                >
-                  Back
-                </Button>
-                <Button
-                  onClick={() => setStep(4)}
-                  className="flex-1 relative overflow-hidden group"
-                  disabled={!password || !confirmPassword || password !== confirmPassword || isLoading}
-                >
-                  <span className="relative z-10">Continue</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {step === 4 && (
-            <div className="space-y-6">
-              <div>
-                <Label htmlFor="username">Choose Username</Label>
-                <Input
-                  id="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  disabled={isLoading}
-                  className="mt-1"
-                  placeholder="Enter your username"
-                />
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="terms"
-                  checked={agreeToTerms}
-                  onChange={(e) => setAgreeToTerms(e.target.checked)}
-                  className="rounded border-gray-300 text-primary focus:ring-primary"
-                  disabled={isLoading}
-                />
-                <Label htmlFor="terms" className="text-sm">
-                  I agree to the Terms of Service and Privacy Policy
-                </Label>
-              </div>
-
-              <div className="flex gap-4">
-                <Button
-                  variant="outline"
-                  onClick={() => setStep(3)}
-                  className="flex-1"
-                  disabled={isLoading}
-                >
-                  Back
-                </Button>
-                <Button
-                  onClick={handleEmailSignUp}
-                  className="flex-1 relative overflow-hidden group"
-                  disabled={!username || !agreeToTerms || isLoading}
-                >
-                  <span className="relative z-10">
-                    {isLoading ? "Creating Account..." : "Create Account"}
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Button>
-              </div>
-            </div>
-          )}
+          {renderStepContent()}
 
           {step === 1 && (
             <p className="text-center text-sm text-muted-foreground">
