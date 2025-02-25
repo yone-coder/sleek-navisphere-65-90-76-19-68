@@ -55,7 +55,7 @@ export const useGameState = ({ boardSize, player1, player2 }: UseGameStateProps)
 
   const { playMoveSound, playWinSound } = useGameAudio(soundEnabled, inactivityTime, winner);
 
-  const resetBoard = useCallback(() => {
+  const resetGame = useCallback(() => {
     resetGameBoard();
     setWinner(null);
     setWinningLine(null);
@@ -127,7 +127,8 @@ export const useGameState = ({ boardSize, player1, player2 }: UseGameStateProps)
     setHoveredCell,
     handleClick,
     undoMove,
-    resetBoard,
+    resetBoard: resetGameBoard,
+    resetGame,
     isValidSecondMove
   };
 };

@@ -41,14 +41,15 @@ const GameComponent: React.FC<GameComponentProps> = ({
     lastMove,
     winner,
     handleClick,
-    resetBoard
+    resetBoard,
+    resetGame
   } = gameState;
 
   // Reset effect when gameMode changes
   useEffect(() => {
     console.log('Game mode changed:', gameMode);
-    resetBoard();
-  }, [gameMode, resetBoard]);
+    resetGame();
+  }, [gameMode, resetGame]);
 
   // Bot move effect
   useEffect(() => {
@@ -76,6 +77,7 @@ const GameComponent: React.FC<GameComponentProps> = ({
       isSettingsOpen={isSettingsOpen}
       setZoom={setZoom}
       setIsSettingsOpen={setIsSettingsOpen}
+      resetGame={resetGame}
       {...gameState}
     />
   );
