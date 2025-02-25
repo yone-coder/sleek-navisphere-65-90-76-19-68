@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -26,6 +25,7 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
     let roomSubscription: ReturnType<typeof supabase.channel>;
     let isSubscribed = true;
     let currentRoomId: string | null = null;
+    let searchInterval: number;
     
     const startMatchmaking = async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -46,102 +46,123 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
         setSearchTime(prev => prev + 1);
       }, 1000);
 
+      // Initial attempt to find or create a room
+      await findOrCreateRoom(user.id);
+
+      // Keep searching periodically if no match is found
+      searchInterval = window.setInterval(() => {
+        findOrCreateRoom(user.id);
+      }, 5000);
+    };
+
+    const findOrCreateRoom = async (userId: string) => {
       try {
         // Look for an existing room
-        const { data: rooms } = await supabase
+        const { data: rooms, error: findError } = await supabase
           .from('game_rooms')
           .select('*')
           .eq('status', 'waiting')
           .is('player2_id', null)
-          .neq('player1_id', user.id)
-          .order('created_at', { ascending: true });
+          .neq('player1_id', userId)
+          .order('created_at', { ascending: true })
+          .limit(1);
 
-        const existingRoom = rooms && rooms.length > 0 ? rooms[0] : null;
+        if (findError) throw findError;
 
-        if (existingRoom) {
+        // If we found an available room
+        if (rooms && rooms.length > 0) {
+          const existingRoom = rooms[0];
           console.log('Found existing room:', existingRoom.id);
-          currentRoomId = existingRoom.id;
-
-          // Subscribe to room updates
-          roomSubscription = supabase.channel('game_room_' + existingRoom.id)
-            .on(
-              'postgres_changes',
-              {
-                event: '*',
-                schema: 'public',
-                table: 'game_rooms',
-                filter: `id=eq.${existingRoom.id}`,
-              },
-              async (payload: RealtimePostgresChangesPayload<GameRoom>) => {
-                console.log('Room update received:', payload);
-                const newRoom = payload.new;
-                if (newRoom.status === 'playing' && 
-                    newRoom.player2_id === user.id && 
-                    newRoom.player1_id) {
-                  await handleMatchFound(existingRoom.id);
-                }
-              }
-            )
-            .subscribe();
-
-          // Try to join the room
-          const { error: joinError } = await supabase
-            .from('game_rooms')
-            .update({ 
-              player2_id: user.id,
-              status: 'playing'
-            })
-            .eq('id', existingRoom.id)
-            .eq('status', 'waiting');
-
-          if (joinError) {
-            console.error('Error joining room:', joinError);
-            throw joinError;
-          }
-
-          console.log('Successfully joined room');
           
-        } else {
-          console.log('Creating new room');
-          // Create new room
-          const { data: newRoom, error: createError } = await supabase
-            .from('game_rooms')
-            .insert({
-              player1_id: user.id,
-              status: 'waiting',
-              board: Array(30).fill(null).map(() => Array(30).fill(null)),
-              code: Math.random().toString(36).substring(7),
-              current_player: 'X'
-            })
-            .select()
-            .single();
+          if (currentRoomId !== existingRoom.id) {
+            currentRoomId = existingRoom.id;
+            
+            // Set up realtime subscription for the room
+            if (roomSubscription) {
+              roomSubscription.unsubscribe();
+            }
 
-          if (createError) throw createError;
-
-          console.log('Created new room:', newRoom.id);
-          currentRoomId = newRoom.id;
-
-          // Subscribe to room updates
-          roomSubscription = supabase.channel('game_room_' + newRoom.id)
-            .on(
-              'postgres_changes',
-              {
-                event: '*',
-                schema: 'public',
-                table: 'game_rooms',
-                filter: `id=eq.${newRoom.id}`,
-              },
-              async (payload: RealtimePostgresChangesPayload<GameRoom>) => {
-                console.log('Room update received:', payload);
-                const newRoom = payload.new;
-                if (newRoom.status === 'playing' && 
-                    newRoom.player2_id && 
-                    newRoom.player1_id === user.id) {
-                  await handleMatchFound(newRoom.id);
+            roomSubscription = supabase.channel('game_room_' + existingRoom.id)
+              .on(
+                'postgres_changes',
+                {
+                  event: '*',
+                  schema: 'public',
+                  table: 'game_rooms',
+                  filter: `id=eq.${existingRoom.id}`,
+                },
+                (payload: RealtimePostgresChangesPayload<GameRoom>) => {
+                  console.log('Room update received:', payload);
+                  if (payload.new && 
+                      payload.new.status === 'playing' && 
+                      payload.new.player2_id === userId) {
+                    handleMatchFound(existingRoom.id);
+                  }
                 }
-              }
-            )
-            .subscribe();
+              )
+              .subscribe();
+
+            // Try to join the room
+            const { data: joinedRoom, error: joinError } = await supabase
+              .from('game_rooms')
+              .update({ 
+                player2_id: userId,
+                status: 'playing'
+              })
+              .eq('id', existingRoom.id)
+              .eq('status', 'waiting')
+              .select()
+              .single();
+
+            if (joinError) throw joinError;
+
+            if (joinedRoom) {
+              console.log('Successfully joined room:', joinedRoom);
+              await handleMatchFound(joinedRoom.id);
+            }
+          }
+        } else {
+          // Create a new room if we haven't created one yet
+          if (!currentRoomId) {
+            console.log('Creating new room');
+            const { data: newRoom, error: createError } = await supabase
+              .from('game_rooms')
+              .insert({
+                player1_id: userId,
+                status: 'waiting',
+                board: Array(30).fill(null).map(() => Array(30).fill(null)),
+                code: Math.random().toString(36).substring(7),
+                current_player: 'X'
+              })
+              .select()
+              .single();
+
+            if (createError) throw createError;
+
+            console.log('Created new room:', newRoom);
+            currentRoomId = newRoom.id;
+
+            // Set up realtime subscription for the new room
+            roomSubscription = supabase.channel('game_room_' + newRoom.id)
+              .on(
+                'postgres_changes',
+                {
+                  event: '*',
+                  schema: 'public',
+                  table: 'game_rooms',
+                  filter: `id=eq.${newRoom.id}`,
+                },
+                (payload: RealtimePostgresChangesPayload<GameRoom>) => {
+                  console.log('Room update received:', payload);
+                  if (payload.new && 
+                      payload.new.status === 'playing' && 
+                      payload.new.player2_id) {
+                    handleMatchFound(newRoom.id);
+                  }
+                }
+              )
+              .subscribe();
+          }
         }
       } catch (error) {
         console.error('Matchmaking error:', error);
@@ -160,7 +181,6 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
       if (!isSubscribed || roomId !== currentRoomId) return;
       
       try {
-        // Verify room status
         const { data: room, error } = await supabase
           .from('game_rooms')
           .select('*')
@@ -169,7 +189,7 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
 
         if (error) throw error;
 
-        if (!room || room.status !== 'playing' || !room.player1_id || !room.player2_id) {
+        if (!room || !room.player1_id || !room.player2_id) {
           console.log('Invalid room state:', room);
           return;
         }
@@ -177,7 +197,6 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
         console.log('Match confirmed! Room:', room);
         setSearchState("found");
 
-        // Small delay for UI feedback
         await new Promise(resolve => setTimeout(resolve, 1000));
         if (!isSubscribed) return;
         
@@ -207,6 +226,7 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
       console.log('Cleaning up matchmaking...');
       isSubscribed = false;
       clearInterval(timer);
+      clearInterval(searchInterval);
       
       if (roomSubscription) {
         roomSubscription.unsubscribe();
