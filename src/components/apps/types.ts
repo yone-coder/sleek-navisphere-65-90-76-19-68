@@ -1,5 +1,5 @@
 
-import { type Icon as LucideIcon } from "lucide-react";
+import { type Icon as LucideIcon, type LucideProps } from "lucide-react";
 
 export interface IconImage {
   component: 'img';
@@ -10,7 +10,7 @@ export interface IconImage {
   };
 }
 
-export type AppIcon = typeof LucideIcon;
+export type AppIcon = React.ComponentType<LucideProps>;
 
 export interface App {
   name: string;
