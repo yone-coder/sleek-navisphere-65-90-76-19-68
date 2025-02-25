@@ -1,5 +1,5 @@
 
-import { LucideIcon } from "lucide-react";
+import { type LucideIcon } from "lucide-react";
 
 export interface IconImage {
   component: 'img';
@@ -26,11 +26,12 @@ export interface App {
   updates?: number;
 }
 
-export type AppItem = App;
-
 export interface Category {
   id: string;
   label: string;
-  icon: LucideIcon;
+  icon?: LucideIcon;
   count?: number;
 }
+
+// Make AppItem exactly the same as App
+export type AppItem = App;

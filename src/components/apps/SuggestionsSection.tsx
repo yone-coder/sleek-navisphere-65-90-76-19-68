@@ -6,14 +6,14 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useNavigate } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { Card } from "@/components/ui/card";
-import { App, AppIcon } from "./types";
+import { type App, type AppIcon } from "./types";
 import { cn } from "@/lib/utils";
 
 interface SuggestionsSectionProps {
   suggestedApps: App[];
 }
 
-const AppIcon = ({ icon, className }: { icon: AppIcon; className?: string }) => {
+const IconRenderer = ({ icon, className }: { icon: AppIcon; className?: string }) => {
   if ('component' in icon) {
     return <img {...icon.props} className={cn(className, icon.props.className)} />;
   }
@@ -117,7 +117,7 @@ export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) =
                       <div className="relative w-full overflow-hidden">
                         <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
                           <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
-                            <AppIcon icon={app.icon} className="w-8 h-8" />
+                            <IconRenderer icon={app.icon} className="w-8 h-8" />
                             {app.updates > 0 && (
                               <Badge 
                                 className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5"

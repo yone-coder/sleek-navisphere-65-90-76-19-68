@@ -10,14 +10,13 @@ interface CategoryTabsProps {
 export const CategoryTabs = ({ categories }: CategoryTabsProps) => {
   return (
     <div className="overflow-x-auto no-scrollbar">
-      <TabsList className="flex gap-2 bg-transparent h-auto p-0 min-w-max">
+      <div className="flex gap-2 bg-transparent h-auto p-0 min-w-max">
         {categories.map((category) => (
-          <TabsTrigger
+          <button
             key={category.id}
-            value={category.id}
-            className="flex items-center gap-2 px-4 py-2 data-[state=active]:bg-white rounded-xl border border-transparent data-[state=active]:border-gray-200 relative whitespace-nowrap"
+            className="flex items-center gap-2 px-4 py-2 bg-background hover:bg-accent rounded-xl border border-transparent hover:border-gray-200 relative whitespace-nowrap"
           >
-            <category.icon className="w-4 h-4" />
+            {category.icon && <category.icon className="w-4 h-4" />}
             <span className="text-sm font-medium">{category.label}</span>
             {category.count && (
               <Badge 
@@ -27,9 +26,9 @@ export const CategoryTabs = ({ categories }: CategoryTabsProps) => {
                 {category.count}
               </Badge>
             )}
-          </TabsTrigger>
+          </button>
         ))}
-      </TabsList>
+      </div>
     </div>
   );
 };
