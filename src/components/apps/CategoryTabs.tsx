@@ -35,5 +35,3 @@ export const CategoryTabs = ({ categories }: CategoryTabsProps) => {
     </Tabs>
   );
 };
-
-export { categories };
