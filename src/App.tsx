@@ -1,3 +1,5 @@
+
+import React from "react";
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -56,7 +58,7 @@ const LoadingFallback = () => (
   </div>
 );
 
-// Create a new QueryClient instance
+// Initialize QueryClient outside of the component
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -126,19 +128,29 @@ const AppContent = () => {
   );
 };
 
+// Root component where we set up providers
+const Root = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <LanguageProvider>
+          <Toaster />
+          <Sonner />
+          <AppContent />
+        </LanguageProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
+
+// Main App component
 const App = () => {
   return (
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <LanguageProvider>
-            <Toaster />
-            <Sonner />
-            <AppContent />
-          </LanguageProvider>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </BrowserRouter>
+    <React.StrictMode>
+      <BrowserRouter>
+        <Root />
+      </BrowserRouter>
+    </React.StrictMode>
   );
 };
 
