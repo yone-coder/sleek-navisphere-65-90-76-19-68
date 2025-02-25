@@ -7,7 +7,7 @@ import { FavoritesSection } from "@/components/apps/FavoritesSection";
 import { SearchOverlay } from "@/components/search/SearchOverlay";
 import { CategoryTabs } from "@/components/apps/CategoryTabs";
 import { AppControls } from "@/components/apps/AppControls";
-import { App, Category } from "@/components/apps/types";
+import { type App, type Category } from "@/components/apps/types";
 import { SuggestionsSection } from "@/components/apps/SuggestionsSection";
 import { ProfileCard } from "@/components/apps/ProfileCard";
 import { AppDisplay } from "@/components/apps/app-store/AppDisplay";

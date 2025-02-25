@@ -14,8 +14,9 @@ import {
   Settings,
   LayoutGrid
 } from "lucide-react";
+import { type App } from "@/components/apps/types";
 
-const mockApps = [
+const mockApps: App[] = [
   {
     name: "Tournaments",
     description: "Browse and join gaming tournaments",

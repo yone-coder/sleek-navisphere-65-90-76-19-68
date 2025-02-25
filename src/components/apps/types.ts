@@ -1,5 +1,5 @@
 
-import { LucideIcon } from "lucide-react";
+import { type LucideIcon } from "lucide-react";
 
 export type IconComponent = LucideIcon;
 
@@ -23,3 +23,5 @@ export interface Category {
   icon: LucideIcon;
   count?: number;
 }
+
+export type AppItem = App;
