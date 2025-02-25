@@ -1,5 +1,5 @@
 
-import { Mail, Settings, Users, FileText, ShoppingBag, DollarSign, Play, GameController, BarChart3, MessageSquare, Phone, Laptop, GraduationCap, Briefcase, Building2, Share2, Heart, Utensils, Tool } from "lucide-react";
+import { Mail, Settings, Users, FileText, ShoppingBag, DollarSign, Play, Gamepad, BarChart3, MessageSquare, Phone, Laptop, GraduationCap, Briefcase, Building2, Share2, Heart, Utensils } from "lucide-react";
 import type { App } from "@/components/apps/types";
 
 export const apps: App[] = [
@@ -90,7 +90,7 @@ export const apps: App[] = [
   {
     name: "Games",
     description: "Play exciting games",
-    icon: GameController,
+    icon: Gamepad, // Changed from GameController to Gamepad
     color: "bg-indigo-500",
     category: "Gaming",
     route: "/games",

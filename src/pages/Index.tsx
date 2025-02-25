@@ -1,88 +1,117 @@
-
-import { useState } from "react";
-import { Store, Trophy, BookOpen, Wallet, PiggyBank } from "lucide-react";
-import { AppGrid } from "@/components/apps/AppGrid";
-import { FavoritesSection } from "@/components/apps/FavoritesSection";
+import { Mail, Settings, Users, FileText, ShoppingBag, DollarSign, Play, Gamepad } from "lucide-react";
 import type { App } from "@/components/apps/types";
 
-const apps: App[] = [
+const mockApps: App[] = [
   {
-    name: "Shopr",
-    description: "Your ultimate marketplace for buying and selling",
-    icon: Store,
-    route: "/marketplace",
-    color: "bg-emerald-500",
-    category: "Shopping",
-    users: "12.5k",
+    name: "Media Player",
+    description: "Watch your favorite content",
+    icon: Play,
+    color: "bg-blue-500",
+    category: "Entertainment",
+    route: "/media",
     rating: 4.8,
+    updates: 0
+  },
+  {
+    name: "Games",
+    description: "Play exciting games",
+    icon: Gamepad,
+    color: "bg-purple-500",
+    category: "Gaming",
+    route: "/games",
+    rating: 4.9,
     updates: 2
   },
   {
-    name: "Winnr",
-    description: "Compete in tournaments and win prizes",
-    icon: Trophy,
-    route: "/tournaments",
-    color: "bg-amber-500",
-    category: "Gaming",
-    users: "8.2k",
+    name: "Mail",
+    description: "Send and receive emails",
+    icon: Mail,
+    color: "bg-indigo-500",
+    category: "Communication",
+    route: "/mail",
     rating: 4.7,
     updates: 1
   },
   {
-    name: "LernX",
-    description: "Learn new skills with interactive online courses",
-    icon: BookOpen,
-    route: "/courses",
-    color: "bg-blue-500",
-    category: "Education",
-    users: "15.3k",
-    rating: 4.9
+    name: "Settings",
+    description: "System preferences",
+    icon: Settings,
+    color: "bg-gray-500",
+    category: "System",
+    route: "/settings",
+    rating: 4.5,
+    updates: 0
   },
   {
-    name: "Zendy",
-    description: "Fast and secure money transfers worldwide",
-    icon: Wallet,
-    route: "/transfer",
-    color: "bg-violet-500",
-    category: "Finance",
-    users: "9.1k",
+    name: "Social",
+    description: "Connect with friends",
+    icon: Users,
+    color: "bg-pink-500",
+    category: "Social",
+    route: "/social",
     rating: 4.6,
     updates: 3
   },
   {
-    name: "FundX",
-    description: "Crowdfunding platform for innovative projects",
-    icon: PiggyBank,
-    route: "/crowdfunding",
-    color: "bg-rose-500",
+    name: "Documents",
+    description: "Manage your files",
+    icon: FileText,
+    color: "bg-yellow-500",
+    category: "Work",
+    route: "/documents",
+    rating: 4.4,
+    updates: 0
+  },
+  {
+    name: "Store",
+    description: "Shop online",
+    icon: ShoppingBag,
+    color: "bg-green-500",
+    category: "Shopping",
+    route: "/store",
+    rating: 4.8,
+    updates: 5
+  },
+  {
+    name: "Finance",
+    description: "Track your expenses",
+    icon: DollarSign,
+    color: "bg-emerald-500",
     category: "Finance",
-    users: "6.8k",
-    rating: 4.5
+    route: "/finance",
+    rating: 4.7,
+    updates: 1
   }
 ];
 
 export default function Index() {
-  const [favorites, setFavorites] = useState<string[]>([]);
-
-  const favoriteApps = apps.filter(app => favorites.includes(app.name));
-
-  const handleToggleFavorite = (appName: string) => {
-    setFavorites(prev => 
-      prev.includes(appName) 
-        ? prev.filter(name => name !== appName)
-        : [...prev, appName]
-    );
-  };
-
   return (
-    <div className="min-h-screen bg-background p-4 sm:p-6 md:p-8">
-      <FavoritesSection favoriteApps={favoriteApps} />
-      <AppGrid 
-        apps={apps}
-        favorites={favorites}
-        onToggleFavorite={handleToggleFavorite}
-        viewMode="grid"
-      />
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-6">Featured Apps</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {mockApps.map((app) => (
+          <div
+            key={app.name}
+            className="p-4 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div className={`p-2 rounded-lg ${app.color}`}>
+                <app.icon className="w-6 h-6 text-white" />
+              </div>
+              <h2 className="font-semibold">{app.name}</h2>
+            </div>
+            <p className="text-sm text-gray-600">{app.description}</p>
+            {app.updates > 0 && (
+              <div className="mt-3 text-xs text-green-600">
+                {app.updates} new updates available
+              </div>
+            )}
+            <div className="mt-3 text-sm text-gray-500">
+              Rating: {app.rating}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

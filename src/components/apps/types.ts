@@ -19,6 +19,7 @@ export interface Category {
   id: string;
   label: string;
   icon: LucideIcon;
+  count?: number; // Added count property
 }
 
 export type AppCategory = typeof import("./data/appCategories").appCategories[number];
