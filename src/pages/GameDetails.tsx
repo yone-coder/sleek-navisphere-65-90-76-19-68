@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -306,7 +307,11 @@ export default function GameDetails() {
             gameType={game?.game_type} 
             status={game?.status} 
           />
-          <GameTabNav tabs={tabs} />
+          <GameTabNav 
+            tabs={tabs} 
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+          />
         </div>
       </div>
 
@@ -327,7 +332,10 @@ export default function GameDetails() {
           </TabsContent>
 
           <TabsContent value="matches">
-            <GameMatchesSection matches={mockMatches} />
+            <GameMatchesSection matches={mockMatches.map(match => ({
+              ...match,
+              status: match.status as "live" | "upcoming" | "done"
+            }))} />
           </TabsContent>
 
           <TabsContent value="news">
