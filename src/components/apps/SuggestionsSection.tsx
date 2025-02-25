@@ -6,16 +6,11 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useNavigate } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Card } from "@/components/ui/card";
-import { useEffect, useRef } from "react";
+import { App } from "./types";
+import { cn } from "@/lib/utils";
 
 interface SuggestionsSectionProps {
-  suggestedApps: Array<{
-    name: string;
-    icon: any;
-    color: string;
-    route: string;
-    updates?: number;
-  }>;
+  suggestedApps: App[];
 }
 
 export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) => {
@@ -29,7 +24,7 @@ export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) =
     if (!acc[groupIndex]) acc[groupIndex] = [];
     acc[groupIndex].push(app);
     return acc;
-  }, [] as typeof suggestedApps[]);
+  }, [] as App[][]);
 
   return (
     <div className="mb-8 -mx-4 sm:-mx-6 md:-mx-8">
@@ -112,7 +107,10 @@ export const SuggestionsSection = ({ suggestedApps }: SuggestionsSectionProps) =
                       <div className="relative w-full overflow-hidden">
                         <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
                           <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
-                            <app.icon className="w-8 h-8 text-white" strokeWidth={2} />
+                            {'component' in app.icon 
+                              ? <img {...app.icon.props} className={cn("w-[80%] h-[80%]", app.icon.props.className)} />
+                              : <app.icon className="w-8 h-8 text-white" strokeWidth={2} />
+                            }
                             {app.updates > 0 && (
                               <Badge 
                                 className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5"
