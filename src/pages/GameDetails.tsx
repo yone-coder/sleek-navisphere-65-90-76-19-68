@@ -16,7 +16,9 @@ import {
   GamepadIcon,
   Clock,
   Users2,
-  Calendar
+  Calendar,
+  Filter,
+  Search
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -32,6 +34,14 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { TournamentCard } from "@/components/tournaments/TournamentCard";
 import { MatchCard } from "@/components/matches/MatchCard";
 import type { Match } from "@/components/matches/types";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const mockGame = {
   id: "1",
@@ -172,6 +182,84 @@ const mockMatches: Match[] = [
     predictions: {
       firstPlayer: 45,
       secondPlayer: 55
+    }
+  },
+  {
+    id: 3,
+    championship: "Regional Championship",
+    phase: "Finals",
+    status: "upcoming",
+    date: "2025-02-14",
+    time: "20:00:00",
+    venue: "Staples Center",
+    location: "Los Angeles, USA",
+    opponents: [
+      {
+        name: "David Kim",
+        photo: "https://images.unsplash.com/photo-1599566150163-29194dcaad36",
+        country: "South Korea",
+        city: "Seoul",
+        rank: 5,
+        stats: "Rising Star",
+        wins: 32,
+        losses: 8
+      },
+      {
+        name: "Lucas Silva",
+        photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
+        country: "Brazil",
+        city: "São Paulo",
+        rank: 6,
+        stats: "Champion",
+        wins: 28,
+        losses: 12
+      }
+    ],
+    spectators: 1500,
+    likes: 750,
+    comments: 280,
+    predictions: {
+      firstPlayer: 55,
+      secondPlayer: 45
+    }
+  },
+  {
+    id: 4,
+    championship: "Summer Cup",
+    phase: "Group Stage",
+    status: "done",
+    date: "2025-02-11",
+    time: "15:30:00",
+    venue: "Tokyo Dome",
+    location: "Tokyo, Japan",
+    opponents: [
+      {
+        name: "Yuki Tanaka",
+        photo: "https://images.unsplash.com/photo-1599566150163-29194dcaad36",
+        country: "Japan",
+        city: "Tokyo",
+        rank: 7,
+        stats: "Veteran",
+        wins: 25,
+        losses: 15
+      },
+      {
+        name: "Anna Liu",
+        photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
+        country: "China",
+        city: "Beijing",
+        rank: 8,
+        stats: "Rising Star",
+        wins: 22,
+        losses: 18
+      }
+    ],
+    spectators: 1200,
+    likes: 500,
+    comments: 150,
+    predictions: {
+      firstPlayer: 40,
+      secondPlayer: 60
     }
   }
 ];
@@ -519,15 +607,82 @@ export default function GameDetails() {
           </TabsContent>
 
           <TabsContent value="matches">
-            <div className="p-4">
-              <h2 className="text-xl font-bold mb-4">Recent Matches</h2>
+            <div className="p-4 space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold">Game Matches</h2>
+                <Button variant="outline" size="sm">
+                  <Filter className="w-4 h-4 mr-2" />
+                  Filters
+                </Button>
+              </div>
+
               <div className="space-y-4">
-                {mockMatches.map((match) => (
-                  <MatchCard 
-                    key={match.id} 
-                    match={match}
-                  />
-                ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Search Matches</label>
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                      <Input 
+                        placeholder="Search by player or tournament..." 
+                        className="pl-9"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Match Status</label>
+                    <Select defaultValue="all">
+                      <SelectTrigger>
+                        <SelectValue placeholder="Filter by status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Matches</SelectItem>
+                        <SelectItem value="live">Live Now</SelectItem>
+                        <SelectItem value="upcoming">Upcoming</SelectItem>
+                        <SelectItem value="done">Completed</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-semibold text-gray-400">Live & Upcoming</h3>
+                      <Badge variant="outline" className="bg-green-500/10 text-green-500 hover:bg-green-500/20">
+                        {mockMatches.filter(m => m.status === "live" || m.status === "upcoming").length} Matches
+                      </Badge>
+                    </div>
+                    <div className="space-y-4">
+                      {mockMatches
+                        .filter(m => m.status === "live" || m.status === "upcoming")
+                        .map((match) => (
+                          <MatchCard 
+                            key={match.id} 
+                            match={match}
+                          />
+                        ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-semibold text-gray-400">Recent Matches</h3>
+                      <Badge variant="outline" className="bg-blue-500/10 text-blue-500 hover:bg-blue-500/20">
+                        {mockMatches.filter(m => m.status === "done").length} Matches
+                      </Badge>
+                    </div>
+                    <div className="space-y-4">
+                      {mockMatches
+                        .filter(m => m.status === "done")
+                        .map((match) => (
+                          <MatchCard 
+                            key={match.id} 
+                            match={match}
+                          />
+                        ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </TabsContent>
