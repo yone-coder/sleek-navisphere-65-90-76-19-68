@@ -3,14 +3,23 @@ import { LucideIcon } from "lucide-react";
 
 export type IconComponent = LucideIcon;
 
+export interface ImageIcon {
+  component: 'img';
+  props: {
+    src: string;
+    alt: string;
+    className?: string;
+  };
+}
+
 export interface App {
   name: string;
   description: string;
-  icon: LucideIcon;
+  icon: LucideIcon | ImageIcon;
   route: string;
   color: string;
   category: string;
-  status?: string;
+  status?: "new" | "popular";
   users?: string;
   lastUsed?: string;
   rating?: number;
