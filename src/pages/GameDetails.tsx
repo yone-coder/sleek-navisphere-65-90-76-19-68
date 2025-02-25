@@ -37,7 +37,7 @@ export default function GameDetails() {
 
   const handleGameModeSelect = (mode: 'local' | 'bot' | 'online', roomId?: string) => {
     setShowModeSelect(false);
-    navigate('/games/morpion');
+    navigate(`/games/morpion?start=true&mode=${mode}${roomId ? `&roomId=${roomId}` : ''}`);
   };
 
   if (isLoading) {

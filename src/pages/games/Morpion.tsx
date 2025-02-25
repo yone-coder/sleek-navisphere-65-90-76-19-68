@@ -69,6 +69,18 @@ const Morpion = () => {
   const [gameMode, setGameMode] = useState<GameMode | null>(null);
   const [difficulty, setDifficulty] = useState('medium');
 
+  // Get query parameters to check if we should start game directly
+  const queryParams = new URLSearchParams(window.location.search);
+  const directStart = queryParams.get('start');
+  const mode = queryParams.get('mode') as GameMode;
+
+  // Effect to handle direct game start
+  useEffect(() => {
+    if (directStart && mode) {
+      handleSelectMode(mode);
+    }
+  }, [directStart, mode]);
+
   const handleSelectMode = (mode: GameMode, roomId?: string, options?: { difficulty?: string }) => {
     setGameMode(mode);
     setGameStarted(true);
@@ -81,8 +93,8 @@ const Morpion = () => {
     console.log(`Starting game in ${mode} mode${roomId ? ` with room ${roomId}` : ''}`);
   };
 
-  // Show menu if game hasn't started
-  if (!gameStarted) {
+  // Show menu if game hasn't started and we're not doing a direct start
+  if (!gameStarted && !directStart) {
     return <GameMenu onSelectMode={handleSelectMode} />;
   }
 
