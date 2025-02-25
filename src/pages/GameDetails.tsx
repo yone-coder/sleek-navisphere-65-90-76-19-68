@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Loader } from "lucide-react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
@@ -13,11 +13,20 @@ import { GameMatchesSection } from "@/components/games/details/sections/matches/
 import { GameNewsSection } from "@/components/games/details/sections/news/GameNewsSection";
 import { FloatingActions } from "@/components/games/details/sections/overview/FloatingActions";
 import { mockGame, mockTournaments, mockMatches, mockNews } from "@/data/mockGameData";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { GameMenu } from "@/components/games/morpion/GameMenu";
 
 export default function GameDetails() {
   const { id } = useParams();
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("overview");
+  const [showModeSelect, setShowModeSelect] = useState(false);
 
   const { data: game, isLoading } = useQuery({
     queryKey: ["game", id],
@@ -27,6 +36,11 @@ export default function GameDetails() {
     },
   });
 
+  const handleGameModeSelect = (mode: 'local' | 'bot' | 'online', roomId?: string) => {
+    setShowModeSelect(false);
+    navigate('/games/morpion');
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen pt-14 flex items-center justify-center">
@@ -34,8 +48,6 @@ export default function GameDetails() {
       </div>
     );
   }
-
-  const tabs = ["overview", "stats", "tournaments", "matches", "news", "dlc"];
 
   return (
     <div className="min-h-screen animate-fade-in">
@@ -47,7 +59,7 @@ export default function GameDetails() {
             status={game?.status} 
           />
           <GameTabNav 
-            tabs={tabs} 
+            tabs={["overview", "stats", "tournaments", "matches", "news", "dlc"]} 
             activeTab={activeTab}
             onTabChange={setActiveTab}
           />
@@ -93,8 +105,18 @@ export default function GameDetails() {
         <FloatingActions 
           currentPlayers={game?.current_players}
           gameTitle={game?.title}
+          onPlayClick={() => setShowModeSelect(true)}
         />
       )}
+
+      <Dialog open={showModeSelect} onOpenChange={setShowModeSelect}>
+        <DialogContent className="max-w-4xl p-0">
+          <DialogHeader className="p-6 pb-0">
+            <DialogTitle>Select Game Mode</DialogTitle>
+          </DialogHeader>
+          <GameMenu onSelectMode={handleGameModeSelect} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -10,9 +10,10 @@ import { useToast } from "@/hooks/use-toast";
 interface FloatingActionsProps {
   currentPlayers?: number;
   gameTitle?: string;
+  onPlayClick?: () => void;
 }
 
-export const FloatingActions = ({ currentPlayers, gameTitle }: FloatingActionsProps) => {
+export const FloatingActions = ({ currentPlayers, gameTitle, onPlayClick }: FloatingActionsProps) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(1234);
   const [shareCount, setShareCount] = useState(245);
@@ -147,6 +148,7 @@ export const FloatingActions = ({ currentPlayers, gameTitle }: FloatingActionsPr
         <Button 
           size="sm"
           className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white gap-1.5 h-7 min-h-0 text-xs"
+          onClick={onPlayClick}
         >
           <Play className="h-3.5 w-3.5" />
           Play Now
