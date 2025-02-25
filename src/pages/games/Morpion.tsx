@@ -66,13 +66,13 @@ const GameComponent = ({
 };
 
 const Morpion = () => {
-  const [boardSize, setBoardSize] = useState(30);
-  const [zoom, setZoom] = useState(100);
+  const [boardSize] = useState(30);
+  const [zoom, setZoom] = useState(150); // Changed from 100 to 150
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [player1] = useState('Guest10816');
   const [player2, setPlayer2] = useState('Guest');
   const [gameMode, setGameMode] = useState<GameMode>('local');
-  const [difficulty, setDifficulty] = useState('medium');
+  const [difficulty] = useState('medium');
 
   // Get query parameters to check if we should set specific game mode
   const queryParams = new URLSearchParams(window.location.search);
