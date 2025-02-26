@@ -163,6 +163,25 @@ export default function Landing() {
       <section className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50 py-2">
         <div className="container mx-auto px-4">
           <div className="space-y-2">
+            {/* Stats above progress bar */}
+            <div className="flex justify-between items-center mb-1">
+              <div className="flex items-center whitespace-nowrap">
+                <span className="text-sm md:text-base font-bold text-gray-900">
+                  {backers}
+                </span>
+                <span className="text-gray-600 text-[10px] ml-1">
+                  backers
+                </span>
+              </div>
+              <div className="flex items-center text-gray-600">
+                <Clock className="h-3.5 w-3.5 mr-1" />
+                <span className="text-[10px] font-medium">
+                  {days}d : {Math.floor(days * 24)}h : {Math.floor(days * 24 * 60)}m
+                </span>
+              </div>
+            </div>
+
+            {/* Progress bar */}
             <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
               <div 
                 className="bg-emerald-500 h-full transition-all duration-500 ease-in-out"
@@ -170,7 +189,7 @@ export default function Landing() {
               />
             </div>
             
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 gap-6">
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-sm md:text-base font-bold text-emerald-500">
@@ -179,17 +198,6 @@ export default function Landing() {
                   <div className="bg-gray-100 rounded-full p-1">
                     <DollarSign className="h-3 w-3 text-gray-500" />
                   </div>
-                </div>
-              </div>
-
-              <div className="text-right">
-                <div className="flex items-center justify-end whitespace-nowrap">
-                  <span className="text-sm md:text-base font-bold text-gray-900">
-                    {backers}
-                  </span>
-                  <span className="text-gray-600 text-[10px] ml-1">
-                    backers
-                  </span>
                 </div>
               </div>
 
