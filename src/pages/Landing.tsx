@@ -203,24 +203,48 @@ export default function Landing() {
             
             <div className="grid grid-cols-2 gap-6">
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm md:text-base font-bold text-emerald-500">
-                    ${raised.toLocaleString()}/${goal.toLocaleString()}
-                  </span>
-                  <div className="bg-gray-100 rounded-full p-1">
-                    <DollarSign className="h-3 w-3 text-gray-500" />
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-lg md:text-xl font-bold text-emerald-500">
+                        ${raised.toLocaleString()}
+                      </span>
+                      <span className="text-xs text-gray-400 font-medium">of</span>
+                      <span className="text-sm text-gray-600 font-semibold">
+                        ${goal.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="flex gap-1 items-center bg-emerald-50 px-2 py-0.5 rounded-full">
+                      <DollarSign className="h-3 w-3 text-emerald-500" />
+                      <span className="text-[10px] font-medium text-emerald-600">+2.5k today</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex -space-x-1">
+                      <div className="h-4 w-4 rounded-full bg-blue-400 ring-2 ring-white" />
+                      <div className="h-4 w-4 rounded-full bg-purple-400 ring-2 ring-white" />
+                      <div className="h-4 w-4 rounded-full bg-pink-400 ring-2 ring-white" />
+                    </div>
+                    <span className="text-[10px] text-gray-500">
+                      +12 backers in the last hour
+                    </span>
                   </div>
                 </div>
               </div>
 
               <div className="text-right">
                 <div className="flex items-center justify-end whitespace-nowrap">
-                  <span className="text-sm md:text-base font-bold text-gray-900">
-                    {days}
-                  </span>
-                  <span className="text-gray-600 text-[10px] ml-1">
-                    days to go
-                  </span>
+                  <div className="flex flex-col items-end">
+                    <span className="text-lg md:text-xl font-bold text-gray-900">
+                      {days}
+                    </span>
+                    <div className="flex items-center gap-1 text-gray-500">
+                      <span className="text-[10px]">
+                        days to go
+                      </span>
+                      <Shield className="h-3 w-3" aria-label="Protected campaign" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -228,14 +252,17 @@ export default function Landing() {
             <div className="flex items-center gap-3">
               <Button 
                 size="sm"
-                className="bg-emerald-500 hover:bg-emerald-600 text-white flex-1"
+                className="bg-emerald-500 hover:bg-emerald-600 text-white flex-1 group"
               >
-                Back This Project
+                <span>Back This Project</span>
+                <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Check className="h-3.5 w-3.5" />
+                </div>
               </Button>
               <Button 
                 size="icon"
                 variant="outline"
-                className="shrink-0 h-9 w-9"
+                className="shrink-0 h-9 w-9 hover:bg-gray-50"
               >
                 <Share2 className="h-3.5 w-3.5" />
               </Button>
