@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
@@ -11,6 +12,8 @@ import { UpdatesTab } from '@/components/landing/UpdatesTab';
 import { CommentsTab } from '@/components/landing/CommentsTab';
 import { Input } from "@/components/ui/input";
 import { VideoSection } from '@/components/landing/VideoSection';
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 export default function Landing() {
   const [progress, setProgress] = useState(65);
@@ -52,10 +55,34 @@ export default function Landing() {
     }
   ];
 
+  const paymentMethods = [
+    {
+      name: "Western Union",
+      icon: "💸",
+      description: "Send money through Western Union's global network"
+    },
+    {
+      name: "MoneyGram",
+      icon: "💰",
+      description: "Quick and secure transfers via MoneyGram"
+    },
+    {
+      name: "Sendwave",
+      icon: "📱",
+      description: "Fast mobile money transfers"
+    },
+    {
+      name: "CAM",
+      icon: "🏦",
+      description: "Direct bank transfer through CAM"
+    }
+  ];
+
   return (
     <div className="font-sans">
-      {/* Search Bar */}
-      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg">
+      {/* Search Bar and Tabs Navigation - Sticky Header */}
+      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg shadow-sm">
+        {/* Search Bar */}
         <div className="px-4 py-2">
           <div className="relative max-w-lg mx-auto">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -68,10 +95,8 @@ export default function Landing() {
             />
           </div>
         </div>
-      </div>
 
-      {/* Sticky Tabs Navigation */}
-      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg">
+        {/* Tabs Navigation */}
         <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
           <TabNav activeTab={activeTab} />
 
@@ -109,20 +134,60 @@ export default function Landing() {
         </Tabs>
       </div>
 
-      {/* Progress Bar */}
-      <FloatingProgress
-        backers={backers}
-        progress={progress}
-        days={days}
-        raised={raised}
-        goal={goal}
-      />
+      {/* Progress Bar - Only show on overview tab */}
+      {activeTab === "overview" && (
+        <FloatingProgress
+          backers={backers}
+          progress={progress}
+          days={days}
+          raised={raised}
+          goal={goal}
+        />
+      )}
       
-      {/* Add padding at the bottom of the page to prevent content from being hidden behind the fixed bar */}
-      <div className="pb-32" />
+      {/* Payment Methods Sheet */}
+      <Sheet>
+        <SheetTrigger asChild>
+          <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/10 to-transparent">
+            <Button 
+              size="lg"
+              className="w-full bg-primary hover:bg-primary/90 text-white rounded-xl h-14"
+            >
+              Back This Project
+            </Button>
+          </div>
+        </SheetTrigger>
+        <SheetContent side="bottom" className="h-[80vh] rounded-t-3xl">
+          <div className="space-y-6 pt-6">
+            <div className="text-center">
+              <div className="h-1 w-12 bg-gray-300 rounded-full mx-auto mb-6" />
+              <h3 className="text-lg font-semibold">Choose Payment Method</h3>
+              <p className="text-sm text-gray-500 mt-1">Select your preferred way to back this project</p>
+            </div>
+            
+            <div className="grid gap-4">
+              {paymentMethods.map((method, index) => (
+                <Button
+                  key={index}
+                  variant="outline"
+                  className="h-auto p-4 flex items-start text-left"
+                >
+                  <div className="flex gap-4 items-center w-full">
+                    <div className="text-3xl">{method.icon}</div>
+                    <div className="flex-1">
+                      <div className="font-medium">{method.name}</div>
+                      <div className="text-sm text-gray-500">{method.description}</div>
+                    </div>
+                  </div>
+                </Button>
+              ))}
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
 
       {/* Trust Indicators */}
-      <div className="fixed bottom-4 left-4 bg-white p-3 rounded-lg shadow-lg flex items-center text-sm">
+      <div className="fixed bottom-24 left-4 bg-white p-3 rounded-lg shadow-lg flex items-center text-sm">
         <Shield className="text-green-600 mr-2 h-5 w-5" />
         <span>Secure Payments</span>
       </div>
