@@ -128,30 +128,33 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
       });
     };
 
-    startMatchmaking();
-
-    return () => {
+    const cleanup = async () => {
       console.log('Cleaning up matchmaking...');
       isSubscribed = false;
       if (searchTimerRef.current) clearInterval(searchTimerRef.current);
       if (checkIntervalRef.current) clearInterval(checkIntervalRef.current);
       if (roomSubscription) roomSubscription.unsubscribe();
       
-      // Only clean up the room if we created it and it's still in waiting state
       if (currentRoomRef.current) {
         console.log('Cleaning up room:', currentRoomRef.current);
-        supabase
-          .from('game_rooms')
-          .delete()
-          .eq('id', currentRoomRef.current)
-          .eq('status', 'waiting')
-          .then(() => {
-            console.log('Room cleaned up successfully');
-          })
-          .catch((error) => {
-            console.error('Error cleaning up room:', error);
-          });
+        try {
+          await supabase
+            .from('game_rooms')
+            .delete()
+            .eq('id', currentRoomRef.current)
+            .eq('status', 'waiting');
+          console.log('Room cleaned up successfully');
+        } catch (error) {
+          console.error('Error cleaning up room:', error);
+        }
       }
+    };
+
+    startMatchmaking();
+    return () => {
+      cleanup().catch(error => {
+        console.error('Error during cleanup:', error);
+      });
     };
   }, [onClose, toast, searchTimerRef, checkIntervalRef, currentRoomRef, handleMatchFound, setSearchTime]);
 

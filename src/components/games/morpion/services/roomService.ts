@@ -9,15 +9,11 @@ export const roomService = {
     console.log('Creating room for user:', userId);
     
     // First, clean up any existing rooms for this user
-    const { error: cleanupError } = await supabase
+    await supabase
       .from('game_rooms')
       .delete()
       .eq('player1_id', userId)
       .eq('status', 'waiting');
-
-    if (cleanupError) {
-      console.error('Error cleaning up existing rooms:', cleanupError);
-    }
 
     const { data: room, error } = await supabase
       .from('game_rooms')
@@ -48,17 +44,12 @@ export const roomService = {
   async joinRoom(roomId: string, userId: string): Promise<GameRoom> {
     console.log('Attempting to join room:', roomId, 'for user:', userId);
     
-    // Single atomic operation to update the room
+    // Try to join the room with a single atomic operation
     const { data: updatedRooms, error } = await supabase
-      .from('game_rooms')
-      .update({
-        player2_id: userId,
-        status: 'playing'
-      })
-      .eq('id', roomId)
-      .eq('status', 'waiting')
-      .is('player2_id', null)
-      .select();
+      .rpc('join_game_room', {
+        p_room_id: roomId,
+        p_user_id: userId
+      });
 
     if (error || !updatedRooms || updatedRooms.length === 0) {
       console.error('Error joining room:', error);
