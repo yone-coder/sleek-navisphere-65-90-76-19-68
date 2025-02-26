@@ -105,18 +105,18 @@ const BalanceCard = () => {
   // Render loading skeleton
   if (loading) {
     return (
-      <div className={`w-full max-w-md mx-auto rounded-xl shadow-lg overflow-hidden ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
-        <div className="p-6 animate-pulse">
-          <div className="h-4 bg-gray-300 rounded w-1/4 mb-4"></div>
-          <div className="h-8 bg-gray-300 rounded w-3/4 mb-6"></div>
-          <div className="h-4 bg-gray-300 rounded w-1/2 mb-6"></div>
-          <div className="flex space-x-4 mb-6">
-            <div className="h-10 bg-gray-300 rounded w-1/3"></div>
-            <div className="h-10 bg-gray-300 rounded w-1/3"></div>
-            <div className="h-10 bg-gray-300 rounded w-1/3"></div>
+      <div className="w-full overflow-hidden">
+        <div className="p-4 animate-pulse">
+          <div className="h-3 bg-gray-300 rounded w-1/4 mb-3"></div>
+          <div className="h-6 bg-gray-300 rounded w-3/4 mb-4"></div>
+          <div className="h-3 bg-gray-300 rounded w-1/2 mb-4"></div>
+          <div className="flex space-x-2 mb-4">
+            <div className="h-8 bg-gray-300 rounded w-1/3"></div>
+            <div className="h-8 bg-gray-300 rounded w-1/3"></div>
+            <div className="h-8 bg-gray-300 rounded w-1/3"></div>
           </div>
-          <div className="h-4 bg-gray-300 rounded w-full mb-2"></div>
-          <div className="h-6 bg-gray-300 rounded w-full"></div>
+          <div className="h-3 bg-gray-300 rounded w-full mb-2"></div>
+          <div className="h-4 bg-gray-300 rounded w-full"></div>
         </div>
       </div>
     );
@@ -125,16 +125,16 @@ const BalanceCard = () => {
   // Render error state
   if (error) {
     return (
-      <div className={`w-full max-w-md mx-auto rounded-xl shadow-lg overflow-hidden ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
-        <div className="p-6 text-center">
-          {/*<AlertTriangle className="mx-auto mb-4 text-red-500" size={48} />*/}
-          <h3 className="text-xl font-bold mb-2">Unable to Load Account</h3>
-          <p className="mb-4">We're having trouble connecting to your account. Please try again later.</p>
+      <div className="w-full overflow-hidden">
+        <div className="p-4 text-center">
+          <AlertTriangle className="mx-auto mb-3 text-red-500" size={32} />
+          <h3 className="text-lg font-bold mb-2">Unable to Load Account</h3>
+          <p className="mb-3 text-sm">We're having trouble connecting to your account. Please try again later.</p>
           <button 
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center mx-auto"
+            className="px-3 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center mx-auto text-sm"
             onClick={() => window.location.reload()}
           >
-            {/*<RefreshCw className="mr-2" size={16} />*/}
+            <RefreshCw className="mr-2" size={14} />
             Retry
           </button>
         </div>
@@ -144,43 +144,38 @@ const BalanceCard = () => {
 
   // Main component render
   return (
-    <div 
-      className={`w-full max-w-md mx-auto rounded-xl shadow-lg overflow-hidden transition-all duration-300 ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}
-      style={{ transform: isHovered ? 'translateY(-4px)' : 'translateY(0)', boxShadow: isHovered ? '0 10px 25px rgba(0, 0, 0, 0.1)' : '0 4px 6px rgba(0, 0, 0, 0.1)' }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="w-full overflow-hidden">
       {/* Header */}
-      <div className="p-6 pb-4">
-        <div className="flex justify-between items-center mb-4">
+      <div className="px-4 py-3">
+        <div className="flex justify-between items-center mb-3">
           <div className="relative">
             <button 
-              className="flex items-center text-sm font-medium"
+              className="flex items-center text-xs font-medium"
               onClick={() => setShowDropdown(!showDropdown)}
               aria-label="Select account"
             >
               {accounts[currentAccount].type} Account
-              <ChevronDown size={16} className="ml-1" />
+              <ChevronDown size={14} className="ml-1" />
             </button>
             
             {/* Account dropdown */}
             {showDropdown && (
-              <div className={`absolute top-full left-0 mt-1 w-48 rounded-md shadow-lg z-10 ${darkMode ? 'bg-gray-700' : 'bg-white'}`}>
+              <div className="absolute top-full left-0 mt-1 w-40 rounded-md shadow-lg z-10 bg-white">
                 <div className="py-1">
                   <button 
-                    className={`block px-4 py-2 text-sm w-full text-left ${currentAccount === 'checking' ? 'bg-blue-50 text-blue-700' : ''} ${darkMode ? 'hover:bg-gray-600' : 'hover:bg-gray-100'}`}
+                    className={`block px-3 py-1.5 text-xs w-full text-left ${currentAccount === 'checking' ? 'bg-blue-50 text-blue-700' : ''} hover:bg-gray-50`}
                     onClick={() => handleAccountChange('checking')}
                   >
                     Checking Account
                   </button>
                   <button 
-                    className={`block px-4 py-2 text-sm w-full text-left ${currentAccount === 'savings' ? 'bg-blue-50 text-blue-700' : ''} ${darkMode ? 'hover:bg-gray-600' : 'hover:bg-gray-100'}`}
+                    className={`block px-3 py-1.5 text-xs w-full text-left ${currentAccount === 'savings' ? 'bg-blue-50 text-blue-700' : ''} hover:bg-gray-50`}
                     onClick={() => handleAccountChange('savings')}
                   >
                     Savings Account
                   </button>
                   <button 
-                    className={`block px-4 py-2 text-sm w-full text-left ${currentAccount === 'credit' ? 'bg-blue-50 text-blue-700' : ''} ${darkMode ? 'hover:bg-gray-600' : 'hover:bg-gray-100'}`}
+                    className={`block px-3 py-1.5 text-xs w-full text-left ${currentAccount === 'credit' ? 'bg-blue-50 text-blue-700' : ''} hover:bg-gray-50`}
                     onClick={() => handleAccountChange('credit')}
                   >
                     Credit Card
@@ -190,36 +185,25 @@ const BalanceCard = () => {
             )}
           </div>
           
-          <div className="flex space-x-2">
-            {/* Currency toggle */}
+          <div className="flex space-x-1">
             <button 
-              className={`p-2 rounded-full ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
+              className="p-1.5 rounded-full hover:bg-gray-100"
               onClick={() => setCurrency(currency === 'USD' ? 'EUR' : 'USD')}
               aria-label="Toggle currency"
             >
-              {currency === 'USD' ? <DollarSign size={18} /> : <Euro size={18} />}
+              {currency === 'USD' ? <DollarSign size={14} /> : <Euro size={14} />}
             </button>
             
-            {/* Dark mode toggle */}
             <button 
-              className={`p-2 rounded-full ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
-              onClick={() => setDarkMode(!darkMode)}
-              aria-label="Toggle dark mode"
-            >
-              {darkMode ? <Circle size={18} /> : <Circle size={18} fill="black" />}
-            </button>
-            
-            {/* Security status */}
-            <button 
-              className={`p-2 rounded-full ${securityStatus === 'secure' ? 'text-green-500' : 'text-yellow-500'}`}
+              className={`p-1.5 rounded-full ${securityStatus === 'secure' ? 'text-green-500' : 'text-yellow-500'} hover:bg-gray-100`}
               onClick={handleSecurityAction}
               aria-label="Security status"
               onMouseEnter={() => handleTooltipShow('Security')}
               onMouseLeave={handleTooltipHide}
             >
-              {securityStatus === 'secure' ? <Lock size={18} /> : <Unlock size={18} />}
+              {securityStatus === 'secure' ? <Lock size={14} /> : <Unlock size={14} />}
               {showTooltip === 'Security' && (
-                <div className="absolute bg-black text-white p-2 rounded text-xs -mt-10 whitespace-nowrap">
+                <div className="absolute bg-black text-white p-1.5 rounded text-xs -mt-8 whitespace-nowrap">
                   {tooltips['Security']}
                 </div>
               )}
@@ -228,65 +212,65 @@ const BalanceCard = () => {
         </div>
         
         {/* Balance display */}
-        <div className="mb-4">
+        <div className="mb-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm opacity-75">Available Balance</span>
+            <span className="text-xs opacity-75">Available Balance</span>
             <button 
-              className={`p-1 rounded-full ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
+              className="p-1 rounded-full hover:bg-gray-100"
               onClick={() => setHideBalance(!hideBalance)}
               aria-label="Hide balance"
             >
-              {hideBalance ? <EyeOff size={18} /> : <Eye size={18} />}
+              {hideBalance ? <EyeOff size={14} /> : <Eye size={14} />}
             </button>
           </div>
           <div className="flex items-baseline">
-            <h1 className="text-4xl font-bold tracking-tight">
+            <h1 className="text-2xl font-bold tracking-tight">
               {formatCurrency(accounts[currentAccount].balance)}
             </h1>
-            <span className="text-sm ml-2 opacity-75">{accounts[currentAccount].number}</span>
+            <span className="text-xs ml-2 opacity-75">{accounts[currentAccount].number}</span>
           </div>
         </div>
         
         {/* Quick action buttons */}
-        <div className="flex space-x-2 mb-6">
-          <button className={`flex-1 py-2 px-3 rounded-lg flex items-center justify-center text-sm font-medium ${darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white transition-colors`}>
-            <Send size={16} className="mr-2" />
+        <div className="flex space-x-2 mb-4">
+          <button className="flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center text-xs font-medium bg-blue-500 hover:bg-blue-600 text-white transition-colors">
+            <Send size={14} className="mr-1.5" />
             Transfer
           </button>
-          <button className={`flex-1 py-2 px-3 rounded-lg flex items-center justify-center text-sm font-medium ${darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'} transition-colors`}>
-            <Download size={16} className="mr-2" />
+          <button className="flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center text-xs font-medium bg-gray-100 hover:bg-gray-200 transition-colors">
+            <Download size={14} className="mr-1.5" />
             Deposit
           </button>
-          <button className={`flex-1 py-2 px-3 rounded-lg flex items-center justify-center text-sm font-medium ${darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'} transition-colors`}>
-            <CreditCard size={16} className="mr-2" />
+          <button className="flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center text-xs font-medium bg-gray-100 hover:bg-gray-200 transition-colors">
+            <CreditCard size={14} className="mr-1.5" />
             Card
           </button>
         </div>
         
         {/* Budget progress */}
-        <div className="mb-6">
+        <div className="mb-4">
           <div className="flex justify-between items-center mb-1">
             <div className="flex items-center">
-              <span className="text-sm font-medium mr-1">Monthly Budget</span>
+              <span className="text-xs font-medium mr-1">Monthly Budget</span>
               <button 
-                className="p-1"
+                className="p-0.5"
                 onMouseEnter={() => handleTooltipShow('Budget')}
                 onMouseLeave={handleTooltipHide}
                 aria-label="Budget info"
               >
-                <Info size={14} />
+                <Info size={12} />
                 {showTooltip === 'Budget' && (
-                  <div className="absolute bg-black text-white p-2 rounded text-xs -mt-10 whitespace-nowrap">
+                  <div className="absolute bg-black text-white p-1.5 rounded text-xs -mt-8 whitespace-nowrap">
                     {tooltips['Budget']}
                   </div>
                 )}
               </button>
             </div>
-            <span className="text-sm">
+            <span className="text-xs">
               {formatCurrency(accounts[currentAccount].budget.current)} of {formatCurrency(accounts[currentAccount].budget.max)}
             </span>
           </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
             <div 
               className={`h-full ${budgetProgress > 80 ? 'bg-red-500' : 'bg-green-500'}`}
               style={{ width: `${(accounts[currentAccount].budget.current / accounts[currentAccount].budget.max) * 100}%` }}
@@ -296,32 +280,32 @@ const BalanceCard = () => {
       </div>
       
       {/* Footer with advanced features */}
-      <div className={`px-6 py-4 flex justify-between items-center ${darkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-        <div className="flex items-center space-x-2">
-          <button className={`p-2 rounded-full ${darkMode ? 'hover:bg-gray-600' : 'hover:bg-gray-200'} transition-colors`} aria-label="Search transactions">
-            <Search size={18} />
+      <div className="px-4 py-3 flex justify-between items-center border-t border-gray-100">
+        <div className="flex items-center space-x-1">
+          <button className="p-1.5 rounded-full hover:bg-gray-100 transition-colors" aria-label="Search transactions">
+            <Search size={14} />
           </button>
-          <button className={`p-2 rounded-full ${darkMode ? 'hover:bg-gray-600' : 'hover:bg-gray-200'} transition-colors`} aria-label="Filter">
-            <Filter size={18} />
+          <button className="p-1.5 rounded-full hover:bg-gray-100 transition-colors" aria-label="Filter">
+            <Filter size={14} />
           </button>
-          <button className={`p-2 rounded-full ${darkMode ? 'hover:bg-gray-600' : 'hover:bg-gray-200'} transition-colors`} aria-label="Calendar view">
-            <Calendar size={18} />
+          <button className="p-1.5 rounded-full hover:bg-gray-100 transition-colors" aria-label="Calendar view">
+            <Calendar size={14} />
           </button>
         </div>
         
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1">
           <button 
-            className={`p-2 rounded-full ${darkMode ? 'hover:bg-gray-600' : 'hover:bg-gray-200'} transition-colors`}
+            className="p-1.5 rounded-full hover:bg-gray-100 transition-colors"
             onClick={handleBiometricAuth}
             aria-label="Biometric authentication"
           >
-            <Fingerprint size={18} />
+            <Fingerprint size={14} />
           </button>
-          <button className={`p-2 rounded-full ${darkMode ? 'hover:bg-gray-600' : 'hover:bg-gray-200'} transition-colors`} aria-label="User settings">
-            <User size={18} />
+          <button className="p-1.5 rounded-full hover:bg-gray-100 transition-colors" aria-label="User settings">
+            <User size={14} />
           </button>
-          <button className={`p-2 rounded-full ${darkMode ? 'hover:bg-gray-600' : 'hover:bg-gray-200'} transition-colors`} aria-label="Language settings">
-            <Globe size={18} />
+          <button className="p-1.5 rounded-full hover:bg-gray-100 transition-colors" aria-label="Language settings">
+            <Globe size={14} />
           </button>
         </div>
       </div>
