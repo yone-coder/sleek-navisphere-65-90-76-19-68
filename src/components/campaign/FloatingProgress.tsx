@@ -12,12 +12,41 @@ interface FloatingProgressProps {
 }
 
 export function FloatingProgress({ 
-  backers, 
-  progress, 
+  backers: finalBackers, 
+  progress: finalProgress, 
   days, 
-  raised, 
+  raised: finalRaised, 
   goal 
 }: FloatingProgressProps) {
+  const [progress, setProgress] = useState(0);
+  const [raised, setRaised] = useState(0);
+  const [backers, setBackers] = useState(0);
+
+  useEffect(() => {
+    // Animate values from 0 to their final values
+    const duration = 1500; // 1.5 seconds
+    const frames = 60;
+    const interval = duration / frames;
+
+    const progressIncrement = finalProgress / frames;
+    const raisedIncrement = finalRaised / frames;
+    const backersIncrement = finalBackers / frames;
+
+    let frame = 0;
+    const timer = setInterval(() => {
+      if (frame < frames) {
+        setProgress(prev => Math.min(prev + progressIncrement, finalProgress));
+        setRaised(prev => Math.min(prev + raisedIncrement, finalRaised));
+        setBackers(prev => Math.min(Math.round(prev + backersIncrement), finalBackers));
+        frame++;
+      } else {
+        clearInterval(timer);
+      }
+    }, interval);
+
+    return () => clearInterval(timer);
+  }, [finalProgress, finalRaised, finalBackers]);
+
   return (
     <section className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50 py-2">
       <div className="container mx-auto px-4">
@@ -28,7 +57,7 @@ export function FloatingProgress({
               <div className="flex items-center whitespace-nowrap">
                 <Users className="h-3.5 w-3.5 mr-1 text-gray-500" />
                 <span className="text-sm md:text-base font-bold text-gray-900">
-                  {backers}
+                  {Math.round(backers)}
                 </span>
                 <span className="text-gray-600 text-[10px] ml-1">
                   backers
@@ -37,7 +66,7 @@ export function FloatingProgress({
               <div className="flex items-center whitespace-nowrap">
                 <Heart className="h-3.5 w-3.5 mr-1 text-pink-500" />
                 <span className="text-sm md:text-base font-bold text-gray-900">
-                  {progress}%
+                  {Math.round(progress)}%
                 </span>
                 <span className="text-gray-600 text-[10px] ml-1">
                   funded
@@ -52,12 +81,19 @@ export function FloatingProgress({
             </div>
           </div>
 
-          {/* Progress bar */}
+          {/* Progress bar with gradient and animation */}
           <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
             <div 
-              className="bg-emerald-500 h-full transition-all duration-500 ease-in-out"
-              style={{ width: `${(raised / goal) * 100}%` }}
-            />
+              className="h-full transition-all duration-300 ease-out rounded-full relative overflow-hidden"
+              style={{ 
+                width: `${Math.max((raised / goal) * 100, 0.5)}%`,
+                background: 'linear-gradient(90deg, #34d399 0%, #059669 50%, #047857 100%)',
+                backgroundSize: '200% 100%',
+                animation: 'shimmer 2s infinite linear'
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0" />
+            </div>
           </div>
           
           <div className="grid grid-cols-2 gap-6">
@@ -66,7 +102,7 @@ export function FloatingProgress({
                 <div className="flex items-center gap-2 mb-1">
                   <div className="flex items-baseline gap-1.5">
                     <span className="text-lg md:text-xl font-bold text-emerald-500">
-                      ${raised.toLocaleString()}
+                      ${Math.round(raised).toLocaleString()}
                     </span>
                     <span className="text-xs text-gray-400 font-medium">of</span>
                     <span className="text-sm text-gray-600 font-semibold">
