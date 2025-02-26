@@ -1,39 +1,57 @@
 
 import { Button } from '@/components/ui/button';
+import { Avatar } from '@/components/ui/avatar';
+import { Heart, MoreVertical } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export function CommentsTab() {
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      <div className="flex gap-4 mb-8">
+    <div className="max-w-3xl mx-auto">
+      <div className="flex gap-4 mb-8 sticky top-0 bg-white/95 backdrop-blur-sm p-4 -mx-4">
         <div className="flex-1">
           <textarea 
-            className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-            placeholder="Leave a comment..."
+            className="w-full p-4 border rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent resize-none text-sm h-[80px]"
+            placeholder="Add a comment..."
             rows={3}
           />
           <div className="mt-2 flex justify-end">
-            <Button>Post Comment</Button>
+            <Button size="sm">Post</Button>
           </div>
         </div>
       </div>
 
-      {/* Sample Comments */}
-      <div className="space-y-6">
-        {[1, 2, 3].map((_, i) => (
-          <div key={i} className="flex gap-4">
-            <div className="h-10 w-10 rounded-full bg-gray-200" />
+      <div className="space-y-6 px-4">
+        {[1, 2, 3, 4, 5].map((_, i) => (
+          <motion.div 
+            key={i} 
+            className="flex gap-3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+          >
+            <Avatar className="h-9 w-9">
+              <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=user${i}`} alt="user avatar" />
+            </Avatar>
             <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <h4 className="font-semibold">User Name</h4>
-                <span className="text-xs text-gray-500">2 days ago</span>
+              <div className="flex items-start justify-between">
+                <div>
+                  <h4 className="text-sm font-medium">User Name</h4>
+                  <p className="text-sm text-gray-600 mt-1">This project looks amazing! Can't wait to see it come to life.</p>
+                </div>
+                <button className="text-gray-400 hover:text-gray-600">
+                  <MoreVertical className="h-5 w-5" />
+                </button>
               </div>
-              <p className="text-gray-700">This project looks amazing! Can't wait to see it come to life.</p>
-              <div className="mt-2 flex gap-4">
-                <button className="text-sm text-gray-500 hover:text-gray-700">Reply</button>
-                <button className="text-sm text-gray-500 hover:text-gray-700">Like</button>
+              <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                <span>2d ago</span>
+                <button className="flex items-center gap-1 hover:text-gray-700">
+                  <Heart className="h-4 w-4" />
+                  <span>24</span>
+                </button>
+                <button className="hover:text-gray-700">Reply</button>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

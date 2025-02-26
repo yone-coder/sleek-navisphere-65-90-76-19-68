@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
@@ -11,6 +10,7 @@ import { TabNav } from '@/components/landing/TabNav';
 import { UpdatesTab } from '@/components/landing/UpdatesTab';
 import { CommentsTab } from '@/components/landing/CommentsTab';
 import { Input } from "@/components/ui/input";
+import { VideoSection } from '@/components/landing/VideoSection';
 
 export default function Landing() {
   const [progress, setProgress] = useState(65);
@@ -71,11 +71,11 @@ export default function Landing() {
       </div>
 
       {/* Sticky Tabs Navigation */}
-      <div className="sticky top-[52px] z-40 bg-white/80 backdrop-blur-lg">
+      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg">
         <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
           <TabNav activeTab={activeTab} />
 
-          <div className="container mx-auto">
+          <div className="w-full">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
@@ -85,11 +85,14 @@ export default function Landing() {
                 transition={{ duration: 0.2 }}
               >
                 <TabsContent value="overview" className="mt-0">
-                  <HeroSection backers={backers} />
-                  <RewardsSection rewards={rewards} />
+                  <VideoSection />
+                  <div className="container mx-auto">
+                    <HeroSection backers={backers} />
+                    <RewardsSection rewards={rewards} />
+                  </div>
                 </TabsContent>
 
-                <TabsContent value="updates" className="mt-6">
+                <TabsContent value="updates" className="mt-6 container mx-auto">
                   <UpdatesTab />
                 </TabsContent>
 
@@ -97,7 +100,7 @@ export default function Landing() {
                   <CommentsTab />
                 </TabsContent>
 
-                <TabsContent value="faqs" className="mt-6">
+                <TabsContent value="faqs" className="mt-6 container mx-auto">
                   <FAQsTab />
                 </TabsContent>
               </motion.div>
