@@ -16,10 +16,10 @@ export function TabNav({ activeTab }: TabNavProps) {
         <TabsList className="w-max inline-flex h-14 items-center justify-start gap-2 rounded-xl bg-gray-50/50 p-2 backdrop-blur-sm border border-gray-100">
           <TabsTrigger 
             value="overview"
-            className="relative flex items-center gap-2.5 px-4 py-2 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
+            className="relative flex items-center gap-2.5 px-3 py-1.5 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
           >
-            <div className="relative flex items-center justify-center w-8 h-8">
-              <Info className="w-[18px] h-[18px]" />
+            <div className="relative flex items-center justify-center w-6 h-6">
+              <Info className="w-4 h-4" />
               {activeTab === "overview" && (
                 <motion.div
                   layoutId="activeBackground"
@@ -28,15 +28,15 @@ export function TabNav({ activeTab }: TabNavProps) {
                 />
               )}
             </div>
-            <span className="font-medium">Overview</span>
+            <span className="text-sm font-medium">Overview</span>
           </TabsTrigger>
 
           <TabsTrigger 
             value="updates"
-            className="relative flex items-center gap-2.5 px-4 py-2 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
+            className="relative flex items-center gap-2.5 px-3 py-1.5 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
           >
-            <div className="relative flex items-center justify-center w-8 h-8">
-              <Bell className="w-[18px] h-[18px]" />
+            <div className="relative flex items-center justify-center w-6 h-6">
+              <Bell className="w-4 h-4" />
               {activeTab === "updates" && (
                 <motion.div
                   layoutId="activeBackground"
@@ -45,10 +45,10 @@ export function TabNav({ activeTab }: TabNavProps) {
                 />
               )}
             </div>
-            <span className="font-medium">Updates</span>
+            <span className="text-sm font-medium">Updates</span>
             <Badge 
               variant="secondary" 
-              className="h-5 px-2 bg-primary/5 text-primary border-0"
+              className="h-4 px-1.5 text-xs bg-primary/5 text-primary border-0"
             >
               2
             </Badge>
@@ -56,10 +56,10 @@ export function TabNav({ activeTab }: TabNavProps) {
 
           <TabsTrigger 
             value="comments"
-            className="relative flex items-center gap-2.5 px-4 py-2 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
+            className="relative flex items-center gap-2.5 px-3 py-1.5 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
           >
-            <div className="relative flex items-center justify-center w-8 h-8">
-              <MessageCircle className="w-[18px] h-[18px]" />
+            <div className="relative flex items-center justify-center w-6 h-6">
+              <MessageCircle className="w-4 h-4" />
               {activeTab === "comments" && (
                 <motion.div
                   layoutId="activeBackground"
@@ -68,10 +68,10 @@ export function TabNav({ activeTab }: TabNavProps) {
                 />
               )}
             </div>
-            <span className="font-medium">Comments</span>
+            <span className="text-sm font-medium">Comments</span>
             <Badge 
               variant="secondary" 
-              className="h-5 px-2 bg-primary/5 text-primary border-0"
+              className="h-4 px-1.5 text-xs bg-primary/5 text-primary border-0"
             >
               12
             </Badge>
@@ -79,10 +79,10 @@ export function TabNav({ activeTab }: TabNavProps) {
 
           <TabsTrigger 
             value="faqs"
-            className="relative flex items-center gap-2.5 px-4 py-2 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
+            className="relative flex items-center gap-2.5 px-3 py-1.5 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
           >
-            <div className="relative flex items-center justify-center w-8 h-8">
-              <HelpCircle className="w-[18px] h-[18px]" />
+            <div className="relative flex items-center justify-center w-6 h-6">
+              <HelpCircle className="w-4 h-4" />
               {activeTab === "faqs" && (
                 <motion.div
                   layoutId="activeBackground"
@@ -91,7 +91,7 @@ export function TabNav({ activeTab }: TabNavProps) {
                 />
               )}
             </div>
-            <span className="font-medium">FAQs</span>
+            <span className="text-sm font-medium">FAQs</span>
           </TabsTrigger>
         </TabsList>
         <ScrollBar orientation="horizontal" className="invisible" />
