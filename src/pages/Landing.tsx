@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { Shield } from 'lucide-react';
+import { Shield, Search } from 'lucide-react';
 import { FloatingProgress } from '@/components/campaign/FloatingProgress';
 import { FAQsTab } from '@/components/product/tabs/FAQsTab';
 import { HeroSection } from '@/components/landing/HeroSection';
@@ -10,52 +10,37 @@ import { RewardsSection } from '@/components/landing/RewardsSection';
 import { TabNav } from '@/components/landing/TabNav';
 import { UpdatesTab } from '@/components/landing/UpdatesTab';
 import { CommentsTab } from '@/components/landing/CommentsTab';
+import { Input } from "@/components/ui/input";
 
 export default function Landing() {
-  // State for funding progress
   const [progress, setProgress] = useState(65);
   const [backers, setBackers] = useState(824);
   const [days, setDays] = useState(14);
   const [raised, setRaised] = useState(32500);
   const [goal, setGoal] = useState(50000);
   const [activeTab, setActiveTab] = useState("overview");
-
-  // Sample reward tiers
-  const rewards = [
-    {
-      title: "Early Bird",
-      price: 25,
-      description: "Get early access to our product and a special thank you in our digital booklet.",
-      claimed: 342,
-      limit: 500
-    },
-    {
-      title: "Premium Supporter",
-      price: 75,
-      description: "Receive the product with exclusive features and a mention on our website.",
-      claimed: 215,
-      limit: 300
-    },
-    {
-      title: "VIP Backer",
-      price: 150,
-      description: "Get our limited edition product, a signed thank you card, and join our virtual launch party.",
-      claimed: 98,
-      limit: 150
-    },
-    {
-      title: "Founding Member",
-      price: 500,
-      description: "Everything in VIP plus a consultation call with our team and your name engraved on our 'Founders Wall'.",
-      claimed: 12,
-      limit: 20
-    }
-  ];
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
     <div className="font-sans">
-      {/* Sticky Tabs Navigation */}
+      {/* Search Bar */}
       <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b">
+        <div className="px-4 py-3">
+          <div className="relative max-w-2xl mx-auto">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Input 
+              type="search"
+              placeholder="Search updates, comments, or FAQs..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 h-11 bg-gray-50/50 border-gray-100 focus:bg-white transition-colors"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Sticky Tabs Navigation */}
+      <div className="sticky top-[73px] z-40 bg-white/80 backdrop-blur-lg border-b">
         <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
           <TabNav activeTab={activeTab} />
 
