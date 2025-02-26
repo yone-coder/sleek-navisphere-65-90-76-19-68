@@ -48,45 +48,67 @@ export const roomService = {
   async joinRoom(roomId: string, userId: string): Promise<GameRoom> {
     console.log('Attempting to join room:', roomId, 'for user:', userId);
     
-    // Use a transaction to ensure atomicity
-    const { data: room, error } = await supabase.rpc('join_game_room', {
-      p_room_id: roomId,
-      p_user_id: userId
-    });
+    // First verify the room exists and is available
+    const { data: existingRoom, error: checkError } = await supabase
+      .from('game_rooms')
+      .select()
+      .eq('id', roomId)
+      .eq('status', 'waiting')
+      .is('player2_id', null)
+      .single();
+
+    if (checkError || !existingRoom) {
+      console.error('Room not available:', checkError);
+      throw new Error('Room not available');
+    }
+
+    // Update the room with the second player
+    const { data: room, error } = await supabase
+      .from('game_rooms')
+      .update({
+        player2_id: userId,
+        status: 'playing'
+      })
+      .eq('id', roomId)
+      .select()
+      .single();
 
     if (error) {
       console.error('Error joining room:', error);
       throw error;
     }
-
-    if (!room) {
-      throw new Error('Failed to join room');
-    }
+    if (!room) throw new Error('Failed to join room');
 
     console.log('Successfully joined room:', roomId);
-    return room as GameRoom;
+    return room;
   },
 
   async findAvailableRoom(userId: string): Promise<GameRoom | null> {
     console.log('Finding available room for user:', userId);
 
-    // We'll use a stored procedure to handle this atomically
-    const { data: room, error } = await supabase.rpc('find_available_room', {
-      p_user_id: userId
-    });
+    // First clean up any stale rooms
+    await supabase
+      .from('game_rooms')
+      .delete()
+      .eq('player1_id', userId)
+      .eq('status', 'waiting');
+
+    // Find an available room
+    const { data: rooms, error } = await supabase
+      .from('game_rooms')
+      .select()
+      .eq('status', 'waiting')
+      .is('player2_id', null)
+      .neq('player1_id', userId)
+      .order('created_at', { ascending: true })
+      .limit(1);
 
     if (error) {
       console.error('Error finding available room:', error);
       throw error;
     }
 
-    if (!room) {
-      console.log('No available rooms found');
-      return null;
-    }
-
-    console.log('Found available room:', room);
-    return room as GameRoom;
+    return rooms?.[0] || null;
   },
 
   subscribeToRoom(roomId: string, onUpdate: (room: GameRoom) => void) {
