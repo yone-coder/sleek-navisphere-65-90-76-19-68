@@ -125,7 +125,7 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
           .eq('id', roomId)
           .single();
 
-        if (room && room.status === 'playing' && room.player2_id) {
+        if (room && 'status' in room && 'player2_id' in room && room.status === 'playing' && room.player2_id) {
           if (checkIntervalRef.current) {
             clearInterval(checkIntervalRef.current);
           }
@@ -230,31 +230,31 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
     if (!isSubscribed) return;
     
     try {
-      const { data: room, error } = await supabase
+      const { data: roomData, error } = await supabase
         .from('game_rooms')
-        .select('*')
+        .select()
         .eq('id', roomId)
         .single();
 
       if (error) throw error;
-      if (!room) throw new Error('Room not found');
+      if (!roomData) throw new Error('Room not found');
 
-      // Type guard to verify room properties
-      if (!('status' in room) || !('player1_id' in room) || !('player2_id' in room)) {
-        console.error('Invalid room data structure:', room);
+      // Type guard to ensure room has required properties
+      if (!('status' in roomData) || !('player1_id' in roomData) || !('player2_id' in roomData)) {
+        console.error('Invalid room data structure:', roomData);
         throw new Error('Invalid room data structure');
       }
 
-      const gameRoom = room as GameRoom;
+      const room = roomData as GameRoom;
       
-      console.log('Room state:', gameRoom);
+      console.log('Room state:', room);
       
-      if (gameRoom.status !== 'playing') {
-        console.log('Room not in playing state:', gameRoom);
+      if (room.status !== 'playing') {
+        console.log('Room not in playing state:', room);
         return;
       }
 
-      console.log('Match found! Room:', gameRoom);
+      console.log('Match found! Room:', room);
       setSearchState("found");
 
       await new Promise(resolve => setTimeout(resolve, 1000));
