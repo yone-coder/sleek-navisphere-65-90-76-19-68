@@ -29,8 +29,6 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
   useEffect(() => {
     let isSubscribed = true;
     let roomSubscription: ReturnType<typeof supabase.channel>;
-    let retryCount = 0;
-    const maxRetries = 3;
     
     const startMatchmaking = async () => {
       try {
@@ -54,67 +52,78 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
           setSearchTime(prev => prev + 1);
         }, 1000);
 
-        // Retry loop for finding a match
+        // Try to find a match
         const findMatch = async () => {
-          if (!isSubscribed || retryCount >= maxRetries) return;
+          if (!isSubscribed) return;
 
           try {
-            // Try to find an available room first
+            // First try to find an existing room
             const availableRoom = await roomService.findAvailableRoom(user.id);
 
             if (availableRoom) {
               console.log('Found available room:', availableRoom.id);
-              const room = await roomService.joinRoom(availableRoom.id, user.id);
-              currentRoomRef.current = room.id;
-              await handleMatchFound(room.id, isSubscribed);
+              
+              try {
+                const joinedRoom = await roomService.joinRoom(availableRoom.id, user.id);
+                currentRoomRef.current = joinedRoom.id;
+                await handleMatchFound(joinedRoom.id, isSubscribed);
+              } catch (joinError) {
+                console.error('Error joining room:', joinError);
+                // If joining fails, create a new room
+                const newRoom = await roomService.createRoom(user.id);
+                currentRoomRef.current = newRoom.id;
+                setupRoomSubscription(newRoom.id);
+              }
             } else {
               console.log('Creating new room');
               const room = await roomService.createRoom(user.id);
               currentRoomRef.current = room.id;
               setupRoomSubscription(room.id);
-              
-              // Set up a retry interval to look for players
-              checkIntervalRef.current = setInterval(async () => {
-                retryCount++;
-                if (retryCount >= maxRetries) {
-                  clearInterval(checkIntervalRef.current);
-                  if (isSubscribed) {
-                    toast({
-                      title: "No players found",
-                      description: "Please try again later.",
-                      variant: "destructive"
-                    });
-                    onClose();
-                  }
-                } else {
-                  await findMatch();
-                }
-              }, 5000);
             }
           } catch (error) {
             console.error('Error in findMatch:', error);
-            retryCount++;
+            if (isSubscribed) {
+              toast({
+                title: "Error",
+                description: "Failed to find a match. Please try again.",
+                variant: "destructive"
+              });
+              onClose();
+            }
           }
         };
 
+        // Initial match finding attempt
         await findMatch();
+
+        // Set up retry interval
+        checkIntervalRef.current = setInterval(async () => {
+          if (currentRoomRef.current) {
+            // If we have a current room, don't search for new ones
+            return;
+          }
+          await findMatch();
+        }, 5000);
+
       } catch (error) {
         console.error('Error in matchmaking:', error);
-        toast({
-          title: "Error",
-          description: "Failed to start matchmaking. Please try again.",
-          variant: "destructive"
-        });
-        onClose();
+        if (isSubscribed) {
+          toast({
+            title: "Error",
+            description: "Failed to start matchmaking. Please try again.",
+            variant: "destructive"
+          });
+          onClose();
+        }
       }
     };
 
     const setupRoomSubscription = (roomId: string) => {
       console.log('Setting up room subscription for:', roomId);
-      roomSubscription = roomService.subscribeToRoom(roomId, (newRoom) => {
+      roomSubscription = roomService.subscribeToRoom(roomId, async (newRoom) => {
         console.log('Room update received:', newRoom);
         if (newRoom.status === 'playing' && newRoom.player2_id) {
-          handleMatchFound(roomId, isSubscribed);
+          await handleMatchFound(roomId, isSubscribed);
         }
       });
     };
@@ -128,7 +137,7 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
       if (checkIntervalRef.current) clearInterval(checkIntervalRef.current);
       if (roomSubscription) roomSubscription.unsubscribe();
       
-      // Clean up room if we created one and we're still in waiting state
+      // Only clean up the room if we created it and it's still in waiting state
       if (currentRoomRef.current) {
         console.log('Cleaning up room:', currentRoomRef.current);
         supabase
@@ -138,6 +147,9 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
           .eq('status', 'waiting')
           .then(() => {
             console.log('Room cleaned up successfully');
+          })
+          .catch((error) => {
+            console.error('Error cleaning up room:', error);
           });
       }
     };
