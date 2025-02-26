@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate, Routes, Route } from "react-router-dom";
 import { GameSearchOverlay } from "@/components/search/GameSearchOverlay";
@@ -51,27 +52,25 @@ export default function GamesPages() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="relative">
-        <Routes>
-          <Route path="/" element={
-            <>
-              <GamesHeader 
-                categories={categories}
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-                notifications={notifications}
-                searchQuery={searchQuery}
-                navigate={navigate}
-                setIsSearchOpen={setIsSearchOpen}
-              />
-              <MainContent />
-            </>
-          } />
-          <Route path="game-search/*" element={<GamesExplore />} />
-          <Route path="contest/*" element={<ContestsPage />} />
-          <Route path="morpion" element={<Morpion />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={
+          <>
+            <GamesHeader 
+              categories={categories}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              notifications={notifications}
+              searchQuery={searchQuery}
+              navigate={navigate}
+              setIsSearchOpen={setIsSearchOpen}
+            />
+            <MainContent />
+          </>
+        } />
+        <Route path="game-search/*" element={<GamesExplore />} />
+        <Route path="contest/*" element={<ContestsPage />} />
+        <Route path="morpion" element={<Morpion />} />
+      </Routes>
 
       <GamesBottomNav />
       
