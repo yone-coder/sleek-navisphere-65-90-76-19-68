@@ -49,7 +49,7 @@ export interface AppControlsProps {
   viewMode: "grid" | "list";
   showUpdatesOnly: boolean;
   updatesCount: number;
-  categories: readonly AppCategory[];
+  categories: readonly AppCategory[]; // Updated to accept readonly array
   onCategoryChange: (category: AppCategory) => void;
   onSortChange: (sort: "name" | "rating" | "users") => void;
   onViewModeChange: (mode: "grid" | "list") => void;

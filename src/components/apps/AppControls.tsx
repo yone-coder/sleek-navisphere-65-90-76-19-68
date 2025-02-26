@@ -11,18 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-interface AppControlsProps {
-  selectedCategory: string;
-  viewMode: "grid" | "list";
-  showUpdatesOnly: boolean;
-  updatesCount: number;
-  categories: string[];
-  onCategoryChange: (category: string) => void;
-  onSortChange: (sort: "name" | "rating" | "users") => void;
-  onViewModeChange: (mode: "grid" | "list") => void;
-  onUpdatesToggle: () => void;
-}
+import type { AppControlsProps, AppCategory } from "./types";
 
 export const AppControls = ({
   selectedCategory,
