@@ -160,9 +160,9 @@ export default function Landing() {
       </section>
       
       {/* Progress Bar */}
-      <section className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50 py-4">
+      <section className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50 py-2">
         <div className="container mx-auto px-4">
-          <div className="space-y-4">
+          <div className="space-y-2">
             <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
               <div 
                 className="bg-emerald-500 h-full transition-all duration-500 ease-in-out"
@@ -173,36 +173,36 @@ export default function Landing() {
             <div className="grid grid-cols-3 gap-6">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl md:text-3xl font-bold text-emerald-500">
+                  <span className="text-lg md:text-xl font-bold text-emerald-500">
                     ${raised.toLocaleString()}
                   </span>
                   <div className="bg-gray-100 rounded-full p-1">
-                    <DollarSign className="h-3.5 w-3.5 text-gray-500" />
+                    <DollarSign className="h-3 w-3 text-gray-500" />
                   </div>
                 </div>
-                <p className="text-gray-600 text-sm mt-0.5">
+                <p className="text-gray-600 text-xs mt-0.5">
                   pledged of ${goal.toLocaleString()}
                 </p>
               </div>
 
               <div className="text-right">
                 <div className="flex items-baseline justify-end">
-                  <span className="text-2xl md:text-3xl font-bold text-gray-900">
+                  <span className="text-lg md:text-xl font-bold text-gray-900">
                     {backers}
                   </span>
                 </div>
-                <p className="text-gray-600 text-sm mt-0.5">
+                <p className="text-gray-600 text-xs mt-0.5">
                   backers
                 </p>
               </div>
 
               <div className="text-right">
                 <div className="flex items-baseline justify-end">
-                  <span className="text-2xl md:text-3xl font-bold text-gray-900">
+                  <span className="text-lg md:text-xl font-bold text-gray-900">
                     {days}
                   </span>
                 </div>
-                <p className="text-gray-600 text-sm mt-0.5">
+                <p className="text-gray-600 text-xs mt-0.5">
                   days to go
                 </p>
               </div>
@@ -210,7 +210,7 @@ export default function Landing() {
 
             <div className="flex items-center gap-3">
               <Button 
-                size="default"
+                size="sm"
                 className="bg-emerald-500 hover:bg-emerald-600 text-white flex-1"
               >
                 Back This Project
@@ -218,9 +218,9 @@ export default function Landing() {
               <Button 
                 size="icon"
                 variant="outline"
-                className="shrink-0"
+                className="shrink-0 h-9 w-9"
               >
-                <Share2 className="h-4 w-4" />
+                <Share2 className="h-3.5 w-3.5" />
               </Button>
             </div>
           </div>
@@ -228,7 +228,7 @@ export default function Landing() {
       </section>
       
       {/* Add padding at the bottom of the page to prevent content from being hidden behind the fixed bar */}
-      <div className="pb-48" />
+      <div className="pb-32" />
 
       {/* Project Overview */}
       <section className="py-16">
