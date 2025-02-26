@@ -165,13 +165,25 @@ export default function Landing() {
           <div className="space-y-2">
             {/* Stats above progress bar */}
             <div className="flex justify-between items-center mb-1">
-              <div className="flex items-center whitespace-nowrap">
-                <span className="text-sm md:text-base font-bold text-gray-900">
-                  {backers}
-                </span>
-                <span className="text-gray-600 text-[10px] ml-1">
-                  backers
-                </span>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center whitespace-nowrap">
+                  <Users className="h-3.5 w-3.5 mr-1 text-gray-500" />
+                  <span className="text-sm md:text-base font-bold text-gray-900">
+                    {backers}
+                  </span>
+                  <span className="text-gray-600 text-[10px] ml-1">
+                    backers
+                  </span>
+                </div>
+                <div className="flex items-center whitespace-nowrap">
+                  <Heart className="h-3.5 w-3.5 mr-1 text-pink-500" />
+                  <span className="text-sm md:text-base font-bold text-gray-900">
+                    {progress}%
+                  </span>
+                  <span className="text-gray-600 text-[10px] ml-1">
+                    funded
+                  </span>
+                </div>
               </div>
               <div className="flex items-center text-gray-600">
                 <Clock className="h-3.5 w-3.5 mr-1" />
