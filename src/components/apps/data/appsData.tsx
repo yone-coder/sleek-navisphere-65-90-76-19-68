@@ -1,18 +1,12 @@
 import React from 'react';
 import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe, Heart, Building } from "lucide-react";
-import type { App } from "../types";
+import type { App, AppCategory } from "../types";
 
 export const apps: App[] = [
   {
     name: "Morpion",
     description: "Classic Tic-tac-toe game with a modern twist",
-    icon: () => (
-      <img 
-        src="/lovable-uploads/44c5c93d-ace1-4feb-a49b-db4a8a02f987.png" 
-        alt="Morpion"
-        className="w-[80%] h-[80%]"
-      />
-    ),
+    icon: Gamepad2, // Changed from custom component to Lucide icon
     route: "/games/morpion-details",
     color: "bg-indigo-500",
     category: "Gaming",
@@ -299,7 +293,7 @@ export const apps: App[] = [
     icon: Gift,
     route: "/rewards",
     color: "bg-orange-500",
-    category: "Rewards"
+    category: "System", // Changed from "Rewards" to valid AppCategory
   },
   {
     name: "Messages",
@@ -315,7 +309,7 @@ export const apps: App[] = [
     icon: Bell,
     route: "/notifications",
     color: "bg-cyan-500",
-    category: "Updates"
+    category: "System", // Changed from "Updates" to valid AppCategory
   },
   {
     name: "Settings",

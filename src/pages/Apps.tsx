@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs } from "@/components/ui/tabs";
@@ -91,8 +90,8 @@ export default function Apps() {
                     viewMode={viewMode}
                     showUpdatesOnly={showUpdatesOnly}
                     updatesCount={updatesCount}
-                    categories={appCategories}
-                    onCategoryChange={category => setSelectedCategory(category as AppCategory)}
+                    categories={[...appCategories]}
+                    onCategoryChange={(category) => setSelectedCategory(category)}
                     onSortChange={setSortBy}
                     onViewModeChange={setViewMode}
                     onUpdatesToggle={() => setShowUpdatesOnly(!showUpdatesOnly)}
