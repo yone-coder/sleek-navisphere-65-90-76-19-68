@@ -21,6 +21,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
+import BalanceCard from "@/components/wallet/BalanceCard";
 
 // Mock notifications for demo
 const notifications = [
@@ -169,6 +170,11 @@ export default function Wallet() {
 
       {/* Content (with header spacing) */}
       <div className="pt-14">
+        {/* Add BalanceCard after header */}
+        <div className="p-4">
+          <BalanceCard />
+        </div>
+        
         <div className="p-4">
           <h1 className="text-2xl font-semibold">{t('nav.wallet')}</h1>
         </div>
