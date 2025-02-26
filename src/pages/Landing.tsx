@@ -56,10 +56,10 @@ export default function Landing() {
     <div className="font-sans">
       {/* Sticky Tabs Navigation */}
       <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b">
-        <div className="container mx-auto">
-          <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
-            <TabNav activeTab={activeTab} />
+        <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
+          <TabNav activeTab={activeTab} />
 
+          <div className="container mx-auto">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
@@ -86,8 +86,8 @@ export default function Landing() {
                 </TabsContent>
               </motion.div>
             </AnimatePresence>
-          </Tabs>
-        </div>
+          </div>
+        </Tabs>
       </div>
 
       {/* Progress Bar */}
