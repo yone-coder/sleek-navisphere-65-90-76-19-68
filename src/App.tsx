@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { BottomNav } from "./components/BottomNav";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -95,6 +95,7 @@ const AppContent = () => {
           <Route path="/games/morpion-details" element={<GameDetails />} />
           <Route path="/games/morpion" element={<Morpion />} />
           <Route path="/games/gomoku" element={<Gomoku />} />
+          <Route path="/games/winnr" element={<Navigate to="/games" replace />} />
           <Route path="/feeds" element={<Feeds />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/wallet" element={<Wallet />} />
