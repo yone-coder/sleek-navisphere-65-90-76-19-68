@@ -131,7 +131,7 @@ export default function Landing() {
   return (
     <div className="font-sans">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-purple-600 to-blue-500 text-white py-16">
+      <section className="text-gray-900 py-16">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -140,8 +140,8 @@ export default function Landing() {
             className="text-center max-w-4xl mx-auto"
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Building Haiti's Digital Future</h1>
-            <h2 className="text-xl md:text-2xl mb-6">A revolutionary platform connecting Haitian businesses, creators, and communities</h2>
-            <p className="mb-8">Join {backers}+ backers who are already supporting this innovative platform</p>
+            <h2 className="text-xl md:text-2xl mb-6 text-gray-600">A revolutionary platform connecting Haitian businesses, creators, and communities</h2>
+            <p className="mb-8 text-gray-600">Join {backers}+ backers who are already supporting this innovative platform</p>
             
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
