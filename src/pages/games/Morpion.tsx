@@ -6,7 +6,19 @@ import GameMenu from '@/components/games/morpion/GameMenu';
 import { GameMode } from '@/components/games/morpion/types';
 import { calculateBotMove } from '@/components/games/morpion/utils/botUtils';
 
-const GameComponent = ({ 
+interface GameComponentProps {
+  boardSize: number;
+  zoom: number;
+  isSettingsOpen: boolean;
+  player1: string;
+  player2: string;
+  gameMode: GameMode;
+  difficulty: string;
+  setZoom: (zoom: number) => void;
+  setIsSettingsOpen: (open: boolean) => void;
+}
+
+const GameComponent: React.FC<GameComponentProps> = ({ 
   boardSize,
   zoom,
   isSettingsOpen,
@@ -33,8 +45,6 @@ const GameComponent = ({
 
   // Bot move effect
   useEffect(() => {
-    console.log('Bot effect running:', { gameMode, currentPlayer, winner });
-    
     if (gameMode === 'bot' && currentPlayer === 'O' && !winner) {
       console.log('Bot is thinking...');
       
@@ -45,7 +55,7 @@ const GameComponent = ({
         if (botMove) {
           handleClick(botMove.row, botMove.col);
         }
-      }, 750); // Add a small delay to make it feel more natural
+      }, 750);
 
       return () => clearTimeout(timer);
     }
@@ -67,7 +77,7 @@ const GameComponent = ({
 
 const Morpion = () => {
   const [boardSize] = useState(30);
-  const [zoom, setZoom] = useState(150); // Changed from 100 to 150
+  const [zoom, setZoom] = useState(150);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [player1] = useState('Guest10816');
   const [player2, setPlayer2] = useState('Guest');

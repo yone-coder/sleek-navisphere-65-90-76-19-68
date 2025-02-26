@@ -226,88 +226,59 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
       console.log('Subscribed to room:', roomId);
     };
 
-    const handleMatchFound = async (roomId: string) => {
+  const handleMatchFound = async (roomId: string) => {
+    if (!isSubscribed) return;
+    
+    try {
+      const { data: room, error } = await supabase
+        .from('game_rooms')
+        .select('*')
+        .eq('id', roomId)
+        .single();
+
+      if (error) throw error;
+      if (!room) throw new Error('Room not found');
+
+      // Type assertion after validation
+      const gameRoom = room as GameRoom;
+
+      if (!gameRoom.status || !gameRoom.player1_id || !gameRoom.player2_id) {
+        console.log('Invalid room state:', gameRoom);
+        return;
+      }
+
+      if (gameRoom.status !== 'playing') {
+        console.log('Room not in playing state:', gameRoom);
+        return;
+      }
+
+      console.log('Match found! Room:', gameRoom);
+      setSearchState("found");
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
       if (!isSubscribed) return;
       
-      try {
-        const { data: room, error } = await supabase
-          .from('game_rooms')
-          .select()
-          .eq('id', roomId)
-          .single();
+      setSearchState("connecting");
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      if (!isSubscribed) return;
 
-        if (error) throw error;
-        if (!room) throw new Error('Room not found');
-        const gameRoom = room as GameRoom;
-
-        if (gameRoom.status !== 'playing' || !gameRoom.player1_id || !gameRoom.player2_id) {
-          console.log('Invalid room state:', gameRoom);
-          return;
-        }
-
-        console.log('Match found! Room:', gameRoom);
-        setSearchState("found");
-
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        if (!isSubscribed) return;
-        
-        setSearchState("connecting");
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        if (!isSubscribed) return;
-
-        onClose();
-        navigate(`/games/morpion?start=true&mode=online&roomId=${roomId}`);
-        toast({
-          title: "Match Found!",
-          description: "Connected to opponent. Get ready to play!",
-        });
-      } catch (error) {
-        console.error('Error handling match:', error);
-        toast({
-          title: "Error",
-          description: "Failed to connect to game. Please try again.",
-          variant: "destructive"
-        });
-        onClose();
-      }
-    };
-
-    startMatchmaking();
-
-    return () => {
-      console.log('Cleaning up matchmaking...');
-      isSubscribed = false;
-
-      if (searchTimerRef.current) {
-        clearInterval(searchTimerRef.current);
-      }
-      
-      if (checkIntervalRef.current) {
-        clearInterval(checkIntervalRef.current);
-      }
-      
-      if (roomSubscription) {
-        roomSubscription.unsubscribe();
-      }
-      
-      if (currentRoomRef.current) {
-        const cleanup = async () => {
-          const { data: { user } } = await supabase.auth.getUser();
-          if (user) {
-            await supabase
-              .from('game_rooms')
-              .delete()
-              .eq('id', currentRoomRef.current)
-              .eq('player1_id', user.id)
-              .eq('status', 'waiting');
-          }
-        };
-        cleanup().then(() => {
-          console.log('Cleaned up waiting room:', currentRoomRef.current);
-        });
-      }
-    };
-  }, [navigate, onClose, toast]);
+      onClose();
+      navigate(`/games/morpion?start=true&mode=online&roomId=${roomId}`);
+      toast({
+        title: "Match Found!",
+        description: "Connected to opponent. Get ready to play!",
+        variant: "default"
+      });
+    } catch (error) {
+      console.error('Error handling match:', error);
+      toast({
+        title: "Error",
+        description: "Failed to connect to game. Please try again.",
+        variant: "destructive"
+      });
+      onClose();
+    }
+  };
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
