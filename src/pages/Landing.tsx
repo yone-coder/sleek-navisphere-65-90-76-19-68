@@ -214,20 +214,18 @@ export default function Landing() {
                         ${goal.toLocaleString()}
                       </span>
                     </div>
-                    <div className="flex gap-1 items-center bg-emerald-50 px-2 py-0.5 rounded-full">
-                      <DollarSign className="h-3 w-3 text-emerald-500" />
+                    <div className="flex gap-1 items-center bg-emerald-50 px-2 py-0.5 rounded-full whitespace-nowrap">
+                      <DollarSign className="h-3 w-3 text-emerald-500 shrink-0" />
                       <span className="text-[10px] font-medium text-emerald-600">+2.5k today</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="flex -space-x-1">
+                    <div className="flex -space-x-1 shrink-0">
                       <div className="h-4 w-4 rounded-full bg-blue-400 ring-2 ring-white" />
                       <div className="h-4 w-4 rounded-full bg-purple-400 ring-2 ring-white" />
                       <div className="h-4 w-4 rounded-full bg-pink-400 ring-2 ring-white" />
                     </div>
-                    <span className="text-[10px] text-gray-500">
-                      +12 backers in the last hour
-                    </span>
+                    <span className="text-[10px] text-gray-500 whitespace-nowrap">+12 backers in the last hour</span>
                   </div>
                 </div>
               </div>
