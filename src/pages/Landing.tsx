@@ -15,7 +15,13 @@ import {
   LineChart,
   Cpu,
   Layers,
-  Heart
+  Heart,
+  ShoppingCart,
+  Trophy,
+  Home,
+  Github,
+  Twitter,
+  Linkedin
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -31,7 +37,6 @@ export default function Landing() {
   const [scrolled, setScrolled] = useState(false);
   const [backers, setBackers] = useState(1342);
 
-  // Handle scroll events for sticky header
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -40,7 +45,6 @@ export default function Landing() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Simulate live backer updates
   useEffect(() => {
     const interval = setInterval(() => {
       setBackers(prev => prev + Math.floor(Math.random() * 3));
@@ -121,9 +125,71 @@ export default function Landing() {
     }
   ];
 
+  const timeline = [
+    {
+      date: "Q1 2024",
+      title: "Platform Launch",
+      description: "Launch of core platform features and marketplace integration",
+      completed: true
+    },
+    {
+      date: "Q2 2024",
+      title: "Contest System",
+      description: "Release of online contest platform with rewards system",
+      completed: false
+    },
+    {
+      date: "Q3 2024",
+      title: "Rental Platform",
+      description: "Launch of property and goods rental marketplace",
+      completed: false
+    },
+    {
+      date: "Q4 2024",
+      title: "Mobile App",
+      description: "Release of native mobile applications",
+      completed: false
+    }
+  ];
+
+  const team = [
+    {
+      name: "Marie Baptiste",
+      role: "Founder & CEO",
+      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200",
+      bio: "10+ years experience in tech entrepreneurship",
+      social: {
+        twitter: "#",
+        linkedin: "#",
+        github: "#"
+      }
+    },
+    {
+      name: "Jean Michel",
+      role: "CTO",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200",
+      bio: "Former tech lead at major Silicon Valley companies",
+      social: {
+        twitter: "#",
+        linkedin: "#",
+        github: "#"
+      }
+    },
+    {
+      name: "Sophie Laurent",
+      role: "Product Manager",
+      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200",
+      bio: "Specializes in marketplace product development",
+      social: {
+        twitter: "#",
+        linkedin: "#",
+        github: "#"
+      }
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      {/* Sticky Header */}
       <header className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         scrolled ? "bg-white/80 backdrop-blur-lg shadow-sm" : "bg-transparent"
@@ -151,7 +217,6 @@ export default function Landing() {
         </div>
       </header>
 
-      {/* Hero Section */}
       <section className="pt-32 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div 
@@ -187,7 +252,6 @@ export default function Landing() {
             </div>
           </motion.div>
 
-          {/* Trust Indicators */}
           <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -242,7 +306,6 @@ export default function Landing() {
             </motion.div>
           </div>
 
-          {/* Brand Logos */}
           <div className="mt-16 px-4">
             <p className="text-center text-sm text-gray-500 mb-8">Trusted by leading companies worldwide</p>
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center justify-items-center opacity-60">
@@ -254,7 +317,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
@@ -289,7 +351,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Pricing Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
@@ -356,7 +417,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-purple-600 to-blue-500">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white sm:text-4xl">
@@ -385,6 +445,159 @@ export default function Landing() {
               Contact Sales
             </Button>
           </motion.div>
+        </div>
+      </section>
+
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid gap-12 lg:grid-cols-2 items-center">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-6">
+                Connecting Haiti's Digital Future
+              </h2>
+              <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
+                    <ShoppingCart className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg mb-2">Digital Marketplace</h3>
+                    <p className="text-gray-600">A centralized platform for Haitian businesses and artisans to showcase and sell their products globally.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                    <Trophy className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg mb-2">Online Contests</h3>
+                    <p className="text-gray-600">Engaging competitions and challenges that showcase Haitian talent and creativity.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
+                    <Home className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg mb-2">Rental Platform</h3>
+                    <p className="text-gray-600">Simplified rental solutions for properties and goods within the Haitian community.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500 rounded-2xl transform rotate-3"></div>
+              <img 
+                src="https://images.unsplash.com/photo-1590341328520-63256eb32bc3?w=800" 
+                alt="Platform preview" 
+                className="relative rounded-2xl shadow-xl"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+              Development Roadmap
+            </h2>
+            <p className="mt-4 text-xl text-gray-600">
+              Our journey to building Haiti's premier digital hub
+            </p>
+          </div>
+
+          <div className="relative">
+            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-200"></div>
+            <div className="space-y-12">
+              {timeline.map((item, index) => (
+                <motion.div
+                  key={item.date}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className={cn(
+                    "relative flex items-center",
+                    index % 2 === 0 ? "justify-start" : "justify-end"
+                  )}
+                >
+                  <div className={cn(
+                    "w-1/2 flex gap-4",
+                    index % 2 === 0 ? "flex-row" : "flex-row-reverse"
+                  )}>
+                    <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-purple-600"></div>
+                    <Card className="w-full">
+                      <CardHeader>
+                        <CardTitle className="flex items-center justify-between">
+                          {item.title}
+                          <span className="text-sm font-normal text-gray-500">{item.date}</span>
+                        </CardTitle>
+                        <CardDescription>{item.description}</CardDescription>
+                      </CardHeader>
+                    </Card>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+              Meet Our Team
+            </h2>
+            <p className="mt-4 text-xl text-gray-600">
+              The passionate individuals bringing this vision to life
+            </p>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {team.map((member, index) => (
+              <motion.div
+                key={member.name}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Card className="overflow-hidden">
+                  <CardHeader className="text-center">
+                    <div className="relative w-32 h-32 mx-auto mb-4">
+                      <img 
+                        src={member.image} 
+                        alt={member.name}
+                        className="rounded-full object-cover w-full h-full"
+                      />
+                    </div>
+                    <CardTitle>{member.name}</CardTitle>
+                    <CardDescription className="font-medium text-purple-600">
+                      {member.role}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="text-center">
+                    <p className="text-gray-600 mb-4">{member.bio}</p>
+                    <div className="flex justify-center gap-4">
+                      <Button variant="ghost" size="icon" className="rounded-full">
+                        <Twitter className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="rounded-full">
+                        <Linkedin className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="rounded-full">
+                        <Github className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
     </div>
