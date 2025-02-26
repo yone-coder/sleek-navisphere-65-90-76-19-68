@@ -373,6 +373,96 @@ export default function Landing() {
                   </div>
                 </div>
               </section>
+
+              {/* Testimonials */}
+              <section className="py-16 bg-indigo-50">
+                <div className="container mx-auto px-4">
+                  <h2 className="text-3xl font-bold text-center mb-12">What People Are Saying</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {testimonials.map((testimonial, index) => (
+                      <div key={index} className="bg-white p-6 rounded-lg shadow-md">
+                        <div className="text-indigo-600 mb-4">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="currentColor" className="opacity-20">
+                            <path d="M6.5 10c-.223 0-.437.034-.65.065.069-.232.14-.468.254-.68.114-.308.292-.575.469-.844.148-.291.409-.488.601-.737.201-.242.475-.403.692-.604.213-.21.492-.315.714-.463.232-.133.434-.28.65-.35.208-.086.39-.16.539-.222.302-.125.474-.197.474-.197L9.758 4.03c0 0-.218.052-.597.144C8.97 4.222 8.737 4.278 8.472 4.345c-.271.05-.56.187-.882.312C7.272 4.799 6.904 4.895 6.562 5.123c-.344.218-.741.4-1.091.692C5.132 6.116 4.723 6.377 4.421 6.76c-.33.358-.656.734-.909 1.162C3.219 8.33 3.02 8.778 2.81 9.221c-.19.443-.343.896-.468 1.336-.237.882-.343 1.72-.384 2.437-.034.718-.014 1.315.028 1.747.015.204.043.402.063.539.017.109.025.168.025.168l.026-.006C2.535 17.474 4.338 19 6.5 19c2.485 0 4.5-2.015 4.5-4.5S8.985 10 6.5 10zM17.5 10c-.223 0-.437.034-.65.065.069-.232.14-.468.254-.68.114-.308.292-.575.469-.844.148-.291.409-.488.601-.737.201-.242.475-.403.692-.604.213-.21.492-.315.714-.463.232-.133.434-.28.65-.35.208-.086.39-.16.539-.222.302-.125.474-.197.474-.197L20.758 4.03c0 0-.218.052-.597.144-.191.048-.424.104-.689.171-.271.05-.56.187-.882.312-.317.143-.686.238-1.028.467-.344.218-.741.4-1.091.692-.339.301-.748.562-1.05.944-.33.358-.656.734-.909 1.162C14.219 8.33 14.02 8.778 13.81 9.221c-.19.443-.343.896-.468 1.336-.237.882-.343 1.72-.384 2.437-.034.718-.014 1.315.028 1.747.015.204.043.402.063.539.017.109.025.168.025.168l.026-.006C13.535 17.474 15.338 19 17.5 19c2.485 0 4.5-2.015 4.5-4.5S19.985 10 17.5 10z" />
+                          </svg>
+                        </div>
+                        <p className="text-gray-700 mb-4">{testimonial.quote}</p>
+                        <p className="font-medium text-indigo-700">{testimonial.author}</p>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="mt-12 text-center">
+                    <h3 className="text-xl font-bold mb-6">Featured In</h3>
+                    <div className="flex flex-wrap justify-center gap-8 items-center">
+                      <div className="bg-white h-12 w-32 rounded shadow-sm flex items-center justify-center text-gray-400">
+                        TechCrunch
+                      </div>
+                      <div className="bg-white h-12 w-32 rounded shadow-sm flex items-center justify-center text-gray-400">
+                        Forbes
+                      </div>
+                      <div className="bg-white h-12 w-32 rounded shadow-sm flex items-center justify-center text-gray-400">
+                        Product Hunt
+                      </div>
+                      <div className="bg-white h-12 w-32 rounded shadow-sm flex items-center justify-center text-gray-400">
+                        The Verge
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              
+              {/* Team Section */}
+              <section className="py-16">
+                <div className="container mx-auto px-4">
+                  <h2 className="text-3xl font-bold text-center mb-12">Meet the Team</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {team.map((member, index) => (
+                      <div key={index} className="text-center">
+                        <div className="bg-gray-200 h-48 w-48 rounded-full mx-auto mb-4 flex items-center justify-center">
+                          <span className="text-gray-500">Photo</span>
+                        </div>
+                        <h3 className="text-xl font-bold">{member.name}</h3>
+                        <p className="text-indigo-600 mb-2">{member.role}</p>
+                        <p className="text-gray-600">{member.bio}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+              
+              {/* Call to Action & Social */}
+              <section className="py-16 bg-gradient-to-r from-purple-600 to-blue-500 text-white">
+                <div className="container mx-auto px-4 text-center">
+                  <h2 className="text-3xl font-bold mb-4">Ready to Join Our Journey?</h2>
+                  <p className="text-lg mb-8 max-w-2xl mx-auto">
+                    Back our project today and be part of Haiti's digital transformation.
+                    Together, we can build a more connected future.
+                  </p>
+                  <Button
+                    size="lg"
+                    variant="secondary"
+                    className="bg-white text-purple-600 hover:bg-gray-100 mb-8"
+                  >
+                    Back This Project
+                  </Button>
+                  
+                  <div>
+                    <p className="font-medium mb-4">Share with your friends:</p>
+                    <div className="flex justify-center gap-4">
+                      <Button size="icon" variant="secondary" className="rounded-full">
+                        <Facebook className="h-5 w-5" />
+                      </Button>
+                      <Button size="icon" variant="secondary" className="rounded-full">
+                        <Twitter className="h-5 w-5" />
+                      </Button>
+                      <Button size="icon" variant="secondary" className="rounded-full">
+                        <Share2 className="h-5 w-5" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </section>
             </TabsContent>
 
             <TabsContent value="updates" className="mt-6">
@@ -468,96 +558,6 @@ export default function Landing() {
       
       {/* Add padding at the bottom of the page to prevent content from being hidden behind the fixed bar */}
       <div className="pb-32" />
-
-      {/* Testimonials */}
-      <section className="py-16 bg-indigo-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">What People Are Saying</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-                <div className="text-indigo-600 mb-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="currentColor" className="opacity-20">
-                    <path d="M6.5 10c-.223 0-.437.034-.65.065.069-.232.14-.468.254-.68.114-.308.292-.575.469-.844.148-.291.409-.488.601-.737.201-.242.475-.403.692-.604.213-.21.492-.315.714-.463.232-.133.434-.28.65-.35.208-.086.39-.16.539-.222.302-.125.474-.197.474-.197L9.758 4.03c0 0-.218.052-.597.144C8.97 4.222 8.737 4.278 8.472 4.345c-.271.05-.56.187-.882.312C7.272 4.799 6.904 4.895 6.562 5.123c-.344.218-.741.4-1.091.692C5.132 6.116 4.723 6.377 4.421 6.76c-.33.358-.656.734-.909 1.162C3.219 8.33 3.02 8.778 2.81 9.221c-.19.443-.343.896-.468 1.336-.237.882-.343 1.72-.384 2.437-.034.718-.014 1.315.028 1.747.015.204.043.402.063.539.017.109.025.168.025.168l.026-.006C2.535 17.474 4.338 19 6.5 19c2.485 0 4.5-2.015 4.5-4.5S8.985 10 6.5 10zM17.5 10c-.223 0-.437.034-.65.065.069-.232.14-.468.254-.68.114-.308.292-.575.469-.844.148-.291.409-.488.601-.737.201-.242.475-.403.692-.604.213-.21.492-.315.714-.463.232-.133.434-.28.65-.35.208-.086.39-.16.539-.222.302-.125.474-.197.474-.197L20.758 4.03c0 0-.218.052-.597.144-.191.048-.424.104-.689.171-.271.05-.56.187-.882.312-.317.143-.686.238-1.028.467-.344.218-.741.4-1.091.692-.339.301-.748.562-1.05.944-.33.358-.656.734-.909 1.162C14.219 8.33 14.02 8.778 13.81 9.221c-.19.443-.343.896-.468 1.336-.237.882-.343 1.72-.384 2.437-.034.718-.014 1.315.028 1.747.015.204.043.402.063.539.017.109.025.168.025.168l.026-.006C13.535 17.474 15.338 19 17.5 19c2.485 0 4.5-2.015 4.5-4.5S19.985 10 17.5 10z" />
-                  </svg>
-                </div>
-                <p className="text-gray-700 mb-4">{testimonial.quote}</p>
-                <p className="font-medium text-indigo-700">{testimonial.author}</p>
-              </div>
-            ))}
-          </div>
-          
-          <div className="mt-12 text-center">
-            <h3 className="text-xl font-bold mb-6">Featured In</h3>
-            <div className="flex flex-wrap justify-center gap-8 items-center">
-              <div className="bg-white h-12 w-32 rounded shadow-sm flex items-center justify-center text-gray-400">
-                TechCrunch
-              </div>
-              <div className="bg-white h-12 w-32 rounded shadow-sm flex items-center justify-center text-gray-400">
-                Forbes
-              </div>
-              <div className="bg-white h-12 w-32 rounded shadow-sm flex items-center justify-center text-gray-400">
-                Product Hunt
-              </div>
-              <div className="bg-white h-12 w-32 rounded shadow-sm flex items-center justify-center text-gray-400">
-                The Verge
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* Team Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Meet the Team</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {team.map((member, index) => (
-              <div key={index} className="text-center">
-                <div className="bg-gray-200 h-48 w-48 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-gray-500">Photo</span>
-                </div>
-                <h3 className="text-xl font-bold">{member.name}</h3>
-                <p className="text-indigo-600 mb-2">{member.role}</p>
-                <p className="text-gray-600">{member.bio}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-      
-      {/* Call to Action & Social */}
-      <section className="py-16 bg-gradient-to-r from-purple-600 to-blue-500 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Join Our Journey?</h2>
-          <p className="text-lg mb-8 max-w-2xl mx-auto">
-            Back our project today and be part of Haiti's digital transformation.
-            Together, we can build a more connected future.
-          </p>
-          <Button
-            size="lg"
-            variant="secondary"
-            className="bg-white text-purple-600 hover:bg-gray-100 mb-8"
-          >
-            Back This Project
-          </Button>
-          
-          <div>
-            <p className="font-medium mb-4">Share with your friends:</p>
-            <div className="flex justify-center gap-4">
-              <Button size="icon" variant="secondary" className="rounded-full">
-                <Facebook className="h-5 w-5" />
-              </Button>
-              <Button size="icon" variant="secondary" className="rounded-full">
-                <Twitter className="h-5 w-5" />
-              </Button>
-              <Button size="icon" variant="secondary" className="rounded-full">
-                <Share2 className="h-5 w-5" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Trust Indicators */}
       <div className="fixed bottom-4 left-4 bg-white p-3 rounded-lg shadow-lg flex items-center text-sm">
