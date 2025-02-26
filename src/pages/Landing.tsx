@@ -177,63 +177,63 @@ export default function Landing() {
       </section>
       
       {/* Progress Bar */}
-      <section className="py-8 bg-white">
+      <section className="py-6 bg-white">
         <div className="container mx-auto px-4">
-          <div className="space-y-6">
-            <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+          <div className="space-y-4">
+            <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
               <div 
                 className="bg-emerald-500 h-full transition-all duration-500 ease-in-out"
                 style={{ width: `${(raised / goal) * 100}%` }}
               />
             </div>
             
-            <div className="grid grid-cols-3 gap-8">
+            <div className="grid grid-cols-3 gap-6">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-3xl md:text-4xl font-bold text-emerald-500">
+                  <span className="text-2xl md:text-3xl font-bold text-emerald-500">
                     ${raised.toLocaleString()}
                   </span>
-                  <div className="bg-gray-100 rounded-full p-1.5">
-                    <DollarSign className="h-4 w-4 text-gray-500" />
+                  <div className="bg-gray-100 rounded-full p-1">
+                    <DollarSign className="h-3.5 w-3.5 text-gray-500" />
                   </div>
                 </div>
-                <p className="text-gray-600 mt-1">
+                <p className="text-gray-600 text-sm mt-0.5">
                   pledged of ${goal.toLocaleString()}
                 </p>
               </div>
 
               <div>
                 <div className="flex items-baseline">
-                  <span className="text-3xl md:text-4xl font-bold text-gray-900">
+                  <span className="text-2xl md:text-3xl font-bold text-gray-900">
                     {backers}
                   </span>
                 </div>
-                <p className="text-gray-600 mt-1">
+                <p className="text-gray-600 text-sm mt-0.5">
                   backers
                 </p>
               </div>
 
               <div>
                 <div className="flex items-baseline">
-                  <span className="text-3xl md:text-4xl font-bold text-gray-900">
+                  <span className="text-2xl md:text-3xl font-bold text-gray-900">
                     {days}
                   </span>
                 </div>
-                <p className="text-gray-600 mt-1">
+                <p className="text-gray-600 text-sm mt-0.5">
                   days to go
                 </p>
               </div>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex gap-3 mt-6">
               <Button 
-                size="lg"
+                size="default"
                 className="bg-emerald-500 hover:bg-emerald-600 text-white"
               >
                 Back This Project
               </Button>
               <Button 
-                size="lg"
+                size="default"
                 variant="outline"
                 className="gap-2"
               >
