@@ -21,6 +21,37 @@ export default function Landing() {
   const [activeTab, setActiveTab] = useState("overview");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const rewards = [
+    {
+      title: "Early Bird",
+      price: 25,
+      description: "Get early access to our product and a special thank you in our digital booklet.",
+      claimed: 342,
+      limit: 500
+    },
+    {
+      title: "Premium Supporter",
+      price: 75,
+      description: "Receive the product with exclusive features and a mention on our website.",
+      claimed: 215,
+      limit: 300
+    },
+    {
+      title: "VIP Backer",
+      price: 150,
+      description: "Get our limited edition product, a signed thank you card, and join our virtual launch party.",
+      claimed: 98,
+      limit: 150
+    },
+    {
+      title: "Founding Member",
+      price: 500,
+      description: "Everything in VIP plus a consultation call with our team and your name engraved on our 'Founders Wall'.",
+      claimed: 12,
+      limit: 20
+    }
+  ];
+
   return (
     <div className="font-sans">
       {/* Search Bar */}
