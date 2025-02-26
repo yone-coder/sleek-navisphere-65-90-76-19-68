@@ -132,40 +132,22 @@ export default function Landing() {
     <div className="font-sans">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-purple-600 to-blue-500 text-white py-16">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center">
-          <div className="md:w-1/2 mb-8 md:mb-0">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">Building Haiti's Digital Future</h1>
-              <h2 className="text-xl md:text-2xl mb-6">A revolutionary platform connecting Haitian businesses, creators, and communities</h2>
-              <p className="mb-8">Join {backers}+ backers who are already supporting this innovative platform</p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  className="bg-white text-purple-600 hover:bg-gray-100"
-                >
-                  Back This Project
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-2 border-white text-white hover:bg-white hover:text-purple-600"
-                >
-                  Watch Video
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-          <div className="md:w-1/2">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center max-w-4xl mx-auto"
+          >
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Building Haiti's Digital Future</h1>
+            <h2 className="text-xl md:text-2xl mb-6">A revolutionary platform connecting Haitian businesses, creators, and communities</h2>
+            <p className="mb-8">Join {backers}+ backers who are already supporting this innovative platform</p>
+            
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="bg-gray-200 rounded-lg h-64 md:h-96 flex items-center justify-center relative overflow-hidden"
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="rounded-lg h-64 md:h-96 mb-8 relative overflow-hidden"
             >
               <img 
                 src="https://images.unsplash.com/photo-1590341328520-63256eb32bc3?w=800" 
@@ -173,7 +155,24 @@ export default function Landing() {
                 className="absolute inset-0 w-full h-full object-cover"
               />
             </motion.div>
-          </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                size="lg"
+                variant="secondary"
+                className="bg-white text-purple-600 hover:bg-gray-100"
+              >
+                Back This Project
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-2 border-white text-white hover:bg-white hover:text-purple-600"
+              >
+                Watch Video
+              </Button>
+            </div>
+          </motion.div>
         </div>
       </section>
       
