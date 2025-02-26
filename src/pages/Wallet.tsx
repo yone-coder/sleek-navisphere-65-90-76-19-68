@@ -1,3 +1,4 @@
+
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -21,8 +22,8 @@ import {
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import BalanceCard from "@/components/wallet/BalanceCard";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
+// Mock notifications for demo
 const notifications = [
   { id: 1, title: "Payment Received", message: "$50.00 from John Doe", time: "2m ago", isNew: true },
   { id: 2, title: "Transfer Complete", message: "Successfully sent $30.00", time: "1h ago", isNew: true },
@@ -33,12 +34,6 @@ export default function Wallet() {
   const { t } = useLanguage();
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-
-  const currencies = [
-    { code: 'USD', symbol: '$' },
-    { code: 'HTG', symbol: 'G' },
-    { code: 'USDT', symbol: '₮' }
-  ];
 
   return (
     <div className="min-h-screen animate-fade-in">
@@ -175,18 +170,9 @@ export default function Wallet() {
 
       {/* Content (with header spacing) */}
       <div className="pt-14">
-        {/* Balance Cards Scroll Area */}
+        {/* Add BalanceCard after header */}
         <div className="p-4">
-          <ScrollArea className="w-full whitespace-nowrap rounded-md">
-            <div className="flex w-full space-x-4">
-              {currencies.map((currency) => (
-                <div key={currency.code} className="min-w-[85%] first:ml-0 last:mr-4">
-                  <BalanceCard defaultCurrency={currency.code} />
-                </div>
-              ))}
-            </div>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
+          <BalanceCard />
         </div>
         
         <div className="p-4">
