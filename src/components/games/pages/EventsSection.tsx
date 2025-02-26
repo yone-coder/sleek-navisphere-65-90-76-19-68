@@ -16,21 +16,30 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
   if (isLoading) {
     return (
       <div className="mb-8">
-        <Skeleton className="h-8 w-64 mx-4 mb-4" />
+        <div className="px-4 mb-4">
+          <Skeleton className="h-8 w-64 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
+        </div>
         <ScrollArea className="w-full" type="scroll">
           <div className="flex px-4 gap-4 pb-4">
             {[1, 2, 3].map((i) => (
               <div key={i} className="flex-none w-[280px]">
                 <div className="relative rounded-2xl overflow-hidden">
-                  <Skeleton className="w-full aspect-[16/9]" />
+                  <Skeleton className="w-full aspect-[16/9] bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
+                  <div className="absolute top-2 left-2">
+                    <Skeleton className="h-5 w-24 rounded-full bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
+                  </div>
                 </div>
                 <div className="flex items-center gap-3 mt-3">
-                  <Skeleton className="w-10 h-10 rounded-xl" />
+                  <Skeleton className="w-10 h-10 rounded-xl bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
                   <div className="flex-1">
-                    <Skeleton className="h-5 w-3/4 mb-2" />
-                    <Skeleton className="h-4 w-1/2" />
+                    <Skeleton className="h-5 w-3/4 mb-2 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="h-4 w-20 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
+                      <Skeleton className="h-4 w-4 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
+                      <Skeleton className="h-4 w-12 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
+                    </div>
                   </div>
-                  <Skeleton className="w-20 h-8" />
+                  <Skeleton className="w-20 h-8 rounded-lg bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
                 </div>
               </div>
             ))}

@@ -31,18 +31,21 @@ const TopFreeGames: React.FC<TopFreeGamesProps> = ({ games, isLoading }) => {
   if (isLoading) {
     return (
       <div className="px-4">
-        <Skeleton className="h-7 w-48 mb-4" />
-        <div className="space-y-4">
+        <Skeleton className="h-8 w-48 mb-6 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
+        <div className="space-y-6">
           {[1, 2, 3, 4, 5].map((i) => (
             <div key={i} className="flex items-center gap-4">
-              <Skeleton className="w-6 h-6" />
-              <Skeleton className="w-16 h-16 rounded-xl" />
+              <Skeleton className="w-6 h-6 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
+              <Skeleton className="w-16 h-16 rounded-xl bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
               <div className="flex-1">
-                <Skeleton className="h-5 w-3/4 mb-2" />
-                <Skeleton className="h-4 w-1/2 mb-2" />
-                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-5 w-3/4 mb-2 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
+                <Skeleton className="h-4 w-1/2 mb-2 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-4 w-12 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
+                  <Skeleton className="h-4 w-16 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
+                </div>
               </div>
-              <Skeleton className="w-20 h-9" />
+              <Skeleton className="w-20 h-9 rounded-lg bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
             </div>
           ))}
         </div>
