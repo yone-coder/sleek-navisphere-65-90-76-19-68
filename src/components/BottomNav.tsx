@@ -12,8 +12,11 @@ export const BottomNav = () => {
   const isMobile = useIsMobile();
   const { t } = useLanguage();
 
-  // Hide the main bottom nav on games pages and tournament pages
-  if (location.pathname.includes('games-pages') || location.pathname.includes('tournament') || location.pathname.includes('morpion')) {
+  // Hide the main bottom nav on games pages, tournament pages, and games route
+  if (location.pathname.includes('games-pages') || 
+      location.pathname.includes('tournament') || 
+      location.pathname.includes('morpion') ||
+      location.pathname === '/games') {
     return null;
   }
 
