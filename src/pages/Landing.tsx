@@ -99,39 +99,40 @@ export default function Landing() {
         {/* Tabs Navigation */}
         <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
           <TabNav activeTab={activeTab} />
-
-          <div className="w-full">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-              >
-                <TabsContent value="overview" className="mt-0">
-                  <VideoSection />
-                  <div className="container mx-auto">
-                    <HeroSection backers={backers} />
-                    <RewardsSection rewards={rewards} />
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="updates" className="mt-6 container mx-auto">
-                  <UpdatesTab />
-                </TabsContent>
-
-                <TabsContent value="comments" className="mt-6">
-                  <CommentsTab />
-                </TabsContent>
-
-                <TabsContent value="faqs" className="mt-6 container mx-auto">
-                  <FAQsTab />
-                </TabsContent>
-              </motion.div>
-            </AnimatePresence>
-          </div>
         </Tabs>
+      </div>
+
+      {/* Content Sections */}
+      <div className="w-full">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            <TabsContent value="overview" className="mt-0">
+              <VideoSection />
+              <div className="container mx-auto">
+                <HeroSection backers={backers} />
+                <RewardsSection rewards={rewards} />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="updates" className="mt-6 container mx-auto">
+              <UpdatesTab />
+            </TabsContent>
+
+            <TabsContent value="comments" className="mt-6">
+              <CommentsTab />
+            </TabsContent>
+
+            <TabsContent value="faqs" className="mt-6 container mx-auto">
+              <FAQsTab />
+            </TabsContent>
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Progress Bar - Only show on overview tab */}
