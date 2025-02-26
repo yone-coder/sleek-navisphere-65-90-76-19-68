@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import BalanceCard from "@/components/wallet/BalanceCard";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 // Mock notifications for demo
 const notifications = [
@@ -34,6 +35,12 @@ export default function Wallet() {
   const { t } = useLanguage();
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const currencies = [
+    { code: 'USD', symbol: '$', balance: 4285.75 },
+    { code: 'HTG', symbol: 'G', balance: 425785.75 },
+    { code: 'USDT', symbol: '₮', balance: 4285.75 }
+  ];
 
   return (
     <div className="min-h-screen animate-fade-in">
@@ -170,9 +177,18 @@ export default function Wallet() {
 
       {/* Content (with header spacing) */}
       <div className="pt-14">
-        {/* Add BalanceCard after header */}
+        {/* Balance Cards Section */}
         <div className="p-4">
-          <BalanceCard />
+          <ScrollArea className="w-full whitespace-nowrap rounded-md">
+            <div className="flex w-full gap-4">
+              {currencies.map((currency) => (
+                <div key={currency.code} className="min-w-[85%] sm:min-w-[350px] flex-shrink-0">
+                  <BalanceCard currency={currency.code} />
+                </div>
+              ))}
+            </div>
+            <ScrollBar orientation="horizontal" className="mt-2" />
+          </ScrollArea>
         </div>
         
         <div className="p-4">

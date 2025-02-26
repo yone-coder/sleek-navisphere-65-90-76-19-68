@@ -7,13 +7,16 @@ import {
   ChevronDown, Info, AlertTriangle, RefreshCw
 } from 'lucide-react';
 
-const BalanceCard = () => {
+interface BalanceCardProps {
+  currency?: string;
+}
+
+const BalanceCard = ({ currency = 'USD' }: BalanceCardProps) => {
   // State management
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [hideBalance, setHideBalance] = useState(false);
   const [currentAccount, setCurrentAccount] = useState('checking');
-  const [currency, setCurrency] = useState('USD');
   const [darkMode, setDarkMode] = useState(false);
   const [securityStatus, setSecurityStatus] = useState('secure');
   const [showDropdown, setShowDropdown] = useState(false);
@@ -21,28 +24,38 @@ const BalanceCard = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [showTooltip, setShowTooltip] = useState('');
 
-  // Sample data
+  // Sample data for different currencies
   const accounts = {
     checking: { 
-      balance: 4285.75, 
+      balance: currency === 'HTG' ? 425785.75 : (currency === 'USDT' ? 4285.75 : 4285.75), 
       type: 'Checking', 
       number: '**** 4523',
-      budget: { current: 2100, max: 3200 }
+      budget: { 
+        current: currency === 'HTG' ? 210000 : (currency === 'USDT' ? 2100 : 2100), 
+        max: currency === 'HTG' ? 320000 : (currency === 'USDT' ? 3200 : 3200) 
+      }
     },
     savings: { 
-      balance: 12650.42, 
+      balance: currency === 'HTG' ? 1265042.42 : (currency === 'USDT' ? 12650.42 : 12650.42), 
       type: 'Savings', 
       number: '**** 7802',
-      budget: { current: 12650.42, max: 20000 }
+      budget: { 
+        current: currency === 'HTG' ? 1265042.42 : (currency === 'USDT' ? 12650.42 : 12650.42), 
+        max: currency === 'HTG' ? 2000000 : (currency === 'USDT' ? 20000 : 20000) 
+      }
     },
     credit: { 
-      balance: 742.18, 
+      balance: currency === 'HTG' ? 74218.18 : (currency === 'USDT' ? 742.18 : 742.18), 
       type: 'Credit', 
       number: '**** 9245',
-      budget: { current: 742.18, max: 5000 }
+      budget: { 
+        current: currency === 'HTG' ? 74218.18 : (currency === 'USDT' ? 742.18 : 742.18), 
+        max: currency === 'HTG' ? 500000 : (currency === 'USDT' ? 5000 : 5000) 
+      }
     }
   };
 
+  // Tooltips for information
   const tooltips = {
     'APR': 'Annual Percentage Rate - The yearly interest rate charged for borrowing.',
     'Budget': 'Your monthly spending limit that you set for this account.',
@@ -145,7 +158,7 @@ const BalanceCard = () => {
 
   // Main component render
   return (
-    <div className="w-full overflow-hidden">
+    <div className="w-full overflow-hidden bg-white rounded-lg border border-gray-100">
       {/* Header */}
       <div className="px-4 py-3">
         <div className="flex justify-between items-center mb-3">
@@ -187,14 +200,6 @@ const BalanceCard = () => {
           </div>
           
           <div className="flex space-x-1">
-            <button 
-              className="p-1.5 rounded-full hover:bg-gray-100"
-              onClick={() => setCurrency(currency === 'USD' ? 'EUR' : 'USD')}
-              aria-label="Toggle currency"
-            >
-              {currency === 'USD' ? <DollarSign size={14} /> : <Euro size={14} />}
-            </button>
-            
             <button 
               className={`p-1.5 rounded-full ${securityStatus === 'secure' ? 'text-green-500' : 'text-yellow-500'} hover:bg-gray-100`}
               onClick={handleSecurityAction}
