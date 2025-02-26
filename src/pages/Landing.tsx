@@ -160,114 +160,80 @@ export default function Landing() {
       </section>
       
       {/* Progress Bar */}
-      <section className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50">
-        <div 
-          className="h-0.5 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500"
-          style={{ width: `${(raised / goal) * 100}%` }}
-        />
-        <div className="container mx-auto px-4 py-3">
-          <div className="space-y-3">
+      <section className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50 py-2">
+        <div className="container mx-auto px-4">
+          <div className="space-y-2">
             {/* Stats above progress bar */}
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-4">
-                <div className="flex flex-col items-center">
-                  <div className="flex items-center gap-2">
-                    <Users className="h-3.5 w-3.5 text-gray-500" />
-                    <span className="text-sm md:text-base font-bold text-gray-900">
-                      {backers.toLocaleString()}
-                    </span>
-                  </div>
-                  <span className="text-[10px] text-gray-500 font-medium">
-                    backers
-                  </span>
-                </div>
-
-                <div className="h-8 w-px bg-gray-200" />
-
-                <div className="flex flex-col items-center">
-                  <div className="flex items-center gap-2">
-                    <Heart className="h-3.5 w-3.5 text-pink-500" />
-                    <span className="text-sm md:text-base font-bold text-gray-900">
-                      {Math.floor((raised / goal) * 100)}%
-                    </span>
-                  </div>
-                  <span className="text-[10px] text-gray-500 font-medium">
-                    funded
-                  </span>
-                </div>
+            <div className="flex justify-between items-center mb-1">
+              <div className="flex items-center whitespace-nowrap">
+                <span className="text-sm md:text-base font-bold text-gray-900">
+                  {backers}
+                </span>
+                <span className="text-gray-600 text-[10px] ml-1">
+                  backers
+                </span>
               </div>
-
-              <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full">
-                <Clock className="h-3.5 w-3.5 text-blue-500" />
-                <div className="flex items-center gap-1">
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm font-bold text-gray-900">{days}</span>
-                    <span className="text-[10px] text-gray-500">days</span>
-                  </div>
-                  <span className="text-gray-300">:</span>
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm font-bold text-gray-900">{Math.floor(days * 24) % 24}</span>
-                    <span className="text-[10px] text-gray-500">hrs</span>
-                  </div>
-                  <span className="text-gray-300">:</span>
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm font-bold text-gray-900">{Math.floor(days * 24 * 60) % 60}</span>
-                    <span className="text-[10px] text-gray-500">min</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Main stats */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="relative">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-sm md:text-base font-bold text-emerald-500">
-                      ${raised.toLocaleString()}
-                    </span>
-                    <span className="text-[10px] text-gray-500 font-medium">raised of</span>
-                    <span className="text-sm text-gray-400 font-medium">
-                      ${goal.toLocaleString()}
-                    </span>
-                  </div>
-                  <div className="absolute -top-2 -right-2">
-                    <Award className="h-3.5 w-3.5 text-yellow-500" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Button 
-                  size="sm"
-                  className="bg-emerald-500 hover:bg-emerald-600 text-white gap-2 px-6"
-                >
-                  <span>Back This Project</span>
-                  <MessageCircle className="h-3.5 w-3.5" />
-                </Button>
-                <Button 
-                  size="icon"
-                  variant="outline"
-                  className="h-9 w-9 hover:bg-gray-50 transition-colors"
-                >
-                  <Share2 className="h-3.5 w-3.5" />
-                </Button>
+              <div className="flex items-center text-gray-600">
+                <Clock className="h-3.5 w-3.5 mr-1" />
+                <span className="text-[10px] font-medium">
+                  {days}d : {Math.floor(days * 24)}h : {Math.floor(days * 24 * 60)}m
+                </span>
               </div>
             </div>
 
             {/* Progress bar */}
             <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
               <div 
-                className="bg-gradient-to-r from-emerald-500 to-emerald-400 h-full transition-all duration-500 ease-in-out"
+                className="bg-emerald-500 h-full transition-all duration-500 ease-in-out"
                 style={{ width: `${(raised / goal) * 100}%` }}
               />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm md:text-base font-bold text-emerald-500">
+                    ${raised.toLocaleString()}/${goal.toLocaleString()}
+                  </span>
+                  <div className="bg-gray-100 rounded-full p-1">
+                    <DollarSign className="h-3 w-3 text-gray-500" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-right">
+                <div className="flex items-center justify-end whitespace-nowrap">
+                  <span className="text-sm md:text-base font-bold text-gray-900">
+                    {days}
+                  </span>
+                  <span className="text-gray-600 text-[10px] ml-1">
+                    days to go
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Button 
+                size="sm"
+                className="bg-emerald-500 hover:bg-emerald-600 text-white flex-1"
+              >
+                Back This Project
+              </Button>
+              <Button 
+                size="icon"
+                variant="outline"
+                className="shrink-0 h-9 w-9"
+              >
+                <Share2 className="h-3.5 w-3.5" />
+              </Button>
             </div>
           </div>
         </div>
       </section>
       
       {/* Add padding at the bottom of the page to prevent content from being hidden behind the fixed bar */}
-      <div className="pb-40" />
+      <div className="pb-32" />
 
       {/* Project Overview */}
       <section className="py-16">
