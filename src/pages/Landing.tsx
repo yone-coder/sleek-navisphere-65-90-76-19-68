@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -10,9 +9,23 @@ import {
   Zap,
   Globe,
   Lock,
-  Star
+  Star,
+  Cloud,
+  Code,
+  LineChart,
+  Cpu,
+  Layers,
+  Heart
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function Landing() {
   const [scrolled, setScrolled] = useState(false);
@@ -34,6 +47,79 @@ export default function Landing() {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  const features = [
+    {
+      icon: Cloud,
+      title: "Cloud Infrastructure",
+      description: "Enterprise-grade cloud infrastructure with 99.99% uptime guarantee"
+    },
+    {
+      icon: Code,
+      title: "API Integration",
+      description: "Seamless integration with your existing tech stack via RESTful APIs"
+    },
+    {
+      icon: Shield,
+      title: "Advanced Security",
+      description: "Bank-level encryption and multi-factor authentication built-in"
+    },
+    {
+      icon: LineChart,
+      title: "Real-time Analytics",
+      description: "Comprehensive analytics dashboard with ML-powered insights"
+    },
+    {
+      icon: Layers,
+      title: "Modular Architecture",
+      description: "Flexible, scalable architecture that grows with your needs"
+    },
+    {
+      icon: Cpu,
+      title: "AI Powered",
+      description: "Advanced AI capabilities for automated decision making"
+    }
+  ];
+
+  const tiers = [
+    {
+      name: "Starter",
+      price: "49",
+      description: "Perfect for small teams and startups",
+      features: [
+        "Up to 5 team members",
+        "10GB storage",
+        "Basic analytics",
+        "24/7 support"
+      ]
+    },
+    {
+      name: "Pro",
+      price: "99",
+      description: "Best for growing businesses",
+      features: [
+        "Up to 20 team members",
+        "50GB storage",
+        "Advanced analytics",
+        "Priority support",
+        "Custom integrations"
+      ],
+      popular: true
+    },
+    {
+      name: "Enterprise",
+      price: "299",
+      description: "For large-scale operations",
+      features: [
+        "Unlimited team members",
+        "500GB storage",
+        "Custom analytics",
+        "24/7 priority support",
+        "Dedicated account manager",
+        "Custom development"
+      ]
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
@@ -165,6 +251,140 @@ export default function Landing() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+              Powerful Features
+            </h2>
+            <p className="mt-4 text-xl text-gray-600">
+              Everything you need to build and scale your SaaS application
+            </p>
+          </div>
+
+          <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Card className="relative overflow-hidden group hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <div className="h-12 w-12 rounded-lg bg-purple-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <feature.icon className="h-6 w-6 text-purple-600" />
+                    </div>
+                    <CardTitle>{feature.title}</CardTitle>
+                    <CardDescription>{feature.description}</CardDescription>
+                  </CardHeader>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+              Simple, Transparent Pricing
+            </h2>
+            <p className="mt-4 text-xl text-gray-600">
+              Choose the perfect plan for your needs
+            </p>
+          </div>
+
+          <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {tiers.map((tier, index) => (
+              <motion.div
+                key={tier.name}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="relative"
+              >
+                <Card className={cn(
+                  "relative overflow-hidden",
+                  tier.popular && "border-purple-600 shadow-lg"
+                )}>
+                  {tier.popular && (
+                    <div className="absolute top-0 right-0 -mt-1 -mr-1 px-3 py-1 bg-purple-600 text-white text-xs font-medium transform rotate-12">
+                      Popular
+                    </div>
+                  )}
+                  <CardHeader>
+                    <CardTitle className="text-2xl">{tier.name}</CardTitle>
+                    <CardDescription>{tier.description}</CardDescription>
+                    <div className="mt-4">
+                      <span className="text-4xl font-bold">${tier.price}</span>
+                      <span className="text-gray-600">/month</span>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-3">
+                      {tier.features.map((feature, i) => (
+                        <li key={i} className="flex items-center">
+                          <Heart className="h-4 w-4 text-purple-600 mr-2" />
+                          <span className="text-sm text-gray-600">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Button 
+                      className={cn(
+                        "w-full",
+                        tier.popular 
+                          ? "bg-gradient-to-r from-purple-600 to-blue-500 text-white hover:opacity-90"
+                          : "bg-white text-gray-900 border-2 border-gray-200 hover:bg-gray-50"
+                      )}
+                    >
+                      Get Started
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-purple-600 to-blue-500">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl font-bold text-white sm:text-4xl">
+            Ready to Transform Your SaaS Journey?
+          </h2>
+          <p className="mt-4 text-xl text-white/90">
+            Join thousands of satisfied customers and take your business to the next level
+          </p>
+          <motion.div 
+            className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Button 
+              size="lg"
+              className="bg-white text-purple-600 hover:bg-white/90"
+            >
+              Start Free Trial
+            </Button>
+            <Button 
+              size="lg"
+              variant="outline" 
+              className="bg-transparent border-2 border-white text-white hover:bg-white/10"
+            >
+              Contact Sales
+            </Button>
+          </motion.div>
         </div>
       </section>
     </div>
