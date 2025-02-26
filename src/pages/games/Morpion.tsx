@@ -16,6 +16,16 @@ const GameComponent = ({
   difficulty,
   setZoom,
   setIsSettingsOpen
+}: {
+  boardSize: number;
+  zoom: number;
+  isSettingsOpen: boolean;
+  player1: string;
+  player2: string;
+  gameMode: GameMode;
+  difficulty: string;
+  setZoom: (zoom: number) => void;
+  setIsSettingsOpen: (open: boolean) => void;
 }) => {
   const gameState = useGameState({
     boardSize,
@@ -67,7 +77,7 @@ const GameComponent = ({
 
 const Morpion = () => {
   const [boardSize] = useState(30);
-  const [zoom, setZoom] = useState(150); // Changed from 100 to 150
+  const [zoom, setZoom] = useState(150);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [player1] = useState('Guest10816');
   const [player2, setPlayer2] = useState('Guest');

@@ -226,51 +226,57 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
       console.log('Subscribed to room:', roomId);
     };
 
-    const handleMatchFound = async (roomId: string) => {
+  const handleMatchFound = async (roomId: string) => {
+    if (!isSubscribed) return;
+    
+    try {
+      const { data: room, error } = await supabase
+        .from('game_rooms')
+        .select()
+        .eq('id', roomId)
+        .single();
+
+      if (error) throw error;
+      if (!room) throw new Error('Room not found');
+      
+      // Type guard to ensure room has required properties
+      if (!('status' in room && 'player1_id' in room && 'player2_id' in room)) {
+        throw new Error('Invalid room data');
+      }
+
+      const gameRoom = room as GameRoom;
+
+      if (gameRoom.status !== 'playing' || !gameRoom.player1_id || !gameRoom.player2_id) {
+        console.log('Invalid room state:', gameRoom);
+        return;
+      }
+
+      console.log('Match found! Room:', gameRoom);
+      setSearchState("found");
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
       if (!isSubscribed) return;
       
-      try {
-        const { data: room, error } = await supabase
-          .from('game_rooms')
-          .select()
-          .eq('id', roomId)
-          .single();
+      setSearchState("connecting");
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      if (!isSubscribed) return;
 
-        if (error) throw error;
-        if (!room) throw new Error('Room not found');
-        const gameRoom = room as GameRoom;
-
-        if (gameRoom.status !== 'playing' || !gameRoom.player1_id || !gameRoom.player2_id) {
-          console.log('Invalid room state:', gameRoom);
-          return;
-        }
-
-        console.log('Match found! Room:', gameRoom);
-        setSearchState("found");
-
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        if (!isSubscribed) return;
-        
-        setSearchState("connecting");
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        if (!isSubscribed) return;
-
-        onClose();
-        navigate(`/games/morpion?start=true&mode=online&roomId=${roomId}`);
-        toast({
-          title: "Match Found!",
-          description: "Connected to opponent. Get ready to play!",
-        });
-      } catch (error) {
-        console.error('Error handling match:', error);
-        toast({
-          title: "Error",
-          description: "Failed to connect to game. Please try again.",
-          variant: "destructive"
-        });
-        onClose();
-      }
-    };
+      onClose();
+      navigate(`/games/morpion?start=true&mode=online&roomId=${roomId}`);
+      toast({
+        title: "Match Found!",
+        description: "Connected to opponent. Get ready to play!",
+      });
+    } catch (error) {
+      console.error('Error handling match:', error);
+      toast({
+        title: "Error",
+        description: "Failed to connect to game. Please try again.",
+        variant: "destructive"
+      });
+      onClose();
+    }
+  };
 
     startMatchmaking();
 
