@@ -181,7 +181,7 @@ export default function Wallet() {
           <ScrollArea className="w-full whitespace-nowrap rounded-md">
             <div className="flex w-full space-x-4">
               {currencies.map((currency) => (
-                <div key={currency.code} className="min-w-[85%] first:ml-0 last:mr-4">
+                <div key={currency.code} className="min-w-[280px] sm:min-w-[320px] first:ml-0 last:mr-4">
                   <BalanceCard defaultCurrency={currency.code} />
                 </div>
               ))}
