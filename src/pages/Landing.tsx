@@ -173,7 +173,7 @@ export default function Landing() {
             <div className="grid grid-cols-3 gap-6">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-lg md:text-xl font-bold text-emerald-500">
+                  <span className="text-sm md:text-base font-bold text-emerald-500">
                     ${raised.toLocaleString()}/${goal.toLocaleString()}
                   </span>
                   <div className="bg-gray-100 rounded-full p-1">
@@ -184,10 +184,10 @@ export default function Landing() {
 
               <div className="text-right">
                 <div className="flex items-center justify-end whitespace-nowrap">
-                  <span className="text-lg md:text-xl font-bold text-gray-900">
+                  <span className="text-sm md:text-base font-bold text-gray-900">
                     {backers}
                   </span>
-                  <span className="text-gray-600 text-xs ml-2">
+                  <span className="text-gray-600 text-[10px] ml-1">
                     backers
                   </span>
                 </div>
@@ -195,10 +195,10 @@ export default function Landing() {
 
               <div className="text-right">
                 <div className="flex items-center justify-end whitespace-nowrap">
-                  <span className="text-lg md:text-xl font-bold text-gray-900">
+                  <span className="text-sm md:text-base font-bold text-gray-900">
                     {days}
                   </span>
-                  <span className="text-gray-600 text-xs ml-2">
+                  <span className="text-gray-600 text-[10px] ml-1">
                     days to go
                   </span>
                 </div>
