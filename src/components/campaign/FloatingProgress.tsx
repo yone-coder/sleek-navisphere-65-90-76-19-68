@@ -84,7 +84,7 @@ export function FloatingProgress({
           {/* Progress bar with gradient and animation */}
           <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
             <div 
-              className="h-full transition-all duration-300 ease-out rounded-full relative overflow-hidden"
+              className="h-full rounded-full relative overflow-hidden"
               style={{ 
                 width: `${Math.max((raised / goal) * 100, 0.5)}%`,
                 background: 'linear-gradient(90deg, #34d399 0%, #059669 50%, #047857 100%)',
