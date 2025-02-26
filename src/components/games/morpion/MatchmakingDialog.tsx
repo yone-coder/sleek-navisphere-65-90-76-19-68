@@ -29,6 +29,8 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
   useEffect(() => {
     let isSubscribed = true;
     let roomSubscription: ReturnType<typeof supabase.channel>;
+    let retryCount = 0;
+    const maxRetries = 3;
     
     const startMatchmaking = async () => {
       try {
@@ -52,29 +54,50 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
           setSearchTime(prev => prev + 1);
         }, 1000);
 
-        // Try to find an available room first
-        const availableRoom = await roomService.findAvailableRoom(user.id);
-        console.log('Available room search result:', availableRoom);
+        // Retry loop for finding a match
+        const findMatch = async () => {
+          if (!isSubscribed || retryCount >= maxRetries) return;
 
-        if (availableRoom) {
-          console.log('Found available room, attempting to join:', availableRoom.id);
           try {
-            const room = await roomService.joinRoom(availableRoom.id, user.id);
-            currentRoomRef.current = room.id;
-            await handleMatchFound(room.id, isSubscribed);
-          } catch (joinError) {
-            console.error('Failed to join room:', joinError);
-            // If joining fails, create a new room
-            const newRoom = await roomService.createRoom(user.id);
-            currentRoomRef.current = newRoom.id;
-            setupRoomSubscription(newRoom.id);
+            // Try to find an available room first
+            const availableRoom = await roomService.findAvailableRoom(user.id);
+
+            if (availableRoom) {
+              console.log('Found available room:', availableRoom.id);
+              const room = await roomService.joinRoom(availableRoom.id, user.id);
+              currentRoomRef.current = room.id;
+              await handleMatchFound(room.id, isSubscribed);
+            } else {
+              console.log('Creating new room');
+              const room = await roomService.createRoom(user.id);
+              currentRoomRef.current = room.id;
+              setupRoomSubscription(room.id);
+              
+              // Set up a retry interval to look for players
+              checkIntervalRef.current = setInterval(async () => {
+                retryCount++;
+                if (retryCount >= maxRetries) {
+                  clearInterval(checkIntervalRef.current);
+                  if (isSubscribed) {
+                    toast({
+                      title: "No players found",
+                      description: "Please try again later.",
+                      variant: "destructive"
+                    });
+                    onClose();
+                  }
+                } else {
+                  await findMatch();
+                }
+              }, 5000);
+            }
+          } catch (error) {
+            console.error('Error in findMatch:', error);
+            retryCount++;
           }
-        } else {
-          console.log('No available room, creating new room');
-          const room = await roomService.createRoom(user.id);
-          currentRoomRef.current = room.id;
-          setupRoomSubscription(room.id);
-        }
+        };
+
+        await findMatch();
       } catch (error) {
         console.error('Error in matchmaking:', error);
         toast({
@@ -105,7 +128,7 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
       if (checkIntervalRef.current) clearInterval(checkIntervalRef.current);
       if (roomSubscription) roomSubscription.unsubscribe();
       
-      // Clean up room if we created one
+      // Clean up room if we created one and we're still in waiting state
       if (currentRoomRef.current) {
         console.log('Cleaning up room:', currentRoomRef.current);
         supabase
@@ -115,9 +138,6 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
           .eq('status', 'waiting')
           .then(() => {
             console.log('Room cleaned up successfully');
-          })
-          .catch((error) => {
-            console.error('Error cleaning up room:', error);
           });
       }
     };
