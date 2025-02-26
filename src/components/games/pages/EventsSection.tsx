@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { GameEvent } from '@/types/game';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,16 +13,7 @@ interface EventsSectionProps {
 }
 
 const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
-  const [loadedImages, setLoadedImages] = useState<{ [key: string]: boolean }>({});
-
-  const handleImageLoad = (eventId: string) => {
-    setLoadedImages(prev => ({ ...prev, [eventId]: true }));
-  };
-
-  const allImagesLoaded = !isLoading && events?.length > 0 && 
-    events.every(event => loadedImages[event.id] && loadedImages[`${event.id}-icon`]);
-
-  if (isLoading || !allImagesLoaded) {
+  if (isLoading) {
     return (
       <div className="mb-8">
         <div className="px-4 mb-4">
@@ -78,7 +69,6 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
                   className="w-full aspect-[16/9] object-cover mix-blend-overlay transform-gpu"
                   loading="lazy"
                   decoding="async"
-                  onLoad={() => handleImageLoad(event.id)}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
@@ -95,7 +85,6 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
                   className="w-10 h-10 rounded-xl flex-shrink-0"
                   loading="lazy"
                   decoding="async"
-                  onLoad={() => handleImageLoad(`${event.id}-icon`)}
                 />
                 <div className="flex-1 min-w-0">
                   <h4 className="font-medium text-gray-900 truncate text-sm">
