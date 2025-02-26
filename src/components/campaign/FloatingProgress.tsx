@@ -89,7 +89,7 @@ export function FloatingProgress({
                 width: `${Math.max((raised / goal) * 100, 0.5)}%`,
                 background: 'linear-gradient(90deg, #34d399 0%, #059669 50%, #047857 100%)',
                 backgroundSize: '200% 100%',
-                animation: 'shimmer 2s infinite linear'
+                animation: 'shimmer 30s infinite linear'
               }}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0" />
