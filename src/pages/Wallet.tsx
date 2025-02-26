@@ -1,4 +1,3 @@
-
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -177,18 +176,16 @@ export default function Wallet() {
       {/* Content (with header spacing) */}
       <div className="pt-14">
         {/* Balance Cards Scroll Area */}
-        <div className="p-4">
-          <ScrollArea className="w-full whitespace-nowrap rounded-md">
-            <div className="flex w-full space-x-4">
-              {currencies.map((currency) => (
-                <div key={currency.code} className="min-w-[280px] sm:min-w-[320px] first:ml-0 last:mr-4">
-                  <BalanceCard defaultCurrency={currency.code} />
-                </div>
-              ))}
-            </div>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
-        </div>
+        <ScrollArea className="w-full whitespace-nowrap">
+          <div className="flex w-full space-x-4 px-4">
+            {currencies.map((currency) => (
+              <div key={currency.code} className="min-w-[280px] sm:min-w-[320px] first:ml-0 last:mr-4 py-4">
+                <BalanceCard defaultCurrency={currency.code} />
+              </div>
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
         
         <div className="p-4">
           <h1 className="text-2xl font-semibold">{t('nav.wallet')}</h1>
