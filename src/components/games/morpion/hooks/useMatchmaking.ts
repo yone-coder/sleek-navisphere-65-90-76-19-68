@@ -27,10 +27,17 @@ export const useMatchmaking = (onClose: () => void) => {
         .eq('id', roomId)
         .single();
 
-      if (error) throw error;
-      if (!roomData) throw new Error('Room not found');
+      if (error) {
+        console.error('Error fetching room:', error);
+        throw error;
+      }
+      if (!roomData) {
+        console.error('Room not found:', roomId);
+        throw new Error('Room not found');
+      }
 
       if (!('status' in roomData) || !('player1_id' in roomData) || !('player2_id' in roomData)) {
+        console.error('Invalid room data structure:', roomData);
         throw new Error('Invalid room data structure');
       }
 

@@ -6,6 +6,13 @@ type GameRoom = Database['public']['Tables']['game_rooms']['Row'];
 
 export const roomService = {
   async createRoom(userId: string): Promise<GameRoom> {
+    // First, clean up any existing rooms for this user
+    await supabase
+      .from('game_rooms')
+      .delete()
+      .eq('player1_id', userId)
+      .eq('status', 'waiting');
+
     const { data: room, error } = await supabase
       .from('game_rooms')
       .insert({
@@ -22,13 +29,29 @@ export const roomService = {
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) {
+      console.error('Error creating room:', error);
+      throw error;
+    }
     if (!room) throw new Error('Failed to create room');
 
     return room;
   },
 
   async joinRoom(roomId: string, userId: string): Promise<GameRoom> {
+    // First verify the room exists and is available
+    const { data: existingRoom } = await supabase
+      .from('game_rooms')
+      .select()
+      .eq('id', roomId)
+      .eq('status', 'waiting')
+      .is('player2_id', null)
+      .single();
+
+    if (!existingRoom) {
+      throw new Error('Room not available');
+    }
+
     const { data: room, error } = await supabase
       .from('game_rooms')
       .update({
@@ -36,19 +59,27 @@ export const roomService = {
         status: 'playing'
       })
       .eq('id', roomId)
-      .eq('status', 'waiting')
-      .is('player2_id', null)
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) {
+      console.error('Error joining room:', error);
+      throw error;
+    }
     if (!room) throw new Error('Failed to join room');
 
     return room;
   },
 
-  async findAvailableRoom(userId: string) {
-    const { data: rooms } = await supabase
+  async findAvailableRoom(userId: string): Promise<GameRoom | undefined> {
+    // First clean up any stale rooms
+    await supabase
+      .from('game_rooms')
+      .delete()
+      .eq('status', 'waiting')
+      .eq('player1_id', userId);
+
+    const { data: rooms, error } = await supabase
       .from('game_rooms')
       .select()
       .eq('status', 'waiting')
@@ -57,7 +88,12 @@ export const roomService = {
       .order('created_at', { ascending: true })
       .limit(1);
 
-    return rooms?.[0] as GameRoom | undefined;
+    if (error) {
+      console.error('Error finding available room:', error);
+      throw error;
+    }
+
+    return rooms?.[0];
   },
 
   subscribeToRoom(roomId: string, onUpdate: (room: GameRoom) => void) {
@@ -73,6 +109,7 @@ export const roomService = {
         (payload) => {
           const newRoom = payload.new as GameRoom;
           if (newRoom) {
+            console.log('Room update received:', newRoom);
             onUpdate(newRoom);
           }
         }
