@@ -48,21 +48,8 @@ export const roomService = {
   async joinRoom(roomId: string, userId: string): Promise<GameRoom> {
     console.log('Attempting to join room:', roomId, 'for user:', userId);
     
-    // First get the room to verify it exists and is available
-    const { data: rooms, error: checkError } = await supabase
-      .from('game_rooms')
-      .select()
-      .eq('id', roomId)
-      .eq('status', 'waiting')
-      .is('player2_id', null);
-
-    if (checkError || !rooms || rooms.length === 0) {
-      console.error('Room not available');
-      throw new Error('Room not available');
-    }
-
-    // Then update it
-    const { data: updatedRooms, error: updateError } = await supabase
+    // Single atomic operation to update the room
+    const { data: updatedRooms, error } = await supabase
       .from('game_rooms')
       .update({
         player2_id: userId,
@@ -73,8 +60,8 @@ export const roomService = {
       .is('player2_id', null)
       .select();
 
-    if (updateError || !updatedRooms || updatedRooms.length === 0) {
-      console.error('Error updating room:', updateError);
+    if (error || !updatedRooms || updatedRooms.length === 0) {
+      console.error('Error joining room:', error);
       throw new Error('Room not available');
     }
 
@@ -99,7 +86,8 @@ export const roomService = {
       .eq('status', 'waiting')
       .is('player2_id', null)
       .neq('player1_id', userId)
-      .order('created_at', { ascending: true });
+      .order('created_at', { ascending: true })
+      .limit(1);
 
     if (error) {
       console.error('Error finding available room:', error);
@@ -111,9 +99,8 @@ export const roomService = {
       return null;
     }
 
-    const availableRoom = rooms[0];
-    console.log('Found available room:', availableRoom.id);
-    return availableRoom;
+    console.log('Found available room:', rooms[0].id);
+    return rooms[0];
   },
 
   subscribeToRoom(roomId: string, onUpdate: (room: GameRoom) => void) {
