@@ -72,25 +72,35 @@ const BalanceCard = ({ defaultCurrency = 'USD' }: BalanceCardProps) => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Format large numbers with K, M, B suffixes
+  const formatLargeNumber = (num: number) => {
+    if (num >= 1000000000) {
+      return (num / 1000000000).toFixed(1) + 'B';
+    }
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1) + 'M';
+    }
+    if (num >= 1000) {
+      return (num / 1000).toFixed(1) + 'K';
+    }
+    return num.toFixed(2);
+  };
+
   // Format currency based on selected currency
   const formatCurrency = (amount: number) => {
     if (hideBalance) return '●●●●';
     
+    // Format the number first
+    const formattedNumber = formatLargeNumber(amount);
+    
     // Special handling for USDT
     if (defaultCurrency === 'USDT') {
-      return `₮${amount.toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      })}`;
+      return `₮${formattedNumber}`;
     }
     
-    const formatter = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: defaultCurrency,
-      minimumFractionDigits: 2
-    });
-    
-    return formatter.format(amount);
+    // For other currencies, use the currency symbol
+    const symbol = defaultCurrency === 'HTG' ? 'G' : '$';
+    return `${symbol}${formattedNumber}`;
   };
 
   // Get gradient class based on currency
