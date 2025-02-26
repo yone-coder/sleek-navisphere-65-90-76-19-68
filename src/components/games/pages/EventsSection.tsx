@@ -20,17 +20,17 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
         <ScrollArea className="w-full" type="scroll">
           <div className="flex px-4 gap-4 pb-4">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="flex-none w-[340px]">
+              <div key={i} className="flex-none w-[280px]">
                 <div className="relative rounded-2xl overflow-hidden">
-                  <Skeleton className="w-full aspect-[5/3]" />
+                  <Skeleton className="w-full aspect-[16/9]" />
                 </div>
                 <div className="flex items-center gap-3 mt-3">
-                  <Skeleton className="w-12 h-12 rounded-xl" />
+                  <Skeleton className="w-10 h-10 rounded-xl" />
                   <div className="flex-1">
                     <Skeleton className="h-5 w-3/4 mb-2" />
                     <Skeleton className="h-4 w-1/2" />
                   </div>
-                  <Skeleton className="w-20 h-9" />
+                  <Skeleton className="w-20 h-8" />
                 </div>
               </div>
             ))}
@@ -47,50 +47,50 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
       <ScrollArea className="w-full" type="scroll">
         <div className="flex px-4 gap-4 pb-4">
           {events.map(event => (
-            <div key={event.id} className="flex-none w-[340px]">
+            <div key={event.id} className="flex-none w-[280px]">
               <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-purple-500 to-pink-500">
-                <div className="absolute top-3 left-3 z-10">
-                  <Badge className="bg-black/50 text-white border-none backdrop-blur-sm">
+                <div className="absolute top-2 left-2 z-10">
+                  <Badge className="bg-black/50 text-white border-none backdrop-blur-sm text-xs">
                     Ends in {event.endsIn}
                   </Badge>
                 </div>
                 <img
                   src={event.image}
                   alt={event.title}
-                  className="w-full aspect-[5/3] object-cover mix-blend-overlay"
+                  className="w-full aspect-[16/9] object-cover mix-blend-overlay"
                   loading="lazy"
                   decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                  <h3 className="text-xl font-bold mb-1">{event.title}</h3>
-                  <p className="text-sm opacity-90 line-clamp-2 mb-2">
+                <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                  <h3 className="text-base font-bold mb-1 line-clamp-1">{event.title}</h3>
+                  <p className="text-xs opacity-90 line-clamp-2 mb-1">
                     {event.description}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 mt-3">
+              <div className="flex items-center gap-2 mt-2">
                 <img
                   src={event.gameIcon}
                   alt={event.gameTitle}
-                  className="w-12 h-12 rounded-xl"
+                  className="w-10 h-10 rounded-xl"
                   loading="lazy"
                   decoding="async"
                 />
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-medium text-gray-900 truncate">
+                  <h4 className="font-medium text-gray-900 truncate text-sm">
                     {event.gameTitle}
                   </h4>
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="flex items-center gap-1 text-xs text-gray-500">
                     <span className="truncate">{event.developer}</span>
                     <span>•</span>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-0.5">
                       <span>{event.rating}</span>
                       <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
                     </div>
                   </div>
                 </div>
-                <Button className="h-9" size="sm">Install</Button>
+                <Button className="h-8 text-xs" size="sm">Install</Button>
               </div>
             </div>
           ))}
