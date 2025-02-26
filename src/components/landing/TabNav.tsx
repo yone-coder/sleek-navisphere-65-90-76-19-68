@@ -11,129 +11,95 @@ interface TabNavProps {
 
 export function TabNav({ activeTab }: TabNavProps) {
   return (
-    <div className="relative">
+    <div className="relative px-4 py-2">
       <ScrollArea className="w-full">
-        <TabsList className="w-max inline-flex h-16 items-center justify-start gap-4 rounded-lg bg-transparent p-1">
+        <TabsList className="w-max inline-flex h-14 items-center justify-start gap-2 rounded-xl bg-gray-50/50 p-2 backdrop-blur-sm border border-gray-100">
           <TabsTrigger 
             value="overview"
-            className="group data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary relative py-3 px-4 whitespace-nowrap transition-all duration-300 hover:bg-gray-50/50 rounded-lg"
+            className="relative flex items-center gap-2.5 px-4 py-2 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
           >
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Info className="w-4 h-4 transition-transform group-hover:scale-110 duration-300" />
+            <div className="relative flex items-center justify-center w-8 h-8">
+              <Info className="w-[18px] h-[18px]" />
+              {activeTab === "overview" && (
                 <motion.div
-                  className="absolute -inset-1 bg-primary/5 rounded-full"
-                  initial={{ scale: 0 }}
-                  animate={activeTab === "overview" ? { scale: 1 } : { scale: 0 }}
-                  transition={{ duration: 0.2 }}
+                  layoutId="activeBackground"
+                  className="absolute inset-0 bg-primary/5 rounded-full"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
-              </div>
-              <span className="font-medium">Overview</span>
+              )}
             </div>
-            {activeTab === "overview" && (
-              <motion.div 
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
-                layoutId="activeTab"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
-              />
-            )}
+            <span className="font-medium">Overview</span>
           </TabsTrigger>
-          
+
           <TabsTrigger 
             value="updates"
-            className="group data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary relative py-3 px-4 whitespace-nowrap transition-all duration-300 hover:bg-gray-50/50 rounded-lg"
+            className="relative flex items-center gap-2.5 px-4 py-2 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
           >
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Bell className="w-4 h-4 transition-transform group-hover:scale-110 duration-300" />
+            <div className="relative flex items-center justify-center w-8 h-8">
+              <Bell className="w-[18px] h-[18px]" />
+              {activeTab === "updates" && (
                 <motion.div
-                  className="absolute -inset-1 bg-primary/5 rounded-full"
-                  initial={{ scale: 0 }}
-                  animate={activeTab === "updates" ? { scale: 1 } : { scale: 0 }}
-                  transition={{ duration: 0.2 }}
+                  layoutId="activeBackground"
+                  className="absolute inset-0 bg-primary/5 rounded-full"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
-              </div>
-              <span className="font-medium">Updates</span>
-              <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/15">
-                2 New
-              </Badge>
+              )}
             </div>
-            {activeTab === "updates" && (
-              <motion.div 
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
-                layoutId="activeTab"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
-              />
-            )}
+            <span className="font-medium">Updates</span>
+            <Badge 
+              variant="secondary" 
+              className="h-5 px-2 bg-primary/5 text-primary border-0"
+            >
+              2
+            </Badge>
           </TabsTrigger>
-          
+
           <TabsTrigger 
             value="comments"
-            className="group data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary relative py-3 px-4 whitespace-nowrap transition-all duration-300 hover:bg-gray-50/50 rounded-lg"
+            className="relative flex items-center gap-2.5 px-4 py-2 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
           >
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <MessageCircle className="w-4 h-4 transition-transform group-hover:scale-110 duration-300" />
+            <div className="relative flex items-center justify-center w-8 h-8">
+              <MessageCircle className="w-[18px] h-[18px]" />
+              {activeTab === "comments" && (
                 <motion.div
-                  className="absolute -inset-1 bg-primary/5 rounded-full"
-                  initial={{ scale: 0 }}
-                  animate={activeTab === "comments" ? { scale: 1 } : { scale: 0 }}
-                  transition={{ duration: 0.2 }}
+                  layoutId="activeBackground"
+                  className="absolute inset-0 bg-primary/5 rounded-full"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
-              </div>
-              <span className="font-medium">Comments</span>
-              <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/15">
-                12
-              </Badge>
+              )}
             </div>
-            {activeTab === "comments" && (
-              <motion.div 
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
-                layoutId="activeTab"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
-              />
-            )}
+            <span className="font-medium">Comments</span>
+            <Badge 
+              variant="secondary" 
+              className="h-5 px-2 bg-primary/5 text-primary border-0"
+            >
+              12
+            </Badge>
           </TabsTrigger>
-          
+
           <TabsTrigger 
             value="faqs"
-            className="group data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary relative py-3 px-4 whitespace-nowrap transition-all duration-300 hover:bg-gray-50/50 rounded-lg"
+            className="relative flex items-center gap-2.5 px-4 py-2 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
           >
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <HelpCircle className="w-4 h-4 transition-transform group-hover:scale-110 duration-300" />
+            <div className="relative flex items-center justify-center w-8 h-8">
+              <HelpCircle className="w-[18px] h-[18px]" />
+              {activeTab === "faqs" && (
                 <motion.div
-                  className="absolute -inset-1 bg-primary/5 rounded-full"
-                  initial={{ scale: 0 }}
-                  animate={activeTab === "faqs" ? { scale: 1 } : { scale: 0 }}
-                  transition={{ duration: 0.2 }}
+                  layoutId="activeBackground"
+                  className="absolute inset-0 bg-primary/5 rounded-full"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
-              </div>
-              <span className="font-medium">FAQs</span>
+              )}
             </div>
-            {activeTab === "faqs" && (
-              <motion.div 
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
-                layoutId="activeTab"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
-              />
-            )}
+            <span className="font-medium">FAQs</span>
           </TabsTrigger>
         </TabsList>
         <ScrollBar orientation="horizontal" className="invisible" />
       </ScrollArea>
-      
-      {/* Gradient Fade Effect */}
-      <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white to-transparent pointer-events-none" />
-      <div className="absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white to-transparent pointer-events-none" />
+
+      {/* Subtle gradient edges */}
+      <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent pointer-events-none" />
     </div>
   );
 }
