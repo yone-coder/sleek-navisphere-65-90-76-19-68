@@ -177,125 +177,71 @@ export default function Landing() {
       </section>
       
       {/* Progress Bar */}
-      <section className="py-8 bg-gray-50">
+      <section className="py-8 bg-white">
         <div className="container mx-auto px-4">
-          <Card className="overflow-hidden">
-            <CardContent className="pt-6">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="space-y-2"
-                >
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-bold text-purple-600">$32,500</span>
-                    <span className="text-sm text-gray-500">raised</span>
+          <div className="space-y-6">
+            <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+              <div 
+                className="bg-emerald-500 h-full transition-all duration-500 ease-in-out"
+                style={{ width: `${(raised / goal) * 100}%` }}
+              />
+            </div>
+            
+            <div className="grid grid-cols-3 gap-8">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-3xl md:text-4xl font-bold text-emerald-500">
+                    ${raised.toLocaleString()}
+                  </span>
+                  <div className="bg-gray-100 rounded-full p-1.5">
+                    <DollarSign className="h-4 w-4 text-gray-500" />
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <DollarSign className="h-4 w-4 text-purple-600" />
-                    <span>of $50,000 goal</span>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.1 }}
-                  className="space-y-2"
-                >
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-bold text-purple-600">824</span>
-                    <span className="text-sm text-gray-500">backers</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Users className="h-4 w-4 text-purple-600" />
-                    <span>Supporting this project</span>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.2 }}
-                  className="space-y-2"
-                >
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-bold text-purple-600">14</span>
-                    <span className="text-sm text-gray-500">days</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Clock className="h-4 w-4 text-purple-600" />
-                    <span>Time remaining</span>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.3 }}
-                  className="space-y-2"
-                >
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-bold text-purple-600">65%</span>
-                    <span className="text-sm text-gray-500">funded</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Award className="h-4 w-4 text-purple-600" />
-                    <span>Almost there!</span>
-                  </div>
-                </motion.div>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="relative">
-                  <Progress 
-                    value={65} 
-                    className="h-3"
-                  />
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ 
-                      type: "spring",
-                      stiffness: 260,
-                      damping: 20,
-                      delay: 0.5 
-                    }}
-                    className="absolute -top-1 left-[65%] transform -translate-x-1/2 bg-purple-600 text-white text-xs px-2 py-1 rounded-full"
-                  >
-                    65%
-                  </motion.div>
                 </div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.4 }}
-                  className="flex flex-col sm:flex-row items-center justify-between gap-4"
-                >
-                  <Button 
-                    size="lg"
-                    className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-blue-500 text-white hover:opacity-90"
-                  >
-                    Back This Project
-                    <Heart className="ml-2 h-4 w-4" />
-                  </Button>
-                  
-                  <div className="flex items-center gap-4">
-                    <Button variant="outline" size="sm" className="gap-2">
-                      <Share2 className="h-4 w-4" />
-                      Share
-                    </Button>
-                    <Button variant="outline" size="sm" className="gap-2">
-                      <MessageCircle className="h-4 w-4" />
-                      Follow
-                    </Button>
-                  </div>
-                </motion.div>
+                <p className="text-gray-600 mt-1">
+                  pledged of ${goal.toLocaleString()}
+                </p>
               </div>
-            </CardContent>
-          </Card>
+
+              <div>
+                <div className="flex items-baseline">
+                  <span className="text-3xl md:text-4xl font-bold text-gray-900">
+                    {backers}
+                  </span>
+                </div>
+                <p className="text-gray-600 mt-1">
+                  backers
+                </p>
+              </div>
+
+              <div>
+                <div className="flex items-baseline">
+                  <span className="text-3xl md:text-4xl font-bold text-gray-900">
+                    {days}
+                  </span>
+                </div>
+                <p className="text-gray-600 mt-1">
+                  days to go
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <Button 
+                size="lg"
+                className="bg-emerald-500 hover:bg-emerald-600 text-white"
+              >
+                Back This Project
+              </Button>
+              <Button 
+                size="lg"
+                variant="outline"
+                className="gap-2"
+              >
+                <Share2 className="h-4 w-4" />
+                Share
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
       
