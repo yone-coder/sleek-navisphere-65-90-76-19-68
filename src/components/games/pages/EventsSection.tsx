@@ -4,7 +4,7 @@ import { GameEvent } from '@/types/game';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Star } from "lucide-react";
+import { Star, PlayCircle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface EventsSectionProps {
@@ -90,7 +90,13 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
                     </div>
                   </div>
                 </div>
-                <Button className="h-8 text-xs" size="sm">Install</Button>
+                <Button 
+                  size="sm" 
+                  className="h-8 bg-indigo-600 hover:bg-indigo-700 text-xs font-medium transition-colors duration-200 flex items-center gap-1"
+                >
+                  <PlayCircle className="w-3 h-3" />
+                  Demo
+                </Button>
               </div>
             </div>
           ))}

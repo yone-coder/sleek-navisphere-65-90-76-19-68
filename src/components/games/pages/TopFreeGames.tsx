@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Game } from '@/types/game';
 import { Button } from "@/components/ui/button";
-import { Star } from "lucide-react";
+import { Star, PlayCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -86,7 +86,13 @@ const TopFreeGames: React.FC<TopFreeGamesProps> = ({ games, isLoading }) => {
                 <span className="text-xs text-gray-500">{game.size}</span>
               </div>
             </div>
-            <Button className="w-20" size="sm">Install</Button>
+            <Button 
+              className="w-20 bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200 flex items-center justify-center gap-1"
+              size="sm"
+            >
+              <PlayCircle className="w-3 h-3" />
+              Demo
+            </Button>
           </div>
         ))}
       </div>
