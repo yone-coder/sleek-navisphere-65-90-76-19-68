@@ -19,6 +19,9 @@ const TopFreeGames: React.FC<TopFreeGamesProps> = ({ games, isLoading }) => {
     setLoadedImages(prev => ({ ...prev, [gameId]: true }));
   };
 
+  const allImagesLoaded = !isLoading && games?.length > 0 && 
+    games.every(game => loadedImages[game.id]);
+
   const renderRating = (rating: number) => {
     return (
       <div className="flex items-center gap-1">
@@ -28,7 +31,7 @@ const TopFreeGames: React.FC<TopFreeGamesProps> = ({ games, isLoading }) => {
     );
   };
 
-  if (isLoading) {
+  if (isLoading || !allImagesLoaded) {
     return (
       <div className="px-4">
         <Skeleton className="h-8 w-48 mb-6 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-[shimmer_2s_infinite]" />
@@ -65,15 +68,10 @@ const TopFreeGames: React.FC<TopFreeGamesProps> = ({ games, isLoading }) => {
           >
             <span className="text-lg font-medium text-gray-400 w-6">{index + 1}</span>
             <div className="relative w-16 h-16 flex-shrink-0">
-              {!loadedImages[game.id] && (
-                <Skeleton className="absolute inset-0 w-16 h-16 rounded-xl" />
-              )}
               <img
                 src={game.icon}
                 alt={`${game.title} icon`}
-                className={`w-16 h-16 rounded-xl object-cover transform-gpu ${
-                  !loadedImages[game.id] ? 'invisible' : ''
-                }`}
+                className="w-16 h-16 rounded-xl object-cover transform-gpu"
                 onLoad={() => handleImageLoad(game.id)}
                 loading="lazy"
                 decoding="async"
