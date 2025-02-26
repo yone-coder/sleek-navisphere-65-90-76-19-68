@@ -87,11 +87,13 @@ const TopFreeGames: React.FC<TopFreeGamesProps> = ({ games, isLoading }) => {
               </div>
             </div>
             <Button 
-              className="w-20 bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200 flex items-center justify-center gap-1"
+              className="relative w-20 bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-600 hover:from-indigo-500 hover:via-blue-500 hover:to-indigo-500 text-xs font-medium transition-all duration-300 flex items-center justify-center gap-1.5 border border-indigo-400/30 shadow-[0_0_15px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.5)] backdrop-blur-sm overflow-hidden group rounded-lg animate-fade-in"
               size="sm"
             >
-              <PlayCircle className="w-3 h-3" />
-              Demo
+              <PlayCircle className="w-3 h-3 relative z-10 group-hover:scale-110 transition-transform" />
+              <span className="relative z-10">Demo</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 via-transparent to-indigo-600/10" />
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.1)_0%,_transparent_50%)]" />
             </Button>
           </div>
         ))}
