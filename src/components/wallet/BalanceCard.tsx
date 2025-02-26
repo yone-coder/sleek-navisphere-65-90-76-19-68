@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Eye, EyeOff, Lock, Unlock, CreditCard, Send, 
@@ -73,12 +72,20 @@ const BalanceCard = ({ defaultCurrency = 'USD' }: BalanceCardProps) => {
   }, []);
 
   // Format currency based on selected currency
-  const formatCurrency = (amount) => {
+  const formatCurrency = (amount: number) => {
     if (hideBalance) return '●●●●';
+    
+    // Special handling for USDT
+    if (defaultCurrency === 'USDT') {
+      return `₮${amount.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })}`;
+    }
     
     const formatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: currency,
+      currency: defaultCurrency,
       minimumFractionDigits: 2
     });
     
@@ -158,7 +165,7 @@ const BalanceCard = ({ defaultCurrency = 'USD' }: BalanceCardProps) => {
 
   // Main component render
   return (
-    <div className="w-full overflow-hidden">
+    <div className="w-full overflow-hidden bg-white rounded-lg border border-gray-100 shadow-sm">
       {/* Header */}
       <div className="px-4 py-3">
         <div className="flex justify-between items-center mb-3">
@@ -172,7 +179,6 @@ const BalanceCard = ({ defaultCurrency = 'USD' }: BalanceCardProps) => {
               <ChevronDown size={14} className="ml-1" />
             </button>
             
-            {/* Account dropdown */}
             {showDropdown && (
               <div className="absolute top-full left-0 mt-1 w-40 rounded-md shadow-lg z-10 bg-white">
                 <div className="py-1">
@@ -201,26 +207,11 @@ const BalanceCard = ({ defaultCurrency = 'USD' }: BalanceCardProps) => {
           
           <div className="flex space-x-1">
             <button 
-              className="p-1.5 rounded-full hover:bg-gray-100"
-              onClick={() => setCurrency(currency === 'USD' ? 'EUR' : 'USD')}
-              aria-label="Toggle currency"
-            >
-              {currency === 'USD' ? <DollarSign size={14} /> : <Euro size={14} />}
-            </button>
-            
-            <button 
               className={`p-1.5 rounded-full ${securityStatus === 'secure' ? 'text-green-500' : 'text-yellow-500'} hover:bg-gray-100`}
-              onClick={handleSecurityAction}
+              onClick={() => setSecurityStatus(securityStatus === 'secure' ? 'unlocked' : 'secure')}
               aria-label="Security status"
-              onMouseEnter={() => handleTooltipShow('Security')}
-              onMouseLeave={handleTooltipHide}
             >
               {securityStatus === 'secure' ? <Lock size={14} /> : <Unlock size={14} />}
-              {showTooltip === 'Security' && (
-                <div className="absolute bg-black text-white p-1.5 rounded text-xs -mt-8 whitespace-nowrap">
-                  {tooltips['Security']}
-                </div>
-              )}
             </button>
           </div>
         </div>
@@ -228,11 +219,11 @@ const BalanceCard = ({ defaultCurrency = 'USD' }: BalanceCardProps) => {
         {/* Balance display */}
         <div className="mb-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs opacity-75">Available Balance</span>
+            <span className="text-xs text-gray-500">Available Balance</span>
             <button 
               className="p-1 rounded-full hover:bg-gray-100"
               onClick={() => setHideBalance(!hideBalance)}
-              aria-label="Hide balance"
+              aria-label="Toggle balance visibility"
             >
               {hideBalance ? <EyeOff size={14} /> : <Eye size={14} />}
             </button>
@@ -241,19 +232,19 @@ const BalanceCard = ({ defaultCurrency = 'USD' }: BalanceCardProps) => {
             <h1 className="text-2xl font-bold tracking-tight">
               {formatCurrency(accounts[currentAccount].balance)}
             </h1>
-            <span className="text-xs ml-2 opacity-75">{accounts[currentAccount].number}</span>
+            <span className="text-xs ml-2 text-gray-500">{accounts[currentAccount].number}</span>
           </div>
         </div>
         
-        {/* Quick action buttons */}
+        {/* Quick actions */}
         <div className="flex space-x-2 mb-4">
           <button className="flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center text-xs font-medium bg-blue-500 hover:bg-blue-600 text-white transition-colors">
             <Send size={14} className="mr-1.5" />
-            Transfer
+            Send
           </button>
           <button className="flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center text-xs font-medium bg-gray-100 hover:bg-gray-200 transition-colors">
             <Download size={14} className="mr-1.5" />
-            Deposit
+            Receive
           </button>
           <button className="flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center text-xs font-medium bg-gray-100 hover:bg-gray-200 transition-colors">
             <CreditCard size={14} className="mr-1.5" />
@@ -262,33 +253,20 @@ const BalanceCard = ({ defaultCurrency = 'USD' }: BalanceCardProps) => {
         </div>
         
         {/* Budget progress */}
-        <div className="mb-4">
+        <div className="mb-3">
           <div className="flex justify-between items-center mb-1">
-            <div className="flex items-center">
-              <span className="text-xs font-medium mr-1">Monthly Budget</span>
-              <button 
-                className="p-0.5"
-                onMouseEnter={() => handleTooltipShow('Budget')}
-                onMouseLeave={handleTooltipHide}
-                aria-label="Budget info"
-              >
-                <Info size={12} />
-                {showTooltip === 'Budget' && (
-                  <div className="absolute bg-black text-white p-1.5 rounded text-xs -mt-8 whitespace-nowrap">
-                    {tooltips['Budget']}
-                  </div>
-                )}
-              </button>
-            </div>
-            <span className="text-xs">
+            <span className="text-xs text-gray-500">Monthly Budget</span>
+            <span className="text-xs text-gray-500">
               {formatCurrency(accounts[currentAccount].budget.current)} of {formatCurrency(accounts[currentAccount].budget.max)}
             </span>
           </div>
           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
             <div 
-              className={`h-full ${budgetProgress > 80 ? 'bg-red-500' : 'bg-green-500'}`}
-              style={{ width: `${(accounts[currentAccount].budget.current / accounts[currentAccount].budget.max) * 100}%` }}
-            ></div>
+              className="h-full bg-green-500"
+              style={{ 
+                width: `${(accounts[currentAccount].budget.current / accounts[currentAccount].budget.max) * 100}%`
+              }}
+            />
           </div>
         </div>
       </div>
