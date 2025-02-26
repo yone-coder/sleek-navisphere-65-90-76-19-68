@@ -62,11 +62,16 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
 
             if (availableRoom) {
               console.log('Found available room:', availableRoom.id);
+              currentRoomRef.current = availableRoom.id;
               
               try {
                 const joinedRoom = await roomService.joinRoom(availableRoom.id, user.id);
-                currentRoomRef.current = joinedRoom.id;
-                await handleMatchFound(joinedRoom.id, isSubscribed);
+                console.log('Successfully joined room:', joinedRoom);
+                if (joinedRoom.status === 'playing') {
+                  await handleMatchFound(joinedRoom.id, isSubscribed);
+                } else {
+                  setupRoomSubscription(joinedRoom.id);
+                }
               } catch (joinError) {
                 console.error('Error joining room:', joinError);
                 // If joining fails, create a new room
@@ -175,3 +180,4 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
     </DialogContent>
   );
 }
+
