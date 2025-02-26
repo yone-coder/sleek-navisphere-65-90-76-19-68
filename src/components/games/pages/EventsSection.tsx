@@ -42,12 +42,12 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
   }
 
   return (
-    <div className="mb-8">
+    <div className="mb-8 will-change-transform">
       <h2 className="text-2xl font-medium text-gray-900 px-4 mb-4">Events happening now</h2>
       <ScrollArea className="w-full" type="scroll">
         <div className="flex px-4 gap-4 pb-4">
           {events.map(event => (
-            <div key={event.id} className="flex-none w-[280px]">
+            <div key={event.id} className="flex-none w-[280px] transform-gpu">
               <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-purple-500 to-pink-500">
                 <div className="absolute top-2 left-2 z-10">
                   <Badge className="bg-black/50 text-white border-none backdrop-blur-sm text-xs">
@@ -57,7 +57,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
                 <img
                   src={event.image}
                   alt={event.title}
-                  className="w-full aspect-[16/9] object-cover mix-blend-overlay"
+                  className="w-full aspect-[16/9] object-cover mix-blend-overlay transform-gpu"
                   loading="lazy"
                   decoding="async"
                 />
@@ -73,7 +73,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
                 <img
                   src={event.gameIcon}
                   alt={event.gameTitle}
-                  className="w-10 h-10 rounded-xl"
+                  className="w-10 h-10 rounded-xl flex-shrink-0"
                   loading="lazy"
                   decoding="async"
                 />
@@ -92,7 +92,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events, isLoading }) => {
                 </div>
                 <Button 
                   size="sm" 
-                  className="relative h-8 bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-600 hover:from-indigo-500 hover:via-blue-500 hover:to-indigo-500 text-xs font-medium transition-all duration-300 flex items-center gap-1.5 border border-indigo-400/30 shadow-[0_0_15px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.5)] backdrop-blur-sm overflow-hidden group rounded-lg animate-fade-in"
+                  className="relative h-8 bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-600 hover:from-indigo-500 hover:via-blue-500 hover:to-indigo-500 text-xs font-medium transition-all duration-300 flex items-center gap-1.5 border border-indigo-400/30 shadow-[0_0_15px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.5)] backdrop-blur-sm overflow-hidden group rounded-lg animate-fade-in transform-gpu"
                 >
                   <PlayCircle className="w-3 h-3 relative z-10 group-hover:scale-110 transition-transform" />
                   <span className="relative z-10">Demo</span>
