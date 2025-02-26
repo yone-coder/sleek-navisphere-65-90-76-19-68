@@ -70,14 +70,14 @@ export const roomService = {
       .eq('player1_id', userId)
       .eq('status', 'waiting');
 
-    // Find an available room with extra conditions to ensure room validity
+    // Find an available room
     const { data: rooms, error } = await supabase
       .from('game_rooms')
       .select()
       .eq('status', 'waiting')
       .is('player2_id', null)
       .neq('player1_id', userId)
-      .gt('created_at', new Date(Date.now() - 5 * 60 * 1000).toISOString()) // Only rooms created in the last 5 minutes
+      .gt('created_at', new Date(Date.now() - 5 * 60 * 1000).toISOString())
       .order('created_at', { ascending: true })
       .limit(1);
 
@@ -98,7 +98,9 @@ export const roomService = {
   subscribeToRoom(roomId: string, onUpdate: (room: GameRoom) => void) {
     console.log('Setting up subscription for room:', roomId);
     
-    const channel = supabase.channel(`room:${roomId}`)
+    const channel = supabase.channel(`room:${roomId}`);
+    
+    channel
       .on(
         'postgres_changes',
         {
@@ -110,18 +112,19 @@ export const roomService = {
         (payload) => {
           console.log('Received room update:', payload);
           const newRoom = payload.new as GameRoom;
-          if (newRoom) {
-            console.log('Room update processed:', newRoom);
+          if (newRoom && newRoom.id === roomId) {
+            console.log('Processing room update:', newRoom);
             onUpdate(newRoom);
           }
         }
       )
       .subscribe((status) => {
-        console.log('Room subscription status:', status);
+        console.log('Subscription status:', status);
+        if (status === 'SUBSCRIBED') {
+          console.log('Successfully subscribed to room:', roomId);
+        }
       });
 
-    console.log('Room subscription established');
     return channel;
   }
 };
-

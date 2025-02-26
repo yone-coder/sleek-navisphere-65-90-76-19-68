@@ -30,6 +30,22 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
     let isSubscribed = true;
     let roomSubscription: ReturnType<typeof supabase.channel>;
     
+    const setupRoomSubscription = (roomId: string) => {
+      console.log('Setting up room subscription for:', roomId);
+      if (roomSubscription) {
+        console.log('Unsubscribing from previous room subscription');
+        roomSubscription.unsubscribe();
+      }
+      
+      roomSubscription = roomService.subscribeToRoom(roomId, async (newRoom) => {
+        console.log('Room update received:', newRoom);
+        if (newRoom.status === 'playing' && newRoom.player2_id) {
+          console.log('Match is ready to start');
+          await handleMatchFound(roomId, isSubscribed);
+        }
+      });
+    };
+
     const startMatchmaking = async () => {
       try {
         const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -47,34 +63,26 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
 
         console.log('Starting matchmaking for user:', user.id);
 
-        // Start the search timer
         searchTimerRef.current = setInterval(() => {
           setSearchTime(prev => prev + 1);
         }, 1000);
 
-        // Try to find a match
         const findMatch = async () => {
           if (!isSubscribed) return;
 
           try {
-            // First try to find an existing room
             const availableRoom = await roomService.findAvailableRoom(user.id);
 
             if (availableRoom) {
               console.log('Found available room:', availableRoom.id);
               currentRoomRef.current = availableRoom.id;
+              setupRoomSubscription(availableRoom.id);
               
               try {
                 const joinedRoom = await roomService.joinRoom(availableRoom.id, user.id);
                 console.log('Successfully joined room:', joinedRoom);
-                if (joinedRoom.status === 'playing') {
-                  await handleMatchFound(joinedRoom.id, isSubscribed);
-                } else {
-                  setupRoomSubscription(joinedRoom.id);
-                }
               } catch (joinError) {
                 console.error('Error joining room:', joinError);
-                // If joining fails, create a new room
                 const newRoom = await roomService.createRoom(user.id);
                 currentRoomRef.current = newRoom.id;
                 setupRoomSubscription(newRoom.id);
@@ -98,16 +106,12 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
           }
         };
 
-        // Initial match finding attempt
         await findMatch();
 
-        // Set up retry interval
         checkIntervalRef.current = setInterval(async () => {
-          if (currentRoomRef.current) {
-            // If we have a current room, don't search for new ones
-            return;
+          if (!currentRoomRef.current) {
+            await findMatch();
           }
-          await findMatch();
         }, 5000);
 
       } catch (error) {
@@ -123,22 +127,17 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
       }
     };
 
-    const setupRoomSubscription = (roomId: string) => {
-      console.log('Setting up room subscription for:', roomId);
-      roomSubscription = roomService.subscribeToRoom(roomId, async (newRoom) => {
-        console.log('Room update received:', newRoom);
-        if (newRoom.status === 'playing' && newRoom.player2_id) {
-          await handleMatchFound(roomId, isSubscribed);
-        }
-      });
-    };
-
     const cleanup = async () => {
       console.log('Cleaning up matchmaking...');
       isSubscribed = false;
+      
       if (searchTimerRef.current) clearInterval(searchTimerRef.current);
       if (checkIntervalRef.current) clearInterval(checkIntervalRef.current);
-      if (roomSubscription) roomSubscription.unsubscribe();
+      
+      if (roomSubscription) {
+        console.log('Unsubscribing from room subscription');
+        roomSubscription.unsubscribe();
+      }
       
       if (currentRoomRef.current) {
         console.log('Cleaning up room:', currentRoomRef.current);
@@ -180,4 +179,3 @@ export function MatchmakingDialog({ onClose }: MatchmakingDialogProps) {
     </DialogContent>
   );
 }
-
