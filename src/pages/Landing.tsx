@@ -174,37 +174,34 @@ export default function Landing() {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-lg md:text-xl font-bold text-emerald-500">
-                    ${raised.toLocaleString()}
+                    ${raised.toLocaleString()}/${goal.toLocaleString()}
                   </span>
                   <div className="bg-gray-100 rounded-full p-1">
                     <DollarSign className="h-3 w-3 text-gray-500" />
                   </div>
                 </div>
-                <p className="text-gray-600 text-xs mt-0.5">
-                  pledged of ${goal.toLocaleString()}
-                </p>
               </div>
 
               <div className="text-right">
-                <div className="flex items-baseline justify-end">
+                <div className="flex items-center justify-end whitespace-nowrap">
                   <span className="text-lg md:text-xl font-bold text-gray-900">
                     {backers}
                   </span>
+                  <span className="text-gray-600 text-xs ml-2">
+                    backers
+                  </span>
                 </div>
-                <p className="text-gray-600 text-xs mt-0.5">
-                  backers
-                </p>
               </div>
 
               <div className="text-right">
-                <div className="flex items-baseline justify-end">
+                <div className="flex items-center justify-end whitespace-nowrap">
                   <span className="text-lg md:text-xl font-bold text-gray-900">
                     {days}
                   </span>
+                  <span className="text-gray-600 text-xs ml-2">
+                    days to go
+                  </span>
                 </div>
-                <p className="text-gray-600 text-xs mt-0.5">
-                  days to go
-                </p>
               </div>
             </div>
 
