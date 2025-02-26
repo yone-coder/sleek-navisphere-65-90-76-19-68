@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   Eye, EyeOff, Lock, Unlock, CreditCard, Send, 
@@ -17,9 +18,11 @@ const BalanceCard = ({ defaultCurrency = 'USD' }: BalanceCardProps) => {
   const [hideBalance, setHideBalance] = useState(false);
   const [currentAccount, setCurrentAccount] = useState('checking');
   const [currency, setCurrency] = useState(defaultCurrency);
+  const [darkMode, setDarkMode] = useState(false);
   const [securityStatus, setSecurityStatus] = useState('secure');
   const [showDropdown, setShowDropdown] = useState(false);
   const [budgetProgress, setBudgetProgress] = useState(65);
+  const [isHovered, setIsHovered] = useState(false);
   const [showTooltip, setShowTooltip] = useState('');
 
   // Sample data with different currencies
