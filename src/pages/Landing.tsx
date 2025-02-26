@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { 
   Card,
   CardHeader,
@@ -141,74 +141,77 @@ export default function Landing() {
       <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b">
         <div className="container mx-auto">
           <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
-            <TabsList className="w-full justify-start gap-8 h-16 bg-transparent">
-              <TabsTrigger 
-                value="overview"
-                className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary relative"
-              >
-                <Info className="w-4 h-4 mr-2" />
-                Overview
-                {activeTab === "overview" && (
-                  <motion.div 
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
-                    layoutId="activeTab"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.2 }}
-                  />
-                )}
-              </TabsTrigger>
-              <TabsTrigger 
-                value="updates"
-                className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary relative"
-              >
-                <Bell className="w-4 h-4 mr-2" />
-                Updates
-                <span className="ml-2 bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">2</span>
-                {activeTab === "updates" && (
-                  <motion.div 
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
-                    layoutId="activeTab"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.2 }}
-                  />
-                )}
-              </TabsTrigger>
-              <TabsTrigger 
-                value="comments"
-                className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary relative"
-              >
-                <MessageCircle className="w-4 h-4 mr-2" />
-                Comments
-                <span className="ml-2 bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">12</span>
-                {activeTab === "comments" && (
-                  <motion.div 
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
-                    layoutId="activeTab"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.2 }}
-                  />
-                )}
-              </TabsTrigger>
-              <TabsTrigger 
-                value="faqs"
-                className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary relative"
-              >
-                <HelpCircle className="w-4 h-4 mr-2" />
-                FAQs
-                {activeTab === "faqs" && (
-                  <motion.div 
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
-                    layoutId="activeTab"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.2 }}
-                  />
-                )}
-              </TabsTrigger>
-            </TabsList>
+            <ScrollArea className="w-full">
+              <TabsList className="w-max inline-flex h-16 items-center justify-start gap-2 rounded-lg bg-transparent p-1">
+                <TabsTrigger 
+                  value="overview"
+                  className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary relative whitespace-nowrap"
+                >
+                  <Info className="w-4 h-4 mr-2" />
+                  Overview
+                  {activeTab === "overview" && (
+                    <motion.div 
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
+                      layoutId="activeTab"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  )}
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="updates"
+                  className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary relative whitespace-nowrap"
+                >
+                  <Bell className="w-4 h-4 mr-2" />
+                  Updates
+                  <span className="ml-2 bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">2</span>
+                  {activeTab === "updates" && (
+                    <motion.div 
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
+                      layoutId="activeTab"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  )}
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="comments"
+                  className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary relative whitespace-nowrap"
+                >
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Comments
+                  <span className="ml-2 bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">12</span>
+                  {activeTab === "comments" && (
+                    <motion.div 
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
+                      layoutId="activeTab"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  )}
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="faqs"
+                  className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-primary relative whitespace-nowrap"
+                >
+                  <HelpCircle className="w-4 h-4 mr-2" />
+                  FAQs
+                  {activeTab === "faqs" && (
+                    <motion.div 
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
+                      layoutId="activeTab"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  )}
+                </TabsTrigger>
+              </TabsList>
+              <ScrollBar orientation="horizontal" className="invisible" />
+            </ScrollArea>
 
             <TabsContent value="overview" className="mt-0">
               {/* Hero Section */}
