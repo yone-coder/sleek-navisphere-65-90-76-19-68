@@ -8,15 +8,16 @@ import {
 } from 'lucide-react';
 
 interface BalanceCardProps {
-  currency?: string;
+  defaultCurrency?: string;
 }
 
-const BalanceCard = ({ currency = 'USD' }: BalanceCardProps) => {
+const BalanceCard = ({ defaultCurrency = 'USD' }: BalanceCardProps) => {
   // State management
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [hideBalance, setHideBalance] = useState(false);
   const [currentAccount, setCurrentAccount] = useState('checking');
+  const [currency, setCurrency] = useState(defaultCurrency);
   const [darkMode, setDarkMode] = useState(false);
   const [securityStatus, setSecurityStatus] = useState('secure');
   const [showDropdown, setShowDropdown] = useState(false);
@@ -24,7 +25,7 @@ const BalanceCard = ({ currency = 'USD' }: BalanceCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showTooltip, setShowTooltip] = useState('');
 
-  // Sample data for different currencies
+  // Sample data with different currencies
   const accounts = {
     checking: { 
       balance: currency === 'HTG' ? 425785.75 : (currency === 'USDT' ? 4285.75 : 4285.75), 
@@ -55,7 +56,6 @@ const BalanceCard = ({ currency = 'USD' }: BalanceCardProps) => {
     }
   };
 
-  // Tooltips for information
   const tooltips = {
     'APR': 'Annual Percentage Rate - The yearly interest rate charged for borrowing.',
     'Budget': 'Your monthly spending limit that you set for this account.',
@@ -158,7 +158,7 @@ const BalanceCard = ({ currency = 'USD' }: BalanceCardProps) => {
 
   // Main component render
   return (
-    <div className="w-full overflow-hidden bg-white rounded-lg border border-gray-100">
+    <div className="w-full overflow-hidden">
       {/* Header */}
       <div className="px-4 py-3">
         <div className="flex justify-between items-center mb-3">
@@ -200,6 +200,14 @@ const BalanceCard = ({ currency = 'USD' }: BalanceCardProps) => {
           </div>
           
           <div className="flex space-x-1">
+            <button 
+              className="p-1.5 rounded-full hover:bg-gray-100"
+              onClick={() => setCurrency(currency === 'USD' ? 'EUR' : 'USD')}
+              aria-label="Toggle currency"
+            >
+              {currency === 'USD' ? <DollarSign size={14} /> : <Euro size={14} />}
+            </button>
+            
             <button 
               className={`p-1.5 rounded-full ${securityStatus === 'secure' ? 'text-green-500' : 'text-yellow-500'} hover:bg-gray-100`}
               onClick={handleSecurityAction}

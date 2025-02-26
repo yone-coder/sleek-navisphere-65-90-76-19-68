@@ -1,4 +1,3 @@
-
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,7 +23,6 @@ import { Badge } from "@/components/ui/badge";
 import BalanceCard from "@/components/wallet/BalanceCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
-// Mock notifications for demo
 const notifications = [
   { id: 1, title: "Payment Received", message: "$50.00 from John Doe", time: "2m ago", isNew: true },
   { id: 2, title: "Transfer Complete", message: "Successfully sent $30.00", time: "1h ago", isNew: true },
@@ -37,9 +35,9 @@ export default function Wallet() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const currencies = [
-    { code: 'USD', symbol: '$', balance: 4285.75 },
-    { code: 'HTG', symbol: 'G', balance: 425785.75 },
-    { code: 'USDT', symbol: '₮', balance: 4285.75 }
+    { code: 'USD', symbol: '$' },
+    { code: 'HTG', symbol: 'G' },
+    { code: 'USDT', symbol: '₮' }
   ];
 
   return (
@@ -177,17 +175,17 @@ export default function Wallet() {
 
       {/* Content (with header spacing) */}
       <div className="pt-14">
-        {/* Balance Cards Section */}
+        {/* Balance Cards Scroll Area */}
         <div className="p-4">
           <ScrollArea className="w-full whitespace-nowrap rounded-md">
-            <div className="flex w-full gap-4">
+            <div className="flex w-full space-x-4">
               {currencies.map((currency) => (
-                <div key={currency.code} className="min-w-[85%] sm:min-w-[350px] flex-shrink-0">
-                  <BalanceCard currency={currency.code} />
+                <div key={currency.code} className="min-w-[85%] first:ml-0 last:mr-4">
+                  <BalanceCard defaultCurrency={currency.code} />
                 </div>
               ))}
             </div>
-            <ScrollBar orientation="horizontal" className="mt-2" />
+            <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </div>
         
