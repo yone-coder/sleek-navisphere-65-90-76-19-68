@@ -1,3 +1,4 @@
+<lov-code>
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -28,10 +29,10 @@ import {
 
 export default function Landing() {
   // State for funding progress
-  const [progress, setProgress] = useState(65);
+  const [progress, setProgress] = useState(0); // Start at 0 for animation
   const [backers, setBackers] = useState(824);
   const [days, setDays] = useState(14);
-  const [raised, setRaised] = useState(32500);
+  const [raised, setRaised] = useState(0); // Start at 0 for animation
   const [goal, setGoal] = useState(50000);
   
   // State for FAQ accordion
@@ -128,6 +129,30 @@ export default function Landing() {
     }
   ];
 
+  // Animate progress on mount
+  useEffect(() => {
+    // Animate progress from 0 to 65
+    const targetProgress = 65;
+    const targetRaised = 32500;
+    const duration = 1500; // 1.5 seconds
+    const steps = 60;
+    const progressIncrement = targetProgress / steps;
+    const raisedIncrement = targetRaised / steps;
+    let currentStep = 0;
+
+    const interval = setInterval(() => {
+      if (currentStep < steps) {
+        setProgress(prev => Math.min(prev + progressIncrement, targetProgress));
+        setRaised(prev => Math.min(prev + raisedIncrement, targetRaised));
+        currentStep++;
+      } else {
+        clearInterval(interval);
+      }
+    }, duration / steps);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="font-sans">
       {/* Hero Section */}
@@ -178,7 +203,7 @@ export default function Landing() {
                 <div className="flex items-center whitespace-nowrap">
                   <Heart className="h-3.5 w-3.5 mr-1 text-pink-500" />
                   <span className="text-sm md:text-base font-bold text-gray-900">
-                    {progress}%
+                    {Math.round(progress)}%
                   </span>
                   <span className="text-gray-600 text-[10px] ml-1">
                     funded
@@ -193,13 +218,18 @@ export default function Landing() {
               </div>
             </div>
 
-            {/* Progress bar */}
-            <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+            {/* Progress bar with gradient and animation */}
+            <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden relative">
               <div 
-                className="bg-emerald-500 h-full transition-all duration-500 ease-in-out"
-                style={{ width: `${(raised / goal) * 100}%` }}
+                className="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 transition-transform duration-1500 ease-out rounded-full"
+                style={{ 
+                  transform: `translateX(-${100 - progress}%)`,
+                  backgroundSize: '200% 100%',
+                  animation: 'shimmer 2s infinite linear'
+                }}
               />
             </div>
+
             
             <div className="grid grid-cols-2 gap-6">
               <div>
@@ -545,9 +575,4 @@ export default function Landing() {
 
       {/* Trust Indicators */}
       <div className="fixed bottom-4 left-4 bg-white p-3 rounded-lg shadow-lg flex items-center text-sm">
-        <Shield className="text-green-600 mr-2 h-5 w-5" />
-        <span>Secure Payments</span>
-      </div>
-    </div>
-  );
-}
+        <Shield className="
