@@ -70,13 +70,14 @@ export const roomService = {
       .eq('player1_id', userId)
       .eq('status', 'waiting');
 
-    // Find an available room
+    // Find an available room with extra conditions to ensure room validity
     const { data: rooms, error } = await supabase
       .from('game_rooms')
       .select()
       .eq('status', 'waiting')
       .is('player2_id', null)
       .neq('player1_id', userId)
+      .gt('created_at', new Date(Date.now() - 5 * 60 * 1000).toISOString()) // Only rooms created in the last 5 minutes
       .order('created_at', { ascending: true })
       .limit(1);
 
@@ -107,16 +108,20 @@ export const roomService = {
           filter: `id=eq.${roomId}`
         },
         (payload) => {
+          console.log('Received room update:', payload);
           const newRoom = payload.new as GameRoom;
           if (newRoom) {
-            console.log('Room update received:', newRoom);
+            console.log('Room update processed:', newRoom);
             onUpdate(newRoom);
           }
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log('Room subscription status:', status);
+      });
 
     console.log('Room subscription established');
     return channel;
   }
 };
+
