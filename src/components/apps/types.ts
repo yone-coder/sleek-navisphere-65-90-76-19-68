@@ -6,7 +6,7 @@ export type IconComponent = LucideIcon | (() => JSX.Element);
 export interface App {
   name: string;
   description: string;
-  icon: LucideIcon;  // Changed from IconComponent to LucideIcon
+  icon: IconComponent;
   route: string;
   color: string;
   category: string;
@@ -24,15 +24,18 @@ export interface Category {
   count?: number;
 }
 
-export type AppCategory = "All" | "Shopping" | "Finance" | "Entertainment" | "Gaming" | "Analytics" | "Social" | "Communication" | "System" | "Education" | "Work" | "Business" | "Content" | "Nonprofit" | "Food" | "Services" | "Real Estate";
+// Changed from type to interface to fix type error
+export interface AppCategory {
+  type: "All" | "Shopping" | "Finance" | "Entertainment" | "Gaming" | "Analytics" | "Social" | "Communication" | "System" | "Education" | "Work" | "Business" | "Content" | "Nonprofit" | "Food" | "Services" | "Real Estate";
+}
 
 export interface AppControlsProps {
-  selectedCategory: AppCategory;
+  selectedCategory: string;
   viewMode: "grid" | "list";
   showUpdatesOnly: boolean;
   updatesCount: number;
   categories: AppCategory[];
-  onCategoryChange: (category: AppCategory) => void;
+  onCategoryChange: (category: string) => void;
   onSortChange: (sort: "name" | "rating" | "users") => void;
   onViewModeChange: (mode: "grid" | "list") => void;
   onUpdatesToggle: () => void;
@@ -41,7 +44,7 @@ export interface AppControlsProps {
 export type AppItem = {
   name: string;
   description: string;
-  icon: LucideIcon;
+  icon: LucideIcon | (() => JSX.Element);
   route: string;
   color: string;
   category: string;
