@@ -55,23 +55,23 @@ export default function Landing() {
   return (
     <div className="font-sans">
       {/* Search Bar */}
-      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b">
-        <div className="px-4 py-3">
-          <div className="relative max-w-2xl mx-auto">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg">
+        <div className="px-4 py-2">
+          <div className="relative max-w-lg mx-auto">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <Input 
               type="search"
               placeholder="Search updates, comments, or FAQs..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 h-11 bg-gray-50/50 border-gray-100 focus:bg-white transition-colors"
+              className="w-full pl-8 pr-3 h-9 bg-gray-50/50 border-0 focus:bg-white transition-colors text-sm"
             />
           </div>
         </div>
       </div>
 
       {/* Sticky Tabs Navigation */}
-      <div className="sticky top-[73px] z-40 bg-white/80 backdrop-blur-lg border-b">
+      <div className="sticky top-[52px] z-40 bg-white/80 backdrop-blur-lg">
         <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
           <TabNav activeTab={activeTab} />
 
