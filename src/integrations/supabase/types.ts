@@ -209,26 +209,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      join_game_room: {
-        Args: {
-          p_room_id: string
-          p_user_id: string
-        }
-        Returns: {
-          board: Json
-          code: string
-          created_at: string
-          current_player: string
-          id: string
-          last_move: Json | null
-          player1_id: string | null
-          player2_id: string | null
-          status: string
-          time_left_o: number
-          time_left_x: number
-          winner: string | null
-        }[]
-      }
+      [_ in never]: never
     }
     Enums: {
       tournament_status: "in-progress" | "closed" | "completed" | "upcoming"

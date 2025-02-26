@@ -77,7 +77,6 @@ export const roomService = {
       .eq('status', 'waiting')
       .is('player2_id', null)
       .neq('player1_id', userId)
-      .gt('created_at', new Date(Date.now() - 5 * 60 * 1000).toISOString())
       .order('created_at', { ascending: true })
       .limit(1);
 
@@ -98,9 +97,7 @@ export const roomService = {
   subscribeToRoom(roomId: string, onUpdate: (room: GameRoom) => void) {
     console.log('Setting up subscription for room:', roomId);
     
-    const channel = supabase.channel(`room:${roomId}`);
-    
-    channel
+    const channel = supabase.channel(`room:${roomId}`)
       .on(
         'postgres_changes',
         {
@@ -110,21 +107,16 @@ export const roomService = {
           filter: `id=eq.${roomId}`
         },
         (payload) => {
-          console.log('Received room update:', payload);
           const newRoom = payload.new as GameRoom;
-          if (newRoom && newRoom.id === roomId) {
-            console.log('Processing room update:', newRoom);
+          if (newRoom) {
+            console.log('Room update received:', newRoom);
             onUpdate(newRoom);
           }
         }
       )
-      .subscribe((status) => {
-        console.log('Subscription status:', status);
-        if (status === 'SUBSCRIBED') {
-          console.log('Successfully subscribed to room:', roomId);
-        }
-      });
+      .subscribe();
 
+    console.log('Room subscription established');
     return channel;
   }
 };
