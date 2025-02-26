@@ -202,8 +202,8 @@ export default function Landing() {
                 </p>
               </div>
 
-              <div>
-                <div className="flex items-baseline">
+              <div className="text-right">
+                <div className="flex items-baseline justify-end">
                   <span className="text-2xl md:text-3xl font-bold text-gray-900">
                     {backers}
                   </span>
@@ -213,8 +213,8 @@ export default function Landing() {
                 </p>
               </div>
 
-              <div>
-                <div className="flex items-baseline">
+              <div className="text-right">
+                <div className="flex items-baseline justify-end">
                   <span className="text-2xl md:text-3xl font-bold text-gray-900">
                     {days}
                   </span>
@@ -225,20 +225,19 @@ export default function Landing() {
               </div>
             </div>
 
-            <div className="flex gap-3 mt-6">
+            <div className="flex items-center gap-3 mt-6">
               <Button 
                 size="default"
-                className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                className="bg-emerald-500 hover:bg-emerald-600 text-white flex-1"
               >
                 Back This Project
               </Button>
               <Button 
-                size="default"
+                size="icon"
                 variant="outline"
-                className="gap-2"
+                className="shrink-0"
               >
                 <Share2 className="h-4 w-4" />
-                Share
               </Button>
             </div>
           </div>
