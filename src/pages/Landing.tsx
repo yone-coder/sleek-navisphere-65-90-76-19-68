@@ -252,23 +252,29 @@ export default function Landing() {
                 size="sm"
                 className="bg-emerald-500 hover:bg-emerald-600 text-white flex-1 group relative overflow-hidden"
               >
-                <div className="flex items-center justify-center gap-2">
+                <div className="flex items-center justify-center">
                   <span className="font-medium relative z-10">Back This Project</span>
-                  <div className="ml-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1">
-                    <Check className="h-3.5 w-3.5" />
-                  </div>
                 </div>
                 
                 {/* Payment method icons */}
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 flex -space-x-1.5 mr-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
-                  <div className="h-5 w-5 rounded-full bg-yellow-500 flex items-center justify-center ring-2 ring-white">
-                    <span className="text-[8px] text-white font-bold">WU</span>
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 flex gap-1.5 mr-3">
+                  <div className="h-5 w-5 rounded-full bg-[#FFCB05] flex items-center justify-center ring-1 ring-white">
+                    <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none">
+                      <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" fill="#000"/>
+                      <path d="M7.5 11.5h9M7.5 14.5h9" stroke="#FFCB05" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
                   </div>
-                  <div className="h-5 w-5 rounded-full bg-blue-600 flex items-center justify-center ring-2 ring-white">
-                    <span className="text-[8px] text-white font-bold">MG</span>
+                  <div className="h-5 w-5 rounded-full bg-[#00B9F2] flex items-center justify-center ring-1 ring-white">
+                    <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none">
+                      <path d="M12 3L3 8l9 5 9-5-9-5z" fill="#fff"/>
+                      <path d="M3 16l9 5 9-5M3 12l9 5 9-5" stroke="#fff" strokeWidth="1.5"/>
+                    </svg>
                   </div>
-                  <div className="h-5 w-5 rounded-full bg-purple-500 flex items-center justify-center ring-2 ring-white">
-                    <span className="text-[8px] text-white font-bold">SW</span>
+                  <div className="h-5 w-5 rounded-full bg-[#7C2CFF] flex items-center justify-center ring-1 ring-white">
+                    <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none">
+                      <path d="M12 4L4 8v8l8 4 8-4V8l-8-4z" stroke="#fff" strokeWidth="2"/>
+                      <path d="M12 8v8M8 10v4M16 10v4" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
                   </div>
                 </div>
 
