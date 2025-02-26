@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Clock, Users, DollarSign, Share2, Heart, Shield } from 'lucide-react';
@@ -81,19 +80,15 @@ export function FloatingProgress({
             </div>
           </div>
 
-          {/* Progress bar with gradient and animation */}
+          {/* Progress bar with gradient */}
           <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
             <div 
               className="h-full rounded-full relative overflow-hidden"
               style={{ 
                 width: `${Math.max((raised / goal) * 100, 0.5)}%`,
-                background: 'linear-gradient(90deg, #34d399 0%, #059669 50%, #047857 100%)',
-                backgroundSize: '200% 100%',
-                animation: 'shimmer 30s infinite linear'
+                background: 'linear-gradient(90deg, #34d399 0%, #059669 50%, #047857 100%)'
               }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/0 via-emerald-600/30 to-emerald-600/0" style={{ animation: 'pulse 30s cubic-bezier(0.4, 0, 0.6, 1) infinite' }} />
-            </div>
+            />
           </div>
           
           <div className="grid grid-cols-2 gap-6">
