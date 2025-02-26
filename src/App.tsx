@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
@@ -13,7 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 // Lazy load pages
 const Apps = lazy(() => import("./pages/Apps"));
 const Login = lazy(() => import("./pages/Login"));
-const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const Landing = lazy(() => import("./pages/Landing"));
 const GamesPages = lazy(() => import("./pages/GamesPages"));
 const ContestsPage = lazy(() => import("./pages/games/ContestsPage"));
 const GamesExplore = lazy(() => import("./pages/games/GamesExplore"));
@@ -71,7 +70,7 @@ const queryClient = new QueryClient({
 
 const AppContent = () => {
   const location = useLocation();
-  const hideBottomNavRoutes = ['/marketplace', '/games/'];
+  const hideBottomNavRoutes = ['/marketplace', '/games/', '/landing'];
   const isAdminRoute = location.pathname.startsWith('/admin');
   const shouldShowBottomNav = !isAdminRoute && 
     !hideBottomNavRoutes.some(route => location.pathname.startsWith(route));
@@ -81,6 +80,7 @@ const AppContent = () => {
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
           <Route path="/" element={<Apps />} />
+          <Route path="/landing" element={<Landing />} />
           <Route path="/apps" element={<Apps />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
