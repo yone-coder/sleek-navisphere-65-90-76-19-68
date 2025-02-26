@@ -48,49 +48,71 @@ export const roomService = {
   async joinRoom(roomId: string, userId: string): Promise<GameRoom> {
     console.log('Attempting to join room:', roomId, 'for user:', userId);
     
-    // Update the room with the second player in a single atomic operation
-    const { data: room, error } = await supabase
+    // First get the room to verify it exists and is available
+    const { data: rooms, error: checkError } = await supabase
+      .from('game_rooms')
+      .select()
+      .eq('id', roomId)
+      .eq('status', 'waiting')
+      .is('player2_id', null);
+
+    if (checkError || !rooms || rooms.length === 0) {
+      console.error('Room not available');
+      throw new Error('Room not available');
+    }
+
+    // Then update it
+    const { data: updatedRooms, error: updateError } = await supabase
       .from('game_rooms')
       .update({
         player2_id: userId,
         status: 'playing'
       })
       .eq('id', roomId)
-      .eq('status', 'waiting')  // Ensure room is still waiting
-      .is('player2_id', null)   // Ensure no other player has joined
-      .select()
-      .single();
+      .eq('status', 'waiting')
+      .is('player2_id', null)
+      .select();
 
-    if (error) {
-      console.error('Error joining room:', error);
+    if (updateError || !updatedRooms || updatedRooms.length === 0) {
+      console.error('Error updating room:', updateError);
       throw new Error('Room not available');
     }
-    if (!room) throw new Error('Room not available');
 
     console.log('Successfully joined room:', roomId);
-    return room;
+    return updatedRooms[0];
   },
 
   async findAvailableRoom(userId: string): Promise<GameRoom | null> {
     console.log('Finding available room for user:', userId);
 
-    // Find an available room in a single query
+    // Clean up any stale rooms first
+    await supabase
+      .from('game_rooms')
+      .delete()
+      .eq('player1_id', userId)
+      .eq('status', 'waiting');
+
+    // Find an available room
     const { data: rooms, error } = await supabase
       .from('game_rooms')
       .select()
       .eq('status', 'waiting')
       .is('player2_id', null)
       .neq('player1_id', userId)
-      .order('created_at', { ascending: true })
-      .limit(1);
+      .order('created_at', { ascending: true });
 
     if (error) {
       console.error('Error finding available room:', error);
       throw error;
     }
 
-    const availableRoom = rooms?.[0] || null;
-    console.log('Available room found:', availableRoom?.id || 'none');
+    if (!rooms || rooms.length === 0) {
+      console.log('No available rooms found');
+      return null;
+    }
+
+    const availableRoom = rooms[0];
+    console.log('Found available room:', availableRoom.id);
     return availableRoom;
   },
 
