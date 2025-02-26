@@ -250,12 +250,30 @@ export default function Landing() {
             <div className="flex items-center gap-3">
               <Button 
                 size="sm"
-                className="bg-emerald-500 hover:bg-emerald-600 text-white flex-1 group"
+                className="bg-emerald-500 hover:bg-emerald-600 text-white flex-1 group relative overflow-hidden"
               >
-                <span>Back This Project</span>
-                <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Check className="h-3.5 w-3.5" />
+                <div className="flex items-center justify-center gap-2">
+                  <span className="font-medium relative z-10">Back This Project</span>
+                  <div className="ml-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1">
+                    <Check className="h-3.5 w-3.5" />
+                  </div>
                 </div>
+                
+                {/* Payment method icons */}
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 flex -space-x-1.5 mr-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
+                  <div className="h-5 w-5 rounded-full bg-yellow-500 flex items-center justify-center ring-2 ring-white">
+                    <span className="text-[8px] text-white font-bold">WU</span>
+                  </div>
+                  <div className="h-5 w-5 rounded-full bg-blue-600 flex items-center justify-center ring-2 ring-white">
+                    <span className="text-[8px] text-white font-bold">MG</span>
+                  </div>
+                  <div className="h-5 w-5 rounded-full bg-purple-500 flex items-center justify-center ring-2 ring-white">
+                    <span className="text-[8px] text-white font-bold">SW</span>
+                  </div>
+                </div>
+
+                {/* Animated background gradient */}
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/0 via-emerald-600/5 to-emerald-600/0 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
               </Button>
               <Button 
                 size="icon"
