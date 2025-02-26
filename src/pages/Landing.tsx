@@ -80,60 +80,60 @@ export default function Landing() {
 
   return (
     <div className="font-sans">
-      {/* Search Bar and Tabs Navigation - Sticky Header */}
-      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg shadow-sm">
-        {/* Search Bar */}
-        <div className="px-4 py-2">
-          <div className="relative max-w-lg mx-auto">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <Input 
-              type="search"
-              placeholder="Search updates, comments, or FAQs..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 h-9 bg-gray-50/50 border-0 focus:bg-white transition-colors text-sm"
-            />
+      <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
+        {/* Search Bar and Tabs Navigation - Sticky Header */}
+        <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg shadow-sm">
+          {/* Search Bar */}
+          <div className="px-4 py-2">
+            <div className="relative max-w-lg mx-auto">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input 
+                type="search"
+                placeholder="Search updates, comments, or FAQs..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-8 pr-3 h-9 bg-gray-50/50 border-0 focus:bg-white transition-colors text-sm"
+              />
+            </div>
           </div>
+
+          {/* Tabs Navigation */}
+          <TabNav activeTab={activeTab} />
         </div>
 
-        {/* Tabs Navigation */}
-        <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
-          <TabNav activeTab={activeTab} />
-        </Tabs>
-      </div>
+        {/* Content Sections */}
+        <div className="w-full">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
+              <TabsContent value="overview" className="mt-0">
+                <VideoSection />
+                <div className="container mx-auto">
+                  <HeroSection backers={backers} />
+                  <RewardsSection rewards={rewards} />
+                </div>
+              </TabsContent>
 
-      {/* Content Sections */}
-      <div className="w-full">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-          >
-            <TabsContent value="overview" className="mt-0">
-              <VideoSection />
-              <div className="container mx-auto">
-                <HeroSection backers={backers} />
-                <RewardsSection rewards={rewards} />
-              </div>
-            </TabsContent>
+              <TabsContent value="updates" className="mt-6 container mx-auto">
+                <UpdatesTab />
+              </TabsContent>
 
-            <TabsContent value="updates" className="mt-6 container mx-auto">
-              <UpdatesTab />
-            </TabsContent>
+              <TabsContent value="comments" className="mt-6">
+                <CommentsTab />
+              </TabsContent>
 
-            <TabsContent value="comments" className="mt-6">
-              <CommentsTab />
-            </TabsContent>
-
-            <TabsContent value="faqs" className="mt-6 container mx-auto">
-              <FAQsTab />
-            </TabsContent>
-          </motion.div>
-        </AnimatePresence>
-      </div>
+              <TabsContent value="faqs" className="mt-6 container mx-auto">
+                <FAQsTab />
+              </TabsContent>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </Tabs>
 
       {/* Progress Bar - Only show on overview tab */}
       {activeTab === "overview" && (
