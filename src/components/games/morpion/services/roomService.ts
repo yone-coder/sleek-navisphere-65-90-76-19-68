@@ -48,21 +48,7 @@ export const roomService = {
   async joinRoom(roomId: string, userId: string): Promise<GameRoom> {
     console.log('Attempting to join room:', roomId, 'for user:', userId);
     
-    // First verify the room exists and is available
-    const { data: existingRoom, error: checkError } = await supabase
-      .from('game_rooms')
-      .select()
-      .eq('id', roomId)
-      .eq('status', 'waiting')
-      .is('player2_id', null)
-      .single();
-
-    if (checkError || !existingRoom) {
-      console.error('Room not available:', checkError);
-      throw new Error('Room not available');
-    }
-
-    // Update the room with the second player
+    // Update the room with the second player in a single atomic operation
     const { data: room, error } = await supabase
       .from('game_rooms')
       .update({
@@ -70,14 +56,16 @@ export const roomService = {
         status: 'playing'
       })
       .eq('id', roomId)
+      .eq('status', 'waiting')  // Ensure room is still waiting
+      .is('player2_id', null)   // Ensure no other player has joined
       .select()
       .single();
 
     if (error) {
       console.error('Error joining room:', error);
-      throw error;
+      throw new Error('Room not available');
     }
-    if (!room) throw new Error('Failed to join room');
+    if (!room) throw new Error('Room not available');
 
     console.log('Successfully joined room:', roomId);
     return room;
@@ -86,14 +74,7 @@ export const roomService = {
   async findAvailableRoom(userId: string): Promise<GameRoom | null> {
     console.log('Finding available room for user:', userId);
 
-    // First clean up any stale rooms
-    await supabase
-      .from('game_rooms')
-      .delete()
-      .eq('player1_id', userId)
-      .eq('status', 'waiting');
-
-    // Find an available room
+    // Find an available room in a single query
     const { data: rooms, error } = await supabase
       .from('game_rooms')
       .select()
@@ -108,13 +89,15 @@ export const roomService = {
       throw error;
     }
 
-    return rooms?.[0] || null;
+    const availableRoom = rooms?.[0] || null;
+    console.log('Available room found:', availableRoom?.id || 'none');
+    return availableRoom;
   },
 
   subscribeToRoom(roomId: string, onUpdate: (room: GameRoom) => void) {
     console.log('Setting up subscription for room:', roomId);
     
-    return supabase.channel(`room:${roomId}`)
+    const channel = supabase.channel(`room:${roomId}`)
       .on(
         'postgres_changes',
         {
@@ -132,5 +115,8 @@ export const roomService = {
         }
       )
       .subscribe();
+
+    console.log('Room subscription established');
+    return channel;
   }
 };
