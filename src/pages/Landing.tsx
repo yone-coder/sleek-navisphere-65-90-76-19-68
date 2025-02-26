@@ -250,10 +250,10 @@ export default function Landing() {
             <div className="flex items-center gap-3">
               <Button 
                 size="sm"
-                className="bg-emerald-500 hover:bg-emerald-600 text-white flex-1 group relative overflow-hidden"
+                className="bg-emerald-500 hover:bg-emerald-600 text-white flex-1 group relative overflow-hidden pr-20"
               >
-                <div className="flex items-center justify-center">
-                  <span className="font-medium relative z-10">Back This Project</span>
+                <div className="flex items-center">
+                  <span className="font-medium relative z-10 ml-3">Back This Project</span>
                 </div>
                 
                 {/* Payment method icons */}
