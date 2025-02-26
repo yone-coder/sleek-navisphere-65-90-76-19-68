@@ -160,7 +160,7 @@ export default function Landing() {
       </section>
       
       {/* Progress Bar */}
-      <section className="py-6 bg-white">
+      <section className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50 py-4">
         <div className="container mx-auto px-4">
           <div className="space-y-4">
             <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
@@ -208,7 +208,7 @@ export default function Landing() {
               </div>
             </div>
 
-            <div className="flex items-center gap-3 mt-6">
+            <div className="flex items-center gap-3">
               <Button 
                 size="default"
                 className="bg-emerald-500 hover:bg-emerald-600 text-white flex-1"
@@ -227,6 +227,9 @@ export default function Landing() {
         </div>
       </section>
       
+      {/* Add padding at the bottom of the page to prevent content from being hidden behind the fixed bar */}
+      <div className="pb-48" />
+
       {/* Project Overview */}
       <section className="py-16">
         <div className="container mx-auto px-4">
