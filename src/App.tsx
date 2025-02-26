@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
@@ -41,6 +42,7 @@ const AdminBanners = lazy(() => import("./pages/admin/AdminBanners"));
 const AdminTournaments = lazy(() => import("./pages/admin/AdminTournaments"));
 const GamesProfile = lazy(() => import("./pages/games/GamesProfile"));
 const GameDetails = lazy(() => import("./pages/GameDetails"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen p-8 space-y-4">
