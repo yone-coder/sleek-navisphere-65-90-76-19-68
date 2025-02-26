@@ -155,23 +155,6 @@ export default function Landing() {
                 className="absolute inset-0 w-full h-full object-cover"
               />
             </motion.div>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                size="lg"
-                variant="secondary"
-                className="bg-white text-purple-600 hover:bg-gray-100"
-              >
-                Back This Project
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-2 border-white text-white hover:bg-white hover:text-purple-600"
-              >
-                Watch Video
-              </Button>
-            </div>
           </motion.div>
         </div>
       </section>
