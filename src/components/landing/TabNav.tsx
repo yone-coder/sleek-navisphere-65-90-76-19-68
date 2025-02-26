@@ -11,9 +11,9 @@ interface TabNavProps {
 
 export function TabNav({ activeTab }: TabNavProps) {
   return (
-    <div className="relative px-4 py-2">
+    <div className="relative w-full">
       <ScrollArea className="w-full">
-        <TabsList className="w-max inline-flex h-14 items-center justify-start gap-2 rounded-xl bg-gray-50/50 p-2 backdrop-blur-sm border border-gray-100">
+        <TabsList className="w-max inline-flex h-12 items-center justify-start gap-2 bg-gray-50/50 p-2 backdrop-blur-sm border-y border-gray-100">
           <TabsTrigger 
             value="overview"
             className="relative flex items-center gap-2.5 px-3 py-1.5 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
