@@ -1,29 +1,7 @@
+
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { 
-  ArrowRight, 
-  ChevronDown, 
-  Shield, 
-  Users, 
-  Zap,
-  Globe,
-  Lock,
-  Star,
-  Cloud,
-  Code,
-  LineChart,
-  Cpu,
-  Layers,
-  Heart,
-  ShoppingCart,
-  Trophy,
-  Home,
-  Github,
-  Twitter,
-  Linkedin
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
 import {
   Card,
   CardContent,
@@ -32,9 +10,37 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import {
+  ArrowRight,
+  Shield,
+  Users,
+  Star,
+  Clock,
+  Heart,
+  CheckCircle,
+  Lock,
+  MessageCircle,
+  DollarSign,
+  Trophy,
+  Globe,
+  ChevronDown,
+  Github,
+  Twitter,
+  Linkedin,
+  Building,
+  Rocket,
+  Target
+} from 'lucide-react';
 
 export default function Landing() {
   const [scrolled, setScrolled] = useState(false);
+  const [progress, setProgress] = useState(65);
+  const [timeLeft, setTimeLeft] = useState({
+    days: 12,
+    hours: 6,
+    minutes: 45
+  });
   const [backers, setBackers] = useState(1342);
 
   useEffect(() => {
@@ -45,168 +51,111 @@ export default function Landing() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setBackers(prev => prev + Math.floor(Math.random() * 3));
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const features = [
+  const rewardTiers = [
     {
-      icon: Cloud,
-      title: "Cloud Infrastructure",
-      description: "Enterprise-grade cloud infrastructure with 99.99% uptime guarantee"
-    },
-    {
-      icon: Code,
-      title: "API Integration",
-      description: "Seamless integration with your existing tech stack via RESTful APIs"
-    },
-    {
-      icon: Shield,
-      title: "Advanced Security",
-      description: "Bank-level encryption and multi-factor authentication built-in"
-    },
-    {
-      icon: LineChart,
-      title: "Real-time Analytics",
-      description: "Comprehensive analytics dashboard with ML-powered insights"
-    },
-    {
-      icon: Layers,
-      title: "Modular Architecture",
-      description: "Flexible, scalable architecture that grows with your needs"
-    },
-    {
-      icon: Cpu,
-      title: "AI Powered",
-      description: "Advanced AI capabilities for automated decision making"
-    }
-  ];
-
-  const tiers = [
-    {
-      name: "Starter",
-      price: "49",
-      description: "Perfect for small teams and startups",
-      features: [
-        "Up to 5 team members",
-        "10GB storage",
-        "Basic analytics",
-        "24/7 support"
-      ]
-    },
-    {
-      name: "Pro",
-      price: "99",
-      description: "Best for growing businesses",
-      features: [
-        "Up to 20 team members",
-        "50GB storage",
-        "Advanced analytics",
+      name: "Early Bird",
+      price: 99,
+      description: "Get early access to our platform",
+      perks: [
+        "1 year premium subscription",
         "Priority support",
-        "Custom integrations"
+        "Early access to new features",
+        "Exclusive community access"
       ],
+      available: 50,
+      delivery: "January 2024"
+    },
+    {
+      name: "Business Pro",
+      price: 499,
+      description: "Perfect for small businesses",
+      perks: [
+        "5 user licenses",
+        "Custom branding",
+        "API access",
+        "Dedicated support",
+        "Training sessions"
+      ],
+      available: 100,
+      delivery: "February 2024",
       popular: true
     },
     {
       name: "Enterprise",
-      price: "299",
-      description: "For large-scale operations",
-      features: [
-        "Unlimited team members",
-        "500GB storage",
-        "Custom analytics",
-        "24/7 priority support",
-        "Dedicated account manager",
-        "Custom development"
-      ]
+      price: 999,
+      description: "Full-scale deployment",
+      perks: [
+        "Unlimited users",
+        "White-label solution",
+        "Custom development",
+        "24/7 support",
+        "On-site training",
+        "Data migration"
+      ],
+      available: 20,
+      delivery: "March 2024"
     }
   ];
 
-  const timeline = [
+  const testimonials = [
     {
-      date: "Q1 2024",
-      title: "Platform Launch",
-      description: "Launch of core platform features and marketplace integration",
-      completed: true
+      quote: "This platform is exactly what Haiti's digital economy needs. Revolutionary!",
+      author: "Jean-Paul Michel",
+      role: "Tech Entrepreneur",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200"
     },
     {
-      date: "Q2 2024",
-      title: "Contest System",
-      description: "Release of online contest platform with rewards system",
-      completed: false
+      quote: "The marketplace feature will transform how we do business locally and internationally.",
+      author: "Marie Claire Baptiste",
+      role: "Business Owner",
+      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200"
     },
     {
-      date: "Q3 2024",
-      title: "Rental Platform",
-      description: "Launch of property and goods rental marketplace",
-      completed: false
-    },
-    {
-      date: "Q4 2024",
-      title: "Mobile App",
-      description: "Release of native mobile applications",
-      completed: false
+      quote: "Finally, a platform that understands and addresses our local needs.",
+      author: "Pierre Louis",
+      role: "Community Leader",
+      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200"
     }
   ];
 
-  const team = [
+  const stats = [
+    { label: "Backers", value: backers, icon: Users },
+    { label: "Days Left", value: timeLeft.days, icon: Clock },
+    { label: "Progress", value: `${progress}%`, icon: Target },
+    { label: "Countries", value: "150+", icon: Globe }
+  ];
+
+  const faqs = [
     {
-      name: "Marie Baptiste",
-      role: "Founder & CEO",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200",
-      bio: "10+ years experience in tech entrepreneurship",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#"
-      }
+      question: "How will the funds be used?",
+      answer: "The funds will be allocated across platform development (40%), security infrastructure (25%), marketing and community building (20%), and operational costs (15%)."
     },
     {
-      name: "Jean Michel",
-      role: "CTO",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200",
-      bio: "Former tech lead at major Silicon Valley companies",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#"
-      }
+      question: "When will the platform launch?",
+      answer: "We plan to launch the beta version in Q1 2024, with the full platform release scheduled for Q2 2024."
     },
     {
-      name: "Sophie Laurent",
-      role: "Product Manager",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200",
-      bio: "Specializes in marketplace product development",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#"
-      }
+      question: "Is my investment secure?",
+      answer: "Yes, all investments are processed through secure payment gateways and are backed by our platform's security guarantees."
     }
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <header className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+      {/* Navigation */}
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled ? "bg-white/80 backdrop-blur-lg shadow-sm" : "bg-transparent"
-      )}>
+      }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
-              <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
-                SaaSify
-              </span>
-            </div>
-            
+            <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
+              HaitiHub
+            </span>
             <div className="hidden md:flex items-center space-x-8">
-              <Button variant="ghost" className="text-sm">Features</Button>
-              <Button variant="ghost" className="text-sm">Roadmap</Button>
-              <Button variant="ghost" className="text-sm">Team</Button>
-              <Button variant="ghost" className="text-sm">FAQ</Button>
+              <Button variant="ghost">Features</Button>
+              <Button variant="ghost">Roadmap</Button>
+              <Button variant="ghost">Team</Button>
+              <Button variant="ghost">FAQ</Button>
               <Button 
                 className="bg-gradient-to-r from-purple-600 to-blue-500 text-white hover:opacity-90"
               >
@@ -217,6 +166,7 @@ export default function Landing() {
         </div>
       </header>
 
+      {/* Hero Section */}
       <section className="pt-32 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div 
@@ -226,13 +176,13 @@ export default function Landing() {
             className="text-center"
           >
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
-              Redefining SaaS Development
+              Building Haiti's Digital Future
               <br />
-              For The Future
+              One Platform at a Time
             </h1>
             <p className="mt-6 text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
-              Building the next generation of cloud infrastructure with advanced AI capabilities,
-              enterprise-grade security, and unparalleled scalability.
+              A revolutionary digital hub connecting Haitian businesses, creators, and communities 
+              through an innovative marketplace, online contests, and rental platform.
             </p>
             
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -250,244 +200,91 @@ export default function Landing() {
                 Watch Demo <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </div>
-          </motion.div>
 
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex flex-col items-center p-6 rounded-2xl bg-white shadow-md hover:shadow-lg transition-shadow"
-            >
-              <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
-                <Users className="h-6 w-6 text-purple-600" />
+            {/* Funding Progress */}
+            <div className="mt-16 max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-6">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                {stats.map((stat, index) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="text-center"
+                  >
+                    <div className="flex justify-center mb-2">
+                      <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
+                        <stat.icon className="h-6 w-6 text-purple-600" />
+                      </div>
+                    </div>
+                    <div className="font-bold text-2xl text-gray-900">{stat.value}</div>
+                    <div className="text-sm text-gray-500">{stat.label}</div>
+                  </motion.div>
+                ))}
               </div>
-              <h3 className="text-2xl font-bold text-gray-900">{backers.toLocaleString()}</h3>
-              <p className="text-gray-600">Active Backers</p>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-col items-center p-6 rounded-2xl bg-white shadow-md hover:shadow-lg transition-shadow"
-            >
-              <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                <Shield className="h-6 w-6 text-blue-600" />
+              <Progress value={progress} className="h-4" />
+              <div className="mt-4 flex justify-between text-sm text-gray-600">
+                <span>${(875000 * progress / 100).toLocaleString()} raised</span>
+                <span>$875,000 goal</span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900">100%</h3>
-              <p className="text-gray-600">Secure Funds</p>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="flex flex-col items-center p-6 rounded-2xl bg-white shadow-md hover:shadow-lg transition-shadow"
-            >
-              <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
-                <Globe className="h-6 w-6 text-green-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900">150+</h3>
-              <p className="text-gray-600">Countries</p>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              className="flex flex-col items-center p-6 rounded-2xl bg-white shadow-md hover:shadow-lg transition-shadow"
-            >
-              <div className="h-12 w-12 rounded-full bg-yellow-100 flex items-center justify-center mb-4">
-                <Star className="h-6 w-6 text-yellow-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900">4.9/5</h3>
-              <p className="text-gray-600">User Rating</p>
-            </motion.div>
-          </div>
-
-          <div className="mt-16 px-4">
-            <p className="text-center text-sm text-gray-500 mb-8">Trusted by leading companies worldwide</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center justify-items-center opacity-60">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="h-8 w-32 rounded-md bg-gray-200 animate-pulse" />
-              ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-              Powerful Features
-            </h2>
-            <p className="mt-4 text-xl text-gray-600">
-              Everything you need to build and scale your SaaS application
-            </p>
-          </div>
-
-          <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <Card className="relative overflow-hidden group hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="h-12 w-12 rounded-lg bg-purple-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                      <feature.icon className="h-6 w-6 text-purple-600" />
-                    </div>
-                    <CardTitle>{feature.title}</CardTitle>
-                    <CardDescription>{feature.description}</CardDescription>
-                  </CardHeader>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-              Simple, Transparent Pricing
-            </h2>
-            <p className="mt-4 text-xl text-gray-600">
-              Choose the perfect plan for your needs
-            </p>
-          </div>
-
-          <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {tiers.map((tier, index) => (
-              <motion.div
-                key={tier.name}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="relative"
-              >
-                <Card className={cn(
-                  "relative overflow-hidden",
-                  tier.popular && "border-purple-600 shadow-lg"
-                )}>
-                  {tier.popular && (
-                    <div className="absolute top-0 right-0 -mt-1 -mr-1 px-3 py-1 bg-purple-600 text-white text-xs font-medium transform rotate-12">
-                      Popular
-                    </div>
-                  )}
-                  <CardHeader>
-                    <CardTitle className="text-2xl">{tier.name}</CardTitle>
-                    <CardDescription>{tier.description}</CardDescription>
-                    <div className="mt-4">
-                      <span className="text-4xl font-bold">${tier.price}</span>
-                      <span className="text-gray-600">/month</span>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-3">
-                      {tier.features.map((feature, i) => (
-                        <li key={i} className="flex items-center">
-                          <Heart className="h-4 w-4 text-purple-600 mr-2" />
-                          <span className="text-sm text-gray-600">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter>
-                    <Button 
-                      className={cn(
-                        "w-full",
-                        tier.popular 
-                          ? "bg-gradient-to-r from-purple-600 to-blue-500 text-white hover:opacity-90"
-                          : "bg-white text-gray-900 border-2 border-gray-200 hover:bg-gray-50"
-                      )}
-                    >
-                      Get Started
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-purple-600 to-blue-500">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white sm:text-4xl">
-            Ready to Transform Your SaaS Journey?
-          </h2>
-          <p className="mt-4 text-xl text-white/90">
-            Join thousands of satisfied customers and take your business to the next level
-          </p>
-          <motion.div 
-            className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Button 
-              size="lg"
-              className="bg-white text-purple-600 hover:bg-white/90"
-            >
-              Start Free Trial
-            </Button>
-            <Button 
-              size="lg"
-              variant="outline" 
-              className="bg-transparent border-2 border-white text-white hover:bg-white/10"
-            >
-              Contact Sales
-            </Button>
           </motion.div>
         </div>
       </section>
 
+      {/* Project Benefits */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid gap-12 lg:grid-cols-2 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-6">
-                Connecting Haiti's Digital Future
-              </h2>
+              <h2 className="text-3xl font-bold mb-6">Why HaitiHub Matters</h2>
               <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
-                    <ShoppingCart className="h-6 w-6 text-purple-600" />
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0">
+                    <div className="h-12 w-12 rounded-lg bg-purple-100 flex items-center justify-center">
+                      <Building className="h-6 w-6 text-purple-600" />
+                    </div>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg mb-2">Digital Marketplace</h3>
-                    <p className="text-gray-600">A centralized platform for Haitian businesses and artisans to showcase and sell their products globally.</p>
+                    <h3 className="text-xl font-semibold mb-2">Digital Infrastructure</h3>
+                    <p className="text-gray-600">
+                      Building the foundation for Haiti's digital economy with secure, 
+                      scalable, and accessible technology.
+                    </p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
-                    <Trophy className="h-6 w-6 text-blue-600" />
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0">
+                    <div className="h-12 w-12 rounded-lg bg-blue-100 flex items-center justify-center">
+                      <Rocket className="h-6 w-6 text-blue-600" />
+                    </div>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg mb-2">Online Contests</h3>
-                    <p className="text-gray-600">Engaging competitions and challenges that showcase Haitian talent and creativity.</p>
+                    <h3 className="text-xl font-semibold mb-2">Economic Growth</h3>
+                    <p className="text-gray-600">
+                      Empowering local businesses and entrepreneurs with tools to reach 
+                      global markets and expand their operations.
+                    </p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
-                    <Home className="h-6 w-6 text-green-600" />
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0">
+                    <div className="h-12 w-12 rounded-lg bg-green-100 flex items-center justify-center">
+                      <Users className="h-6 w-6 text-green-600" />
+                    </div>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg mb-2">Rental Platform</h3>
-                    <p className="text-gray-600">Simplified rental solutions for properties and goods within the Haitian community.</p>
+                    <h3 className="text-xl font-semibold mb-2">Community Building</h3>
+                    <p className="text-gray-600">
+                      Creating a vibrant digital community that celebrates Haitian culture, 
+                      creativity, and commerce.
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500 rounded-2xl transform rotate-3"></div>
               <img 
@@ -500,103 +297,195 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Reward Tiers */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-              Development Roadmap
-            </h2>
+            <h2 className="text-3xl font-bold">Choose Your Impact Level</h2>
             <p className="mt-4 text-xl text-gray-600">
-              Our journey to building Haiti's premier digital hub
-            </p>
-          </div>
-
-          <div className="relative">
-            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-200"></div>
-            <div className="space-y-12">
-              {timeline.map((item, index) => (
-                <motion.div
-                  key={item.date}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className={cn(
-                    "relative flex items-center",
-                    index % 2 === 0 ? "justify-start" : "justify-end"
-                  )}
-                >
-                  <div className={cn(
-                    "w-1/2 flex gap-4",
-                    index % 2 === 0 ? "flex-row" : "flex-row-reverse"
-                  )}>
-                    <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-purple-600"></div>
-                    <Card className="w-full">
-                      <CardHeader>
-                        <CardTitle className="flex items-center justify-between">
-                          {item.title}
-                          <span className="text-sm font-normal text-gray-500">{item.date}</span>
-                        </CardTitle>
-                        <CardDescription>{item.description}</CardDescription>
-                      </CardHeader>
-                    </Card>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-              Meet Our Team
-            </h2>
-            <p className="mt-4 text-xl text-gray-600">
-              The passionate individuals bringing this vision to life
+              Join us in building Haiti's digital future with exclusive rewards
             </p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {team.map((member, index) => (
+            {rewardTiers.map((tier, index) => (
               <motion.div
-                key={member.name}
+                key={tier.name}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <Card className="overflow-hidden">
-                  <CardHeader className="text-center">
-                    <div className="relative w-32 h-32 mx-auto mb-4">
-                      <img 
-                        src={member.image} 
-                        alt={member.name}
-                        className="rounded-full object-cover w-full h-full"
-                      />
+                <Card className={`relative overflow-hidden ${
+                  tier.popular ? 'border-purple-600 shadow-lg' : ''
+                }`}>
+                  {tier.popular && (
+                    <div className="absolute top-0 right-0 -mt-1 -mr-1 px-3 py-1 bg-purple-600 text-white text-xs font-medium transform rotate-12">
+                      Most Popular
                     </div>
-                    <CardTitle>{member.name}</CardTitle>
-                    <CardDescription className="font-medium text-purple-600">
-                      {member.role}
-                    </CardDescription>
+                  )}
+                  <CardHeader>
+                    <CardTitle>{tier.name}</CardTitle>
+                    <div className="mt-2">
+                      <span className="text-4xl font-bold">${tier.price}</span>
+                    </div>
+                    <CardDescription>{tier.description}</CardDescription>
                   </CardHeader>
-                  <CardContent className="text-center">
-                    <p className="text-gray-600 mb-4">{member.bio}</p>
-                    <div className="flex justify-center gap-4">
-                      <Button variant="ghost" size="icon" className="rounded-full">
-                        <Twitter className="h-4 w-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="rounded-full">
-                        <Linkedin className="h-4 w-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="rounded-full">
-                        <Github className="h-4 w-4" />
-                      </Button>
+                  <CardContent>
+                    <ul className="space-y-3">
+                      {tier.perks.map((perk, i) => (
+                        <li key={i} className="flex items-center">
+                          <CheckCircle className="h-5 w-5 text-purple-600 mr-2 flex-shrink-0" />
+                          <span className="text-gray-600">{perk}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <div className="flex justify-between text-sm text-gray-600">
+                        <span>Available</span>
+                        <span>{tier.available} spots</span>
+                      </div>
+                      <div className="flex justify-between text-sm text-gray-600 mt-1">
+                        <span>Estimated Delivery</span>
+                        <span>{tier.delivery}</span>
+                      </div>
                     </div>
+                  </CardContent>
+                  <CardFooter>
+                    <Button 
+                      className={`w-full ${
+                        tier.popular 
+                          ? 'bg-gradient-to-r from-purple-600 to-blue-500 text-white hover:opacity-90'
+                          : 'bg-white text-gray-900 border-2 border-gray-200 hover:bg-gray-50'
+                      }`}
+                    >
+                      Select {tier.name}
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold">What People Are Saying</h2>
+            <p className="mt-4 text-xl text-gray-600">
+              Hear from our early supporters and community members
+            </p>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center gap-4">
+                      <img 
+                        src={testimonial.image} 
+                        alt={testimonial.author}
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                      <div>
+                        <CardTitle className="text-lg">{testimonial.author}</CardTitle>
+                        <CardDescription>{testimonial.role}</CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600 italic">"{testimonial.quote}"</p>
                   </CardContent>
                 </Card>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold">Frequently Asked Questions</h2>
+            <p className="mt-4 text-xl text-gray-600">
+              Everything you need to know about the project
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            {faqs.map((faq, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">{faq.question}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">{faq.answer}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-purple-600 to-blue-500">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl font-bold text-white sm:text-4xl">
+            Ready to Shape Haiti's Digital Future?
+          </h2>
+          <p className="mt-4 text-xl text-white/90">
+            Join us in building a platform that will transform how Haitians connect, 
+            create, and conduct business in the digital age.
+          </p>
+          <motion.div 
+            className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Button 
+              size="lg"
+              className="bg-white text-purple-600 hover:bg-white/90"
+            >
+              Back the Project
+            </Button>
+            <Button 
+              size="lg"
+              variant="outline" 
+              className="bg-transparent border-2 border-white text-white hover:bg-white/10"
+            >
+              Join Community
+            </Button>
+          </motion.div>
+          
+          <div className="mt-8 flex justify-center gap-4">
+            <div className="flex items-center gap-2 text-white/90">
+              <Lock className="h-4 w-4" />
+              <span className="text-sm">Secure Payment</span>
+            </div>
+            <div className="flex items-center gap-2 text-white/90">
+              <Shield className="h-4 w-4" />
+              <span className="text-sm">Protected Funds</span>
+            </div>
+            <div className="flex items-center gap-2 text-white/90">
+              <MessageCircle className="h-4 w-4" />
+              <span className="text-sm">24/7 Support</span>
+            </div>
           </div>
         </div>
       </section>
