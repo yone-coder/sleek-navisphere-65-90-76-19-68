@@ -92,7 +92,7 @@ export function FloatingProgress({
                 animation: 'shimmer 30s infinite linear'
               }}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/0 via-emerald-600/30 to-emerald-600/0 animate-shimmer-slow" />
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/0 via-emerald-600/30 to-emerald-600/0" style={{ animation: 'pulse 30s cubic-bezier(0.4, 0, 0.6, 1) infinite' }} />
             </div>
           </div>
           
