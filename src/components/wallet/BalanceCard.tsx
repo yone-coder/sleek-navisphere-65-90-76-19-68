@@ -1,9 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   Eye, EyeOff, Lock, Unlock, CreditCard, Send, 
   Download, Search, Filter, Calendar, DollarSign, 
   Euro, Circle, Fingerprint, User, Globe, 
-  ChevronDown, Info
+  ChevronDown, Info, AlertTriangle, RefreshCw
 } from 'lucide-react';
 
 const BalanceCard = () => {
