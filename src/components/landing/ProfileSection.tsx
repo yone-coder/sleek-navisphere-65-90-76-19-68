@@ -30,25 +30,25 @@ export function ProfileSection({
         
         {/* Text Content */}
         <div>
-          <div className="flex items-center">
-            <span className="font-medium text-sm text-black">{creatorName}</span>
+          <div className="flex items-center whitespace-nowrap">
+            <span className="font-semibold text-sm text-gray-900 font-inter tracking-tight">{creatorName}</span>
             <div className="ml-2 flex items-center">
               <div className="px-1.5 py-0.5 bg-gradient-to-r from-[#9b87f5] to-[#7E69AB] rounded-full flex items-center gap-1 shadow-md group transition-all duration-300 hover:shadow-purple-500/30 hover:scale-105">
                 <Check className="text-white h-2.5 w-2.5" />
                 <span className="text-[10px] text-white font-medium">Verified</span>
                 <Award className="h-2.5 w-2.5 text-white hidden group-hover:block transition-all" />
               </div>
-              <div className="ml-2 px-1.5 py-0.5 bg-black/40 backdrop-blur-sm rounded-full flex items-center text-[8px] text-gray-300 whitespace-nowrap">
+              <div className="ml-2 px-1.5 py-0.5 bg-black/40 backdrop-blur-sm rounded-full flex items-center text-[8px] text-white whitespace-nowrap">
                 <MapPin className="text-[#9b87f5] h-2.5 w-2.5 mr-0.5" />
                 Desarmes, AR, Haïti
               </div>
             </div>
           </div>
-          <p className="text-xs mt-1 text-gray-300 max-w-xs">
+          <p className="text-xs mt-1 text-gray-600 max-w-xs font-medium">
             Investment Holding Company
           </p>
           <div className="flex items-center gap-2 mt-1.5">
-            <div className="px-1.5 py-0.5 bg-black/40 backdrop-blur-sm rounded-full flex items-center text-[10px] text-gray-300">
+            <div className="px-1.5 py-0.5 bg-black/40 backdrop-blur-sm rounded-full flex items-center text-[10px] text-white">
               <span className="text-[#9b87f5] mr-1">•</span>
               Investment Holding Company
             </div>
