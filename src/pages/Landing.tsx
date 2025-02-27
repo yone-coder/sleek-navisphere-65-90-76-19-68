@@ -95,32 +95,11 @@ export default function Landing() {
     }
   ];
 
-  // Creator profile data
+  // Creator profile data - simplified
   const creatorProfile = {
-    creatorName: "Galari",
+    creatorName: "Mima Group",
     creatorImage: "/lovable-uploads/7b6dfa3b-fe97-4083-8e4a-0640871dbc3f.png",
-    creatorBio: "Award-winning product designer and developer with over 10 years of experience creating innovative solutions for global brands and startups.",
-    projectsCount: 23,
-    followersCount: 4582,
-    isVerified: true,
-    joinDate: "March 2019",
-    socialLinks: [
-      {
-        name: "galari.design",
-        url: "https://galari.design",
-        icon: <Globe className="h-4 w-4" />
-      },
-      {
-        name: "Twitter",
-        url: "https://twitter.com/galari",
-        icon: <Twitter className="h-4 w-4" />
-      },
-      {
-        name: "Github",
-        url: "https://github.com/galari",
-        icon: <Github className="h-4 w-4" />
-      }
-    ]
+    creatorBio: "Digital design studio specializing in UI/UX and branding."
   };
 
   const handleBackProjectClick = () => {
