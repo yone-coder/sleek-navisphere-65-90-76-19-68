@@ -12,7 +12,6 @@ import { UpdatesTab } from '@/components/landing/UpdatesTab';
 import { CommentsTab } from '@/components/landing/CommentsTab';
 import { VideoSection } from '@/components/landing/VideoSection';
 import { ProfileSection } from '@/components/landing/ProfileSection';
-import { TitleSection } from '@/components/landing/TitleSection';
 import { SearchBar } from '@/components/landing/SearchBar';
 import { PaymentMethodsSheet } from '@/components/landing/PaymentMethodsSheet';
 import { TrustIndicator } from '@/components/landing/TrustIndicator';
@@ -97,11 +96,6 @@ export default function Landing() {
               <TabsContent value="overview" className="mt-0">
                 <VideoSection />
                 <ProfileSection {...creatorProfile} />
-                <TitleSection />
-                <div className="container mx-auto">
-                  <HeroSection backers={backers} />
-                  <RewardsSection rewards={rewards} />
-                </div>
               </TabsContent>
 
               <TabsContent value="updates" className="mt-6 container mx-auto">
