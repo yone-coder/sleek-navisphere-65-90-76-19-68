@@ -45,7 +45,7 @@ export function ProfileSection({
             </div>
           </div>
           <p className="text-xs mt-1 text-gray-600 max-w-xs font-medium">
-            {creatorBio}
+            Investment Holding Company
           </p>
         </div>
       </div>
