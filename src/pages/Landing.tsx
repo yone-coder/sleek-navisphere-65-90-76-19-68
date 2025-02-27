@@ -13,6 +13,7 @@ import { CommentsTab } from '@/components/landing/CommentsTab';
 import { Input } from "@/components/ui/input";
 import { VideoSection } from '@/components/landing/VideoSection';
 import { ProfileSection } from '@/components/landing/ProfileSection';
+import { TitleSection } from '@/components/landing/TitleSection';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { DialogTrigger } from "@/components/ui/dialog";
@@ -149,6 +150,7 @@ export default function Landing() {
               <TabsContent value="overview" className="mt-0">
                 <VideoSection />
                 <ProfileSection {...creatorProfile} />
+                <TitleSection />
                 <div className="container mx-auto">
                   <HeroSection backers={backers} />
                   <RewardsSection rewards={rewards} />
