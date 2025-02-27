@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Check, Award, Shield } from 'lucide-react';
+import { Check, Award, Shield, MapPin } from 'lucide-react';
 
 interface ProfileSectionProps {
   creatorName: string;
@@ -11,7 +11,7 @@ interface ProfileSectionProps {
 export function ProfileSection({
   creatorName,
   creatorImage,
-  creatorBio
+  creatorBio = "Investment Holding Company"
 }: ProfileSectionProps) {
   return (
     <div className="w-full text-white">
@@ -46,11 +46,11 @@ export function ProfileSection({
           <div className="flex items-center gap-2 mt-1.5">
             <div className="px-1.5 py-0.5 bg-black/40 backdrop-blur-sm rounded-full flex items-center text-[10px] text-gray-300">
               <span className="text-[#9b87f5] mr-1">•</span>
-              Design Studio
+              Investment Holding Company
             </div>
             <div className="px-1.5 py-0.5 bg-black/40 backdrop-blur-sm rounded-full flex items-center text-[10px] text-gray-300">
-              <span className="text-[#9b87f5] mr-1">•</span>
-              Est. 2021
+              <MapPin className="text-[#9b87f5] h-2.5 w-2.5 mr-1" />
+              Desarmes, AR, Haïti
             </div>
           </div>
         </div>
