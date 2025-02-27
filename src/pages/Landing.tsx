@@ -17,9 +17,6 @@ import { SearchBar } from '@/components/landing/SearchBar';
 import { PaymentMethodsSheet } from '@/components/landing/PaymentMethodsSheet';
 import { TrustIndicator } from '@/components/landing/TrustIndicator';
 import { SecondaryTabNav } from '@/components/landing/SecondaryTabNav';
-import { StoryTab } from '@/components/landing/StoryTab';
-import { ServicesTab } from '@/components/landing/ServicesTab';
-import { TeamTab } from '@/components/landing/TeamTab';
 
 export default function Landing() {
   const [progress, setProgress] = useState(65);
@@ -104,18 +101,11 @@ export default function Landing() {
                 <ProfileSection {...creatorProfile} />
                 <TitleSection />
                 
-                {/* Secondary Tabs Navigation */}
+                {/* Secondary Tabs Navigation and Content */}
                 <SecondaryTabNav 
                   activeTab={activeSecondaryTab} 
                   onTabChange={setActiveSecondaryTab} 
                 />
-                
-                {/* Secondary Tabs Content */}
-                <div className="relative">
-                  {activeSecondaryTab === "story" && <StoryTab />}
-                  {activeSecondaryTab === "services" && <ServicesTab />}
-                  {activeSecondaryTab === "team" && <TeamTab />}
-                </div>
                 
                 <div className="container mx-auto">
                   <HeroSection backers={backers} />
