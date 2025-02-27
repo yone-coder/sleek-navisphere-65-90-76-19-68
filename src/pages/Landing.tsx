@@ -16,7 +16,6 @@ import { TitleSection } from '@/components/landing/TitleSection';
 import { SearchBar } from '@/components/landing/SearchBar';
 import { PaymentMethodsSheet } from '@/components/landing/PaymentMethodsSheet';
 import { TrustIndicator } from '@/components/landing/TrustIndicator';
-import { SecondaryTabNav } from '@/components/landing/SecondaryTabNav';
 
 export default function Landing() {
   const [progress, setProgress] = useState(65);
@@ -25,7 +24,6 @@ export default function Landing() {
   const [raised, setRaised] = useState(32500);
   const [goal, setGoal] = useState(50000);
   const [activeTab, setActiveTab] = useState("overview");
-  const [activeSecondaryTab, setActiveSecondaryTab] = useState("story");
   const [searchQuery, setSearchQuery] = useState("");
   const sheetTriggerRef = useRef<HTMLButtonElement>(null);
 
@@ -100,13 +98,6 @@ export default function Landing() {
                 <VideoSection />
                 <ProfileSection {...creatorProfile} />
                 <TitleSection />
-                
-                {/* Secondary Tabs Navigation and Content */}
-                <SecondaryTabNav 
-                  activeTab={activeSecondaryTab} 
-                  onTabChange={setActiveSecondaryTab} 
-                />
-                
                 <div className="container mx-auto">
                   <HeroSection backers={backers} />
                   <RewardsSection rewards={rewards} />
