@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Check } from 'lucide-react';
+import { Check, Award, Shield } from 'lucide-react';
 
 interface ProfileSectionProps {
   creatorName: string;
@@ -17,23 +17,42 @@ export function ProfileSection({
     <div className="w-full text-white">
       <div className="flex items-center p-2 pt-3 pl-2 pr-4">
         {/* Profile Image Container */}
-        <div className="w-12 h-12 rounded-full bg-white mr-2 flex items-center justify-center overflow-hidden flex-shrink-0 aspect-square">
+        <div className="relative w-12 h-12 rounded-full bg-white mr-3 flex items-center justify-center overflow-hidden flex-shrink-0 aspect-square shadow-md shadow-purple-800/20">
           <img 
             src={creatorImage}
             alt={`Profile image of ${creatorName}`}
             className="w-full h-full object-cover min-w-full min-h-full"
           />
+          <div className="absolute -bottom-1 -right-1 bg-[#9b87f5] rounded-full w-4 h-4 flex items-center justify-center border border-white">
+            <Shield className="text-white w-2 h-2" />
+          </div>
         </div>
         
         {/* Text Content */}
         <div>
           <div className="flex items-center">
-            <span className="font-medium text-sm">{creatorName}</span>
-            <Check className="text-[#9b87f5] ml-1 h-3 w-3" />
+            <span className="font-medium text-sm bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">{creatorName}</span>
+            <div className="ml-2 flex items-center">
+              <div className="px-1.5 py-0.5 bg-gradient-to-r from-[#9b87f5] to-[#7E69AB] rounded-full flex items-center gap-1 shadow-md group transition-all duration-300 hover:shadow-purple-500/30 hover:scale-105">
+                <Check className="text-white h-2.5 w-2.5" />
+                <span className="text-[10px] text-white font-medium">Verified</span>
+                <Award className="h-2.5 w-2.5 text-white hidden group-hover:block transition-all" />
+              </div>
+            </div>
           </div>
-          <p className="text-xs mt-1 text-gray-300">
+          <p className="text-xs mt-1 text-gray-300 max-w-xs">
             {creatorBio}
           </p>
+          <div className="flex items-center gap-2 mt-1.5">
+            <div className="px-1.5 py-0.5 bg-black/40 backdrop-blur-sm rounded-full flex items-center text-[10px] text-gray-300">
+              <span className="text-[#9b87f5] mr-1">•</span>
+              Design Studio
+            </div>
+            <div className="px-1.5 py-0.5 bg-black/40 backdrop-blur-sm rounded-full flex items-center text-[10px] text-gray-300">
+              <span className="text-[#9b87f5] mr-1">•</span>
+              Est. 2021
+            </div>
+          </div>
         </div>
       </div>
     </div>
