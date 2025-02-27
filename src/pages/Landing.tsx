@@ -227,7 +227,7 @@ export default function Landing() {
                       
                       <div className="p-3 flex items-center gap-3">
                         <div 
-                          className="h-10 w-10 flex items-center justify-center rounded-lg text-xl"
+                          className="h-10 w-10 flex-shrink-0 flex items-center justify-center rounded-lg text-xl"
                           style={{
                             background: `linear-gradient(135deg, ${method.colorStart}, ${method.colorEnd})`,
                             boxShadow: selectedPayment === method.id ? `0 8px 12px -3px ${method.colorEnd}30` : 'none'
@@ -237,8 +237,8 @@ export default function Landing() {
                         </div>
                         
                         <div className="flex-1 min-w-0">
-                          <div className="font-medium text-sm text-gray-900">{method.name}</div>
-                          <div className="text-xs text-gray-500 truncate">{method.description}</div>
+                          <div className="font-medium text-sm text-gray-900 break-words">{method.name}</div>
+                          <div className="text-xs text-gray-500 break-words line-clamp-2">{method.description}</div>
                         </div>
                         
                         <div className="flex-shrink-0">
