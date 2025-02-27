@@ -31,7 +31,7 @@ export function ProfileSection({
         {/* Text Content */}
         <div>
           <div className="flex items-center">
-            <span className="font-medium text-sm bg-gradient-to-r from-[#9b87f5] to-white bg-clip-text text-transparent">{creatorName}</span>
+            <span className="font-medium text-sm bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">{creatorName}</span>
             <div className="ml-2 flex items-center">
               <div className="px-1.5 py-0.5 bg-gradient-to-r from-[#9b87f5] to-[#7E69AB] rounded-full flex items-center gap-1 shadow-md group transition-all duration-300 hover:shadow-purple-500/30 hover:scale-105">
                 <Check className="text-white h-2.5 w-2.5" />
