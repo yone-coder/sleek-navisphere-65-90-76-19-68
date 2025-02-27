@@ -189,9 +189,9 @@ export default function Landing() {
             </div>
             
             {/* Payment panel header */}
-            <div className="text-center px-4 py-3 bg-gradient-to-r from-[#9b87f5] to-[#7E69AB] text-white">
-              <h3 className="text-base font-bold">Back This Project</h3>
-              <p className="text-xs text-white/80">Select your preferred payment method</p>
+            <div className="text-center px-4 py-3">
+              <h3 className="text-base font-bold text-gray-900">Back This Project</h3>
+              <p className="text-xs text-gray-500">Select your preferred payment method</p>
             </div>
 
             {/* Payment methods */}
