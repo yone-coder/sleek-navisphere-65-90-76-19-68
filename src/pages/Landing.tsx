@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { Shield, Search, Check, ChevronRight } from 'lucide-react';
+import { Shield, Search, Check, ChevronRight, Globe, Twitter, Github } from 'lucide-react';
 import { FloatingProgress } from '@/components/campaign/FloatingProgress';
 import { FAQsTab } from '@/components/product/tabs/FAQsTab';
 import { HeroSection } from '@/components/landing/HeroSection';
@@ -12,6 +12,7 @@ import { UpdatesTab } from '@/components/landing/UpdatesTab';
 import { CommentsTab } from '@/components/landing/CommentsTab';
 import { Input } from "@/components/ui/input";
 import { VideoSection } from '@/components/landing/VideoSection';
+import { ProfileSection } from '@/components/landing/ProfileSection';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { DialogTrigger } from "@/components/ui/dialog";
@@ -94,6 +95,34 @@ export default function Landing() {
     }
   ];
 
+  // Creator profile data
+  const creatorProfile = {
+    creatorName: "Galari",
+    creatorImage: "/lovable-uploads/7b6dfa3b-fe97-4083-8e4a-0640871dbc3f.png",
+    creatorBio: "Award-winning product designer and developer with over 10 years of experience creating innovative solutions for global brands and startups.",
+    projectsCount: 23,
+    followersCount: 4582,
+    isVerified: true,
+    joinDate: "March 2019",
+    socialLinks: [
+      {
+        name: "galari.design",
+        url: "https://galari.design",
+        icon: <Globe className="h-4 w-4" />
+      },
+      {
+        name: "Twitter",
+        url: "https://twitter.com/galari",
+        icon: <Twitter className="h-4 w-4" />
+      },
+      {
+        name: "Github",
+        url: "https://github.com/galari",
+        icon: <Github className="h-4 w-4" />
+      }
+    ]
+  };
+
   const handleBackProjectClick = () => {
     // Programmatically click the sheet trigger when FloatingProgress back button is clicked
     if (sheetTriggerRef.current) {
@@ -140,6 +169,7 @@ export default function Landing() {
             >
               <TabsContent value="overview" className="mt-0">
                 <VideoSection />
+                <ProfileSection {...creatorProfile} />
                 <div className="container mx-auto">
                   <HeroSection backers={backers} />
                   <RewardsSection rewards={rewards} />
