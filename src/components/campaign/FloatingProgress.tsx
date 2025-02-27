@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Clock, Users, DollarSign, Share2, Heart, Shield } from 'lucide-react';
@@ -8,6 +9,7 @@ interface FloatingProgressProps {
   days: number;
   raised: number;
   goal: number;
+  onBackProjectClick?: () => void;
 }
 
 export function FloatingProgress({ 
@@ -15,7 +17,8 @@ export function FloatingProgress({
   progress: finalProgress, 
   days, 
   raised: finalRaised, 
-  goal 
+  goal,
+  onBackProjectClick
 }: FloatingProgressProps) {
   const [progress, setProgress] = useState(0);
   const [raised, setRaised] = useState(0);
@@ -141,6 +144,7 @@ export function FloatingProgress({
             <Button 
               size="sm"
               className="bg-emerald-500 hover:bg-emerald-600 text-white flex-1 group relative overflow-hidden pr-20"
+              onClick={onBackProjectClick}
             >
               <div className="flex items-center">
                 <span className="font-medium relative z-10 ml-3">Back This Project</span>

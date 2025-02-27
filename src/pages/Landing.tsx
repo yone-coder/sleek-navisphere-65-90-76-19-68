@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Shield, Search } from 'lucide-react';
@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { VideoSection } from '@/components/landing/VideoSection';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { DialogTrigger } from "@/components/ui/dialog";
 
 export default function Landing() {
   const [progress, setProgress] = useState(65);
@@ -23,6 +24,7 @@ export default function Landing() {
   const [goal, setGoal] = useState(50000);
   const [activeTab, setActiveTab] = useState("overview");
   const [searchQuery, setSearchQuery] = useState("");
+  const sheetTriggerRef = useRef<HTMLButtonElement>(null);
 
   const rewards = [
     {
@@ -77,6 +79,13 @@ export default function Landing() {
       description: "Direct bank transfer through CAM"
     }
   ];
+
+  const handleBackProjectClick = () => {
+    // Programmatically click the sheet trigger when FloatingProgress back button is clicked
+    if (sheetTriggerRef.current) {
+      sheetTriggerRef.current.click();
+    }
+  };
 
   return (
     <div className="font-sans">
@@ -143,20 +152,16 @@ export default function Landing() {
           days={days}
           raised={raised}
           goal={goal}
+          onBackProjectClick={handleBackProjectClick}
         />
       )}
       
       {/* Payment Methods Sheet */}
       <Sheet>
         <SheetTrigger asChild>
-          <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/10 to-transparent">
-            <Button 
-              size="lg"
-              className="w-full bg-primary hover:bg-primary/90 text-white rounded-xl h-14"
-            >
-              Back This Project
-            </Button>
-          </div>
+          <button ref={sheetTriggerRef} className="hidden">
+            Open Payment Methods
+          </button>
         </SheetTrigger>
         <SheetContent side="bottom" className="h-[80vh] rounded-t-3xl">
           <div className="space-y-6 pt-6">
