@@ -15,6 +15,7 @@ import { ProfileSection } from '@/components/landing/ProfileSection';
 import { SearchBar } from '@/components/landing/SearchBar';
 import { PaymentMethodsSheet } from '@/components/landing/PaymentMethodsSheet';
 import { TrustIndicator } from '@/components/landing/TrustIndicator';
+import { StoryMissionsTab } from '@/components/landing/StoryMissionsTab';
 
 export default function Landing() {
   const [progress, setProgress] = useState(65);
@@ -96,6 +97,10 @@ export default function Landing() {
               <TabsContent value="overview" className="mt-0">
                 <VideoSection />
                 <ProfileSection {...creatorProfile} />
+              </TabsContent>
+
+              <TabsContent value="story" className="mt-0">
+                <StoryMissionsTab />
               </TabsContent>
 
               <TabsContent value="updates" className="mt-6 container mx-auto">
