@@ -44,9 +44,12 @@ export function ProfileSection({
               </div>
             </div>
           </div>
-          <p className="text-xs mt-1 text-gray-600 max-w-xs font-medium">
-            {creatorBio}
-          </p>
+          <div className="flex items-center gap-2 mt-1.5">
+            <div className="px-1.5 py-0.5 bg-black/40 backdrop-blur-sm rounded-full flex items-center text-[10px] text-white">
+              <span className="text-[#9b87f5] mr-1">•</span>
+              {creatorBio}
+            </div>
+          </div>
         </div>
       </div>
     </div>
