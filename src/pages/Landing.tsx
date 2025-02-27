@@ -77,19 +77,6 @@ export default function Landing() {
     }
   };
 
-  const renderSecondaryTabContent = () => {
-    switch (activeSecondaryTab) {
-      case "story":
-        return <StoryTab />;
-      case "services":
-        return <ServicesTab />;
-      case "team":
-        return <TeamTab />;
-      default:
-        return <StoryTab />;
-    }
-  };
-
   return (
     <div className="font-sans">
       <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
