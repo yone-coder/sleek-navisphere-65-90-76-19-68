@@ -15,7 +15,7 @@ export function ProfileSection({
 }: ProfileSectionProps) {
   return (
     <div className="w-full text-white">
-      <div className="flex items-center p-2 px-4">
+      <div className="flex items-center p-2 pt-3 pl-2 pr-4">
         {/* Profile Image Container */}
         <div className="w-12 h-12 rounded-full bg-white mr-2 flex items-center justify-center overflow-hidden flex-shrink-0 aspect-square">
           <img 
