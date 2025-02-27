@@ -124,17 +124,11 @@ export default function Landing() {
                 />
                 
                 {/* Secondary Tabs Content */}
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeSecondaryTab}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {renderSecondaryTabContent()}
-                  </motion.div>
-                </AnimatePresence>
+                <div className="relative">
+                  {activeSecondaryTab === "story" && <StoryTab />}
+                  {activeSecondaryTab === "services" && <ServicesTab />}
+                  {activeSecondaryTab === "team" && <TeamTab />}
+                </div>
                 
                 <div className="container mx-auto">
                   <HeroSection backers={backers} />

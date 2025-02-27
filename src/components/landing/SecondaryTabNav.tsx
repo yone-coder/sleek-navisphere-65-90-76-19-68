@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -18,6 +18,7 @@ export function SecondaryTabNav({ activeTab, onTabChange }: SecondaryTabNavProps
           <TabsTrigger 
             value="story"
             onClick={() => onTabChange("story")}
+            data-state={activeTab === "story" ? "active" : "inactive"}
             className="relative flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
           >
             <div className="relative flex items-center justify-center w-5 h-5">
@@ -36,6 +37,7 @@ export function SecondaryTabNav({ activeTab, onTabChange }: SecondaryTabNavProps
           <TabsTrigger 
             value="services"
             onClick={() => onTabChange("services")}
+            data-state={activeTab === "services" ? "active" : "inactive"}
             className="relative flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
           >
             <div className="relative flex items-center justify-center w-5 h-5">
@@ -54,6 +56,7 @@ export function SecondaryTabNav({ activeTab, onTabChange }: SecondaryTabNavProps
           <TabsTrigger 
             value="team"
             onClick={() => onTabChange("team")}
+            data-state={activeTab === "team" ? "active" : "inactive"}
             className="relative flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
           >
             <div className="relative flex items-center justify-center w-5 h-5">
