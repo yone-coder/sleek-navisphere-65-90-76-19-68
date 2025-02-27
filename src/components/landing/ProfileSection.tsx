@@ -14,10 +14,10 @@ export function ProfileSection({
   creatorBio
 }: ProfileSectionProps) {
   return (
-    <div className="w-full bg-black text-white py-4">
-      <div className="flex items-center p-3 rounded-lg px-4">
+    <div className="w-full text-white">
+      <div className="flex items-center p-2 px-4">
         {/* Profile Image Container */}
-        <div className="w-12 h-12 rounded-full bg-white mr-4 flex items-center justify-center overflow-hidden flex-shrink-0 aspect-square">
+        <div className="w-12 h-12 rounded-full bg-white mr-2 flex items-center justify-center overflow-hidden flex-shrink-0 aspect-square">
           <img 
             src={creatorImage}
             alt={`Profile image of ${creatorName}`}
@@ -26,7 +26,7 @@ export function ProfileSection({
         </div>
         
         {/* Text Content */}
-        <div className="ml-2">
+        <div>
           <div className="flex items-center">
             <span className="font-medium text-sm">{creatorName}</span>
             <Check className="text-[#9b87f5] ml-1 h-3 w-3" />
