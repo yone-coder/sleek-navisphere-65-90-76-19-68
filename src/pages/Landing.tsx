@@ -16,6 +16,10 @@ import { TitleSection } from '@/components/landing/TitleSection';
 import { SearchBar } from '@/components/landing/SearchBar';
 import { PaymentMethodsSheet } from '@/components/landing/PaymentMethodsSheet';
 import { TrustIndicator } from '@/components/landing/TrustIndicator';
+import { SecondaryTabNav } from '@/components/landing/SecondaryTabNav';
+import { StoryTab } from '@/components/landing/StoryTab';
+import { ServicesTab } from '@/components/landing/ServicesTab';
+import { TeamTab } from '@/components/landing/TeamTab';
 
 export default function Landing() {
   const [progress, setProgress] = useState(65);
@@ -24,6 +28,7 @@ export default function Landing() {
   const [raised, setRaised] = useState(32500);
   const [goal, setGoal] = useState(50000);
   const [activeTab, setActiveTab] = useState("overview");
+  const [activeSecondaryTab, setActiveSecondaryTab] = useState("story");
   const [searchQuery, setSearchQuery] = useState("");
   const sheetTriggerRef = useRef<HTMLButtonElement>(null);
 
@@ -72,6 +77,19 @@ export default function Landing() {
     }
   };
 
+  const renderSecondaryTabContent = () => {
+    switch (activeSecondaryTab) {
+      case "story":
+        return <StoryTab />;
+      case "services":
+        return <ServicesTab />;
+      case "team":
+        return <TeamTab />;
+      default:
+        return <StoryTab />;
+    }
+  };
+
   return (
     <div className="font-sans">
       <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
@@ -98,6 +116,26 @@ export default function Landing() {
                 <VideoSection />
                 <ProfileSection {...creatorProfile} />
                 <TitleSection />
+                
+                {/* Secondary Tabs Navigation */}
+                <SecondaryTabNav 
+                  activeTab={activeSecondaryTab} 
+                  onTabChange={setActiveSecondaryTab} 
+                />
+                
+                {/* Secondary Tabs Content */}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeSecondaryTab}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {renderSecondaryTabContent()}
+                  </motion.div>
+                </AnimatePresence>
+                
                 <div className="container mx-auto">
                   <HeroSection backers={backers} />
                   <RewardsSection rewards={rewards} />
