@@ -41,7 +41,7 @@ export function ProfileSection({
             </div>
           </div>
           <p className="text-xs mt-1 text-gray-300 max-w-xs">
-            {creatorBio}
+            Investment Holding Company
           </p>
           <div className="flex items-center gap-2 mt-1.5">
             <div className="px-1.5 py-0.5 bg-black/40 backdrop-blur-sm rounded-full flex items-center text-[10px] text-gray-300">
