@@ -3,7 +3,7 @@ import React from 'react';
 
 export function PlatformHeader() {
   return (
-    <div className="w-full py-12 px-0">
+    <div className="w-full py-0 px-0">
       <div className="relative overflow-hidden p-8 md:p-12 transition-all duration-500">
         <div className="absolute -top-24 -right-24 w-72 h-72 bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-3xl"></div>
