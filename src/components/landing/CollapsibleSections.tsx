@@ -35,7 +35,7 @@ export function CollapsibleSections() {
   };
 
   return (
-    <div className="w-full py-8 px-4 sm:px-6 lg:px-8 space-y-8">
+    <div className="w-full py-8 px-0 space-y-8">
       {/* Story and Missions Section */}
       <Collapsible
         open={openSections.story}
