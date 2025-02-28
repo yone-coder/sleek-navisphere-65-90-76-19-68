@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/collapsible";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion, AnimatePresence } from 'framer-motion';
+import ProjectHighlights from './ProjectHighlights';
 
 export function CollapsibleSections() {
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({
@@ -108,7 +109,7 @@ export function CollapsibleSections() {
         </AnimatePresence>
       </Collapsible>
 
-      {/* Services We Offer Section */}
+      {/* Services We Offer Section - Replaced with ProjectHighlights */}
       <Collapsible
         open={openSections.services}
         onOpenChange={() => toggleSection('services')}
@@ -132,49 +133,7 @@ export function CollapsibleSections() {
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="px-6 pb-6">
-                  <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    <div className="p-6 rounded-xl backdrop-blur-sm bg-white/50 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-start">
-                      <div className="p-3 rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 mb-4">
-                        <Laptop className="w-5 h-5 text-blue-600" />
-                      </div>
-                      <h4 className="font-semibold text-gray-800 mb-2">Digital Marketplace</h4>
-                      <p className="text-gray-600 text-sm">A secure platform for buying and selling Haitian products, services, and digital goods globally.</p>
-                    </div>
-                    
-                    <div className="p-6 rounded-xl backdrop-blur-sm bg-white/50 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-start">
-                      <div className="p-3 rounded-lg bg-gradient-to-br from-purple-50 to-purple-100 mb-4">
-                        <ShoppingBag className="w-5 h-5 text-purple-600" />
-                      </div>
-                      <h4 className="font-semibold text-gray-800 mb-2">Creator Showcase</h4>
-                      <p className="text-gray-600 text-sm">Tools for Haitian artists, creators, and developers to showcase and monetize their work.</p>
-                    </div>
-                    
-                    <div className="p-6 rounded-xl backdrop-blur-sm bg-white/50 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-start">
-                      <div className="p-3 rounded-lg bg-gradient-to-br from-pink-50 to-pink-100 mb-4">
-                        <MessageCircle className="w-5 h-5 text-pink-600" />
-                      </div>
-                      <h4 className="font-semibold text-gray-800 mb-2">Community Forums</h4>
-                      <p className="text-gray-600 text-sm">Vibrant discussion spaces connecting Haitians worldwide to share ideas and opportunities.</p>
-                    </div>
-                    
-                    <div className="p-6 rounded-xl backdrop-blur-sm bg-white/50 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-start">
-                      <div className="p-3 rounded-lg bg-gradient-to-br from-green-50 to-green-100 mb-4">
-                        <GraduationCap className="w-5 h-5 text-green-600" />
-                      </div>
-                      <h4 className="font-semibold text-gray-800 mb-2">Educational Resources</h4>
-                      <p className="text-gray-600 text-sm">Access to learning materials, courses, and mentorship opportunities focused on digital skills.</p>
-                    </div>
-                    
-                    <div className="p-6 rounded-xl backdrop-blur-sm bg-white/50 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-start">
-                      <div className="p-3 rounded-lg bg-gradient-to-br from-yellow-50 to-yellow-100 mb-4">
-                        <Trophy className="w-5 h-5 text-yellow-600" />
-                      </div>
-                      <h4 className="font-semibold text-gray-800 mb-2">Competitions & Grants</h4>
-                      <p className="text-gray-600 text-sm">Regular contests and funding opportunities to support Haitian innovation and entrepreneurship.</p>
-                    </div>
-                  </div>
-                </div>
+                <ProjectHighlights />
               </motion.div>
             </CollapsibleContent>
           )}
