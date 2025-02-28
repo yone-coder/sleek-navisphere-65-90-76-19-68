@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/collapsible";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion, AnimatePresence } from 'framer-motion';
-import ProjectHighlights from './ProjectHighlights';
+import AppShowcase from './AppShowcase';
 
 export function CollapsibleSections() {
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({
@@ -138,7 +138,7 @@ export function CollapsibleSections() {
               >
                 <div className="px-6">
                   <div className="h-px w-full bg-gradient-to-r from-transparent via-purple-200 to-transparent mb-6"></div>
-                  <ProjectHighlights />
+                  <AppShowcase />
                 </div>
               </motion.div>
             </CollapsibleContent>
