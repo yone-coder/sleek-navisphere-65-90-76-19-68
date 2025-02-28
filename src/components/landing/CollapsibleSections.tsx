@@ -50,7 +50,7 @@ export function CollapsibleSections() {
             <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 text-blue-600">
               <BookOpen className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800">Our Story and Missions</h3>
+            <h3 className="text-xl font-semibold text-gray-800">Story & Missions</h3>
           </div>
           <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${openSections.story ? 'rotate-180' : ''}`} />
         </CollapsibleTrigger>
@@ -64,6 +64,7 @@ export function CollapsibleSections() {
                 transition={{ duration: 0.3 }}
               >
                 <div className="px-6 pb-6 space-y-6">
+                  <div className="h-px w-full bg-gradient-to-r from-transparent via-blue-200 to-transparent mb-6"></div>
                   <div className="grid md:grid-cols-2 gap-8">
                     <div className="space-y-4">
                       <h4 className="text-lg font-medium text-gray-800 flex items-center gap-2">
@@ -111,7 +112,7 @@ export function CollapsibleSections() {
         </AnimatePresence>
       </Collapsible>
 
-      {/* Services We Offer Section - Replaced with ProjectHighlights */}
+      {/* Services Section */}
       <Collapsible
         open={openSections.services}
         onOpenChange={() => toggleSection('services')}
@@ -122,7 +123,7 @@ export function CollapsibleSections() {
             <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 text-purple-600">
               <Briefcase className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800">The Services We Offer</h3>
+            <h3 className="text-xl font-semibold text-gray-800">Services</h3>
           </div>
           <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${openSections.services ? 'rotate-180' : ''}`} />
         </CollapsibleTrigger>
@@ -135,7 +136,10 @@ export function CollapsibleSections() {
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <ProjectHighlights />
+                <div className="px-6">
+                  <div className="h-px w-full bg-gradient-to-r from-transparent via-purple-200 to-transparent mb-6"></div>
+                  <ProjectHighlights />
+                </div>
               </motion.div>
             </CollapsibleContent>
           )}
@@ -167,6 +171,7 @@ export function CollapsibleSections() {
                 transition={{ duration: 0.3 }}
               >
                 <div className="px-6 pb-10">
+                  <div className="h-px w-full bg-gradient-to-r from-transparent via-indigo-200 to-transparent mb-8"></div>
                   {/* Header */}
                   <div className="text-center space-y-4 mb-8">
                     <h2 className="text-2xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
@@ -251,7 +256,7 @@ export function CollapsibleSections() {
         </AnimatePresence>
       </Collapsible>
 
-      {/* Meet the Team Section */}
+      {/* Our Team Section */}
       <Collapsible
         open={openSections.team}
         onOpenChange={() => toggleSection('team')}
@@ -262,7 +267,7 @@ export function CollapsibleSections() {
             <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 text-pink-600">
               <Users className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800">Meet the Team</h3>
+            <h3 className="text-xl font-semibold text-gray-800">Our Team</h3>
           </div>
           <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${openSections.team ? 'rotate-180' : ''}`} />
         </CollapsibleTrigger>
@@ -276,6 +281,7 @@ export function CollapsibleSections() {
                 transition={{ duration: 0.3 }}
               >
                 <div className="px-6 pb-8">
+                  <div className="h-px w-full bg-gradient-to-r from-transparent via-pink-200 to-transparent mb-6"></div>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {[
                       {
