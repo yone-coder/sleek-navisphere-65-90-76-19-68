@@ -2,11 +2,9 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { Shield } from 'lucide-react';
+import { Shield, BookOpen, Briefcase, Users } from 'lucide-react';
 import { FloatingProgress } from '@/components/campaign/FloatingProgress';
 import { FAQsTab } from '@/components/product/tabs/FAQsTab';
-import { HeroSection } from '@/components/landing/HeroSection';
-import { RewardsSection } from '@/components/landing/RewardsSection';
 import { TabNav } from '@/components/landing/TabNav';
 import { UpdatesTab } from '@/components/landing/UpdatesTab';
 import { CommentsTab } from '@/components/landing/CommentsTab';
@@ -16,6 +14,8 @@ import { SearchBar } from '@/components/landing/SearchBar';
 import { PaymentMethodsSheet } from '@/components/landing/PaymentMethodsSheet';
 import { TrustIndicator } from '@/components/landing/TrustIndicator';
 import { StoryMissionsTab } from '@/components/landing/StoryMissionsTab';
+import { PlatformHeader } from '@/components/landing/PlatformHeader';
+import { CollapsibleSections } from '@/components/landing/CollapsibleSections';
 
 export default function Landing() {
   const [progress, setProgress] = useState(65);
@@ -97,6 +97,8 @@ export default function Landing() {
               <TabsContent value="overview" className="mt-0">
                 <VideoSection />
                 <ProfileSection {...creatorProfile} />
+                <PlatformHeader />
+                <CollapsibleSections />
               </TabsContent>
 
               <TabsContent value="story" className="mt-0">
