@@ -94,7 +94,7 @@ export default function Landing() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
             >
-              <TabsContent value="overview" className="mt-0">
+              <TabsContent value="overview" className="mt-0 pb-24">
                 <VideoSection />
                 <ProfileSection {...creatorProfile} />
                 <PlatformHeader />
