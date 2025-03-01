@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
@@ -58,11 +57,11 @@ export default function Landing() {
     }
   ];
 
-  // Creator profile data - simplified
+  // Creator profile data - updated to ensure bio is Investment Holding Company
   const creatorProfile = {
     creatorName: "Mima Group",
     creatorImage: "/lovable-uploads/7b6dfa3b-fe97-4083-8e4a-0640871dbc3f.png",
-    creatorBio: "Digital design studio specializing in UI/UX and branding."
+    creatorBio: "Investment Holding Company"
   };
 
   const handleBackProjectClick = () => {
