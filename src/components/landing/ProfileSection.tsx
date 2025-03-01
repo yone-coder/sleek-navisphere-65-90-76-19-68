@@ -42,31 +42,18 @@ export function ProfileSection({
             
             <p className="text-gray-600">{creatorBio}</p>
             
-            <div className="mt-1 flex items-center text-gray-500">
-              <MapPin className="mr-1 h-4 w-4" />
-              <span className="text-sm">Désarmes, AR, Haiti</span>
+            <div className="mt-1 flex items-center justify-between">
+              <div className="flex items-center text-gray-500">
+                <MapPin className="mr-1 h-4 w-4" />
+                <span className="text-sm">Désarmes, AR, Haiti</span>
+              </div>
+              
+              {/* YTD - Moved to same line as location */}
+              <div className="flex items-center space-x-1">
+                <span className="text-base font-medium text-green-500">+24.5%</span>
+                <span className="text-xs text-gray-500">YTD</span>
+              </div>
             </div>
-          </div>
-        </div>
-        
-        {/* Metrics Section - Reduced size */}
-        <div className="mt-3 grid grid-cols-3 gap-2">
-          {/* AUM */}
-          <div className="flex items-center justify-center space-x-1">
-            <span className="text-lg font-bold text-gray-900">$52M</span>
-            <span className="text-xs text-gray-500">AUM</span>
-          </div>
-          
-          {/* ROI */}
-          <div className="flex items-center justify-center space-x-1">
-            <span className="text-lg font-bold text-gray-900">94%</span>
-            <span className="text-xs text-gray-500">ROI</span>
-          </div>
-          
-          {/* YTD */}
-          <div className="flex items-center justify-center space-x-1">
-            <span className="text-base font-medium text-green-500">+24.5%</span>
-            <span className="text-xs text-gray-500">YTD</span>
           </div>
         </div>
       </div>
