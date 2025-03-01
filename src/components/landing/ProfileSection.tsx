@@ -49,24 +49,24 @@ export function ProfileSection({
           </div>
         </div>
         
-        {/* Metrics Section */}
-        <div className="mt-4 grid grid-cols-3 gap-4">
+        {/* Metrics Section - Reduced size */}
+        <div className="mt-3 grid grid-cols-3 gap-2">
           {/* AUM */}
-          <div className="flex items-center justify-center space-x-2">
-            <span className="text-2xl font-bold text-gray-900">$52M</span>
-            <span className="text-sm text-gray-500">AUM</span>
+          <div className="flex items-center justify-center space-x-1">
+            <span className="text-lg font-bold text-gray-900">$52M</span>
+            <span className="text-xs text-gray-500">AUM</span>
           </div>
           
           {/* ROI */}
-          <div className="flex items-center justify-center space-x-2">
-            <span className="text-2xl font-bold text-gray-900">94%</span>
-            <span className="text-sm text-gray-500">ROI</span>
+          <div className="flex items-center justify-center space-x-1">
+            <span className="text-lg font-bold text-gray-900">94%</span>
+            <span className="text-xs text-gray-500">ROI</span>
           </div>
           
           {/* YTD */}
-          <div className="flex items-center justify-center space-x-2">
-            <span className="text-lg font-medium text-green-500">+24.5%</span>
-            <span className="text-sm text-gray-500">YTD</span>
+          <div className="flex items-center justify-center space-x-1">
+            <span className="text-base font-medium text-green-500">+24.5%</span>
+            <span className="text-xs text-gray-500">YTD</span>
           </div>
         </div>
       </div>
