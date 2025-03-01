@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Check, Award, Shield, MapPin } from 'lucide-react';
+import { Check, MapPin } from 'lucide-react';
 
 interface ProfileSectionProps {
   creatorName: string;
@@ -14,39 +14,60 @@ export function ProfileSection({
   creatorBio = "Investment Holding Company"
 }: ProfileSectionProps) {
   return (
-    <div className="w-full text-white">
-      <div className="flex items-center p-2 pt-3 pl-2 pr-4">
-        {/* Profile Image Container */}
-        <div className="relative w-12 h-12 rounded-full bg-white mr-3 flex items-center justify-center overflow-hidden flex-shrink-0 aspect-square shadow-md shadow-purple-800/20">
-          <img 
-            src={creatorImage}
-            alt={`Profile image of ${creatorName}`}
-            className="w-full h-full object-cover min-w-full min-h-full"
-          />
-          <div className="absolute -bottom-1 -right-1 bg-[#9b87f5] rounded-full w-4 h-4 flex items-center justify-center border border-white">
-            <Shield className="text-white w-2 h-2" />
+    <div className="w-full">
+      <div className="max-w-md mx-auto rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
+        <div className="flex items-start gap-3">
+          {/* Profile Image and Badge */}
+          <div className="relative">
+            <div className="h-12 w-12 overflow-hidden rounded-full bg-gradient-to-r from-[#9b87f5] to-[#7E69AB]">
+              <img 
+                src={creatorImage}
+                alt={`Profile image of ${creatorName}`}
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="absolute -bottom-1 -right-1 rounded-full bg-[#9b87f5] p-0.5">
+              <Check className="h-3 w-3 text-white" />
+            </div>
+          </div>
+          
+          {/* Company Information */}
+          <div className="flex-1">
+            <div className="flex items-center justify-between">
+              <h1 className="text-xl font-bold text-gray-900 whitespace-nowrap">{creatorName}</h1>
+              <div className="ml-2">
+                <button className="rounded-md bg-[#9b87f5] px-3 py-1 text-sm font-semibold text-white shadow-sm hover:bg-[#7E69AB] transition-colors duration-200">Contact</button>
+              </div>
+            </div>
+            
+            <p className="text-gray-600">{creatorBio}</p>
+            
+            <div className="mt-1 flex items-center text-gray-500">
+              <MapPin className="mr-1 h-4 w-4" />
+              <span className="text-sm">Désarmes, AR, Haiti</span>
+            </div>
           </div>
         </div>
         
-        {/* Text Content */}
-        <div>
-          <div className="flex items-center whitespace-nowrap">
-            <span className="font-semibold text-sm text-gray-900 font-inter tracking-tight">{creatorName}</span>
-            <div className="ml-2 flex items-center">
-              <div className="px-1.5 py-0.5 bg-gradient-to-r from-[#9b87f5] to-[#7E69AB] rounded-full flex items-center gap-1 shadow-md group transition-all duration-300 hover:shadow-purple-500/30 hover:scale-105">
-                <Check className="text-white h-2.5 w-2.5" />
-                <span className="text-[10px] text-white font-medium">Verified</span>
-                <Award className="h-2.5 w-2.5 text-white hidden group-hover:block transition-all" />
-              </div>
-              <div className="ml-2 px-1.5 py-0.5 bg-black/40 backdrop-blur-sm rounded-full flex items-center text-[8px] text-white whitespace-nowrap">
-                <MapPin className="text-[#9b87f5] h-2.5 w-2.5 mr-0.5" />
-                Desarmes, AR, Haïti
-              </div>
-            </div>
+        {/* Metrics Section */}
+        <div className="mt-4 grid grid-cols-3 gap-4">
+          {/* AUM */}
+          <div className="flex items-center justify-center space-x-2">
+            <span className="text-2xl font-bold text-gray-900">$52M</span>
+            <span className="text-sm text-gray-500">AUM</span>
           </div>
-          <p className="text-xs mt-1 text-gray-600 max-w-xs font-medium">
-            Investment Holding Company
-          </p>
+          
+          {/* ROI */}
+          <div className="flex items-center justify-center space-x-2">
+            <span className="text-2xl font-bold text-gray-900">94%</span>
+            <span className="text-sm text-gray-500">ROI</span>
+          </div>
+          
+          {/* YTD */}
+          <div className="flex items-center justify-center space-x-2">
+            <span className="text-lg font-medium text-green-500">+24.5%</span>
+            <span className="text-sm text-gray-500">YTD</span>
+          </div>
         </div>
       </div>
     </div>
