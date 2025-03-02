@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
@@ -12,7 +11,6 @@ import { VideoSection } from '@/components/landing/VideoSection';
 import { ProfileSection } from '@/components/landing/ProfileSection';
 import { SearchBar } from '@/components/landing/SearchBar';
 import { PaymentMethodsSheet } from '@/components/landing/PaymentMethodsSheet';
-import { TrustIndicator } from '@/components/landing/TrustIndicator';
 import { StoryMissionsTab } from '@/components/landing/StoryMissionsTab';
 import { PlatformHeader } from '@/components/landing/PlatformHeader';
 import { CollapsibleSections } from '@/components/landing/CollapsibleSections';
@@ -59,7 +57,6 @@ export default function Landing() {
     }
   ];
 
-  // Creator profile data - updated to ensure bio is Investment Holding Company
   const creatorProfile = {
     creatorName: "Mima Group",
     creatorImage: "/lovable-uploads/7b6dfa3b-fe97-4083-8e4a-0640871dbc3f.png",
@@ -67,7 +64,6 @@ export default function Landing() {
   };
 
   const handleBackProjectClick = () => {
-    // Programmatically click the sheet trigger when FloatingProgress back button is clicked
     if (sheetTriggerRef.current) {
       sheetTriggerRef.current.click();
     }
@@ -76,16 +72,10 @@ export default function Landing() {
   return (
     <div className="font-sans">
       <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
-        {/* Search Bar and Tabs Navigation - Sticky Header */}
         <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg shadow-sm">
-          {/* Search Bar */}
           <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-
-          {/* Tabs Navigation */}
           <TabNav activeTab={activeTab} />
         </div>
-
-        {/* Content Sections */}
         <div className="w-full">
           <AnimatePresence mode="wait">
             <motion.div
@@ -101,23 +91,18 @@ export default function Landing() {
                 <PlatformHeader />
                 <CollapsibleSections />
               </TabsContent>
-
               <TabsContent value="services" className="mt-0">
                 <ServicesTab />
               </TabsContent>
-
               <TabsContent value="story" className="mt-0">
                 <StoryMissionsTab />
               </TabsContent>
-
               <TabsContent value="timeline" className="mt-2 w-full px-1">
                 <TimelineTab />
               </TabsContent>
-
               <TabsContent value="comments" className="mt-6">
                 <CommentsTab />
               </TabsContent>
-
               <TabsContent value="faqs" className="mt-6 container mx-auto">
                 <FAQsTab />
               </TabsContent>
@@ -125,8 +110,6 @@ export default function Landing() {
           </AnimatePresence>
         </div>
       </Tabs>
-
-      {/* Progress Bar - Only show on overview tab */}
       {activeTab === "overview" && (
         <FloatingProgress
           backers={backers}
@@ -137,12 +120,7 @@ export default function Landing() {
           onBackProjectClick={handleBackProjectClick}
         />
       )}
-      
-      {/* Payment Methods Sheet */}
       <PaymentMethodsSheet sheetTriggerRef={sheetTriggerRef} />
-
-      {/* Trust Indicators */}
-      <TrustIndicator />
     </div>
   );
 }
