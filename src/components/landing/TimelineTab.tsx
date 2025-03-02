@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 
 const ProjectTimeline = () => {
   // Sample project data - you can replace with your actual data
@@ -208,6 +209,9 @@ const ProjectTimeline = () => {
       
       {/* Timeline */}
       <div className="relative px-2">
+        {/* Timeline connector line */}
+        <div className="absolute left-8 top-0 bottom-0 w-1 bg-gray-200 z-0" style={{ marginLeft: "-3px" }}></div>
+        
         <AnimatePresence>
           {filteredPhases.length > 0 ? (
             filteredPhases.map((phase, index) => (
@@ -227,9 +231,20 @@ const ProjectTimeline = () => {
                       : phase.status === 'in-progress'
                         ? 'bg-blue-50 border-l-4 border-blue-500'
                         : 'bg-gray-50 border-l-4 border-gray-300'
-                  }`}
+                  } relative z-10`}
                   onClick={() => toggleExpand(phase.id)}
                 >
+                  {/* Timeline connector dot */}
+                  <div 
+                    className={`absolute -left-6 w-5 h-5 rounded-full z-20 border-2 ${
+                      phase.status === 'completed' 
+                        ? 'bg-green-500 border-green-200' 
+                        : phase.status === 'in-progress'
+                          ? 'bg-blue-500 border-blue-200'
+                          : 'bg-gray-300 border-gray-200'
+                    }`}
+                  ></div>
+
                   <div className="flex-1">
                     <div className="flex items-center">
                       {getStatusIcon(phase.status)}
@@ -255,7 +270,7 @@ const ProjectTimeline = () => {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="mt-2 ml-6 pl-6 border-l-2 border-dashed border-gray-300">
+                      <div className="mt-2 ml-6 pl-6 border-l-2 border-dashed border-gray-300 relative z-10">
                         <p className="text-gray-700 mb-3">{phase.description}</p>
                         <div className="space-y-3">
                           {phase.tasks.map(task => (
