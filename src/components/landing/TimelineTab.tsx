@@ -208,9 +208,9 @@ const ProjectTimeline = () => {
       </div>
       
       {/* Timeline */}
-      <div className="relative px-2">
+      <div className="relative px-4 pl-12">
         {/* Timeline connector line */}
-        <div className="absolute left-8 top-0 bottom-0 w-1 bg-gray-200 z-0" style={{ marginLeft: "-3px" }}></div>
+        <div className="absolute left-10 top-0 bottom-0 w-1 bg-gray-200 z-0"></div>
         
         <AnimatePresence>
           {filteredPhases.length > 0 ? (
@@ -236,7 +236,7 @@ const ProjectTimeline = () => {
                 >
                   {/* Timeline connector dot */}
                   <div 
-                    className={`absolute -left-6 w-5 h-5 rounded-full z-20 border-2 ${
+                    className={`absolute -left-8 w-6 h-6 rounded-full z-20 border-2 ${
                       phase.status === 'completed' 
                         ? 'bg-green-500 border-green-200' 
                         : phase.status === 'in-progress'
