@@ -23,10 +23,10 @@ const ImpactStory = () => {
     { value: 75, label: "Countries Reached" }
   ];
 
-  // Single image for each section
-  const founderImage = "/api/placeholder/600/400";
-  const challengeImage = "/api/placeholder/600/400";
-  const impactImage = "/api/placeholder/800/400";
+  // Public images
+  const founderImage = "/lovable-uploads/7751a0aa-bb1f-47c5-b434-e63e68dbc0d0.png";
+  const challengeImage = "/lovable-uploads/44c5c93d-ace1-4feb-a49b-db4a8a02f987.png";
+  const impactImage = "/lovable-uploads/7b6dfa3b-fe97-4083-8e4a-0640871dbc3f.png";
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -69,15 +69,15 @@ const ImpactStory = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+    <div className="w-full bg-white overflow-hidden">
       {/* Minimal, Sleek Title Section */}
-      <div className="py-12 px-6 text-center">
+      <div className="py-12 px-4 text-center">
         <h1 className="text-4xl font-bold mb-4 text-gray-900">Our Story & Mission</h1>
         <div className="w-24 h-1 bg-indigo-600 mx-auto"></div>
       </div>
 
-      {/* Main content area */}
-      <div className="p-6 md:p-8">
+      {/* Main content area with minimal padding */}
+      <div className="px-4 md:px-6 lg:px-8">
         {/* Introduction Section with Single Image */}
         <div className="mb-16 flex flex-col md:flex-row gap-8 items-center">
           <div className="md:w-1/2 space-y-4">
@@ -97,7 +97,7 @@ const ImpactStory = () => {
               </button>
             </div>
           </div>
-          <div className="md:w-1/2 h-64 rounded-lg shadow-md overflow-hidden">
+          <div className="md:w-1/2 h-64 md:h-80 rounded-lg shadow-md overflow-hidden">
             <img 
               src={founderImage} 
               alt="Our founding team" 
@@ -130,7 +130,7 @@ const ImpactStory = () => {
               ))}
             </ul>
           </div>
-          <div className="md:w-1/2 h-64 rounded-lg shadow-md overflow-hidden">
+          <div className="md:w-1/2 h-64 md:h-80 rounded-lg shadow-md overflow-hidden">
             <img 
               src={challengeImage} 
               alt="Challenges facing our community" 
@@ -259,7 +259,7 @@ const ImpactStory = () => {
                 We are building the future of the Haitian digital community, but we can't do it alone. The strength of our platform lies in its community—in the diverse perspectives, talents, and commitments that each member brings.
               </p>
             </div>
-            <div className="md:w-1/2 rounded-lg shadow-md overflow-hidden h-72">
+            <div className="md:w-1/2 rounded-lg shadow-md overflow-hidden h-72 md:h-96">
               <img 
                 src={impactImage} 
                 alt="Our impact in the community" 
@@ -309,7 +309,7 @@ const ImpactStory = () => {
 
 export function StoryMissionsTab() {
   return (
-    <div className="container mx-auto py-8">
+    <div className="w-full">
       <ImpactStory />
     </div>
   );
