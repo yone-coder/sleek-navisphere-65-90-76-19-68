@@ -16,9 +16,19 @@ export function TabNav({ activeTab }: TabNavProps) {
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [showSwipeHint, setShowSwipeHint] = useState(true);
+  const [autoScrollActive, setAutoScrollActive] = useState(true);
+  const [scrollDirection, setScrollDirection] = useState<'right' | 'left'>('right');
+  const autoScrollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Minimum swipe distance threshold (in px)
   const minSwipeDistance = 50;
+  
+  // Auto-scroll speed (ms)
+  const autoScrollSpeed = 30;
+  // Pause duration at ends (ms)
+  const autoScrollPause = 1000;
+  // Scroll step size (px)
+  const scrollStep = 2;
 
   // Check if scrolling is needed
   useEffect(() => {
@@ -37,6 +47,72 @@ export function TabNav({ activeTab }: TabNavProps) {
     };
   }, []);
 
+  // Setup auto-scroll animation
+  useEffect(() => {
+    if (showScrollIndicator && autoScrollActive && scrollAreaRef.current) {
+      const handleAutoScroll = () => {
+        if (!scrollAreaRef.current) return;
+        
+        const { scrollLeft, scrollWidth, clientWidth } = scrollAreaRef.current;
+        const maxScroll = scrollWidth - clientWidth;
+        
+        // Reached the right end
+        if (scrollDirection === 'right' && scrollLeft >= maxScroll - 5) {
+          setScrollDirection('left');
+          // Pause at the right end
+          if (autoScrollIntervalRef.current) {
+            clearInterval(autoScrollIntervalRef.current);
+            setTimeout(() => {
+              startAutoScroll('left');
+            }, autoScrollPause);
+          }
+        }
+        // Reached the left end
+        else if (scrollDirection === 'left' && scrollLeft <= 5) {
+          setScrollDirection('right');
+          // Pause at the left end
+          if (autoScrollIntervalRef.current) {
+            clearInterval(autoScrollIntervalRef.current);
+            setTimeout(() => {
+              startAutoScroll('right');
+            }, autoScrollPause);
+          }
+        }
+        // Continue scrolling in the current direction
+        else {
+          scrollAreaRef.current.scrollLeft += scrollDirection === 'right' ? scrollStep : -scrollStep;
+        }
+      };
+      
+      const startAutoScroll = (direction: 'right' | 'left') => {
+        if (autoScrollIntervalRef.current) {
+          clearInterval(autoScrollIntervalRef.current);
+        }
+        setScrollDirection(direction);
+        autoScrollIntervalRef.current = setInterval(handleAutoScroll, autoScrollSpeed);
+      };
+      
+      // Start the auto-scroll
+      startAutoScroll('right');
+      
+      // Cleanup function
+      return () => {
+        if (autoScrollIntervalRef.current) {
+          clearInterval(autoScrollIntervalRef.current);
+        }
+      };
+    }
+  }, [showScrollIndicator, autoScrollActive, scrollDirection]);
+
+  // Pause auto-scroll on user interaction
+  const pauseAutoScroll = () => {
+    setAutoScrollActive(false);
+    // Restart after 10 seconds of inactivity
+    setTimeout(() => {
+      setAutoScrollActive(true);
+    }, 10000);
+  };
+
   // Auto-hide swipe hint after 5 seconds
   useEffect(() => {
     if (showSwipeHint) {
@@ -50,6 +126,7 @@ export function TabNav({ activeTab }: TabNavProps) {
 
   // Handle touch events for swipe
   const onTouchStart = (e: React.TouchEvent) => {
+    pauseAutoScroll();
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
   };
@@ -78,6 +155,15 @@ export function TabNav({ activeTab }: TabNavProps) {
     setTouchEnd(null);
   };
 
+  // Add mouse interaction handlers
+  const onMouseDown = () => {
+    pauseAutoScroll();
+  };
+
+  const onWheel = () => {
+    pauseAutoScroll();
+  };
+
   return (
     <div className="relative w-full">
       <ScrollArea 
@@ -86,6 +172,8 @@ export function TabNav({ activeTab }: TabNavProps) {
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
+        onMouseDown={onMouseDown}
+        onWheel={onWheel}
       >
         <TabsList className="w-max inline-flex h-10 items-center justify-start gap-1 bg-transparent p-1">
           <TabsTrigger 
