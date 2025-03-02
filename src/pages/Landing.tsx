@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
@@ -104,7 +105,7 @@ export default function Landing() {
                 <StoryMissionsTab />
               </TabsContent>
 
-              <TabsContent value="timeline" className="mt-6 container mx-auto">
+              <TabsContent value="timeline" className="mt-2 w-full px-1">
                 <TimelineTab />
               </TabsContent>
 

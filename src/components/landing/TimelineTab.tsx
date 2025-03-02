@@ -159,11 +159,11 @@ const ProjectTimeline = () => {
   return (
     <div className="w-full max-w-none mx-auto bg-white">
       {/* Header with controls */}
-      <div className="mb-8 bg-gradient-to-r from-gray-50 to-white p-6 rounded-xl shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+      <div className="mb-4 bg-gradient-to-r from-gray-50 to-white p-3 rounded-lg shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Website Project Timeline</h1>
-            <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold text-gray-800 mb-1">Website Project Timeline</h1>
+            <div className="flex items-center gap-2">
               <p className="text-gray-600">March 2025 - July 2025</p>
               <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">On Track</Badge>
             </div>
@@ -179,7 +179,7 @@ const ProjectTimeline = () => {
         </div>
         
         {/* Search and filters */}
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex flex-col sm:flex-row gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
             <Input 
@@ -207,7 +207,7 @@ const ProjectTimeline = () => {
       </div>
       
       {/* Timeline */}
-      <div className="relative px-4 sm:px-6">
+      <div className="relative px-2">
         <AnimatePresence>
           {filteredPhases.length > 0 ? (
             filteredPhases.map((phase, index) => (
@@ -304,7 +304,7 @@ const ProjectTimeline = () => {
 
 export function TimelineTab() {
   return (
-    <div className="w-full mx-auto">
+    <div className="w-full">
       <ProjectTimeline />
     </div>
   );
