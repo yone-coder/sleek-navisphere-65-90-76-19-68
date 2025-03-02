@@ -19,6 +19,7 @@ export function TabNav({ activeTab }: TabNavProps) {
   const [autoScrollActive, setAutoScrollActive] = useState(true);
   const [scrollDirection, setScrollDirection] = useState<'right' | 'left'>('right');
   const autoScrollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const tabsListRef = useRef<HTMLDivElement>(null);
 
   // Minimum swipe distance threshold (in px)
   const minSwipeDistance = 50;
@@ -55,6 +56,9 @@ export function TabNav({ activeTab }: TabNavProps) {
         
         const { scrollLeft, scrollWidth, clientWidth } = scrollAreaRef.current;
         const maxScroll = scrollWidth - clientWidth;
+        
+        // Ensure we have accurate scroll information
+        if (maxScroll <= 0) return;
         
         // Reached the right end
         if (scrollDirection === 'right' && scrollLeft >= maxScroll - 5) {
@@ -102,15 +106,41 @@ export function TabNav({ activeTab }: TabNavProps) {
         }
       };
     }
-  }, [showScrollIndicator, autoScrollActive, scrollDirection]);
+  }, [showScrollIndicator, autoScrollActive]);
+
+  // Force scroll check when tabs render completely
+  useEffect(() => {
+    // Check scroll dimensions after a short delay to ensure DOM is fully rendered
+    const timer = setTimeout(() => {
+      if (scrollAreaRef.current && tabsListRef.current) {
+        const { scrollWidth, clientWidth } = scrollAreaRef.current;
+        setShowScrollIndicator(scrollWidth > clientWidth);
+        
+        // Force a small scroll to trigger the auto-scroll mechanism
+        if (scrollWidth > clientWidth && autoScrollActive) {
+          scrollAreaRef.current.scrollLeft = 1;
+        }
+      }
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   // Pause auto-scroll on user interaction
   const pauseAutoScroll = () => {
     setAutoScrollActive(false);
+    
+    if (autoScrollIntervalRef.current) {
+      clearInterval(autoScrollIntervalRef.current);
+      autoScrollIntervalRef.current = null;
+    }
+    
     // Restart after 10 seconds of inactivity
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setAutoScrollActive(true);
     }, 10000);
+    
+    return () => clearTimeout(timer);
   };
 
   // Auto-hide swipe hint after 5 seconds
@@ -175,7 +205,10 @@ export function TabNav({ activeTab }: TabNavProps) {
         onMouseDown={onMouseDown}
         onWheel={onWheel}
       >
-        <TabsList className="w-max inline-flex h-10 items-center justify-start gap-1 bg-transparent p-1">
+        <TabsList 
+          className="w-max inline-flex h-10 items-center justify-start gap-1 bg-transparent p-1"
+          ref={tabsListRef}
+        >
           <TabsTrigger 
             value="overview"
             className="relative flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
