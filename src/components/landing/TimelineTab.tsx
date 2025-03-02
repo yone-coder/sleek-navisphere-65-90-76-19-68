@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, Calendar, CheckCircle, Clock, AlertCircle, Filter, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -195,7 +196,7 @@ const ProjectTimeline = () => {
         </div>
       </div>
       
-      <div className="relative px-4 pl-2">
+      <div className="relative px-4">
         <AnimatePresence>
           {filteredPhases.length > 0 ? (
             filteredPhases.map((phase, index) => (
@@ -241,7 +242,7 @@ const ProjectTimeline = () => {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="mt-2 pl-2 relative z-10">
+                      <div className="mt-2 px-4 relative z-10">
                         <p className="text-gray-700 mb-3">{phase.description}</p>
                         <div className="space-y-3">
                           {phase.tasks.map(task => (
@@ -252,11 +253,11 @@ const ProjectTimeline = () => {
                               transition={{ duration: 0.2 }}
                               className="flex flex-col p-3 bg-white rounded-md shadow-sm hover:shadow-md transition-shadow"
                             >
-                              <div className="flex items-center mb-1">
+                              <div className="flex items-start mb-1">
                                 {getStatusIcon(task.status)}
                                 <span className="ml-2 font-medium break-words">{task.title}</span>
                               </div>
-                              <span className="text-xs text-gray-500 pl-2">{formatDate(task.date)}</span>
+                              <span className="text-xs text-gray-500 ml-6">{formatDate(task.date)}</span>
                             </motion.div>
                           ))}
                         </div>
