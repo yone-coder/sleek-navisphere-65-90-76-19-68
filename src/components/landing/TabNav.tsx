@@ -20,6 +20,7 @@ export function TabNav({ activeTab }: TabNavProps) {
   const [scrollDirection, setScrollDirection] = useState<'right' | 'left'>('right');
   const autoScrollIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const tabsListRef = useRef<HTMLDivElement>(null);
+  const scrollCheckTimer = useRef<NodeJS.Timeout | null>(null);
 
   // Minimum swipe distance threshold (in px)
   const minSwipeDistance = 50;
@@ -31,13 +32,76 @@ export function TabNav({ activeTab }: TabNavProps) {
   // Scroll step size (px)
   const scrollStep = 2;
 
-  // Check if scrolling is needed
+  // Start auto-scroll function
+  const startAutoScroll = (direction: 'right' | 'left') => {
+    if (autoScrollIntervalRef.current) {
+      clearInterval(autoScrollIntervalRef.current);
+    }
+    
+    setScrollDirection(direction);
+    
+    autoScrollIntervalRef.current = setInterval(() => {
+      if (!scrollAreaRef.current) return;
+      
+      const { scrollLeft, scrollWidth, clientWidth } = scrollAreaRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      
+      // Ensure we have accurate scroll information
+      if (maxScroll <= 0) return;
+      
+      // Reached the right end
+      if (direction === 'right' && scrollLeft >= maxScroll - 5) {
+        setScrollDirection('left');
+        // Pause at the right end
+        clearInterval(autoScrollIntervalRef.current!);
+        setTimeout(() => {
+          startAutoScroll('left');
+        }, autoScrollPause);
+      }
+      // Reached the left end
+      else if (direction === 'left' && scrollLeft <= 5) {
+        setScrollDirection('right');
+        // Pause at the left end
+        clearInterval(autoScrollIntervalRef.current!);
+        setTimeout(() => {
+          startAutoScroll('right');
+        }, autoScrollPause);
+      }
+      // Continue scrolling in the current direction
+      else {
+        scrollAreaRef.current.scrollLeft += direction === 'right' ? scrollStep : -scrollStep;
+      }
+    }, autoScrollSpeed);
+  };
+
+  // Check if scrolling is needed and initialize auto-scroll
+  const initializeScroll = () => {
+    if (scrollCheckTimer.current) {
+      clearTimeout(scrollCheckTimer.current);
+    }
+    
+    // Delay to ensure DOM is fully rendered
+    scrollCheckTimer.current = setTimeout(() => {
+      if (scrollAreaRef.current && tabsListRef.current) {
+        const { scrollWidth, clientWidth } = scrollAreaRef.current;
+        const needsScroll = scrollWidth > clientWidth;
+        
+        setShowScrollIndicator(needsScroll);
+        
+        // Start auto-scroll if needed and active
+        if (needsScroll && autoScrollActive && !autoScrollIntervalRef.current) {
+          // Force a small initial scroll to ensure we're not at the edge
+          scrollAreaRef.current.scrollLeft = 1;
+          startAutoScroll('right');
+        }
+      }
+    }, 500);
+  };
+
+  // Initialize scroll check when component mounts or window resizes
   useEffect(() => {
     const checkScroll = () => {
-      if (scrollAreaRef.current) {
-        const { scrollWidth, clientWidth } = scrollAreaRef.current;
-        setShowScrollIndicator(scrollWidth > clientWidth);
-      }
+      initializeScroll();
     };
 
     checkScroll();
@@ -45,85 +109,34 @@ export function TabNav({ activeTab }: TabNavProps) {
     
     return () => {
       window.removeEventListener('resize', checkScroll);
+      if (scrollCheckTimer.current) {
+        clearTimeout(scrollCheckTimer.current);
+      }
     };
   }, []);
 
-  // Setup auto-scroll animation
+  // Handle auto-scroll activation/deactivation
   useEffect(() => {
-    if (showScrollIndicator && autoScrollActive && scrollAreaRef.current) {
-      const handleAutoScroll = () => {
-        if (!scrollAreaRef.current) return;
-        
-        const { scrollLeft, scrollWidth, clientWidth } = scrollAreaRef.current;
-        const maxScroll = scrollWidth - clientWidth;
-        
-        // Ensure we have accurate scroll information
-        if (maxScroll <= 0) return;
-        
-        // Reached the right end
-        if (scrollDirection === 'right' && scrollLeft >= maxScroll - 5) {
-          setScrollDirection('left');
-          // Pause at the right end
-          if (autoScrollIntervalRef.current) {
-            clearInterval(autoScrollIntervalRef.current);
-            setTimeout(() => {
-              startAutoScroll('left');
-            }, autoScrollPause);
-          }
-        }
-        // Reached the left end
-        else if (scrollDirection === 'left' && scrollLeft <= 5) {
-          setScrollDirection('right');
-          // Pause at the left end
-          if (autoScrollIntervalRef.current) {
-            clearInterval(autoScrollIntervalRef.current);
-            setTimeout(() => {
-              startAutoScroll('right');
-            }, autoScrollPause);
-          }
-        }
-        // Continue scrolling in the current direction
-        else {
-          scrollAreaRef.current.scrollLeft += scrollDirection === 'right' ? scrollStep : -scrollStep;
-        }
-      };
-      
-      const startAutoScroll = (direction: 'right' | 'left') => {
-        if (autoScrollIntervalRef.current) {
-          clearInterval(autoScrollIntervalRef.current);
-        }
-        setScrollDirection(direction);
-        autoScrollIntervalRef.current = setInterval(handleAutoScroll, autoScrollSpeed);
-      };
-      
-      // Start the auto-scroll
-      startAutoScroll('right');
-      
-      // Cleanup function
-      return () => {
-        if (autoScrollIntervalRef.current) {
-          clearInterval(autoScrollIntervalRef.current);
-        }
-      };
+    if (showScrollIndicator && autoScrollActive) {
+      if (!autoScrollIntervalRef.current) {
+        startAutoScroll(scrollDirection);
+      }
+    } else if (!autoScrollActive && autoScrollIntervalRef.current) {
+      clearInterval(autoScrollIntervalRef.current);
+      autoScrollIntervalRef.current = null;
     }
+    
+    return () => {
+      if (autoScrollIntervalRef.current) {
+        clearInterval(autoScrollIntervalRef.current);
+        autoScrollIntervalRef.current = null;
+      }
+    };
   }, [showScrollIndicator, autoScrollActive]);
 
   // Force scroll check when tabs render completely
   useEffect(() => {
-    // Check scroll dimensions after a short delay to ensure DOM is fully rendered
-    const timer = setTimeout(() => {
-      if (scrollAreaRef.current && tabsListRef.current) {
-        const { scrollWidth, clientWidth } = scrollAreaRef.current;
-        setShowScrollIndicator(scrollWidth > clientWidth);
-        
-        // Force a small scroll to trigger the auto-scroll mechanism
-        if (scrollWidth > clientWidth && autoScrollActive) {
-          scrollAreaRef.current.scrollLeft = 1;
-        }
-      }
-    }, 300);
-    
-    return () => clearTimeout(timer);
+    initializeScroll();
   }, []);
 
   // Pause auto-scroll on user interaction
