@@ -16,6 +16,7 @@ import { TrustIndicator } from '@/components/landing/TrustIndicator';
 import { StoryMissionsTab } from '@/components/landing/StoryMissionsTab';
 import { PlatformHeader } from '@/components/landing/PlatformHeader';
 import { CollapsibleSections } from '@/components/landing/CollapsibleSections';
+import { ServicesTab } from '@/components/landing/ServicesTab';
 
 export default function Landing() {
   const [progress, setProgress] = useState(65);
@@ -99,6 +100,10 @@ export default function Landing() {
                 <ProfileSection {...creatorProfile} />
                 <PlatformHeader />
                 <CollapsibleSections />
+              </TabsContent>
+
+              <TabsContent value="services" className="mt-0">
+                <ServicesTab />
               </TabsContent>
 
               <TabsContent value="story" className="mt-0">
