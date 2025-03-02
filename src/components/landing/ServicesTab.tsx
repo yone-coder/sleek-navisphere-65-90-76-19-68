@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Download, Star, ChevronRight, Heart, Info, ChevronDown } from 'lucide-react';
+import { Download, Star, ChevronRight, Heart, ChevronDown, Store, Gamepad2, Calendar, BookOpen, Bitcoin, Globe, Building, PiggyBank, Briefcase, Search, Ticket, Heart as HeartIcon, Wallet } from 'lucide-react';
 
 const AppStore = () => {
   // App data with all the details
@@ -12,6 +12,7 @@ const AppStore = () => {
       status: "Live",
       description: "A platform for discovering and purchasing unique products from local and global sellers.",
       color: "#FF6B6B",
+      icon: Store,
       rating: 4.2,
       downloads: "2.3M",
       price: "Free",
@@ -25,6 +26,7 @@ const AppStore = () => {
       status: "In Development",
       description: "Fast and reliable delivery services for everyday needs.",
       color: "#4ECDC4",
+      icon: Store,
       rating: 3.9,
       downloads: "1.5M",
       price: "Free",
@@ -38,6 +40,7 @@ const AppStore = () => {
       status: "Coming Soon",
       description: "Compete in tournaments and win prizes in a competitive gaming environment.",
       color: "#FFD166",
+      icon: Gamepad2,
       rating: 4.5,
       downloads: "5.8M",
       price: "Free",
@@ -51,6 +54,7 @@ const AppStore = () => {
       status: "Live",
       description: "Create and sell custom printed products.",
       color: "#06D6A0",
+      icon: Store,
       rating: 4.0,
       downloads: "1.2M",
       price: "$3.99",
@@ -64,6 +68,7 @@ const AppStore = () => {
       status: "In Development",
       description: "Learn new skills with interactive online courses.",
       color: "#118AB2",
+      icon: BookOpen,
       rating: 4.7,
       downloads: "3.4M",
       price: "Free",
@@ -77,6 +82,7 @@ const AppStore = () => {
       status: "Coming Soon",
       description: "Support and manage nonprofit fundraising efforts.",
       color: "#EF476F",
+      icon: HeartIcon,
       rating: 4.3,
       downloads: "950K",
       price: "Free",
@@ -90,6 +96,7 @@ const AppStore = () => {
       status: "Live",
       description: "Fast and secure money transfers worldwide.",
       color: "#073B4C",
+      icon: Wallet,
       rating: 4.6,
       downloads: "7.8M",
       price: "Free",
@@ -103,6 +110,7 @@ const AppStore = () => {
       status: "In Development",
       description: "Book tickets for events and shows seamlessly.",
       color: "#9B5DE5",
+      icon: Ticket,
       rating: 4.1,
       downloads: "2.7M",
       price: "Free",
@@ -116,6 +124,7 @@ const AppStore = () => {
       status: "Coming Soon",
       description: "Discover and host amazing seminars, conferences, and events.",
       color: "#F15BB5",
+      icon: Calendar,
       rating: 4.4,
       downloads: "1.9M",
       price: "$4.99",
@@ -129,6 +138,7 @@ const AppStore = () => {
       status: "Live",
       description: "A modern twist on the classic Tic-Tac-Toe game, offering a fun and engaging way to pass time.",
       color: "#00BBF9",
+      icon: Gamepad2,
       rating: 4.8,
       downloads: "10.2M",
       price: "Free",
@@ -142,6 +152,7 @@ const AppStore = () => {
       status: "In Development",
       description: "Discover and order from top food franchises, making meal choices easy and convenient.",
       color: "#FF6B6B",
+      icon: Store,
       rating: 4.5,
       downloads: "5.1M",
       price: "Free",
@@ -155,6 +166,7 @@ const AppStore = () => {
       status: "Coming Soon",
       description: "Buy and sell high-quality study notes, helping students excel academically.",
       color: "#4ECDC4",
+      icon: BookOpen,
       rating: 4.2,
       downloads: "1.7M",
       price: "Free",
@@ -182,16 +194,6 @@ const AppStore = () => {
       prev.includes(id) ? prev.filter(appId => appId !== id) : [...prev, id]
     );
   };
-
-  // Generate app icon with first letter and background color
-  const AppIcon = ({ name, color }: { name: string; color: string }) => (
-    <div 
-      className="w-16 h-16 rounded-xl flex items-center justify-center text-white font-bold text-xl"
-      style={{ backgroundColor: color }}
-    >
-      {name.charAt(0)}
-    </div>
-  );
 
   // Calculate star display based on rating
   const StarRating = ({ rating }: { rating: number }) => {
@@ -235,7 +237,12 @@ const AppStore = () => {
           <div key={app.id} className="pt-4 pb-6 bg-white mb-3 shadow-sm">
             {/* App header section */}
             <div className="flex items-start px-4 mb-3">
-              <AppIcon name={app.name} color={app.color} />
+              <div 
+                className="w-16 h-16 rounded-xl flex items-center justify-center text-white"
+                style={{ backgroundColor: app.color }}
+              >
+                {app.icon && <app.icon className="w-8 h-8" />}
+              </div>
               
               <div className="flex-1 ml-4">
                 <div className="flex items-start justify-between">
