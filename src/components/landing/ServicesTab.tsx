@@ -1,9 +1,6 @@
 
-import React, { useState, useEffect } from 'react';
-import { Download, Star, ChevronRight, Heart, ChevronDown, Store, Gamepad2, Calendar, BookOpen, Bitcoin, Globe, Building, PiggyBank, Briefcase, Search, Ticket, Heart as HeartIcon, Wallet, Filter, SlidersHorizontal } from 'lucide-react';
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import React, { useState } from 'react';
+import { Download, Star, ChevronRight, Heart, ChevronDown, Store, Gamepad2, Calendar, BookOpen, Bitcoin, Globe, Building, PiggyBank, Briefcase, Search, Ticket, Heart as HeartIcon, Wallet } from 'lucide-react';
 
 const AppStore = () => {
   // App data with all the details
@@ -181,23 +178,6 @@ const AppStore = () => {
   // State for active app details and favorites
   const [activeAppId, setActiveAppId] = useState<number | null>(null);
   const [favoriteApps, setFavoriteApps] = useState<number[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<'name' | 'rating' | 'downloads'>('rating');
-  const [isLoading, setIsLoading] = useState(true);
-  const [showFilters, setShowFilters] = useState(false);
-  const [statusFilter, setStatusFilter] = useState<string | null>(null);
-
-  // Extract unique categories from apps
-  const categories = [...new Set(apps.map(app => app.type))];
-  const statuses = [...new Set(apps.map(app => app.status))];
-
-  // Simulate loading
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 800);
-    return () => clearTimeout(timer);
-  }, []);
 
   // Generate placeholder screenshots (3-5 per app)
   const getScreenshots = (appId: number) => {
@@ -205,28 +185,8 @@ const AppStore = () => {
     return Array.from({ length: count }, (_, i) => i + 1);
   };
 
-  // Filter and sort apps
-  const filteredApps = apps
-    .filter(app => {
-      if (selectedCategory && app.type !== selectedCategory) return false;
-      if (statusFilter && app.status !== statusFilter) return false;
-      return true;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'name':
-          return a.name.localeCompare(b.name);
-        case 'rating':
-          return b.rating - a.rating;
-        case 'downloads':
-          return b.downloads.localeCompare(a.downloads);
-        default:
-          return 0;
-      }
-    });
-
-  // Get the featured app (highest rated)
-  const featuredApp = [...apps].sort((a, b) => b.rating - a.rating)[0];
+  // Use all apps for display
+  const filteredApps = apps;
 
   // Toggle favorite status
   const toggleFavorite = (id: number) => {
@@ -263,342 +223,167 @@ const AppStore = () => {
     );
   };
 
-  // Loading skeletons
-  if (isLoading) {
-    return (
-      <div className="bg-gray-50 min-h-screen pb-16">
-        <div className="bg-white shadow-sm px-6 py-4 mb-3">
-          <Skeleton className="h-6 w-48 mx-auto mb-2" />
-          <Skeleton className="h-4 w-64 mx-auto" />
-        </div>
-        
-        {[1, 2, 3].map(i => (
-          <div key={i} className="bg-white mb-3 p-4 shadow-sm">
-            <div className="flex items-start">
-              <Skeleton className="w-16 h-16 rounded-xl" />
-              <div className="flex-1 ml-4">
-                <Skeleton className="h-5 w-32 mb-1" />
-                <Skeleton className="h-4 w-24 mb-2" />
-                <Skeleton className="h-4 w-16" />
-              </div>
-            </div>
-            <div className="mt-4">
-              <Skeleton className="h-40 w-full rounded-lg" />
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-
   return (
     <div className="bg-gray-50 min-h-screen pb-16">
       {/* Investor Showcase Header */}
       <div className="bg-white shadow-sm px-6 py-4 mb-3">
         <h1 className="text-xl font-bold text-center">Our App Portfolio</h1>
         <p className="text-center text-gray-600 text-sm mt-1">A showcase of our current and upcoming applications</p>
-        
-        {/* Filters and sorting */}
-        <div className="mt-4 flex justify-center">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="mr-2"
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            <Filter className="w-4 h-4 mr-1" /> Filters
-          </Button>
-          
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => {
-              const options: ('name' | 'rating' | 'downloads')[] = ['name', 'rating', 'downloads'];
-              const currentIndex = options.indexOf(sortBy);
-              const nextIndex = (currentIndex + 1) % options.length;
-              setSortBy(options[nextIndex]);
-            }}
-          >
-            <SlidersHorizontal className="w-4 h-4 mr-1" /> 
-            Sort: {sortBy === 'name' ? 'A-Z' : sortBy === 'rating' ? 'Rating' : 'Popularity'}
-          </Button>
-        </div>
-        
-        {showFilters && (
-          <div className="mt-3 flex flex-wrap justify-center gap-2 pb-2 animate-fade-in">
-            <Button 
-              variant={selectedCategory === null ? "default" : "outline"} 
-              size="sm"
-              onClick={() => setSelectedCategory(null)}
-            >
-              All Types
-            </Button>
-            {categories.map(category => (
-              <Button 
-                key={category} 
-                variant={selectedCategory === category ? "default" : "outline"} 
-                size="sm"
-                onClick={() => setSelectedCategory(category)}
-              >
-                {category}
-              </Button>
-            ))}
-            <div className="w-full h-px bg-gray-100 my-2"></div>
-            <Button 
-              variant={statusFilter === null ? "default" : "outline"} 
-              size="sm"
-              onClick={() => setStatusFilter(null)}
-            >
-              All Status
-            </Button>
-            {statuses.map(status => (
-              <Button 
-                key={status} 
-                variant={statusFilter === status ? "default" : "outline"} 
-                size="sm"
-                onClick={() => setStatusFilter(status)}
-              >
-                {status}
-              </Button>
-            ))}
-          </div>
-        )}
       </div>
       
-      {/* Featured App Section */}
-      {!selectedCategory && !statusFilter && (
-        <Card className="mb-4 mx-4 overflow-hidden border-0 shadow-md">
-          <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-3 text-white">
-            <h2 className="font-bold">Featured App</h2>
-          </div>
-          <CardContent className="p-0">
-            <div className="flex p-4">
+      {/* App listings */}
+      <div>
+        {filteredApps.map(app => (
+          <div key={app.id} className="pt-4 pb-6 bg-white mb-3 shadow-sm">
+            {/* App header section */}
+            <div className="flex items-start px-4 mb-3">
               <div 
-                className="w-16 h-16 rounded-xl flex items-center justify-center text-white flex-shrink-0"
-                style={{ backgroundColor: featuredApp.color }}
+                className="w-16 h-16 rounded-xl flex items-center justify-center text-white"
+                style={{ backgroundColor: app.color }}
               >
-                {featuredApp.icon && <featuredApp.icon className="w-8 h-8" />}
+                {app.icon && <app.icon className="w-8 h-8" />}
               </div>
               
-              <div className="ml-4 flex-1">
-                <div className="flex justify-between items-start">
+              <div className="flex-1 ml-4">
+                <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="font-semibold">{featuredApp.name}</h3>
-                    <p className="text-xs text-gray-500">{featuredApp.type}</p>
-                    <StarRating rating={featuredApp.rating} />
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold">{app.name}</h3>
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${
+                        app.status === "Live" ? "bg-green-100 text-green-800" :
+                        app.status === "In Development" ? "bg-blue-100 text-blue-800" :
+                        "bg-orange-100 text-orange-800"
+                      }`}>
+                        {app.status}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500">{app.type}</p>
+                    <div className="mt-1">
+                      <StarRating rating={app.rating} />
+                    </div>
                   </div>
                   
-                  <div>
+                  <div className="flex flex-col items-end">
                     <button 
                       className="p-1 rounded-full"
-                      onClick={() => toggleFavorite(featuredApp.id)}
+                      onClick={() => toggleFavorite(app.id)}
                     >
                       <Heart 
                         className={`w-5 h-5 ${
-                          favoriteApps.includes(featuredApp.id) 
+                          favoriteApps.includes(app.id) 
                             ? "fill-red-500 text-red-500" 
                             : "text-gray-400"
                         }`} 
                       />
                     </button>
+                    <button className={`mt-2 px-4 py-1.5 rounded-full text-sm font-medium ${
+                      app.price === "Free" 
+                        ? "bg-blue-600 text-white" 
+                        : "bg-gray-200 text-gray-800"
+                    }`}>
+                      {app.price === "Free" ? "Get" : app.price}
+                    </button>
                   </div>
-                </div>
-                
-                <p className="text-sm text-gray-700 mt-2">{featuredApp.description}</p>
-                
-                <div className="flex items-center mt-3 justify-between">
-                  <div className="flex gap-2">
-                    {featuredApp.tags.map(tag => (
-                      <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  
-                  <button className={`px-4 py-1.5 rounded-full text-sm font-medium ${
-                    featuredApp.price === "Free" 
-                      ? "bg-blue-600 text-white" 
-                      : "bg-gray-200 text-gray-800"
-                  }`}>
-                    {featuredApp.price === "Free" ? "Get" : featuredApp.price}
-                  </button>
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
-      )}
-      
-      {/* App listings */}
-      <div className="px-4">
-        {filteredApps.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-gray-500">No apps found matching your filters</p>
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="mt-3"
-              onClick={() => {
-                setSelectedCategory(null);
-                setStatusFilter(null);
-              }}
-            >
-              Clear Filters
-            </Button>
-          </div>
-        ) : (
-          filteredApps.map(app => (
-            <div key={app.id} className="pt-4 pb-6 bg-white mb-3 shadow-sm rounded-lg">
-              {/* App header section */}
-              <div className="flex items-start px-4 mb-3">
-                <div 
-                  className="w-16 h-16 rounded-xl flex items-center justify-center text-white"
-                  style={{ backgroundColor: app.color }}
-                >
-                  {app.icon && <app.icon className="w-8 h-8" />}
-                </div>
-                
-                <div className="flex-1 ml-4">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-semibold">{app.name}</h3>
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${
-                          app.status === "Live" ? "bg-green-100 text-green-800" :
-                          app.status === "In Development" ? "bg-blue-100 text-blue-800" :
-                          "bg-orange-100 text-orange-800"
-                        }`}>
-                          {app.status}
-                        </span>
-                      </div>
-                      <p className="text-xs text-gray-500">{app.type}</p>
-                      <div className="mt-1">
-                        <StarRating rating={app.rating} />
-                      </div>
-                    </div>
-                    
-                    <div className="flex flex-col items-end">
-                      <button 
-                        className="p-1 rounded-full"
-                        onClick={() => toggleFavorite(app.id)}
-                      >
-                        <Heart 
-                          className={`w-5 h-5 ${
-                            favoriteApps.includes(app.id) 
-                              ? "fill-red-500 text-red-500" 
-                              : "text-gray-400"
-                          }`} 
-                        />
-                      </button>
-                      <button className={`mt-2 px-4 py-1.5 rounded-full text-sm font-medium ${
-                        app.price === "Free" 
-                          ? "bg-blue-600 text-white" 
-                          : "bg-gray-200 text-gray-800"
-                      }`}>
-                        {app.price === "Free" ? "Get" : app.price}
-                      </button>
-                    </div>
-                  </div>
-                </div>
+            
+            {/* Key metrics */}
+            <div className="flex justify-between px-4 py-2 mb-3 bg-gray-50">
+              <div className="text-center">
+                <p className="text-xs text-gray-500">Downloads</p>
+                <p className="text-sm font-medium flex items-center justify-center">
+                  <Download className="w-3 h-3 mr-1" /> {app.downloads}
+                </p>
               </div>
-              
-              {/* Key metrics */}
-              <div className="flex justify-between px-4 py-2 mb-3 bg-gray-50">
-                <div className="text-center">
-                  <p className="text-xs text-gray-500">Downloads</p>
-                  <p className="text-sm font-medium flex items-center justify-center">
-                    <Download className="w-3 h-3 mr-1" /> {app.downloads}
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-xs text-gray-500">Rating</p>
-                  <p className="text-sm font-medium flex items-center justify-center">
-                    <Star className="w-3 h-3 mr-1 fill-yellow-400 text-yellow-400" /> {app.rating.toFixed(1)}
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-xs text-gray-500">Price</p>
-                  <p className="text-sm font-medium">{app.price}</p>
-                </div>
+              <div className="text-center">
+                <p className="text-xs text-gray-500">Rating</p>
+                <p className="text-sm font-medium flex items-center justify-center">
+                  <Star className="w-3 h-3 mr-1 fill-yellow-400 text-yellow-400" /> {app.rating.toFixed(1)}
+                </p>
               </div>
-              
-              {/* Tags */}
-              <div className="px-4 mb-3">
-                <div className="flex flex-wrap gap-1">
-                  {app.tags.map(tag => (
-                    <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
-                      {tag}
-                    </span>
+              <div className="text-center">
+                <p className="text-xs text-gray-500">Price</p>
+                <p className="text-sm font-medium">{app.price}</p>
+              </div>
+            </div>
+            
+            {/* Tags */}
+            <div className="px-4 mb-3">
+              <div className="flex flex-wrap gap-1">
+                {app.tags.map(tag => (
+                  <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+            
+            {/* Scrollable screenshots with edge-to-edge scrolling and gaps on both ends */}
+            <div className="relative">
+              {/* This creates a full-width scrollable area */}
+              <div className="overflow-x-auto -mx-4 px-4">
+                {/* This inner container holds all images with gaps */}
+                <div className="flex gap-3 pl-4 pr-16" style={{ width: 'max-content' }}>
+                  {getScreenshots(app.id).map(num => (
+                    <div 
+                      key={num} 
+                      className="flex-shrink-0 rounded-lg overflow-hidden bg-gray-200 w-64 h-40 flex items-center justify-center shadow-sm"
+                    >
+                      <img 
+                        src={`https://placehold.co/256x160?text=${app.name}`}
+                        alt={`${app.name} screenshot ${num}`} 
+                        className="w-full"
+                      />
+                    </div>
                   ))}
+                  {/* This creates the gap at the end */}
+                  <div className="flex-shrink-0 w-4"></div>
                 </div>
-              </div>
-              
-              {/* Scrollable screenshots with edge-to-edge scrolling and gaps on both ends */}
-              <div className="relative">
-                {/* This creates a full-width scrollable area */}
-                <div className="overflow-x-auto -mx-4 px-4">
-                  {/* This inner container holds all images with gaps */}
-                  <div className="flex gap-3 pl-4 pr-16" style={{ width: 'max-content' }}>
-                    {getScreenshots(app.id).map(num => (
-                      <div 
-                        key={num} 
-                        className="flex-shrink-0 rounded-lg overflow-hidden bg-gray-200 w-64 h-40 flex items-center justify-center shadow-sm"
-                      >
-                        <img 
-                          src={`https://placehold.co/256x160?text=${app.name}`}
-                          alt={`${app.name} screenshot ${num}`} 
-                          className="w-full"
-                        />
-                      </div>
-                    ))}
-                    {/* This creates the gap at the end */}
-                    <div className="flex-shrink-0 w-4"></div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Description below the images */}
-              <div className="px-4 mt-3 mb-2">
-                <p className="text-sm text-gray-600">{app.description}</p>
-              </div>
-              
-              {/* Expandable details section */}
-              <div className="px-4">
-                <button 
-                  className="w-full flex items-center justify-between py-2 border-t border-gray-100 text-sm text-blue-600"
-                  onClick={() => setActiveAppId(activeAppId === app.id ? null : app.id)}
-                >
-                  <span>View more details</span>
-                  <ChevronDown 
-                    className={`w-4 h-4 transition-transform duration-200 ${
-                      activeAppId === app.id ? 'transform rotate-180' : ''
-                    }`} 
-                  />
-                </button>
-                
-                {activeAppId === app.id && (
-                  <div className="py-3 border-t border-gray-100 text-sm">
-                    <h4 className="font-medium mb-2">Key Features</h4>
-                    <ul className="ml-4 list-disc space-y-1 text-gray-600">
-                      {app.features.map(feature => (
-                        <li key={feature}>{feature}</li>
-                      ))}
-                    </ul>
-                    
-                    <div className="mt-4 flex justify-between">
-                      <button className="text-blue-600 flex items-center">
-                        View in App Store <ChevronRight className="w-4 h-4 ml-1" />
-                      </button>
-                      <button className="text-blue-600 flex items-center">
-                        Share <ChevronRight className="w-4 h-4 ml-1" />
-                      </button>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
-          ))
-        )}
+            
+            {/* Description below the images */}
+            <div className="px-4 mt-3 mb-2">
+              <p className="text-sm text-gray-600">{app.description}</p>
+            </div>
+            
+            {/* Expandable details section */}
+            <div className="px-4">
+              <button 
+                className="w-full flex items-center justify-between py-2 border-t border-gray-100 text-sm text-blue-600"
+                onClick={() => setActiveAppId(activeAppId === app.id ? null : app.id)}
+              >
+                <span>View more details</span>
+                <ChevronDown 
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    activeAppId === app.id ? 'transform rotate-180' : ''
+                  }`} 
+                />
+              </button>
+              
+              {activeAppId === app.id && (
+                <div className="py-3 border-t border-gray-100 text-sm">
+                  <h4 className="font-medium mb-2">Key Features</h4>
+                  <ul className="ml-4 list-disc space-y-1 text-gray-600">
+                    {app.features.map(feature => (
+                      <li key={feature}>{feature}</li>
+                    ))}
+                  </ul>
+                  
+                  <div className="mt-4 flex justify-between">
+                    <button className="text-blue-600 flex items-center">
+                      View in App Store <ChevronRight className="w-4 h-4 ml-1" />
+                    </button>
+                    <button className="text-blue-600 flex items-center">
+                      Share <ChevronRight className="w-4 h-4 ml-1" />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
