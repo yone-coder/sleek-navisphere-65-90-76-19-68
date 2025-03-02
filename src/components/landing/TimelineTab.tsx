@@ -208,9 +208,9 @@ const ProjectTimeline = () => {
       </div>
       
       {/* Timeline */}
-      <div className="relative px-4 pl-12">
+      <div className="relative px-4 pl-8">
         {/* Timeline connector line */}
-        <div className="absolute left-10 top-0 bottom-0 w-1 bg-gray-200 z-0"></div>
+        <div className="absolute left-6 top-0 bottom-0 w-1 bg-gray-200 z-0"></div>
         
         <AnimatePresence>
           {filteredPhases.length > 0 ? (
@@ -236,7 +236,7 @@ const ProjectTimeline = () => {
                 >
                   {/* Timeline connector dot */}
                   <div 
-                    className={`absolute -left-8 w-6 h-6 rounded-full z-20 border-2 ${
+                    className={`absolute -left-6 w-6 h-6 rounded-full z-20 border-2 ${
                       phase.status === 'completed' 
                         ? 'bg-green-500 border-green-200' 
                         : phase.status === 'in-progress'
@@ -270,7 +270,7 @@ const ProjectTimeline = () => {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="mt-2 ml-6 pl-6 border-l-2 border-dashed border-gray-300 relative z-10">
+                      <div className="mt-2 ml-3 pl-3 border-l-2 border-dashed border-gray-300 relative z-10">
                         <p className="text-gray-700 mb-3">{phase.description}</p>
                         <div className="space-y-3">
                           {phase.tasks.map(task => (
@@ -279,11 +279,13 @@ const ProjectTimeline = () => {
                               initial={{ x: -10, opacity: 0 }}
                               animate={{ x: 0, opacity: 1 }}
                               transition={{ duration: 0.2 }}
-                              className="flex items-center p-3 bg-white rounded-md shadow-sm hover:shadow-md transition-shadow"
+                              className="flex flex-col p-3 bg-white rounded-md shadow-sm hover:shadow-md transition-shadow"
                             >
-                              {getStatusIcon(task.status)}
-                              <span className="ml-2 flex-1">{task.title}</span>
-                              <span className="text-sm text-gray-500">{formatDate(task.date)}</span>
+                              <div className="flex items-center mb-1">
+                                {getStatusIcon(task.status)}
+                                <span className="ml-2 font-medium break-words">{task.title}</span>
+                              </div>
+                              <span className="text-xs text-gray-500 pl-6">{formatDate(task.date)}</span>
                             </motion.div>
                           ))}
                         </div>
