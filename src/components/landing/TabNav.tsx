@@ -83,9 +83,20 @@ export function TabNav({ activeTab }: TabNavProps) {
       clearTimeout(scrollCheckTimer.current);
     }
     
+    // We'll force the TabsList to be wider than the container
+    if (tabsListRef.current) {
+      // Force the TabsList to be wider than its container
+      tabsListRef.current.style.minWidth = '150%';
+    }
+    
     // Delay to ensure DOM is fully rendered
     scrollCheckTimer.current = setTimeout(() => {
       if (scrollAreaRef.current && tabsListRef.current) {
+        // Force a width that ensures scrolling is needed
+        const containerWidth = scrollAreaRef.current.clientWidth;
+        tabsListRef.current.style.minWidth = `${containerWidth * 1.5}px`;
+        
+        // Re-measure after forcing width
         const { scrollWidth, clientWidth } = scrollAreaRef.current;
         const needsScroll = scrollWidth > clientWidth;
         
@@ -93,27 +104,23 @@ export function TabNav({ activeTab }: TabNavProps) {
           scrollWidth, 
           clientWidth, 
           tabsListWidth: tabsListRef.current.offsetWidth,
-          needsScroll 
+          needsScroll,
+          forcedWidth: `${containerWidth * 1.5}px`
         });
         
         setShowScrollIndicator(needsScroll);
         
-        // Always start auto-scroll if content is scrollable
-        if (needsScroll) {
-          // Force a small initial scroll to ensure we're not at the edge
-          scrollAreaRef.current.scrollLeft = 1;
-          startAutoScroll('right');
-          console.log("Auto-scroll started");
-        } else {
-          console.log("Content fits, no auto-scroll needed");
-        }
+        // Always start auto-scroll if we forced the content to be scrollable
+        scrollAreaRef.current.scrollLeft = 1;
+        startAutoScroll('right');
+        console.log("Auto-scroll started");
       } else {
         console.log("Refs not available:", { 
           scrollAreaRef: !!scrollAreaRef.current, 
           tabsListRef: !!tabsListRef.current 
         });
       }
-    }, 800); // Increased from 500 to 800ms for more reliable DOM measurement
+    }, 1000); // Increased to 1000ms for more reliable DOM measurement
   };
 
   // Initialize scroll check when component mounts or window resizes
