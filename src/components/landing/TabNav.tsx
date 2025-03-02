@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { Info, Bell, MessageCircle, HelpCircle, BookOpen, ChevronRight } from 'lucide-react';
+import { Info, Bell, MessageCircle, HelpCircle, BookOpen, ChevronRight, Swipe } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 
 interface TabNavProps {
@@ -13,6 +13,12 @@ interface TabNavProps {
 export function TabNav({ activeTab }: TabNavProps) {
   const [showScrollIndicator, setShowScrollIndicator] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [showSwipeHint, setShowSwipeHint] = useState(true);
+
+  // Minimum swipe distance threshold (in px)
+  const minSwipeDistance = 50;
 
   // Check if scrolling is needed
   useEffect(() => {
@@ -31,9 +37,56 @@ export function TabNav({ activeTab }: TabNavProps) {
     };
   }, []);
 
+  // Auto-hide swipe hint after 5 seconds
+  useEffect(() => {
+    if (showSwipeHint) {
+      const timer = setTimeout(() => {
+        setShowSwipeHint(false);
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [showSwipeHint]);
+
+  // Handle touch events for swipe
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe && scrollAreaRef.current) {
+      // Scroll to the right
+      scrollAreaRef.current.scrollLeft += 100;
+    } else if (isRightSwipe && scrollAreaRef.current) {
+      // Scroll to the left
+      scrollAreaRef.current.scrollLeft -= 100;
+    }
+    
+    // Reset values
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
   return (
     <div className="relative w-full">
-      <ScrollArea className="w-full" ref={scrollAreaRef}>
+      <ScrollArea 
+        className="w-full" 
+        ref={scrollAreaRef}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         <TabsList className="w-max inline-flex h-10 items-center justify-start gap-1 bg-transparent p-1">
           <TabsTrigger 
             value="overview"
@@ -135,15 +188,15 @@ export function TabNav({ activeTab }: TabNavProps) {
         <ScrollBar orientation="horizontal" className="invisible" />
       </ScrollArea>
       
-      {/* Double chevron scroll indicator */}
+      {/* Double chevron scroll indicator with enhanced visibility */}
       {showScrollIndicator && (
         <div className="absolute right-0 top-0 bottom-0 z-10 flex items-center justify-center">
-          <div className="h-full flex items-center px-2 bg-gradient-to-l from-white via-white/90 to-transparent">
+          <div className="h-full flex items-center px-3 bg-gradient-to-l from-white via-white/95 to-transparent backdrop-blur-sm">
             <motion.div 
               className="flex flex-col"
-              initial={{ opacity: 0.7, x: 5 }}
+              initial={{ opacity: 0.8, x: 5 }}
               animate={{ 
-                opacity: [0.7, 1, 0.7],
+                opacity: [0.8, 1, 0.8],
                 x: [5, 0, 5]
               }}
               transition={{ 
@@ -152,7 +205,7 @@ export function TabNav({ activeTab }: TabNavProps) {
                 ease: "easeInOut"
               }}
             >
-              <ChevronRight className="text-primary/80 w-5 h-5" />
+              <ChevronRight className="text-primary w-5 h-5" />
               <motion.div
                 animate={{
                   y: [-2, 2, -2]
@@ -164,11 +217,37 @@ export function TabNav({ activeTab }: TabNavProps) {
                   ease: "easeInOut"
                 }}
               >
-                <ChevronRight className="text-primary/60 w-5 h-5" />
+                <ChevronRight className="text-primary/80 w-5 h-5" />
               </motion.div>
             </motion.div>
           </div>
         </div>
+      )}
+
+      {/* Swipe tutorial hint */}
+      {showScrollIndicator && showSwipeHint && (
+        <motion.div 
+          className="absolute left-0 right-0 bottom-[-45px] z-20 flex justify-center"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <motion.div 
+            className="bg-primary/5 text-primary/90 rounded-full px-4 py-1.5 flex items-center text-xs shadow-sm"
+            animate={{ 
+              x: [10, -10, 10]
+            }}
+            transition={{
+              repeat: Infinity,
+              duration: 2,
+              ease: "easeInOut"
+            }}
+          >
+            <Swipe className="w-3.5 h-3.5 mr-1.5" />
+            <span>Swipe to see more tabs</span>
+          </motion.div>
+        </motion.div>
       )}
     </div>
   );
