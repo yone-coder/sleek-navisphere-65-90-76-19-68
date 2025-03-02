@@ -25,12 +25,10 @@ export function TabNav({ activeTab }: TabNavProps) {
   // Minimum swipe distance threshold (in px)
   const minSwipeDistance = 50;
   
-  // Auto-scroll speed (ms)
-  const autoScrollSpeed = 30;
-  // Pause duration at ends (ms)
-  const autoScrollPause = 1000;
-  // Scroll step size (px)
-  const scrollStep = 2;
+  // Auto-scroll settings
+  const autoScrollSpeed = 25; // Faster scroll speed (lower is faster)
+  const autoScrollPause = 1200; // Slightly longer pause at each end
+  const scrollStep = 2; // Scroll step size (px)
 
   // Start auto-scroll function
   const startAutoScroll = (direction: 'right' | 'left') => {
@@ -88,8 +86,8 @@ export function TabNav({ activeTab }: TabNavProps) {
         
         setShowScrollIndicator(needsScroll);
         
-        // Start auto-scroll if needed and active
-        if (needsScroll && autoScrollActive && !autoScrollIntervalRef.current) {
+        // Always start auto-scroll if content is scrollable
+        if (needsScroll) {
           // Force a small initial scroll to ensure we're not at the edge
           scrollAreaRef.current.scrollLeft = 1;
           startAutoScroll('right');
@@ -112,32 +110,16 @@ export function TabNav({ activeTab }: TabNavProps) {
       if (scrollCheckTimer.current) {
         clearTimeout(scrollCheckTimer.current);
       }
-    };
-  }, []);
-
-  // Handle auto-scroll activation/deactivation
-  useEffect(() => {
-    if (showScrollIndicator && autoScrollActive) {
-      if (!autoScrollIntervalRef.current) {
-        startAutoScroll(scrollDirection);
-      }
-    } else if (!autoScrollActive && autoScrollIntervalRef.current) {
-      clearInterval(autoScrollIntervalRef.current);
-      autoScrollIntervalRef.current = null;
-    }
-    
-    return () => {
       if (autoScrollIntervalRef.current) {
         clearInterval(autoScrollIntervalRef.current);
-        autoScrollIntervalRef.current = null;
       }
     };
-  }, [showScrollIndicator, autoScrollActive]);
+  }, []);
 
-  // Force scroll check when tabs render completely
+  // Force scroll check when active tab changes
   useEffect(() => {
     initializeScroll();
-  }, []);
+  }, [activeTab]);
 
   // Pause auto-scroll on user interaction
   const pauseAutoScroll = () => {
@@ -148,10 +130,11 @@ export function TabNav({ activeTab }: TabNavProps) {
       autoScrollIntervalRef.current = null;
     }
     
-    // Restart after 10 seconds of inactivity
+    // Restart after 6 seconds of inactivity (shorter delay)
     const timer = setTimeout(() => {
       setAutoScrollActive(true);
-    }, 10000);
+      initializeScroll();
+    }, 6000);
     
     return () => clearTimeout(timer);
   };
@@ -206,6 +189,30 @@ export function TabNav({ activeTab }: TabNavProps) {
   const onWheel = () => {
     pauseAutoScroll();
   };
+
+  // Resume auto-scroll when component becomes visible
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && autoScrollActive) {
+            initializeScroll();
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (scrollAreaRef.current) {
+      observer.observe(scrollAreaRef.current);
+    }
+
+    return () => {
+      if (scrollAreaRef.current) {
+        observer.unobserve(scrollAreaRef.current);
+      }
+    };
+  }, [autoScrollActive]);
 
   return (
     <div className="relative w-full">
@@ -375,7 +382,7 @@ export function TabNav({ activeTab }: TabNavProps) {
         </div>
       )}
 
-      {/* Swipe tutorial hint */}
+      {/* Swipe tutorial hint - Hidden by default now that we have auto-scroll */}
       {showScrollIndicator && showSwipeHint && (
         <motion.div 
           className="absolute left-0 right-0 bottom-[-45px] z-20 flex justify-center"
