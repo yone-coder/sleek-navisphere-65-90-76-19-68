@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -37,6 +36,7 @@ export function TabNav({ activeTab }: TabNavProps) {
     }
     
     setScrollDirection(direction);
+    console.log(`Starting auto-scroll in ${direction} direction`);
     
     autoScrollIntervalRef.current = setInterval(() => {
       if (!scrollAreaRef.current) return;
@@ -45,10 +45,14 @@ export function TabNav({ activeTab }: TabNavProps) {
       const maxScroll = scrollWidth - clientWidth;
       
       // Ensure we have accurate scroll information
-      if (maxScroll <= 0) return;
+      if (maxScroll <= 0) {
+        console.log("No scroll needed, maxScroll:", maxScroll);
+        return;
+      }
       
       // Reached the right end
       if (direction === 'right' && scrollLeft >= maxScroll - 5) {
+        console.log("Reached right end, changing direction");
         setScrollDirection('left');
         // Pause at the right end
         clearInterval(autoScrollIntervalRef.current!);
@@ -58,6 +62,7 @@ export function TabNav({ activeTab }: TabNavProps) {
       }
       // Reached the left end
       else if (direction === 'left' && scrollLeft <= 5) {
+        console.log("Reached left end, changing direction");
         setScrollDirection('right');
         // Pause at the left end
         clearInterval(autoScrollIntervalRef.current!);
@@ -84,6 +89,13 @@ export function TabNav({ activeTab }: TabNavProps) {
         const { scrollWidth, clientWidth } = scrollAreaRef.current;
         const needsScroll = scrollWidth > clientWidth;
         
+        console.log("ScrollArea dimensions:", { 
+          scrollWidth, 
+          clientWidth, 
+          tabsListWidth: tabsListRef.current.offsetWidth,
+          needsScroll 
+        });
+        
         setShowScrollIndicator(needsScroll);
         
         // Always start auto-scroll if content is scrollable
@@ -91,14 +103,23 @@ export function TabNav({ activeTab }: TabNavProps) {
           // Force a small initial scroll to ensure we're not at the edge
           scrollAreaRef.current.scrollLeft = 1;
           startAutoScroll('right');
+          console.log("Auto-scroll started");
+        } else {
+          console.log("Content fits, no auto-scroll needed");
         }
+      } else {
+        console.log("Refs not available:", { 
+          scrollAreaRef: !!scrollAreaRef.current, 
+          tabsListRef: !!tabsListRef.current 
+        });
       }
-    }, 500);
+    }, 800); // Increased from 500 to 800ms for more reliable DOM measurement
   };
 
   // Initialize scroll check when component mounts or window resizes
   useEffect(() => {
     const checkScroll = () => {
+      console.log("Checking scroll on mount/resize");
       initializeScroll();
     };
 
@@ -118,11 +139,13 @@ export function TabNav({ activeTab }: TabNavProps) {
 
   // Force scroll check when active tab changes
   useEffect(() => {
+    console.log("Active tab changed to:", activeTab);
     initializeScroll();
   }, [activeTab]);
 
   // Pause auto-scroll on user interaction
   const pauseAutoScroll = () => {
+    console.log("User interaction detected, pausing auto-scroll");
     setAutoScrollActive(false);
     
     if (autoScrollIntervalRef.current) {
@@ -132,6 +155,7 @@ export function TabNav({ activeTab }: TabNavProps) {
     
     // Restart after 6 seconds of inactivity (shorter delay)
     const timer = setTimeout(() => {
+      console.log("Resuming auto-scroll after inactivity");
       setAutoScrollActive(true);
       initializeScroll();
     }, 6000);
@@ -196,6 +220,7 @@ export function TabNav({ activeTab }: TabNavProps) {
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting && autoScrollActive) {
+            console.log("TabNav is now visible, initializing scroll");
             initializeScroll();
           }
         });
@@ -217,7 +242,7 @@ export function TabNav({ activeTab }: TabNavProps) {
   return (
     <div className="relative w-full">
       <ScrollArea 
-        className="w-full" 
+        className="w-full overflow-x-auto" 
         ref={scrollAreaRef}
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
@@ -228,6 +253,7 @@ export function TabNav({ activeTab }: TabNavProps) {
         <TabsList 
           className="w-max inline-flex h-10 items-center justify-start gap-1 bg-transparent p-1"
           ref={tabsListRef}
+          style={{ minWidth: tabsListRef.current ? tabsListRef.current.offsetWidth : 'auto' }}
         >
           <TabsTrigger 
             value="overview"
