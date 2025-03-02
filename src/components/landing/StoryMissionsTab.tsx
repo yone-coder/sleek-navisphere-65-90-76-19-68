@@ -69,9 +69,9 @@ const ImpactStory = () => {
 
   return (
     <div className="w-full bg-white overflow-hidden">
-      {/* Centered title with green round background */}
+      {/* Centered title with glassmorphic green background */}
       <div className="py-6 px-4 flex items-center justify-center">
-        <div className="bg-green-500 rounded-full px-6 py-2">
+        <div className="bg-green-500/50 backdrop-blur-sm rounded-full px-6 py-2 shadow-sm border border-green-200">
           <h1 className="text-2xl font-semibold text-white">Our Story & Mission</h1>
         </div>
       </div>
@@ -105,7 +105,7 @@ const ImpactStory = () => {
             />
           </div>
         </div>
-
+        
         {/* Current Challenge Section with Single Image */}
         <div className="mb-16 flex flex-col md:flex-row-reverse gap-8 items-center">
           <div className="md:w-1/2 space-y-4">
@@ -138,7 +138,7 @@ const ImpactStory = () => {
             />
           </div>
         </div>
-
+        
         {/* Our Solution Section - Replacing Impact Areas with Text-Focused Content */}
         <div className="mb-16">
           <h2 className="text-2xl font-bold text-indigo-800 mb-8 text-center">Our Solution: A Digital Ecosystem</h2>
@@ -215,7 +215,7 @@ const ImpactStory = () => {
             </p>
           </div>
         </div>
-
+        
         {/* Animated Stats Section */}
         <div className="mb-16" ref={statsRef}>
           <h2 className="text-2xl font-bold text-indigo-800 mb-8 text-center">Our Impact by the Numbers</h2>
@@ -240,7 +240,7 @@ const ImpactStory = () => {
             </p>
           </div>
         </div>
-
+        
         {/* Impact Statement with Single Image */}
         <div className="mb-16">
           <h2 className="text-2xl font-bold text-indigo-800 mb-6 text-center">More Than a Platform</h2>
@@ -268,7 +268,7 @@ const ImpactStory = () => {
             </div>
           </div>
         </div>
-
+        
         {/* Call to Action */}
         <div className="text-center bg-indigo-100 p-8 rounded-xl">
           <h2 className="text-2xl font-bold text-indigo-800 mb-4">Join Our Movement</h2>
