@@ -3,16 +3,37 @@ import { motion } from 'framer-motion';
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { Info, Bell, MessageCircle, HelpCircle, BookOpen } from 'lucide-react';
+import { Info, Bell, MessageCircle, HelpCircle, BookOpen, ChevronRight } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 
 interface TabNavProps {
   activeTab: string;
 }
 
 export function TabNav({ activeTab }: TabNavProps) {
+  const [showScrollIndicator, setShowScrollIndicator] = useState(false);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  // Check if scrolling is needed
+  useEffect(() => {
+    const checkScroll = () => {
+      if (scrollAreaRef.current) {
+        const { scrollWidth, clientWidth } = scrollAreaRef.current;
+        setShowScrollIndicator(scrollWidth > clientWidth);
+      }
+    };
+
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+    
+    return () => {
+      window.removeEventListener('resize', checkScroll);
+    };
+  }, []);
+
   return (
     <div className="relative w-full">
-      <ScrollArea className="w-full">
+      <ScrollArea className="w-full" ref={scrollAreaRef}>
         <TabsList className="w-max inline-flex h-10 items-center justify-start gap-1 bg-transparent p-1">
           <TabsTrigger 
             value="overview"
@@ -113,6 +134,42 @@ export function TabNav({ activeTab }: TabNavProps) {
         </TabsList>
         <ScrollBar orientation="horizontal" className="invisible" />
       </ScrollArea>
+      
+      {/* Double chevron scroll indicator */}
+      {showScrollIndicator && (
+        <div className="absolute right-0 top-0 bottom-0 z-10 pointer-events-none flex items-center justify-center">
+          <div className="h-full flex items-center px-2 bg-gradient-to-l from-white via-white/90 to-transparent">
+            <motion.div 
+              className="flex flex-col"
+              initial={{ opacity: 0.7, x: 5 }}
+              animate={{ 
+                opacity: [0.7, 1, 0.7],
+                x: [5, 0, 5]
+              }}
+              transition={{ 
+                repeat: Infinity, 
+                duration: 1.5,
+                ease: "easeInOut"
+              }}
+            >
+              <ChevronRight className="text-primary/80 w-5 h-5" />
+              <motion.div
+                animate={{
+                  y: [-2, 2, -2]
+                }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 1.5,
+                  delay: 0.15,
+                  ease: "easeInOut"
+                }}
+              >
+                <ChevronRight className="text-primary/60 w-5 h-5" />
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
