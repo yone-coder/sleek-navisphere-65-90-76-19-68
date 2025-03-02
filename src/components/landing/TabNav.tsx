@@ -49,12 +49,12 @@ export function TabNav({ activeTab }: TabNavProps) {
           </TabsTrigger>
 
           <TabsTrigger 
-            value="updates"
+            value="timeline"
             className="relative flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
           >
             <div className="relative flex items-center justify-center w-5 h-5">
               <Bell className="w-3.5 h-3.5" />
-              {activeTab === "updates" && (
+              {activeTab === "timeline" && (
                 <motion.div
                   layoutId="activeBackground"
                   className="absolute inset-0 bg-primary/5 rounded-full"
@@ -62,7 +62,7 @@ export function TabNav({ activeTab }: TabNavProps) {
                 />
               )}
             </div>
-            <span className="text-xs font-medium">Updates</span>
+            <span className="text-xs font-medium">Timeline</span>
             <Badge 
               variant="secondary" 
               className="h-3.5 px-1 text-[10px] bg-primary/5 text-primary border-0"

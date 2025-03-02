@@ -5,7 +5,7 @@ import { Shield, BookOpen, Briefcase, Users } from 'lucide-react';
 import { FloatingProgress } from '@/components/campaign/FloatingProgress';
 import { FAQsTab } from '@/components/product/tabs/FAQsTab';
 import { TabNav } from '@/components/landing/TabNav';
-import { UpdatesTab } from '@/components/landing/UpdatesTab';
+import { TimelineTab } from '@/components/landing/TimelineTab';
 import { CommentsTab } from '@/components/landing/CommentsTab';
 import { VideoSection } from '@/components/landing/VideoSection';
 import { ProfileSection } from '@/components/landing/ProfileSection';
@@ -104,8 +104,8 @@ export default function Landing() {
                 <StoryMissionsTab />
               </TabsContent>
 
-              <TabsContent value="updates" className="mt-6 container mx-auto">
-                <UpdatesTab />
+              <TabsContent value="timeline" className="mt-6 container mx-auto">
+                <TimelineTab />
               </TabsContent>
 
               <TabsContent value="comments" className="mt-6">
