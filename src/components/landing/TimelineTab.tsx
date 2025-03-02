@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, Calendar, CheckCircle, Clock, AlertCircle, Filter, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,7 +8,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 
 const ProjectTimeline = () => {
-  // Sample project data - you can replace with your actual data
   const [phases, setPhases] = useState([
     {
       id: 1,
@@ -100,20 +98,17 @@ const ProjectTimeline = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
-  // Function to toggle expanded state of a phase
   const toggleExpand = (id: number) => {
     setPhases(phases.map(phase => 
       phase.id === id ? { ...phase, expanded: !phase.expanded } : phase
     ));
   };
 
-  // Helper function to format dates
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  // Helper function to get status icon
   const getStatusIcon = (status: string) => {
     switch(status) {
       case 'completed':
@@ -127,14 +122,11 @@ const ProjectTimeline = () => {
     }
   };
 
-  // Function to handle search and filtering
   const filteredPhases = phases.filter(phase => {
-    // Filter by status
     if (statusFilter !== 'all' && phase.status !== statusFilter) {
       return false;
     }
     
-    // Filter by search query
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       return (
@@ -147,19 +139,16 @@ const ProjectTimeline = () => {
     return true;
   });
 
-  // Function to expand all phases
   const expandAll = () => {
     setPhases(phases.map(phase => ({ ...phase, expanded: true })));
   };
 
-  // Function to collapse all phases
   const collapseAll = () => {
     setPhases(phases.map(phase => ({ ...phase, expanded: false })));
   };
 
   return (
     <div className="w-full max-w-none mx-auto bg-white">
-      {/* Header with controls */}
       <div className="mb-4 bg-gradient-to-r from-gray-50 to-white p-3 rounded-lg shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
           <div>
@@ -179,7 +168,6 @@ const ProjectTimeline = () => {
           </div>
         </div>
         
-        {/* Search and filters */}
         <div className="flex flex-col sm:flex-row gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
@@ -207,23 +195,18 @@ const ProjectTimeline = () => {
         </div>
       </div>
       
-      {/* Timeline */}
-      <div className="relative px-4 pl-8">
-        {/* Timeline connector line */}
-        <div className="absolute left-6 top-0 bottom-0 w-1 bg-gray-200 z-0"></div>
-        
+      <div className="relative px-4 pl-2">
         <AnimatePresence>
           {filteredPhases.length > 0 ? (
             filteredPhases.map((phase, index) => (
               <motion.div 
                 key={phase.id} 
-                className="mb-6"
+                className="mb-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
               >
-                {/* Phase header */}
                 <div 
                   className={`flex items-center p-4 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-md ${
                     phase.status === 'completed' 
@@ -234,17 +217,6 @@ const ProjectTimeline = () => {
                   } relative z-10`}
                   onClick={() => toggleExpand(phase.id)}
                 >
-                  {/* Timeline connector dot */}
-                  <div 
-                    className={`absolute -left-6 w-6 h-6 rounded-full z-20 border-2 ${
-                      phase.status === 'completed' 
-                        ? 'bg-green-500 border-green-200' 
-                        : phase.status === 'in-progress'
-                          ? 'bg-blue-500 border-blue-200'
-                          : 'bg-gray-300 border-gray-200'
-                    }`}
-                  ></div>
-
                   <div className="flex-1">
                     <div className="flex items-center">
                       {getStatusIcon(phase.status)}
@@ -260,7 +232,6 @@ const ProjectTimeline = () => {
                   </Button>
                 </div>
                 
-                {/* Phase details when expanded */}
                 <AnimatePresence>
                   {phase.expanded && (
                     <motion.div
@@ -270,7 +241,7 @@ const ProjectTimeline = () => {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="mt-2 ml-3 pl-3 border-l-2 border-dashed border-gray-300 relative z-10">
+                      <div className="mt-2 pl-2 relative z-10">
                         <p className="text-gray-700 mb-3">{phase.description}</p>
                         <div className="space-y-3">
                           {phase.tasks.map(task => (
@@ -285,7 +256,7 @@ const ProjectTimeline = () => {
                                 {getStatusIcon(task.status)}
                                 <span className="ml-2 font-medium break-words">{task.title}</span>
                               </div>
-                              <span className="text-xs text-gray-500 pl-6">{formatDate(task.date)}</span>
+                              <span className="text-xs text-gray-500 pl-2">{formatDate(task.date)}</span>
                             </motion.div>
                           ))}
                         </div>
