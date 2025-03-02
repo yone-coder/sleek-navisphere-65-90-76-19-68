@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Heart, 
@@ -70,10 +69,10 @@ const ImpactStory = () => {
 
   return (
     <div className="w-full bg-white overflow-hidden">
-      {/* Minimal, Sleek Title Section */}
-      <div className="py-12 px-4 text-center">
-        <h1 className="text-4xl font-bold mb-4 text-gray-900">Our Story & Mission</h1>
-        <div className="w-24 h-1 bg-indigo-600 mx-auto"></div>
+      {/* Horizontal, more compact title section */}
+      <div className="py-6 px-4 flex items-center justify-center">
+        <h1 className="text-2xl font-semibold text-gray-900">Our Story & Mission</h1>
+        <div className="w-16 h-1 bg-indigo-600 ml-4 mt-1"></div>
       </div>
 
       {/* Main content area with minimal padding */}
