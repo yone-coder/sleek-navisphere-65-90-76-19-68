@@ -137,7 +137,7 @@ export function TabNav({ activeTab }: TabNavProps) {
       
       {/* Double chevron scroll indicator */}
       {showScrollIndicator && (
-        <div className="absolute right-0 top-0 bottom-0 z-10 pointer-events-none flex items-center justify-center">
+        <div className="absolute right-0 top-0 bottom-0 z-10 flex items-center justify-center">
           <div className="h-full flex items-center px-2 bg-gradient-to-l from-white via-white/90 to-transparent">
             <motion.div 
               className="flex flex-col"
