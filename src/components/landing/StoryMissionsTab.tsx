@@ -69,10 +69,11 @@ const ImpactStory = () => {
 
   return (
     <div className="w-full bg-white overflow-hidden">
-      {/* Horizontal, more compact title section */}
+      {/* Centered title with green round background */}
       <div className="py-6 px-4 flex items-center justify-center">
-        <h1 className="text-2xl font-semibold text-gray-900">Our Story & Mission</h1>
-        <div className="w-16 h-1 bg-indigo-600 ml-4 mt-1"></div>
+        <div className="bg-green-500 rounded-full px-6 py-2">
+          <h1 className="text-2xl font-semibold text-white">Our Story & Mission</h1>
+        </div>
       </div>
 
       {/* Main content area with minimal padding */}
