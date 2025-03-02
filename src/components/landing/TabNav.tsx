@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { Info, Bell, MessageCircle, HelpCircle, BookOpen, ChevronRight, Swipe } from 'lucide-react';
+import { Info, Bell, MessageCircle, HelpCircle, BookOpen, ChevronRight, ArrowLeftRight } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 
 interface TabNavProps {
@@ -244,7 +244,7 @@ export function TabNav({ activeTab }: TabNavProps) {
               ease: "easeInOut"
             }}
           >
-            <Swipe className="w-3.5 h-3.5 mr-1.5" />
+            <ArrowLeftRight className="w-3.5 h-3.5 mr-1.5" />
             <span>Swipe to see more tabs</span>
           </motion.div>
         </motion.div>
