@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailsPage from '../components/landing/VideoDetailsPage';
 
@@ -112,14 +113,14 @@ const TabSwitcher = () => {
   }, [activeTab]);
 
   return (
-    <div className="flex flex-col w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg overflow-hidden h-screen">
-      {/* Ultra Modern Tab Header */}
-      <div className="flex bg-gradient-to-r from-indigo-500 to-purple-600 p-1 rounded-t-lg sticky top-0 z-10">
-        <div className="flex bg-white/5 backdrop-blur-sm w-full rounded-md p-1">
+    <div className="flex flex-col w-full max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden h-[85vh]">
+      {/* Ultra Modern Tab Header - Reduced size */}
+      <div className="flex bg-gradient-to-r from-indigo-500 to-purple-600 p-0.5 rounded-t-lg sticky top-0 z-10">
+        <div className="flex bg-white/5 backdrop-blur-sm w-full rounded-md p-0.5">
           {tabs.map((tab, index) => (
             <button
               key={index}
-              className={`flex-1 py-2 px-3 text-center font-medium transition-all duration-300 rounded-md ${
+              className={`flex-1 py-1.5 px-2 text-center text-xs font-medium transition-all duration-300 rounded-md ${
                 activeTab === index
                   ? 'bg-white text-indigo-600 shadow-md transform scale-105'
                   : 'text-white/80 hover:text-white hover:bg-white/10'
