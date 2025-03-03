@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailsPage from '../components/landing/VideoDetailsPage';
+import ServicesTab from '../components/landing/ServicesTab';
 import { Navigation, ArrowRight, Sparkle } from 'lucide-react';
 
 const TabSwitcher = () => {
@@ -30,18 +31,7 @@ const TabSwitcher = () => {
     },
     {
       name: "Services",
-      items: [
-        "Web Development",
-        "Mobile App Development",
-        "UI/UX Design",
-        "Cloud Solutions",
-        "E-commerce Integration",
-        "Custom Software Development",
-        "API Development",
-        "Maintenance & Support",
-        "Digital Transformation",
-        "DevOps Services"
-      ]
+      content: <div className="h-full overflow-auto"><ServicesTab /></div>
     },
     {
       name: "Timeline",
@@ -191,7 +181,7 @@ const TabSwitcher = () => {
           >
             <div className="h-full w-full overflow-y-auto bg-white">
               {tab.content ? (
-                <div className="w-full">{tab.content}</div>
+                <div className="w-full h-full">{tab.content}</div>
               ) : (
                 <>
                   <h2 className="text-xl font-bold p-2 pb-1">{tab.name}</h2>
