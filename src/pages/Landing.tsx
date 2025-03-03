@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailsPage from '../components/landing/VideoDetailsPage';
 
@@ -113,7 +112,7 @@ const TabSwitcher = () => {
   }, [activeTab]);
 
   return (
-    <div className="flex flex-col w-full max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden h-[85vh]">
+    <div className="flex flex-col w-full max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden h-screen">
       {/* Ultra Modern Tab Header - Reduced size */}
       <div className="flex bg-gradient-to-r from-indigo-500 to-purple-600 p-0.5 rounded-t-lg sticky top-0 z-10">
         <div className="flex bg-white/5 backdrop-blur-sm w-full rounded-md p-0.5">
