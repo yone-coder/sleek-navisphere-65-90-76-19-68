@@ -2,6 +2,45 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, Clock, MessageSquare, Share2, Type } from 'lucide-react';
 
+// Define animations as a CSS-in-JS object
+const animationStyles = `
+  @keyframes pageExitToLeft {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(-10%); opacity: 0; }
+  }
+  
+  @keyframes pageExitToRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(10%); opacity: 0; }
+  }
+  
+  @keyframes pageEnterFromRight {
+    from { transform: translateX(10%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  @keyframes pageEnterFromLeft {
+    from { transform: translateX(-10%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  .animate-page-exit-to-left {
+    animation: pageExitToLeft 0.5s ease-in-out forwards;
+  }
+  
+  .animate-page-exit-to-right {
+    animation: pageExitToRight 0.5s ease-in-out forwards;
+  }
+  
+  .animate-page-enter-from-right {
+    animation: pageEnterFromRight 0.5s ease-in-out forwards;
+  }
+  
+  .animate-page-enter-from-left {
+    animation: pageEnterFromLeft 0.5s ease-in-out forwards;
+  }
+`;
+
 const StoryPage = () => {
   const [fontSize, setFontSize] = useState(16);
   const [currentPage, setCurrentPage] = useState(1);
@@ -172,47 +211,21 @@ const StoryPage = () => {
     return ((fontSize - min) / (max - min)) * 100;
   };
   
+  // Effect to inject animation styles once on component mount
+  useEffect(() => {
+    // Add the animation styles to the document head
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = animationStyles;
+    document.head.appendChild(styleElement);
+    
+    // Clean up on unmount
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }, []);
+  
   return (
     <div className="min-h-screen bg-white text-gray-800 transition-colors duration-300">
-      {/* Custom Animation Styles */}
-      <style jsx global>{`
-        @keyframes pageExitToLeft {
-          from { transform: translateX(0); opacity: 1; }
-          to { transform: translateX(-10%); opacity: 0; }
-        }
-        
-        @keyframes pageExitToRight {
-          from { transform: translateX(0); opacity: 1; }
-          to { transform: translateX(10%); opacity: 0; }
-        }
-        
-        @keyframes pageEnterFromRight {
-          from { transform: translateX(10%); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes pageEnterFromLeft {
-          from { transform: translateX(-10%); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
-        }
-        
-        .animate-page-exit-to-left {
-          animation: pageExitToLeft 0.5s ease-in-out forwards;
-        }
-        
-        .animate-page-exit-to-right {
-          animation: pageExitToRight 0.5s ease-in-out forwards;
-        }
-        
-        .animate-page-enter-from-right {
-          animation: pageEnterFromRight 0.5s ease-in-out forwards;
-        }
-        
-        .animate-page-enter-from-left {
-          animation: pageEnterFromLeft 0.5s ease-in-out forwards;
-        }
-      `}</style>
-      
       {/* Side Table of Contents */}
       <div 
         className={`fixed top-0 left-0 h-full w-64 z-50 transform ${tocOpen ? 'translate-x-0' : '-translate-x-full'} 
