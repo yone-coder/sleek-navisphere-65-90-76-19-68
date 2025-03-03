@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailsPage from '../components/landing/VideoDetailsPage';
 
@@ -113,7 +112,7 @@ const TabSwitcher = () => {
   }, [activeTab]);
 
   return (
-    <div className="flex flex-col w-full max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden h-[85vh]">
+    <div className="flex flex-col w-full max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden min-h-screen">
       {/* Ultra Modern Tab Header - Reduced size */}
       <div className="flex bg-gradient-to-r from-indigo-500 to-purple-600 p-0.5 rounded-t-lg sticky top-0 z-10">
         <div className="flex bg-white/5 backdrop-blur-sm w-full rounded-md p-0.5">
@@ -136,7 +135,7 @@ const TabSwitcher = () => {
       {/* Scrollable Tab Content Container with reduced padding */}
       <div 
         ref={scrollContainerRef}
-        className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide flex-grow"
+        className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide flex-1"
         style={{ 
           scrollSnapType: 'x mandatory',
           scrollBehavior: 'smooth',
