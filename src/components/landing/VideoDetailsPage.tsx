@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, Volume2, VolumeX, Maximize, Share2, Heart, MessageCircle, MoreHorizontal, ChevronLeft, CheckCircle, Clock, Flag, Facebook, Instagram } from 'lucide-react';
 
 const VideoDetailsPage = () => {
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -51,7 +51,7 @@ const VideoDetailsPage = () => {
   };
 
   // Format view count
-  const formatCount = (count) => {
+  const formatCount = (count: number): string => {
     if (count >= 1000000) {
       return (count / 1000000).toFixed(1) + 'M';
     } else if (count >= 1000) {
@@ -61,10 +61,10 @@ const VideoDetailsPage = () => {
   };
 
   // Format date
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     const now = new Date();
-    const diffTime = Math.abs(now - date);
+    const diffTime = Math.abs(now.getTime() - date.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
     if (diffDays <= 1) return 'Today';
@@ -75,7 +75,7 @@ const VideoDetailsPage = () => {
   };
 
   // Calculate channel membership duration
-  const getChannelAge = () => {
+  const getChannelAge = (): string => {
     const startDate = new Date(video.channel.memberSince);
     const now = new Date();
     const years = now.getFullYear() - startDate.getFullYear();
@@ -88,7 +88,7 @@ const VideoDetailsPage = () => {
   };
 
   // Toggle play/pause
-  const togglePlay = () => {
+  const togglePlay = (): void => {
     if (videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
@@ -100,7 +100,7 @@ const VideoDetailsPage = () => {
   };
 
   // Toggle mute
-  const toggleMute = () => {
+  const toggleMute = (): void => {
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
       setIsMuted(!isMuted);
@@ -108,8 +108,8 @@ const VideoDetailsPage = () => {
   };
 
   // Handle volume change
-  const handleVolumeChange = (e) => {
-    const newVolume = e.target.value;
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const newVolume = parseInt(e.target.value, 10);
     setVolume(newVolume);
     if (videoRef.current) {
       videoRef.current.volume = newVolume / 100;
@@ -117,17 +117,17 @@ const VideoDetailsPage = () => {
   };
 
   // Toggle like
-  const toggleLike = () => {
+  const toggleLike = (): void => {
     setIsLiked(!isLiked);
   };
   
   // Toggle comment
-  const toggleComment = () => {
+  const toggleComment = (): void => {
     setIsCommented(!isCommented);
   };
 
   // Toggle subscribe
-  const toggleSubscribe = () => {
+  const toggleSubscribe = (): void => {
     setIsSubscribed(!isSubscribed);
   };
 
@@ -158,20 +158,20 @@ const VideoDetailsPage = () => {
   }, []);
 
   // Format time from seconds to MM:SS
-  const formatTime = (timeInSeconds) => {
+  const formatTime = (timeInSeconds: number): string => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = Math.floor(timeInSeconds % 60);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
   // Parse duration string (MM:SS) to seconds
-  const parseDuration = (durationString) => {
+  const parseDuration = (durationString: string): number => {
     const [minutes, seconds] = durationString.split(':').map(Number);
     return minutes * 60 + seconds;
   };
 
   // Seek to position in video
-  const handleSeek = (e) => {
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>): void => {
     const seekPosition = e.nativeEvent.offsetX / e.currentTarget.clientWidth;
     if (videoRef.current && !isNaN(videoRef.current.duration)) {
       videoRef.current.currentTime = seekPosition * videoRef.current.duration;
@@ -217,7 +217,6 @@ const VideoDetailsPage = () => {
           poster={video.thumbnailUrl}
           onClick={togglePlay}
           muted={isMuted}
-          volume={volume / 100}
         ></video>
         
         {/* Play/Pause Overlay - only visible when paused */}
