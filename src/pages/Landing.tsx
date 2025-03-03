@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailsPage from '../components/landing/VideoDetailsPage';
 import ServicesTab from '../components/landing/ServicesTab';
@@ -176,7 +177,7 @@ const TabSwitcher = () => {
               fontSize: '1rem', // Reset font size for content
               margin: 0,
               padding: 0,
-              flex: '0 0 95%'
+              flex: '0 0 91%' // Reduced from 95% to show more of the next tab
             }}
           >
             <div className="h-full w-full overflow-y-auto bg-white">
