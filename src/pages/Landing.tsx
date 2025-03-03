@@ -178,13 +178,13 @@ const TabSwitcher = () => {
         {tabs.map((tab, tabIndex) => (
           <div 
             key={tabIndex}
-            className="flex-shrink-0 w-11/12 snap-center h-full"
+            className="flex-shrink-0 w-full snap-center h-full"
             style={{ 
               scrollSnapAlign: 'start', 
               fontSize: '1rem', // Reset font size for content
               margin: 0,
               padding: 0,
-              flex: '0 0 91.666667%'
+              flex: '0 0 95%'
             }}
           >
             <div className="h-full w-full overflow-y-auto bg-white">
