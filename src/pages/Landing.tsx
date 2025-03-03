@@ -18,7 +18,7 @@ const TabSwitcher = () => {
     },
     {
       name: "Our story",
-      content: <div className="h-full overflow-auto"><StoryPage /></div>
+      content: <div className="h-full overflow-hidden"><StoryPage /></div>
     },
     {
       name: "Services",

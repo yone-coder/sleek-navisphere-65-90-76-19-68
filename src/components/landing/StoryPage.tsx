@@ -224,7 +224,7 @@ const StoryPage = () => {
   }, []);
   
   return (
-    <div className="bg-white text-gray-800 transition-colors duration-300 relative overflow-y-auto h-screen pb-40">
+    <div className="bg-white text-gray-800 transition-colors duration-300 relative overflow-y-auto h-full pb-20">
       {/* Side Table of Contents */}
       <div 
         className={`fixed top-0 left-0 h-full w-64 z-50 transform ${tocOpen ? 'translate-x-0' : '-translate-x-full'} 
@@ -324,7 +324,7 @@ const StoryPage = () => {
       </div>
       
       {/* Story Container - Adjust padding bottom to account for footer */}
-      <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative">
+      <main className="container mx-auto px-4 py-8 pb-28 max-w-3xl relative">
         {/* Current content with animation */}
         <div className={`transition-all duration-500 ${getAnimationClasses()}`}>
           {/* Title and Author - Only on first page */}
@@ -373,7 +373,7 @@ const StoryPage = () => {
       </main>
       
       {/* Floating Font Size Control Button - moved higher up */}
-      <div className="fixed bottom-40 right-4 z-30 flex flex-col items-end">
+      <div className="fixed bottom-20 right-4 z-30 flex flex-col items-end">
         {/* Font Size Toggle Button */}
         <button 
           onClick={() => setFontSizeControlOpen(!fontSizeControlOpen)}
@@ -385,7 +385,7 @@ const StoryPage = () => {
       
       {/* Glassmorphic Horizontal Font Size Control */}
       {fontSizeControlOpen && (
-        <div className="fixed bottom-40 left-0 right-0 z-20 flex justify-center">
+        <div className="fixed bottom-20 left-0 right-0 z-20 flex justify-center">
           <div className="font-size-control mx-4 w-full max-w-xl bg-white bg-opacity-80 backdrop-blur-md rounded-lg shadow-xl p-4 border border-white border-opacity-30">
             <div className="text-sm font-medium mb-2 text-gray-700 text-center">Text Size</div>
             
@@ -433,7 +433,7 @@ const StoryPage = () => {
       )}
       
       {/* Social Buttons Footer */}
-      <footer className="fixed bottom-0 w-full bg-white border-t border-gray-200 shadow-md z-20">
+      <footer className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-200 shadow-md z-20">
         <div className="w-full px-2 py-3">
           {/* Navigation row */}
           <div className="flex justify-between items-center mb-3">
