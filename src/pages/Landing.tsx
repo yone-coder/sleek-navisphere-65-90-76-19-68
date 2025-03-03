@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailsPage from '../components/landing/VideoDetailsPage';
 import ServicesTab from '../components/landing/ServicesTab';
@@ -9,7 +8,6 @@ const TabSwitcher = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showHint, setShowHint] = useState(true);
   
-  // Tab data with names and content items
   const tabs = [
     {
       name: "Overview",
@@ -66,12 +64,10 @@ const TabSwitcher = () => {
     }
   ];
 
-  // Handle manual tab switching
   const handleTabClick = (index: number) => {
     setActiveTab(index);
     if (scrollContainerRef.current) {
       const containerWidth = scrollContainerRef.current.offsetWidth;
-      // Use 11/12 width to show hint of next tab
       const tabWidth = containerWidth * (11/12);
       scrollContainerRef.current.scrollTo({
         left: index * tabWidth,
@@ -79,29 +75,24 @@ const TabSwitcher = () => {
       });
     }
     
-    // Hide hint after user clicks a tab
     setShowHint(false);
   };
 
-  // Handle scroll event to update active tab
   const handleScroll = () => {
     if (scrollContainerRef.current) {
       const { scrollLeft, offsetWidth } = scrollContainerRef.current;
-      // Use 11/12 width to show hint of next tab
       const tabWidth = offsetWidth * (11/12);
       const tabIndex = Math.round(scrollLeft / tabWidth);
       if (tabIndex !== activeTab && tabIndex >= 0 && tabIndex < tabs.length) {
         setActiveTab(tabIndex);
       }
       
-      // Hide hint after user starts scrolling
       if (scrollLeft > 10) {
         setShowHint(false);
       }
     }
   };
 
-  // Add scroll event listener
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
     if (scrollContainer) {
@@ -112,7 +103,6 @@ const TabSwitcher = () => {
     }
   }, [activeTab]);
 
-  // Auto-hide hint after 5 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowHint(false);
@@ -123,7 +113,6 @@ const TabSwitcher = () => {
 
   return (
     <div className="flex flex-col w-full max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden h-screen relative">
-      {/* Ultra Modern Tab Header - Reduced size */}
       <div className="flex bg-gradient-to-r from-indigo-500 to-purple-600 p-0.5 rounded-t-lg sticky top-0 z-10">
         <div className="flex bg-white/5 backdrop-blur-sm w-full rounded-md p-0.5">
           {tabs.map((tab, index) => (
@@ -142,7 +131,6 @@ const TabSwitcher = () => {
         </div>
       </div>
 
-      {/* Visually Appealing, Non-Blinking Hint Message */}
       {showHint && (
         <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
           <div className="bg-white/90 backdrop-blur-sm px-5 py-3 rounded-lg shadow-md border border-gray-100 transition-opacity duration-300">
@@ -155,7 +143,6 @@ const TabSwitcher = () => {
         </div>
       )}
 
-      {/* Scrollable Tab Content Container with reduced padding */}
       <div 
         ref={scrollContainerRef}
         className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide flex-grow"
@@ -163,7 +150,7 @@ const TabSwitcher = () => {
           scrollSnapType: 'x mandatory',
           scrollBehavior: 'smooth',
           WebkitOverflowScrolling: 'touch',
-          fontSize: 0, // Remove whitespace between inline elements
+          fontSize: 0,
           display: 'flex',
           width: '100%'
         }}
@@ -174,10 +161,11 @@ const TabSwitcher = () => {
             className="flex-shrink-0 w-full snap-center h-full"
             style={{ 
               scrollSnapAlign: 'start', 
-              fontSize: '1rem', // Reset font size for content
+              fontSize: '1rem',
               margin: 0,
               padding: 0,
-              flex: '0 0 91%' // Reduced from 95% to show more of the next tab
+              width: '91.67%',
+              flex: 'none'
             }}
           >
             <div className="h-full w-full overflow-y-auto bg-white">
