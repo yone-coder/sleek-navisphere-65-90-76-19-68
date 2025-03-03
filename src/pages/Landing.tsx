@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailsPage from '../components/landing/VideoDetailsPage';
 import ServicesTab from '../components/landing/ServicesTab';
+import TimelineTab from '../components/landing/TimelineTab';
 import { Navigation, ArrowRight, Sparkle } from 'lucide-react';
 
 const TabSwitcher = () => {
@@ -34,18 +35,7 @@ const TabSwitcher = () => {
     },
     {
       name: "Timeline",
-      items: [
-        "2020 - Company founded",
-        "2021 - First product launch",
-        "2021 - Initial seed funding",
-        "2022 - International expansion",
-        "2022 - Partnership program started",
-        "2023 - Reached 1M users milestone",
-        "2023 - Series A funding secured",
-        "2024 - New product line launched",
-        "2024 - Industry innovation award",
-        "2025 - IPO plans announced"
-      ]
+      content: <div className="h-full overflow-auto"><TimelineTab /></div>
     },
     {
       name: "FAQs",
