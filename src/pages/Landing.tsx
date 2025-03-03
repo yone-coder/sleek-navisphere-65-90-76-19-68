@@ -151,14 +151,14 @@ const TabSwitcher = () => {
         </div>
       </div>
 
-      {/* Modern Hint Message */}
+      {/* Visually Appealing, Non-Blinking Hint Message */}
       {showHint && (
         <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-          <div className="bg-white/80 backdrop-blur-md px-5 py-3 rounded-full shadow-lg border border-indigo-100 animate-pulse transform transition-all duration-500">
-            <div className="flex items-center gap-3 text-sm font-medium text-indigo-600">
-              <Sparkle size={18} className="text-purple-500" />
+          <div className="bg-white/90 backdrop-blur-sm px-5 py-3 rounded-lg shadow-md border border-gray-100 transition-opacity duration-300">
+            <div className="flex items-center gap-3 text-sm font-medium text-gray-700">
+              <Sparkle size={18} className="text-indigo-400" />
               <span>Swipe to explore more tabs</span>
-              <Navigation size={18} className="text-indigo-500 animate-bounce" />
+              <Navigation size={18} className="text-indigo-400" />
             </div>
           </div>
         </div>
