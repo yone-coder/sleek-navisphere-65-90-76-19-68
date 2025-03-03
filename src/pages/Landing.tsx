@@ -4,12 +4,10 @@ import VideoDetailsPage from '../components/landing/VideoDetailsPage';
 import ServicesTab from '../components/landing/ServicesTab';
 import TimelineTab from '../components/landing/TimelineTab';
 import StoryPage from '../components/landing/StoryPage';
-import { Navigation, ArrowRight, Sparkle } from 'lucide-react';
 
 const TabSwitcher = () => {
   const [activeTab, setActiveTab] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [showHint, setShowHint] = useState(true);
   
   const tabs = [
     {
@@ -49,27 +47,19 @@ const TabSwitcher = () => {
     setActiveTab(index);
     if (scrollContainerRef.current) {
       const containerWidth = scrollContainerRef.current.offsetWidth;
-      const tabWidth = containerWidth * (0.96); // Increased to 96% to show smaller hint
       scrollContainerRef.current.scrollTo({
-        left: index * tabWidth,
+        left: index * containerWidth,
         behavior: 'smooth'
       });
     }
-    
-    setShowHint(false);
   };
 
   const handleScroll = () => {
     if (scrollContainerRef.current) {
       const { scrollLeft, offsetWidth } = scrollContainerRef.current;
-      const tabWidth = offsetWidth * (0.96); // Increased to 96% to show smaller hint
-      const tabIndex = Math.round(scrollLeft / tabWidth);
+      const tabIndex = Math.round(scrollLeft / offsetWidth);
       if (tabIndex !== activeTab && tabIndex >= 0 && tabIndex < tabs.length) {
         setActiveTab(tabIndex);
-      }
-      
-      if (scrollLeft > 10) {
-        setShowHint(false);
       }
     }
   };
@@ -83,14 +73,6 @@ const TabSwitcher = () => {
       };
     }
   }, [activeTab]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowHint(false);
-    }, 5000);
-    
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <div className="flex flex-col w-full max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden h-screen relative">
@@ -111,18 +93,6 @@ const TabSwitcher = () => {
           ))}
         </div>
       </div>
-
-      {showHint && (
-        <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-          <div className="bg-white/90 backdrop-blur-sm px-5 py-3 rounded-lg shadow-md border border-gray-100 transition-opacity duration-300">
-            <div className="flex items-center gap-3 text-sm font-medium text-gray-700">
-              <Sparkle size={18} className="text-indigo-400" />
-              <span>Swipe to explore more tabs</span>
-              <Navigation size={18} className="text-indigo-400" />
-            </div>
-          </div>
-        </div>
-      )}
 
       <div 
         ref={scrollContainerRef}
@@ -145,7 +115,7 @@ const TabSwitcher = () => {
               fontSize: '1rem',
               margin: 0,
               padding: 0,
-              width: '96%', // Increased from 91.67% to 96% to show smaller hint
+              width: '100%', // Changed from 96% to 100% for full width tabs
               flex: 'none'
             }}
           >
