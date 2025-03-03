@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailsPage from '../components/landing/VideoDetailsPage';
 
@@ -160,7 +159,7 @@ const TabSwitcher = () => {
           >
             <div className="h-full w-full overflow-y-auto bg-white">
               {tab.content ? (
-                tab.content
+                <div className="w-full">{tab.content}</div>
               ) : (
                 <>
                   <h2 className="text-xl font-bold p-2 pb-1">{tab.name}</h2>

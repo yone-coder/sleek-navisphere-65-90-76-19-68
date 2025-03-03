@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, Volume2, VolumeX, Maximize, Share2, Heart, MessageCircle, MoreHorizontal, ChevronLeft, CheckCircle, Clock, Flag, Facebook, Instagram } from 'lucide-react';
 
@@ -15,7 +14,6 @@ const VideoDetailsPage = () => {
   const [showMoreDescription, setShowMoreDescription] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   
-  // Mock video data
   const video = {
     id: 'v12345',
     title: 'How to Master Modern Web Design in 2025',
@@ -50,7 +48,6 @@ const VideoDetailsPage = () => {
     ]
   };
 
-  // Format view count
   const formatCount = (count: number): string => {
     if (count >= 1000000) {
       return (count / 1000000).toFixed(1) + 'M';
@@ -60,7 +57,6 @@ const VideoDetailsPage = () => {
     return count.toString();
   };
 
-  // Format date
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     const now = new Date();
@@ -74,7 +70,6 @@ const VideoDetailsPage = () => {
     return `${Math.floor(diffDays / 365)} years ago`;
   };
 
-  // Calculate channel membership duration
   const getChannelAge = (): string => {
     const startDate = new Date(video.channel.memberSince);
     const now = new Date();
@@ -87,7 +82,6 @@ const VideoDetailsPage = () => {
     return `${years} years`;
   };
 
-  // Toggle play/pause
   const togglePlay = (): void => {
     if (videoRef.current) {
       if (isPlaying) {
@@ -99,7 +93,6 @@ const VideoDetailsPage = () => {
     }
   };
 
-  // Toggle mute
   const toggleMute = (): void => {
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
@@ -107,7 +100,6 @@ const VideoDetailsPage = () => {
     }
   };
 
-  // Handle volume change
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const newVolume = parseInt(e.target.value, 10);
     setVolume(newVolume);
@@ -116,22 +108,18 @@ const VideoDetailsPage = () => {
     }
   };
 
-  // Toggle like
   const toggleLike = (): void => {
     setIsLiked(!isLiked);
   };
   
-  // Toggle comment
   const toggleComment = (): void => {
     setIsCommented(!isCommented);
   };
 
-  // Toggle subscribe
   const toggleSubscribe = (): void => {
     setIsSubscribed(!isSubscribed);
   };
 
-  // Update progress bar and current time when video is playing
   useEffect(() => {
     const videoElement = videoRef.current;
     if (!videoElement) return;
@@ -157,20 +145,17 @@ const VideoDetailsPage = () => {
     };
   }, []);
 
-  // Format time from seconds to MM:SS
   const formatTime = (timeInSeconds: number): string => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = Math.floor(timeInSeconds % 60);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
-  // Parse duration string (MM:SS) to seconds
   const parseDuration = (durationString: string): number => {
     const [minutes, seconds] = durationString.split(':').map(Number);
     return minutes * 60 + seconds;
   };
 
-  // Seek to position in video
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>): void => {
     const seekPosition = e.nativeEvent.offsetX / e.currentTarget.clientWidth;
     if (videoRef.current && !isNaN(videoRef.current.duration)) {
@@ -178,7 +163,6 @@ const VideoDetailsPage = () => {
     }
   };
 
-  // Custom X (Twitter) Icon
   const XIcon = () => (
     <svg 
       xmlns="http://www.w3.org/2000/svg" 
@@ -192,7 +176,6 @@ const VideoDetailsPage = () => {
     </svg>
   );
 
-  // Custom TikTok Icon
   const TikTokIcon = () => (
     <svg 
       xmlns="http://www.w3.org/2000/svg" 
@@ -207,8 +190,7 @@ const VideoDetailsPage = () => {
   );
 
   return (
-    <div className="bg-gray-50 text-gray-800 min-h-screen">
-      {/* Video Player Section */}
+    <div className="bg-gray-50 text-gray-800 w-full">
       <div className="relative w-full aspect-video bg-gray-900">
         <video
           ref={videoRef}
@@ -219,7 +201,6 @@ const VideoDetailsPage = () => {
           muted={isMuted}
         ></video>
         
-        {/* Play/Pause Overlay - only visible when paused */}
         {!isPlaying && (
           <div className="absolute inset-0 flex items-center justify-center">
             <button 
@@ -231,10 +212,8 @@ const VideoDetailsPage = () => {
           </div>
         )}
         
-        {/* Video Controls */}
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
           <div className="flex flex-col gap-2">
-            {/* Progress Bar */}
             <div 
               className="w-full h-2 bg-gray-400/40 rounded-full overflow-hidden cursor-pointer"
               onClick={handleSeek}
@@ -245,7 +224,6 @@ const VideoDetailsPage = () => {
               />
             </div>
             
-            {/* Controls */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <button 
@@ -296,13 +274,10 @@ const VideoDetailsPage = () => {
         </div>
       </div>
 
-      {/* Video Info Section */}
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="w-full px-2 py-4">
         <div className="w-full">
-          {/* Title and Stats */}
           <h1 className="text-2xl font-bold mb-2 text-gray-900">{video.title}</h1>
           
-          {/* Updated Stats bar with 4K badge and evenly spaced items */}
           <div className="flex items-center justify-between text-gray-600 text-sm mb-6 border-b border-gray-200 pb-4">
             <div className="flex items-center">
               <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded mr-2">4K</span>
@@ -319,8 +294,7 @@ const VideoDetailsPage = () => {
             </div>
           </div>
           
-          {/* Action Buttons */}
-          <div className="grid grid-cols-3 gap-2 mb-6">
+          <div className="grid grid-cols-3 gap-2 mb-6 w-full">
             <button 
               onClick={toggleLike}
               className={`flex items-center justify-center gap-1 px-3 py-2 rounded-full ${isLiked ? 'bg-red-100 text-red-600' : 'hover:bg-gray-200'}`}
@@ -343,10 +317,8 @@ const VideoDetailsPage = () => {
             </button>
           </div>
           
-          {/* Enhanced Channel Info */}
-          <div className="bg-white rounded-xl mb-6 overflow-hidden shadow-md">
+          <div className="bg-white rounded-xl mb-6 overflow-hidden shadow-md w-full">
             <div className="p-5">
-              {/* Upper section with avatar, name, and subscribe button */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
                   <div className="relative flex-shrink-0">
@@ -384,12 +356,10 @@ const VideoDetailsPage = () => {
                 </button>
               </div>
               
-              {/* Channel description */}
               <div className="mt-4 text-gray-700 text-sm">
                 <p className="line-clamp-3">{video.channel.description}</p>
               </div>
               
-              {/* Social links with icons */}
               <div className="mt-4">
                 <h4 className="text-xs text-gray-600 mb-2">Follow on:</h4>
                 <div className="grid grid-cols-4 sm:grid-cols-4 gap-2">
@@ -425,7 +395,6 @@ const VideoDetailsPage = () => {
               </div>
             </div>
             
-            {/* Channel stats */}
             <div className="bg-gray-100 grid grid-cols-3 divide-x divide-gray-200 mt-4">
               <div className="p-3 text-center">
                 <p className="text-xl sm:text-2xl font-bold text-gray-900">{video.channel.totalVideos}</p>
@@ -442,8 +411,7 @@ const VideoDetailsPage = () => {
             </div>
           </div>
           
-          {/* Description */}
-          <div className="bg-white p-5 rounded-xl mb-6 shadow-md">
+          <div className="bg-white p-4 rounded-xl shadow-md w-full">
             <div className="flex justify-between items-start mb-4">
               <h3 className="font-semibold text-lg text-gray-900">Description</h3>
               <button className="text-gray-500 hover:text-gray-700">
@@ -476,8 +444,7 @@ const VideoDetailsPage = () => {
             </div>
           </div>
           
-          {/* Related Content */}
-          <div className="bg-white p-5 rounded-xl shadow-md">
+          <div className="bg-white p-4 rounded-xl shadow-md w-full">
             <h3 className="font-semibold text-lg mb-4 text-gray-900">More from {video.channel.name}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {video.relatedContent.map((item) => (
