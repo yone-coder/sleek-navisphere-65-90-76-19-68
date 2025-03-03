@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailsPage from '../components/landing/VideoDetailsPage';
 import ServicesTab from '../components/landing/ServicesTab';
@@ -68,7 +69,7 @@ const TabSwitcher = () => {
     setActiveTab(index);
     if (scrollContainerRef.current) {
       const containerWidth = scrollContainerRef.current.offsetWidth;
-      const tabWidth = containerWidth * (11/12);
+      const tabWidth = containerWidth * (0.96); // Increased to 96% to show smaller hint
       scrollContainerRef.current.scrollTo({
         left: index * tabWidth,
         behavior: 'smooth'
@@ -81,7 +82,7 @@ const TabSwitcher = () => {
   const handleScroll = () => {
     if (scrollContainerRef.current) {
       const { scrollLeft, offsetWidth } = scrollContainerRef.current;
-      const tabWidth = offsetWidth * (11/12);
+      const tabWidth = offsetWidth * (0.96); // Increased to 96% to show smaller hint
       const tabIndex = Math.round(scrollLeft / tabWidth);
       if (tabIndex !== activeTab && tabIndex >= 0 && tabIndex < tabs.length) {
         setActiveTab(tabIndex);
@@ -164,7 +165,7 @@ const TabSwitcher = () => {
               fontSize: '1rem',
               margin: 0,
               padding: 0,
-              width: '91.67%',
+              width: '96%', // Increased from 91.67% to 96% to show smaller hint
               flex: 'none'
             }}
           >
