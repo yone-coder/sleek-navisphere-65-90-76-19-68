@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, Clock, MessageSquare, Share2, Type } from 'lucide-react';
 
@@ -225,7 +224,7 @@ const StoryPage = () => {
   }, []);
   
   return (
-    <div className="min-h-screen bg-white text-gray-800 transition-colors duration-300">
+    <div className="bg-white text-gray-800 transition-colors duration-300 relative overflow-y-auto h-screen pb-40">
       {/* Side Table of Contents */}
       <div 
         className={`fixed top-0 left-0 h-full w-64 z-50 transform ${tocOpen ? 'translate-x-0' : '-translate-x-full'} 
@@ -325,7 +324,7 @@ const StoryPage = () => {
       </div>
       
       {/* Story Container - Adjust padding bottom to account for footer */}
-      <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative overflow-hidden">
+      <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative">
         {/* Current content with animation */}
         <div className={`transition-all duration-500 ${getAnimationClasses()}`}>
           {/* Title and Author - Only on first page */}

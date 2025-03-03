@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailsPage from '../components/landing/VideoDetailsPage';
 import ServicesTab from '../components/landing/ServicesTab';
@@ -17,7 +18,7 @@ const TabSwitcher = () => {
     },
     {
       name: "Our story",
-      content: <div className="h-full overflow-hidden"><StoryPage /></div>
+      content: <div className="h-full overflow-auto"><StoryPage /></div>
     },
     {
       name: "Services",
