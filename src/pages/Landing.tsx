@@ -1,20 +1,18 @@
+
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { Shield, BookOpen, Briefcase, Users } from 'lucide-react';
-import { FloatingProgress } from '@/components/campaign/FloatingProgress';
 import { FAQsTab } from '@/components/product/tabs/FAQsTab';
 import { TabNav } from '@/components/landing/TabNav';
 import { TimelineTab } from '@/components/landing/TimelineTab';
 import { CommentsTab } from '@/components/landing/CommentsTab';
-import { VideoSection } from '@/components/landing/VideoSection';
 import { ProfileSection } from '@/components/landing/ProfileSection';
 import { SearchBar } from '@/components/landing/SearchBar';
 import { PaymentMethodsSheet } from '@/components/landing/PaymentMethodsSheet';
 import { StoryMissionsTab } from '@/components/landing/StoryMissionsTab';
-import { PlatformHeader } from '@/components/landing/PlatformHeader';
-import { CollapsibleSections } from '@/components/landing/CollapsibleSections';
 import { ServicesTab } from '@/components/landing/ServicesTab';
+import { FloatingProgress } from '@/components/campaign/FloatingProgress';
+import VideoDetailsPage from '@/components/landing/VideoDetailsPage';
 
 export default function Landing() {
   const [progress, setProgress] = useState(65);
@@ -86,10 +84,7 @@ export default function Landing() {
               transition={{ duration: 0.2 }}
             >
               <TabsContent value="overview" className="mt-0 pb-32">
-                <VideoSection />
-                <ProfileSection {...creatorProfile} />
-                <PlatformHeader />
-                <CollapsibleSections />
+                <VideoDetailsPage />
               </TabsContent>
               <TabsContent value="services" className="mt-0">
                 <ServicesTab />
