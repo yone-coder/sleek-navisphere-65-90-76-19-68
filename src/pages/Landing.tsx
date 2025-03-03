@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailsPage from '../components/landing/VideoDetailsPage';
 import { Navigation, ArrowRight, Sparkle } from 'lucide-react';
@@ -141,7 +142,7 @@ const TabSwitcher = () => {
         </div>
       </div>
 
-      {/* Visually Appealing, Non-Blinking Hint Message */}
+      {/* Visually Appealing, Non-Blinking Hint Message - now works on all tabs by positioning it absolutely */}
       {showHint && (
         <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
           <div className="bg-white/90 backdrop-blur-sm px-5 py-3 rounded-lg shadow-md border border-gray-100 transition-opacity duration-300">
