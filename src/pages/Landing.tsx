@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailsPage from '../components/landing/VideoDetailsPage';
 import { Navigation, ArrowRight, Sparkle } from 'lucide-react';
-import ServicesTab from '../components/landing/ServicesTab';
 
 const TabSwitcher = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -31,7 +30,18 @@ const TabSwitcher = () => {
     },
     {
       name: "Services",
-      content: <ServicesTab />
+      items: [
+        "Web Development",
+        "Mobile App Development",
+        "UI/UX Design",
+        "Cloud Solutions",
+        "E-commerce Integration",
+        "Custom Software Development",
+        "API Development",
+        "Maintenance & Support",
+        "Digital Transformation",
+        "DevOps Services"
+      ]
     },
     {
       name: "Timeline",
@@ -53,7 +63,6 @@ const TabSwitcher = () => {
       items: [
         "How do I get started?",
         "Can I change plans later?",
-        "Do you offer refunds?",
         "Do you offer refunds?",
         "Is there a mobile app?",
         "How secure is my data?",
