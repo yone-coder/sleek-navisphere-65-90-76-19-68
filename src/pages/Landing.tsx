@@ -1,9 +1,12 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailsPage from '../components/landing/VideoDetailsPage';
+import { ChevronRight } from 'lucide-react';
 
 const TabSwitcher = () => {
   const [activeTab, setActiveTab] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [showHint, setShowHint] = useState(true);
   
   // Tab data with names and content items
   const tabs = [
@@ -85,6 +88,9 @@ const TabSwitcher = () => {
         behavior: 'smooth'
       });
     }
+    
+    // Hide hint after user clicks a tab
+    setShowHint(false);
   };
 
   // Handle scroll event to update active tab
@@ -96,6 +102,11 @@ const TabSwitcher = () => {
       const tabIndex = Math.round(scrollLeft / tabWidth);
       if (tabIndex !== activeTab && tabIndex >= 0 && tabIndex < tabs.length) {
         setActiveTab(tabIndex);
+      }
+      
+      // Hide hint after user starts scrolling
+      if (scrollLeft > 10) {
+        setShowHint(false);
       }
     }
   };
@@ -111,8 +122,17 @@ const TabSwitcher = () => {
     }
   }, [activeTab]);
 
+  // Auto-hide hint after 5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowHint(false);
+    }, 5000);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="flex flex-col w-full max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden h-screen">
+    <div className="flex flex-col w-full max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden h-screen relative">
       {/* Ultra Modern Tab Header - Reduced size */}
       <div className="flex bg-gradient-to-r from-indigo-500 to-purple-600 p-0.5 rounded-t-lg sticky top-0 z-10">
         <div className="flex bg-white/5 backdrop-blur-sm w-full rounded-md p-0.5">
@@ -131,6 +151,16 @@ const TabSwitcher = () => {
           ))}
         </div>
       </div>
+
+      {/* Hint Message */}
+      {showHint && (
+        <div className="absolute right-4 top-16 z-20 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-indigo-100 animate-fade-in">
+          <div className="flex items-center gap-2 text-xs text-indigo-600 font-medium">
+            <span>Scroll to see more tabs</span>
+            <ChevronRight size={16} className="animate-pulse" />
+          </div>
+        </div>
+      )}
 
       {/* Scrollable Tab Content Container with reduced padding */}
       <div 
