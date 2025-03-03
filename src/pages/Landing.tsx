@@ -1,7 +1,6 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailsPage from '../components/landing/VideoDetailsPage';
-import { ChevronRight } from 'lucide-react';
+import { Navigation, ArrowRight, Sparkle } from 'lucide-react';
 
 const TabSwitcher = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -152,12 +151,15 @@ const TabSwitcher = () => {
         </div>
       </div>
 
-      {/* Hint Message */}
+      {/* Modern Hint Message */}
       {showHint && (
-        <div className="absolute right-4 top-16 z-20 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-indigo-100 animate-fade-in">
-          <div className="flex items-center gap-2 text-xs text-indigo-600 font-medium">
-            <span>Scroll to see more tabs</span>
-            <ChevronRight size={16} className="animate-pulse" />
+        <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+          <div className="bg-white/80 backdrop-blur-md px-5 py-3 rounded-full shadow-lg border border-indigo-100 animate-pulse transform transition-all duration-500">
+            <div className="flex items-center gap-3 text-sm font-medium text-indigo-600">
+              <Sparkle size={18} className="text-purple-500" />
+              <span>Swipe to explore more tabs</span>
+              <Navigation size={18} className="text-indigo-500 animate-bounce" />
+            </div>
           </div>
         </div>
       )}
