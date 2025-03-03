@@ -1,5 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
+import VideoDetailsPage from '../components/landing/VideoDetailsPage';
 
 const TabSwitcher = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -8,37 +9,56 @@ const TabSwitcher = () => {
   // Tab data with names and content items
   const tabs = [
     {
-      name: "Features",
+      name: "Overview",
+      content: <VideoDetailsPage />
+    },
+    {
+      name: "Our story",
       items: [
-        "Responsive Design",
-        "Dark Mode Support",
-        "Offline Capability",
-        "Push Notifications",
-        "Cross-platform",
-        "Customizable Theme",
-        "Keyboard Shortcuts",
-        "Multi-language Support",
-        "Accessibility Features",
-        "Real-time Updates"
+        "Founded in 2020",
+        "Started with 3 team members",
+        "First major release in 2021",
+        "Expanded to global markets in 2022",
+        "Reached 1 million users in 2023",
+        "Secured Series A funding",
+        "Opened headquarters in San Francisco",
+        "Expanded product line",
+        "Won industry innovation award",
+        "Launched partner program"
       ]
     },
     {
-      name: "Pricing",
+      name: "Services",
       items: [
-        "Free Plan - $0/month",
-        "Starter - $9/month",
-        "Professional - $19/month",
-        "Business - $49/month",
-        "Enterprise - Custom pricing",
-        "Educational Discount",
-        "Nonprofit Discount",
-        "Annual Savings 20%",
-        "30-day Free Trial",
-        "Money-back Guarantee"
+        "Web Development",
+        "Mobile App Development",
+        "UI/UX Design",
+        "Cloud Solutions",
+        "E-commerce Integration",
+        "Custom Software Development",
+        "API Development",
+        "Maintenance & Support",
+        "Digital Transformation",
+        "DevOps Services"
       ]
     },
     {
-      name: "FAQ",
+      name: "Timeline",
+      items: [
+        "2020 - Company founded",
+        "2021 - First product launch",
+        "2021 - Initial seed funding",
+        "2022 - International expansion",
+        "2022 - Partnership program started",
+        "2023 - Reached 1M users milestone",
+        "2023 - Series A funding secured",
+        "2024 - New product line launched",
+        "2024 - Industry innovation award",
+        "2025 - IPO plans announced"
+      ]
+    },
+    {
+      name: "FAQs",
       items: [
         "How do I get started?",
         "Can I change plans later?",
@@ -139,17 +159,23 @@ const TabSwitcher = () => {
             }}
           >
             <div className="h-full w-full overflow-y-auto bg-white">
-              <h2 className="text-xl font-bold p-2 pb-1">{tab.name}</h2>
-              <ul className="px-2 pb-4 space-y-3">
-                {tab.items.map((item, itemIndex) => (
-                  <li 
-                    key={itemIndex}
-                    className="p-3 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition-colors"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              {tab.content ? (
+                tab.content
+              ) : (
+                <>
+                  <h2 className="text-xl font-bold p-2 pb-1">{tab.name}</h2>
+                  <ul className="px-2 pb-4 space-y-3">
+                    {tab.items && tab.items.map((item, itemIndex) => (
+                      <li 
+                        key={itemIndex}
+                        className="p-3 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition-colors"
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
             </div>
           </div>
         ))}
