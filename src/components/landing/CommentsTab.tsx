@@ -1,15 +1,28 @@
 
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Avatar } from '@/components/ui/avatar';
-import { Heart, MoreVertical } from 'lucide-react';
+import { Heart, MoreVertical, MessageCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Textarea } from '@/components/ui/textarea';
+import TikTokCommentsPanel from '../comments/TikTokCommentsPanel';
 
 export function CommentsTab() {
+  const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
+
+  const openCommentsPanel = () => {
+    setIsCommentsPanelOpen(true);
+  };
+
+  const closeCommentsPanel = () => {
+    setIsCommentsPanelOpen(false);
+  };
+
   return (
     <div className="max-w-3xl mx-auto">
       <div className="flex gap-4 mb-8 sticky top-0 bg-white/95 backdrop-blur-sm p-4 -mx-4">
         <div className="flex-1">
-          <textarea 
+          <Textarea 
             className="w-full p-4 border rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent resize-none text-sm h-[80px]"
             placeholder="Add a comment..."
             rows={3}
@@ -48,12 +61,24 @@ export function CommentsTab() {
                   <Heart className="h-4 w-4" />
                   <span>24</span>
                 </button>
-                <button className="hover:text-gray-700">Reply</button>
+                <button 
+                  className="hover:text-gray-700 flex items-center gap-1"
+                  onClick={openCommentsPanel}
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  <span>Reply</span>
+                </button>
               </div>
             </div>
           </motion.div>
         ))}
       </div>
+
+      {/* Render the TikTokCommentsPanel */}
+      <TikTokCommentsPanel
+        isOpen={isCommentsPanelOpen}
+        onClose={closeCommentsPanel}
+      />
     </div>
   );
 }

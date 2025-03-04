@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, Clock, MessageSquare, Share2, Type } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, Clock, MessageCircle, Share2, Type } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import BookChapters from '@/components/story/BookChapters';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import TikTokCommentsPanel from '../comments/TikTokCommentsPanel';
 
 const StoryPage = () => {
   const [fontSize, setFontSize] = useState(16);
@@ -19,6 +20,7 @@ const StoryPage = () => {
   const [currentLanguage, setCurrentLanguage] = useState({ name: 'English', code: 'en', flag: '🇬🇧' });
   const [fontSizeControlOpen, setFontSizeControlOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
   
   const languages = [
     { name: 'English', code: 'en', flag: '🇬🇧' },
@@ -243,6 +245,14 @@ const StoryPage = () => {
       return (num / 1000).toFixed(1) + 'k';
     }
     return num.toString();
+  };
+
+  const openCommentsPanel = () => {
+    setIsCommentsPanelOpen(true);
+  };
+
+  const closeCommentsPanel = () => {
+    setIsCommentsPanelOpen(false);
   };
   
   const progressPercentage = (currentPage / totalPages) * 100;
@@ -586,8 +596,9 @@ const StoryPage = () => {
             
             <button 
               className="flex items-center justify-center gap-2 py-2 px-4 rounded-lg w-full bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all duration-200"
+              onClick={openCommentsPanel}
             >
-              <MessageSquare size={18} />
+              <MessageCircle size={18} />
               <span className="font-medium">{formatNumber(comments)}</span>
             </button>
             
@@ -600,6 +611,12 @@ const StoryPage = () => {
           </div>
         </div>
       </footer>
+
+      {/* Render TikTokCommentsPanel */}
+      <TikTokCommentsPanel 
+        isOpen={isCommentsPanelOpen} 
+        onClose={closeCommentsPanel} 
+      />
     </div>
   );
 };
