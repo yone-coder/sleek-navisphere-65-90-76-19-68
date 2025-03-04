@@ -393,8 +393,8 @@ const StoryPage = () => {
         </SheetContent>
       </Sheet>
       
-      <div className="sticky top-0 z-10">
-        <header className="bg-white shadow-md transition-colors duration-300">
+      <div className="sticky top-0 z-40 bg-white shadow-md">
+        <header className="bg-white transition-colors duration-300">
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
             <button
               onClick={() => setIsShowingChapters(true)} 
