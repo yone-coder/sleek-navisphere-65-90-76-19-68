@@ -1,437 +1,371 @@
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useToast } from '@/components/ui/use-toast';
-import { CheckCircle, ArrowLeft, ArrowRight } from 'lucide-react';
+import React, { useState } from "react";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, Mail, User } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const FormSchema = z.object({
+const registrationSchema = z.object({
   step1: z.object({
-    firstName: z.string().min(2, { message: 'First name must be at least 2 characters.' }),
-    lastName: z.string().min(2, { message: 'Last name must be at least 2 characters.' }),
-    email: z.string().email({ message: 'Please enter a valid email address.' }),
-    phone: z.string().min(10, { message: 'Phone number must be at least 10 digits.' }).optional(),
+    firstName: z.string().min(2, { message: "First name must be at least 2 characters." }),
+    lastName: z.string().min(2, { message: "Last name must be at least 2 characters." }),
+    email: z.string().email({ message: "Please enter a valid email address." }),
+    company: z.string().optional(),
+    jobTitle: z.string().optional(),
   }),
   step2: z.object({
-    companyName: z.string().optional(),
-    jobTitle: z.string().optional(),
-    experience: z.enum(['beginner', 'intermediate', 'advanced'], {
-      required_error: 'Please select your experience level.',
+    passType: z.enum(["basic", "professional", "team"], {
+      required_error: "Please select a pass type.",
     }),
-    hearAbout: z.string().optional(),
+    attendeeCount: z.number().min(1).optional(),
+    referralSource: z.string().optional(),
+    specialRequirements: z.string().optional(),
   }),
   step3: z.object({
-    interests: z.array(z.string()).min(1, { message: 'Please select at least one interest.' }),
-    specialRequirements: z.string().optional(),
-    agreeTerms: z.boolean().refine(val => val === true, {
-      message: 'You must agree to the terms and conditions.',
+    workshops: z.array(z.string()).optional(),
+    marketingConsent: z.boolean().refine((val) => val === true, {
+      message: "You must agree to receive updates about the event.",
     }),
-    receiveUpdates: z.boolean().optional(),
+    termsAccepted: z.boolean().refine((val) => val === true, {
+      message: "You must accept the terms and conditions.",
+    }),
   }),
 });
 
-type FormValues = z.infer<typeof FormSchema>;
+type RegistrationFormValues = z.infer<typeof registrationSchema>;
 
 export const RegisterForm = () => {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<Partial<FormValues>>({
-    step1: { firstName: '', lastName: '', email: '', phone: '' },
-    step2: { companyName: '', jobTitle: '', experience: 'intermediate', hearAbout: '' },
-    step3: { interests: [], specialRequirements: '', agreeTerms: false, receiveUpdates: false },
+  const [formData, setFormData] = useState<Partial<RegistrationFormValues>>({
+    step1: { firstName: "", lastName: "", email: "", company: "", jobTitle: "" },
+    step2: { passType: "professional", attendeeCount: 1, referralSource: "", specialRequirements: "" },
+    step3: { workshops: [], marketingConsent: false, termsAccepted: false },
   });
-  const [completed, setCompleted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
   const { toast } = useToast();
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(FormSchema),
+  const currentSchema = {
+    1: registrationSchema.pick({ step1: true }),
+    2: registrationSchema.pick({ step2: true }),
+    3: registrationSchema.pick({ step3: true }),
+  }[step];
+
+  const { register, handleSubmit, formState: { errors } } = useForm<any>({
+    resolver: zodResolver(currentSchema),
     defaultValues: formData,
-    mode: 'onChange',
   });
 
-  const nextStep = async () => {
-    const stepKey = `step${step}` as keyof FormValues;
-    const isValid = await form.trigger(stepKey as any);
-    
-    if (isValid) {
-      const currentStepData = form.getValues(stepKey as any);
-      setFormData(prev => ({ ...prev, [stepKey]: currentStepData }));
-      
-      if (step < 3) {
-        setStep(prev => prev + 1);
-      } else {
-        handleSubmit();
-      }
+  const onSubmit = (data: any) => {
+    const updatedFormData = { ...formData, ...data };
+    setFormData(updatedFormData);
+
+    if (step < 3) {
+      setStep(step + 1);
+    } else {
+      setIsSubmitting(true);
+      // Simulate API call
+      setTimeout(() => {
+        setIsSubmitting(false);
+        setIsComplete(true);
+        toast({
+          title: "Registration successful!",
+          description: "Check your email for confirmation details.",
+        });
+      }, 1500);
     }
   };
 
-  const prevStep = () => {
+  const handlePrevious = () => {
     if (step > 1) {
-      setStep(prev => prev - 1);
+      setStep(step - 1);
     }
   };
 
-  const handleSubmit = () => {
-    // In a real application, you'd submit to an API here
-    console.log('Form submitted:', form.getValues());
-    setCompleted(true);
-    toast({
-      title: "Registration successful!",
-      description: "We'll send you more details via email soon.",
-    });
-  };
-
-  const renderStepContent = () => {
-    switch (step) {
-      case 1:
-        return (
-          <>
-            <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="step1.firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>First Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="John" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="step1.lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Last Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Doe" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="step1.email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="john.doe@example.com" type="email" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="step1.phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone Number (optional)</FormLabel>
-                    <FormControl>
-                      <Input placeholder="+1 (555) 000-0000" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </>
-        );
-      case 2:
-        return (
-          <>
-            <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="step2.companyName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Company Name (optional)</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Acme Inc." {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="step2.jobTitle"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Job Title (optional)</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Software Developer" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="step2.experience"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Experience Level</FormLabel>
-                    <FormControl>
-                      <RadioGroup 
-                        onValueChange={field.onChange} 
-                        defaultValue={field.value}
-                        className="flex flex-col space-y-1"
-                      >
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value="beginner" />
-                          </FormControl>
-                          <FormLabel className="font-normal">Beginner</FormLabel>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value="intermediate" />
-                          </FormControl>
-                          <FormLabel className="font-normal">Intermediate</FormLabel>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value="advanced" />
-                          </FormControl>
-                          <FormLabel className="font-normal">Advanced</FormLabel>
-                        </FormItem>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="step2.hearAbout"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>How did you hear about us?</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select an option" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="search">Search Engine</SelectItem>
-                        <SelectItem value="social">Social Media</SelectItem>
-                        <SelectItem value="friend">Friend or Colleague</SelectItem>
-                        <SelectItem value="email">Email Newsletter</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </>
-        );
-      case 3:
-        return (
-          <>
-            <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="step3.interests"
-                render={() => (
-                  <FormItem>
-                    <div className="mb-4">
-                      <FormLabel className="text-base">What topics are you interested in?</FormLabel>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      {['HTML & CSS', 'JavaScript', 'React', 'Vue', 'Angular', 'Node.js', 'Python', 'UI/UX Design'].map((item) => (
-                        <FormField
-                          key={item}
-                          control={form.control}
-                          name="step3.interests"
-                          render={({ field }) => {
-                            return (
-                              <FormItem
-                                key={item}
-                                className="flex flex-row items-start space-x-3 space-y-0"
-                              >
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value?.includes(item)}
-                                    onCheckedChange={(checked) => {
-                                      const updatedInterests = checked
-                                        ? [...(field.value || []), item]
-                                        : field.value?.filter((value) => value !== item) || [];
-                                      field.onChange(updatedInterests);
-                                    }}
-                                  />
-                                </FormControl>
-                                <FormLabel className="font-normal">
-                                  {item}
-                                </FormLabel>
-                              </FormItem>
-                            );
-                          }}
-                        />
-                      ))}
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="step3.specialRequirements"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Special Requirements (optional)</FormLabel>
-                    <FormControl>
-                      <Textarea 
-                        placeholder="Any dietary, accessibility, or other requirements we should know about..."
-                        className="resize-none"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="step3.agreeTerms"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>
-                        I agree to the <a href="#" className="text-purple-600 hover:underline">terms of service</a> and <a href="#" className="text-purple-600 hover:underline">privacy policy</a>
-                      </FormLabel>
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="step3.receiveUpdates"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>
-                        I'd like to receive updates about future events and courses
-                      </FormLabel>
-                    </div>
-                  </FormItem>
-                )}
-              />
-            </div>
-          </>
-        );
-      default:
-        return null;
-    }
-  };
-
-  if (completed) {
-    return (
-      <div className="text-center py-12 max-w-md mx-auto">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <CheckCircle className="h-8 w-8 text-green-600" />
-        </div>
-        <h3 className="text-2xl font-bold mb-2">Registration Complete!</h3>
-        <p className="text-gray-600 mb-6">
-          Thank you for registering for our Web Development Seminar. We've sent a confirmation to your email.
-        </p>
-        <Button className="w-full">Download Calendar Invite</Button>
-      </div>
-    );
-  }
+  const workshopOptions = [
+    { id: "workshop1", label: "Building Accessible Interfaces (Day 1)" },
+    { id: "workshop2", label: "Design Systems in Practice (Day 2)" },
+    { id: "workshop3", label: "Serverless Architectures (Day 2)" },
+    { id: "workshop4", label: "Advanced CSS Techniques (Day 3)" },
+  ];
 
   return (
-    <div className="max-w-md mx-auto">
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          {[1, 2, 3].map((stepNumber) => (
-            <div key={stepNumber} className="flex flex-col items-center">
-              <div 
-                className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                  step === stepNumber 
-                    ? 'bg-purple-600 text-white' 
-                    : step > stepNumber 
-                      ? 'bg-green-500 text-white' 
-                      : 'bg-gray-200 text-gray-600'
-                }`}
-              >
-                {step > stepNumber ? <CheckCircle className="h-5 w-5" /> : stepNumber}
-              </div>
-              <span className="text-xs mt-1 text-gray-600">{
-                stepNumber === 1 ? 'Contact' : stepNumber === 2 ? 'Professional' : 'Preferences'
-              }</span>
-            </div>
-          ))}
+    <div className="py-20 bg-gradient-to-b from-white to-purple-50">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Register Now</h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Secure your spot at the premier web development summit of the year
+          </p>
         </div>
-        <div className="relative">
-          <div className="absolute top-0 h-1 bg-gray-200 w-full">
-            <div 
-              className="absolute top-0 h-1 bg-purple-600 transition-all" 
-              style={{ width: `${((step - 1) / 2) * 100}%` }}
-            ></div>
-          </div>
+
+        <div className="max-w-3xl mx-auto">
+          {!isComplete ? (
+            <Card className="border border-gray-200 shadow-sm">
+              <CardContent className="p-6 pt-6">
+                <div className="mb-8">
+                  <div className="flex items-center justify-between mb-4">
+                    <Tabs value={`${step}`} className="w-full">
+                      <TabsList className="grid w-full grid-cols-3">
+                        <TabsTrigger 
+                          value="1" 
+                          className={`data-[state=active]:bg-purple-100 data-[state=active]:text-purple-700 ${step > 1 ? 'text-green-600' : ''}`}
+                          disabled
+                        >
+                          {step > 1 && <Check className="w-4 h-4 mr-2" />}
+                          Personal Info
+                        </TabsTrigger>
+                        <TabsTrigger 
+                          value="2" 
+                          className={`data-[state=active]:bg-purple-100 data-[state=active]:text-purple-700 ${step > 2 ? 'text-green-600' : ''}`}
+                          disabled
+                        >
+                          {step > 2 && <Check className="w-4 h-4 mr-2" />}
+                          Pass Selection
+                        </TabsTrigger>
+                        <TabsTrigger 
+                          value="3" 
+                          className="data-[state=active]:bg-purple-100 data-[state=active]:text-purple-700"
+                          disabled
+                        >
+                          Preferences
+                        </TabsTrigger>
+                      </TabsList>
+                    </Tabs>
+                  </div>
+                </div>
+
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  {step === 1 && (
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label htmlFor="firstName">First Name <span className="text-red-500">*</span></Label>
+                          <Input
+                            id="firstName"
+                            placeholder="Enter your first name"
+                            {...register("step1.firstName")}
+                          />
+                          {errors.step1?.firstName && (
+                            <p className="text-red-500 text-sm">{errors.step1.firstName.message as string}</p>
+                          )}
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="lastName">Last Name <span className="text-red-500">*</span></Label>
+                          <Input
+                            id="lastName"
+                            placeholder="Enter your last name"
+                            {...register("step1.lastName")}
+                          />
+                          {errors.step1?.lastName && (
+                            <p className="text-red-500 text-sm">{errors.step1.lastName.message as string}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email Address <span className="text-red-500">*</span></Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="you@example.com"
+                          {...register("step1.email")}
+                        />
+                        {errors.step1?.email && (
+                          <p className="text-red-500 text-sm">{errors.step1.email.message as string}</p>
+                        )}
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="company">Company/Organization</Label>
+                        <Input
+                          id="company"
+                          placeholder="Your company name"
+                          {...register("step1.company")}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="jobTitle">Job Title</Label>
+                        <Input
+                          id="jobTitle"
+                          placeholder="Your role"
+                          {...register("step1.jobTitle")}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {step === 2 && (
+                    <div className="space-y-6">
+                      <div className="space-y-4">
+                        <Label>Select Pass Type <span className="text-red-500">*</span></Label>
+                        <RadioGroup defaultValue={formData.step2?.passType} className="space-y-3">
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="basic" id="pass-basic" {...register("step2.passType")} />
+                            <Label htmlFor="pass-basic" className="font-medium">Basic Pass - $299</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="professional" id="pass-professional" {...register("step2.passType")} />
+                            <Label htmlFor="pass-professional" className="font-medium">Professional Pass - $599</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="team" id="pass-team" {...register("step2.passType")} />
+                            <Label htmlFor="pass-team" className="font-medium">Team Pass - $499 per person (3+ attendees)</Label>
+                          </div>
+                        </RadioGroup>
+                        {errors.step2?.passType && (
+                          <p className="text-red-500 text-sm">{errors.step2.passType.message as string}</p>
+                        )}
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="attendeeCount">Number of Attendees (for Team Pass)</Label>
+                        <Input
+                          id="attendeeCount"
+                          type="number"
+                          min="1"
+                          placeholder="1"
+                          {...register("step2.attendeeCount", { valueAsNumber: true })}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="referralSource">How did you hear about us?</Label>
+                        <Input
+                          id="referralSource"
+                          placeholder="Google, Social Media, Colleague, etc."
+                          {...register("step2.referralSource")}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="specialRequirements">Special Requirements or Accommodations</Label>
+                        <Textarea
+                          id="specialRequirements"
+                          placeholder="Let us know if you have any dietary restrictions, accessibility needs, etc."
+                          {...register("step2.specialRequirements")}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {step === 3 && (
+                    <div className="space-y-6">
+                      <div className="space-y-4">
+                        <Label>Select Workshops You'd Like to Attend (Optional)</Label>
+                        <div className="space-y-3">
+                          {workshopOptions.map((workshop) => (
+                            <div key={workshop.id} className="flex items-start space-x-2">
+                              <Checkbox
+                                id={workshop.id}
+                                value={workshop.id}
+                                {...register("step3.workshops")}
+                              />
+                              <Label htmlFor={workshop.id} className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                {workshop.label}
+                              </Label>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="space-y-4 pt-4">
+                        <div className="flex items-start space-x-2">
+                          <Checkbox
+                            id="marketingConsent"
+                            {...register("step3.marketingConsent")}
+                          />
+                          <Label htmlFor="marketingConsent" className="text-sm font-normal leading-normal">
+                            I agree to receive updates about the event, including schedule changes, speaker announcements, and session reminders.
+                          </Label>
+                        </div>
+                        {errors.step3?.marketingConsent && (
+                          <p className="text-red-500 text-sm">{errors.step3.marketingConsent.message as string}</p>
+                        )}
+
+                        <div className="flex items-start space-x-2">
+                          <Checkbox
+                            id="termsAccepted"
+                            {...register("step3.termsAccepted")}
+                          />
+                          <Label htmlFor="termsAccepted" className="text-sm font-normal leading-normal">
+                            I agree to the <a href="#" className="text-purple-600 hover:underline">Terms and Conditions</a> and <a href="#" className="text-purple-600 hover:underline">Privacy Policy</a>.
+                          </Label>
+                        </div>
+                        {errors.step3?.termsAccepted && (
+                          <p className="text-red-500 text-sm">{errors.step3.termsAccepted.message as string}</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between mt-8">
+                    {step > 1 ? (
+                      <Button type="button" variant="outline" onClick={handlePrevious}>
+                        <ArrowLeft className="mr-2 h-4 w-4" /> Back
+                      </Button>
+                    ) : (
+                      <div></div>
+                    )}
+                    <Button 
+                      type="submit" 
+                      className={step === 3 ? "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700" : ""}
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        "Processing..."
+                      ) : step < 3 ? (
+                        <>
+                          Continue <ArrowRight className="ml-2 h-4 w-4" />
+                        </>
+                      ) : (
+                        "Complete Registration"
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="border border-green-200 shadow-sm bg-green-50">
+              <CardContent className="p-6 pt-6 text-center">
+                <CheckCircle2 className="mx-auto h-16 w-16 text-green-500 mb-4" />
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">Registration Complete!</h3>
+                <p className="text-gray-600 mb-6">
+                  Thank you for registering for the WebDev Summit 2024. We've sent a confirmation email to <span className="font-medium">{formData.step1?.email}</span> with all the details.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+                    <Calendar className="mr-2 h-4 w-4" /> Add to Calendar
+                  </Button>
+                  <Button variant="outline">
+                    <User className="mr-2 h-4 w-4" /> Update Profile
+                  </Button>
+                </div>
+
+                <div className="mt-8 p-4 border border-blue-200 rounded-lg bg-blue-50 inline-block">
+                  <div className="flex items-center">
+                    <Mail className="h-5 w-5 text-blue-500 mr-2" />
+                    <p className="text-sm text-blue-700">
+                      Can't find our email? Check your spam folder or <a href="#" className="underline font-medium">contact support</a>.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
-      
-      <Form {...form}>
-        <form className="space-y-6">
-          <h3 className="text-xl font-semibold mb-4">{
-            step === 1 ? 'Your Contact Information' : 
-            step === 2 ? 'Professional Background' : 
-            'Interests & Preferences'
-          }</h3>
-          
-          {renderStepContent()}
-          
-          <div className="flex justify-between mt-8">
-            <Button 
-              type="button" 
-              onClick={prevStep} 
-              variant="outline" 
-              disabled={step === 1}
-              className="w-1/3"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" /> Back
-            </Button>
-            <Button 
-              type="button" 
-              onClick={nextStep} 
-              className="w-1/3 bg-purple-600 hover:bg-purple-700"
-            >
-              {step === 3 ? 'Submit' : 'Next'} {step !== 3 && <ArrowRight className="ml-2 h-4 w-4" />}
-            </Button>
-          </div>
-        </form>
-      </Form>
     </div>
   );
 };

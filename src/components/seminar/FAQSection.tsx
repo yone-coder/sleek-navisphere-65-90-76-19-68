@@ -1,154 +1,109 @@
 
-import { useState } from 'react';
-import { 
-  Accordion, 
-  AccordionContent, 
-  AccordionItem, 
-  AccordionTrigger 
-} from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/components/ui/use-toast';
-import { SendIcon } from 'lucide-react';
+import React from "react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Mail, MessageSquare } from "lucide-react";
 
 const faqs = [
   {
-    question: "When and where will the seminar take place?",
-    answer: "The seminar will take place on October 15-17, 2023, at the Tech Innovation Center in San Francisco. We also offer virtual attendance options for those who cannot join in person."
+    question: "What is included in my registration?",
+    answer: "Your registration includes access to all general sessions, workshops (depending on your pass type), conference materials, meals during the event, and networking opportunities. Professional Pass holders also receive video recordings and a 1-on-1 expert session."
   },
   {
-    question: "Is this seminar suitable for beginners?",
-    answer: "Yes, we have tracks for all experience levels. The beginner track covers fundamentals and is perfect for those just starting their web development journey. We also have intermediate and advanced tracks for more experienced developers."
+    question: "Is there a virtual attendance option?",
+    answer: "Yes, we offer a virtual attendance option for those who cannot attend in person. Virtual attendees can watch livestreams of all general sessions and select workshops, participate in online networking, and access the same digital materials as in-person attendees."
   },
   {
-    question: "What should I bring to the seminar?",
-    answer: "You should bring a laptop with your preferred code editor installed. We'll provide detailed setup instructions before the event to ensure you have all necessary software and tools ready."
+    question: "Can I switch workshops after registering?",
+    answer: "Yes, you can modify your workshop selections up to 14 days before the event through your attendee portal. After that, changes can be made on-site based on availability."
   },
   {
-    question: "Will recordings be available after the seminar?",
-    answer: "Yes, all sessions will be recorded and made available to registered participants for 6 months after the event. This allows you to revisit any session or catch up on sessions you couldn't attend live."
+    question: "What is the refund policy?",
+    answer: "We offer full refunds up to 30 days before the event. Between 30 and 14 days, you can receive a 50% refund. Within 14 days of the event, refunds are not available, but you can transfer your registration to a colleague at no additional cost."
   },
   {
-    question: "Is there a refund policy?",
-    answer: "Yes, we offer full refunds up to 30 days before the event. After that, you can receive a 50% refund up to 7 days before the event or transfer your ticket to another person at no cost."
+    question: "Are meals provided during the event?",
+    answer: "Yes, registration includes breakfast, lunch, and refreshments during breaks each day of the conference. The evening networking events also include appetizers and drinks."
   },
   {
-    question: "Do you offer group discounts?",
-    answer: "Yes, we offer discounts for groups of 3 or more people from the same organization. Please contact our sales team at sales@webdevseminar.com for more information on group rates."
+    question: "Where should I stay during the conference?",
+    answer: "We have negotiated special rates with several hotels near the venue. After registering, you'll receive information about booking accommodations with our discount code."
   },
   {
-    question: "Will there be networking opportunities?",
-    answer: "Absolutely! We have scheduled networking sessions, a welcome reception, and a closing party. These events are great opportunities to connect with speakers, sponsors, and fellow attendees."
+    question: "Will presentations be available after the event?",
+    answer: "Yes, slide decks and session materials will be available to all attendees after the conference. Video recordings are included with Professional Pass registrations and available for purchase for Basic Pass holders."
   },
   {
     question: "How can I become a sponsor?",
-    answer: "We offer various sponsorship packages to showcase your brand to our community of web developers. Please email sponsors@webdevseminar.com for our sponsorship prospectus and details."
+    answer: "We offer various sponsorship opportunities to connect your brand with our community of web developers. Please contact our sponsorship team at sponsors@webdevsummit.com for more information."
   }
 ];
 
 export const FAQSection = () => {
-  const [contactForm, setContactForm] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-  const { toast } = useToast();
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setContactForm(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // In a real app, you would send the form data to a server here
-    console.log('Contact form submitted:', contactForm);
-    
-    toast({
-      title: "Message sent!",
-      description: "We'll get back to you as soon as possible.",
-    });
-    
-    // Reset form
-    setContactForm({ name: '', email: '', message: '' });
-  };
-
   return (
-    <section id="faq" className="py-20 bg-white">
-      <div className="container px-4 mx-auto">
+    <div className="py-20 bg-white">
+      <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Have questions about the seminar? Check out our most common questions below or contact us directly.
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Got questions? We've got answers. If you don't see your question here, reach out to us.
           </p>
         </div>
-        
-        <div className="grid md:grid-cols-5 gap-12 max-w-6xl mx-auto">
-          <div className="md:col-span-3">
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="lg:col-span-2">
             <Accordion type="single" collapsible className="w-full">
               {faqs.map((faq, index) => (
                 <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className="text-left">
+                  <AccordionTrigger className="text-left font-medium text-gray-900">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent>
-                    <p className="text-gray-600">{faq.answer}</p>
+                  <AccordionContent className="text-gray-600">
+                    {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
           </div>
-          
-          <div className="md:col-span-2">
-            <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
-              <h3 className="text-xl font-semibold mb-4">Still have questions?</h3>
-              <p className="text-gray-600 mb-6">
-                If you couldn't find the answer to your question, please reach out to us directly and we'll get back to you as soon as possible.
-              </p>
-              
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <Input 
-                    placeholder="Your Name" 
-                    name="name"
-                    value={contactForm.name}
-                    onChange={handleInputChange}
-                    required
-                  />
+
+          <div>
+            <Card className="border border-purple-100 shadow-sm">
+              <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50 border-b border-purple-100">
+                <CardTitle className="flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5 text-purple-500" />
+                  <span>Still have questions?</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <form className="space-y-4">
+                  <div>
+                    <Input placeholder="Your Name" />
+                  </div>
+                  <div>
+                    <Input type="email" placeholder="Your Email" />
+                  </div>
+                  <div>
+                    <Textarea placeholder="Your Question" className="min-h-[120px]" />
+                  </div>
+                  <Button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+                    <Mail className="mr-2 h-4 w-4" />
+                    Send Message
+                  </Button>
+                </form>
+
+                <div className="mt-6 pt-6 border-t border-gray-100">
+                  <p className="text-sm text-gray-500 mb-2">Or contact us directly:</p>
+                  <p className="text-sm font-medium">info@webdevsummit.com</p>
+                  <p className="text-sm font-medium">+1 (555) 123-4567</p>
                 </div>
-                <div>
-                  <Input 
-                    type="email" 
-                    placeholder="Your Email" 
-                    name="email"
-                    value={contactForm.email}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <Textarea 
-                    placeholder="Your Question" 
-                    name="message"
-                    value={contactForm.message}
-                    onChange={handleInputChange}
-                    rows={4}
-                    required
-                  />
-                </div>
-                <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
-                  <SendIcon className="mr-2 h-4 w-4" />
-                  Send Message
-                </Button>
-              </form>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };

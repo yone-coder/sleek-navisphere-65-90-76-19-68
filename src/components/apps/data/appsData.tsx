@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe, Heart, Building } from "lucide-react";
+import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe, Heart, Building, Presentation } from "lucide-react";
 import type { App, AppCategory } from "../types";
 
 export const apps: App[] = [
@@ -15,6 +15,19 @@ export const apps: App[] = [
     lastUsed: "5 mins ago",
     rating: 4.8,
     updates: 1
+  },
+  {
+    name: "WebDev Summit",
+    description: "Register for the premier web development conference",
+    icon: Presentation,
+    route: "/seminar",
+    color: "bg-purple-500",
+    category: "Education",
+    status: "new",
+    users: "2.5K+",
+    lastUsed: "10 mins ago",
+    rating: 4.9,
+    updates: 3
   },
   {
     name: "Flora",
@@ -293,7 +306,7 @@ export const apps: App[] = [
     icon: Gift,
     route: "/rewards",
     color: "bg-orange-500",
-    category: "System", // Changed from "Rewards" to valid AppCategory
+    category: "System"
   },
   {
     name: "Messages",
@@ -309,7 +322,7 @@ export const apps: App[] = [
     icon: Bell,
     route: "/notifications",
     color: "bg-cyan-500",
-    category: "System", // Changed from "Updates" to valid AppCategory
+    category: "System"
   },
   {
     name: "Settings",

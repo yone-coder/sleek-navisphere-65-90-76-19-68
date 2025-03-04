@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
@@ -43,6 +42,7 @@ const AdminTournaments = lazy(() => import("./pages/admin/AdminTournaments"));
 const GamesProfile = lazy(() => import("./pages/games/GamesProfile"));
 const GameDetails = lazy(() => import("./pages/GameDetails"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const Seminar = lazy(() => import("./pages/Seminar"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen p-8 space-y-4">
@@ -72,7 +72,7 @@ const queryClient = new QueryClient({
 
 const AppContent = () => {
   const location = useLocation();
-  const hideBottomNavRoutes = ['/marketplace', '/games/', '/landing'];
+  const hideBottomNavRoutes = ['/marketplace', '/games/', '/landing', '/seminar'];
   const isAdminRoute = location.pathname.startsWith('/admin');
   const shouldShowBottomNav = !isAdminRoute && 
     !hideBottomNavRoutes.some(route => location.pathname.startsWith(route));
@@ -112,6 +112,7 @@ const AppContent = () => {
           <Route path="/marketplace/cart" element={<MarketplaceCart />} />
           <Route path="/marketplace/account" element={<MarketplaceAccount />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/seminar" element={<Seminar />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
