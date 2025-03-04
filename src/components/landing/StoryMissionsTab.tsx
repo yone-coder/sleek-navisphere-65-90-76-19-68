@@ -1,13 +1,14 @@
-
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, Clock, MessageSquare, Share2, Type } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
+import BookChapters from '@/components/story/BookChapters';
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const StoryPage = () => {
   const [fontSize, setFontSize] = useState(16);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages] = useState(2);
-  const [tocOpen, setTocOpen] = useState(false);
+  const [isShowingChapters, setIsShowingChapters] = useState(false);
   const [isPageAnimating, setIsPageAnimating] = useState(false);
   const [animationDirection, setAnimationDirection] = useState('next');
   const [likes, setLikes] = useState(1243);
@@ -93,21 +94,21 @@ const StoryPage = () => {
     }
   };
   
-  const navigateToPage = (pageNumber: number) => {
+  const navigateToPage = (pageNumber) => {
     if (!isPageAnimating && pageNumber !== currentPage) {
       setAnimationDirection(pageNumber > currentPage ? 'next' : 'prev');
       setIsPageAnimating(true);
       
       setTimeout(() => {
         setCurrentPage(pageNumber);
-        setTocOpen(false);
+        setIsShowingChapters(false);
         
         setTimeout(() => {
           setIsPageAnimating(false);
         }, 500);
       }, 500);
     } else {
-      setTocOpen(false);
+      setIsShowingChapters(false);
     }
   };
   
@@ -120,17 +121,17 @@ const StoryPage = () => {
     setLiked(!liked);
   };
 
-  const handleLanguageChange = (language: { name: string; code: string; flag: string }) => {
+  const handleLanguageChange = (language) => {
     setCurrentLanguage(language);
     setLanguageMenuOpen(false);
   };
   
-  const handleSetFontSize = (size: number) => {
+  const handleSetFontSize = (size) => {
     setFontSize(size);
   };
   
   // Format numbers with k/m suffix
-  const formatNumber = (num: number) => {
+  const formatNumber = (num) => {
     if (num >= 1000000) {
       return (num / 1000000).toFixed(1) + 'm';
     } else if (num >= 1000) {
@@ -213,6 +214,18 @@ const StoryPage = () => {
     </div>
   );
   
+  // Add animation style for BookChapters
+  const bottomToTopAnimation = `
+    @keyframes slideUpIn {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    .animate-slide-up-in {
+      animation: slideUpIn 0.4s ease-out forwards;
+    }
+  `;
+  
   return (
     <div className="min-h-screen bg-white text-gray-800 transition-colors duration-300">
       {/* Custom Animation Styles */}
@@ -237,6 +250,15 @@ const StoryPage = () => {
           to { transform: translateX(0); opacity: 1; }
         }
         
+        @keyframes slideUpIn {
+          from { transform: translateY(100%); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .animate-slide-up-in {
+          animation: slideUpIn 0.4s ease-out forwards;
+        }
+        
         .animate-page-exit-to-left {
           animation: pageExitToLeft 0.5s ease-in-out forwards;
         }
@@ -254,43 +276,12 @@ const StoryPage = () => {
         }
       `}</style>
       
-      {/* Side Table of Contents */}
-      <div 
-        className={`fixed top-0 left-0 h-full w-64 z-50 transform ${tocOpen ? 'translate-x-0' : '-translate-x-full'} 
-        bg-white shadow-xl transition-transform duration-300 overflow-y-auto`}
-      >
-        <div className="p-4">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold">Contents</h2>
-            <button 
-              onClick={() => setTocOpen(false)}
-              className="p-1 rounded-full hover:bg-gray-200"
-            >
-              <X size={20} />
-            </button>
-          </div>
-          
-          <ul className="space-y-4">
-            {storyContent.map((content, index) => (
-              <li key={index} className="border-b pb-2 last:border-0">
-                <button
-                  onClick={() => navigateToPage(index + 1)}
-                  className={`text-left w-full py-2 px-2 rounded-lg transition-colors
-                  ${currentPage === index + 1 ? 
-                    'bg-blue-100 font-medium' : 
-                    'hover:bg-gray-100'}`}
-                >
-                  <div className="font-medium">{content.chapter}</div>
-                  <div className="flex items-center mt-1 text-sm text-gray-600">
-                    <Clock size={14} className="mr-1" />
-                    {content.readingTime}
-                  </div>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      {/* Using Sheet component from shadcn for the bottom sliding panel */}
+      <Sheet open={isShowingChapters} onOpenChange={setIsShowingChapters}>
+        <SheetContent side="bottom" className="h-[90vh] overflow-y-auto p-0">
+          <BookChapters />
+        </SheetContent>
+      </Sheet>
       
       {/* Top Navigation Bar with Sticky Progress Bar */}
       <div className="sticky top-0 z-10">
@@ -298,11 +289,11 @@ const StoryPage = () => {
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
             {/* Chapters Toggle with light green background */}
             <button
-              onClick={() => setTocOpen(!tocOpen)} 
+              onClick={() => setIsShowingChapters(true)} 
               className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-green-100 hover:bg-green-200 transition-all duration-200"
             >
               <span className="font-medium">Chapters</span>
-              {tocOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+              <ChevronDown size={18} />
             </button>
             
             {/* Language Selector with light pink background */}
@@ -460,14 +451,6 @@ const StoryPage = () => {
         </div>
       )}
       
-      {/* Overlay for Table of Contents */}
-      {tocOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
-          onClick={() => setTocOpen(false)}
-        />
-      )}
-      
       {/* Social Buttons Footer */}
       <footer className="fixed bottom-0 w-full bg-white border-t border-gray-200 shadow-md z-20">
         <div className="w-full px-2 py-3">
@@ -487,7 +470,7 @@ const StoryPage = () => {
             
             <div className="text-center">
               <button 
-                onClick={() => setTocOpen(true)}
+                onClick={() => setIsShowingChapters(true)}
                 className="font-mono hover:bg-gray-200 px-3 py-1 rounded bg-green-50"
               >
                 {currentPage} / {totalPages}
