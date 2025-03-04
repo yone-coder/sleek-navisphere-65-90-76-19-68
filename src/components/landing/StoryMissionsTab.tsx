@@ -1,308 +1,501 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Heart, 
-  Globe, 
-  BookOpen, 
-  ShoppingBag, 
-  Award, 
-  Wallet,
-  Users,
-  ArrowRight,
-  CheckCircle
-} from 'lucide-react';
 
-const ImpactStory = () => {
-  const [animatedCount, setAnimatedCount] = useState(0);
-  const statsRef = useRef(null);
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, Clock, MessageSquare, Share2, Type } from 'lucide-react';
+
+const StoryPage = () => {
+  const [fontSize, setFontSize] = useState(16);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages] = useState(2);
+  const [tocOpen, setTocOpen] = useState(false);
+  const [isPageAnimating, setIsPageAnimating] = useState(false);
+  const [animationDirection, setAnimationDirection] = useState('next');
+  const [likes, setLikes] = useState(1243);
+  const [comments] = useState(85);
+  const [shares] = useState(32);
+  const [liked, setLiked] = useState(false);
+  const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState({ name: 'English', code: 'en', flag: '🇬🇧' });
+  const [fontSizeControlOpen, setFontSizeControlOpen] = useState(false);
   
-  const stats = [
-    { value: 15000, label: "Community Members" },
-    { value: 450, label: "Businesses Supported" },
-    { value: 2500, label: "Students Enrolled" },
-    { value: 75, label: "Countries Reached" }
+  // Available languages
+  const languages = [
+    { name: 'English', code: 'en', flag: '🇬🇧' },
+    { name: 'Español', code: 'es', flag: '🇪🇸' },
+    { name: 'Français', code: 'fr', flag: '🇫🇷' },
+    { name: 'Deutsch', code: 'de', flag: '🇩🇪' },
+    { name: 'Italiano', code: 'it', flag: '🇮🇹' }
+  ];
+  
+  // Font size options
+  const fontSizeOptions = [12, 14, 16, 18, 20, 22, 24];
+  
+  // Sample story content with placeholder images and chapters
+  const storyContent = [
+    {
+      title: "The Silent Echo",
+      author: "Alex Rivers",
+      chapter: "Chapter 1: The Misty Valley",
+      content: "The morning fog rolled through the valley, enveloping everything in its ethereal embrace. Maya stood at the edge of the cliff, her silhouette barely visible through the dense mist. She had been coming to this spot for years, but today felt different. The ancient forest below seemed to whisper secrets that only she could hear. Legends spoke of echoes that weren't just reflections of sound, but glimpses into parallel worlds. Maya had always dismissed these as nothing more than local folklore designed to attract tourists.",
+      image: "/api/placeholder/600/400",
+      readingTime: "3 min"
+    },
+    {
+      chapter: "Chapter 2: Whispers in the Forest",
+      content: "Her research team had been studying the unusual acoustic properties of the valley for months. The readings were unlike anything they had ever encountered - sound waves that seemed to exist in quantum superposition, neither here nor there. As she adjusted her recording equipment, a soft melody drifted through the fog. It wasn't coming from the village below, nor from any direction she could identify. It seemed to emanate from the very air around her, as if the fog itself was singing.",
+      image: "/api/placeholder/600/400",
+      readingTime: "4 min"
+    }
   ];
 
-  // Public images
-  const founderImage = "/lovable-uploads/7751a0aa-bb1f-47c5-b434-e63e68dbc0d0.png";
-  const challengeImage = "/lovable-uploads/44c5c93d-ace1-4feb-a49b-db4a8a02f987.png";
-  const impactImage = "/lovable-uploads/7b6dfa3b-fe97-4083-8e4a-0640871dbc3f.png";
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          startCountAnimation();
-        }
-      },
-      { threshold: 0.1 }
-    );
-    
-    if (statsRef.current) {
-      observer.observe(statsRef.current);
+  const handleNextPage = () => {
+    if (currentPage < totalPages && !isPageAnimating) {
+      setAnimationDirection('next');
+      setIsPageAnimating(true);
+      
+      // Delay actual page change to allow animation to complete
+      setTimeout(() => {
+        setCurrentPage(currentPage + 1);
+        
+        // Allow animation out to complete before resetting
+        setTimeout(() => {
+          setIsPageAnimating(false);
+        }, 500);
+      }, 500);
     }
-    
-    return () => {
-      if (statsRef.current) {
-        observer.unobserve(statsRef.current);
-      }
-    };
-  }, []);
+  };
   
-  const startCountAnimation = () => {
-    const duration = 2000; // 2 seconds
-    const frameDuration = 1000 / 60; // 60fps
-    const totalFrames = Math.round(duration / frameDuration);
-    let frame = 0;
-    
-    const counter = setInterval(() => {
-      frame++;
-      const progress = frame / totalFrames;
-      const easeOutProgress = 1 - Math.pow(1 - progress, 3); // Cubic ease out
+  const handlePrevPage = () => {
+    if (currentPage > 1 && !isPageAnimating) {
+      setAnimationDirection('prev');
+      setIsPageAnimating(true);
       
-      setAnimatedCount(easeOutProgress);
+      // Delay actual page change to allow animation to complete
+      setTimeout(() => {
+        setCurrentPage(currentPage - 1);
+        
+        // Allow animation out to complete before resetting
+        setTimeout(() => {
+          setIsPageAnimating(false);
+        }, 500);
+      }, 500);
+    }
+  };
+  
+  const navigateToPage = (pageNumber: number) => {
+    if (!isPageAnimating && pageNumber !== currentPage) {
+      setAnimationDirection(pageNumber > currentPage ? 'next' : 'prev');
+      setIsPageAnimating(true);
       
-      if (frame === totalFrames) {
-        clearInterval(counter);
-      }
-    }, frameDuration);
+      setTimeout(() => {
+        setCurrentPage(pageNumber);
+        setTocOpen(false);
+        
+        setTimeout(() => {
+          setIsPageAnimating(false);
+        }, 500);
+      }, 500);
+    } else {
+      setTocOpen(false);
+    }
+  };
+  
+  const handleLike = () => {
+    if (liked) {
+      setLikes(likes - 1);
+    } else {
+      setLikes(likes + 1);
+    }
+    setLiked(!liked);
   };
 
+  const handleLanguageChange = (language: { name: string; code: string; flag: string }) => {
+    setCurrentLanguage(language);
+    setLanguageMenuOpen(false);
+  };
+  
+  const handleSetFontSize = (size: number) => {
+    setFontSize(size);
+  };
+  
+  // Format numbers with k/m suffix
+  const formatNumber = (num: number) => {
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1) + 'm';
+    } else if (num >= 1000) {
+      return (num / 1000).toFixed(1) + 'k';
+    }
+    return num.toString();
+  };
+  
+  // Progress bar calculation
+  const progressPercentage = (currentPage / totalPages) * 100;
+  
+  const currentContent = storyContent[currentPage - 1];
+  
+  // Close font size control when clicking outside
+  useEffect(() => {
+    if (fontSizeControlOpen) {
+      const handleClickOutside = (e: MouseEvent) => {
+        if (
+          !e.target ||
+          !(e.target as Element).closest('.font-size-control') && 
+          !(e.target as Element).closest('.font-size-toggle')
+        ) {
+          setFontSizeControlOpen(false);
+        }
+      };
+      
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [fontSizeControlOpen]);
+  
+  // Animation classes based on direction and state
+  const getAnimationClasses = () => {
+    if (!isPageAnimating) return "";
+    
+    if (animationDirection === 'next') {
+      return "animate-page-exit-to-left";
+    } else {
+      return "animate-page-exit-to-right";
+    }
+  };
+  
+  const getEnterAnimationClasses = () => {
+    if (!isPageAnimating) return "";
+    
+    return animationDirection === 'next' 
+      ? "animate-page-enter-from-right" 
+      : "animate-page-enter-from-left";
+  };
+  
+  // Calculate font size percentage for the slider
+  const getFontSizePercentage = () => {
+    const min = fontSizeOptions[0];
+    const max = fontSizeOptions[fontSizeOptions.length - 1];
+    return ((fontSize - min) / (max - min)) * 100;
+  };
+  
   return (
-    <div className="w-full bg-white overflow-hidden">
-      {/* Centered title with glassmorphic green background */}
-      <div className="py-6 px-4 flex items-center justify-center">
-        <div className="bg-green-500/50 backdrop-blur-sm rounded-full px-6 py-2 shadow-sm border border-green-200">
-          <h1 className="text-2xl font-semibold text-white">Our Story & Mission</h1>
+    <div className="min-h-screen bg-white text-gray-800 transition-colors duration-300">
+      {/* Custom Animation Styles */}
+      <style jsx global>{`
+        @keyframes pageExitToLeft {
+          from { transform: translateX(0); opacity: 1; }
+          to { transform: translateX(-10%); opacity: 0; }
+        }
+        
+        @keyframes pageExitToRight {
+          from { transform: translateX(0); opacity: 1; }
+          to { transform: translateX(10%); opacity: 0; }
+        }
+        
+        @keyframes pageEnterFromRight {
+          from { transform: translateX(10%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes pageEnterFromLeft {
+          from { transform: translateX(-10%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .animate-page-exit-to-left {
+          animation: pageExitToLeft 0.5s ease-in-out forwards;
+        }
+        
+        .animate-page-exit-to-right {
+          animation: pageExitToRight 0.5s ease-in-out forwards;
+        }
+        
+        .animate-page-enter-from-right {
+          animation: pageEnterFromRight 0.5s ease-in-out forwards;
+        }
+        
+        .animate-page-enter-from-left {
+          animation: pageEnterFromLeft 0.5s ease-in-out forwards;
+        }
+      `}</style>
+      
+      {/* Side Table of Contents */}
+      <div 
+        className={`fixed top-0 left-0 h-full w-64 z-50 transform ${tocOpen ? 'translate-x-0' : '-translate-x-full'} 
+        bg-white shadow-xl transition-transform duration-300 overflow-y-auto`}
+      >
+        <div className="p-4">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold">Contents</h2>
+            <button 
+              onClick={() => setTocOpen(false)}
+              className="p-1 rounded-full hover:bg-gray-200"
+            >
+              <X size={20} />
+            </button>
+          </div>
+          
+          <ul className="space-y-4">
+            {storyContent.map((content, index) => (
+              <li key={index} className="border-b pb-2 last:border-0">
+                <button
+                  onClick={() => navigateToPage(index + 1)}
+                  className={`text-left w-full py-2 px-2 rounded-lg transition-colors
+                  ${currentPage === index + 1 ? 
+                    'bg-blue-100 font-medium' : 
+                    'hover:bg-gray-100'}`}
+                >
+                  <div className="font-medium">{content.chapter}</div>
+                  <div className="flex items-center mt-1 text-sm text-gray-600">
+                    <Clock size={14} className="mr-1" />
+                    {content.readingTime}
+                  </div>
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
-
-      {/* Main content area with minimal padding */}
-      <div className="px-4 md:px-6 lg:px-8">
-        {/* Introduction Section with Single Image */}
-        <div className="mb-16 flex flex-col md:flex-row gap-8 items-center">
-          <div className="md:w-1/2 space-y-4">
-            <h2 className="text-2xl font-bold text-indigo-800 mb-2">A Vision Born from Necessity</h2>
-            <p className="text-lg text-gray-800 leading-relaxed">
-              Haitians have endured hardship for far too long. Despite our resilience, creativity, and determination, we've lacked a true digital space designed for us—a place where we can unite, support each other, and thrive together.
-            </p>
-            <p className="text-lg text-gray-800 leading-relaxed">
-              Our platform emerged from a critical need: to provide safe, accessible opportunities for connection and growth amidst challenging circumstances. We've witnessed how isolation compounds the difficulties our communities face, both within Haiti and across the diaspora.
-            </p>
-            <p className="text-lg text-gray-800 leading-relaxed">
-              When traditional institutions falter, it becomes necessary to forge new paths. Our founding team—composed of technologists, educators, and community leaders—came together with a shared vision: to build a digital bridge that connects Haitians worldwide, empowering us to support one another regardless of physical boundaries.
-            </p>
-            <div className="pt-4">
-              <button className="flex items-center gap-2 text-indigo-600 font-medium hover:text-indigo-800 transition">
-                Learn about our founding <ArrowRight className="w-5 h-5" />
+      
+      {/* Top Navigation Bar with Sticky Progress Bar */}
+      <div className="sticky top-0 z-10">
+        <header className="bg-white shadow-md transition-colors duration-300">
+          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+            {/* Chapters Toggle with light green background */}
+            <button
+              onClick={() => setTocOpen(!tocOpen)} 
+              className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-green-100 hover:bg-green-200 transition-all duration-200"
+            >
+              <span className="font-medium">Chapters</span>
+              {tocOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+            </button>
+            
+            {/* Language Selector with light pink background */}
+            <div className="relative">
+              <button
+                onClick={() => setLanguageMenuOpen(!languageMenuOpen)}
+                className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-pink-100 hover:bg-pink-200 transition-all duration-200"
+              >
+                <span className="mr-2">{currentLanguage.flag}</span>
+                <span>{currentLanguage.name}</span>
+                <ChevronDown size={16} className={`transition-transform ${languageMenuOpen ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {/* Language Dropdown */}
+              {languageMenuOpen && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-40" 
+                    onClick={() => setLanguageMenuOpen(false)}
+                  />
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-50 py-2">
+                    {languages.map((language) => (
+                      <button
+                        key={language.code}
+                        onClick={() => handleLanguageChange(language)}
+                        className={`flex items-center w-full text-left px-4 py-2 hover:bg-gray-100 ${
+                          currentLanguage.code === language.code ? 'bg-pink-50 text-pink-600' : ''
+                        }`}
+                      >
+                        <span className="mr-3 text-lg">{language.flag}</span>
+                        <span>{language.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </header>
+        
+        {/* Reading Progress Bar - Now sticky with header */}
+        <div className="w-full h-1 bg-gray-300">
+          <div 
+            className="h-full bg-blue-500 transition-all duration-300" 
+            style={{ width: `${progressPercentage}%` }}
+          />
+        </div>
+      </div>
+      
+      {/* Story Container - Adjust padding bottom to account for footer */}
+      <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative overflow-hidden">
+        {/* Current content with animation */}
+        <div className={`transition-all duration-500 ${getAnimationClasses()}`}>
+          {/* Title and Author - Only on first page */}
+          {currentPage === 1 && (
+            <div className="mb-8 text-center">
+              <h2 className="text-3xl font-bold mb-2">{currentContent.title}</h2>
+              <p className="text-lg text-gray-600">by {currentContent.author}</p>
+            </div>
+          )}
+          
+          {/* Chapter title and reading time */}
+          <div className="mb-6">
+            <h3 className="text-2xl font-semibold mb-2">{currentContent.chapter}</h3>
+            <div className="flex items-center text-gray-600">
+              <Clock size={16} className="mr-2" />
+              <span>Reading time: {currentContent.readingTime}</span>
+            </div>
+          </div>
+          
+          {/* Story Content */}
+          <div 
+            className="prose max-w-none mb-8 relative" 
+            style={{ fontSize: `${fontSize}px` }}
+          >
+            <p className="leading-relaxed mb-6">{currentContent.content}</p>
+            
+            {/* Conditional Image */}
+            {currentContent.image && (
+              <div className="my-8 rounded-lg overflow-hidden shadow-lg">
+                <img 
+                  src={currentContent.image} 
+                  alt="Story illustration" 
+                  className="w-full object-cover"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+        
+        {/* Page turning transition overlay */}
+        {isPageAnimating && (
+          <div className={`absolute inset-0 pointer-events-none ${getEnterAnimationClasses()}`}>
+            <div className="h-full opacity-0">Transition placeholder</div>
+          </div>
+        )}
+      </main>
+      
+      {/* Floating Font Size Control Button - moved higher up */}
+      <div className="fixed bottom-40 right-4 z-30 flex flex-col items-end">
+        {/* Font Size Toggle Button */}
+        <button 
+          onClick={() => setFontSizeControlOpen(!fontSizeControlOpen)}
+          className="font-size-toggle bg-black bg-opacity-70 hover:bg-opacity-80 text-white rounded-full p-3 shadow-lg transition-all duration-200"
+        >
+          <Type size={20} />
+        </button>
+      </div>
+      
+      {/* Glassmorphic Horizontal Font Size Control */}
+      {fontSizeControlOpen && (
+        <div className="fixed bottom-40 left-0 right-0 z-20 flex justify-center">
+          <div className="font-size-control mx-4 w-full max-w-xl bg-white bg-opacity-80 backdrop-blur-md rounded-lg shadow-xl p-4 border border-white border-opacity-30">
+            <div className="text-sm font-medium mb-2 text-gray-700 text-center">Text Size</div>
+            
+            {/* Horizontal Slider Area */}
+            <div className="relative h-12 mb-2">
+              {/* Horizontal Track */}
+              <div className="absolute left-8 right-8 top-1/2 h-2 -mt-1 bg-gray-200 rounded-full" />
+              
+              {/* Filled Track */}
+              <div 
+                className="absolute left-8 top-1/2 h-2 -mt-1 bg-blue-500 rounded-full"
+                style={{ width: `${getFontSizePercentage()}%`, maxWidth: 'calc(100% - 64px)' }}
+              />
+              
+              {/* Font Size Buttons */}
+              <div className="absolute left-8 right-8 top-0 h-full flex items-center justify-between">
+                {fontSizeOptions.map((size) => {
+                  const isActive = size === fontSize;
+                  return (
+                    <button
+                      key={size}
+                      onClick={() => handleSetFontSize(size)}
+                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200
+                        ${isActive ? 'bg-blue-500 text-white shadow-md scale-110' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                    >
+                      <span className="text-xs font-medium">{size}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            
+            {/* Current Size Display */}
+            <div className="text-sm font-bold text-center text-blue-600">Current: {fontSize}px</div>
+          </div>
+        </div>
+      )}
+      
+      {/* Overlay for Table of Contents */}
+      {tocOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setTocOpen(false)}
+        />
+      )}
+      
+      {/* Social Buttons Footer */}
+      <footer className="fixed bottom-0 w-full bg-white border-t border-gray-200 shadow-md z-20">
+        <div className="w-full px-2 py-3">
+          {/* Navigation row */}
+          <div className="flex justify-between items-center mb-3">
+            <button 
+              onClick={handlePrevPage}
+              disabled={currentPage === 1 || isPageAnimating}
+              className={`flex items-center space-x-2 px-3 py-1 rounded-lg transition-all duration-200 
+                ${(currentPage === 1 || isPageAnimating) ? 
+                'opacity-50 cursor-not-allowed' : 
+                'hover:bg-gray-200 bg-green-50'}`}
+            >
+              <ChevronLeft size={18} />
+              <span>Previous</span>
+            </button>
+            
+            <div className="text-center">
+              <button 
+                onClick={() => setTocOpen(true)}
+                className="font-mono hover:bg-gray-200 px-3 py-1 rounded bg-green-50"
+              >
+                {currentPage} / {totalPages}
               </button>
             </div>
-          </div>
-          <div className="md:w-1/2 h-64 md:h-80 rounded-lg shadow-md overflow-hidden">
-            <img 
-              src={founderImage} 
-              alt="Our founding team" 
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-        
-        {/* Current Challenge Section with Single Image */}
-        <div className="mb-16 flex flex-col md:flex-row-reverse gap-8 items-center">
-          <div className="md:w-1/2 space-y-4">
-            <h2 className="text-2xl font-bold text-indigo-800 mb-2">The Challenge We Face</h2>
-            <p className="text-lg text-gray-800 leading-relaxed">
-              As insecurity grips our country, the daily realities of life have become increasingly challenging. Educational institutions have been forced to close their doors, leaving students without access to vital learning resources. Businesses struggle to maintain operations, with entrepreneurs unable to safely reach customers or suppliers.
-            </p>
-            <p className="text-lg text-gray-800 leading-relaxed">
-              The psychological impact of this prolonged crisis compounds the material difficulties. Isolation, uncertainty, and fear have become constant companions for many Haitians, eroding the social connections that traditionally sustain our resilient communities.
-            </p>
-            <ul className="space-y-3 mt-4">
-              {[
-                "Students struggle to access their schools and universities",
-                "Businesses suffer due to limited physical opportunities",
-                "People live in fear, unable to move freely",
-                "Many Haitians are disconnected and isolated from vital resources"
-              ].map((challenge, index) => (
-                <li key={index} className="flex items-start gap-3">
-                  <CheckCircle className="w-6 h-6 text-red-500 mt-1 flex-shrink-0" />
-                  <span className="text-lg text-gray-800">{challenge}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="md:w-1/2 h-64 md:h-80 rounded-lg shadow-md overflow-hidden">
-            <img 
-              src={challengeImage} 
-              alt="Challenges facing our community" 
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-        
-        {/* Our Solution Section - Replacing Impact Areas with Text-Focused Content */}
-        <div className="mb-16">
-          <h2 className="text-2xl font-bold text-indigo-800 mb-8 text-center">Our Solution: A Digital Ecosystem</h2>
-          
-          <div className="space-y-8">
-            <p className="text-lg text-gray-800 leading-relaxed">
-              We're building more than just a website or app—we're creating an integrated digital ecosystem where Haitians can connect, learn, earn, and celebrate their culture. Our platform addresses multiple critical needs simultaneously, providing practical solutions to the challenges our community faces.
-            </p>
             
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Globe className="w-8 h-8 text-indigo-600" />
-                  <h3 className="text-xl font-bold text-indigo-800">Digital Community</h3>
-                </div>
-                <p className="text-gray-800">
-                  Our secure platform connects Haitians worldwide, overcoming geographical barriers that have fragmented our community. Members build meaningful relationships through shared interests, skills, and aspirations, fostering a sense of belonging that transcends physical isolation.
-                </p>
-              </div>
-              
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <BookOpen className="w-8 h-8 text-indigo-600" />
-                  <h3 className="text-xl font-bold text-indigo-800">Education Access</h3>
-                </div>
-                <p className="text-gray-800">
-                  When schools must close their doors, ours remain open. Our educational resources—developed in collaboration with Haitian educators and cultural experts—provide accessible, quality learning experiences that honor Haitian perspectives and knowledge systems.
-                </p>
-              </div>
-              
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <ShoppingBag className="w-8 h-8 text-indigo-600" />
-                  <h3 className="text-xl font-bold text-indigo-800">Economic Empowerment</h3>
-                </div>
-                <p className="text-gray-800">
-                  Our digital marketplace empowers Haitian entrepreneurs to reach global audiences, enabling sustainable business operations despite local security challenges. Artisans, food producers, service providers, and creators can showcase their offerings to customers worldwide.
-                </p>
-              </div>
-              
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Award className="w-8 h-8 text-indigo-600" />
-                  <h3 className="text-xl font-bold text-indigo-800">Talent Showcase</h3>
-                </div>
-                <p className="text-gray-800">
-                  Haiti's artistic and creative brilliance deserves global recognition. Our platform hosts competitions, exhibitions, and showcases that spotlight Haitian talent across disciplines—from visual arts and music to literature and technology innovation.
-                </p>
-              </div>
-              
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Wallet className="w-8 h-8 text-indigo-600" />
-                  <h3 className="text-xl font-bold text-indigo-800">Financial Access</h3>
-                </div>
-                <p className="text-gray-800">
-                  Traditional banking infrastructure often fails to reach all Haitians. Our integrated financial tools facilitate secure transactions, enable remittances, and provide microlending opportunities, creating financial inclusion for underserved populations.
-                </p>
-              </div>
-              
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Heart className="w-8 h-8 text-indigo-600" />
-                  <h3 className="text-xl font-bold text-indigo-800">Cultural Preservation</h3>
-                </div>
-                <p className="text-gray-800">
-                  Our platform serves as a living archive of Haitian heritage, documenting traditions, languages, and cultural practices. Through collaborative digital preservation, we ensure that our rich cultural legacy endures for future generations, regardless of physical disruptions.
-                </p>
-              </div>
-            </div>
-            
-            <p className="text-lg text-gray-800 leading-relaxed pt-4">
-              By integrating these elements into a cohesive platform, we create a self-reinforcing ecosystem where educational opportunities lead to economic empowerment, cultural celebration strengthens community bonds, and financial inclusion facilitates broader participation across all aspects of the platform.
-            </p>
-          </div>
-        </div>
-        
-        {/* Animated Stats Section */}
-        <div className="mb-16" ref={statsRef}>
-          <h2 className="text-2xl font-bold text-indigo-800 mb-8 text-center">Our Impact by the Numbers</h2>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {stats.map((stat, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
-                <h3 className="text-3xl font-bold text-indigo-700 mb-2">
-                  {Math.round(stat.value * animatedCount).toLocaleString()}+
-                </h3>
-                <p className="text-gray-700">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-          
-          <div className="mt-8 space-y-4">
-            <p className="text-lg text-gray-800 leading-relaxed">
-              Behind these numbers are real stories of transformation—students who have continued their education despite school closures, entrepreneurs who have maintained their livelihoods during economic uncertainty, and disconnected community members who have found belonging and purpose.
-            </p>
-            <p className="text-lg text-gray-800 leading-relaxed">
-              Each statistic represents countless hours of collaboration, innovation, and determination from our growing community. Together, we're demonstrating that digital solutions, thoughtfully designed with Haitian needs at the center, can create meaningful impact even amid challenging circumstances.
-            </p>
-          </div>
-        </div>
-        
-        {/* Impact Statement with Single Image */}
-        <div className="mb-16">
-          <h2 className="text-2xl font-bold text-indigo-800 mb-6 text-center">More Than a Platform</h2>
-          <div className="flex flex-col md:flex-row gap-8 items-center">
-            <div className="md:w-1/2 space-y-4">
-              <p className="text-lg text-gray-800 leading-relaxed">
-                This isn't just a platform; it's a movement. A way to reclaim our potential, despite the barriers we face. A way to bring Haitians together, no matter where they are in the world.
-              </p>
-              <p className="text-lg text-gray-800 leading-relaxed">
-                When physical infrastructure falters, digital connections become lifelines. Our platform serves as both a practical resource and a symbol of Haitian resilience—a testament to our ability to innovate and adapt in the face of adversity.
-              </p>
-              <p className="text-lg text-gray-800 leading-relaxed">
-                By creating this digital ecosystem, we're not merely responding to current challenges; we're building sustainable infrastructure for Haiti's future. The skills developed, connections formed, and opportunities created today will continue to yield benefits long after the current crisis subsides.
-              </p>
-              <p className="text-lg text-gray-800 leading-relaxed">
-                We are building the future of the Haitian digital community, but we can't do it alone. The strength of our platform lies in its community—in the diverse perspectives, talents, and commitments that each member brings.
-              </p>
-            </div>
-            <div className="md:w-1/2 rounded-lg shadow-md overflow-hidden h-72 md:h-96">
-              <img 
-                src={impactImage} 
-                alt="Our impact in the community" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        </div>
-        
-        {/* Call to Action */}
-        <div className="text-center bg-indigo-100 p-8 rounded-xl">
-          <h2 className="text-2xl font-bold text-indigo-800 mb-4">Join Our Movement</h2>
-          <p className="text-lg text-gray-800 leading-relaxed mb-4">
-            Join us in creating a space where Haitians can thrive—safely, freely, and together. Your support will help make this vision a reality. Let's build something lasting, something powerful. Let's build this for us, by us.
-          </p>
-          <p className="text-lg text-gray-800 leading-relaxed mb-6">
-            Whether you're a student seeking educational resources, an entrepreneur looking to expand your reach, a creative wanting to showcase your talents, or simply someone who believes in the power of connection—there's a place for you in our community. Together, we can transform challenges into opportunities and build a digital home that honors the richness of Haitian identity while opening new possibilities for our future.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-indigo-600 text-white px-6 py-3 rounded-full font-medium hover:bg-indigo-700 transition flex items-center justify-center gap-2">
-              <Heart className="w-5 h-5" /> Support Our Mission
-            </button>
-            <button className="bg-white text-indigo-600 border border-indigo-600 px-6 py-3 rounded-full font-medium hover:bg-indigo-50 transition flex items-center justify-center gap-2">
-              <Users className="w-5 h-5" /> Join The Community
+            <button 
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages || isPageAnimating}
+              className={`flex items-center space-x-2 px-3 py-1 rounded-lg transition-all duration-200
+                ${(currentPage === totalPages || isPageAnimating) ? 
+                'opacity-50 cursor-not-allowed' : 
+                'hover:bg-gray-200 bg-green-50'}`}
+            >
+              <span>Next</span>
+              <ChevronRight size={18} />
             </button>
           </div>
           
-          <div className="mt-8 pt-6 border-t border-indigo-200">
-            <h3 className="font-medium text-indigo-800 mb-3">Stay Connected</h3>
-            <div className="flex justify-center gap-4">
-              {['Twitter', 'Facebook', 'Instagram', 'LinkedIn'].map((social, index) => (
-                <button 
-                  key={index}
-                  className="w-10 h-10 rounded-full bg-white text-indigo-600 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition"
-                >
-                  {social.charAt(0)}
-                </button>
-              ))}
-            </div>
+          {/* Social Buttons */}
+          <div className="grid grid-cols-3 gap-2 w-full">
+            {/* Like Button */}
+            <button 
+              onClick={handleLike}
+              className={`flex items-center justify-center gap-2 py-2 px-4 rounded-lg w-full transition-all duration-200 ${
+                liked 
+                  ? 'bg-red-50 text-red-600' 
+                  : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <span className="text-xl">❤️</span>
+              <span className="font-medium">{formatNumber(likes)}</span>
+            </button>
+            
+            {/* Comment Button */}
+            <button 
+              className="flex items-center justify-center gap-2 py-2 px-4 rounded-lg w-full bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all duration-200"
+            >
+              <MessageSquare size={18} />
+              <span className="font-medium">{formatNumber(comments)}</span>
+            </button>
+            
+            {/* Share Button */}
+            <button 
+              className="flex items-center justify-center gap-2 py-2 px-4 rounded-lg w-full bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all duration-200"
+            >
+              <Share2 size={18} />
+              <span className="font-medium">{formatNumber(shares)}</span>
+            </button>
           </div>
         </div>
-      </div>
+      </footer>
     </div>
   );
 };
@@ -310,9 +503,9 @@ const ImpactStory = () => {
 export function StoryMissionsTab() {
   return (
     <div className="w-full">
-      <ImpactStory />
+      <StoryPage />
     </div>
   );
 }
 
-export default ImpactStory;
+export default StoryPage;
