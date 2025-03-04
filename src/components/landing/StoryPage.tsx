@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, Clock, MessageSquare, Share2, Type } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, Clock, MessageSquare, Share2, Type, Heart } from 'lucide-react';
 
 // Define animations as a CSS-in-JS object
 const animationStyles = `
@@ -40,7 +41,11 @@ const animationStyles = `
   }
 `;
 
-const StoryPage = () => {
+interface StoryPageProps {
+  showStoryControls?: boolean;
+}
+
+const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
   const [fontSize, setFontSize] = useState(16);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages] = useState(2);
@@ -432,78 +437,80 @@ const StoryPage = () => {
         />
       )}
       
-      {/* Social Buttons Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-200 shadow-md z-20">
-        <div className="w-full px-2 py-3">
-          {/* Navigation row */}
-          <div className="flex justify-between items-center mb-3">
-            <button 
-              onClick={handlePrevPage}
-              disabled={currentPage === 1 || isPageAnimating}
-              className={`flex items-center space-x-2 px-3 py-1 rounded-lg transition-all duration-200 
-                ${(currentPage === 1 || isPageAnimating) ? 
-                'opacity-50 cursor-not-allowed' : 
-                'hover:bg-gray-200 bg-green-50'}`}
-            >
-              <ChevronLeft size={18} />
-              <span>Previous</span>
-            </button>
-            
-            <div className="text-center">
+      {/* Navigation and Social Controls - Only show when showStoryControls is true */}
+      {showStoryControls && (
+        <footer className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-200 shadow-md z-20">
+          <div className="w-full px-2 py-3">
+            {/* Navigation row */}
+            <div className="flex justify-between items-center mb-3">
               <button 
-                onClick={() => setTocOpen(true)}
-                className="font-mono hover:bg-gray-200 px-3 py-1 rounded bg-green-50"
+                onClick={handlePrevPage}
+                disabled={currentPage === 1 || isPageAnimating}
+                className={`flex items-center space-x-2 px-3 py-1 rounded-lg transition-all duration-200 
+                  ${(currentPage === 1 || isPageAnimating) ? 
+                  'opacity-50 cursor-not-allowed' : 
+                  'hover:bg-gray-200 bg-green-50'}`}
               >
-                {currentPage} / {totalPages}
+                <ChevronLeft size={18} />
+                <span>Previous</span>
+              </button>
+              
+              <div className="text-center">
+                <button 
+                  onClick={() => setTocOpen(true)}
+                  className="font-mono hover:bg-gray-200 px-3 py-1 rounded bg-green-50"
+                >
+                  {currentPage} / {totalPages}
+                </button>
+              </div>
+              
+              <button 
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages || isPageAnimating}
+                className={`flex items-center space-x-2 px-3 py-1 rounded-lg transition-all duration-200
+                  ${(currentPage === totalPages || isPageAnimating) ? 
+                  'opacity-50 cursor-not-allowed' : 
+                  'hover:bg-gray-200 bg-green-50'}`}
+              >
+                <span>Next</span>
+                <ChevronRight size={18} />
               </button>
             </div>
             
-            <button 
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages || isPageAnimating}
-              className={`flex items-center space-x-2 px-3 py-1 rounded-lg transition-all duration-200
-                ${(currentPage === totalPages || isPageAnimating) ? 
-                'opacity-50 cursor-not-allowed' : 
-                'hover:bg-gray-200 bg-green-50'}`}
-            >
-              <span>Next</span>
-              <ChevronRight size={18} />
-            </button>
+            {/* Social Buttons */}
+            <div className="grid grid-cols-3 gap-2 w-full">
+              {/* Like Button */}
+              <button 
+                onClick={handleLike}
+                className={`flex items-center justify-center gap-2 py-2 px-4 rounded-lg w-full transition-all duration-200 ${
+                  liked 
+                    ? 'bg-red-50 text-red-600' 
+                    : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                <Heart size={18} className={liked ? 'text-red-500 fill-red-500' : ''} />
+                <span className="font-medium">{formatNumber(likes)}</span>
+              </button>
+              
+              {/* Comment Button */}
+              <button 
+                className="flex items-center justify-center gap-2 py-2 px-4 rounded-lg w-full bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all duration-200"
+              >
+                <MessageSquare size={18} />
+                <span className="font-medium">{formatNumber(comments)}</span>
+              </button>
+              
+              {/* Share Button */}
+              <button 
+                className="flex items-center justify-center gap-2 py-2 px-4 rounded-lg w-full bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all duration-200"
+              >
+                <Share2 size={18} />
+                <span className="font-medium">{formatNumber(shares)}</span>
+              </button>
+            </div>
           </div>
-          
-          {/* Social Buttons */}
-          <div className="grid grid-cols-3 gap-2 w-full">
-            {/* Like Button */}
-            <button 
-              onClick={handleLike}
-              className={`flex items-center justify-center gap-2 py-2 px-4 rounded-lg w-full transition-all duration-200 ${
-                liked 
-                  ? 'bg-red-50 text-red-600' 
-                  : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              <span className="text-xl">❤️</span>
-              <span className="font-medium">{formatNumber(likes)}</span>
-            </button>
-            
-            {/* Comment Button */}
-            <button 
-              className="flex items-center justify-center gap-2 py-2 px-4 rounded-lg w-full bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all duration-200"
-            >
-              <MessageSquare size={18} />
-              <span className="font-medium">{formatNumber(comments)}</span>
-            </button>
-            
-            {/* Share Button */}
-            <button 
-              className="flex items-center justify-center gap-2 py-2 px-4 rounded-lg w-full bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all duration-200"
-            >
-              <Share2 size={18} />
-              <span className="font-medium">{formatNumber(shares)}</span>
-            </button>
-          </div>
-        </div>
-      </footer>
+        </footer>
+      )}
     </div>
   );
 };
