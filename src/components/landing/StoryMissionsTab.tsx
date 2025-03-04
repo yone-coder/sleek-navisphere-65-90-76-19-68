@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, Clock, MessageSquare, Share2, Type } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
@@ -8,7 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 const StoryPage = () => {
   const [fontSize, setFontSize] = useState(16);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(6);
+  const [totalPages, setTotalPages] = useState(15);
   const [isShowingChapters, setIsShowingChapters] = useState(false);
   const [isPageAnimating, setIsPageAnimating] = useState(false);
   const [animationDirection, setAnimationDirection] = useState('next');
@@ -26,62 +25,134 @@ const StoryPage = () => {
     { name: 'English', code: 'en', flag: '🇬🇧' },
     { name: 'Español', code: 'es', flag: '🇪🇸' },
     { name: 'Français', code: 'fr', flag: '🇫🇷' },
-    { name: 'Deutsch', code: 'de', flag: '🇩🇪' },
+    { name: 'Haitian Creole', code: 'ht', flag: '🇭🇹' },
     { name: 'Italiano', code: 'it', flag: '🇮🇹' }
   ];
   
   // Font size options
   const fontSizeOptions = [12, 14, 16, 18, 20, 22, 24];
   
-  // Sample story content with placeholder images and chapters that match BookChapters
+  // Story content for "The Digital Renaissance of Haiti"
   const storyContent = [
     {
-      title: "The Silent Echo",
-      author: "Alex Rivers",
-      chapter: "Chapter 1: The Silent Echo",
-      content: "The morning fog rolled through the valley, enveloping everything in its ethereal embrace. Maya stood at the edge of the cliff, her silhouette barely visible through the dense mist. She had been coming to this spot for years, but today felt different. The ancient forest below seemed to whisper secrets that only she could hear. Legends spoke of echoes that weren't just reflections of sound, but glimpses into parallel worlds. Maya had always dismissed these as nothing more than local folklore designed to attract tourists.",
-      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=500&auto=format&fit=crop",
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Chapter 1: A Vision is Born",
+      content: "Port-au-Prince was a city of both hope and hardship. I was one of the lucky ones—Plante Lavi covered my tuition, rent, and living expenses. But outside my small apartment, I saw a different reality: students struggling to afford education, businesses barely surviving, and talented people with no platform to showcase their skills.\n\nI kept asking myself—why didn't we have a digital space designed for us?\n\nIt wasn't that we lacked talent or ideas. We lacked the infrastructure.\n\nIf no one was going to build it for us, I had to do it myself.\n\nBut the city had other plans for me.",
+      image: "/api/placeholder/600/400",
       readingTime: "3 min"
     },
     {
-      title: "The Silent Echo",
-      author: "Alex Rivers",
-      chapter: "Chapter 2: Whispers in the Forest",
-      content: "Her research team had been studying the unusual acoustic properties of the valley for months. The readings were unlike anything they had ever encountered - sound waves that seemed to exist in quantum superposition, neither here nor there. As she adjusted her recording equipment, a soft melody drifted through the fog. It wasn't coming from the village below, nor from any direction she could identify. It seemed to emanate from the very air around her, as if the fog itself was singing.",
-      image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=500&auto=format&fit=crop",
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Chapter 2: Staring Death in the Face",
+      content: "One morning, on my way to school, my reality shattered. Gunshots rang out. I barely escaped with my life. That day, I understood something deeper—survival in Haiti was not guaranteed.\n\nI had always wanted to build something for my people. But now, it wasn't just about opportunity—it was about creating a safe future.\n\nBut survival wasn't the only challenge I faced.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Chapter 3: When Universities Closed Their Doors",
+      content: "As insecurity worsened, universities across the city shut down—including mine.\n\nFor more than half a year, I was stranded. My education was paused, my dreams put on hold. But instead of waiting, I made a decision.\n\nI wasn't going to let this stop me.\n\nBut my journey was about to take an unexpected turn.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Chapter 4: Leaving Port-au-Prince",
+      content: "With no school and the city growing more dangerous, I had no choice but to return to my home village, Désarmes, in the last days of March 2024. It felt like a defeat.\n\nBut soon, I realized something:\n\nIf I could build this platform from anywhere, why not from here?\n\nSo, I went all in.\n\nBut returning home opened my eyes to something even deeper.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Chapter 5: A Harsh Reality Hits Home",
+      content: "Back in Désarmes, I saw how much my friends and others from my generation were struggling. They weren't just worried about careers—they were struggling to survive.\n\nMany couldn't afford to go to university. Some had already given up on education entirely.\n\nIt hit me hard.\n\nI realized how privileged I was to have even had a chance at higher education. I had endured hardships, but at least I had a way out—most didn't.\n\nThis gave me a new dream.\n\nI had to build something bigger than just a business.\n\nI had to create a foundation to help those in need.\n\nBecause I knew what it was to suffer in Haiti.\n\nAnd I knew that without help, many of them would never get the opportunities they deserved.",
+      image: "/api/placeholder/600/400",
       readingTime: "4 min"
     },
     {
-      title: "The Silent Echo",
-      author: "Alex Rivers",
-      chapter: "Chapter 3: The Discovery",
-      content: "The unusual readings led Maya to a hidden cave behind the waterfall. Inside, she found ancient symbols carved into the rock walls, pulsing with a subtle blue light. They appeared to shift slightly when viewed from different angles, as if existing in multiple dimensions simultaneously. Her colleague, Dr. Chen, theorized that they were some form of written language, but unlike any known to archaeology. Maya had a different theory - these weren't words, but mathematical expressions describing wave functions.",
-      image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=500&auto=format&fit=crop",
-      readingTime: "5 min"
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Chapter 6: The Deep Dive into Creation",
+      content: "With nothing but time on my hands, I threw myself into coding. I learned everything—databases, front-end, back-end. In just two years, I transformed from a dreamer into a builder.\n\nBut my dedication came at a heavy price.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
     },
     {
-      title: "The Silent Echo",
-      author: "Alex Rivers",
-      chapter: "Chapter 4: The Pattern",
-      content: "Maya realized the symbols formed a mathematical pattern that corresponded to the acoustic anomalies her team had measured throughout the valley. When she input the equations into her simulation model, the result was startling - they described a method of using sound waves to manipulate the fabric of spacetime itself. The ancient civilization that had inhabited this valley hadn't just discovered the multiverse; they had found a way to traverse it through carefully calibrated resonances.",
-      image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&auto=format&fit=crop",
-      readingTime: "4 min"
-    },
-    {
-      title: "The Silent Echo",
-      author: "Alex Rivers",
-      chapter: "Chapter 5: The Gateway",
-      content: "The pattern was not just a record but a key - activating the symbols in the right sequence created a resonance that revealed a doorway where solid rock had been. Maya carefully reproduced the tonal sequence on her specialized equipment. As the final note hung in the air, the cave wall before her seemed to ripple like water. She reached out hesitantly, her fingertips passing through what appeared to be solid stone. The boundary between worlds was thinner here than anywhere else on Earth.",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&auto=format&fit=crop",
-      readingTime: "5 min"
-    },
-    {
-      title: "The Silent Echo",
-      author: "Alex Rivers",
-      chapter: "Chapter 6: Beyond Echo",
-      content: "As Maya stepped through the doorway, she found herself in the same valley, but somehow different. The echo wasn't a reflection - it was a connection between parallel worlds. The fog still clung to the trees, but with a purple tinge that wasn't possible in her world. In the distance, she could see structures that resembled her research equipment, but with configurations she'd never imagined. And approaching from the forest path was a figure that looked remarkably like herself, but wasn't her at all.",
-      image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=500&auto=format&fit=crop",
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Chapter 7: The Cost of Obsession",
+      content: "I worked so hard that I lost track of the world. Some days I forgot to eat. Other days, I simply couldn't afford to. I poured everything into the platform, ignoring my health, my social life—everything.\n\nAt times, I had no money left for food. I was struggling so much that I had to beg for survival. It was humiliating, but I had no choice.\n\nI hated it. But I refused to quit.\n\nAnd then, the first breakthrough happened.",
+      image: "/api/placeholder/600/400",
       readingTime: "3 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Chapter 8: The First Working Prototype",
+      content: "After months of relentless work, I finally had something tangible: an online marketplace for Haitian businesses. It was just a starting point, but it proved one thing—\n\nThis wasn't just an idea anymore. It was happening.\n\nAnd I wasn't stopping there.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Chapter 9: Expanding the Ecosystem",
+      content: "One feature at a time, my platform grew:\n✅ A marketplace for Haitian entrepreneurs\n✅ An online learning hub for students and professionals\n✅ A contests platform for artists, musicians, and developers\n✅ A digital wallet for seamless transactions\n\nThis wasn't just an app. It was a movement.\n\nBut I realized something else was needed.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Chapter 10: The Nonprofit Foundation",
+      content: "Building a digital future for Haiti was one thing. But what about those struggling to survive right now?\n\nSo, I launched a nonprofit foundation to help those in need—supporting students, small businesses, and families who, like me, had no safety net.\n\nThis was bigger than me.\n\nBut how was I going to fund it all?",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Chapter 11: Finding Support",
+      content: "I started sharing my vision with anyone who would listen—investors, entrepreneurs, even strangers who believed in Haiti's potential. Some saw the vision. Others doubted it.\n\nBut one thing was clear: we weren't waiting for change anymore—we were creating it.\n\nAnd we needed to think even bigger.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Chapter 12: Building an Agency",
+      content: "Through this journey, I had gained something invaluable: mastery in coding.\n\nNow, I wanted to help others bring their ideas to life. So, I decided to launch an agency to help people build their dream websites and apps.\n\nOur portfolio now includes over 30 websites, apps, and real-life projects. But the most prominent ones remain:\n\nThe online marketplace\n\nThe online courses platform\n\nThe contests platform\n\nThe nonprofit foundation\n\nThis wasn't just about money—it was about empowerment.\n\nBut what about my own unfinished education?",
+      image: "/api/placeholder/600/400",
+      readingTime: "3 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Chapter 13: The University Question",
+      content: "Despite everything, I still want to return to university. I will return—but I don't know when.\n\nThe truth is, it doesn't matter if it's soon or later. Education is important, but my return doesn't financially depend on me.\n\nWhen I go back, I'll be doing it on my own terms.\n\nBecause what I'm building now is just as important.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Chapter 14: A Crossroads—Stay or Escape?",
+      content: "At one point, I seriously considered leaving Haiti. Insecurity was rising. Everything felt uncertain.\n\nI looked for opportunities to escape, but a mix of confusion, doubts, and conflicting encouragements left me unsure.\n\nThat's when I made my decision.\n\nI had no choice but to thrive in my home country.\n\nThere was no other way around it—either I built my future here, or I lost everything.\n\nAnd so, I chose to stay.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Chapter 15: The Future of Haiti's Digital Renaissance",
+      content: "This was never just about an app. It was about freedom.\n\nHaitians have been held back for too long.\n\nBut now, we're building our own future.\n\nThis platform is more than a business. It's a movement. A revolution. A space where Haitians can thrive—safely, freely, together.\n\nWill you be part of history?",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
     }
   ];
 
@@ -152,7 +223,6 @@ const StoryPage = () => {
     }
   };
   
-  // Handle chapter selection from BookChapters
   const handleChapterSelect = (chapterId: number) => {
     navigateToPage(chapterId);
   };
@@ -175,7 +245,6 @@ const StoryPage = () => {
     setFontSize(size);
   };
   
-  // Format numbers with k/m suffix
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
       return (num / 1000000).toFixed(1) + 'm';
@@ -185,12 +254,10 @@ const StoryPage = () => {
     return num.toString();
   };
   
-  // Progress bar calculation
   const progressPercentage = (currentPage / totalPages) * 100;
   
   const currentContent = storyContent[currentPage - 1];
   
-  // Close font size control when clicking outside
   useEffect(() => {
     if (fontSizeControlOpen) {
       const handleClickOutside = (e: MouseEvent) => {
@@ -208,7 +275,6 @@ const StoryPage = () => {
     }
   }, [fontSizeControlOpen]);
   
-  // Animation classes based on direction and state
   const getAnimationClasses = () => {
     if (!isPageAnimating) return "";
     
@@ -227,14 +293,12 @@ const StoryPage = () => {
       : "animate-page-enter-from-left";
   };
   
-  // Calculate font size percentage for the slider
   const getFontSizePercentage = () => {
     const min = fontSizeOptions[0];
     const max = fontSizeOptions[fontSizeOptions.length - 1];
     return ((fontSize - min) / (max - min)) * 100;
   };
 
-  // Skeleton loader for story content
   const StorySkeletonLoader = () => (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -258,8 +322,7 @@ const StoryPage = () => {
       <Skeleton className="h-48 w-full rounded-lg" />
     </div>
   );
-  
-  // Add animation style for BookChapters
+
   const bottomToTopAnimation = `
     @keyframes slideUpIn {
       from { transform: translateY(100%); opacity: 0; }
@@ -270,10 +333,9 @@ const StoryPage = () => {
       animation: slideUpIn 0.4s ease-out forwards;
     }
   `;
-  
+
   return (
     <div className="min-h-screen bg-white text-gray-800 transition-colors duration-300">
-      {/* Custom Animation Styles */}
       <style>{`
         @keyframes pageExitToLeft {
           from { transform: translateX(0); opacity: 1; }
@@ -321,7 +383,6 @@ const StoryPage = () => {
         }
       `}</style>
       
-      {/* Using Sheet component from shadcn for the bottom sliding panel */}
       <Sheet open={isShowingChapters} onOpenChange={setIsShowingChapters}>
         <SheetContent side="bottom" className="h-[90vh] overflow-y-auto p-0">
           <BookChapters 
@@ -331,11 +392,9 @@ const StoryPage = () => {
         </SheetContent>
       </Sheet>
       
-      {/* Top Navigation Bar with Sticky Progress Bar */}
       <div className="sticky top-0 z-10">
         <header className="bg-white shadow-md transition-colors duration-300">
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            {/* Chapters Toggle with light green background */}
             <button
               onClick={() => setIsShowingChapters(true)} 
               className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-green-100 hover:bg-green-200 transition-all duration-200"
@@ -344,7 +403,6 @@ const StoryPage = () => {
               <ChevronDown size={18} />
             </button>
             
-            {/* Language Selector with light pink background */}
             <div className="relative">
               <button
                 onClick={() => setLanguageMenuOpen(!languageMenuOpen)}
@@ -355,7 +413,6 @@ const StoryPage = () => {
                 <ChevronDown size={16} className={`transition-transform ${languageMenuOpen ? 'rotate-180' : ''}`} />
               </button>
               
-              {/* Language Dropdown */}
               {languageMenuOpen && (
                 <>
                   <div 
@@ -382,7 +439,6 @@ const StoryPage = () => {
           </div>
         </header>
         
-        {/* Reading Progress Bar - Now sticky with header */}
         <div className="w-full h-1 bg-gray-300">
           <div 
             className="h-full bg-blue-500 transition-all duration-300" 
@@ -391,16 +447,12 @@ const StoryPage = () => {
         </div>
       </div>
       
-      {/* Story Container - Adjust padding bottom to account for footer */}
       <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative overflow-hidden">
-        {/* Loading Skeleton */}
         {isLoading ? (
           <StorySkeletonLoader />
         ) : (
           <>
-            {/* Current content with animation */}
             <div className={`transition-all duration-500 ${getAnimationClasses()}`}>
-              {/* Title and Author - Only on first page */}
               {currentPage === 1 && (
                 <div className="mb-8 text-center">
                   <h2 className="text-3xl font-bold mb-2">{currentContent.title}</h2>
@@ -408,7 +460,6 @@ const StoryPage = () => {
                 </div>
               )}
               
-              {/* Chapter title and reading time */}
               <div className="mb-6">
                 <h3 className="text-2xl font-semibold mb-2">{currentContent.chapter}</h3>
                 <div className="flex items-center text-gray-600">
@@ -417,14 +468,12 @@ const StoryPage = () => {
                 </div>
               </div>
               
-              {/* Story Content */}
               <div 
                 className="prose max-w-none mb-8 relative" 
                 style={{ fontSize: `${fontSize}px` }}
               >
                 <p className="leading-relaxed mb-6">{currentContent.content}</p>
                 
-                {/* Conditional Image */}
                 {currentContent.image && (
                   <div className="my-8 rounded-lg overflow-hidden shadow-lg">
                     <img 
@@ -437,7 +486,6 @@ const StoryPage = () => {
               </div>
             </div>
             
-            {/* Page turning transition overlay */}
             {isPageAnimating && (
               <div className={`absolute inset-0 pointer-events-none ${getEnterAnimationClasses()}`}>
                 <div className="h-full opacity-0">Transition placeholder</div>
@@ -447,9 +495,7 @@ const StoryPage = () => {
         )}
       </main>
       
-      {/* Floating Font Size Control Button - moved higher up */}
       <div className="fixed bottom-40 right-4 z-30 flex flex-col items-end">
-        {/* Font Size Toggle Button */}
         <button 
           onClick={() => setFontSizeControlOpen(!fontSizeControlOpen)}
           className="font-size-toggle bg-black bg-opacity-70 hover:bg-opacity-80 text-white rounded-full p-3 shadow-lg transition-all duration-200"
@@ -458,24 +504,19 @@ const StoryPage = () => {
         </button>
       </div>
       
-      {/* Glassmorphic Horizontal Font Size Control */}
       {fontSizeControlOpen && (
         <div className="fixed bottom-40 left-0 right-0 z-20 flex justify-center">
           <div className="font-size-control mx-4 w-full max-w-xl bg-white bg-opacity-80 backdrop-blur-md rounded-lg shadow-xl p-4 border border-white border-opacity-30">
             <div className="text-sm font-medium mb-2 text-gray-700 text-center">Text Size</div>
             
-            {/* Horizontal Slider Area */}
             <div className="relative h-12 mb-2">
-              {/* Horizontal Track */}
               <div className="absolute left-8 right-8 top-1/2 h-2 -mt-1 bg-gray-200 rounded-full" />
               
-              {/* Filled Track */}
               <div 
                 className="absolute left-8 top-1/2 h-2 -mt-1 bg-blue-500 rounded-full"
                 style={{ width: `${getFontSizePercentage()}%`, maxWidth: 'calc(100% - 64px)' }}
               />
               
-              {/* Font Size Buttons */}
               <div className="absolute left-8 right-8 top-0 h-full flex items-center justify-between">
                 {fontSizeOptions.map((size) => {
                   const isActive = size === fontSize;
@@ -493,16 +534,13 @@ const StoryPage = () => {
               </div>
             </div>
             
-            {/* Current Size Display */}
             <div className="text-sm font-bold text-center text-blue-600">Current: {fontSize}px</div>
           </div>
         </div>
       )}
       
-      {/* Social Buttons Footer */}
       <footer className="fixed bottom-0 w-full bg-white border-t border-gray-200 shadow-md z-20">
         <div className="w-full px-2 py-3">
-          {/* Navigation row */}
           <div className="flex justify-between items-center mb-3">
             <button 
               onClick={handlePrevPage}
@@ -538,9 +576,7 @@ const StoryPage = () => {
             </button>
           </div>
           
-          {/* Social Buttons */}
           <div className="grid grid-cols-3 gap-2 w-full">
-            {/* Like Button */}
             <button 
               onClick={handleLike}
               className={`flex items-center justify-center gap-2 py-2 px-4 rounded-lg w-full transition-all duration-200 ${
@@ -553,7 +589,6 @@ const StoryPage = () => {
               <span className="font-medium">{formatNumber(likes)}</span>
             </button>
             
-            {/* Comment Button */}
             <button 
               className="flex items-center justify-center gap-2 py-2 px-4 rounded-lg w-full bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all duration-200"
             >
@@ -561,7 +596,6 @@ const StoryPage = () => {
               <span className="font-medium">{formatNumber(comments)}</span>
             </button>
             
-            {/* Share Button */}
             <button 
               className="flex items-center justify-center gap-2 py-2 px-4 rounded-lg w-full bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all duration-200"
             >
@@ -578,7 +612,6 @@ const StoryPage = () => {
 export function StoryMissionsTab() {
   const [isTabLoading, setIsTabLoading] = useState(true);
   
-  // Simulate loading when the tab is mounted
   useEffect(() => {
     setIsTabLoading(true);
     const timer = setTimeout(() => {
@@ -588,20 +621,16 @@ export function StoryMissionsTab() {
     return () => clearTimeout(timer);
   }, []);
   
-  // Skeleton loader for the entire tab
   if (isTabLoading) {
     return (
       <div className="w-full p-4 space-y-6">
-        {/* Header skeletons */}
         <div className="flex justify-between items-center">
           <Skeleton className="h-8 w-24" />
           <Skeleton className="h-8 w-24" />
         </div>
         
-        {/* Progress bar skeleton */}
         <Skeleton className="h-1 w-full" />
         
-        {/* Content skeletons */}
         <div className="space-y-4 pt-4">
           <div className="text-center space-y-2">
             <Skeleton className="h-8 w-2/3 mx-auto" />
@@ -624,7 +653,6 @@ export function StoryMissionsTab() {
           <Skeleton className="h-60 w-full rounded-lg mt-6" />
         </div>
         
-        {/* Footer controls skeleton */}
         <div className="fixed bottom-0 left-0 w-full bg-white p-4 border-t">
           <div className="flex justify-between items-center mb-3">
             <Skeleton className="h-8 w-24" />

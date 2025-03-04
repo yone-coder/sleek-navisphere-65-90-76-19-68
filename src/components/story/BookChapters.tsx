@@ -18,7 +18,16 @@ const BookChapters = ({ onSelectChapter, currentChapterId }: BookChaptersProps) 
     3: 'in-progress',
     4: 'not-started',
     5: 'not-started',
-    6: 'not-started'
+    6: 'not-started',
+    7: 'not-started',
+    8: 'not-started',
+    9: 'not-started',
+    10: 'not-started',
+    11: 'not-started',
+    12: 'not-started',
+    13: 'not-started',
+    14: 'not-started',
+    15: 'not-started'
   });
   
   // Chapter ratings
@@ -26,88 +35,130 @@ const BookChapters = ({ onSelectChapter, currentChapterId }: BookChaptersProps) 
     1: 4.5,
     2: 4.0,
     3: 5.0,
-    4: 0,
-    5: 0,
-    6: 0
+    4: 4.2,
+    5: 4.8,
+    6: 4.3,
+    7: 4.6,
+    8: 4.9,
+    9: 4.7,
+    10: 4.5,
+    11: 4.2,
+    12: 4.4,
+    13: 4.3,
+    14: 4.6,
+    15: 4.8
   });
   
   // Estimated reading times (in minutes)
   const readingTimes: Record<number, number> = {
     1: 3,
-    2: 4,
-    3: 5,
-    4: 4,
-    5: 5,
-    6: 3
+    2: 2,
+    3: 2,
+    4: 2,
+    5: 4,
+    6: 2,
+    7: 3,
+    8: 2,
+    9: 2,
+    10: 2,
+    11: 2,
+    12: 3,
+    13: 2,
+    14: 2,
+    15: 2
   };
   
-  // Chapters data with thumbnails and descriptions
+  // Chapters data
   const chapters = [
     { 
       id: 1, 
-      title: 'The Silent Echo', 
-      description: 'The morning fog rolled through the valley, enveloping everything in its ethereal embrace. Maya stood at the edge of the cliff, her silhouette barely visible through the dense mist.',
-      keyPoints: [
-        'Introduction to Maya',
-        'The mysterious valley setting',
-        'Legends of the echo'
-      ],
-      thumbnail: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=500&auto=format&fit=crop'
+      title: 'A Vision is Born', 
+      description: 'Port-au-Prince was a city of both hope and hardship. I was one of the lucky ones—Plante Lavi covered my tuition, rent, and living expenses. But outside my small apartment, I saw a different reality: students struggling to afford education, businesses barely surviving, and talented people with no platform to showcase their skills.',
+      thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 2, 
-      title: 'Whispers in the Forest', 
-      description: 'Her research team had been studying the unusual acoustic properties of the valley for months. The readings were unlike anything they had ever encountered.',
-      keyPoints: [
-        'Research findings',
-        'Mysterious sounds',
-        'The strange melody'
-      ],
-      thumbnail: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=500&auto=format&fit=crop' 
+      title: 'Staring Death in the Face', 
+      description: 'One morning, on my way to school, my reality shattered. Gunshots rang out. I barely escaped with my life. That day, I understood something deeper—survival in Haiti was not guaranteed.',
+      thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 3, 
-      title: 'The Discovery', 
-      description: 'The unusual readings led Maya to a hidden cave behind the waterfall. Inside, she found ancient symbols carved into the rock walls, pulsing with a subtle blue light.',
-      keyPoints: [
-        'The hidden cave',
-        'Ancient symbols',
-        'Connection to past civilizations'
-      ],
-      thumbnail: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=500&auto=format&fit=crop' 
+      title: 'When Universities Closed Their Doors', 
+      description: 'As insecurity worsened, universities across the city shut down—including mine. For more than half a year, I was stranded. My education was paused, my dreams put on hold. But instead of waiting, I made a decision.',
+      thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 4, 
-      title: 'The Pattern', 
-      description: 'Maya realized the symbols formed a mathematical pattern that corresponded to the acoustic anomalies her team had measured throughout the valley.',
-      keyPoints: [
-        'Mathematical connections',
-        'Sound wave analysis',
-        'Historical significance'
-      ],
-      thumbnail: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&auto=format&fit=crop' 
+      title: 'Leaving Port-au-Prince', 
+      description: 'With no school and the city growing more dangerous, I had no choice but to return to my home village, Désarmes, in the last days of March 2024. It felt like a defeat. But soon, I realized something: If I could build this platform from anywhere, why not from here?',
+      thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 5, 
-      title: 'The Gateway', 
-      description: 'The pattern was not just a record but a key - activating the symbols in the right sequence created a resonance that revealed a doorway where solid rock had been.',
-      keyPoints: [
-        'The activation sequence',
-        'Physical transformation of the cave',
-        'Theoretical implications'
-      ],
-      thumbnail: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&auto=format&fit=crop' 
+      title: 'A Harsh Reality Hits Home', 
+      description: 'Back in Désarmes, I saw how much my friends and others from my generation were struggling. They weren't just worried about careers—they were struggling to survive. Many couldn't afford to go to university. Some had already given up on education entirely.',
+      thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 6, 
-      title: 'Beyond Echo', 
-      description: 'As Maya stepped through the doorway, she found herself in the same valley, but somehow different. The echo wasn\'t a reflection - it was a connection between parallel worlds.',
-      keyPoints: [
-        'The parallel dimension',
-        'Implications of discovery',
-        'Maya\'s journey forward'
-      ],
-      thumbnail: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=500&auto=format&fit=crop' 
+      title: 'The Deep Dive into Creation', 
+      description: 'With nothing but time on my hands, I threw myself into coding. I learned everything—databases, front-end, back-end. In just two years, I transformed from a dreamer into a builder. But my dedication came at a heavy price.',
+      thumbnail: '/api/placeholder/600/400'
+    },
+    { 
+      id: 7, 
+      title: 'The Cost of Obsession', 
+      description: 'I worked so hard that I lost track of the world. Some days I forgot to eat. Other days, I simply couldn't afford to. I poured everything into the platform, ignoring my health, my social life—everything. At times, I had no money left for food.',
+      thumbnail: '/api/placeholder/600/400'
+    },
+    { 
+      id: 8, 
+      title: 'The First Working Prototype', 
+      description: 'After months of relentless work, I finally had something tangible: an online marketplace for Haitian businesses. It was just a starting point, but it proved one thing—this wasn't just an idea anymore. It was happening.',
+      thumbnail: '/api/placeholder/600/400'
+    },
+    { 
+      id: 9, 
+      title: 'Expanding the Ecosystem', 
+      description: 'One feature at a time, my platform grew: a marketplace for Haitian entrepreneurs, an online learning hub for students and professionals, a contests platform for artists, musicians, and developers, and a digital wallet for seamless transactions.',
+      thumbnail: '/api/placeholder/600/400'
+    },
+    { 
+      id: 10, 
+      title: 'The Nonprofit Foundation', 
+      description: 'Building a digital future for Haiti was one thing. But what about those struggling to survive right now? So, I launched a nonprofit foundation to help those in need—supporting students, small businesses, and families who, like me, had no safety net.',
+      thumbnail: '/api/placeholder/600/400'
+    },
+    { 
+      id: 11, 
+      title: 'Finding Support', 
+      description: 'I started sharing my vision with anyone who would listen—investors, entrepreneurs, even strangers who believed in Haiti's potential. Some saw the vision. Others doubted it. But one thing was clear: we weren't waiting for change anymore—we were creating it.',
+      thumbnail: '/api/placeholder/600/400'
+    },
+    { 
+      id: 12, 
+      title: 'Building an Agency', 
+      description: 'Through this journey, I had gained something invaluable: mastery in coding. Now, I wanted to help others bring their ideas to life. So, I decided to launch an agency to help people build their dream websites and apps.',
+      thumbnail: '/api/placeholder/600/400'
+    },
+    { 
+      id: 13, 
+      title: 'The University Question', 
+      description: 'Despite everything, I still want to return to university. I will return—but I don't know when. The truth is, it doesn't matter if it's soon or later. Education is important, but my return doesn't financially depend on me.',
+      thumbnail: '/api/placeholder/600/400'
+    },
+    { 
+      id: 14, 
+      title: 'A Crossroads—Stay or Escape?', 
+      description: 'At one point, I seriously considered leaving Haiti. Insecurity was rising. Everything felt uncertain. I looked for opportunities to escape, but a mix of confusion, doubts, and conflicting encouragements left me unsure.',
+      thumbnail: '/api/placeholder/600/400'
+    },
+    { 
+      id: 15, 
+      title: 'The Future of Haiti's Digital Renaissance', 
+      description: 'This was never just about an app. It was about freedom. Haitians have been held back for too long. But now, we're building our own future. This platform is more than a business. It's a movement. A revolution. A space where Haitians can thrive—safely, freely, together.',
+      thumbnail: '/api/placeholder/600/400'
     }
   ];
   
@@ -178,9 +229,9 @@ const BookChapters = ({ onSelectChapter, currentChapterId }: BookChaptersProps) 
       {/* Header with title */}
       <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
         <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-gray-800">Book Contents</h2>
+          <h2 className="text-xl font-semibold text-gray-800">The Digital Renaissance of Haiti</h2>
         </div>
-        <p className="mt-1 text-sm text-gray-500">6 chapters • Approximately 25 minutes of reading</p>
+        <p className="mt-1 text-sm text-gray-500">15 chapters • Approximately 35 minutes of reading</p>
       </div>
       
       {/* Chapters section */}
@@ -220,64 +271,6 @@ const BookChapters = ({ onSelectChapter, currentChapterId }: BookChaptersProps) 
                 {expandedChapters[chapter.id] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
               </div>
             </div>
-            
-            {/* Chapter details (conditional) */}
-            {expandedChapters[chapter.id] && (
-              <div className="px-4 pb-4 pt-0">
-                <div className="flex flex-col md:flex-row">
-                  <div className="md:w-1/3 flex-shrink-0 mb-3 md:mb-0 md:pr-4">
-                    <img 
-                      src={chapter.thumbnail} 
-                      alt={chapter.title}
-                      className="w-full rounded-md shadow-sm object-cover"
-                    />
-                    
-                    <div className="mt-3 flex items-center justify-between">
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Clock size={14} className="mr-1" />
-                        <span>{readingTimes[chapter.id]} min read</span>
-                      </div>
-                      <div>
-                        {renderRating(chapterRatings[chapter.id])}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="md:w-2/3">
-                    <p className="text-gray-700 text-sm mb-4">
-                      {chapter.description}
-                    </p>
-                    
-                    <div className="mb-3">
-                      <h4 className="text-sm font-medium text-gray-800 mb-2">Key Points</h4>
-                      <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1">
-                        {chapter.keyPoints.map((point, idx) => (
-                          <li key={idx}>{point}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    
-                    <button 
-                      className={`mt-2 px-3 py-1 text-sm rounded-md transition-colors ${
-                        chapter.id === currentChapterId
-                          ? 'bg-blue-600 text-white hover:bg-blue-700'
-                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                      }`}
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent double triggering
-                        handleChapterClick(chapter.id);
-                      }}
-                    >
-                      {readingProgress[chapter.id] === 'completed' 
-                        ? 'Review Chapter' 
-                        : readingProgress[chapter.id] === 'in-progress' 
-                          ? 'Continue Reading' 
-                          : 'Start Reading'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         ))}
       </div>
