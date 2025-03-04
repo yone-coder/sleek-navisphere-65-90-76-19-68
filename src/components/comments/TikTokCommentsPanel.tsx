@@ -57,7 +57,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   const inputRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   
-  // Set up click outside handler for menus
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -70,7 +69,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Focus input when editing comment or replying
   useEffect(() => {
     if (editingComment || replyingTo) {
       inputRef.current?.focus();
@@ -81,7 +79,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     e.preventDefault();
     if (commentText.trim()) {
       if (replyingTo) {
-        // Add reply to the comment
         const newReply: Reply = {
           id: Date.now(),
           username: '@me',
@@ -104,7 +101,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
         
         setReplyingTo(null);
       } else {
-        // Add new main comment
         const newComment: Comment = {
           id: Date.now(),
           username: '@me',
@@ -117,7 +113,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
           replies: []
         };
         
-        // Place new comment at top, but below pinned comments
         const pinnedComments = comments.filter(c => c.pinned);
         const unpinnedComments = comments.filter(c => !c.pinned);
         setComments([...pinnedComments, newComment, ...unpinnedComments]);
@@ -187,13 +182,8 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   
   const pinComment = (id: number) => {
     setComments(comments.map(comment => {
-      // If this is the comment to pin/unpin
       if (comment.id === id) {
         return { ...comment, pinned: !comment.pinned };
-      }
-      // If we're pinning a comment, unpin any other pinned comments
-      else if (comment.pinned && !comments.find(c => c.id === id)?.pinned) {
-        return { ...comment, pinned: false };
       }
       return comment;
     }));
@@ -210,7 +200,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     setCommentText('');
   };
   
-  // Filter comments based on selected filter
   const filteredComments = comments.filter(comment => {
     if (filter === 'verified' && !comment.verified) return false;
     if (filter === 'liked' && !comment.isLiked) return false;
@@ -218,7 +207,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     return true;
   });
   
-  // Sort comments to keep pinned at top
   const sortedComments = [...filteredComments].sort((a, b) => {
     if (a.pinned && !b.pinned) return -1;
     if (!a.pinned && b.pinned) return 1;
@@ -230,11 +218,9 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
       <div 
         className={`absolute bottom-0 left-0 right-0 h-[85vh] bg-white rounded-t-3xl transform transition-transform duration-300 ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
       >
-        {/* Drag handle */}
         <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-1"></div>
         
-        {/* Comments panel */}
-        <div className="w-full h-full pb-safe flex flex-col overflow-hidden">
+        <div className="w-full h-full flex flex-col overflow-hidden">
           <div className="px-4 py-2 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10">
             <div className="flex items-center">
               {replyingTo ? (
@@ -467,7 +453,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
                         </Button>
                       </div>
                       
-                      {/* Display replies */}
                       {comment.replies && comment.replies.length > 0 && (
                         <div className="mt-3 pl-4 border-l-2 border-gray-100 space-y-3">
                           {comment.replies.map(reply => (
