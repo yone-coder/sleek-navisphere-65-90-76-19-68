@@ -30,7 +30,7 @@ const TabSwitcher = () => {
     },
     {
       name: "Our story",
-      content: <div className="h-full overflow-hidden"><StoryPage showStoryControls={true} /></div>
+      content: <div className="h-full overflow-hidden"><StoryPage showStoryControls={activeTab === 1} /></div>
     },
     {
       name: "Services",

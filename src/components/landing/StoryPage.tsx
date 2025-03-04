@@ -1,8 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, Clock, MessageSquare, Share2, Type, Heart } from 'lucide-react';
 
-// Define animations as a CSS-in-JS object
 const animationStyles = `
   @keyframes pageExitToLeft {
     from { transform: translateX(0); opacity: 1; }
@@ -60,7 +58,6 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
   const [currentLanguage, setCurrentLanguage] = useState({ name: 'English', code: 'en', flag: '🇬🇧' });
   const [fontSizeControlOpen, setFontSizeControlOpen] = useState(false);
   
-  // Available languages
   const languages = [
     { name: 'English', code: 'en', flag: '🇬🇧' },
     { name: 'Español', code: 'es', flag: '🇪🇸' },
@@ -69,10 +66,8 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
     { name: 'Italiano', code: 'it', flag: '🇮🇹' }
   ];
   
-  // Font size options
   const fontSizeOptions = [12, 14, 16, 18, 20, 22, 24];
   
-  // Sample story content with placeholder images and chapters
   const storyContent = [
     {
       title: "The Silent Echo",
@@ -95,11 +90,9 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
       setAnimationDirection('next');
       setIsPageAnimating(true);
       
-      // Delay actual page change to allow animation to complete
       setTimeout(() => {
         setCurrentPage(currentPage + 1);
         
-        // Allow animation out to complete before resetting
         setTimeout(() => {
           setIsPageAnimating(false);
         }, 500);
@@ -112,11 +105,9 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
       setAnimationDirection('prev');
       setIsPageAnimating(true);
       
-      // Delay actual page change to allow animation to complete
       setTimeout(() => {
         setCurrentPage(currentPage - 1);
         
-        // Allow animation out to complete before resetting
         setTimeout(() => {
           setIsPageAnimating(false);
         }, 500);
@@ -160,7 +151,6 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
     setFontSize(size);
   };
   
-  // Format numbers with k/m suffix
   const formatNumber = (num) => {
     if (num >= 1000000) {
       return (num / 1000000).toFixed(1) + 'm';
@@ -170,12 +160,10 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
     return num.toString();
   };
   
-  // Progress bar calculation
   const progressPercentage = (currentPage / totalPages) * 100;
   
   const currentContent = storyContent[currentPage - 1];
   
-  // Close font size control when clicking outside
   useEffect(() => {
     if (fontSizeControlOpen) {
       const handleClickOutside = (e) => {
@@ -189,7 +177,6 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
     }
   }, [fontSizeControlOpen]);
   
-  // Animation classes based on direction and state
   const getAnimationClasses = () => {
     if (!isPageAnimating) return "";
     
@@ -208,21 +195,17 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
       : "animate-page-enter-from-left";
   };
   
-  // Calculate font size percentage for the slider
   const getFontSizePercentage = () => {
     const min = fontSizeOptions[0];
     const max = fontSizeOptions[fontSizeOptions.length - 1];
     return ((fontSize - min) / (max - min)) * 100;
   };
   
-  // Effect to inject animation styles once on component mount
   useEffect(() => {
-    // Add the animation styles to the document head
     const styleElement = document.createElement('style');
     styleElement.innerHTML = animationStyles;
     document.head.appendChild(styleElement);
     
-    // Clean up on unmount
     return () => {
       document.head.removeChild(styleElement);
     };
@@ -230,7 +213,6 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
   
   return (
     <div className="bg-white text-gray-800 transition-colors duration-300 relative overflow-y-auto h-full pb-20">
-      {/* Side Table of Contents */}
       <div 
         className={`fixed top-0 left-0 h-full w-64 z-50 transform ${tocOpen ? 'translate-x-0' : '-translate-x-full'} 
         bg-white shadow-xl transition-transform duration-300 overflow-y-auto`}
@@ -268,11 +250,9 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
         </div>
       </div>
       
-      {/* Top Navigation Bar with Sticky Progress Bar */}
       <div className="sticky top-0 z-10">
         <header className="bg-white shadow-md transition-colors duration-300">
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            {/* Chapters Toggle with light green background */}
             <button
               onClick={() => setTocOpen(!tocOpen)} 
               className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-green-100 hover:bg-green-200 transition-all duration-200"
@@ -281,7 +261,6 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
               {tocOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
             </button>
             
-            {/* Language Selector with light pink background */}
             <div className="relative">
               <button
                 onClick={() => setLanguageMenuOpen(!languageMenuOpen)}
@@ -292,7 +271,6 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
                 <ChevronDown size={16} className={`transition-transform ${languageMenuOpen ? 'rotate-180' : ''}`} />
               </button>
               
-              {/* Language Dropdown */}
               {languageMenuOpen && (
                 <>
                   <div 
@@ -319,7 +297,6 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
           </div>
         </header>
         
-        {/* Reading Progress Bar - Now sticky with header */}
         <div className="w-full h-1 bg-gray-300">
           <div 
             className="h-full bg-blue-500 transition-all duration-300" 
@@ -328,11 +305,8 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
         </div>
       </div>
       
-      {/* Story Container - Adjust padding bottom to account for footer */}
       <main className="container mx-auto px-4 py-8 pb-28 max-w-3xl relative">
-        {/* Current content with animation */}
         <div className={`transition-all duration-500 ${getAnimationClasses()}`}>
-          {/* Title and Author - Only on first page */}
           {currentPage === 1 && (
             <div className="mb-8 text-center">
               <h2 className="text-3xl font-bold mb-2">{currentContent.title}</h2>
@@ -340,7 +314,6 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
             </div>
           )}
           
-          {/* Chapter title and reading time */}
           <div className="mb-6">
             <h3 className="text-2xl font-semibold mb-2">{currentContent.chapter}</h3>
             <div className="flex items-center text-gray-600">
@@ -349,14 +322,12 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
             </div>
           </div>
           
-          {/* Story Content */}
           <div 
             className="prose max-w-none mb-8 relative" 
             style={{ fontSize: `${fontSize}px` }}
           >
             <p className="leading-relaxed mb-6">{currentContent.content}</p>
             
-            {/* Conditional Image */}
             {currentContent.image && (
               <div className="my-8 rounded-lg overflow-hidden shadow-lg">
                 <img 
@@ -369,7 +340,6 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
           </div>
         </div>
         
-        {/* Page turning transition overlay */}
         {isPageAnimating && (
           <div className={`absolute inset-0 pointer-events-none ${getEnterAnimationClasses()}`}>
             <div className="h-full opacity-0">Transition placeholder</div>
@@ -377,9 +347,7 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
         )}
       </main>
       
-      {/* Floating Font Size Control Button - moved higher up */}
       <div className="fixed bottom-20 right-4 z-30 flex flex-col items-end">
-        {/* Font Size Toggle Button */}
         <button 
           onClick={() => setFontSizeControlOpen(!fontSizeControlOpen)}
           className="font-size-toggle bg-black bg-opacity-70 hover:bg-opacity-80 text-white rounded-full p-3 shadow-lg transition-all duration-200"
@@ -388,24 +356,19 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
         </button>
       </div>
       
-      {/* Glassmorphic Horizontal Font Size Control */}
       {fontSizeControlOpen && (
         <div className="fixed bottom-20 left-0 right-0 z-20 flex justify-center">
           <div className="font-size-control mx-4 w-full max-w-xl bg-white bg-opacity-80 backdrop-blur-md rounded-lg shadow-xl p-4 border border-white border-opacity-30">
             <div className="text-sm font-medium mb-2 text-gray-700 text-center">Text Size</div>
             
-            {/* Horizontal Slider Area */}
             <div className="relative h-12 mb-2">
-              {/* Horizontal Track */}
               <div className="absolute left-8 right-8 top-1/2 h-2 -mt-1 bg-gray-200 rounded-full" />
               
-              {/* Filled Track */}
               <div 
                 className="absolute left-8 top-1/2 h-2 -mt-1 bg-blue-500 rounded-full"
                 style={{ width: `${getFontSizePercentage()}%`, maxWidth: 'calc(100% - 64px)' }}
               />
               
-              {/* Font Size Buttons */}
               <div className="absolute left-8 right-8 top-0 h-full flex items-center justify-between">
                 {fontSizeOptions.map((size) => {
                   const isActive = size === fontSize;
@@ -423,13 +386,11 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
               </div>
             </div>
             
-            {/* Current Size Display */}
             <div className="text-sm font-bold text-center text-blue-600">Current: {fontSize}px</div>
           </div>
         </div>
       )}
       
-      {/* Overlay for Table of Contents */}
       {tocOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-40"
@@ -437,11 +398,9 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
         />
       )}
       
-      {/* Navigation and Social Controls - Only show when showStoryControls is true */}
       {showStoryControls && (
         <footer className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-200 shadow-md z-20">
           <div className="w-full px-2 py-3">
-            {/* Navigation row */}
             <div className="flex justify-between items-center mb-3">
               <button 
                 onClick={handlePrevPage}
@@ -477,9 +436,7 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
               </button>
             </div>
             
-            {/* Social Buttons */}
             <div className="grid grid-cols-3 gap-2 w-full">
-              {/* Like Button */}
               <button 
                 onClick={handleLike}
                 className={`flex items-center justify-center gap-2 py-2 px-4 rounded-lg w-full transition-all duration-200 ${
@@ -492,7 +449,6 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
                 <span className="font-medium">{formatNumber(likes)}</span>
               </button>
               
-              {/* Comment Button */}
               <button 
                 className="flex items-center justify-center gap-2 py-2 px-4 rounded-lg w-full bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all duration-200"
               >
@@ -500,7 +456,6 @@ const StoryPage: React.FC<StoryPageProps> = ({ showStoryControls = false }) => {
                 <span className="font-medium">{formatNumber(comments)}</span>
               </button>
               
-              {/* Share Button */}
               <button 
                 className="flex items-center justify-center gap-2 py-2 px-4 rounded-lg w-full bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all duration-200"
               >
