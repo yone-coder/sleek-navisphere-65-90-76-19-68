@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, BookOpen, Star, StarHalf, Clock, CheckCircle } from 'lucide-react';
 
@@ -227,10 +228,10 @@ const BookChapters = ({ onSelectChapter, currentChapterId }: BookChaptersProps) 
                     animate-slide-up-in">
       {/* Header with title */}
       <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-        <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-gray-800">The Digital Renaissance of Haiti</h2>
+        <div className="flex justify-center items-center">
+          <h2 className="text-xl font-semibold text-gray-800 text-center">The Digital Renaissance of Haiti</h2>
         </div>
-        <p className="mt-1 text-sm text-gray-500">15 chapters • Approximately 35 minutes of reading</p>
+        <p className="mt-1 text-sm text-gray-500 text-center">15 chapters • Approximately 35 minutes of reading</p>
       </div>
       
       {/* Chapters section */}
