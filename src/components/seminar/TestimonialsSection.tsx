@@ -1,228 +1,223 @@
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Star, MessageSquare } from 'lucide-react';
 
-interface TestimonialsSectionProps {
-  id: string;
-}
-
-interface Testimonial {
-  id: number;
-  name: string;
-  role: string;
-  company: string;
-  avatar: string;
-  quote: string;
-  rating: number;
-}
-
-const testimonials: Testimonial[] = [
+const testimonials = [
   {
     id: 1,
-    name: "David Wang",
+    name: "Sarah Johnson",
     role: "Frontend Developer",
-    company: "StartupX",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=testimonial1",
-    quote: "This seminar completely changed how I approach frontend development. The speakers were world-class, and I left with practical skills I could apply immediately.",
-    rating: 5
+    company: "TechCorp",
+    image: "https://api.dicebear.com/7.x/notionists/svg?seed=Sarah",
+    quote: "This seminar completely transformed my approach to web development. The practical workshops and networking opportunities were invaluable for my career growth.",
+    rating: 5,
+    year: "2022"
   },
   {
     id: 2,
-    name: "Lisa Johnson",
+    name: "Michael Chen",
     role: "UX Designer",
-    company: "DesignLab",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=testimonial2",
-    quote: "As someone who works at the intersection of design and development, this event was perfect. I learned so much about modern workflows and collaboration.",
-    rating: 5
+    company: "DesignHub",
+    image: "https://api.dicebear.com/7.x/notionists/svg?seed=Michael",
+    quote: "The perfect blend of theory and practice. I left with new skills I could immediately apply to my projects and a network of fellow professionals.",
+    rating: 5,
+    year: "2022"
   },
   {
     id: 3,
-    name: "Michael Torres",
-    role: "CTO",
-    company: "WebTech",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=testimonial3",
-    quote: "The technical depth was impressive. My team implemented several of the architectural patterns we learned, and it's made a huge difference in our development speed.",
-    rating: 4
+    name: "Emily Rodriguez",
+    role: "Full Stack Developer",
+    company: "StartupX",
+    image: "https://api.dicebear.com/7.x/notionists/svg?seed=Emily",
+    quote: "I was skeptical at first, but this seminar exceeded all my expectations. The instructors were world-class and the content was cutting-edge.",
+    rating: 4,
+    year: "2021"
   },
   {
     id: 4,
-    name: "Sophia Chen",
-    role: "Full Stack Developer",
-    company: "TechCorp",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=testimonial4",
-    quote: "The workshops were hands-on and practical. I appreciated how the instructors helped when we got stuck and made complex concepts accessible.",
-    rating: 5
+    name: "David Kim",
+    role: "CTO",
+    company: "InnovateTech",
+    image: "https://api.dicebear.com/7.x/notionists/svg?seed=David",
+    quote: "We sent our entire development team to this seminar and the ROI has been incredible. The team is now more aligned, productive, and innovative.",
+    rating: 5,
+    year: "2021"
   },
   {
     id: 5,
-    name: "Raj Patel",
-    role: "Engineering Manager",
-    company: "DevFirm",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=testimonial5",
-    quote: "Sending my team to this seminar was one of the best professional development investments I've made. They came back energized and with valuable new skills.",
-    rating: 4
-  },
-  {
-    id: 6,
-    name: "Emma Wilson",
-    role: "Junior Developer",
-    company: "CodeAcademy",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=testimonial6",
-    quote: "As someone early in their career, this seminar was incredibly valuable. The speakers were approachable, and I made great connections with other developers.",
-    rating: 5
+    name: "Lisa Wang",
+    role: "Software Engineer",
+    company: "TechGiant",
+    image: "https://api.dicebear.com/7.x/notionists/svg?seed=Lisa",
+    quote: "The seminar's focus on current industry best practices and emerging technologies helped me stay ahead in my field. Highly recommended for any web developer.",
+    rating: 5,
+    year: "2020"
   }
 ];
 
-const TestimonialsSection = ({ id }: TestimonialsSectionProps) => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  
-  const nextTestimonial = () => {
-    setActiveIndex((prev) => (prev + 1) % testimonials.length);
+export const TestimonialsSection = () => {
+  const [activePage, setActivePage] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const itemsPerPage = 3;
+  const totalPages = Math.ceil(testimonials.length / itemsPerPage);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const nextPage = () => {
+    if (activePage < totalPages - 1) {
+      setDirection(1);
+      setActivePage(prev => prev + 1);
+    }
   };
-  
-  const prevTestimonial = () => {
-    setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+
+  const prevPage = () => {
+    if (activePage > 0) {
+      setDirection(-1);
+      setActivePage(prev => prev - 1);
+    }
   };
-  
+
+  const currentTestimonials = testimonials.slice(
+    activePage * itemsPerPage,
+    (activePage + 1) * itemsPerPage
+  );
+
+  const variants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0
+    }),
+    center: {
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction: number) => ({
+      x: direction > 0 ? -1000 : 1000,
+      opacity: 0
+    })
+  };
+
   return (
-    <section id={id} className="py-24 bg-gradient-to-b from-slate-50 to-white">
-      <div className="container px-4 sm:px-6">
-        <div className="mb-16 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors border-purple-300 bg-purple-50 text-purple-600 mb-4"
-          >
-            <MessageSquare className="mr-1 h-3 w-3" /> Testimonials
-          </motion.div>
-          
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-3xl md:text-4xl font-bold tracking-tight mb-4"
-          >
-            What Attendees Say
-          </motion.h2>
-          
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-xl text-slate-600 max-w-2xl mx-auto"
-          >
-            Don't just take our word for it. Hear from developers who've attended our previous events.
-          </motion.p>
+    <section id="testimonials" className="py-20 bg-gradient-to-b from-white to-gray-50">
+      <div className="container px-4 mx-auto">
+        <div className="text-center mb-16">
+          <Badge variant="outline" className="mb-4">Testimonials</Badge>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">What Attendees Say</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Don't just take our word for it. Here's what previous attendees have to say about their experience.
+          </p>
         </div>
         
-        {/* Desktop layout */}
-        <div className="hidden md:grid grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={testimonial.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="bg-white p-6 rounded-xl shadow-md border border-slate-200/50 hover:shadow-lg transition-shadow"
-            >
-              <div className="flex items-center mb-4">
-                <div className="flex-shrink-0">
-                  <img 
-                    src={testimonial.avatar} 
-                    alt={testimonial.name} 
-                    className="w-12 h-12 rounded-full"
-                  />
-                </div>
-                <div className="ml-4">
-                  <h3 className="font-medium text-slate-900">{testimonial.name}</h3>
-                  <p className="text-sm text-slate-500">{testimonial.role}, {testimonial.company}</p>
-                </div>
-              </div>
+        <div className="max-w-6xl mx-auto">
+          <div className="relative">
+            <div className="overflow-hidden" ref={containerRef}>
+              <motion.div
+                key={activePage}
+                custom={direction}
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{
+                  x: { type: "spring", stiffness: 300, damping: 30 },
+                  opacity: { duration: 0.2 }
+                }}
+                className="grid md:grid-cols-3 gap-6"
+              >
+                {currentTestimonials.map((testimonial) => (
+                  <Card key={testimonial.id} className="bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+                    <CardContent className="p-6">
+                      <div className="relative z-10 mb-6">
+                        <Quote size={64} className="absolute -top-2 -left-2 text-purple-100 z-0" />
+                        <p className="text-gray-700 relative z-10 leading-relaxed">"{testimonial.quote}"</p>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <Avatar>
+                            <AvatarImage src={testimonial.image} alt={testimonial.name} />
+                            <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <h4 className="font-semibold text-sm">{testimonial.name}</h4>
+                            <p className="text-xs text-gray-500">
+                              {testimonial.role} at {testimonial.company}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              size={14}
+                              className={`${
+                                i < testimonial.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
+                              }`}
+                            />
+                          ))}
+                          <span className="ml-1 text-xs text-gray-500">{testimonial.year}</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </motion.div>
+            </div>
+            
+            <div className="flex justify-center mt-10 space-x-2">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={prevPage} 
+                disabled={activePage === 0}
+                className="rounded-full"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
               
-              <div className="flex mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star 
-                    key={i} 
-                    className={`h-4 w-4 ${i < testimonial.rating ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'}`} 
+              <div className="flex space-x-1 items-center">
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      i === activePage ? 'bg-purple-600' : 'bg-gray-300'
+                    }`}
+                    onClick={() => {
+                      setDirection(i > activePage ? 1 : -1);
+                      setActivePage(i);
+                    }}
+                    aria-label={`Go to page ${i + 1}`}
                   />
                 ))}
               </div>
               
-              <blockquote className="text-slate-600 italic">
-                "{testimonial.quote}"
-              </blockquote>
-            </motion.div>
-          ))}
-        </div>
-        
-        {/* Mobile carousel */}
-        <div className="md:hidden relative">
-          <div className="overflow-hidden">
-            <div 
-              className="flex transition-transform duration-300 ease-in-out"
-              style={{ transform: `translateX(-${activeIndex * 100}%)` }}
-            >
-              {testimonials.map((testimonial) => (
-                <div 
-                  key={testimonial.id}
-                  className="w-full flex-shrink-0 px-4"
-                >
-                  <div className="bg-white p-6 rounded-xl shadow-md border border-slate-200/50">
-                    <div className="flex items-center mb-4">
-                      <div className="flex-shrink-0">
-                        <img 
-                          src={testimonial.avatar} 
-                          alt={testimonial.name} 
-                          className="w-12 h-12 rounded-full"
-                        />
-                      </div>
-                      <div className="ml-4">
-                        <h3 className="font-medium text-slate-900">{testimonial.name}</h3>
-                        <p className="text-sm text-slate-500">{testimonial.role}, {testimonial.company}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex mb-4">
-                      {[...Array(5)].map((_, i) => (
-                        <Star 
-                          key={i} 
-                          className={`h-4 w-4 ${i < testimonial.rating ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'}`} 
-                        />
-                      ))}
-                    </div>
-                    
-                    <blockquote className="text-slate-600 italic">
-                      "{testimonial.quote}"
-                    </blockquote>
-                  </div>
-                </div>
-              ))}
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={nextPage} 
+                disabled={activePage === totalPages - 1}
+                className="rounded-full"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
             </div>
           </div>
           
-          {/* Carousel navigation */}
-          <div className="flex justify-center mt-6 gap-2">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveIndex(index)}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === activeIndex ? 'bg-purple-600' : 'bg-slate-300'
-                }`}
-                aria-label={`Go to testimonial ${index + 1}`}
-              />
-            ))}
+          <div className="mt-16 bg-purple-50 rounded-lg p-8 text-center">
+            <h3 className="text-xl font-semibold mb-3">Become a Success Story</h3>
+            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+              Join thousands of developers who have advanced their careers through our web development seminars.
+            </p>
+            <Button className="bg-purple-600 hover:bg-purple-700">
+              Register Now
+            </Button>
           </div>
         </div>
       </div>
     </section>
   );
 };
-
-export default TestimonialsSection;

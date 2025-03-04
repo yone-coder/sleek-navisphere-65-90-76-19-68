@@ -1,147 +1,171 @@
 
-import { motion } from 'framer-motion';
-import { ArrowRight, Calendar, Users, Lightbulb } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { motion } from 'framer-motion';
+import { Calendar, MapPin, Clock, Users, ArrowRight } from 'lucide-react';
 
-interface HeroSectionProps {
-  id: string;
-}
+export const HeroSection = () => {
+  const [scrollY, setScrollY] = useState(0);
 
-const HeroSection = ({ id }: HeroSectionProps) => {
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const parallaxOffset = scrollY * 0.4;
+
   return (
-    <section id={id} className="relative min-h-[90vh] overflow-hidden flex items-center">
-      {/* Animated grid background */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-purple-50" />
-        <div className="absolute inset-0 bg-grid-slate-200/50 [mask-image:linear-gradient(0deg,white,transparent)]" />
+    <section className="relative min-h-screen flex items-center py-20 overflow-hidden">
+      {/* Background with parallax effect */}
+      <div 
+        className="absolute inset-0 bg-gradient-to-b from-purple-900 via-indigo-900 to-indigo-950 z-0"
+        style={{ transform: `translateY(${parallaxOffset * 0.2}px)` }}
+      />
+      
+      {/* Grid pattern overlay */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMSI+PHBhdGggZD0iTTM2IDM0aDR2MWgtNHYtMXptMC0ybDQtMXYxbC00IDF2LTF6bTUuMDU2LTlsLjk0NC45NDQtMS41NTUgMS41NTYtMi42MjItMi42MjJMMzQuMDU2IDIzSDIxdjFoMTYuMDQ0bC0yLjExIDIuMTEtMi43MjMgMi43MjMtMi4yMjItMi4yMjJMNS40NDQgNTIuMzg5IDE0IDE2aDVsLjk1NiA0Ljc3OEwyNSAyNmg3di0xaC01bC0xMC03MTQuNjExIDE5LjUzMy0yMS4zODkgNS41NDQgNS41NDQgNi42NjcgNi42NjcuNzc4Ljc3OHpNNDAgNDBoLTJ2LTFoMnYxem00IDBoLTJ2LTFoMnYxem00IDBoLTJ2LTFoMnYxeiIvPjwvZz48L2c+PC9zdmc+')] bg-blue-500 opacity-10 z-0" 
+        style={{ transform: `translateY(${parallaxOffset * 0.1}px)` }}
+      />
+      
+      {/* Floating elements */}
+      <div className="absolute top-0 left-0 right-0 bottom-0 overflow-hidden z-0">
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute bg-white bg-opacity-10 rounded-full"
+            style={{
+              width: Math.random() * 100 + 50,
+              height: Math.random() * 100 + 50,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, Math.random() * 100 - 50],
+              scale: [1, Math.random() + 0.5],
+              opacity: [0.1, 0.3, 0.1],
+            }}
+            transition={{
+              duration: Math.random() * 10 + 10,
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
+          />
+        ))}
       </div>
       
-      {/* Floating gradient blobs */}
-      <motion.div 
-        className="absolute top-0 -right-32 w-96 h-96 bg-purple-300/30 rounded-full blur-3xl"
-        animate={{
-          y: [0, 30, 0],
-          opacity: [0.5, 0.3, 0.5],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
-      
-      <motion.div 
-        className="absolute -bottom-32 -left-32 w-96 h-96 bg-indigo-300/30 rounded-full blur-3xl"
-        animate={{
-          y: [0, -30, 0],
-          opacity: [0.5, 0.3, 0.5],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 2
-        }}
-      />
-      
-      <div className="container px-4 sm:px-6 py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors border-purple-300 bg-purple-50 text-purple-600"
-            >
-              June 15-16, 2023 • San Francisco
-            </motion.div>
-            
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-4xl md:text-6xl font-bold tracking-tight"
-            >
-              <span className="block">Master Modern</span>
-              <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                Web Development
-              </span>
-            </motion.h1>
-            
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-xl text-slate-600 max-w-lg"
-            >
-              Join the most comprehensive seminar on cutting-edge web development technologies, best practices, and future trends.
-            </motion.p>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-4"
-            >
-              <Button size="lg" className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700">
-                Register Now <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button size="lg" variant="outline">
-                View Agenda
-              </Button>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.5 }}
-              className="grid grid-cols-3 gap-4 pt-8"
-            >
-              <div className="flex flex-col">
-                <div className="flex items-center gap-2 text-purple-600">
-                  <Users className="h-5 w-5" />
-                  <span className="font-bold text-2xl">50+</span>
-                </div>
-                <span className="text-sm text-slate-600">Expert Speakers</span>
-              </div>
-              
-              <div className="flex flex-col">
-                <div className="flex items-center gap-2 text-indigo-600">
-                  <Calendar className="h-5 w-5" />
-                  <span className="font-bold text-2xl">2</span>
-                </div>
-                <span className="text-sm text-slate-600">Days of Learning</span>
-              </div>
-              
-              <div className="flex flex-col">
-                <div className="flex items-center gap-2 text-purple-600">
-                  <Lightbulb className="h-5 w-5" />
-                  <span className="font-bold text-2xl">24+</span>
-                </div>
-                <span className="text-sm text-slate-600">Workshops</span>
-              </div>
-            </motion.div>
-          </div>
-          
+      {/* Content */}
+      <div className="container px-4 mx-auto relative z-10">
+        <div className="max-w-4xl mx-auto text-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.4 }}
-            className="relative hidden lg:block"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-indigo-500/5 rounded-3xl transform rotate-3" />
-            <div className="relative overflow-hidden rounded-3xl shadow-2xl border border-slate-200/50">
-              <img 
-                src="https://images.unsplash.com/photo-1540304453527-62f9a16a3422?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                alt="Web Development Conference" 
-                className="w-full object-cover h-[600px]"
-              />
+            <Badge className="mb-6 bg-white/10 text-white hover:bg-white/20 transition-colors">
+              October 15-17, 2023
+            </Badge>
+          </motion.div>
+          
+          <motion.h1 
+            className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            Web Development <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
+              Mastery Seminar
+            </span>
+          </motion.h1>
+          
+          <motion.p 
+            className="text-xl text-indigo-100 mb-10 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            Join top industry experts for three days of intensive learning, hands-on workshops, and networking to take your web development skills to the next level.
+          </motion.p>
+          
+          <motion.div 
+            className="flex flex-wrap justify-center gap-4 mb-10"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <div className="flex items-center text-white bg-white/10 px-4 py-2 rounded-full">
+              <Calendar className="h-5 w-5 mr-2 text-purple-300" />
+              <span>October 15-17, 2023</span>
+            </div>
+            <div className="flex items-center text-white bg-white/10 px-4 py-2 rounded-full">
+              <MapPin className="h-5 w-5 mr-2 text-purple-300" />
+              <span>San Francisco, CA</span>
+            </div>
+            <div className="flex items-center text-white bg-white/10 px-4 py-2 rounded-full">
+              <Clock className="h-5 w-5 mr-2 text-purple-300" />
+              <span>9:00 AM - 5:00 PM</span>
+            </div>
+            <div className="flex items-center text-white bg-white/10 px-4 py-2 rounded-full">
+              <Users className="h-5 w-5 mr-2 text-purple-300" />
+              <span>250 Attendees</span>
             </div>
           </motion.div>
+          
+          <motion.div
+            className="flex flex-col sm:flex-row justify-center gap-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <a href="#register">
+              <Button size="lg" className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-lg text-white border-0 w-full sm:w-auto text-base">
+                Register Now <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </a>
+            <a href="#agenda">
+              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10 hover:text-white w-full sm:w-auto text-base">
+                View Schedule
+              </Button>
+            </a>
+          </motion.div>
         </div>
+        
+        <motion.div 
+          className="mt-16 max-w-4xl mx-auto relative"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+        >
+          <div className="p-2 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-2xl shadow-2xl">
+            <div className="relative h-0 pb-[56.25%] rounded-lg overflow-hidden bg-gray-900">
+              <img 
+                src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1000&h=560&q=80" 
+                alt="Web Development Seminar" 
+                className="absolute top-0 left-0 w-full h-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                <Button className="bg-white text-indigo-900 hover:bg-white/90 rounded-full w-16 h-16 flex items-center justify-center shadow-xl">
+                  <span className="sr-only">Play video</span>
+                  <div className="ml-1 w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-indigo-900 border-b-[10px] border-b-transparent" />
+                </Button>
+              </div>
+            </div>
+          </div>
+          <div className="absolute -bottom-10 -right-10 hidden md:block">
+            <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0 shadow-lg px-4 py-2 text-sm transform rotate-12">
+              Exclusive Content
+            </Badge>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
 };
-
-export default HeroSection;

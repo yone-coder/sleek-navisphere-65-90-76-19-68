@@ -1,198 +1,154 @@
 
-import { motion } from 'framer-motion';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { HelpCircle, Mail } from 'lucide-react';
+import { useState } from 'react';
+import { 
+  Accordion, 
+  AccordionContent, 
+  AccordionItem, 
+  AccordionTrigger 
+} from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { toast } from 'sonner';
+import { useToast } from '@/components/ui/use-toast';
+import { SendIcon } from 'lucide-react';
 
-interface FAQSectionProps {
-  id: string;
-}
-
-interface FAQ {
-  question: string;
-  answer: string;
-}
-
-const faqs: FAQ[] = [
+const faqs = [
   {
-    question: "When and where is the seminar taking place?",
-    answer: "The seminar will be held on June 15-16, 2023, at the San Francisco Convention Center, located at 747 Howard St, San Francisco, CA 94103."
+    question: "When and where will the seminar take place?",
+    answer: "The seminar will take place on October 15-17, 2023, at the Tech Innovation Center in San Francisco. We also offer virtual attendance options for those who cannot join in person."
   },
   {
-    question: "What's included in the registration fee?",
-    answer: "Your registration includes access to all sessions and workshops (depending on your pass type), conference materials, lunch and refreshments on both days, and networking opportunities. VIP passes include additional benefits such as reserved seating, exclusive networking events, and one-on-one mentoring sessions."
-  },
-  {
-    question: "Are there any prerequisites for attending?",
-    answer: "The seminar is designed for web developers of all skill levels. While some sessions are more advanced and may require prior knowledge, there are plenty of sessions for beginners and intermediate developers. We'll provide information about the technical level of each session in the program."
-  },
-  {
-    question: "Will presentations be recorded?",
-    answer: "Yes, most sessions will be recorded and made available to attendees with Full and VIP passes after the event. Basic pass holders can upgrade to access the recordings."
+    question: "Is this seminar suitable for beginners?",
+    answer: "Yes, we have tracks for all experience levels. The beginner track covers fundamentals and is perfect for those just starting their web development journey. We also have intermediate and advanced tracks for more experienced developers."
   },
   {
     question: "What should I bring to the seminar?",
-    answer: "We recommend bringing your laptop for the hands-on workshops, a charger, business cards for networking, and a notebook if you prefer taking notes by hand. The venue provides free Wi-Fi."
+    answer: "You should bring a laptop with your preferred code editor installed. We'll provide detailed setup instructions before the event to ensure you have all necessary software and tools ready."
   },
   {
-    question: "Is there a cancellation policy?",
-    answer: "Yes, cancellations made more than 30 days before the event are eligible for a full refund. Cancellations made 15-30 days before the event will receive a 50% refund. No refunds will be issued for cancellations less than 15 days before the event, but you may transfer your registration to another person."
+    question: "Will recordings be available after the seminar?",
+    answer: "Yes, all sessions will be recorded and made available to registered participants for 6 months after the event. This allows you to revisit any session or catch up on sessions you couldn't attend live."
   },
   {
-    question: "Are there group discounts available?",
-    answer: "Yes, we offer a 15% discount for groups of 3 or more from the same organization. Please contact our team for details on how to register as a group."
+    question: "Is there a refund policy?",
+    answer: "Yes, we offer full refunds up to 30 days before the event. After that, you can receive a 50% refund up to 7 days before the event or transfer your ticket to another person at no cost."
+  },
+  {
+    question: "Do you offer group discounts?",
+    answer: "Yes, we offer discounts for groups of 3 or more people from the same organization. Please contact our sales team at sales@webdevseminar.com for more information on group rates."
   },
   {
     question: "Will there be networking opportunities?",
-    answer: "Absolutely! The seminar includes dedicated networking breaks, a networking lunch, and an evening reception on the first day. These are great opportunities to meet speakers, sponsors, and fellow attendees."
+    answer: "Absolutely! We have scheduled networking sessions, a welcome reception, and a closing party. These events are great opportunities to connect with speakers, sponsors, and fellow attendees."
+  },
+  {
+    question: "How can I become a sponsor?",
+    answer: "We offer various sponsorship packages to showcase your brand to our community of web developers. Please email sponsors@webdevseminar.com for our sponsorship prospectus and details."
   }
 ];
 
-const FAQSection = ({ id }: FAQSectionProps) => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+export const FAQSection = () => {
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const { toast } = useToast();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setContactForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // In a real app, you would send the form data to a server here
+    console.log('Contact form submitted:', contactForm);
     
-    // Simulate form submission
-    toast.success("Message sent!", {
-      description: "We'll get back to you as soon as possible."
+    toast({
+      title: "Message sent!",
+      description: "We'll get back to you as soon as possible.",
     });
     
     // Reset form
-    const form = e.target as HTMLFormElement;
-    form.reset();
+    setContactForm({ name: '', email: '', message: '' });
   };
-  
+
   return (
-    <section id={id} className="py-24 bg-white">
-      <div className="container px-4 sm:px-6">
-        <div className="mb-16 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors border-indigo-300 bg-indigo-50 text-indigo-600 mb-4"
-          >
-            <HelpCircle className="mr-1 h-3 w-3" /> Support
-          </motion.div>
-          
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-3xl md:text-4xl font-bold tracking-tight mb-4"
-          >
-            Frequently Asked Questions
-          </motion.h2>
-          
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-xl text-slate-600 max-w-2xl mx-auto"
-          >
-            Have questions? We've got answers. If you don't see your question here, please reach out.
-          </motion.p>
+    <section id="faq" className="py-20 bg-white">
+      <div className="container px-4 mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Have questions about the seminar? Check out our most common questions below or contact us directly.
+          </p>
         </div>
         
         <div className="grid md:grid-cols-5 gap-12 max-w-6xl mx-auto">
           <div className="md:col-span-3">
-            <Accordion type="single" collapsible className="space-y-4">
+            <Accordion type="single" collapsible className="w-full">
               {faqs.map((faq, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                >
-                  <AccordionItem value={`faq-${index}`} className="border border-slate-200 rounded-lg overflow-hidden">
-                    <AccordionTrigger className="px-6 py-4 hover:bg-slate-50 transition-colors">
-                      {faq.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="px-6 py-4 text-slate-600">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                </motion.div>
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger className="text-left">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-gray-600">{faq.answer}</p>
+                  </AccordionContent>
+                </AccordionItem>
               ))}
             </Accordion>
           </div>
           
           <div className="md:col-span-2">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-slate-50 rounded-xl p-6 border border-slate-200"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                  <Mail className="h-5 w-5 text-indigo-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-slate-900">Still have questions?</h3>
-              </div>
-              
-              <p className="text-slate-600 mb-6">
-                Send us a message and our team will get back to you as soon as possible.
+            <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
+              <h3 className="text-xl font-semibold mb-4">Still have questions?</h3>
+              <p className="text-gray-600 mb-6">
+                If you couldn't find the answer to your question, please reach out to us directly and we'll get back to you as soon as possible.
               </p>
               
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">
-                      Name
-                    </label>
-                    <Input id="name" name="name" required placeholder="Your name" />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">
-                      Email
-                    </label>
-                    <Input id="email" name="email" type="email" required placeholder="your.email@example.com" />
-                  </div>
-                </div>
-                
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-slate-700 mb-1">
-                    Subject
-                  </label>
-                  <Input id="subject" name="subject" required placeholder="How can we help you?" />
-                </div>
-                
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-slate-700 mb-1">
-                    Message
-                  </label>
-                  <Textarea 
-                    id="message" 
-                    name="message" 
-                    required 
-                    placeholder="Your message" 
-                    className="resize-none min-h-[120px]" 
+                  <Input 
+                    placeholder="Your Name" 
+                    name="name"
+                    value={contactForm.name}
+                    onChange={handleInputChange}
+                    required
                   />
                 </div>
-                
-                <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700">
+                <div>
+                  <Input 
+                    type="email" 
+                    placeholder="Your Email" 
+                    name="email"
+                    value={contactForm.email}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <Textarea 
+                    placeholder="Your Question" 
+                    name="message"
+                    value={contactForm.message}
+                    onChange={handleInputChange}
+                    rows={4}
+                    required
+                  />
+                </div>
+                <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
+                  <SendIcon className="mr-2 h-4 w-4" />
                   Send Message
                 </Button>
-                
-                <p className="text-xs text-slate-500 text-center">
-                  We'll get back to you within 24 hours.
-                </p>
               </form>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
     </section>
   );
 };
-
-export default FAQSection;
