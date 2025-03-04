@@ -1,8 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, Clock, MessageSquare, Share2, Type } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import BookChapters from '@/components/story/BookChapters';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { FloatingProgress } from '@/components/campaign/FloatingProgress';
 
 const StoryPage = () => {
   const [fontSize, setFontSize] = useState(16);
@@ -430,12 +432,15 @@ const StoryPage = () => {
           </div>
         </header>
         
-        <div className="w-full h-1 bg-gray-300">
-          <div 
-            className="h-full bg-blue-500 transition-all duration-300" 
-            style={{ width: `${progressPercentage}%` }}
-          />
-        </div>
+        {/* Replace the regular progress bar with the sticky FloatingProgress */}
+        <FloatingProgress 
+          backers={1243}
+          progress={progressPercentage}
+          days={28}
+          raised={32500}
+          goal={50000}
+          variant="minimal"
+        />
       </div>
       
       <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative overflow-hidden">
@@ -490,6 +495,7 @@ const StoryPage = () => {
         )}
       </main>
       
+      {/* Font size control */}
       <div className="fixed bottom-40 right-4 z-30 flex flex-col items-end">
         <button 
           onClick={() => setFontSizeControlOpen(!fontSizeControlOpen)}
