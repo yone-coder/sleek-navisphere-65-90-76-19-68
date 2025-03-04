@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailsPage from '../components/landing/VideoDetailsPage';
 import ServicesTab from '../components/landing/ServicesTab';
@@ -15,6 +16,7 @@ const TabSwitcher = () => {
       content: (
         <div className="h-full overflow-hidden relative">
           <VideoDetailsPage />
+          {/* FloatingProgress only in Overview tab */}
           <FloatingProgress 
             backers={1250}
             progress={75}
@@ -130,6 +132,7 @@ const TabSwitcher = () => {
               flex: 'none'
             }}
           >
+            {/* Each tab content is completely isolated */}
             <div className="h-full w-full overflow-hidden bg-white">
               {tab.content ? (
                 <div className="w-full h-full overflow-auto">
