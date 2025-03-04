@@ -73,91 +73,91 @@ const BookChapters = ({ onSelectChapter, currentChapterId }: BookChaptersProps) 
     { 
       id: 1, 
       title: 'A Vision is Born', 
-      description: 'Port-au-Prince was a city of both hope and hardship. I was one of the lucky ones—Plante Lavi covered my tuition, rent, and living expenses. But outside my small apartment, I saw a different reality: students struggling to afford education, businesses barely surviving, and talented people with no platform to showcase their skills.',
+      description: "Port-au-Prince was a city of both hope and hardship. I was one of the lucky ones—Plante Lavi covered my tuition, rent, and living expenses. But outside my small apartment, I saw a different reality: students struggling to afford education, businesses barely surviving, and talented people with no platform to showcase their skills.",
       thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 2, 
       title: 'Staring Death in the Face', 
-      description: 'One morning, on my way to school, my reality shattered. Gunshots rang out. I barely escaped with my life. That day, I understood something deeper—survival in Haiti was not guaranteed.',
+      description: "One morning, on my way to school, my reality shattered. Gunshots rang out. I barely escaped with my life. That day, I understood something deeper—survival in Haiti was not guaranteed.",
       thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 3, 
       title: 'When Universities Closed Their Doors', 
-      description: 'As insecurity worsened, universities across the city shut down—including mine. For more than half a year, I was stranded. My education was paused, my dreams put on hold. But instead of waiting, I made a decision.',
+      description: "As insecurity worsened, universities across the city shut down—including mine. For more than half a year, I was stranded. My education was paused, my dreams put on hold. But instead of waiting, I made a decision.",
       thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 4, 
       title: 'Leaving Port-au-Prince', 
-      description: 'With no school and the city growing more dangerous, I had no choice but to return to my home village, Désarmes, in the last days of March 2024. It felt like a defeat. But soon, I realized something: If I could build this platform from anywhere, why not from here?',
+      description: "With no school and the city growing more dangerous, I had no choice but to return to my home village, Désarmes, in the last days of March 2024. It felt like a defeat. But soon, I realized something: If I could build this platform from anywhere, why not from here?",
       thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 5, 
       title: 'A Harsh Reality Hits Home', 
-      description: 'Back in Désarmes, I saw how much my friends and others from my generation were struggling. They weren't just worried about careers—they were struggling to survive. Many couldn't afford to go to university. Some had already given up on education entirely.',
+      description: "Back in Désarmes, I saw how much my friends and others from my generation were struggling. They weren't just worried about careers—they were struggling to survive. Many couldn't afford to go to university. Some had already given up on education entirely.",
       thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 6, 
       title: 'The Deep Dive into Creation', 
-      description: 'With nothing but time on my hands, I threw myself into coding. I learned everything—databases, front-end, back-end. In just two years, I transformed from a dreamer into a builder. But my dedication came at a heavy price.',
+      description: "With nothing but time on my hands, I threw myself into coding. I learned everything—databases, front-end, back-end. In just two years, I transformed from a dreamer into a builder. But my dedication came at a heavy price.",
       thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 7, 
       title: 'The Cost of Obsession', 
-      description: 'I worked so hard that I lost track of the world. Some days I forgot to eat. Other days, I simply couldn't afford to. I poured everything into the platform, ignoring my health, my social life—everything. At times, I had no money left for food.',
+      description: "I worked so hard that I lost track of the world. Some days I forgot to eat. Other days, I simply couldn't afford to. I poured everything into the platform, ignoring my health, my social life—everything. At times, I had no money left for food.",
       thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 8, 
       title: 'The First Working Prototype', 
-      description: 'After months of relentless work, I finally had something tangible: an online marketplace for Haitian businesses. It was just a starting point, but it proved one thing—this wasn't just an idea anymore. It was happening.',
+      description: "After months of relentless work, I finally had something tangible: an online marketplace for Haitian businesses. It was just a starting point, but it proved one thing—this wasn't just an idea anymore. It was happening.",
       thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 9, 
       title: 'Expanding the Ecosystem', 
-      description: 'One feature at a time, my platform grew: a marketplace for Haitian entrepreneurs, an online learning hub for students and professionals, a contests platform for artists, musicians, and developers, and a digital wallet for seamless transactions.',
+      description: "One feature at a time, my platform grew: a marketplace for Haitian entrepreneurs, an online learning hub for students and professionals, a contests platform for artists, musicians, and developers, and a digital wallet for seamless transactions.",
       thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 10, 
       title: 'The Nonprofit Foundation', 
-      description: 'Building a digital future for Haiti was one thing. But what about those struggling to survive right now? So, I launched a nonprofit foundation to help those in need—supporting students, small businesses, and families who, like me, had no safety net.',
+      description: "Building a digital future for Haiti was one thing. But what about those struggling to survive right now? So, I launched a nonprofit foundation to help those in need—supporting students, small businesses, and families who, like me, had no safety net.",
       thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 11, 
       title: 'Finding Support', 
-      description: 'I started sharing my vision with anyone who would listen—investors, entrepreneurs, even strangers who believed in Haiti's potential. Some saw the vision. Others doubted it. But one thing was clear: we weren't waiting for change anymore—we were creating it.',
+      description: "I started sharing my vision with anyone who would listen—investors, entrepreneurs, even strangers who believed in Haiti's potential. Some saw the vision. Others doubted it. But one thing was clear: we weren't waiting for change anymore—we were creating it.",
       thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 12, 
       title: 'Building an Agency', 
-      description: 'Through this journey, I had gained something invaluable: mastery in coding. Now, I wanted to help others bring their ideas to life. So, I decided to launch an agency to help people build their dream websites and apps.',
+      description: "Through this journey, I had gained something invaluable: mastery in coding. Now, I wanted to help others bring their ideas to life. So, I decided to launch an agency to help people build their dream websites and apps.",
       thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 13, 
       title: 'The University Question', 
-      description: 'Despite everything, I still want to return to university. I will return—but I don't know when. The truth is, it doesn't matter if it's soon or later. Education is important, but my return doesn't financially depend on me.',
+      description: "Despite everything, I still want to return to university. I will return—but I don't know when. The truth is, it doesn't matter if it's soon or later. Education is important, but my return doesn't financially depend on me.",
       thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 14, 
       title: 'A Crossroads—Stay or Escape?', 
-      description: 'At one point, I seriously considered leaving Haiti. Insecurity was rising. Everything felt uncertain. I looked for opportunities to escape, but a mix of confusion, doubts, and conflicting encouragements left me unsure.',
+      description: "At one point, I seriously considered leaving Haiti. Insecurity was rising. Everything felt uncertain. I looked for opportunities to escape, but a mix of confusion, doubts, and conflicting encouragements left me unsure.",
       thumbnail: '/api/placeholder/600/400'
     },
     { 
       id: 15, 
-      title: 'The Future of Haiti's Digital Renaissance', 
-      description: 'This was never just about an app. It was about freedom. Haitians have been held back for too long. But now, we're building our own future. This platform is more than a business. It's a movement. A revolution. A space where Haitians can thrive—safely, freely, together.',
+      title: "The Future of Haiti's Digital Renaissance", 
+      description: "This was never just about an app. It was about freedom. Haitians have been held back for too long. But now, we're building our own future. This platform is more than a business. It's a movement. A revolution. A space where Haitians can thrive—safely, freely, together.",
       thumbnail: '/api/placeholder/600/400'
     }
   ];
