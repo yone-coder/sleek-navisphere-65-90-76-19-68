@@ -6,9 +6,6 @@ const BookChapters = () => {
   // Currently selected chapter
   const [currentChapterId, setCurrentChapterId] = useState(3);
   
-  // Expanded view for chapter details
-  const [expandedView, setExpandedView] = useState(true);
-  
   // Track expanded chapters in simple view
   const [expandedChapters, setExpandedChapters] = useState<Record<number, boolean>>({});
   
@@ -53,7 +50,7 @@ const BookChapters = () => {
         'Introduction to key terminology',
         'Overview of major challenges'
       ],
-      thumbnail: '/api/placeholder/180/100'
+      thumbnail: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=500&auto=format&fit=crop'
     },
     { 
       id: 2, 
@@ -64,7 +61,7 @@ const BookChapters = () => {
         'Analysis of existing approaches',
         'Identification of knowledge gaps'
       ],
-      thumbnail: '/api/placeholder/180/100' 
+      thumbnail: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=500&auto=format&fit=crop' 
     },
     { 
       id: 3, 
@@ -75,7 +72,7 @@ const BookChapters = () => {
         'Data collection methods',
         'Analytical framework development'
       ],
-      thumbnail: '/api/placeholder/180/100' 
+      thumbnail: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=500&auto=format&fit=crop' 
     },
     { 
       id: 4, 
@@ -86,7 +83,7 @@ const BookChapters = () => {
         'Pattern analysis and correlations',
         'Comparative results across segments'
       ],
-      thumbnail: '/api/placeholder/180/100' 
+      thumbnail: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&auto=format&fit=crop' 
     },
     { 
       id: 5, 
@@ -97,7 +94,7 @@ const BookChapters = () => {
         'Practical applications in real-world contexts',
         'Limitations and alternative interpretations'
       ],
-      thumbnail: '/api/placeholder/180/100' 
+      thumbnail: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&auto=format&fit=crop' 
     },
     { 
       id: 6, 
@@ -108,7 +105,7 @@ const BookChapters = () => {
         'Recommendations for implementation',
         'Future research directions'
       ],
-      thumbnail: '/api/placeholder/180/100' 
+      thumbnail: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=500&auto=format&fit=crop' 
     }
   ];
   
@@ -173,22 +170,16 @@ const BookChapters = () => {
   return (
     <div className="w-full max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden 
                     animate-slide-up-in">
-      {/* Header with title and view toggle */}
+      {/* Header with title */}
       <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold text-gray-800">Book Contents</h2>
-          <button 
-            className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 transition-colors"
-            onClick={() => setExpandedView(!expandedView)}
-          >
-            {expandedView ? 'Simple View' : 'Detailed View'}
-          </button>
         </div>
         <p className="mt-1 text-sm text-gray-500">6 chapters • Approximately 2.5 hours of reading</p>
       </div>
       
       {/* Chapters section */}
-      <div className={`${expandedView ? 'divide-y divide-gray-100' : 'max-h-96 overflow-y-auto'}`}>
+      <div className="max-h-96 overflow-y-auto">
         {chapters.map((chapter) => (
           <div 
             key={chapter.id}
@@ -198,8 +189,8 @@ const BookChapters = () => {
           >
             {/* Chapter header (always visible) */}
             <div 
-              className={`flex items-center p-4 cursor-pointer`}
-              onClick={() => expandedView ? handleChapterClick(chapter.id) : toggleChapterExpansion(chapter.id)}
+              className="flex items-center p-4 cursor-pointer"
+              onClick={() => toggleChapterExpansion(chapter.id)}
             >
               <div className="mr-3 flex-shrink-0">
                 {renderReadingStatus(readingProgress[chapter.id])}
@@ -214,23 +205,19 @@ const BookChapters = () => {
                   {chapter.title}
                 </h3>
                 
-                {!expandedView && (
-                  <div className="flex items-center mt-1 text-xs text-gray-500 space-x-3">
-                    <span><Clock size={12} className="inline mr-1" /> {readingTimes[chapter.id]} min</span>
-                    <span>{renderRating(chapterRatings[chapter.id])}</span>
-                  </div>
-                )}
+                <div className="flex items-center mt-1 text-xs text-gray-500 space-x-3">
+                  <span><Clock size={12} className="inline mr-1" /> {readingTimes[chapter.id]} min</span>
+                  <span>{renderRating(chapterRatings[chapter.id])}</span>
+                </div>
               </div>
               
-              {!expandedView && (
-                <div className="ml-2 text-gray-400">
-                  {expandedChapters[chapter.id] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                </div>
-              )}
+              <div className="ml-2 text-gray-400">
+                {expandedChapters[chapter.id] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+              </div>
             </div>
             
             {/* Chapter details (conditional) */}
-            {(expandedView || expandedChapters[chapter.id]) && (
+            {expandedChapters[chapter.id] && (
               <div className="px-4 pb-4 pt-0">
                 <div className="flex flex-col md:flex-row">
                   <div className="md:w-1/3 flex-shrink-0 mb-3 md:mb-0 md:pr-4">
