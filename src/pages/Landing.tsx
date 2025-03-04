@@ -4,8 +4,6 @@ import VideoDetailsPage from '../components/landing/VideoDetailsPage';
 import ServicesTab from '../components/landing/ServicesTab';
 import TimelineTab from '../components/landing/TimelineTab';
 import StoryPage from '../components/landing/StoryPage';
-import { BottomNav } from '../components/BottomNav';
-import { FloatingProgress } from '../components/campaign/FloatingProgress';
 
 const TabSwitcher = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -14,26 +12,11 @@ const TabSwitcher = () => {
   const tabs = [
     {
       name: "Overview",
-      content: (
-        <div className="relative">
-          <VideoDetailsPage />
-          <FloatingProgress 
-            backers={1250}
-            progress={82}
-            days={15}
-            raised={82500}
-            goal={100000}
-          />
-        </div>
-      )
+      content: <VideoDetailsPage />
     },
     {
       name: "Our story",
-      content: (
-        <div className="h-full overflow-hidden">
-          <StoryPage showBottomNav={true} />
-        </div>
-      )
+      content: <div className="h-full overflow-hidden"><StoryPage /></div>
     },
     {
       name: "Services",
@@ -132,7 +115,7 @@ const TabSwitcher = () => {
               fontSize: '1rem',
               margin: 0,
               padding: 0,
-              width: '100%',
+              width: '100%', // Changed from 96% to 100% for full width tabs
               flex: 'none'
             }}
           >
