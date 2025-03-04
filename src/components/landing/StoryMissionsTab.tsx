@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, Clock, MessageSquare, Share2, Type } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
@@ -7,7 +8,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 const StoryPage = () => {
   const [fontSize, setFontSize] = useState(16);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages] = useState(2);
+  const [totalPages, setTotalPages] = useState(6);
   const [isShowingChapters, setIsShowingChapters] = useState(false);
   const [isPageAnimating, setIsPageAnimating] = useState(false);
   const [animationDirection, setAnimationDirection] = useState('next');
@@ -32,23 +33,62 @@ const StoryPage = () => {
   // Font size options
   const fontSizeOptions = [12, 14, 16, 18, 20, 22, 24];
   
-  // Sample story content with placeholder images and chapters
+  // Sample story content with placeholder images and chapters that match BookChapters
   const storyContent = [
     {
       title: "The Silent Echo",
       author: "Alex Rivers",
-      chapter: "Chapter 1: The Misty Valley",
+      chapter: "Chapter 1: The Silent Echo",
       content: "The morning fog rolled through the valley, enveloping everything in its ethereal embrace. Maya stood at the edge of the cliff, her silhouette barely visible through the dense mist. She had been coming to this spot for years, but today felt different. The ancient forest below seemed to whisper secrets that only she could hear. Legends spoke of echoes that weren't just reflections of sound, but glimpses into parallel worlds. Maya had always dismissed these as nothing more than local folklore designed to attract tourists.",
-      image: "/api/placeholder/600/400",
+      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=500&auto=format&fit=crop",
       readingTime: "3 min"
     },
     {
+      title: "The Silent Echo",
+      author: "Alex Rivers",
       chapter: "Chapter 2: Whispers in the Forest",
       content: "Her research team had been studying the unusual acoustic properties of the valley for months. The readings were unlike anything they had ever encountered - sound waves that seemed to exist in quantum superposition, neither here nor there. As she adjusted her recording equipment, a soft melody drifted through the fog. It wasn't coming from the village below, nor from any direction she could identify. It seemed to emanate from the very air around her, as if the fog itself was singing.",
-      image: "/api/placeholder/600/400",
+      image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=500&auto=format&fit=crop",
       readingTime: "4 min"
+    },
+    {
+      title: "The Silent Echo",
+      author: "Alex Rivers",
+      chapter: "Chapter 3: The Discovery",
+      content: "The unusual readings led Maya to a hidden cave behind the waterfall. Inside, she found ancient symbols carved into the rock walls, pulsing with a subtle blue light. They appeared to shift slightly when viewed from different angles, as if existing in multiple dimensions simultaneously. Her colleague, Dr. Chen, theorized that they were some form of written language, but unlike any known to archaeology. Maya had a different theory - these weren't words, but mathematical expressions describing wave functions.",
+      image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=500&auto=format&fit=crop",
+      readingTime: "5 min"
+    },
+    {
+      title: "The Silent Echo",
+      author: "Alex Rivers",
+      chapter: "Chapter 4: The Pattern",
+      content: "Maya realized the symbols formed a mathematical pattern that corresponded to the acoustic anomalies her team had measured throughout the valley. When she input the equations into her simulation model, the result was startling - they described a method of using sound waves to manipulate the fabric of spacetime itself. The ancient civilization that had inhabited this valley hadn't just discovered the multiverse; they had found a way to traverse it through carefully calibrated resonances.",
+      image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&auto=format&fit=crop",
+      readingTime: "4 min"
+    },
+    {
+      title: "The Silent Echo",
+      author: "Alex Rivers",
+      chapter: "Chapter 5: The Gateway",
+      content: "The pattern was not just a record but a key - activating the symbols in the right sequence created a resonance that revealed a doorway where solid rock had been. Maya carefully reproduced the tonal sequence on her specialized equipment. As the final note hung in the air, the cave wall before her seemed to ripple like water. She reached out hesitantly, her fingertips passing through what appeared to be solid stone. The boundary between worlds was thinner here than anywhere else on Earth.",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&auto=format&fit=crop",
+      readingTime: "5 min"
+    },
+    {
+      title: "The Silent Echo",
+      author: "Alex Rivers",
+      chapter: "Chapter 6: Beyond Echo",
+      content: "As Maya stepped through the doorway, she found herself in the same valley, but somehow different. The echo wasn't a reflection - it was a connection between parallel worlds. The fog still clung to the trees, but with a purple tinge that wasn't possible in her world. In the distance, she could see structures that resembled her research equipment, but with configurations she'd never imagined. And approaching from the forest path was a figure that looked remarkably like herself, but wasn't her at all.",
+      image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=500&auto=format&fit=crop",
+      readingTime: "3 min"
     }
   ];
+
+  // Update total pages based on content
+  useEffect(() => {
+    setTotalPages(storyContent.length);
+  }, [storyContent]);
 
   // Simulate loading when the component mounts
   useEffect(() => {
@@ -94,7 +134,7 @@ const StoryPage = () => {
     }
   };
   
-  const navigateToPage = (pageNumber) => {
+  const navigateToPage = (pageNumber: number) => {
     if (!isPageAnimating && pageNumber !== currentPage) {
       setAnimationDirection(pageNumber > currentPage ? 'next' : 'prev');
       setIsPageAnimating(true);
@@ -112,6 +152,11 @@ const StoryPage = () => {
     }
   };
   
+  // Handle chapter selection from BookChapters
+  const handleChapterSelect = (chapterId: number) => {
+    navigateToPage(chapterId);
+  };
+  
   const handleLike = () => {
     if (liked) {
       setLikes(likes - 1);
@@ -121,17 +166,17 @@ const StoryPage = () => {
     setLiked(!liked);
   };
 
-  const handleLanguageChange = (language) => {
+  const handleLanguageChange = (language: {name: string, code: string, flag: string}) => {
     setCurrentLanguage(language);
     setLanguageMenuOpen(false);
   };
   
-  const handleSetFontSize = (size) => {
+  const handleSetFontSize = (size: number) => {
     setFontSize(size);
   };
   
   // Format numbers with k/m suffix
-  const formatNumber = (num) => {
+  const formatNumber = (num: number) => {
     if (num >= 1000000) {
       return (num / 1000000).toFixed(1) + 'm';
     } else if (num >= 1000) {
@@ -279,7 +324,10 @@ const StoryPage = () => {
       {/* Using Sheet component from shadcn for the bottom sliding panel */}
       <Sheet open={isShowingChapters} onOpenChange={setIsShowingChapters}>
         <SheetContent side="bottom" className="h-[90vh] overflow-y-auto p-0">
-          <BookChapters />
+          <BookChapters 
+            onSelectChapter={handleChapterSelect} 
+            currentChapterId={currentPage}
+          />
         </SheetContent>
       </Sheet>
       

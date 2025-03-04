@@ -2,10 +2,12 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, BookOpen, Star, StarHalf, Clock, CheckCircle } from 'lucide-react';
 
-const BookChapters = () => {
-  // Currently selected chapter
-  const [currentChapterId, setCurrentChapterId] = useState(3);
-  
+type BookChaptersProps = {
+  onSelectChapter: (chapterId: number) => void;
+  currentChapterId: number;
+};
+
+const BookChapters = ({ onSelectChapter, currentChapterId }: BookChaptersProps) => {
   // Track expanded chapters in simple view
   const [expandedChapters, setExpandedChapters] = useState<Record<number, boolean>>({});
   
@@ -31,79 +33,79 @@ const BookChapters = () => {
   
   // Estimated reading times (in minutes)
   const readingTimes: Record<number, number> = {
-    1: 15,
-    2: 25,
-    3: 40,
-    4: 35,
-    5: 30,
-    6: 20
+    1: 3,
+    2: 4,
+    3: 5,
+    4: 4,
+    5: 5,
+    6: 3
   };
   
   // Chapters data with thumbnails and descriptions
   const chapters = [
     { 
       id: 1, 
-      title: 'Introduction', 
-      description: 'Overview of the book content and key topics. This chapter sets the stage for the entire book, introducing the main concepts and providing context for the reader.',
+      title: 'The Silent Echo', 
+      description: 'The morning fog rolled through the valley, enveloping everything in its ethereal embrace. Maya stood at the edge of the cliff, her silhouette barely visible through the dense mist.',
       keyPoints: [
-        'Historical background of the topic',
-        'Introduction to key terminology',
-        'Overview of major challenges'
+        'Introduction to Maya',
+        'The mysterious valley setting',
+        'Legends of the echo'
       ],
       thumbnail: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=500&auto=format&fit=crop'
     },
     { 
       id: 2, 
-      title: 'Problem Statement', 
-      description: 'Defining the problem we are trying to solve in detail. This chapter breaks down the complex issues at hand and explains why they matter in both theoretical and practical contexts.',
+      title: 'Whispers in the Forest', 
+      description: 'Her research team had been studying the unusual acoustic properties of the valley for months. The readings were unlike anything they had ever encountered.',
       keyPoints: [
-        'Definition of the core problem',
-        'Analysis of existing approaches',
-        'Identification of knowledge gaps'
+        'Research findings',
+        'Mysterious sounds',
+        'The strange melody'
       ],
       thumbnail: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=500&auto=format&fit=crop' 
     },
     { 
       id: 3, 
-      title: 'Methodology', 
-      description: 'The approach and techniques used to address the problem. This chapter outlines the research methods, theoretical frameworks, and analytical approaches that form the foundation of our investigation.',
+      title: 'The Discovery', 
+      description: 'The unusual readings led Maya to a hidden cave behind the waterfall. Inside, she found ancient symbols carved into the rock walls, pulsing with a subtle blue light.',
       keyPoints: [
-        'Research design and rationale',
-        'Data collection methods',
-        'Analytical framework development'
+        'The hidden cave',
+        'Ancient symbols',
+        'Connection to past civilizations'
       ],
       thumbnail: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=500&auto=format&fit=crop' 
     },
     { 
       id: 4, 
-      title: 'Results', 
-      description: 'Findings and comprehensive data analysis from our research. This chapter presents the outcomes of our methodology and provides detailed evidence for our conclusions.',
+      title: 'The Pattern', 
+      description: 'Maya realized the symbols formed a mathematical pattern that corresponded to the acoustic anomalies her team had measured throughout the valley.',
       keyPoints: [
-        'Primary findings and statistics',
-        'Pattern analysis and correlations',
-        'Comparative results across segments'
+        'Mathematical connections',
+        'Sound wave analysis',
+        'Historical significance'
       ],
       thumbnail: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&auto=format&fit=crop' 
     },
     { 
       id: 5, 
-      title: 'Discussion', 
-      description: 'Interpretation of results and their broader implications. This chapter contextualizes our findings within the larger field and explores their significance for theory and practice.',
+      title: 'The Gateway', 
+      description: 'The pattern was not just a record but a key - activating the symbols in the right sequence created a resonance that revealed a doorway where solid rock had been.',
       keyPoints: [
-        'Theoretical implications of findings',
-        'Practical applications in real-world contexts',
-        'Limitations and alternative interpretations'
+        'The activation sequence',
+        'Physical transformation of the cave',
+        'Theoretical implications'
       ],
       thumbnail: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&auto=format&fit=crop' 
     },
     { 
       id: 6, 
-      title: 'Conclusion', 
-      description: 'Summary of key insights and directions for future work. This chapter synthesizes the entire book and points toward new avenues for exploration and application.',
+      title: 'Beyond Echo', 
+      description: 'As Maya stepped through the doorway, she found herself in the same valley, but somehow different. The echo wasn\'t a reflection - it was a connection between parallel worlds.',
       keyPoints: [
-        'Synthesis of main arguments',
-        'Recommendations for implementation',
-        'Future research directions'
+        'The parallel dimension',
+        'Implications of discovery',
+        'Maya\'s journey forward'
       ],
       thumbnail: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=500&auto=format&fit=crop' 
     }
@@ -119,8 +121,6 @@ const BookChapters = () => {
   
   // Handle chapter click
   const handleChapterClick = (chapterId: number) => {
-    setCurrentChapterId(chapterId);
-    
     // Update reading progress when clicking on a new chapter
     setReadingProgress(prev => {
       const newProgress = {...prev};
@@ -135,6 +135,9 @@ const BookChapters = () => {
       
       return newProgress;
     });
+    
+    // Call the parent's onSelectChapter function
+    onSelectChapter(chapterId);
   };
   
   // Render stars for ratings
@@ -175,7 +178,7 @@ const BookChapters = () => {
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold text-gray-800">Book Contents</h2>
         </div>
-        <p className="mt-1 text-sm text-gray-500">6 chapters • Approximately 2.5 hours of reading</p>
+        <p className="mt-1 text-sm text-gray-500">6 chapters • Approximately 25 minutes of reading</p>
       </div>
       
       {/* Chapters section */}
