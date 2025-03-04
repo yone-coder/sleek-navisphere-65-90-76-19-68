@@ -124,7 +124,7 @@ const VideoDetailsPage = () => {
     const newVolume = e.target.value;
     setVolume(newVolume);
     if (videoRef.current) {
-      videoRef.current.volume = newVolume / 100;
+      videoRef.current.volume = Number(newVolume) / 100;
     }
   };
 
@@ -335,7 +335,7 @@ const VideoDetailsPage = () => {
           <div className="grid grid-cols-3 gap-2 mb-6">
             <button 
               onClick={toggleLike}
-              className={`flex items-center justify-center gap-1 px-3 py-2 rounded-full ${isLiked ? 'bg-red-100 text-red-600' : 'hover:bg-gray-200'}`}
+              className={`flex items-center justify-center gap-1 px-3 py-2 rounded-full ${isLiked ? 'bg-red-100 text-red-600' : 'bg-gray-200/80 hover:bg-gray-200'}`}
             >
               <Heart size={18} className={isLiked ? 'fill-red-500' : ''} />
               <span>{formatCount(isLiked ? video.likes + 1 : video.likes)}</span>
@@ -343,13 +343,13 @@ const VideoDetailsPage = () => {
             
             <button 
               onClick={toggleComment}
-              className={`flex items-center justify-center gap-1 px-3 py-2 rounded-full ${isCommented ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-200'}`}
+              className={`flex items-center justify-center gap-1 px-3 py-2 rounded-full ${isCommented ? 'bg-blue-100 text-blue-600' : 'bg-gray-200/80 hover:bg-gray-200'}`}
             >
               <MessageCircle size={18} />
               <span>{formatCount(video.comments)}</span>
             </button>
             
-            <button className="flex items-center justify-center gap-1 px-3 py-2 rounded-full hover:bg-gray-200">
+            <button className="flex items-center justify-center gap-1 px-3 py-2 rounded-full bg-gray-200/80 hover:bg-gray-200">
               <Share2 size={18} />
               <span>Share</span>
             </button>
