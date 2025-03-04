@@ -17,7 +17,13 @@ const TabSwitcher = () => {
       content: (
         <div className="relative">
           <VideoDetailsPage />
-          <FloatingProgress />
+          <FloatingProgress 
+            backers={1250}
+            progress={82}
+            days={15}
+            raised={82500}
+            goal={100000}
+          />
         </div>
       )
     },
