@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailsPage from '../components/landing/VideoDetailsPage';
 import ServicesTab from '../components/landing/ServicesTab';
@@ -14,17 +13,15 @@ const TabSwitcher = () => {
     {
       name: "Overview",
       content: (
-        <div className="h-full overflow-hidden">
+        <div className="h-full overflow-hidden relative">
           <VideoDetailsPage />
-          {activeTab === 0 && (
-            <FloatingProgress 
-              backers={1250}
-              progress={75}
-              days={15}
-              raised={75000}
-              goal={100000}
-            />
-          )}
+          <FloatingProgress 
+            backers={1250}
+            progress={75}
+            days={15}
+            raised={75000}
+            goal={100000}
+          />
         </div>
       )
     },
