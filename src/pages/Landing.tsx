@@ -1,5 +1,5 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Shield, BookOpen, Briefcase, Users, Play, Pause, Volume2, VolumeX, Maximize, Share2, Heart, MessageCircle, MoreHorizontal, ChevronLeft, CheckCircle, Clock, Flag, Facebook, Instagram } from 'lucide-react';
@@ -15,7 +15,7 @@ import { ServicesTab } from '@/components/landing/ServicesTab';
 
 // VideoDetailsPage component
 const VideoDetailsPage = () => {
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -63,7 +63,7 @@ const VideoDetailsPage = () => {
   };
 
   // Format view count
-  const formatCount = (count) => {
+  const formatCount = (count: number) => {
     if (count >= 1000000) {
       return (count / 1000000).toFixed(1) + 'M';
     } else if (count >= 1000) {
@@ -73,10 +73,10 @@ const VideoDetailsPage = () => {
   };
 
   // Format date
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
-    const diffTime = Math.abs(now - date);
+    const diffTime = Math.abs(now.getTime() - date.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
     if (diffDays <= 1) return 'Today';
@@ -120,11 +120,11 @@ const VideoDetailsPage = () => {
   };
 
   // Handle volume change
-  const handleVolumeChange = (e) => {
-    const newVolume = e.target.value;
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseInt(e.target.value, 10);
     setVolume(newVolume);
     if (videoRef.current) {
-      videoRef.current.volume = Number(newVolume) / 100;
+      videoRef.current.volume = newVolume / 100;
     }
   };
 
@@ -144,7 +144,7 @@ const VideoDetailsPage = () => {
   };
 
   // Update progress bar and current time when video is playing
-  React.useEffect(() => {
+  useEffect(() => {
     const videoElement = videoRef.current;
     if (!videoElement) return;
 
@@ -170,20 +170,20 @@ const VideoDetailsPage = () => {
   }, []);
 
   // Format time from seconds to MM:SS
-  const formatTime = (timeInSeconds) => {
+  const formatTime = (timeInSeconds: number) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = Math.floor(timeInSeconds % 60);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
   // Parse duration string (MM:SS) to seconds
-  const parseDuration = (durationString) => {
+  const parseDuration = (durationString: string) => {
     const [minutes, seconds] = durationString.split(':').map(Number);
     return minutes * 60 + seconds;
   };
 
   // Seek to position in video
-  const handleSeek = (e) => {
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     const seekPosition = e.nativeEvent.offsetX / e.currentTarget.clientWidth;
     if (videoRef.current && !isNaN(videoRef.current.duration)) {
       videoRef.current.currentTime = seekPosition * videoRef.current.duration;
