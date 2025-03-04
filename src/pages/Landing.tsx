@@ -1,164 +1,126 @@
+import React, { useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { Shield, BookOpen, Briefcase, Users } from 'lucide-react';
+import { FloatingProgress } from '@/components/campaign/FloatingProgress';
+import { FAQsTab } from '@/components/product/tabs/FAQsTab';
+import { TabNav } from '@/components/landing/TabNav';
+import { TimelineTab } from '@/components/landing/TimelineTab';
+import { CommentsTab } from '@/components/landing/CommentsTab';
+import { VideoSection } from '@/components/landing/VideoSection';
+import { ProfileSection } from '@/components/landing/ProfileSection';
+import { SearchBar } from '@/components/landing/SearchBar';
+import { PaymentMethodsSheet } from '@/components/landing/PaymentMethodsSheet';
+import { StoryMissionsTab } from '@/components/landing/StoryMissionsTab';
+import { PlatformHeader } from '@/components/landing/PlatformHeader';
+import { CollapsibleSections } from '@/components/landing/CollapsibleSections';
+import { ServicesTab } from '@/components/landing/ServicesTab';
 
-import React, { useState, useRef, useEffect } from 'react';
-import VideoDetailsPage from '../components/landing/VideoDetailsPage';
-import ServicesTab from '../components/landing/ServicesTab';
-import TimelineTab from '../components/landing/TimelineTab';
-import StoryPage from '../components/landing/StoryPage';
-import { FloatingProgress } from '../components/campaign/FloatingProgress';
+export default function Landing() {
+  const [progress, setProgress] = useState(65);
+  const [backers, setBackers] = useState(824);
+  const [days, setDays] = useState(14);
+  const [raised, setRaised] = useState(32500);
+  const [goal, setGoal] = useState(50000);
+  const [activeTab, setActiveTab] = useState("overview");
+  const [searchQuery, setSearchQuery] = useState("");
+  const sheetTriggerRef = useRef<HTMLButtonElement>(null);
 
-const TabSwitcher = () => {
-  const [activeTab, setActiveTab] = useState(0);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  
-  const tabs = [
+  const rewards = [
     {
-      name: "Overview",
-      content: (
-        <div className="h-full overflow-hidden relative">
-          <VideoDetailsPage />
-          {/* FloatingProgress only in Overview tab */}
-          <FloatingProgress 
-            backers={1250}
-            progress={75}
-            days={15}
-            raised={75000}
-            goal={100000}
-          />
-        </div>
-      )
+      title: "Early Bird",
+      price: 25,
+      description: "Get early access to our product and a special thank you in our digital booklet.",
+      claimed: 342,
+      limit: 500
     },
     {
-      name: "Our story",
-      content: <div className="h-full overflow-hidden"><StoryPage showStoryControls={true} /></div>
+      title: "Premium Supporter",
+      price: 75,
+      description: "Receive the product with exclusive features and a mention on our website.",
+      claimed: 215,
+      limit: 300
     },
     {
-      name: "Services",
-      content: <div className="h-full overflow-auto"><ServicesTab /></div>
+      title: "VIP Backer",
+      price: 150,
+      description: "Get our limited edition product, a signed thank you card, and join our virtual launch party.",
+      claimed: 98,
+      limit: 150
     },
     {
-      name: "Timeline",
-      content: <div className="h-full overflow-auto"><TimelineTab /></div>
-    },
-    {
-      name: "FAQs",
-      items: [
-        "How do I get started?",
-        "Can I change plans later?",
-        "Do you offer refunds?",
-        "Is there a mobile app?",
-        "How secure is my data?",
-        "Can I export my data?",
-        "How do I cancel?",
-        "Do you offer support?",
-        "Are there any hidden fees?",
-        "What payment methods do you accept?"
-      ]
+      title: "Founding Member",
+      price: 500,
+      description: "Everything in VIP plus a consultation call with our team and your name engraved on our 'Founders Wall'.",
+      claimed: 12,
+      limit: 20
     }
   ];
 
-  const handleTabClick = (index: number) => {
-    setActiveTab(index);
-    if (scrollContainerRef.current) {
-      const containerWidth = scrollContainerRef.current.offsetWidth;
-      scrollContainerRef.current.scrollTo({
-        left: index * containerWidth,
-        behavior: 'smooth'
-      });
-    }
+  const creatorProfile = {
+    creatorName: "Mima Group",
+    creatorImage: "/lovable-uploads/7b6dfa3b-fe97-4083-8e4a-0640871dbc3f.png",
+    creatorBio: "Investment Holding Company"
   };
 
-  const handleScroll = () => {
-    if (scrollContainerRef.current) {
-      const { scrollLeft, offsetWidth } = scrollContainerRef.current;
-      const tabIndex = Math.round(scrollLeft / offsetWidth);
-      if (tabIndex !== activeTab && tabIndex >= 0 && tabIndex < tabs.length) {
-        setActiveTab(tabIndex);
-      }
+  const handleBackProjectClick = () => {
+    if (sheetTriggerRef.current) {
+      sheetTriggerRef.current.click();
     }
   };
-
-  useEffect(() => {
-    const scrollContainer = scrollContainerRef.current;
-    if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', handleScroll);
-      return () => {
-        scrollContainer.removeEventListener('scroll', handleScroll);
-      };
-    }
-  }, [activeTab]);
 
   return (
-    <div className="flex flex-col w-full max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden h-screen relative">
-      <div className="flex bg-gradient-to-r from-indigo-500 to-purple-600 p-0.5 rounded-t-lg sticky top-0 z-10">
-        <div className="flex bg-white/5 backdrop-blur-sm w-full rounded-md p-0.5">
-          {tabs.map((tab, index) => (
-            <button
-              key={index}
-              className={`flex-1 py-1.5 px-2 text-center text-xs font-medium transition-all duration-300 rounded-md ${
-                activeTab === index
-                  ? 'bg-white text-indigo-600 shadow-md transform scale-105'
-                  : 'text-white/80 hover:text-white hover:bg-white/10'
-              }`}
-              onClick={() => handleTabClick(index)}
-            >
-              {tab.name}
-            </button>
-          ))}
+    <div className="font-sans">
+      <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
+        <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg shadow-sm">
+          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          <TabNav activeTab={activeTab} />
         </div>
-      </div>
-
-      <div 
-        ref={scrollContainerRef}
-        className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide flex-grow"
-        style={{ 
-          scrollSnapType: 'x mandatory',
-          scrollBehavior: 'smooth',
-          WebkitOverflowScrolling: 'touch',
-          fontSize: 0,
-          display: 'flex',
-          width: '100%'
-        }}
-      >
-        {tabs.map((tab, tabIndex) => (
-          <div 
-            key={tabIndex}
-            className="flex-shrink-0 w-full snap-center h-full"
-            style={{ 
-              scrollSnapAlign: 'start', 
-              fontSize: '1rem',
-              margin: 0,
-              padding: 0,
-              width: '100%',
-              flex: 'none'
-            }}
-          >
-            {/* Each tab content is completely isolated */}
-            <div className="h-full w-full overflow-hidden bg-white">
-              {tab.content ? (
-                <div className="w-full h-full overflow-auto">
-                  {tab.content}
-                </div>
-              ) : (
-                <>
-                  <h2 className="text-xl font-bold p-2 pb-1">{tab.name}</h2>
-                  <ul className="px-2 pb-4 space-y-3">
-                    {tab.items && tab.items.map((item, itemIndex) => (
-                      <li 
-                        key={itemIndex}
-                        className="p-3 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition-colors"
-                      >
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
+        <div className="w-full">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
+              <TabsContent value="overview" className="mt-0 pb-32">
+                <VideoSection />
+                <ProfileSection {...creatorProfile} />
+                <PlatformHeader />
+                <CollapsibleSections />
+              </TabsContent>
+              <TabsContent value="services" className="mt-0">
+                <ServicesTab />
+              </TabsContent>
+              <TabsContent value="story" className="mt-0">
+                <StoryMissionsTab />
+              </TabsContent>
+              <TabsContent value="timeline" className="mt-2 w-full px-1">
+                <TimelineTab />
+              </TabsContent>
+              <TabsContent value="comments" className="mt-6">
+                <CommentsTab />
+              </TabsContent>
+              <TabsContent value="faqs" className="mt-6 container mx-auto">
+                <FAQsTab />
+              </TabsContent>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </Tabs>
+      {activeTab === "overview" && (
+        <FloatingProgress
+          backers={backers}
+          progress={progress}
+          days={days}
+          raised={raised}
+          goal={goal}
+          onBackProjectClick={handleBackProjectClick}
+        />
+      )}
+      <PaymentMethodsSheet sheetTriggerRef={sheetTriggerRef} />
     </div>
   );
-};
-
-export default TabSwitcher;
+}

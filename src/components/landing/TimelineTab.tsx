@@ -1,252 +1,291 @@
 
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Check, Clock } from 'lucide-react';
-
-const CircularProgress = ({ progress, size = 40, strokeWidth = 5, textSize = 12 }) => {
-  const radius = (size - strokeWidth) / 2;
-  const circumference = radius * 2 * Math.PI;
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
-  
-  return (
-    <div className="relative inline-flex items-center justify-center">
-      <svg
-        className="transform -rotate-90"
-        width={size}
-        height={size}
-      >
-        <circle
-          className="text-gray-200"
-          strokeWidth={strokeWidth}
-          stroke="currentColor"
-          fill="transparent"
-          r={radius}
-          cx={size / 2}
-          cy={size / 2}
-        />
-        <circle
-          className="text-purple-500"
-          strokeWidth={strokeWidth}
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
-          strokeLinecap="round"
-          stroke="currentColor"
-          fill="transparent"
-          r={radius}
-          cx={size / 2}
-          cy={size / 2}
-        />
-      </svg>
-      <span 
-        className="absolute text-purple-600 font-medium" 
-        style={{ fontSize: `${textSize}px` }}
-      >
-        {progress === 100 ? (
-          <Check size={textSize * 1.2} className="text-purple-600" />
-        ) : (
-          `${Math.round(progress)}%`
-        )}
-      </span>
-    </div>
-  );
-};
+import { ChevronDown, ChevronUp, Calendar, CheckCircle, Clock, AlertCircle, Filter, Search } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 
 const ProjectTimeline = () => {
-  // Sample timeline data - reduced to two items
-  const [timelineData, setTimelineData] = useState([
+  const [phases, setPhases] = useState([
     {
       id: 1,
-      date: 'January 2025',
-      title: 'Project Inception',
-      description: 'Initial concept development and market research completed.',
-      category: 'planning',
-      completed: true,
-      progress: 100,
+      title: 'Planning & Research',
+      startDate: '2025-03-01',
+      endDate: '2025-03-15',
+      status: 'completed',
+      description: 'Initial project planning, requirements gathering, and market research',
+      expanded: false,
       tasks: [
-        { id: 101, title: 'Market research', completed: true, completedDate: '2025-01-10', details: 'Analyzed 15 competitors and identified key market opportunities.' },
-        { id: 102, title: 'Competitive analysis', completed: true, completedDate: '2025-01-15', details: 'Compared features, pricing, and positioning of top 5 competitors.' },
-        { id: 103, title: 'Initial sketches', completed: true, completedDate: '2025-01-20', details: 'Created 12 concept sketches exploring various UI approaches.' },
-        { id: 104, title: 'Stakeholder interviews', completed: true, completedDate: '2025-01-25', details: 'Conducted interviews with 8 key stakeholders to gather requirements.' }
+        { id: 101, title: 'Stakeholder interviews', status: 'completed', date: '2025-03-03' },
+        { id: 102, title: 'Site architecture draft', status: 'completed', date: '2025-03-08' },
+        { id: 103, title: 'Technology stack selection', status: 'completed', date: '2025-03-12' }
+      ]
+    },
+    {
+      id: 2,
+      title: 'Design Phase',
+      startDate: '2025-03-16',
+      endDate: '2025-04-10',
+      status: 'in-progress',
+      description: 'UI/UX design for main website and all sub-websites',
+      expanded: false,
+      tasks: [
+        { id: 201, title: 'Design system creation', status: 'completed', date: '2025-03-20' },
+        { id: 202, title: 'Main website prototyping', status: 'in-progress', date: '2025-03-25' },
+        { id: 203, title: 'Sub-websites design mockups', status: 'pending', date: '2025-04-05' }
+      ]
+    },
+    {
+      id: 3,
+      title: 'Development - Core Website',
+      startDate: '2025-04-11',
+      endDate: '2025-05-15',
+      status: 'pending',
+      description: 'Building the main website framework and core functionality',
+      expanded: false,
+      tasks: [
+        { id: 301, title: 'Frontend framework setup', status: 'pending', date: '2025-04-15' },
+        { id: 302, title: 'Core functionality development', status: 'pending', date: '2025-04-25' },
+        { id: 303, title: 'CMS integration', status: 'pending', date: '2025-05-05' }
       ]
     },
     {
       id: 4,
-      date: 'April 2025',
-      title: 'User Testing',
-      description: 'Beta version released to select users for feedback and iteration.',
-      category: 'testing',
-      completed: false,
-      progress: 75,
+      title: 'Development - Sub-websites',
+      startDate: '2025-05-16',
+      endDate: '2025-06-20',
+      status: 'pending',
+      description: 'Building all sub-websites with shared components',
+      expanded: false,
       tasks: [
-        { id: 401, title: 'Test plan creation', completed: true, completedDate: '2025-04-03', details: 'Developed comprehensive test protocol covering 15 key user journeys.' },
-        { id: 402, title: 'User recruitment', completed: true, completedDate: '2025-04-10', details: 'Recruited 25 beta testers across 4 target customer segments.' },
-        { id: 403, title: 'Usability testing sessions', completed: true, completedDate: '2025-04-20', details: 'Conducted 15 moderated sessions and collected 25 survey responses.' },
-        { id: 404, title: 'Feedback analysis', completed: false, completedDate: '', details: 'Currently categorizing feedback into 5 priority tiers for implementation.' },
-        { id: 405, title: 'Prioritization of changes', completed: false, completedDate: '', details: 'Will create sprint plan for implementing top 20 user-requested features.' }
+        { id: 401, title: 'Sub-website 1 development', status: 'pending', date: '2025-05-20' },
+        { id: 402, title: 'Sub-website 2 development', status: 'pending', date: '2025-06-01' },
+        { id: 403, title: 'Sub-website 3 development', status: 'pending', date: '2025-06-10' }
+      ]
+    },
+    {
+      id: 5,
+      title: 'Testing & Quality Assurance',
+      startDate: '2025-06-21',
+      endDate: '2025-07-15',
+      status: 'pending',
+      description: 'Comprehensive testing of all websites and functionality',
+      expanded: false,
+      tasks: [
+        { id: 501, title: 'User acceptance testing', status: 'pending', date: '2025-06-25' },
+        { id: 502, title: 'Cross-browser testing', status: 'pending', date: '2025-07-01' },
+        { id: 503, title: 'Performance optimization', status: 'pending', date: '2025-07-10' }
+      ]
+    },
+    {
+      id: 6,
+      title: 'Deployment & Launch',
+      startDate: '2025-07-16',
+      endDate: '2025-07-31',
+      status: 'pending',
+      description: 'Final deployment and public launch of all websites',
+      expanded: false,
+      tasks: [
+        { id: 601, title: 'Production environment setup', status: 'pending', date: '2025-07-18' },
+        { id: 602, title: 'Content migration', status: 'pending', date: '2025-07-22' },
+        { id: 603, title: 'Go-live and monitoring', status: 'pending', date: '2025-07-30' }
       ]
     }
   ]);
 
-  const [expandedItem, setExpandedItem] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
 
-  // Calculate overall project completion based on task completion rather than milestone progress
-  const calculateOverallProgress = () => {
-    const totalTasks = timelineData.reduce((acc, item) => acc + item.tasks.length, 0);
-    const completedTasks = timelineData.reduce((acc, item) => 
-      acc + item.tasks.filter(task => task.completed).length, 0);
-    
-    return totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  const toggleExpand = (id: number) => {
+    setPhases(phases.map(phase => 
+      phase.id === id ? { ...phase, expanded: !phase.expanded } : phase
+    ));
   };
 
-  const overallProgress = calculateOverallProgress();
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
 
-  // Toggle expanded view for a timeline item
-  const toggleExpand = (id, e) => {
-    // Prevent the entire card from being clicked when clicking the expand button
-    if (e) {
-      e.stopPropagation();
+  const getStatusIcon = (status: string) => {
+    switch(status) {
+      case 'completed':
+        return <CheckCircle className="text-green-500" size={18} />;
+      case 'in-progress':
+        return <Clock className="text-blue-500" size={18} />;
+      case 'pending':
+        return <AlertCircle className="text-gray-400" size={18} />;
+      default:
+        return null;
     }
-    setExpandedItem(expandedItem === id ? null : id);
   };
 
-  // Get category color
-  const getCategoryColor = (category) => {
-    const categories = {
-      'planning': 'bg-blue-600',
-      'funding': 'bg-green-600',
-      'development': 'bg-purple-600',
-      'testing': 'bg-yellow-600',
-      'marketing': 'bg-pink-600'
-    };
-    return categories[category] || 'bg-gray-600';
+  const filteredPhases = phases.filter(phase => {
+    if (statusFilter !== 'all' && phase.status !== statusFilter) {
+      return false;
+    }
+    
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      return (
+        phase.title.toLowerCase().includes(query) || 
+        phase.description.toLowerCase().includes(query) ||
+        phase.tasks.some(task => task.title.toLowerCase().includes(query))
+      );
+    }
+    
+    return true;
+  });
+
+  const expandAll = () => {
+    setPhases(phases.map(phase => ({ ...phase, expanded: true })));
+  };
+
+  const collapseAll = () => {
+    setPhases(phases.map(phase => ({ ...phase, expanded: false })));
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 bg-white rounded-xl shadow-xl">
-      <div className="mb-6 text-center">
-        <h2 className="text-3xl font-bold mb-2 text-gray-800">Project Timeline</h2>
-        <p className="text-gray-600">Track our progress from concept to launch</p>
-      </div>
-
-      {/* Progress summary with circular indicator - MOVED TO TOP */}
-      <div className="mb-6 p-4 bg-gray-100 rounded-xl">
-        <div className="flex items-center">
-          <div className="mr-4">
-            <CircularProgress progress={overallProgress} size={70} strokeWidth={7} textSize={18} />
-          </div>
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold mb-2 text-gray-800">Overall Project Progress</h3>
-            <div className="w-full bg-gray-200 rounded-full h-3">
-              <div 
-                className="bg-purple-600 h-3 rounded-full transition-all duration-500" 
-                style={{ width: `${overallProgress}%` }}
-              ></div>
+    <div className="w-full max-w-none mx-auto bg-white">
+      <div className="mb-4 bg-gradient-to-r from-gray-50 to-white p-3 rounded-lg shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-800 mb-1">Website Project Timeline</h1>
+            <div className="flex items-center gap-2">
+              <p className="text-gray-600">March 2025 - July 2025</p>
+              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">On Track</Badge>
             </div>
-            <p className="text-sm text-gray-600 mt-2">
-              {overallProgress}% of tasks completed across all milestones
-            </p>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={expandAll}>
+              Expand All
+            </Button>
+            <Button variant="outline" size="sm" onClick={collapseAll}>
+              Collapse All
+            </Button>
+          </div>
+        </div>
+        
+        <div className="flex flex-col sm:flex-row gap-2">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+            <Input 
+              placeholder="Search tasks or phases..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+          <div className="w-full sm:w-48 flex items-center gap-2">
+            <Filter size={16} className="text-gray-500" />
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder="Filter by status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Statuses</SelectItem>
+                <SelectItem value="completed">Completed</SelectItem>
+                <SelectItem value="in-progress">In Progress</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>
-
-      {/* Timeline */}
-      <div className="relative">
-        {/* Timeline connector line - adjusted left position */}
-        <div className="absolute left-4 top-6 bottom-0 w-1 bg-gray-300 rounded-full"></div>
-
-        {/* Timeline items - adjusted padding */}
-        {timelineData.map((item, index) => {
-          // Calculate milestone progress based on completed tasks
-          const totalTasks = item.tasks.length;
-          const completedTasks = item.tasks.filter(task => task.completed).length;
-          const taskProgress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-          
-          return (
-            <div 
-              key={item.id}
-              className={`relative mb-8 pl-12 ${
-                index === timelineData.length - 1 ? '' : 'pb-4'
-              }`}
-            >
-              {/* Timeline dot - adjusted position and size */}
-              <div className="absolute left-0 top-8 transform -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center bg-white shadow">
-                <CircularProgress progress={taskProgress} size={44} strokeWidth={4} textSize={12} />
-              </div>
-
-              {/* Timeline content */}
-              <div 
-                className={`
-                  transition-all duration-300 bg-white rounded-xl shadow-lg relative
-                  ${expandedItem === item.id ? '' : 'hover:bg-gray-50'}
-                `}
+      
+      <div className="relative px-4">
+        <AnimatePresence>
+          {filteredPhases.length > 0 ? (
+            filteredPhases.map((phase, index) => (
+              <motion.div 
+                key={phase.id} 
+                className="mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
               >
-                <div className="p-4">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full text-white ${getCategoryColor(item.category)}`}>
-                      {item.category.charAt(0).toUpperCase() + item.category.slice(1)}
-                    </span>
-                    <span className="text-gray-500 text-sm">{item.date}</span>
+                <div 
+                  className={`flex items-center p-4 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-md ${
+                    phase.status === 'completed' 
+                      ? 'bg-green-50 border-l-4 border-green-500' 
+                      : phase.status === 'in-progress'
+                        ? 'bg-blue-50 border-l-4 border-blue-500'
+                        : 'bg-gray-50 border-l-4 border-gray-300'
+                  } relative z-10`}
+                  onClick={() => toggleExpand(phase.id)}
+                >
+                  <div className="flex-1">
+                    <div className="flex items-center">
+                      {getStatusIcon(phase.status)}
+                      <h2 className="text-lg font-semibold ml-2">{phase.title}</h2>
+                    </div>
+                    <div className="flex items-center mt-1 text-sm text-gray-600">
+                      <Calendar size={14} className="mr-1" />
+                      <span>{formatDate(phase.startDate)} - {formatDate(phase.endDate)}</span>
+                    </div>
                   </div>
-                  
-                  <h3 className="text-xl font-bold mb-2 text-gray-800">{item.title}</h3>
-                  <p className="text-gray-600">{item.description}</p>
-                  <p className="text-sm text-gray-500 mt-2">
-                    {completedTasks} of {totalTasks} tasks completed ({taskProgress}%)
-                  </p>
-                  
-                  {expandedItem === item.id && (
-                    <div className="mt-4 pt-4 border-t border-gray-200">
-                      {/* Task List Section */}
-                      <div className="mb-4">
-                        <h4 className="text-sm font-medium text-gray-600 mb-3">Tasks:</h4>
+                  <Button variant="ghost" size="sm" className="p-1 rounded-full hover:bg-gray-200">
+                    {phase.expanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                  </Button>
+                </div>
+                
+                <AnimatePresence>
+                  {phase.expanded && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="mt-2 px-4 relative z-10">
+                        <p className="text-gray-700 mb-3">{phase.description}</p>
                         <div className="space-y-3">
-                          {item.tasks.map((task) => (
-                            <div key={task.id} className="p-3 bg-gray-50 rounded-lg w-full">
-                              <div className="flex">
-                                <div className="mr-3">
-                                  <div className={`w-10 h-10 rounded-full ${task.completed ? 'bg-green-500' : 'bg-gray-400'} flex items-center justify-center`}>
-                                    {task.completed ? 
-                                      <Check size={20} className="text-white" /> : 
-                                      <Clock size={20} className="text-white" />
-                                    }
-                                  </div>
-                                </div>
-                                <div className="flex-1 flex flex-col">
-                                  <span className={`text-sm font-medium ${task.completed ? 'text-gray-600' : 'text-gray-800'}`}>
-                                    {task.title}
-                                  </span>
-                                  <span className="text-xs text-gray-500 mt-1">
-                                    {task.completed ? task.completedDate : 'Pending'}
-                                  </span>
-                                  <span className="text-xs text-gray-500 mt-1">
-                                    {task.details}
-                                  </span>
-                                </div>
+                          {phase.tasks.map(task => (
+                            <motion.div 
+                              key={task.id} 
+                              initial={{ x: -10, opacity: 0 }}
+                              animate={{ x: 0, opacity: 1 }}
+                              transition={{ duration: 0.2 }}
+                              className="flex flex-col p-3 bg-white rounded-md shadow-sm hover:shadow-md transition-shadow"
+                            >
+                              <div className="flex items-start mb-1">
+                                {getStatusIcon(task.status)}
+                                <span className="ml-2 font-medium break-words">{task.title}</span>
                               </div>
-                            </div>
+                              <span className="text-xs text-gray-500 ml-6">{formatDate(task.date)}</span>
+                            </motion.div>
                           ))}
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
                   )}
-                </div>
-                
-                {/* Expand/collapse button */}
-                <div className="relative h-0 mb-6">
-                  <button 
-                    onClick={(e) => toggleExpand(item.id, e)}
-                    className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white hover:bg-blue-600 hover:text-white flex items-center justify-center transition-all duration-300 shadow-lg border border-gray-200 z-10 text-gray-500"
-                  >
-                    {expandedItem === item.id ? (
-                      <ChevronUp size={20} />
-                    ) : (
-                      <ChevronDown size={20} />
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+                </AnimatePresence>
+              </motion.div>
+            ))
+          ) : (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-12"
+            >
+              <p className="text-gray-500">No phases match your search criteria.</p>
+              <Button 
+                variant="link" 
+                onClick={() => {
+                  setSearchQuery('');
+                  setStatusFilter('all');
+                }}
+              >
+                Clear filters
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
