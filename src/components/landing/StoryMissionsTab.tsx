@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, Clock, MessageSquare, Share2, Type } from 'lucide-react';
+import { Skeleton } from "@/components/ui/skeleton";
 
 const StoryPage = () => {
   const [fontSize, setFontSize] = useState(16);
@@ -16,6 +17,7 @@ const StoryPage = () => {
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState({ name: 'English', code: 'en', flag: '🇬🇧' });
   const [fontSizeControlOpen, setFontSizeControlOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   
   // Available languages
   const languages = [
@@ -46,6 +48,16 @@ const StoryPage = () => {
       readingTime: "4 min"
     }
   ];
+
+  // Simulate loading when the component mounts
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleNextPage = () => {
     if (currentPage < totalPages && !isPageAnimating) {
@@ -175,11 +187,36 @@ const StoryPage = () => {
     const max = fontSizeOptions[fontSizeOptions.length - 1];
     return ((fontSize - min) / (max - min)) * 100;
   };
+
+  // Skeleton loader for story content
+  const StorySkeletonLoader = () => (
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <Skeleton className="h-8 w-3/4 mx-auto" />
+        <Skeleton className="h-4 w-1/3 mx-auto" />
+      </div>
+      
+      <div className="space-y-2">
+        <Skeleton className="h-6 w-1/2" />
+        <Skeleton className="h-4 w-1/4" />
+      </div>
+      
+      <div className="space-y-4">
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-5/6" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-4/5" />
+      </div>
+      
+      <Skeleton className="h-48 w-full rounded-lg" />
+    </div>
+  );
   
   return (
     <div className="min-h-screen bg-white text-gray-800 transition-colors duration-300">
       {/* Custom Animation Styles */}
-      <style jsx global>{`
+      <style>{`
         @keyframes pageExitToLeft {
           from { transform: translateX(0); opacity: 1; }
           to { transform: translateX(-10%); opacity: 0; }
@@ -317,50 +354,57 @@ const StoryPage = () => {
       
       {/* Story Container - Adjust padding bottom to account for footer */}
       <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative overflow-hidden">
-        {/* Current content with animation */}
-        <div className={`transition-all duration-500 ${getAnimationClasses()}`}>
-          {/* Title and Author - Only on first page */}
-          {currentPage === 1 && (
-            <div className="mb-8 text-center">
-              <h2 className="text-3xl font-bold mb-2">{currentContent.title}</h2>
-              <p className="text-lg text-gray-600">by {currentContent.author}</p>
+        {/* Loading Skeleton */}
+        {isLoading ? (
+          <StorySkeletonLoader />
+        ) : (
+          <>
+            {/* Current content with animation */}
+            <div className={`transition-all duration-500 ${getAnimationClasses()}`}>
+              {/* Title and Author - Only on first page */}
+              {currentPage === 1 && (
+                <div className="mb-8 text-center">
+                  <h2 className="text-3xl font-bold mb-2">{currentContent.title}</h2>
+                  <p className="text-lg text-gray-600">by {currentContent.author}</p>
+                </div>
+              )}
+              
+              {/* Chapter title and reading time */}
+              <div className="mb-6">
+                <h3 className="text-2xl font-semibold mb-2">{currentContent.chapter}</h3>
+                <div className="flex items-center text-gray-600">
+                  <Clock size={16} className="mr-2" />
+                  <span>Reading time: {currentContent.readingTime}</span>
+                </div>
+              </div>
+              
+              {/* Story Content */}
+              <div 
+                className="prose max-w-none mb-8 relative" 
+                style={{ fontSize: `${fontSize}px` }}
+              >
+                <p className="leading-relaxed mb-6">{currentContent.content}</p>
+                
+                {/* Conditional Image */}
+                {currentContent.image && (
+                  <div className="my-8 rounded-lg overflow-hidden shadow-lg">
+                    <img 
+                      src={currentContent.image} 
+                      alt="Story illustration" 
+                      className="w-full object-cover"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
-          )}
-          
-          {/* Chapter title and reading time */}
-          <div className="mb-6">
-            <h3 className="text-2xl font-semibold mb-2">{currentContent.chapter}</h3>
-            <div className="flex items-center text-gray-600">
-              <Clock size={16} className="mr-2" />
-              <span>Reading time: {currentContent.readingTime}</span>
-            </div>
-          </div>
-          
-          {/* Story Content */}
-          <div 
-            className="prose max-w-none mb-8 relative" 
-            style={{ fontSize: `${fontSize}px` }}
-          >
-            <p className="leading-relaxed mb-6">{currentContent.content}</p>
             
-            {/* Conditional Image */}
-            {currentContent.image && (
-              <div className="my-8 rounded-lg overflow-hidden shadow-lg">
-                <img 
-                  src={currentContent.image} 
-                  alt="Story illustration" 
-                  className="w-full object-cover"
-                />
+            {/* Page turning transition overlay */}
+            {isPageAnimating && (
+              <div className={`absolute inset-0 pointer-events-none ${getEnterAnimationClasses()}`}>
+                <div className="h-full opacity-0">Transition placeholder</div>
               </div>
             )}
-          </div>
-        </div>
-        
-        {/* Page turning transition overlay */}
-        {isPageAnimating && (
-          <div className={`absolute inset-0 pointer-events-none ${getEnterAnimationClasses()}`}>
-            <div className="h-full opacity-0">Transition placeholder</div>
-          </div>
+          </>
         )}
       </main>
       
@@ -501,6 +545,72 @@ const StoryPage = () => {
 };
 
 export function StoryMissionsTab() {
+  const [isTabLoading, setIsTabLoading] = useState(true);
+  
+  // Simulate loading when the tab is mounted
+  useEffect(() => {
+    setIsTabLoading(true);
+    const timer = setTimeout(() => {
+      setIsTabLoading(false);
+    }, 800);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
+  // Skeleton loader for the entire tab
+  if (isTabLoading) {
+    return (
+      <div className="w-full p-4 space-y-6">
+        {/* Header skeletons */}
+        <div className="flex justify-between items-center">
+          <Skeleton className="h-8 w-24" />
+          <Skeleton className="h-8 w-24" />
+        </div>
+        
+        {/* Progress bar skeleton */}
+        <Skeleton className="h-1 w-full" />
+        
+        {/* Content skeletons */}
+        <div className="space-y-4 pt-4">
+          <div className="text-center space-y-2">
+            <Skeleton className="h-8 w-2/3 mx-auto" />
+            <Skeleton className="h-4 w-1/3 mx-auto" />
+          </div>
+          
+          <div className="space-y-2">
+            <Skeleton className="h-6 w-1/2" />
+            <Skeleton className="h-4 w-1/4" />
+          </div>
+          
+          <div className="space-y-3 pt-4">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-4/5" />
+          </div>
+          
+          <Skeleton className="h-60 w-full rounded-lg mt-6" />
+        </div>
+        
+        {/* Footer controls skeleton */}
+        <div className="fixed bottom-0 left-0 w-full bg-white p-4 border-t">
+          <div className="flex justify-between items-center mb-3">
+            <Skeleton className="h-8 w-24" />
+            <Skeleton className="h-8 w-16" />
+            <Skeleton className="h-8 w-24" />
+          </div>
+          
+          <div className="grid grid-cols-3 gap-2">
+            <Skeleton className="h-10 w-full rounded-lg" />
+            <Skeleton className="h-10 w-full rounded-lg" />
+            <Skeleton className="h-10 w-full rounded-lg" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
   return (
     <div className="w-full">
       <StoryPage />
