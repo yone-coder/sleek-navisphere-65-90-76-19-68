@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight, Check, CheckCircle2, Mail, User } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, Mail, User, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -156,7 +156,7 @@ export const RegisterForm = () => {
                             {...register("step1.firstName")}
                           />
                           {errors.step1?.firstName && (
-                            <p className="text-red-500 text-sm">{errors.step1.firstName.message as string}</p>
+                            <p className="text-red-500 text-sm">{String(errors.step1.firstName.message)}</p>
                           )}
                         </div>
                         <div className="space-y-2">
@@ -167,7 +167,7 @@ export const RegisterForm = () => {
                             {...register("step1.lastName")}
                           />
                           {errors.step1?.lastName && (
-                            <p className="text-red-500 text-sm">{errors.step1.lastName.message as string}</p>
+                            <p className="text-red-500 text-sm">{String(errors.step1.lastName.message)}</p>
                           )}
                         </div>
                       </div>
@@ -181,7 +181,7 @@ export const RegisterForm = () => {
                           {...register("step1.email")}
                         />
                         {errors.step1?.email && (
-                          <p className="text-red-500 text-sm">{errors.step1.email.message as string}</p>
+                          <p className="text-red-500 text-sm">{String(errors.step1.email.message)}</p>
                         )}
                       </div>
 
@@ -224,7 +224,7 @@ export const RegisterForm = () => {
                           </div>
                         </RadioGroup>
                         {errors.step2?.passType && (
-                          <p className="text-red-500 text-sm">{errors.step2.passType.message as string}</p>
+                          <p className="text-red-500 text-sm">{String(errors.step2.passType.message)}</p>
                         )}
                       </div>
 
@@ -290,7 +290,7 @@ export const RegisterForm = () => {
                           </Label>
                         </div>
                         {errors.step3?.marketingConsent && (
-                          <p className="text-red-500 text-sm">{errors.step3.marketingConsent.message as string}</p>
+                          <p className="text-red-500 text-sm">{String(errors.step3.marketingConsent.message)}</p>
                         )}
 
                         <div className="flex items-start space-x-2">
@@ -303,7 +303,7 @@ export const RegisterForm = () => {
                           </Label>
                         </div>
                         {errors.step3?.termsAccepted && (
-                          <p className="text-red-500 text-sm">{errors.step3.termsAccepted.message as string}</p>
+                          <p className="text-red-500 text-sm">{String(errors.step3.termsAccepted.message)}</p>
                         )}
                       </div>
                     </div>
