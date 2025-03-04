@@ -393,7 +393,7 @@ const StoryPage = () => {
         </SheetContent>
       </Sheet>
       
-      <div className="sticky top-0 z-40 bg-white shadow-md">
+      <div className="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
         <header className="bg-white transition-colors duration-300">
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
             <button
@@ -448,7 +448,7 @@ const StoryPage = () => {
         </div>
       </div>
       
-      <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative overflow-hidden">
+      <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative overflow-hidden pt-[72px]">
         {isLoading ? (
           <StorySkeletonLoader />
         ) : (
@@ -612,7 +612,6 @@ const StoryPage = () => {
         </div>
       </footer>
 
-      {/* Render TikTokCommentsPanel */}
       <TikTokCommentsPanel 
         isOpen={isCommentsPanelOpen} 
         onClose={closeCommentsPanel} 
