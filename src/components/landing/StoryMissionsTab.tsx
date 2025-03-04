@@ -20,7 +20,6 @@ const StoryPage = () => {
   const [fontSizeControlOpen, setFontSizeControlOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Available languages
   const languages = [
     { name: 'English', code: 'en', flag: '🇬🇧' },
     { name: 'Español', code: 'es', flag: '🇪🇸' },
@@ -29,10 +28,8 @@ const StoryPage = () => {
     { name: 'Italiano', code: 'it', flag: '🇮🇹' }
   ];
   
-  // Font size options
   const fontSizeOptions = [12, 14, 16, 18, 20, 22, 24];
   
-  // Story content for "The Digital Renaissance of Haiti"
   const storyContent = [
     {
       title: "The Digital Renaissance of Haiti",
@@ -156,12 +153,10 @@ const StoryPage = () => {
     }
   ];
 
-  // Update total pages based on content
   useEffect(() => {
     setTotalPages(storyContent.length);
   }, [storyContent]);
 
-  // Simulate loading when the component mounts
   useEffect(() => {
     setIsLoading(true);
     const timer = setTimeout(() => {
@@ -176,11 +171,9 @@ const StoryPage = () => {
       setAnimationDirection('next');
       setIsPageAnimating(true);
       
-      // Delay actual page change to allow animation to complete
       setTimeout(() => {
         setCurrentPage(currentPage + 1);
         
-        // Allow animation out to complete before resetting
         setTimeout(() => {
           setIsPageAnimating(false);
         }, 500);
@@ -193,11 +186,9 @@ const StoryPage = () => {
       setAnimationDirection('prev');
       setIsPageAnimating(true);
       
-      // Delay actual page change to allow animation to complete
       setTimeout(() => {
         setCurrentPage(currentPage - 1);
         
-        // Allow animation out to complete before resetting
         setTimeout(() => {
           setIsPageAnimating(false);
         }, 500);
@@ -454,15 +445,15 @@ const StoryPage = () => {
           <>
             <div className={`transition-all duration-500 ${getAnimationClasses()}`}>
               {currentPage === 1 && (
-                <div className="mb-8 text-center">
-                  <h2 className="text-3xl font-bold mb-2">{currentContent.title}</h2>
+                <div className="mb-12 text-center">
+                  <h2 className="text-3xl font-bold mb-3">{currentContent.title}</h2>
                   <p className="text-lg text-gray-600">by {currentContent.author}</p>
                 </div>
               )}
               
-              <div className="mb-6">
-                <h3 className="text-2xl font-semibold mb-2">{currentContent.chapter}</h3>
-                <div className="flex items-center text-gray-600">
+              <div className="mb-8">
+                <h3 className="text-2xl font-semibold mb-3">{currentContent.chapter}</h3>
+                <div className="flex items-center text-gray-600 mb-6">
                   <Clock size={16} className="mr-2" />
                   <span>Reading time: {currentContent.readingTime}</span>
                 </div>
@@ -472,10 +463,14 @@ const StoryPage = () => {
                 className="prose max-w-none mb-8 relative" 
                 style={{ fontSize: `${fontSize}px` }}
               >
-                <p className="leading-relaxed mb-6">{currentContent.content}</p>
+                {currentContent.content.split("\n\n").map((paragraph, index) => (
+                  <p key={index} className="leading-relaxed mb-6 tracking-wide">
+                    {paragraph}
+                  </p>
+                ))}
                 
                 {currentContent.image && (
-                  <div className="my-8 rounded-lg overflow-hidden shadow-lg">
+                  <div className="my-12 rounded-lg overflow-hidden shadow-lg">
                     <img 
                       src={currentContent.image} 
                       alt="Story illustration" 

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, BookOpen, Star, StarHalf, Clock, CheckCircle } from 'lucide-react';
 
@@ -277,8 +276,8 @@ const BookChapters = ({ onSelectChapter, currentChapterId }: BookChaptersProps) 
             
             {/* Chapter description (visible only when expanded) */}
             {expandedChapters[chapter.id] && (
-              <div className="px-4 pb-4 ml-12 mr-4 text-sm text-gray-600 border-t border-gray-100 pt-2 animate-fade-in">
-                <p>{chapter.description}</p>
+              <div className="px-6 pb-5 ml-12 mr-4 text-sm text-gray-600 border-t border-gray-100 pt-3 animate-fade-in">
+                <p className="leading-relaxed">{chapter.description}</p>
               </div>
             )}
           </div>
