@@ -112,7 +112,9 @@ const BookChapters = ({ onSelectChapter, currentChapterId }: BookChaptersProps) 
   ];
   
   // Toggle expansion of individual chapter in simple view
-  const toggleChapterExpansion = (chapterId: number) => {
+  const toggleChapterExpansion = (chapterId: number, e: React.MouseEvent) => {
+    // Stop propagation to prevent triggering navigation when clicking the expand button
+    e.stopPropagation();
     setExpandedChapters(prev => ({
       ...prev,
       [chapterId]: !prev[chapterId]
@@ -193,7 +195,7 @@ const BookChapters = ({ onSelectChapter, currentChapterId }: BookChaptersProps) 
             {/* Chapter header (always visible) */}
             <div 
               className="flex items-center p-4 cursor-pointer"
-              onClick={() => toggleChapterExpansion(chapter.id)}
+              onClick={() => handleChapterClick(chapter.id)}
             >
               <div className="mr-3 flex-shrink-0">
                 {renderReadingStatus(readingProgress[chapter.id])}
@@ -214,7 +216,7 @@ const BookChapters = ({ onSelectChapter, currentChapterId }: BookChaptersProps) 
                 </div>
               </div>
               
-              <div className="ml-2 text-gray-400">
+              <div className="ml-2 text-gray-400" onClick={(e) => toggleChapterExpansion(chapter.id, e)}>
                 {expandedChapters[chapter.id] ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
               </div>
             </div>
@@ -261,7 +263,10 @@ const BookChapters = ({ onSelectChapter, currentChapterId }: BookChaptersProps) 
                           ? 'bg-blue-600 text-white hover:bg-blue-700'
                           : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                       }`}
-                      onClick={() => handleChapterClick(chapter.id)}
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent double triggering
+                        handleChapterClick(chapter.id);
+                      }}
                     >
                       {readingProgress[chapter.id] === 'completed' 
                         ? 'Review Chapter' 
