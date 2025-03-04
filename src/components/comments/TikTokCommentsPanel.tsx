@@ -228,67 +228,67 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   return (
     <div className={`fixed inset-0 bg-black bg-opacity-50 z-50 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
       <div 
-        className={`absolute bottom-0 left-0 right-0 h-[90vh] bg-white rounded-t-3xl transform transition-transform duration-300 ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
+        className={`absolute bottom-0 left-0 right-0 h-[85vh] bg-white rounded-t-3xl transform transition-transform duration-300 ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
       >
         {/* Drag handle */}
-        <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-2"></div>
+        <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-1"></div>
         
         {/* Comments panel */}
-        <div className="w-full h-full bg-white overflow-hidden flex flex-col">
-          <div className="p-4 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10">
+        <div className="w-full h-full pb-safe flex flex-col overflow-hidden">
+          <div className="px-4 py-2 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10">
             <div className="flex items-center">
               {replyingTo ? (
                 <div className="flex items-center">
                   <Button 
                     variant="ghost"
                     size="icon"
-                    className="mr-2"
+                    className="h-7 w-7 mr-2"
                     onClick={cancelReply}
                   >
-                    <ArrowLeft size={18} />
+                    <ArrowLeft size={16} />
                   </Button>
-                  <h3 className="font-bold text-lg">Reply</h3>
+                  <span className="font-medium">Reply</span>
                 </div>
               ) : (
                 <>
-                  <h3 className="font-bold text-lg">Comments (1.2K)</h3>
+                  <h3 className="font-medium text-base">Comments</h3>
                   <div className="relative ml-4" ref={menuRef}>
                     <Button 
                       variant="ghost"
-                      className="flex items-center space-x-1 text-sm text-gray-500 hover:text-black p-1 h-auto"
+                      className="flex items-center space-x-1 text-xs text-gray-500 hover:text-black p-1 h-7"
                       onClick={() => setShowFilterMenu(!showFilterMenu)}
                     >
                       <span>
-                        {filter === 'all' ? 'All comments' : 
+                        {filter === 'all' ? 'All' : 
                         filter === 'verified' ? 'Verified' : 
                         filter === 'liked' ? 'Liked' : 'Donations'}
                       </span>
-                      <ChevronDown size={16} />
+                      <ChevronDown size={14} />
                     </Button>
                     
                     {showFilterMenu && (
-                      <div className="absolute top-full left-0 mt-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                      <div className="absolute top-full left-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
                         <ul>
                           <li 
-                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
                             onClick={() => { setFilter('all'); setShowFilterMenu(false); }}
                           >
                             All comments
                           </li>
                           <li 
-                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
                             onClick={() => { setFilter('verified'); setShowFilterMenu(false); }}
                           >
                             Verified only
                           </li>
                           <li 
-                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
                             onClick={() => { setFilter('liked'); setShowFilterMenu(false); }}
                           >
                             Liked by me
                           </li>
                           <li 
-                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
                             onClick={() => { setFilter('donations'); setShowFilterMenu(false); }}
                           >
                             Donations
@@ -301,15 +301,14 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
               )}
             </div>
             
-            <div className="flex items-center">
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={onClose}
-              >
-                <X size={18} />
-              </Button>
-            </div>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-7 w-7"
+              onClick={onClose}
+            >
+              <X size={16} />
+            </Button>
           </div>
           
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -518,9 +517,9 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
             )}
           </div>
           
-          <div className="p-4 border-t border-gray-200 sticky bottom-0 bg-white">
+          <div className="p-3 border-t border-gray-200 bg-white">
             <form onSubmit={handleCommentSubmit} className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex-shrink-0 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex-shrink-0 flex items-center justify-center">
                 <span className="text-xs font-bold text-white">ME</span>
               </div>
               <Input
@@ -529,16 +528,16 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
                 placeholder={replyingTo ? `Reply to ${comments.find(c => c.id === replyingTo)?.username}...` : "Add comment..."}
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
-                className="flex-1 bg-gray-100 rounded-full h-10 text-sm"
+                className="flex-1 bg-gray-100 rounded-full h-9 text-sm border-0"
               />
               <Button 
                 type="submit" 
                 variant="ghost"
                 size="icon"
                 disabled={!commentText.trim()}
-                className={commentText.trim() ? "text-pink-500" : "text-gray-300"}
+                className={`h-8 w-8 ${commentText.trim() ? "text-pink-500" : "text-gray-300"}`}
               >
-                <Send size={20} />
+                <Send size={18} />
               </Button>
             </form>
           </div>
