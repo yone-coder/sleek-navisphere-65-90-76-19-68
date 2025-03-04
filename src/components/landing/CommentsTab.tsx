@@ -20,7 +20,7 @@ export function CommentsTab() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <div className="flex gap-4 mb-8 sticky top-0 bg-white/95 backdrop-blur-sm p-4 -mx-4">
+      <div className="flex gap-4 mb-8 sticky top-0 bg-white/95 backdrop-blur-sm p-4 -mx-4 z-10">
         <div className="flex-1">
           <Textarea 
             className="w-full p-4 border rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent resize-none text-sm h-[80px]"
@@ -33,7 +33,7 @@ export function CommentsTab() {
         </div>
       </div>
 
-      <div className="space-y-6 px-4">
+      <div className="space-y-6 px-4 pb-20">
         {[1, 2, 3, 4, 5].map((_, i) => (
           <motion.div 
             key={i} 
@@ -74,7 +74,7 @@ export function CommentsTab() {
         ))}
       </div>
 
-      {/* Render the TikTokCommentsPanel */}
+      {/* TikTokCommentsPanel with fixed z-index to appear above all content */}
       <TikTokCommentsPanel
         isOpen={isCommentsPanelOpen}
         onClose={closeCommentsPanel}
