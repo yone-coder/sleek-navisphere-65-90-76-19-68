@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Star, ChevronRight, Heart, ChevronDown, Store, Wallet } from 'lucide-react';
 
@@ -114,24 +115,24 @@ const AppStore = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-16">
+    <div className="min-h-screen pb-16">
       {/* Investor Showcase Header */}
-      <div className="bg-gradient-to-r from-blue-700 to-blue-900 text-white shadow-lg px-6 py-6 mb-6">
+      <div className="text-gray-800 px-6 py-6 mb-6">
         <h1 className="text-2xl font-bold text-center">Our App Portfolio</h1>
-        <p className="text-center text-blue-100 mt-2 max-w-lg mx-auto">
+        <p className="text-center text-gray-600 mt-2 max-w-lg mx-auto">
           A showcase of our high-potential applications currently in development, targeting growing markets with innovative solutions.
         </p>
         <div className="flex justify-center mt-4">
-          <div className="bg-white/10 rounded-lg px-4 py-2 text-sm">
+          <div className="rounded-lg px-4 py-2 text-sm border border-gray-200">
             <span className="font-medium">Portfolio Highlights:</span> 2 flagship products • $5.1T combined market size • Q2-Q3 2025 launch window
           </div>
         </div>
       </div>
       
       {/* App listings */}
-      <div className="max-w-3xl mx-auto">
+      <div className="w-full mx-auto">
         {apps.map(app => (
-          <div key={app.id} className="pt-6 pb-6 bg-white mb-6 rounded-xl shadow-md">
+          <div key={app.id} className="pt-6 pb-6 mb-6 border-b border-gray-100">
             {/* App header section */}
             <div className="flex items-start px-6 mb-4">
               <AppLogo app={app} />
@@ -186,7 +187,7 @@ const AppStore = () => {
             </div>
             
             {/* Key metrics */}
-            <div className="grid grid-cols-3 gap-2 px-6 py-3 mb-4 bg-gray-50">
+            <div className="grid grid-cols-3 gap-2 px-6 py-3 mb-4 border-t border-b border-gray-100">
               <div className="text-center">
                 <p className="text-xs text-gray-500">Market Size</p>
                 <p className="text-sm font-medium">{app.marketSize}</p>
@@ -238,7 +239,7 @@ const AppStore = () => {
             </div>
             
             {/* Expandable details section */}
-            <div className="px-6">
+            <div className="px-6 w-full">
               <button 
                 className="w-full flex items-center justify-between py-2 border-t border-gray-100 text-sm text-blue-600"
                 onClick={() => setActiveAppId(activeAppId === app.id ? null : app.id)}
@@ -252,7 +253,7 @@ const AppStore = () => {
               </button>
               
               {activeAppId === app.id && (
-                <div className="py-3 border-t border-gray-100 text-sm">
+                <div className="py-3 border-t border-gray-100 text-sm w-full">
                   <h4 className="font-medium mb-2">Key Differentiators</h4>
                   <ul className="ml-4 list-disc space-y-1 text-gray-600">
                     {app.features.map(feature => (
@@ -262,7 +263,7 @@ const AppStore = () => {
                   
                   <div className="mt-4 pt-2 border-t border-gray-100">
                     <h4 className="font-medium mb-2">Current Milestones</h4>
-                    <div className="bg-blue-50 rounded-lg p-3">
+                    <div className="p-3 border border-blue-100 rounded-lg">
                       <div className="flex items-center">
                         <div className="w-2 h-2 rounded-full bg-blue-600 mr-2"></div>
                         <span className="text-blue-800">Core functionality completed</span>
@@ -294,8 +295,8 @@ const AppStore = () => {
       </div>
       
       {/* Investment CTA */}
-      <div className="max-w-3xl mx-auto px-6 py-4 bg-blue-50 rounded-xl border border-blue-100 shadow-sm">
-        <h3 className="font-medium text-blue-800 text-center">Seeking Series A Investment to Accelerate Launch Timeline</h3>
+      <div className="w-full mx-auto px-6 py-4 border-t border-gray-200">
+        <h3 className="font-medium text-gray-800 text-center">Seeking Series A Investment to Accelerate Launch Timeline</h3>
         <p className="text-sm text-center text-gray-600 mt-2">Contact our investment relations team for detailed financial projections and market analysis</p>
       </div>
     </div>
