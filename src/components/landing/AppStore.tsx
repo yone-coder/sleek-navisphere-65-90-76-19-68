@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Star, ChevronRight, Heart, ChevronDown, Store, Wallet } from 'lucide-react';
 
@@ -105,10 +106,10 @@ const AppStore = () => {
     const IconComponent = app.icon;
     return (
       <div 
-        className="w-16 h-16 rounded-xl flex items-center justify-center text-white shadow-md flex-shrink-0"
+        className="w-14 h-14 rounded-xl flex items-center justify-center text-white shadow-md flex-shrink-0"
         style={{ backgroundColor: app.color }}
       >
-        {IconComponent && <IconComponent size={24} strokeWidth={1.5} className="text-white" />}
+        {IconComponent && <IconComponent size={20} strokeWidth={1.5} className="text-white" />}
       </div>
     );
   };
