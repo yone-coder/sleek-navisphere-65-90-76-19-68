@@ -152,7 +152,7 @@ export function ServicesTab() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 pt-4">
+      <div className="w-full px-0">
         <Sheet open={isShowingProjects} onOpenChange={setIsShowingProjects}>
           <SheetContent side="bottom" className="h-[90vh] overflow-y-auto p-0">
             <div className="w-full max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden animate-slide-up-in">
@@ -213,22 +213,23 @@ export function ServicesTab() {
           onValueChange={handleProjectTypeChange}
           className="w-full mt-0"
         >
-          <TabsContent value="apps" className="space-y-8">
+          <TabsContent value="apps" className="space-y-8 w-full p-0 m-0">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
+              className="w-full"
             >
               <AppStore />
             </motion.div>
           </TabsContent>
 
-          <TabsContent value="lakou-agri" className="space-y-8">
+          <TabsContent value="lakou-agri" className="space-y-8 w-full p-0 m-0">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4"
             >
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="text-lg font-semibold mb-2">Lakou Agri</h3>
@@ -237,12 +238,12 @@ export function ServicesTab() {
             </motion.div>
           </TabsContent>
 
-          <TabsContent value="hearts-hands" className="space-y-8">
+          <TabsContent value="hearts-hands" className="space-y-8 w-full p-0 m-0">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4"
             >
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="text-lg font-semibold mb-2">Hearts & Hands Foundation</h3>
@@ -251,12 +252,12 @@ export function ServicesTab() {
             </motion.div>
           </TabsContent>
 
-          <TabsContent value="holy-light" className="space-y-8">
+          <TabsContent value="holy-light" className="space-y-8 w-full p-0 m-0">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4"
             >
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="text-lg font-semibold mb-2">Holy Light Church</h3>
@@ -265,12 +266,12 @@ export function ServicesTab() {
             </motion.div>
           </TabsContent>
 
-          <TabsContent value="college-nova" className="space-y-8">
+          <TabsContent value="college-nova" className="space-y-8 w-full p-0 m-0">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4"
             >
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="text-lg font-semibold mb-2">Collège Nova de Désarmes</h3>
@@ -279,12 +280,12 @@ export function ServicesTab() {
             </motion.div>
           </TabsContent>
 
-          <TabsContent value="ecole-polytechnique" className="space-y-8">
+          <TabsContent value="ecole-polytechnique" className="space-y-8 w-full p-0 m-0">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4"
             >
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="text-lg font-semibold mb-2">École Polytechnique Horizon</h3>
@@ -293,12 +294,12 @@ export function ServicesTab() {
             </motion.div>
           </TabsContent>
 
-          <TabsContent value="universite-nova" className="space-y-8">
+          <TabsContent value="universite-nova" className="space-y-8 w-full p-0 m-0">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4"
             >
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="text-lg font-semibold mb-2">Université Nova</h3>
