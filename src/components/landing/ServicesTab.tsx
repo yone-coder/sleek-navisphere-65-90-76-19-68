@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
 import { 
@@ -16,7 +16,33 @@ export function ServicesTab() {
   const [isShowingProjects, setIsShowingProjects] = useState(false);
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState({ name: 'English', code: 'en', flag: '🇬🇧' });
+  const [isTabSwitcherVisible, setIsTabSwitcherVisible] = useState(true);
+  const [lastScrollTop, setLastScrollTop] = useState(0);
   const { language, setLanguage, t } = useLanguage();
+
+  // Handle scroll events to show/hide the tabs switcher
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      
+      // Determine scroll direction
+      if (scrollTop > lastScrollTop && scrollTop > 50) {
+        // Scrolling down and not at the top - hide the tabs switcher
+        setIsTabSwitcherVisible(false);
+      } else if (scrollTop < lastScrollTop || scrollTop < 10) {
+        // Scrolling up or near the top - show the tabs switcher
+        setIsTabSwitcherVisible(true);
+      }
+      
+      setLastScrollTop(scrollTop);
+    };
+
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Clean up the event listener on component unmount
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollTop]);
 
   const handleProjectTypeChange = (value: string) => {
     setActiveProjectType(value);
@@ -99,8 +125,10 @@ export function ServicesTab() {
 
   return (
     <div className="w-full">
-      {/* Sticky header with project and language selectors */}
-      <div className="sticky top-0 left-0 right-0 bg-white shadow-md z-30">
+      {/* Sticky header with project and language selectors - conditionally shown based on scroll position */}
+      <div className={`sticky top-0 left-0 right-0 bg-white shadow-md z-30 transition-all duration-300 ${
+        isTabSwitcherVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'
+      }`}>
         <div className="container mx-auto px-4 py-2 flex justify-between items-center">
           <button
             onClick={() => setIsShowingProjects(true)} 
