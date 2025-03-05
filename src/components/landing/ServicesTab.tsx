@@ -19,10 +19,16 @@ export function ServicesTab() {
   const { language, setLanguage, t } = useLanguage();
   const [isTogglesVisible, setIsTogglesVisible] = useState(true);
   const [lastScrollTop, setLastScrollTop] = useState(0);
+  const tabRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // This effect is specific to the ServicesTab component and won't affect other tabs
     const handleScroll = () => {
+      // Only apply scroll logic if the ServicesTab component is actually visible
+      if (!tabRef.current || tabRef.current.offsetParent === null) {
+        return; // ServicesTab is not visible, don't apply scroll logic
+      }
+      
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       
       // Only hide toggles when scrolling UP (not down like TabNav)
@@ -120,7 +126,7 @@ export function ServicesTab() {
   const projectShortName = currentProject ? getShortName(currentProject.name) : 'SP';
 
   return (
-    <div className="w-full">
+    <div className="w-full" ref={tabRef}>
       <div className={`sticky top-0 bg-white shadow-md z-30 transition-all duration-300 ${
         isTogglesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'
       }`}>
