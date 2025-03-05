@@ -71,20 +71,20 @@ const AppStore = () => {
         {[...Array(5)].map((_, i) => (
           <div key={i} className="text-lg">
             {i < fullStars ? (
-              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+              <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
             ) : i === fullStars && hasHalfStar ? (
-              <div className="relative w-4 h-4">
-                <Star className="absolute w-4 h-4 text-gray-300" />
-                <div className="absolute w-2 h-4 overflow-hidden">
-                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+              <div className="relative w-5 h-5">
+                <Star className="absolute w-5 h-5 text-gray-300" />
+                <div className="absolute w-2.5 h-5 overflow-hidden">
+                  <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                 </div>
               </div>
             ) : (
-              <Star className="w-4 h-4 text-gray-300" />
+              <Star className="w-5 h-5 text-gray-300" />
             )}
           </div>
         ))}
-        <span className="ml-1 text-xs text-gray-600">{rating.toFixed(1)}</span>
+        <span className="ml-1 text-sm text-gray-600">{rating.toFixed(1)}</span>
       </div>
     );
   };
@@ -102,43 +102,30 @@ const AppStore = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-16">
-      {/* Investor Showcase Header */}
-      <div className="bg-gradient-to-r from-blue-700 to-blue-900 text-white shadow-lg px-6 py-6 mb-6">
-        <h1 className="text-2xl font-bold text-center">Our App Portfolio</h1>
-        <p className="text-center text-blue-100 mt-2 max-w-lg mx-auto">
-          A showcase of our high-potential applications currently in development, targeting growing markets with innovative solutions.
-        </p>
-        <div className="flex justify-center mt-4">
-          <div className="bg-white/10 rounded-lg px-4 py-2 text-sm">
-            <span className="font-medium">Portfolio Highlights:</span> 2 flagship products • $5.1T combined market size • Q2-Q3 2025 launch window
-          </div>
-        </div>
-      </div>
-      
+    <div className="bg-black text-white min-h-screen pb-16">
       {/* App listings */}
       <div className="max-w-3xl mx-auto">
         {apps.map(app => (
-          <div key={app.id} className="pt-6 pb-6 bg-white mb-6 rounded-xl shadow-md">
+          <div key={app.id} className="pt-6 pb-6 bg-gray-900 mb-6 rounded-xl">
             {/* App header section */}
             <div className="flex items-start px-6 mb-4">
               <div 
-                className="w-16 h-16 rounded-xl flex items-center justify-center text-white shadow-md"
+                className="w-24 h-24 rounded-xl flex items-center justify-center text-white shadow-md"
                 style={{ backgroundColor: app.color }}
               >
-                {app.icon && <app.icon className="w-8 h-8" />}
+                {app.icon && <app.icon className="w-12 h-12" />}
               </div>
               
               <div className="flex-1 ml-4">
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-lg">{app.name}</h3>
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-800">
+                      <h3 className="font-semibold text-xl">{app.name}</h3>
+                      <div className="text-xs px-2 py-1 rounded-full bg-blue-800 text-white">
                         {app.status}
-                      </span>
+                      </div>
                     </div>
-                    <p className="text-sm text-gray-500">{app.type}</p>
+                    <p className="text-sm text-gray-400">{app.type}</p>
                     <div className="mt-1">
                       <StarRating rating={app.rating} />
                     </div>
@@ -150,14 +137,14 @@ const AppStore = () => {
                       onClick={() => toggleFavorite(app.id)}
                     >
                       <Heart 
-                        className={`w-5 h-5 ${
+                        className={`w-6 h-6 ${
                           favoriteApps.includes(app.id) 
                             ? "fill-red-500 text-red-500" 
                             : "text-gray-400"
                         }`} 
                       />
                     </button>
-                    <button className="mt-2 px-4 py-1.5 rounded-full text-sm font-medium bg-blue-600 text-white">
+                    <button className="mt-2 px-6 py-2 rounded-full text-sm font-medium bg-blue-600 text-white">
                       {app.price}
                     </button>
                   </div>
@@ -166,39 +153,47 @@ const AppStore = () => {
             </div>
             
             {/* Development progress */}
-            <div className="px-6 mb-4">
+            <div className="px-6 mb-6">
               <div className="flex justify-between items-center mb-1">
-                <span className="text-sm font-medium">Development Progress</span>
-                <span className="text-sm text-gray-600">{app.completionPercentage}%</span>
+                <span className="text-base font-medium text-white">Development Progress</span>
+                <span className="text-base text-gray-300">{app.completionPercentage}%</span>
               </div>
               <ProgressBar percentage={app.completionPercentage} />
               <div className="flex justify-between mt-2">
-                <span className="text-xs text-gray-500">Phase: Beta Testing</span>
-                <span className="text-xs text-gray-500">Target Launch: {app.launchDate}</span>
+                <span className="text-xs text-gray-400">Phase: Beta Testing</span>
+                <span className="text-xs text-gray-400">Target Launch: {app.launchDate}</span>
               </div>
             </div>
             
             {/* Key metrics */}
-            <div className="grid grid-cols-3 gap-2 px-6 py-3 mb-4 bg-gray-50">
+            <div className="grid grid-cols-3 gap-2 px-6 py-4 mb-6 bg-gray-800 mx-4 rounded-lg">
               <div className="text-center">
-                <p className="text-xs text-gray-500">Market Size</p>
-                <p className="text-sm font-medium">{app.marketSize}</p>
+                <p className="text-xs text-gray-400">Market Size</p>
+                <p className="text-sm font-medium text-white">{app.marketSize.split(' ')[0]}</p>
+                <p className="text-xs text-gray-400">
+                  {app.marketSize.split(' ').slice(1).join(' ')}
+                </p>
               </div>
               <div className="text-center">
-                <p className="text-xs text-gray-500">Target Users</p>
-                <p className="text-sm font-medium">{app.targetUsers}</p>
+                <p className="text-xs text-gray-400">Target Users</p>
+                <p className="text-sm font-medium text-white">
+                  {app.targetUsers.split(' ').slice(0, 2).join(' ')}
+                </p>
+                <p className="text-xs text-gray-400">
+                  {app.targetUsers.split(' ').slice(2).join(' ')}
+                </p>
               </div>
               <div className="text-center">
-                <p className="text-xs text-gray-500">Revenue Model</p>
-                <p className="text-sm font-medium">{app.revenueModel.split(" ")[0]}</p>
+                <p className="text-xs text-gray-400">Revenue Model</p>
+                <p className="text-sm font-medium text-white">{app.revenueModel.split(' ')[0]}</p>
               </div>
             </div>
             
             {/* Tags */}
             <div className="px-6 mb-4">
-              <div className="flex flex-wrap gap-1">
+              <div className="flex flex-wrap gap-2">
                 {app.tags.map(tag => (
-                  <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
+                  <span key={tag} className="text-xs px-3 py-1 rounded-full bg-gray-800 text-gray-300">
                     {tag}
                   </span>
                 ))}
@@ -212,7 +207,7 @@ const AppStore = () => {
                   {getScreenshots(app.id).map(num => (
                     <div 
                       key={num} 
-                      className="flex-shrink-0 rounded-xl overflow-hidden bg-gray-200 w-72 h-48 flex items-center justify-center shadow-sm"
+                      className="flex-shrink-0 rounded-xl overflow-hidden bg-gray-800 w-72 h-48 flex items-center justify-center shadow-sm"
                     >
                       <img 
                         src={`/api/placeholder/288/192?text=${app.name}+Prototype+${num}`}
@@ -228,13 +223,13 @@ const AppStore = () => {
             
             {/* Description below the images */}
             <div className="px-6 mt-4 mb-3">
-              <p className="text-sm text-gray-600">{app.description}</p>
+              <p className="text-sm text-gray-400">{app.description}</p>
             </div>
             
             {/* Expandable details section */}
             <div className="px-6">
               <button 
-                className="w-full flex items-center justify-between py-2 border-t border-gray-100 text-sm text-blue-600"
+                className="w-full flex items-center justify-between py-2 border-t border-gray-700 text-sm text-blue-400"
                 onClick={() => setActiveAppId(activeAppId === app.id ? null : app.id)}
               >
                 <span>Investment Highlights</span>
@@ -246,37 +241,37 @@ const AppStore = () => {
               </button>
               
               {activeAppId === app.id && (
-                <div className="py-3 border-t border-gray-100 text-sm">
-                  <h4 className="font-medium mb-2">Key Differentiators</h4>
-                  <ul className="ml-4 list-disc space-y-1 text-gray-600">
+                <div className="py-3 border-t border-gray-700 text-sm">
+                  <h4 className="font-medium mb-2 text-white">Key Differentiators</h4>
+                  <ul className="ml-4 list-disc space-y-1 text-gray-400">
                     {app.features.map(feature => (
                       <li key={feature}>{feature}</li>
                     ))}
                   </ul>
                   
-                  <div className="mt-4 pt-2 border-t border-gray-100">
-                    <h4 className="font-medium mb-2">Current Milestones</h4>
-                    <div className="bg-blue-50 rounded-lg p-3">
+                  <div className="mt-4 pt-2 border-t border-gray-700">
+                    <h4 className="font-medium mb-2 text-white">Current Milestones</h4>
+                    <div className="bg-gray-800 rounded-lg p-3">
                       <div className="flex items-center">
-                        <div className="w-2 h-2 rounded-full bg-blue-600 mr-2"></div>
-                        <span className="text-blue-800">Core functionality completed</span>
+                        <div className="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>
+                        <span className="text-gray-300">Core functionality completed</span>
                       </div>
                       <div className="flex items-center mt-2">
-                        <div className="w-2 h-2 rounded-full bg-blue-600 mr-2"></div>
-                        <span className="text-blue-800">Beta testing with 100+ users</span>
+                        <div className="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>
+                        <span className="text-gray-300">Beta testing with 100+ users</span>
                       </div>
                       <div className="flex items-center mt-2">
-                        <div className="w-2 h-2 rounded-full bg-gray-300 mr-2"></div>
+                        <div className="w-2 h-2 rounded-full bg-gray-500 mr-2"></div>
                         <span className="text-gray-500">Full market launch (In Progress)</span>
                       </div>
                     </div>
                   </div>
                   
                   <div className="mt-4 flex justify-between">
-                    <button className="text-blue-600 flex items-center">
+                    <button className="text-blue-400 flex items-center">
                       View Demo <ChevronRight className="w-4 h-4 ml-1" />
                     </button>
-                    <button className="text-blue-600 flex items-center">
+                    <button className="text-blue-400 flex items-center">
                       Financial Projections <ChevronRight className="w-4 h-4 ml-1" />
                     </button>
                   </div>
@@ -285,12 +280,6 @@ const AppStore = () => {
             </div>
           </div>
         ))}
-      </div>
-      
-      {/* Investment CTA */}
-      <div className="max-w-3xl mx-auto px-6 py-4 bg-blue-50 rounded-xl border border-blue-100 shadow-sm">
-        <h3 className="font-medium text-blue-800 text-center">Seeking Series A Investment to Accelerate Launch Timeline</h3>
-        <p className="text-sm text-center text-gray-600 mt-2">Contact our investment relations team for detailed financial projections and market analysis</p>
       </div>
     </div>
   );
