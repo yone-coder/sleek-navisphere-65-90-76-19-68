@@ -128,8 +128,8 @@ const AppStore = () => {
         </div>
       </div>
       
-      {/* App listings */}
-      <div className="max-w-3xl mx-auto">
+      {/* App listings - Updated to be full width */}
+      <div className="w-full px-4 mx-auto">
         {apps.map(app => (
           <div key={app.id} className="pt-6 pb-6 bg-white mb-6 rounded-xl shadow-md">
             {/* App header section */}
@@ -293,8 +293,8 @@ const AppStore = () => {
         ))}
       </div>
       
-      {/* Investment CTA */}
-      <div className="max-w-3xl mx-auto px-6 py-4 bg-blue-50 rounded-xl border border-blue-100 shadow-sm">
+      {/* Investment CTA - Updated to be full width */}
+      <div className="w-full px-6 mx-auto py-4 bg-blue-50 rounded-xl border border-blue-100 shadow-sm">
         <h3 className="font-medium text-blue-800 text-center">Seeking Series A Investment to Accelerate Launch Timeline</h3>
         <p className="text-sm text-center text-gray-600 mt-2">Contact our investment relations team for detailed financial projections and market analysis</p>
       </div>
