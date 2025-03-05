@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Star, ChevronRight, Heart, ChevronDown, Store, Wallet } from 'lucide-react';
 
@@ -101,15 +100,15 @@ const AppStore = () => {
     );
   };
 
-  // App logo component
+  // App logo component - fixed to ensure full logo display
   const AppLogo = ({ app }) => {
     const IconComponent = app.icon;
     return (
       <div 
-        className="w-16 h-16 rounded-xl flex items-center justify-center text-white shadow-md"
+        className="w-20 h-20 rounded-xl flex items-center justify-center text-white shadow-md"
         style={{ backgroundColor: app.color }}
       >
-        {IconComponent && <IconComponent className="w-8 h-8" />}
+        {IconComponent && <IconComponent className="w-12 h-12" />}
       </div>
     );
   };
