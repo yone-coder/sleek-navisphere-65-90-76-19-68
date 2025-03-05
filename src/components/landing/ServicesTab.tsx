@@ -31,6 +31,21 @@ export function ServicesTab() {
     setLanguageMenuOpen(false);
   };
 
+  // Generate abbreviated name for projects
+  const getShortName = (name: string) => {
+    // If the name is short enough, just return it
+    if (name.length <= 10) return name;
+    
+    // For longer names with multiple words, use first letters of each word
+    const words = name.split(' ');
+    if (words.length > 1) {
+      return words.map(word => word.charAt(0)).join('');
+    }
+    
+    // For a single long word, just return first two characters
+    return name.substring(0, 2).toUpperCase();
+  };
+
   // Project data
   const projects = [
     {
@@ -79,6 +94,11 @@ export function ServicesTab() {
     { name: 'Italiano', code: 'it', flag: '🇮🇹' }
   ];
 
+  // Get current project's full name
+  const currentProject = projects.find(p => p.id === activeProjectType);
+  const projectDisplayName = currentProject ? currentProject.name : 'Select Project';
+  const projectShortName = currentProject ? getShortName(currentProject.name) : 'SP';
+
   return (
     <div className="container mx-auto px-4 py-10">
       <div className="flex flex-col items-center justify-center mb-8">
@@ -95,7 +115,12 @@ export function ServicesTab() {
             onClick={() => setIsShowingProjects(true)} 
             className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-green-100 hover:bg-green-200 transition-all duration-200"
           >
-            <span className="font-medium">{projects.find(p => p.id === activeProjectType)?.name || 'Select Project'}</span>
+            <span className="font-medium md:hidden">
+              {projectShortName}
+            </span>
+            <span className="font-medium hidden md:block">
+              {projectDisplayName}
+            </span>
             <ChevronDown size={18} />
           </button>
           
@@ -105,7 +130,8 @@ export function ServicesTab() {
               className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-pink-100 hover:bg-pink-200 transition-all duration-200"
             >
               <span className="mr-2">{currentLanguage.flag}</span>
-              <span>{currentLanguage.name}</span>
+              <span className="hidden sm:inline">{currentLanguage.name}</span>
+              <span className="sm:hidden">{currentLanguage.code.toUpperCase()}</span>
               <ChevronDown size={16} className={`transition-transform ${languageMenuOpen ? 'rotate-180' : ''}`} />
             </button>
             
