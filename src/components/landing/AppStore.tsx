@@ -100,15 +100,15 @@ const AppStore = () => {
     );
   };
 
-  // App logo component - fixed to ensure proper rendering
+  // App logo component - fixed with smaller size
   const AppLogo = ({ app }) => {
     const IconComponent = app.icon;
     return (
       <div 
-        className="w-20 h-20 rounded-xl flex items-center justify-center text-white shadow-md flex-shrink-0"
+        className="w-16 h-16 rounded-xl flex items-center justify-center text-white shadow-md flex-shrink-0"
         style={{ backgroundColor: app.color }}
       >
-        {IconComponent && <IconComponent size={40} strokeWidth={1.5} className="text-white" />}
+        {IconComponent && <IconComponent size={24} strokeWidth={1.5} className="text-white" />}
       </div>
     );
   };
