@@ -34,12 +34,12 @@ export function ServicesTab() {
   // Generate abbreviated name for projects
   const getShortName = (name: string) => {
     // If the name is short enough, just return it
-    if (name.length <= 10) return name;
+    if (name.length <= 10) return name.toUpperCase();
     
     // For longer names with multiple words, use first letters of each word
     const words = name.split(' ');
     if (words.length > 1) {
-      return words.map(word => word.charAt(0)).join('');
+      return words.map(word => word.charAt(0)).join('').toUpperCase();
     }
     
     // For a single long word, just return first two characters
