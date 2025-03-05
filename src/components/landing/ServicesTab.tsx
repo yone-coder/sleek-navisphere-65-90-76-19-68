@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
@@ -97,7 +96,7 @@ export function ServicesTab() {
   const projectShortName = currentProject ? getShortName(currentProject.name) : 'SP';
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto px-4 py-4">
       <div className="fixed top-20 left-0 right-0 bg-white shadow-md z-30">
         <div className="container mx-auto px-4 py-1 flex justify-between items-center">
           <button
@@ -125,34 +124,32 @@ export function ServicesTab() {
             </button>
             
             {languageMenuOpen && (
-              <>
-                <div 
-                  className="fixed inset-0 z-40" 
-                  onClick={() => setLanguageMenuOpen(false)}
-                />
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-50 py-2">
-                  {languages.map((language) => (
-                    <button
-                      key={language.code}
-                      onClick={() => handleLanguageChange(language)}
-                      className={`flex items-center w-full text-left px-4 py-2 hover:bg-gray-100 ${
-                        currentLanguage.code === language.code ? 'bg-pink-50 text-pink-600' : ''
-                      }`}
-                    >
-                      <span className="mr-3 text-lg">{language.flag}</span>
-                      <span>{language.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </>
+              <div 
+                className="fixed inset-0 z-40" 
+                onClick={() => setLanguageMenuOpen(false)}
+              />
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-50 py-2">
+                {languages.map((language) => (
+                  <button
+                    key={language.code}
+                    onClick={() => handleLanguageChange(language)}
+                    className={`flex items-center w-full text-left px-4 py-2 hover:bg-gray-100 ${
+                      currentLanguage.code === language.code ? 'bg-pink-50 text-pink-600' : ''
+                    }`}
+                  >
+                    <span className="mr-3 text-lg">{language.flag}</span>
+                    <span>{language.name}</span>
+                  </button>
+                ))}
+              </div>
             )}
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col items-center justify-center mt-12 mb-2">
-        <h2 className="text-3xl font-bold text-center mb-2">Our Projects</h2>
-        <p className="text-gray-600 text-center max-w-xl mb-4">
+      <div className="flex flex-col items-center justify-center mt-8 mb-2">
+        <h2 className="text-3xl font-bold text-center mb-1">Our Projects</h2>
+        <p className="text-gray-600 text-center max-w-xl mb-3">
           Explore our diverse portfolio of tech and non-tech initiatives designed to create positive impact.
         </p>
       </div>
@@ -215,7 +212,7 @@ export function ServicesTab() {
       <Tabs
         value={activeProjectType}
         onValueChange={handleProjectTypeChange}
-        className="w-full mt-2"
+        className="w-full mt-1"
       >
         <TabsContent value="apps" className="space-y-8">
           <motion.div
@@ -318,4 +315,3 @@ export function ServicesTab() {
     </div>
   );
 }
-
