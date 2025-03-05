@@ -155,7 +155,7 @@ export const RegisterForm = () => {
                             placeholder="Enter your first name"
                             {...register("step1.firstName")}
                           />
-                          {errors.step1?.firstName && (
+                          {errors.step1 && errors.step1.firstName && (
                             <p className="text-red-500 text-sm">{String(errors.step1.firstName.message)}</p>
                           )}
                         </div>
@@ -166,7 +166,7 @@ export const RegisterForm = () => {
                             placeholder="Enter your last name"
                             {...register("step1.lastName")}
                           />
-                          {errors.step1?.lastName && (
+                          {errors.step1 && errors.step1.lastName && (
                             <p className="text-red-500 text-sm">{String(errors.step1.lastName.message)}</p>
                           )}
                         </div>
@@ -180,7 +180,7 @@ export const RegisterForm = () => {
                           placeholder="you@example.com"
                           {...register("step1.email")}
                         />
-                        {errors.step1?.email && (
+                        {errors.step1 && errors.step1.email && (
                           <p className="text-red-500 text-sm">{String(errors.step1.email.message)}</p>
                         )}
                       </div>
@@ -223,7 +223,7 @@ export const RegisterForm = () => {
                             <Label htmlFor="pass-team" className="font-medium">Team Pass - $499 per person (3+ attendees)</Label>
                           </div>
                         </RadioGroup>
-                        {errors.step2?.passType && (
+                        {errors.step2 && errors.step2.passType && (
                           <p className="text-red-500 text-sm">{String(errors.step2.passType.message)}</p>
                         )}
                       </div>
@@ -289,7 +289,7 @@ export const RegisterForm = () => {
                             I agree to receive updates about the event, including schedule changes, speaker announcements, and session reminders.
                           </Label>
                         </div>
-                        {errors.step3?.marketingConsent && (
+                        {errors.step3 && errors.step3.marketingConsent && (
                           <p className="text-red-500 text-sm">{String(errors.step3.marketingConsent.message)}</p>
                         )}
 
@@ -302,7 +302,7 @@ export const RegisterForm = () => {
                             I agree to the <a href="#" className="text-purple-600 hover:underline">Terms and Conditions</a> and <a href="#" className="text-purple-600 hover:underline">Privacy Policy</a>.
                           </Label>
                         </div>
-                        {errors.step3?.termsAccepted && (
+                        {errors.step3 && errors.step3.termsAccepted && (
                           <p className="text-red-500 text-sm">{String(errors.step3.termsAccepted.message)}</p>
                         )}
                       </div>
