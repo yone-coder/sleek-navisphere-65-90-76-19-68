@@ -14,23 +14,10 @@ import { PaymentMethodsSheet } from '@/components/landing/PaymentMethodsSheet';
 import { StoryMissionsTab } from '@/components/landing/StoryMissionsTab';
 import { ServicesTab } from '@/components/landing/ServicesTab';
 
-const VideoDetailsPage = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
-  const [isCommented, setIsCommented] = useState(false);
-  const [volume, setVolume] = useState(80);
-  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const [showMoreDescription, setShowMoreDescription] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const navigate = useNavigate();
-  const { id } = useParams();
-
-  const video = {
-    id: id || 'v12345',
+// Define a map of video content data
+const videoContents = {
+  v12345: {
+    id: 'v12345',
     title: 'How to Master Modern Web Design in 2025',
     views: 1248932,
     uploadDate: '2025-02-15',
@@ -40,6 +27,12 @@ const VideoDetailsPage = () => {
     quality: '4K',
     videoUrl: 'https://cdnjs.cloudflare.com/ajax/libs/Tunis-Flowbite-on-Tailwind.CSS/1.1.2/others/commercial.mp4',
     thumbnailUrl: '/api/placeholder/1920/1080',
+    description: 'In this comprehensive tutorial, we explore the latest trends in web design for 2025. Learn how to create stunning interfaces that combine aesthetics with performance and accessibility.\n\nWe\'ll cover:\n- Modern color theory and psychological impact\n- Responsive design patterns for multi-device experiences\n- Accessibility features that enhance user experience\n- Performance optimization techniques\n- Interactive animations that delight users\n\nDownload the project files and follow along! Premium members get access to extended tutorials and code examples.',
+    tags: ['web design', 'ui/ux', 'frontend', 'tutorial', 'react', 'accessibility', 'performance'],
+    relatedContent: [
+      { id: 'v12346', title: 'Advanced CSS Techniques for 2025', thumbnail: '/api/placeholder/320/180', views: '456K', channel: 'Mima Group', duration: '18:22' },
+      { id: 'v12347', title: 'Building Accessible Components in React', thumbnail: '/api/placeholder/320/180', views: '287K', channel: 'Mima Group', duration: '21:15' }
+    ],
     channel: {
       name: 'Mima Group',
       avatar: '/api/placeholder/48/48',
@@ -54,14 +47,94 @@ const VideoDetailsPage = () => {
         twitter: '@designmasters',
         tiktok: '@designmasters'
       }
-    },
-    description: 'In this comprehensive tutorial, we explore the latest trends in web design for 2025. Learn how to create stunning interfaces that combine aesthetics with performance and accessibility.\n\nWe\'ll cover:\n- Modern color theory and psychological impact\n- Responsive design patterns for multi-device experiences\n- Accessibility features that enhance user experience\n- Performance optimization techniques\n- Interactive animations that delight users\n\nDownload the project files and follow along! Premium members get access to extended tutorials and code examples.',
-    tags: ['web design', 'ui/ux', 'frontend', 'tutorial', 'react', 'accessibility', 'performance'],
+    }
+  },
+  v12346: {
+    id: 'v12346',
+    title: 'Advanced CSS Techniques for 2025',
+    views: 456000,
+    uploadDate: '2025-01-28',
+    likes: 32547,
+    comments: 1876,
+    duration: '18:22',
+    quality: '4K',
+    videoUrl: 'https://cdnjs.cloudflare.com/ajax/libs/Tunis-Flowbite-on-Tailwind.CSS/1.1.2/others/commercial.mp4',
+    thumbnailUrl: '/api/placeholder/1920/1080',
+    description: 'Take your CSS skills to the next level with these advanced techniques for 2025. In this tutorial, we dive deep into cutting-edge CSS features that will transform your web designs.\n\nTopics covered:\n- CSS Container Queries and the future of responsive design\n- Advanced animation techniques with CSS custom properties\n- Mastering the CSS grid for complex layouts\n- Performance optimization through CSS containment\n- Creating accessible, responsive typography systems\n\nThe companion code examples are available for premium members in our community forum.',
+    tags: ['CSS', 'advanced', 'frontend', 'tutorial', 'web design', 'animation', 'grid'],
     relatedContent: [
-      { id: 'v12346', title: 'Advanced CSS Techniques for 2025', thumbnail: '/api/placeholder/320/180', views: '456K', channel: 'Mima Group', duration: '18:22' },
+      { id: 'v12345', title: 'How to Master Modern Web Design in 2025', thumbnail: '/api/placeholder/320/180', views: '1.2M', channel: 'Mima Group', duration: '14:35' },
       { id: 'v12347', title: 'Building Accessible Components in React', thumbnail: '/api/placeholder/320/180', views: '287K', channel: 'Mima Group', duration: '21:15' }
-    ]
-  };
+    ],
+    channel: {
+      name: 'Mima Group',
+      avatar: '/api/placeholder/48/48',
+      subscribers: '2.4M',
+      isVerified: true,
+      memberSince: '2018-05-12',
+      totalVideos: 342,
+      description: 'Professional UI/UX design tutorials and resources for modern web developers. Join our creative community and level up your design skills with our premium courses and weekly livestreams.',
+      socialLinks: {
+        facebook: 'designmasters.official',
+        instagram: '@designmasters_official',
+        twitter: '@designmasters',
+        tiktok: '@designmasters'
+      }
+    }
+  },
+  v12347: {
+    id: 'v12347',
+    title: 'Building Accessible Components in React',
+    views: 287000,
+    uploadDate: '2025-02-05',
+    likes: 28943,
+    comments: 2132,
+    duration: '21:15',
+    quality: '4K',
+    videoUrl: 'https://cdnjs.cloudflare.com/ajax/libs/Tunis-Flowbite-on-Tailwind.CSS/1.1.2/others/commercial.mp4',
+    thumbnailUrl: '/api/placeholder/1920/1080',
+    description: 'Accessibility is no longer optional. Learn how to build truly accessible React components that work for everyone.\n\nIn this comprehensive guide, we cover:\n- Setting up ARIA attributes correctly in React components\n- Keyboard navigation and focus management\n- Creating accessible forms and validation\n- Testing components for accessibility compliance\n- Color contrast and text considerations\n\nAll example components from this tutorial are available on our GitHub repository.',
+    tags: ['react', 'accessibility', 'a11y', 'frontend', 'components', 'ARIA', 'javascript'],
+    relatedContent: [
+      { id: 'v12345', title: 'How to Master Modern Web Design in 2025', thumbnail: '/api/placeholder/320/180', views: '1.2M', channel: 'Mima Group', duration: '14:35' },
+      { id: 'v12346', title: 'Advanced CSS Techniques for 2025', thumbnail: '/api/placeholder/320/180', views: '456K', channel: 'Mima Group', duration: '18:22' }
+    ],
+    channel: {
+      name: 'Mima Group',
+      avatar: '/api/placeholder/48/48',
+      subscribers: '2.4M',
+      isVerified: true,
+      memberSince: '2018-05-12',
+      totalVideos: 342,
+      description: 'Professional UI/UX design tutorials and resources for modern web developers. Join our creative community and level up your design skills with our premium courses and weekly livestreams.',
+      socialLinks: {
+        facebook: 'designmasters.official',
+        instagram: '@designmasters_official',
+        twitter: '@designmasters',
+        tiktok: '@designmasters'
+      }
+    }
+  }
+};
+
+const VideoDetailsPage = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isCommented, setIsCommented] = useState(false);
+  const [volume, setVolume] = useState(80);
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [showMoreDescription, setShowMoreDescription] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const navigate = useNavigate();
+  const { id } = useParams();
+  
+  // Get the correct video content based on the ID parameter
+  const videoId = id || 'v12345';
+  const video = videoContents[videoId as keyof typeof videoContents] || videoContents.v12345;
 
   const formatCount = (count: number) => {
     if (count >= 1000000) {
@@ -136,10 +209,22 @@ const VideoDetailsPage = () => {
   };
 
   const handleRelatedContentClick = (contentId: string) => {
+    // Reset video state when navigating to a new video
+    setIsPlaying(false);
+    setProgress(0);
+    setCurrentTime(0);
+    setShowMoreDescription(false);
+    
+    // Navigate to the new video
     navigate(`/landing/${contentId}`);
   };
 
   useEffect(() => {
+    // Reset state when video ID changes
+    setIsPlaying(false);
+    setProgress(0);
+    setCurrentTime(0);
+    
     const videoElement = videoRef.current;
     if (!videoElement) return;
 
@@ -156,13 +241,16 @@ const VideoDetailsPage = () => {
     videoElement.addEventListener('pause', () => setIsPlaying(false));
     videoElement.addEventListener('ended', () => setIsPlaying(false));
 
+    // Reset video position when video ID changes
+    videoElement.currentTime = 0;
+
     return () => {
       videoElement.removeEventListener('timeupdate', updateProgress);
       videoElement.removeEventListener('play', () => setIsPlaying(true));
       videoElement.removeEventListener('pause', () => setIsPlaying(false));
       videoElement.removeEventListener('ended', () => setIsPlaying(false));
     };
-  }, []);
+  }, [id]); // Add id to dependency array to reset when it changes
 
   const formatTime = (timeInSeconds: number) => {
     const minutes = Math.floor(timeInSeconds / 60);
@@ -342,7 +430,7 @@ const VideoDetailsPage = () => {
                 <div className="flex items-center gap-4">
                   <div className="relative flex-shrink-0">
                     <img 
-                      src="/api/placeholder/64/64" 
+                      src={video.channel.avatar} 
                       alt={video.channel.name} 
                       className="w-12 h-12 sm:w-16 sm:h-16 rounded-full border-2 border-gray-200 object-cover"
                     />
