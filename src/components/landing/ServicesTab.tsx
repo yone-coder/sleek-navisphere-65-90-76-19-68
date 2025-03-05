@@ -1,14 +1,54 @@
+
 import { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
-import { Briefcase, Leaf, Heart, Church, School, GraduationCap, Building } from 'lucide-react';
+import { Briefcase, Leaf, Heart, Church, School, Building, GraduationCap, ChevronDown, ChevronUp } from 'lucide-react';
 
 export function ServicesTab() {
   const [activeProjectType, setActiveProjectType] = useState('apps');
+  const [expandedProject, setExpandedProject] = useState<string | null>(null);
   
   const handleProjectTypeChange = (value: string) => {
     setActiveProjectType(value);
   };
+  
+  const toggleProjectExpansion = (projectId: string) => {
+    setExpandedProject(expandedProject === projectId ? null : projectId);
+  };
+
+  // Non-tech projects data
+  const nonTechProjects = [
+    {
+      id: 'lakou-agri',
+      name: 'Lakou Agri',
+      icon: <Leaf className="w-4 h-4" />,
+    },
+    {
+      id: 'hearts-hands',
+      name: 'Hearts & Hands Foundation',
+      icon: <Heart className="w-4 h-4" />,
+    },
+    {
+      id: 'holy-light',
+      name: 'Holy Light Church',
+      icon: <Church className="w-4 h-4" />,
+    },
+    {
+      id: 'college-nova',
+      name: 'Collège Nova de Désarmes',
+      icon: <School className="w-4 h-4" />,
+    },
+    {
+      id: 'ecole-polytechnique',
+      name: 'École Polytechnique Horizon',
+      icon: <Building className="w-4 h-4" />,
+    },
+    {
+      id: 'universite-nova',
+      name: 'Université Nova',
+      icon: <GraduationCap className="w-4 h-4" />,
+    }
+  ];
 
   return (
     <div className="container mx-auto px-4 py-10">
@@ -49,65 +89,52 @@ export function ServicesTab() {
         </TabsContent>
 
         <TabsContent value="non-tech" className="space-y-8">
-          <Tabs defaultValue="lakou-agri" className="w-full">
-            <div className="overflow-x-auto pb-2">
-              <TabsList className="inline-flex w-auto p-1 h-10">
-                <TabsTrigger value="lakou-agri" className="px-3 text-sm flex items-center gap-1.5">
-                  <Leaf className="w-4 h-4" />
-                  <span>Lakou Agri</span>
-                </TabsTrigger>
-                
-                <TabsTrigger value="hearts-hands" className="px-3 text-sm flex items-center gap-1.5">
-                  <Heart className="w-4 h-4" />
-                  <span>Hearts & Hands Foundation</span>
-                </TabsTrigger>
-                
-                <TabsTrigger value="holy-light" className="px-3 text-sm flex items-center gap-1.5">
-                  <Church className="w-4 h-4" />
-                  <span>Holy Light Church</span>
-                </TabsTrigger>
-                
-                <TabsTrigger value="college-nova" className="px-3 text-sm flex items-center gap-1.5">
-                  <School className="w-4 h-4" />
-                  <span>Collège Nova de Désarmes</span>
-                </TabsTrigger>
-                
-                <TabsTrigger value="ecole-polytechnique" className="px-3 text-sm flex items-center gap-1.5">
-                  <Building className="w-4 h-4" />
-                  <span>École Polytechnique Horizon</span>
-                </TabsTrigger>
-                
-                <TabsTrigger value="universite-nova" className="px-3 text-sm flex items-center gap-1.5">
-                  <GraduationCap className="w-4 h-4" />
-                  <span>Université Nova</span>
-                </TabsTrigger>
-              </TabsList>
+          <div className="w-full max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+            {/* Header with title */}
+            <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
+              <div className="flex justify-center items-center">
+                <h2 className="text-xl font-semibold text-gray-800 text-center">Non-Tech Projects</h2>
+              </div>
+              <p className="mt-1 text-sm text-gray-500 text-center">{nonTechProjects.length} projects • Agricultural, Educational & Community</p>
             </div>
-
-            <TabsContent value="lakou-agri" className="mt-6">
-              {/* Empty content for Lakou Agri as requested */}
-            </TabsContent>
             
-            <TabsContent value="hearts-hands" className="mt-6">
-              {/* Empty content for Hearts & Hands Foundation as requested */}
-            </TabsContent>
-            
-            <TabsContent value="holy-light" className="mt-6">
-              {/* Empty content for Holy Light Church as requested */}
-            </TabsContent>
-            
-            <TabsContent value="college-nova" className="mt-6">
-              {/* Empty content for Collège Nova de Désarmes as requested */}
-            </TabsContent>
-            
-            <TabsContent value="ecole-polytechnique" className="mt-6">
-              {/* Empty content for École Polytechnique Horizon as requested */}
-            </TabsContent>
-            
-            <TabsContent value="universite-nova" className="mt-6">
-              {/* Empty content for Université Nova as requested */}
-            </TabsContent>
-          </Tabs>
+            {/* Projects section */}
+            <div className="max-h-96 overflow-y-auto">
+              {nonTechProjects.map((project) => (
+                <div 
+                  key={project.id}
+                  className="transition-colors border-l-4 border-transparent hover:bg-gray-50"
+                >
+                  {/* Project header (always visible) */}
+                  <div 
+                    className="flex items-center p-4 cursor-pointer"
+                    onClick={() => toggleProjectExpansion(project.id)}
+                  >
+                    <div className="mr-3 flex-shrink-0">
+                      {project.icon}
+                    </div>
+                    
+                    <div className="flex-grow">
+                      <h3 className="font-medium text-gray-800">
+                        {project.name}
+                      </h3>
+                    </div>
+                    
+                    <div className="ml-2 text-gray-400">
+                      {expandedProject === project.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                    </div>
+                  </div>
+                  
+                  {/* Project description (visible only when expanded) */}
+                  {expandedProject === project.id && (
+                    <div className="px-6 pb-5 ml-12 mr-4 text-sm text-gray-600 border-t border-gray-100 pt-3 animate-fade-in">
+                      {/* Empty content as requested */}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
         </TabsContent>
       </Tabs>
     </div>
