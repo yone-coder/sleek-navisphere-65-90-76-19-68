@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -298,7 +299,7 @@ const VideoDetailsPage = () => {
           
           <div className="flex items-center justify-between text-gray-600 text-sm mb-6 border-b border-gray-200 pb-4">
             <div className="flex items-center">
-              <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded mr-2">4K</span>
+              <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded mr-2">{video.quality}</span>
               <span>{formatCount(video.views)} views</span>
             </div>
             
