@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
@@ -148,13 +147,6 @@ export function ServicesTab() {
             )}
           </div>
         </div>
-      </div>
-
-      <div className="flex flex-col items-center justify-center mt-8 mb-2">
-        <h2 className="text-3xl font-bold text-center mb-1">Our Projects</h2>
-        <p className="text-gray-600 text-center max-w-xl mb-3">
-          Explore our diverse portfolio of tech and non-tech initiatives designed to create positive impact.
-        </p>
       </div>
 
       <Sheet open={isShowingProjects} onOpenChange={setIsShowingProjects}>
