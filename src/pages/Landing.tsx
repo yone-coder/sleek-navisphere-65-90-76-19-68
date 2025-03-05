@@ -649,7 +649,9 @@ export default function Landing() {
     <div className="font-sans">
       <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
         <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg shadow-sm">
-          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          {activeTab === "overview" && (
+            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          )}
           <TabNav activeTab={activeTab} />
         </div>
         <div className="w-full">
