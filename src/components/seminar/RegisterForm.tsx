@@ -97,6 +97,19 @@ export const RegisterForm = () => {
     { id: "workshop3", label: "Serverless Architectures (Day 2)" },
     { id: "workshop4", label: "Advanced CSS Techniques (Day 3)" },
   ];
+  
+  // Type-safe way to access nested errors
+  const getFieldError = (field: string, subfield?: string) => {
+    const fieldError = errors[field];
+    if (!fieldError) return null;
+    
+    if (subfield && typeof fieldError === 'object' && 'message' in fieldError === false) {
+      // This is where we safely access the nested error property
+      return (fieldError as Record<string, any>)[subfield];
+    }
+    
+    return null;
+  };
 
   return (
     <div className="py-20 bg-gradient-to-b from-white to-purple-50">
@@ -155,8 +168,8 @@ export const RegisterForm = () => {
                             placeholder="Enter your first name"
                             {...register("step1.firstName")}
                           />
-                          {errors.step1 && errors.step1.firstName && (
-                            <p className="text-red-500 text-sm">{String(errors.step1.firstName.message)}</p>
+                          {errors.step1 && typeof errors.step1 === 'object' && 'firstName' in errors.step1 && (
+                            <p className="text-red-500 text-sm">{errors.step1.firstName?.message as string}</p>
                           )}
                         </div>
                         <div className="space-y-2">
@@ -166,8 +179,8 @@ export const RegisterForm = () => {
                             placeholder="Enter your last name"
                             {...register("step1.lastName")}
                           />
-                          {errors.step1 && errors.step1.lastName && (
-                            <p className="text-red-500 text-sm">{String(errors.step1.lastName.message)}</p>
+                          {errors.step1 && typeof errors.step1 === 'object' && 'lastName' in errors.step1 && (
+                            <p className="text-red-500 text-sm">{errors.step1.lastName?.message as string}</p>
                           )}
                         </div>
                       </div>
@@ -180,8 +193,8 @@ export const RegisterForm = () => {
                           placeholder="you@example.com"
                           {...register("step1.email")}
                         />
-                        {errors.step1 && errors.step1.email && (
-                          <p className="text-red-500 text-sm">{String(errors.step1.email.message)}</p>
+                        {errors.step1 && typeof errors.step1 === 'object' && 'email' in errors.step1 && (
+                          <p className="text-red-500 text-sm">{errors.step1.email?.message as string}</p>
                         )}
                       </div>
 
@@ -223,8 +236,8 @@ export const RegisterForm = () => {
                             <Label htmlFor="pass-team" className="font-medium">Team Pass - $499 per person (3+ attendees)</Label>
                           </div>
                         </RadioGroup>
-                        {errors.step2 && errors.step2.passType && (
-                          <p className="text-red-500 text-sm">{String(errors.step2.passType.message)}</p>
+                        {errors.step2 && typeof errors.step2 === 'object' && 'passType' in errors.step2 && (
+                          <p className="text-red-500 text-sm">{errors.step2.passType?.message as string}</p>
                         )}
                       </div>
 
@@ -289,8 +302,8 @@ export const RegisterForm = () => {
                             I agree to receive updates about the event, including schedule changes, speaker announcements, and session reminders.
                           </Label>
                         </div>
-                        {errors.step3 && errors.step3.marketingConsent && (
-                          <p className="text-red-500 text-sm">{String(errors.step3.marketingConsent.message)}</p>
+                        {errors.step3 && typeof errors.step3 === 'object' && 'marketingConsent' in errors.step3 && (
+                          <p className="text-red-500 text-sm">{errors.step3.marketingConsent?.message as string}</p>
                         )}
 
                         <div className="flex items-start space-x-2">
@@ -302,8 +315,8 @@ export const RegisterForm = () => {
                             I agree to the <a href="#" className="text-purple-600 hover:underline">Terms and Conditions</a> and <a href="#" className="text-purple-600 hover:underline">Privacy Policy</a>.
                           </Label>
                         </div>
-                        {errors.step3 && errors.step3.termsAccepted && (
-                          <p className="text-red-500 text-sm">{String(errors.step3.termsAccepted.message)}</p>
+                        {errors.step3 && typeof errors.step3 === 'object' && 'termsAccepted' in errors.step3 && (
+                          <p className="text-red-500 text-sm">{errors.step3.termsAccepted?.message as string}</p>
                         )}
                       </div>
                     </div>
