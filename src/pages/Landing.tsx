@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,7 +13,6 @@ import { PaymentMethodsSheet } from '@/components/landing/PaymentMethodsSheet';
 import { StoryMissionsTab } from '@/components/landing/StoryMissionsTab';
 import { ServicesTab } from '@/components/landing/ServicesTab';
 
-// Define a map of video content data
 const videoContents = {
   v12345: {
     id: 'v12345',
@@ -132,7 +130,6 @@ const VideoDetailsPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   
-  // Get the correct video content based on the ID parameter
   const videoId = id || 'v12345';
   const video = videoContents[videoId as keyof typeof videoContents] || videoContents.v12345;
 
@@ -209,18 +206,14 @@ const VideoDetailsPage = () => {
   };
 
   const handleRelatedContentClick = (contentId: string) => {
-    // Reset video state when navigating to a new video
     setIsPlaying(false);
     setProgress(0);
     setCurrentTime(0);
     setShowMoreDescription(false);
-    
-    // Navigate to the new video
     navigate(`/landing/${contentId}`);
   };
 
   useEffect(() => {
-    // Reset state when video ID changes
     setIsPlaying(false);
     setProgress(0);
     setCurrentTime(0);
@@ -241,7 +234,6 @@ const VideoDetailsPage = () => {
     videoElement.addEventListener('pause', () => setIsPlaying(false));
     videoElement.addEventListener('ended', () => setIsPlaying(false));
 
-    // Reset video position when video ID changes
     videoElement.currentTime = 0;
 
     return () => {
@@ -250,7 +242,7 @@ const VideoDetailsPage = () => {
       videoElement.removeEventListener('pause', () => setIsPlaying(false));
       videoElement.removeEventListener('ended', () => setIsPlaying(false));
     };
-  }, [id]); // Add id to dependency array to reset when it changes
+  }, [id]);
 
   const formatTime = (timeInSeconds: number) => {
     const minutes = Math.floor(timeInSeconds / 60);
@@ -434,7 +426,7 @@ const VideoDetailsPage = () => {
                       alt={video.channel.name} 
                       className="w-12 h-12 sm:w-16 sm:h-16 rounded-full border-2 border-gray-200 object-cover"
                     />
-                    <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 sm:p-1 shadow-sm">
+                    <div className="absolute -bottom-1 -right-1 bg-black/70 px-1 rounded text-xs text-white">
                       <Clock size={14} className="text-purple-600" />
                     </div>
                   </div>
@@ -601,6 +593,26 @@ export default function Landing() {
   const [searchQuery, setSearchQuery] = useState("");
   const sheetTriggerRef = useRef<HTMLButtonElement>(null);
   const { id } = useParams();
+  const [isTabNavVisible, setIsTabNavVisible] = useState(true);
+  const [lastScrollTop, setLastScrollTop] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      
+      if (scrollTop > lastScrollTop && scrollTop > 50) {
+        setIsTabNavVisible(false);
+      } else if (scrollTop < lastScrollTop || scrollTop < 10) {
+        setIsTabNavVisible(true);
+      }
+      
+      setLastScrollTop(scrollTop);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollTop]);
 
   const rewards = [
     {
@@ -648,7 +660,9 @@ export default function Landing() {
   return (
     <div className="font-sans">
       <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
-        <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg shadow-sm">
+        <div className={`sticky top-0 z-50 bg-white/95 backdrop-blur-lg shadow-sm transition-all duration-300 ${
+          isTabNavVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'
+        }`}>
           {activeTab === "overview" && (
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           )}
