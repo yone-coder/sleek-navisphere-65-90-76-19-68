@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
@@ -20,18 +19,43 @@ export function ServicesTab() {
   const [isTogglesVisible, setIsTogglesVisible] = useState(true);
   const [lastScrollTop, setLastScrollTop] = useState(0);
   const tabRef = useRef<HTMLDivElement>(null);
+  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    // This effect is specific to the ServicesTab component and won't affect other tabs
+    const checkVisibility = () => {
+      const isServicesTabActive = window.location.hash === '#services' || 
+                                 document.querySelector('[data-state="active"][data-value="services"]') !== null;
+      
+      setIsActive(isServicesTabActive);
+    };
+
+    checkVisibility();
+
+    window.addEventListener('hashchange', checkVisibility);
+    const tabElements = document.querySelectorAll('[role="tab"]');
+    tabElements.forEach(tab => {
+      tab.addEventListener('click', checkVisibility);
+    });
+
+    const intervalId = setInterval(checkVisibility, 500);
+
+    return () => {
+      window.removeEventListener('hashchange', checkVisibility);
+      tabElements.forEach(tab => {
+        tab.removeEventListener('click', checkVisibility);
+      });
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(() => {
     const handleScroll = () => {
-      // Only apply scroll logic if the ServicesTab component is actually visible
-      if (!tabRef.current || tabRef.current.offsetParent === null) {
-        return; // ServicesTab is not visible, don't apply scroll logic
+      if (!isActive) {
+        return;
       }
       
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       
-      // Only hide toggles when scrolling UP (not down like TabNav)
       if (scrollTop < lastScrollTop && scrollTop > 50) {
         setIsTogglesVisible(false);
       } else if (scrollTop > lastScrollTop || scrollTop < 10) {
@@ -41,10 +65,23 @@ export function ServicesTab() {
       setLastScrollTop(scrollTop);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollTop]);
+    if (isActive) {
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      console.log("ServicesTab: Scroll listener added");
+      
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+        console.log("ServicesTab: Scroll listener removed");
+      };
+    }
+  }, [lastScrollTop, isActive]);
+
+  useEffect(() => {
+    if (isActive) {
+      setIsTogglesVisible(true);
+      setLastScrollTop(0);
+    }
+  }, [isActive]);
 
   const handleProjectTypeChange = (value: string) => {
     setActiveProjectType(value);
@@ -126,7 +163,7 @@ export function ServicesTab() {
   const projectShortName = currentProject ? getShortName(currentProject.name) : 'SP';
 
   return (
-    <div className="w-full" ref={tabRef}>
+    <div className="w-full" ref={tabRef} data-tab-active={isActive ? "true" : "false"}>
       <div className={`sticky top-0 bg-white shadow-md z-30 transition-all duration-300 ${
         isTogglesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'
       }`}>
