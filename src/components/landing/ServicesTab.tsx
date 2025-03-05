@@ -99,7 +99,7 @@ export function ServicesTab() {
 
   return (
     <div className="w-full">
-      <div className="bg-white shadow-md z-30">
+      <div className="sticky top-0 bg-white shadow-md z-30">
         <div className="container mx-auto px-4 py-2 flex justify-between items-center">
           <button
             onClick={() => setIsShowingProjects(true)} 
