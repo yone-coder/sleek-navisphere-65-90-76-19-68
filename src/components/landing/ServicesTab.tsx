@@ -98,8 +98,8 @@ export function ServicesTab() {
   const projectShortName = currentProject ? getShortName(currentProject.name) : 'SP';
 
   return (
-    <div className="w-full pt-4"> {/* Added padding-top for space below the TabNav */}
-      <div className="sticky top-14 left-0 right-0 bg-white shadow-md z-30"> {/* Increased top value to account for TabNav height */}
+    <div className="w-full pt-0"> {/* Removed padding-top */}
+      <div className="sticky top-14 left-0 right-0 bg-white shadow-md z-30"> {/* Keep top value to account for TabNav height */}
         <div className="container mx-auto px-4 py-2 flex justify-between items-center">
           <button
             onClick={() => setIsShowingProjects(true)} 

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -669,7 +668,7 @@ export default function Landing() {
           )}
           <TabNav activeTab={activeTab} />
         </div>
-        <div className="w-full pt-14"> {/* Added padding-top to create space for the fixed header */}
+        <div className="w-full pt-14 pb-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
@@ -677,6 +676,7 @@ export default function Landing() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
+              className="mt-0"
             >
               <TabsContent value="overview" className="mt-0 pb-32">
                 <VideoDetailsPage />
