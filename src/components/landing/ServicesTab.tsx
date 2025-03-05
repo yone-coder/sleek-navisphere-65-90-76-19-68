@@ -37,9 +37,14 @@ export function ServicesTab() {
     if (name.length <= 10) return name.toUpperCase();
     
     // For longer names with multiple words, use first letters of each word
+    // but ignore common prepositions like "de", "of", "and", etc.
     const words = name.split(' ');
     if (words.length > 1) {
-      return words.map(word => word.charAt(0)).join('').toUpperCase();
+      return words
+        .filter(word => !['de', 'of', 'and', '&', 'the'].includes(word.toLowerCase()))
+        .map(word => word.charAt(0))
+        .join('')
+        .toUpperCase();
     }
     
     // For a single long word, just return first two characters
