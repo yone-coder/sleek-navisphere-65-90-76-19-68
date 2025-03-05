@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -660,7 +661,7 @@ export default function Landing() {
   return (
     <div className="font-sans">
       <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
-        <div className={`sticky top-0 z-50 bg-white/95 backdrop-blur-lg shadow-sm transition-all duration-300 ${
+        <div className={`fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg shadow-sm transition-all duration-300 ${
           isTabNavVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'
         }`}>
           {activeTab === "overview" && (
@@ -668,7 +669,7 @@ export default function Landing() {
           )}
           <TabNav activeTab={activeTab} />
         </div>
-        <div className="w-full">
+        <div className="w-full pt-14"> {/* Added padding-top to create space for the fixed header */}
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
