@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
@@ -83,6 +84,7 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<Apps />} />
           <Route path="/landing" element={<Landing />} />
+          <Route path="/landing/:id" element={<Landing />} />
           <Route path="/apps" element={<Apps />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
