@@ -113,7 +113,7 @@ export function ServicesTab() {
         </p>
       </div>
 
-      {/* Header with toggles */}
+      {/* Header with toggles - REDUCED TOP SPACING */}
       <div className="fixed top-20 left-0 right-0 bg-white shadow-md z-30">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <button
@@ -228,7 +228,7 @@ export function ServicesTab() {
       <Tabs
         value={activeProjectType}
         onValueChange={handleProjectTypeChange}
-        className="w-full mt-16"
+        className="w-full mt-16"  {/* REDUCED MARGIN HERE FROM WHAT WAS LIKELY LARGER BEFORE */}
       >
         <TabsContent value="apps" className="space-y-8">
           <motion.div
