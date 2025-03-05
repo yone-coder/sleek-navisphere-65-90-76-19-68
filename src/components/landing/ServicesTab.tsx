@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
@@ -20,9 +21,11 @@ export function ServicesTab() {
   const [lastScrollTop, setLastScrollTop] = useState(0);
 
   useEffect(() => {
+    // This effect is specific to the ServicesTab component and won't affect other tabs
     const handleScroll = () => {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       
+      // Only hide toggles when scrolling UP (not down like TabNav)
       if (scrollTop < lastScrollTop && scrollTop > 50) {
         setIsTogglesVisible(false);
       } else if (scrollTop > lastScrollTop || scrollTop < 10) {
