@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
@@ -124,24 +125,26 @@ export function ServicesTab() {
             </button>
             
             {languageMenuOpen && (
-              <div 
-                className="fixed inset-0 z-40" 
-                onClick={() => setLanguageMenuOpen(false)}
-              />
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-50 py-2">
-                {languages.map((language) => (
-                  <button
-                    key={language.code}
-                    onClick={() => handleLanguageChange(language)}
-                    className={`flex items-center w-full text-left px-4 py-2 hover:bg-gray-100 ${
-                      currentLanguage.code === language.code ? 'bg-pink-50 text-pink-600' : ''
-                    }`}
-                  >
-                    <span className="mr-3 text-lg">{language.flag}</span>
-                    <span>{language.name}</span>
-                  </button>
-                ))}
-              </div>
+              <>
+                <div 
+                  className="fixed inset-0 z-40" 
+                  onClick={() => setLanguageMenuOpen(false)}
+                />
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-50 py-2">
+                  {languages.map((language) => (
+                    <button
+                      key={language.code}
+                      onClick={() => handleLanguageChange(language)}
+                      className={`flex items-center w-full text-left px-4 py-2 hover:bg-gray-100 ${
+                        currentLanguage.code === language.code ? 'bg-pink-50 text-pink-600' : ''
+                      }`}
+                    >
+                      <span className="mr-3 text-lg">{language.flag}</span>
+                      <span>{language.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </>
             )}
           </div>
         </div>
