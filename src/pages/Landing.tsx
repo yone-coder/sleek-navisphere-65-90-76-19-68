@@ -660,7 +660,7 @@ export default function Landing() {
   return (
     <div className="font-sans">
       <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
-        <div className={`fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg shadow-sm transition-all duration-300 ${
+        <div className={`sticky top-0 z-50 bg-white/95 backdrop-blur-lg shadow-sm transition-all duration-300 ${
           isTabNavVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'
         }`}>
           {activeTab === "overview" && (
@@ -668,7 +668,7 @@ export default function Landing() {
           )}
           <TabNav activeTab={activeTab} />
         </div>
-        <div className="w-full pt-14 pb-0">
+        <div className="w-full">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
@@ -676,7 +676,6 @@ export default function Landing() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="mt-0"
             >
               <TabsContent value="overview" className="mt-0 pb-32">
                 <VideoDetailsPage />

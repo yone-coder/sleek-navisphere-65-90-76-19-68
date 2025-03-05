@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
@@ -98,8 +97,8 @@ export function ServicesTab() {
   const projectShortName = currentProject ? getShortName(currentProject.name) : 'SP';
 
   return (
-    <div className="w-full pt-0"> {/* Removed padding-top */}
-      <div className="sticky top-14 left-0 right-0 bg-white shadow-md z-30"> {/* Keep top value to account for TabNav height */}
+    <div className="w-full">
+      <div className="sticky top-0 left-0 right-0 bg-white shadow-md z-30">
         <div className="container mx-auto px-4 py-2 flex justify-between items-center">
           <button
             onClick={() => setIsShowingProjects(true)} 
