@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
 import { 
@@ -17,6 +17,26 @@ export function ServicesTab() {
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState({ name: 'English', code: 'en', flag: '🇬🇧' });
   const { language, setLanguage, t } = useLanguage();
+  const [isTogglesVisible, setIsTogglesVisible] = useState(true);
+  const [lastScrollTop, setLastScrollTop] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      
+      if (scrollTop > lastScrollTop && scrollTop > 50) {
+        setIsTogglesVisible(false);
+      } else if (scrollTop < lastScrollTop || scrollTop < 10) {
+        setIsTogglesVisible(true);
+      }
+      
+      setLastScrollTop(scrollTop);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollTop]);
 
   const handleProjectTypeChange = (value: string) => {
     setActiveProjectType(value);
@@ -99,7 +119,9 @@ export function ServicesTab() {
 
   return (
     <div className="w-full">
-      <div className="sticky top-0 bg-white shadow-md z-30">
+      <div className={`sticky top-0 bg-white shadow-md z-30 transition-all duration-300 ${
+        isTogglesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'
+      }`}>
         <div className="container mx-auto px-4 py-2 flex justify-between items-center">
           <button
             onClick={() => setIsShowingProjects(true)} 
