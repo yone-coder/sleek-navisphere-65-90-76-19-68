@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useLanguage } from '@/contexts/LanguageContext';
+import AppStore from './AppStore';
 
 export function ServicesTab() {
   const [activeProjectType, setActiveProjectType] = useState('apps');
@@ -217,12 +218,8 @@ export function ServicesTab() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-lg font-semibold mb-2">Apps Projects</h3>
-                <p className="text-gray-600">Content for Apps projects will appear here.</p>
-              </div>
+              <AppStore />
             </motion.div>
           </TabsContent>
 
