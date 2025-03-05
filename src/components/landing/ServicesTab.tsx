@@ -1,4 +1,4 @@
-<lov-codelov-code>
+
 import { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
@@ -7,6 +7,7 @@ import {
   GraduationCap, ChevronDown, BookOpen, X
 } from 'lucide-react';
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export function ServicesTab() {
   const [activeProjectType, setActiveProjectType] = useState('apps');
@@ -14,6 +15,7 @@ export function ServicesTab() {
   const [isShowingProjects, setIsShowingProjects] = useState(false);
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState({ name: 'English', code: 'en', flag: '🇬🇧' });
+  const { language, setLanguage, t } = useLanguage();
 
   const handleProjectTypeChange = (value: string) => {
     setActiveProjectType(value);
@@ -298,4 +300,3 @@ export function ServicesTab() {
     </div>
   );
 }
-</lov-code>
