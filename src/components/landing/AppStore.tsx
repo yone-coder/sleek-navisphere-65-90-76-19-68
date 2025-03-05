@@ -100,15 +100,15 @@ const AppStore = () => {
     );
   };
 
-  // App logo component - adjusted size to match Apps page
+  // App logo component - slightly larger than the Apps page
   const AppLogo = ({ app }) => {
     const IconComponent = app.icon;
     return (
       <div 
-        className="w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-md flex-shrink-0"
+        className="w-14 h-14 rounded-xl flex items-center justify-center text-white shadow-md flex-shrink-0"
         style={{ backgroundColor: app.color }}
       >
-        {IconComponent && <IconComponent className="w-6 h-6 text-white" />}
+        {IconComponent && <IconComponent className="w-7 h-7 text-white" />}
       </div>
     );
   };
