@@ -98,13 +98,6 @@ export function ServicesTab() {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <div className="flex flex-col items-center justify-center mb-2">
-        <h2 className="text-3xl font-bold text-center mb-2">Our Projects</h2>
-        <p className="text-gray-600 text-center max-w-xl mb-4">
-          Explore our diverse portfolio of tech and non-tech initiatives designed to create positive impact.
-        </p>
-      </div>
-
       <div className="fixed top-20 left-0 right-0 bg-white shadow-md z-30">
         <div className="container mx-auto px-4 py-1 flex justify-between items-center">
           <button
@@ -155,6 +148,13 @@ export function ServicesTab() {
             )}
           </div>
         </div>
+      </div>
+
+      <div className="flex flex-col items-center justify-center mt-12 mb-2">
+        <h2 className="text-3xl font-bold text-center mb-2">Our Projects</h2>
+        <p className="text-gray-600 text-center max-w-xl mb-4">
+          Explore our diverse portfolio of tech and non-tech initiatives designed to create positive impact.
+        </p>
       </div>
 
       <Sheet open={isShowingProjects} onOpenChange={setIsShowingProjects}>
@@ -318,3 +318,4 @@ export function ServicesTab() {
     </div>
   );
 }
+
