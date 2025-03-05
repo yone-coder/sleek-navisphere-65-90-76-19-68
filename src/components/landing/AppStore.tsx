@@ -237,7 +237,7 @@ const AppStore = () => {
               <p className="text-sm text-gray-600">{app.description}</p>
             </div>
             
-            {/* Expandable details section */}
+            {/* Expandable details section - Modified to be full width */}
             <div className="px-6">
               <button 
                 className="w-full flex items-center justify-between py-2 border-t border-gray-100 text-sm text-blue-600"
