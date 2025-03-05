@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
@@ -31,13 +30,9 @@ export function ServicesTab() {
     setLanguageMenuOpen(false);
   };
 
-  // Generate abbreviated name for projects
   const getShortName = (name: string) => {
-    // If the name is short enough, just return it
     if (name.length <= 10) return name.toUpperCase();
     
-    // For longer names with multiple words, use first letters of each word
-    // but ignore common prepositions like "de", "of", "and", etc.
     const words = name.split(' ');
     if (words.length > 1) {
       return words
@@ -47,11 +42,9 @@ export function ServicesTab() {
         .toUpperCase();
     }
     
-    // For a single long word, just return first two characters
     return name.substring(0, 2).toUpperCase();
   };
 
-  // Project data
   const projects = [
     {
       id: 'apps',
@@ -90,7 +83,6 @@ export function ServicesTab() {
     }
   ];
 
-  // Languages
   const languages = [
     { name: 'English', code: 'en', flag: '🇬🇧' },
     { name: 'Español', code: 'es', flag: '🇪🇸' },
@@ -99,23 +91,21 @@ export function ServicesTab() {
     { name: 'Italiano', code: 'it', flag: '🇮🇹' }
   ];
 
-  // Get current project's full name
   const currentProject = projects.find(p => p.id === activeProjectType);
   const projectDisplayName = currentProject ? currentProject.name : 'Select Project';
   const projectShortName = currentProject ? getShortName(currentProject.name) : 'SP';
 
   return (
     <div className="container mx-auto px-4 py-10">
-      <div className="flex flex-col items-center justify-center mb-8">
+      <div className="flex flex-col items-center justify-center mb-6">
         <h2 className="text-3xl font-bold text-center mb-4">Our Projects</h2>
         <p className="text-gray-600 text-center max-w-xl">
           Explore our diverse portfolio of tech and non-tech initiatives designed to create positive impact.
         </p>
       </div>
 
-      {/* Header with toggles - REDUCED TOP SPACING */}
       <div className="fixed top-20 left-0 right-0 bg-white shadow-md z-30">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div className="container mx-auto px-4 py-2 flex justify-between items-center">
           <button
             onClick={() => setIsShowingProjects(true)} 
             className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-green-100 hover:bg-green-200 transition-all duration-200"
@@ -165,12 +155,10 @@ export function ServicesTab() {
           </div>
         </div>
       </div>
-      
-      {/* Overlay for project selection */}
+
       <Sheet open={isShowingProjects} onOpenChange={setIsShowingProjects}>
         <SheetContent side="bottom" className="h-[90vh] overflow-y-auto p-0">
           <div className="w-full max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden animate-slide-up-in">
-            {/* Header with title */}
             <div className="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
               <div className="flex-1">
                 <h2 className="text-xl font-semibold text-gray-800 text-center">Our Projects</h2>
@@ -184,7 +172,6 @@ export function ServicesTab() {
               </button>
             </div>
             
-            {/* Projects section */}
             <div className="max-h-96 overflow-y-auto">
               {projects.map((project) => (
                 <div 
@@ -195,7 +182,6 @@ export function ServicesTab() {
                       : 'border-transparent hover:bg-gray-50'
                   }`}
                 >
-                  {/* Project header (always visible) */}
                   <div 
                     className="flex items-center p-4 cursor-pointer"
                     onClick={() => {
@@ -228,7 +214,7 @@ export function ServicesTab() {
       <Tabs
         value={activeProjectType}
         onValueChange={handleProjectTypeChange}
-        className="w-full mt-10"
+        className="w-full mt-6"
       >
         <TabsContent value="apps" className="space-y-8">
           <motion.div
