@@ -228,7 +228,7 @@ export function ServicesTab() {
       <Tabs
         value={activeProjectType}
         onValueChange={handleProjectTypeChange}
-        className="w-full mt-16"  {/* REDUCED MARGIN HERE FROM WHAT WAS LIKELY LARGER BEFORE */}
+        className="w-full mt-10"
       >
         <TabsContent value="apps" className="space-y-8">
           <motion.div
