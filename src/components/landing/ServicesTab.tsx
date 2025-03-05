@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
@@ -24,7 +23,6 @@ export function ServicesTab() {
     const handleScroll = () => {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       
-      // Changed condition: hide when scrolling UP, show when scrolling DOWN
       if (scrollTop < lastScrollTop && scrollTop > 50) {
         setIsTogglesVisible(false);
       } else if (scrollTop > lastScrollTop || scrollTop < 10) {
