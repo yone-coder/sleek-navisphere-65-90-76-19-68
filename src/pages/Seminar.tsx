@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp, BadgeCheck, Eye } from 'lucide-react';
 import RegisterNowSection from '../components/seminar/RegisterNowSection';
+import WebinarComponent from '../components/seminar/WebinarComponent';
 
 const SeminarHomepage = () => {
   // State for active tab
@@ -172,6 +173,13 @@ const SeminarHomepage = () => {
           </div>
         )}
       </div>
+      
+      {/* Fixed WebinarComponent at the bottom only for video tab */}
+      {activeTab === 0 && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 py-3 px-4 z-50">
+          <WebinarComponent />
+        </div>
+      )}
     </div>
   );
 };
