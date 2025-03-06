@@ -85,23 +85,27 @@ const SeminarHomepage = () => {
               <div className="text-sm text-gray-500 mt-1">
                 <p className="font-medium">Future of Innovation Seminar 2025</p>
               </div>
-              
-              <div className="flex items-center gap-x-4 mt-2">
-                <div className="flex items-center text-sm text-gray-700">
-                  <Users size={16} className="mr-1 text-gray-500" />
-                  <span>126.5K foll.</span>
-                </div>
-                <div className="flex items-center text-sm text-gray-700">
-                  <Calendar size={16} className="mr-1 text-gray-500" />
-                  <span>87 sémi.</span>
-                </div>
-                <div className="flex items-center text-sm text-gray-700">
-                  <Star size={16} className="mr-1 text-yellow-500" />
-                  <span>4.8</span>
-                </div>
+            </div>
+          </div>
+          
+          {/* Full width stats section */}
+          <div className="mt-3 -mx-4 md:-mx-6 px-4 md:px-6 py-3 bg-gray-50 border-t border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center text-sm text-gray-700">
+                <Users size={16} className="mr-1 text-gray-500" />
+                <span>126.5K foll.</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-700">
+                <Calendar size={16} className="mr-1 text-gray-500" />
+                <span>87 sémi.</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-700">
+                <Star size={16} className="mr-1 text-yellow-500" />
+                <span>4.8</span>
               </div>
             </div>
           </div>
+          
           <div className="mt-3 text-sm text-gray-700">
             Join industry leaders for this exclusive 3-day event focused on emerging technologies, innovation strategies, and future business trends. March 15-17, 2025.
           </div>
