@@ -17,8 +17,8 @@ const WebinarComponent = () => {
   const [isRegistered, setIsRegistered] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState(0);
-  const [hoverValue, setHoverValue] = useState<{percentage: string, participants: number} | null>(null);
-  const [sparkline, setSparkline] = useState<number[]>([]);
+  const [hoverValue, setHoverValue<{percentage: string, participants: number} | null>(null);
+  const [sparkline, setSparkline<number[]>([]);
   const [registrationMessage, setRegistrationMessage] = useState({
     profile: getRandomLetter(),
     message: 'just registered',
@@ -118,13 +118,13 @@ const WebinarComponent = () => {
             isVisible: true
           });
           
-          // Hide notification after a delay
+          // Hide notification after a delay - changed from 3000ms to 10000ms (10 seconds)
           setTimeout(() => {
             setRegistrationMessage(prev => ({
               ...prev,
               isVisible: false
             }));
-          }, 3000);
+          }, 10000);
         }
       }
     }, 12000); // Slower interval (12 seconds instead of 5)
