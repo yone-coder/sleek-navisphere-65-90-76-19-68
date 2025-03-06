@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp, BadgeCheck, Eye } from 'lucide-react';
 import RegisterNowSection from '../components/seminar/RegisterNowSection';
@@ -19,13 +18,13 @@ const SeminarHomepage = () => {
     { id: 4, name: "Register", icon: <Edit3 size={18} /> }
   ];
   
-  // Floating progress data
+  // Web development webinar floating progress data
   const seminarProgressData = {
-    backers: 824,
-    progress: 65,
-    days: 14,
-    raised: 32500,
-    goal: 50000
+    backers: 312,
+    progress: 78,
+    days: 7,
+    raised: 15600,
+    goal: 20000
   };
   
   const handleBackProjectClick = () => {
