@@ -1,3 +1,4 @@
+
 import { motion } from 'framer-motion';
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -222,7 +223,7 @@ export function TabNav({ activeTab }: TabNavProps) {
   return (
     <div className="relative w-full">
       <ScrollArea 
-        className="w-full overflow-x-auto" 
+        className="w-full overflow-x-auto z-50" 
         ref={scrollAreaRef}
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}

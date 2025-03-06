@@ -224,7 +224,7 @@ export function ServicesTab() {
 
   return (
     <div className="w-full ServicesTab" ref={tabRef} data-tab-active={isActive ? "true" : "false"}>
-      <div className={`sticky top-0 bg-white shadow-md z-5 transition-all duration-300 ${
+      <div className={`sticky top-0 bg-white shadow-md z-10 transition-all duration-300 ${
         isTogglesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'
       }`}>
         <div className="container mx-auto px-4 py-2 flex justify-between items-center">
