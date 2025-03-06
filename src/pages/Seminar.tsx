@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { HeroSection } from "@/components/seminar/HeroSection";
 import { SpeakersSection } from "@/components/seminar/SpeakersSection";
 import { AgendaSection } from "@/components/seminar/AgendaSection";
@@ -11,10 +11,10 @@ import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Seminar = () => {
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [scrollProgress, setScrollProgress] = React.useState(0);
+  const [showScrollTop, setShowScrollTop] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleScroll = () => {
       const totalHeight = document.body.scrollHeight - window.innerHeight;
       const progress = (window.pageYOffset / totalHeight) * 100;
