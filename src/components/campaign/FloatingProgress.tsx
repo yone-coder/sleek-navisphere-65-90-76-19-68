@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Clock, Users, DollarSign, Share2, Heart, Shield } from 'lucide-react';
+import { Clock, Users, DollarSign, Share2, Heart, Shield, UserCheck, GraduationCap } from 'lucide-react';
 
 interface FloatingProgressProps {
   backers: number;
@@ -10,6 +10,7 @@ interface FloatingProgressProps {
   raised: number;
   goal: number;
   onBackProjectClick?: () => void;
+  isWebinar?: boolean;
 }
 
 export function FloatingProgress({ 
@@ -18,7 +19,8 @@ export function FloatingProgress({
   days, 
   raised: finalRaised, 
   goal,
-  onBackProjectClick
+  onBackProjectClick,
+  isWebinar = false
 }: FloatingProgressProps) {
   const [progress, setProgress] = useState(0);
   const [raised, setRaised] = useState(0);
@@ -57,12 +59,16 @@ export function FloatingProgress({
           <div className="flex justify-between items-center mb-1">
             <div className="flex items-center space-x-4">
               <div className="flex items-center whitespace-nowrap">
-                <Users className="h-3.5 w-3.5 mr-1 text-gray-500" />
+                {isWebinar ? (
+                  <UserCheck className="h-3.5 w-3.5 mr-1 text-green-500" />
+                ) : (
+                  <Users className="h-3.5 w-3.5 mr-1 text-gray-500" />
+                )}
                 <span className="text-sm md:text-base font-bold text-gray-900">
                   {Math.round(backers)}
                 </span>
                 <span className="text-gray-600 text-[10px] ml-1">
-                  backers
+                  {isWebinar ? 'participants' : 'backers'}
                 </span>
               </div>
               <div className="flex items-center whitespace-nowrap">
@@ -71,7 +77,7 @@ export function FloatingProgress({
                   {Math.round(progress)}%
                 </span>
                 <span className="text-gray-600 text-[10px] ml-1">
-                  funded
+                  {isWebinar ? 'filled' : 'funded'}
                 </span>
               </div>
             </div>
@@ -89,7 +95,9 @@ export function FloatingProgress({
               className="h-full rounded-full relative overflow-hidden"
               style={{ 
                 width: `${Math.max((raised / goal) * 100, 0.5)}%`,
-                background: 'linear-gradient(90deg, #34d399 0%, #059669 50%, #047857 100%)'
+                background: isWebinar 
+                  ? 'linear-gradient(90deg, #10b981 0%, #059669 50%, #047857 100%)' 
+                  : 'linear-gradient(90deg, #34d399 0%, #059669 50%, #047857 100%)'
               }}
             />
           </div>
@@ -99,17 +107,41 @@ export function FloatingProgress({
               <div className="flex flex-col">
                 <div className="flex items-center gap-2 mb-1">
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-lg md:text-xl font-bold text-emerald-500">
-                      ${Math.round(raised).toLocaleString()}
-                    </span>
-                    <span className="text-xs text-gray-400 font-medium">of</span>
-                    <span className="text-sm text-gray-600 font-semibold">
-                      ${goal.toLocaleString()}
-                    </span>
+                    {isWebinar ? (
+                      <>
+                        <span className="text-lg md:text-xl font-bold text-emerald-500">
+                          {Math.round(raised)}
+                        </span>
+                        <span className="text-xs text-gray-400 font-medium">of</span>
+                        <span className="text-sm text-gray-600 font-semibold">
+                          {goal}
+                        </span>
+                        <span className="text-xs text-gray-500 font-medium ml-1">spots</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="text-lg md:text-xl font-bold text-emerald-500">
+                          ${Math.round(raised).toLocaleString()}
+                        </span>
+                        <span className="text-xs text-gray-400 font-medium">of</span>
+                        <span className="text-sm text-gray-600 font-semibold">
+                          ${goal.toLocaleString()}
+                        </span>
+                      </>
+                    )}
                   </div>
                   <div className="flex gap-1 items-center bg-emerald-50 px-2 py-0.5 rounded-full whitespace-nowrap">
-                    <DollarSign className="h-3 w-3 text-emerald-500 shrink-0" />
-                    <span className="text-[10px] font-medium text-emerald-600">+2.5k today</span>
+                    {isWebinar ? (
+                      <>
+                        <GraduationCap className="h-3 w-3 text-emerald-500 shrink-0" />
+                        <span className="text-[10px] font-medium text-emerald-600">+5 today</span>
+                      </>
+                    ) : (
+                      <>
+                        <DollarSign className="h-3 w-3 text-emerald-500 shrink-0" />
+                        <span className="text-[10px] font-medium text-emerald-600">+2.5k today</span>
+                      </>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -118,7 +150,9 @@ export function FloatingProgress({
                     <div className="h-4 w-4 rounded-full bg-purple-400 ring-2 ring-white" />
                     <div className="h-4 w-4 rounded-full bg-pink-400 ring-2 ring-white" />
                   </div>
-                  <span className="text-[10px] text-gray-500 whitespace-nowrap">+12 backers in the last hour</span>
+                  <span className="text-[10px] text-gray-500 whitespace-nowrap">
+                    {isWebinar ? '+3 participants in the last hour' : '+12 backers in the last hour'}
+                  </span>
                 </div>
               </div>
             </div>
@@ -143,11 +177,15 @@ export function FloatingProgress({
           <div className="flex items-center gap-3">
             <Button 
               size="sm"
-              className="bg-emerald-500 hover:bg-emerald-600 text-white flex-1 group relative overflow-hidden pr-20"
+              className={`bg-emerald-500 hover:bg-emerald-600 text-white flex-1 group relative overflow-hidden pr-20 ${
+                isWebinar ? 'bg-blue-600 hover:bg-blue-700' : ''
+              }`}
               onClick={onBackProjectClick}
             >
               <div className="flex items-center">
-                <span className="font-medium relative z-10 ml-3">Back This Project</span>
+                <span className="font-medium relative z-10 ml-3">
+                  {isWebinar ? 'Reserve Your Spot' : 'Back This Project'}
+                </span>
               </div>
               
               {/* Payment method icons */}

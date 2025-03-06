@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp, BadgeCheck, Eye } from 'lucide-react';
+import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp, BadgeCheck, Eye, GraduationCap, UserCheck } from 'lucide-react';
 import RegisterNowSection from '../components/seminar/RegisterNowSection';
 import { FloatingProgress } from '@/components/campaign/FloatingProgress';
 
@@ -19,13 +19,13 @@ const SeminarHomepage = () => {
     { id: 4, name: "Register", icon: <Edit3 size={18} /> }
   ];
   
-  // Floating progress data
+  // Floating progress data for seminar participants
   const seminarProgressData = {
-    backers: 824,
-    progress: 65,
-    days: 14,
-    raised: 32500,
-    goal: 50000
+    participants: 78,
+    progress: 78,
+    days: 7,
+    registered: 78,
+    capacity: 100
   };
   
   const handleBackProjectClick = () => {
@@ -164,12 +164,13 @@ const SeminarHomepage = () => {
             {/* Floating Progress Section - Only visible on video tab */}
             {activeTab === 0 && (
               <FloatingProgress
-                backers={seminarProgressData.backers}
+                backers={seminarProgressData.participants}
                 progress={seminarProgressData.progress}
                 days={seminarProgressData.days}
-                raised={seminarProgressData.raised}
-                goal={seminarProgressData.goal}
+                raised={seminarProgressData.registered}
+                goal={seminarProgressData.capacity}
                 onBackProjectClick={handleBackProjectClick}
+                isWebinar={true}
               />
             )}
           </div>
