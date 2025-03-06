@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { StoryContentType } from './storyContent';
 
 type StoryHeaderProps = {
   isShowingChapters: boolean;
@@ -17,6 +18,7 @@ type StoryHeaderProps = {
   handleLanguageChange: (language: { name: string; code: string; flag: string }) => void;
   languages: { name: string; code: string; flag: string }[];
   progressPercentage: number;
+  currentContent: StoryContentType;
 };
 
 export function StoryHeader({
@@ -27,7 +29,8 @@ export function StoryHeader({
   setLanguageMenuOpen,
   handleLanguageChange,
   languages,
-  progressPercentage
+  progressPercentage,
+  currentContent
 }: StoryHeaderProps) {
   return (
     <div className="sticky top-0 bg-white shadow-sm z-20">
@@ -74,6 +77,11 @@ export function StoryHeader({
           className="h-full bg-blue-500 transition-all duration-300" 
           style={{ width: `${progressPercentage}%` }}
         />
+      </div>
+
+      {/* Chapter Title Section - Sticky */}
+      <div className="bg-white border-b border-gray-200 py-3 px-4">
+        <h3 className="text-2xl font-semibold text-center">{currentContent.chapter}</h3>
       </div>
     </div>
   );
