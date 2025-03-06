@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, Calendar, UserCheck, AlertCircle, Check } from 'lucide-react';
 
+interface HoverValueType {
+  percentage: string;
+  participants: number;
+}
+
 const WebinarComponent = () => {
   // State variables
   const [timeLeft, setTimeLeft] = useState({
@@ -17,8 +22,8 @@ const WebinarComponent = () => {
   const [isRegistered, setIsRegistered] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState(0);
-  const [hoverValue, setHoverValue<{percentage: string, participants: number} | null>(null);
-  const [sparkline, setSparkline<number[]>([]);
+  const [hoverValue, setHoverValue] = useState<HoverValueType | null>(null);
+  const [sparkline, setSparkline] = useState<number[]>([]);
   const [registrationMessage, setRegistrationMessage] = useState({
     profile: getRandomLetter(),
     message: 'just registered',
@@ -387,7 +392,7 @@ const WebinarComponent = () => {
         </div>
       </button>
       
-      {/* Add animation styles - fixed the jsx error by removing that property */}
+      {/* Add animation styles */}
       <style>{`
         @keyframes fade-in {
           0% { opacity: 0; transform: translateY(5px); }
