@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp } from 'lucide-react';
+import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp, BadgeCheck } from 'lucide-react';
 
 const SeminarHomepage = () => {
   // State for active tab
@@ -39,7 +38,7 @@ const SeminarHomepage = () => {
         </div>
       </div>
       
-      {/* Hero Section (Banner) - Only shown for first tab */}
+      {/* Hero Section */}
       {activeTab === 0 && (
         <div className="relative h-48 overflow-hidden">
           <div className="absolute inset-0">
@@ -58,21 +57,24 @@ const SeminarHomepage = () => {
       
       {/* Enhanced Profile Section - Only shown for first tab */}
       {activeTab === 0 && (
-        <div className="bg-white px-4 md:px-6 py-4 border-b border-gray-200">
-          <div className="flex items-start gap-4">
+        <div className="bg-white px-4 md:px-6 py-3 border-b border-gray-200">
+          <div className="flex items-center gap-3">
             <div className="flex-shrink-0">
               <img 
                 src="/api/placeholder/64/64" 
                 alt="Byte Academy Logo" 
-                className="w-16 h-16 rounded-full object-cover border-2 border-blue-500"
+                className="w-12 h-12 rounded-full object-cover border-2 border-blue-500"
               />
             </div>
             <div className="flex-grow min-w-0">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gray-900 truncate">Byte Academy</h2>
+                <div className="flex items-center gap-1.5">
+                  <h2 className="text-lg font-bold text-gray-900 truncate">Byte Academy</h2>
+                  <BadgeCheck className="w-4 h-4 text-blue-500" />
+                </div>
                 <button 
                   onClick={() => setIsFollowing(!isFollowing)}
-                  className={`px-5 py-2 text-sm font-semibold rounded-full transition ${
+                  className={`px-4 py-1.5 text-sm font-semibold rounded-full transition ${
                     isFollowing 
                     ? "bg-gray-200 text-gray-800 hover:bg-gray-300" 
                     : "bg-blue-600 hover:bg-blue-700 text-white"
@@ -82,13 +84,13 @@ const SeminarHomepage = () => {
                 </button>
               </div>
               
-              <div className="text-sm text-gray-500 mt-1">
-                <p className="font-medium">Future of Innovation Seminar 2025</p>
+              <div className="text-sm text-gray-500 mt-0.5">
+                <p>Future of Innovation Seminar 2025</p>
               </div>
             </div>
           </div>
           
-          {/* Full width stats section */}
+          {/* Stats section */}
           <div className="mt-3 -mx-4 md:-mx-6 px-4 md:px-6 py-3 bg-gray-50 border-t border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center text-sm text-gray-700">
@@ -112,7 +114,7 @@ const SeminarHomepage = () => {
         </div>
       )}
       
-      {/* Tab Content Container - Empty content areas for each tab */}
+      {/* Tab Content Container */}
       <div className="flex-grow bg-white p-6">
         {/* Each tab has an empty container */}
         {activeTab === 0 && (
