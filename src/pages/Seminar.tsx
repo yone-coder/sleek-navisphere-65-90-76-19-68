@@ -1,6 +1,6 @@
+
 import React, { useState } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp, BadgeCheck, Eye } from 'lucide-react';
-import RegisterNowSection from '../components/seminar/RegisterNowSection';
 import WebinarComponent from '../components/seminar/WebinarComponent';
 
 const SeminarHomepage = () => {
@@ -139,12 +139,9 @@ const SeminarHomepage = () => {
         {/* Each tab has an empty container */}
         {activeTab === 0 && (
           <div>
-            <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500 mb-8">
-              Video content area
-            </div>
+            {/* Removed "Video content area" div */}
             
-            {/* Register Now Section */}
-            <RegisterNowSection />
+            {/* Removed RegisterNowSection which contained the "Limited Time Offer" section */}
           </div>
         )}
         
