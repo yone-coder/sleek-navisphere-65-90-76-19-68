@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp, BadgeCheck } from 'lucide-react';
+import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp, BadgeCheck, Eye } from 'lucide-react';
 
 const SeminarHomepage = () => {
   // State for active tab
@@ -38,19 +39,37 @@ const SeminarHomepage = () => {
         </div>
       </div>
       
-      {/* Hero Section */}
+      {/* Video Section - Replaces the Hero Banner */}
       {activeTab === 0 && (
-        <div className="relative h-48 overflow-hidden">
-          <div className="absolute inset-0">
-            <img 
-              src="/api/placeholder/1200/400" 
-              alt="Seminar background" 
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-blue-900/60"></div>
+        <div className="bg-black">
+          {/* Video Player */}
+          <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                <Play size={64} className="text-white opacity-80" />
+              </div>
+            </div>
           </div>
-          <div className="relative z-10 h-full flex flex-col justify-center px-8">
-            <h1 className="text-3xl font-medium text-white">Future of Innovation Seminar 2025</h1>
+          
+          {/* Video Title and Stats - YouTube-like */}
+          <div className="bg-white p-4">
+            <h2 className="text-xl font-medium text-gray-900">
+              Mastering Modern Website Development: From Basics to Advanced Techniques
+            </h2>
+            <div className="flex items-center mt-2 text-sm text-gray-600">
+              <div className="flex items-center mr-4">
+                <Eye size={16} className="mr-1" />
+                <span>125K views</span>
+              </div>
+              <div className="flex items-center mr-4">
+                <ThumbsUp size={16} className="mr-1" />
+                <span>8.2K</span>
+              </div>
+              <div className="flex items-center">
+                <MessageCircle size={16} className="mr-1" />
+                <span>342 comments</span>
+              </div>
+            </div>
           </div>
         </div>
       )}
