@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp, BadgeCheck, Eye } from 'lucide-react';
+import RegisterNowSection from '../components/seminar/RegisterNowSection';
 
 const SeminarHomepage = () => {
   // State for active tab
@@ -137,8 +138,13 @@ const SeminarHomepage = () => {
       <div className="flex-grow bg-white p-6">
         {/* Each tab has an empty container */}
         {activeTab === 0 && (
-          <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500">
-            Video content area
+          <div>
+            <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500 mb-8">
+              Video content area
+            </div>
+            
+            {/* Register Now Section */}
+            <RegisterNowSection />
           </div>
         )}
         
