@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Clock, MessageCircle, Share2, Type } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
@@ -6,7 +5,6 @@ import BookChapters from '@/components/story/BookChapters';
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import TikTokCommentsPanel from '@/components/comments/TikTokCommentsPanel';
 import { storyContent } from './storyContent';
-import { StoryNavigation } from './StoryNavigation';
 import { StoryHeader } from './StoryHeader';
 import { StoryContent } from './StoryContent';
 import { StoryFooter } from './StoryFooter';
