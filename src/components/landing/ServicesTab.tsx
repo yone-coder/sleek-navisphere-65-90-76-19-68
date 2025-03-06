@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from 'framer-motion';
@@ -25,12 +26,19 @@ export function ServicesTab() {
   // Detect when the Services tab is active
   useEffect(() => {
     const checkIfActive = () => {
-      // Get parent tab panel containing this component
+      // Check if we're in the services tab by looking at the parent tab panel
       const parentTabPanel = tabRef.current?.closest('[role="tabpanel"]');
+      
+      // Check the data-value attribute to ensure it's "services"
+      const isServicesTab = parentTabPanel?.getAttribute('data-value') === 'services';
+      
+      // Also check if the tab panel is visible
       const isVisible = parentTabPanel ? 
         window.getComputedStyle(parentTabPanel).display !== 'none' : false;
       
-      setIsActive(isVisible);
+      // Only consider active if both conditions are true
+      setIsActive(isServicesTab && isVisible);
+      console.log("ServicesTab: Active state updated:", isServicesTab && isVisible);
     };
 
     // Check immediately and whenever tabs might change
@@ -74,9 +82,9 @@ export function ServicesTab() {
       const handleScroll = () => {
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
         
-        if (scrollTop < lastScrollTop && scrollTop > 50) {
+        if (scrollTop > lastScrollTop && scrollTop > 50) {
           setIsTogglesVisible(false);
-        } else if (scrollTop > lastScrollTop || scrollTop < 10) {
+        } else if (scrollTop < lastScrollTop || scrollTop < 10) {
           setIsTogglesVisible(true);
         }
         
@@ -88,6 +96,8 @@ export function ServicesTab() {
       console.log("ServicesTab: New scroll listener added");
     } else {
       console.log("ServicesTab: Tab is inactive, no scroll listener");
+      // Ensure toggles are visible when not in services tab
+      setIsTogglesVisible(true);
     }
 
     // Cleanup function
@@ -104,31 +114,27 @@ export function ServicesTab() {
   useEffect(() => {
     if (!isActive || !scrollListenerRef.current) return;
     
-    const updateScrollListener = () => {
-      // Remove old listener
-      if (scrollListenerRef.current) {
-        window.removeEventListener('scroll', scrollListenerRef.current);
+    // Remove old listener
+    if (scrollListenerRef.current) {
+      window.removeEventListener('scroll', scrollListenerRef.current);
+    }
+    
+    // Create updated listener with fresh lastScrollTop value
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      
+      if (scrollTop > lastScrollTop && scrollTop > 50) {
+        setIsTogglesVisible(false);
+      } else if (scrollTop < lastScrollTop || scrollTop < 10) {
+        setIsTogglesVisible(true);
       }
       
-      // Create updated listener with fresh lastScrollTop value
-      const handleScroll = () => {
-        const scrollTop = window.scrollY || document.documentElement.scrollTop;
-        
-        if (scrollTop < lastScrollTop && scrollTop > 50) {
-          setIsTogglesVisible(false);
-        } else if (scrollTop > lastScrollTop || scrollTop < 10) {
-          setIsTogglesVisible(true);
-        }
-        
-        setLastScrollTop(scrollTop);
-      };
-      
-      // Update ref and add new listener
-      scrollListenerRef.current = handleScroll;
-      window.addEventListener('scroll', handleScroll, { passive: true });
+      setLastScrollTop(scrollTop);
     };
     
-    updateScrollListener();
+    // Update ref and add new listener
+    scrollListenerRef.current = handleScroll;
+    window.addEventListener('scroll', handleScroll, { passive: true });
     
     return () => {
       if (scrollListenerRef.current) {
