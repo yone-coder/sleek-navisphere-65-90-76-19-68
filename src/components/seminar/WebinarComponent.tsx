@@ -1,5 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
-import { Clock, Calendar, UserCheck, AlertCircle, Check, Users } from 'lucide-react';
+import { Clock, Calendar, UserCheck, AlertCircle, Check, Users, Eye, Heart, MessageCircle } from 'lucide-react';
+import TikTokCommentsPanel from '@/components/comments/TikTokCommentsPanel';
 
 // Define type for the hover value
 interface HoverValueType {
@@ -30,6 +32,11 @@ const WebinarComponent = () => {
     message: 'just registered',
     isVisible: false
   });
+  const [views, setViews] = useState(125000);
+  const [likes, setLikes] = useState(8200);
+  const [comments, setComments] = useState(342);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
 
   // Event details
   const eventDate = "March 12, 2025 • 4:45 PM";
@@ -295,6 +302,22 @@ const WebinarComponent = () => {
     );
   };
 
+  // Handle likes
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+    setLikes(prev => isLiked ? prev - 1 : prev + 1);
+  };
+
+  // Open comments panel
+  const openCommentsPanel = () => {
+    setIsCommentsPanelOpen(true);
+  };
+
+  // Close comments panel
+  const closeCommentsPanel = () => {
+    setIsCommentsPanelOpen(false);
+  };
+
   return (
     <div className="w-full max-w-sm bg-white rounded-lg shadow-lg p-2 mx-auto">
       {/* Enhanced Progress and Register Section */}
@@ -399,6 +422,30 @@ const WebinarComponent = () => {
         </div>
       </div>
       
+      {/* Social interaction buttons with light grey backgrounds */}
+      <div className="flex justify-between mb-2 text-sm">
+        <div className="bg-gray-100 px-3 py-1.5 rounded-full flex items-center">
+          <Eye size={14} className="mr-1 text-gray-600" />
+          <span className="font-medium">{formatNumber(views)} views</span>
+        </div>
+        <div className="flex space-x-2">
+          <button 
+            onClick={handleLike}
+            className={`bg-gray-100 px-3 py-1.5 rounded-full flex items-center ${isLiked ? 'text-red-500' : 'text-gray-600'}`}
+          >
+            <Heart size={14} className="mr-1" fill={isLiked ? "currentColor" : "none"} />
+            <span className="font-medium">{formatNumber(likes)}</span>
+          </button>
+          <button 
+            onClick={openCommentsPanel}
+            className="bg-gray-100 px-3 py-1.5 rounded-full flex items-center text-gray-600"
+          >
+            <MessageCircle size={14} className="mr-1" />
+            <span className="font-medium">{formatNumber(comments)}</span>
+          </button>
+        </div>
+      </div>
+      
       {/* Register Button - smaller */}
       <button 
         className={`w-full py-2 px-3 font-medium rounded-md shadow-md text-sm transition-all duration-300 transform ${
@@ -426,6 +473,12 @@ const WebinarComponent = () => {
           )}
         </div>
       </button>
+      
+      {/* Comments Panel */}
+      <TikTokCommentsPanel 
+        isOpen={isCommentsPanelOpen} 
+        onClose={closeCommentsPanel} 
+      />
       
       {/* Add animation styles */}
       <style>{`
