@@ -17,6 +17,8 @@ type StoryHeaderProps = {
   handleLanguageChange: (language: { name: string; code: string; flag: string }) => void;
   languages: { name: string; code: string; flag: string }[];
   progressPercentage: number;
+  currentPage: number;
+  chapterTitle: string;
 };
 
 export function StoryHeader({
@@ -27,7 +29,9 @@ export function StoryHeader({
   setLanguageMenuOpen,
   handleLanguageChange,
   languages,
-  progressPercentage
+  progressPercentage,
+  currentPage,
+  chapterTitle
 }: StoryHeaderProps) {
   return (
     <div className="sticky top-0 bg-white shadow-sm z-20">
@@ -68,6 +72,19 @@ export function StoryHeader({
           </DropdownMenu>
         </div>
       </header>
+      
+      {/* Chapter title section */}
+      <div className="border-b border-gray-100 bg-white py-3">
+        <div className="container mx-auto px-4">
+          {currentPage === 1 ? (
+            <div className="text-center">
+              <h2 className="text-2xl font-bold mb-1">{chapterTitle}</h2>
+            </div>
+          ) : (
+            <h3 className="text-xl font-semibold text-center">{chapterTitle}</h3>
+          )}
+        </div>
+      </div>
       
       <div className="w-full h-1 bg-gray-200">
         <div 

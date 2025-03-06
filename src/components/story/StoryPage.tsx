@@ -110,6 +110,8 @@ const StoryPage = () => {
         handleLanguageChange={handleLanguageChange}
         languages={languages}
         progressPercentage={progressPercentage}
+        currentPage={currentPage}
+        chapterTitle={currentContent.chapter}
       />
       
       <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative overflow-hidden">
