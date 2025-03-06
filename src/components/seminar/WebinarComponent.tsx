@@ -276,11 +276,11 @@ const WebinarComponent = () => {
   // Generate stacked profile images
   const renderStackedProfiles = () => {
     // Create an array of colors for the avatars
-    const colors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-yellow-500', 'bg-pink-500'];
+    const colors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500'];
     
     return (
       <div className="flex -space-x-2 mr-2">
-        {[...Array(4)].map((_, i) => (
+        {[...Array(3)].map((_, i) => (
           <div 
             key={i} 
             className={`w-5 h-5 rounded-full ${colors[i % colors.length]} text-white text-xs flex items-center justify-center border border-white`}
