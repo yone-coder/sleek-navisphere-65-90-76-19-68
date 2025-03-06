@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, Calendar, UserCheck, AlertCircle, Check, Users } from 'lucide-react';
-import TikTokCommentsPanel from '@/components/comments/TikTokCommentsPanel';
 
 // Define type for the hover value
 interface HoverValueType {
@@ -31,7 +30,6 @@ const WebinarComponent = () => {
     message: 'just registered',
     isVisible: false
   });
-  const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
 
   // Event details
   const eventDate = "March 12, 2025 • 4:45 PM";
@@ -56,16 +54,6 @@ const WebinarComponent = () => {
   // Calculate participation percentage and spots left
   const participationPercentage = (participants / maxParticipants) * 100;
   const spotsLeft = maxParticipants - participants;
-
-  // Handle opening the comments panel
-  const openCommentsPanel = () => {
-    setIsCommentsPanelOpen(true);
-  };
-
-  // Handle closing the comments panel
-  const closeCommentsPanel = () => {
-    setIsCommentsPanelOpen(false);
-  };
 
   // Update registration status based on participation
   useEffect(() => {
@@ -411,23 +399,6 @@ const WebinarComponent = () => {
         </div>
       </div>
       
-      {/* Social Stats with Light Gray Background */}
-      <div className="bg-gray-100 rounded-lg p-2 mb-3">
-        <div className="grid grid-cols-2 gap-2">
-          <div className="flex items-center justify-center py-1 px-2">
-            <span className="text-lg mr-1">❤️</span>
-            <span className="font-medium text-sm">{formatNumber(8200)}</span>
-          </div>
-          <button 
-            onClick={openCommentsPanel}
-            className="flex items-center justify-center py-1 px-2 hover:bg-gray-200 rounded-md transition-colors duration-200"
-          >
-            <span className="mr-1">💬</span>
-            <span className="font-medium text-sm">{formatNumber(342)}</span>
-          </button>
-        </div>
-      </div>
-      
       {/* Register Button - smaller */}
       <button 
         className={`w-full py-2 px-3 font-medium rounded-md shadow-md text-sm transition-all duration-300 transform ${
@@ -455,12 +426,6 @@ const WebinarComponent = () => {
           )}
         </div>
       </button>
-      
-      {/* TikTok Comments Panel */}
-      <TikTokCommentsPanel
-        isOpen={isCommentsPanelOpen}
-        onClose={closeCommentsPanel}
-      />
       
       {/* Add animation styles */}
       <style>{`
@@ -495,4 +460,3 @@ const WebinarComponent = () => {
 };
 
 export default WebinarComponent;
-
