@@ -20,68 +20,122 @@ export function ServicesTab() {
   const [lastScrollTop, setLastScrollTop] = useState(0);
   const tabRef = useRef<HTMLDivElement>(null);
   const [isActive, setIsActive] = useState(false);
+  const scrollListenerRef = useRef<(() => void) | null>(null);
 
+  // Detect when the Services tab is active
   useEffect(() => {
-    const checkVisibility = () => {
-      const isServicesTabActive = window.location.hash === '#services' || 
-                                 document.querySelector('[data-state="active"][data-value="services"]') !== null;
+    const checkIfActive = () => {
+      // Get parent tab panel containing this component
+      const parentTabPanel = tabRef.current?.closest('[role="tabpanel"]');
+      const isVisible = parentTabPanel ? 
+        window.getComputedStyle(parentTabPanel).display !== 'none' : false;
       
-      setIsActive(isServicesTabActive);
+      setIsActive(isVisible);
     };
 
-    checkVisibility();
-
-    window.addEventListener('hashchange', checkVisibility);
-    const tabElements = document.querySelectorAll('[role="tab"]');
-    tabElements.forEach(tab => {
-      tab.addEventListener('click', checkVisibility);
+    // Check immediately and whenever tabs might change
+    checkIfActive();
+    
+    // Set up a mutation observer to detect DOM changes that might affect visibility
+    const observer = new MutationObserver(checkIfActive);
+    observer.observe(document.body, { 
+      attributes: true, 
+      childList: true, 
+      subtree: true 
     });
 
-    const intervalId = setInterval(checkVisibility, 500);
+    // Also check on window resize as it might affect layout
+    window.addEventListener('resize', checkIfActive);
 
     return () => {
-      window.removeEventListener('hashchange', checkVisibility);
-      tabElements.forEach(tab => {
-        tab.removeEventListener('click', checkVisibility);
-      });
-      clearInterval(intervalId);
+      observer.disconnect();
+      window.removeEventListener('resize', checkIfActive);
     };
   }, []);
 
+  // Clean up scroll listener whenever active state changes
   useEffect(() => {
-    const handleScroll = () => {
-      if (!isActive) {
-        return;
-      }
-      
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      
-      if (scrollTop < lastScrollTop && scrollTop > 50) {
-        setIsTogglesVisible(false);
-      } else if (scrollTop > lastScrollTop || scrollTop < 10) {
-        setIsTogglesVisible(true);
-      }
-      
-      setLastScrollTop(scrollTop);
-    };
-
-    if (isActive) {
-      window.addEventListener('scroll', handleScroll, { passive: true });
-      console.log("ServicesTab: Scroll listener added");
-      
-      return () => {
-        window.removeEventListener('scroll', handleScroll);
-        console.log("ServicesTab: Scroll listener removed");
-      };
+    // Remove existing scroll listener if there is one
+    if (scrollListenerRef.current) {
+      window.removeEventListener('scroll', scrollListenerRef.current);
+      scrollListenerRef.current = null;
+      console.log("ServicesTab: Previous scroll listener removed");
     }
-  }, [lastScrollTop, isActive]);
 
-  useEffect(() => {
+    // Only add scroll listener if the tab is active
     if (isActive) {
+      console.log("ServicesTab: Tab is active, setting up scroll listener");
+      
+      // Reset scroll state when becoming active
       setIsTogglesVisible(true);
       setLastScrollTop(0);
+      
+      // Create and set up the new scroll listener
+      const handleScroll = () => {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        
+        if (scrollTop < lastScrollTop && scrollTop > 50) {
+          setIsTogglesVisible(false);
+        } else if (scrollTop > lastScrollTop || scrollTop < 10) {
+          setIsTogglesVisible(true);
+        }
+        
+        setLastScrollTop(scrollTop);
+      };
+      
+      scrollListenerRef.current = handleScroll;
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      console.log("ServicesTab: New scroll listener added");
+    } else {
+      console.log("ServicesTab: Tab is inactive, no scroll listener");
     }
+
+    // Cleanup function
+    return () => {
+      if (scrollListenerRef.current) {
+        window.removeEventListener('scroll', scrollListenerRef.current);
+        scrollListenerRef.current = null;
+        console.log("ServicesTab: Scroll listener removed in cleanup");
+      }
+    };
   }, [isActive]);
+
+  // Update lastScrollTop in a separate effect to avoid stale closures
+  useEffect(() => {
+    if (!isActive || !scrollListenerRef.current) return;
+    
+    const updateScrollListener = () => {
+      // Remove old listener
+      if (scrollListenerRef.current) {
+        window.removeEventListener('scroll', scrollListenerRef.current);
+      }
+      
+      // Create updated listener with fresh lastScrollTop value
+      const handleScroll = () => {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        
+        if (scrollTop < lastScrollTop && scrollTop > 50) {
+          setIsTogglesVisible(false);
+        } else if (scrollTop > lastScrollTop || scrollTop < 10) {
+          setIsTogglesVisible(true);
+        }
+        
+        setLastScrollTop(scrollTop);
+      };
+      
+      // Update ref and add new listener
+      scrollListenerRef.current = handleScroll;
+      window.addEventListener('scroll', handleScroll, { passive: true });
+    };
+    
+    updateScrollListener();
+    
+    return () => {
+      if (scrollListenerRef.current) {
+        window.removeEventListener('scroll', scrollListenerRef.current);
+      }
+    };
+  }, [lastScrollTop, isActive]);
 
   const handleProjectTypeChange = (value: string) => {
     setActiveProjectType(value);
@@ -163,7 +217,7 @@ export function ServicesTab() {
   const projectShortName = currentProject ? getShortName(currentProject.name) : 'SP';
 
   return (
-    <div className="w-full" ref={tabRef} data-tab-active={isActive ? "true" : "false"}>
+    <div className="w-full ServicesTab" ref={tabRef} data-tab-active={isActive ? "true" : "false"}>
       <div className={`sticky top-0 bg-white shadow-md z-30 transition-all duration-300 ${
         isTogglesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'
       }`}>
