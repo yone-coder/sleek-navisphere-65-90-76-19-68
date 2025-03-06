@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, Clock, MessageCircle, Share2, Type } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
@@ -35,49 +34,124 @@ const StoryPage = () => {
   
   const storyContent = [
     {
-      id: 1,
-      title: "The Lost Artifact",
-      author: "J.K. Rowling",
-      chapter: "Chapter 1: The Mysterious Letter",
-      content: "The morning sun filtered through the dusty blinds of Professor Harrington's office as he carefully unfolded the yellowed parchment. His hands trembled slightly—not from age, though he had seen sixty winters come and go—but from anticipation.\n\nThe letter had arrived in a peculiar fashion: delivered not by post, but discovered within the hollow of an ancient book he had purchased at an estate sale last weekend. The tome itself was unremarkable, a tattered collection of folkloric stories from the Carpathian Mountains, but the letter... the letter changed everything.\n\n\"Dear colleague,\" it began in faded ink, the handwriting precise yet somehow urgent. \"If you are reading this, then my fears have been realized, and I have not survived my expedition. The artifact is real, and far more dangerous than we imagined...\"\n\nThe professor adjusted his spectacles and leaned closer to the text, his academic curiosity fully awakened. According to the letter, an artifact of immense power had been discovered in a remote village in Eastern Europe—an object thought to be merely legend, a footnote in obscure medieval texts.\n\nHarrington reached for his phone, then hesitated. Who could he trust with this information? The letter explicitly warned against involving others, particularly anyone connected to the Herington Institute, where he had dedicated his academic career to the study of mythological objects and their historical significance.",
-      readingTime: "5 min",
-      image: "/api/placeholder/800/500"
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "A Vision is Born",
+      content: "Port-au-Prince was a city of both hope and hardship. I was one of the lucky ones—Plante Lavi covered my tuition, rent, and living expenses. But outside my small apartment, I saw a different reality: students struggling to afford education, businesses barely surviving, and talented people with no platform to showcase their skills.\n\nI kept asking myself—why didn't we have a digital space designed for us?\n\nIt wasn't that we lacked talent or ideas. We lacked the infrastructure.\n\nIf no one was going to build it for us, I had to do it myself.\n\nBut the city had other plans for me.",
+      image: "/api/placeholder/600/400",
+      readingTime: "3 min"
     },
     {
-      id: 2,
-      title: "The Lost Artifact",
-      author: "J.K. Rowling",
-      chapter: "Chapter 2: The Decision",
-      content: "Professor Harrington spent the entire day in his office, door locked, phone off, surrounded by open books and hastily scribbled notes. The letter had included coordinates—a remote location in the Carpathian Mountains—and a series of cryptic instructions.\n\n\"The artifact must be secured before the summer solstice,\" the letter had warned. \"After that, containment may become impossible.\"\n\nThe summer solstice was just two weeks away.\n\nHarrington ran a hand through his silver hair, his mind racing with possibilities. He was an academic, not an adventurer. His expeditions had been limited to well-funded archaeological digs with proper permissions and safety measures. This... this was madness.\n\nYet he couldn't ignore the letter. If the artifact truly existed, and if it was as dangerous as his mysterious correspondent claimed, the implications were staggering.\n\nHe made his decision as the sun was setting, casting long shadows across his cluttered office. He would go. He had enough savings for a plane ticket and basic supplies. He could request an emergency leave of absence—family matters, he would say.\n\nHarrington began to pack his most essential books and notes, his heart pounding with a mixture of fear and exhilaration he hadn't felt in decades. At sixty, he had thought his days of discovery were behind him, replaced by the comfortable routine of teaching and occasional publishing.\n\nHow wrong he had been.",
-      readingTime: "6 min",
-      image: null
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Staring Death in the Face",
+      content: "One morning, on my way to school, my reality shattered. Gunshots rang out. I barely escaped with my life. That day, I understood something deeper—survival in Haiti was not guaranteed.\n\nI had always wanted to build something for my people. But now, it wasn't just about opportunity—it was about creating a safe future.\n\nBut survival wasn't the only challenge I faced.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
     },
     {
-      id: 3,
-      title: "The Lost Artifact",
-      author: "J.K. Rowling",
-      chapter: "Chapter 3: The Journey Begins",
-      content: "The small regional airport buzzed with activity as Professor Harrington checked his worn leather suitcase. He had packed light: a few changes of clothes, essential toiletries, his most relevant reference books, and the mysterious letter safely tucked into his inner jacket pocket.\n\n\"Purpose of your visit?\" asked the young woman at the check-in counter, not looking up from her computer.\n\n\"Academic research,\" Harrington replied, the half-truth coming easily to his lips. He had indeed published several papers on Eastern European folklore—his presence in the region would raise no eyebrows if anyone from the university happened to check.\n\nAs he settled into his seat on the small aircraft that would take him to Bucharest, Harrington's thoughts turned to the letter's author, Dr. Eleanor Webb. He had met her only once, at a conference in Vienna three years ago. She had been presenting a controversial paper on artifacts described in folklore that might have actual historical origins. The academic community had been skeptical, some openly dismissive. Harrington had been one of the few to approach her afterward with genuine interest rather than criticism.\n\nHad that single conversation been enough for her to trust him with this discovery? Or was he simply the last resort, a final hope to complete what she had started?\n\nThe aircraft rumbled down the runway, and Harrington felt a surge of doubt. At his age, with his comfortable position at the university, why risk everything on what might be a wild goose chase? Or worse—what if the artifact was real, but the danger was too?\n\nToo late for second thoughts now. The plane lifted off, banking toward the east, toward mountains that held secrets waiting to be uncovered.\n\nHarrington closed his eyes, not to sleep but to think. If the artifact was real, finding it would rewrite history. If the danger was real... well, he would cross that bridge when he came to it.",
-      readingTime: "7 min",
-      image: "/api/placeholder/800/500"
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "When Universities Closed Their Doors",
+      content: "As insecurity worsened, universities across the city shut down—including mine.\n\nFor more than half a year, I was stranded. My education was paused, my dreams put on hold. But instead of waiting, I made a decision.\n\nI wasn't going to let this stop me.\n\nBut my journey was about to take an unexpected turn.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
     },
     {
-      id: 4,
-      title: "The Lost Artifact",
-      author: "J.K. Rowling",
-      chapter: "Chapter 4: Arrival in Bucharest",
-      content: "Bucharest greeted Professor Harrington with a relentless downpour. Rain cascaded from leaden skies as he navigated the bustling airport, his collar turned up against the damp chill that seemed to permeate everything.\n\nHe had arranged for a modest hotel room in the older part of the city, a place where questions wouldn't be asked and privacy would be respected. The taxi driver spoke little English but seemed to understand the address Harrington showed him on his phone.\n\nAs they drove through the rain-slicked streets, Harrington observed the curious blend of architectural styles that defined the Romanian capital—ornate Belle Époque buildings alongside stark Communist-era apartments, all beneath the shadow of more modern glass structures reaching toward the stormy sky.\n\n\"First time Romania?\" the driver asked, eyes meeting Harrington's in the rearview mirror.\n\n\"Yes,\" Harrington replied, deciding that simplicity was safer than elaboration.\n\nThe driver nodded. \"Beautiful country. Not just Bucharest. Mountains, forests...\" He made a sweeping gesture with one hand while expertly navigating a roundabout with the other. \"Why you come?\"\n\n\"I'm researching local folklore,\" Harrington said, the practiced explanation rolling off his tongue. \"Specifically from the Carpathian region.\"\n\nThe driver's eyes narrowed slightly, his expression shifting in a way Harrington couldn't quite interpret. \"Carpathians have many stories. Some better not to find.\"\n\nThe professor leaned forward slightly. \"What do you mean by that?\"\n\nBut the driver simply shrugged and turned up the radio, a clear signal that the conversation was over.\n\nHarrington settled back, watching raindrops race across the window, each absorbing others in their path as they descended. The driver's reaction troubled him. It suggested that even here, in the modern capital, old superstitions retained their power.\n\nThe taxi pulled up in front of a narrow building wedged between a small café and what appeared to be an antique shop. The Hotel Carpați was hardly impressive from the outside—just a weather-worn sign and a green door—but it would serve his purposes.\n\nHarrington paid the driver, adding a generous tip in hope of rekindling the conversation, but the man simply nodded his thanks and pulled away into the curtain of rain as soon as the professor had retrieved his suitcase.\n\nStanding in the downpour, looking up at his temporary lodging, Harrington felt a curious sensation—not quite fear, but a preternatural awareness that he had crossed some threshold. The familiar world of university halls and academic conferences seemed very far away indeed.",
-      readingTime: "8 min",
-      image: null
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Leaving Port-au-Prince",
+      content: "With no school and the city growing more dangerous, I had no choice but to return to my home village, Désarmes, in the last days of March 2024. It felt like a defeat.\n\nBut soon, I realized something:\n\nIf I could build this platform from anywhere, why not from here?\n\nSo, I went all in.\n\nBut returning home opened my eyes to something even deeper.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
     },
     {
-      id: 5,
-      title: "The Lost Artifact",
-      author: "J.K. Rowling",
-      chapter: "Chapter 5: The Unexpected Visitor",
-      content: "Professor Harrington spent his first day in Bucharest recovering from jet lag and organizing his research materials. His hotel room was small but clean, with a narrow bed, a worn desk, and a window overlooking a cobblestone courtyard. The rain continued unabated, drumming against the windowpane like impatient fingers.\n\nBy evening, he had established a makeshift workstation on the desk, his notes carefully arranged beside his laptop. The letter he kept in the inner pocket of his jacket, which hung on the back of the chair. The coordinates pointed to a location about 200 kilometers north, in a sparsely populated area of the Carpathian Mountains. According to his research, the nearest village was a small settlement called Valea Umbrelor—the Valley of Shadows, an ominously poetic name that did little to settle his nerves.\n\nHarrington was plotting his route on a detailed map when a knock came at his door.\n\nHe froze, instantly alert. He had spoken to no one since checking in, had given this address to no one back home. The knock came again, more insistent this time.\n\nSlowly, Harrington moved to the door. \"Who is it?\" he called, trying to keep his voice steady.\n\n\"Professor Harrington?\" A woman's voice, accented but her English clear. \"My name is Mirela Vasile. I need to speak with you about Dr. Webb.\"\n\nHarrington's breath caught. He hadn't mentioned Eleanor Webb to anyone. He hesitated, then unlatched the door, opening it just enough to see the visitor while keeping his foot wedged against the bottom.\n\nThe woman in the hallway was in her thirties, with dark hair pulled back in a practical ponytail and sharp, intelligent eyes that assessed him just as he was assessing her. She wore a practical raincoat, still beaded with moisture, and carried a leather messenger bag slung across her body.\n\n\"How do you know about Dr. Webb?\" Harrington demanded. \"And how did you find me?\"\n\n\"May I come in?\" She glanced down the empty hallway. \"It's not safe to talk here.\"\n\nAgainst his better judgment, Harrington stepped back, allowing her to enter. He did not close the door completely.\n\n\"I was Eleanor's research assistant,\" the woman said without preamble. \"For her final expedition. She told me if anything happened to her, I should watch for someone following her trail.\" She fixed him with a direct stare. \"When the university database showed someone accessing her old research notes, I tracked the IP address. Then I called hotels near the airport until I found one with an American professor checking in today.\"\n\nHarrington was impressed despite his suspicion. \"That still doesn't explain how you knew about me specifically.\"\n\nMirela reached into her bag and withdrew a small notebook with a weathered cover. \"Because Eleanor left instructions.\" She opened it to a page marked with a red ribbon and handed it to him. \"Read this.\"\n\nHarrington took the notebook, his hands not quite steady. There, in the same precise handwriting as the letter, was his name.",
-      readingTime: "9 min",
-      image: "/api/placeholder/800/500"
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "A Harsh Reality Hits Home",
+      content: "Back in Désarmes, I saw how much my friends and others from my generation were struggling. They weren't just worried about careers—they were struggling to survive.\n\nMany couldn't afford to go to university. Some had already given up on education entirely.\n\nIt hit me hard.\n\nI realized how privileged I was to have even had a chance at higher education. I had endured hardships, but at least I had a way out—most didn't.\n\nThis gave me a new dream.\n\nI had to build something bigger than just a business.\n\nI had to create a foundation to help those in need.\n\nBecause I knew what it was to suffer in Haiti.\n\nAnd I knew that without help, many of them would never get the opportunities they deserved.",
+      image: "/api/placeholder/600/400",
+      readingTime: "4 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "The Deep Dive into Creation",
+      content: "With nothing but time on my hands, I threw myself into coding. I learned everything—databases, front-end, back-end. In just two years, I transformed from a dreamer into a builder.\n\nBut my dedication came at a heavy price.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "The Cost of Obsession",
+      content: "I worked so hard that I lost track of the world. Some days I forgot to eat. Other days, I simply couldn't afford to. I poured everything into the platform, ignoring my health, my social life—everything.\n\nAt times, I had no money left for food. I was struggling so much that I had to beg for survival. It was humiliating, but I had no choice.\n\nI hated it. But I refused to quit.\n\nAnd then, the first breakthrough happened.",
+      image: "/api/placeholder/600/400",
+      readingTime: "3 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "The First Working Prototype",
+      content: "After months of relentless work, I finally had something tangible: an online marketplace for Haitian businesses. It was just a starting point, but it proved one thing—\n\nThis wasn't just an idea anymore. It was happening.\n\nAnd I wasn't stopping there.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Expanding the Ecosystem",
+      content: "One feature at a time, my platform grew:\n✅ A marketplace for Haitian entrepreneurs\n✅ An online learning hub for students and professionals\n✅ A contests platform for artists, musicians, and developers\n✅ A digital wallet for seamless transactions\n\nThis wasn't just an app. It was a movement.\n\nBut I realized something else was needed.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "The Nonprofit Foundation",
+      content: "Building a digital future for Haiti was one thing. But what about those struggling to survive right now?\n\nSo, I launched a nonprofit foundation to help those in need—supporting students, small businesses, and families who, like me, had no safety net.\n\nThis was bigger than me.\n\nBut how was I going to fund it all?",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Finding Support",
+      content: "I started sharing my vision with anyone who would listen—investors, entrepreneurs, even strangers who believed in Haiti's potential. Some saw the vision. Others doubted it.\n\nBut one thing was clear: we weren't waiting for change anymore—we were creating it.\n\nAnd we needed to think even bigger.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "Building an Agency",
+      content: "Through this journey, I had gained something invaluable: mastery in coding.\n\nNow, I wanted to help others bring their ideas to life. So, I decided to launch an agency to help people build their dream websites and apps.\n\nOur portfolio now includes over 30 websites, apps, and real-life projects. But the most prominent ones remain:\n\nThe online marketplace\n\nThe online courses platform\n\nThe contests platform\n\nThe nonprofit foundation\n\nThis wasn't just about money—it was about empowerment.\n\nBut what about my own unfinished education?",
+      image: "/api/placeholder/600/400",
+      readingTime: "3 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "The University Question",
+      content: "Despite everything, I still want to return to university. I will return—but I don't know when.\n\nThe truth is, it doesn't matter if it's soon or later. Education is important, but my return doesn't financially depend on me.\n\nWhen I go back, I'll be doing it on my own terms.\n\nBecause what I'm building now is just as important.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "A Crossroads—Stay or Escape?",
+      content: "At one point, I seriously considered leaving Haiti. Insecurity was rising. Everything felt uncertain.\n\nI looked for opportunities to escape, but a mix of confusion, doubts, and conflicting encouragements left me unsure.\n\nThat's when I made my decision.\n\nI had no choice but to thrive in my home country.\n\nThere was no other way around it—either I built my future here, or I lost everything.\n\nAnd so, I chose to stay.",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
+    },
+    {
+      title: "The Digital Renaissance of Haiti",
+      author: "Haitian Visionary",
+      chapter: "The Future of Haiti's Digital Renaissance",
+      content: "This was never just about an app. It was about freedom.\n\nHaitians have been held back for too long.\n\nBut now, we're building our own future.\n\nThis platform is more than a business. It's a movement. A revolution. A space where Haitians can thrive—safely, freely, together.\n\nWill you be part of history?",
+      image: "/api/placeholder/600/400",
+      readingTime: "2 min"
     }
   ];
 
@@ -319,7 +393,7 @@ const StoryPage = () => {
         </SheetContent>
       </Sheet>
       
-      <div className="fixed top-[60px] left-0 right-0 bg-white shadow-md z-20 border-t border-gray-100">
+      <div className="fixed top-[60px] left-0 right-0 bg-white shadow-md z-20">
         <header className="bg-white transition-colors duration-300">
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
             <button
@@ -374,7 +448,7 @@ const StoryPage = () => {
         </div>
       </div>
       
-      <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative overflow-hidden pt-[120px]">
+      <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative overflow-hidden pt-[132px]">
         {isLoading ? (
           <StorySkeletonLoader />
         ) : (
