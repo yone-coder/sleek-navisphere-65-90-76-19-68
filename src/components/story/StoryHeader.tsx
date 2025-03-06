@@ -80,8 +80,8 @@ export function StoryHeader({
         />
       </div>
       
-      {/* Chapter title section */}
-      <div className="border-b border-gray-100 bg-white py-3">
+      {/* Chapter title section - removed border-b class */}
+      <div className="bg-white py-3">
         <div className="container mx-auto px-4">
           {currentPage === 1 ? (
             <div className="text-center">
