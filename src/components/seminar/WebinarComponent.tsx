@@ -302,7 +302,7 @@ const WebinarComponent = () => {
         <div className="flex justify-between items-center mb-1 text-xs">
           <div className="flex items-center text-gray-600">
             {renderStackedProfiles()}
-            <span>{formatNumber(participants)} participants</span>
+            <span>{formatNumber(participants)} joined</span>
             <div className="flex ml-1 items-center">
               {renderSparkline()}
             </div>
