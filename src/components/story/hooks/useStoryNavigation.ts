@@ -1,10 +1,15 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export function useStoryNavigation(totalPages: number) {
   const [currentPage, setCurrentPage] = useState(1);
   const [isPageAnimating, setIsPageAnimating] = useState(false);
   const [animationDirection, setAnimationDirection] = useState('next');
+
+  // Add effect to scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
 
   const handleNextPage = () => {
     if (currentPage < totalPages && !isPageAnimating) {
