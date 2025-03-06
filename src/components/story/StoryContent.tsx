@@ -29,9 +29,9 @@ export function StoryContent({
           </div>
         )}
         
-        <div className="sticky top-[72px] bg-white z-10 py-4 border-b">
+        <div className="mb-8">
           <h3 className="text-2xl font-semibold mb-3 text-center">{currentContent.chapter}</h3>
-          <div className="flex items-center text-gray-600 justify-center">
+          <div className="flex items-center text-gray-600 mb-6 justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
               <circle cx="12" cy="12" r="10" />
               <polyline points="12 6 12 12 16 14" />
@@ -41,7 +41,7 @@ export function StoryContent({
         </div>
         
         <div 
-          className="prose max-w-none mt-8 relative" 
+          className="prose max-w-none mb-8 relative" 
           style={{ fontSize: `${fontSize}px` }}
         >
           {currentContent.content.split("\n\n").map((paragraph, index) => (
@@ -70,4 +70,3 @@ export function StoryContent({
     </>
   );
 }
-
