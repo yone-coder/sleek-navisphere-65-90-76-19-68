@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -25,16 +26,19 @@ export default function Login() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState("");
+  const [loginIdentifier, setLoginIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [lastEmail, setLastEmail] = useState("");
+  const [loginType, setLoginType] = useState<'email' | 'username'>('email');
 
   useEffect(() => {
     const savedEmail = localStorage.getItem("lastLoginEmail");
     if (savedEmail) {
       setLastEmail(savedEmail);
+      setLoginIdentifier(savedEmail);
+      setLoginType('email');
     }
   }, []);
 
@@ -65,10 +69,10 @@ export default function Login() {
     }
   };
 
-  const handleEmailLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !password) {
+    if (!loginIdentifier || !password) {
       toast({
         title: "Missing Fields",
         description: "Please fill in all required fields.",
@@ -79,24 +83,45 @@ export default function Login() {
 
     try {
       setIsLoading(true);
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      
+      if (loginType === 'email') {
+        // Normal email login
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: loginIdentifier,
+          password,
+        });
 
-      if (error) throw error;
+        if (error) throw error;
 
-      if (rememberMe) {
-        localStorage.setItem("lastLoginEmail", email);
+        if (rememberMe) {
+          localStorage.setItem("lastLoginEmail", loginIdentifier);
+        } else {
+          localStorage.removeItem("lastLoginEmail");
+        }
+
+        toast({
+          title: "Success",
+          description: "You have been logged in successfully.",
+        });
+        navigate('/');
       } else {
-        localStorage.removeItem("lastLoginEmail");
-      }
+        // Username login
+        // For username login, we need to construct the email based on username
+        // This should match the pattern used during signup
+        const email = `${loginIdentifier.toLowerCase()}@example.com`;
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
-      toast({
-        title: "Success",
-        description: "You have been logged in successfully.",
-      });
-      navigate('/');
+        if (error) throw error;
+
+        toast({
+          title: "Success",
+          description: "You have been logged in successfully.",
+        });
+        navigate('/');
+      }
     } catch (error: any) {
       toast({
         title: "Error",
@@ -106,6 +131,11 @@ export default function Login() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const toggleLoginType = () => {
+    setLoginType(loginType === 'email' ? 'username' : 'email');
+    setLoginIdentifier(''); // Clear the input when switching types
   };
 
   return (
@@ -166,7 +196,7 @@ export default function Login() {
           </div>
 
           <div className="mt-8 space-y-6">
-            {lastEmail && (
+            {lastEmail && loginType === 'email' && (
               <div className="bg-blue-50 p-4 rounded-lg flex items-center gap-3 animate-fade-in">
                 <User className="h-5 w-5 text-blue-500" />
                 <div className="flex-1">
@@ -178,6 +208,7 @@ export default function Login() {
                   size="sm"
                   onClick={() => {
                     setLastEmail("");
+                    setLoginIdentifier("");
                     localStorage.removeItem("lastLoginEmail");
                   }}
                 >
@@ -246,30 +277,74 @@ export default function Login() {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-background px-2 text-muted-foreground">
-                  Or continue with email
+                  Or continue with
                 </span>
               </div>
             </div>
 
-            <form onSubmit={handleEmailLogin} className="space-y-6">
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <Button
+                variant={loginType === 'email' ? 'default' : 'outline'}
+                className={`w-full gap-2 relative overflow-hidden group ${
+                  loginType === 'email' ? 'text-white' : ''
+                }`}
+                onClick={() => setLoginType('email')}
+                disabled={isLoading}
+              >
+                {loginType === 'email' && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500" />
+                )}
+                <div className="relative z-10 flex items-center gap-2">
+                  <Mail className="h-4 w-4" />
+                  <span>Email</span>
+                </div>
+              </Button>
+              <Button
+                variant={loginType === 'username' ? 'default' : 'outline'}
+                className={`w-full gap-2 relative overflow-hidden group ${
+                  loginType === 'username' ? 'text-white' : ''
+                }`}
+                onClick={() => setLoginType('username')}
+                disabled={isLoading}
+              >
+                {loginType === 'username' && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500" />
+                )}
+                <div className="relative z-10 flex items-center gap-2">
+                  <User className="h-4 w-4" />
+                  <span>Username</span>
+                </div>
+              </Button>
+            </div>
+
+            <form onSubmit={handleLogin} className="space-y-6">
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="email" className="flex items-center gap-2">
-                    <Mail className="h-4 w-4" />
-                    Email Address
+                  <Label htmlFor="loginIdentifier" className="flex items-center gap-2">
+                    {loginType === 'email' ? (
+                      <>
+                        <Mail className="h-4 w-4" />
+                        Email Address
+                      </>
+                    ) : (
+                      <>
+                        <User className="h-4 w-4" />
+                        Username
+                      </>
+                    )}
                   </Label>
                   <div className="mt-1 relative">
                     <Input
-                      id="email"
-                      type="email"
-                      placeholder="name@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      id="loginIdentifier"
+                      type={loginType === 'email' ? "email" : "text"}
+                      placeholder={loginType === 'email' ? "name@example.com" : "Enter your username"}
+                      value={loginIdentifier}
+                      onChange={(e) => setLoginIdentifier(e.target.value)}
                       required
                       className="pr-10"
                       disabled={isLoading}
                     />
-                    {email && !email.includes('@') && (
+                    {loginType === 'email' && loginIdentifier && !loginIdentifier.includes('@') && (
                       <AlertCircle className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-red-500" />
                     )}
                   </div>

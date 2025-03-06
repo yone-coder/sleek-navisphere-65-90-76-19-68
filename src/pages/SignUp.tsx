@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,8 @@ import {
   Check, 
   HelpCircle,
   Facebook,
-  PhoneCall
+  PhoneCall,
+  User
 } from "lucide-react";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import zxcvbn from "zxcvbn";
@@ -28,9 +30,10 @@ export default function SignUp() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
-  const [signupMethod, setSignupMethod] = useState<'email' | 'phone'>('email');
+  const [signupMethod, setSignupMethod] = useState<'email' | 'phone' | 'username'>('email');
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [usernameInput, setUsernameInput] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -69,6 +72,13 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
+      if (signupMethod === 'username') {
+        // Skip verification for username signup
+        setStep(3);
+        setIsLoading(false);
+        return;
+      }
+
       const response = await supabase.functions.invoke('send-verification', {
         body: {
           method: signupMethod,
@@ -148,25 +158,52 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
-      // Sign up with email and password
-      const { data, error } = await supabase.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-          data: {
-            username: username,
+      if (signupMethod === 'username') {
+        // For username signup, we use the usernameInput as both the username and identifier
+        // This is a simplified approach - in a real app, you might want to generate a unique email
+        const { data, error } = await supabase.auth.signUp({
+          email: `${usernameInput.toLowerCase()}@example.com`, // Creating a placeholder email
+          password: password,
+          options: {
+            data: {
+              username: usernameInput, // Store the real username in metadata
+              signup_method: 'username'
+            },
           },
-        },
-      });
-
-      if (error) throw error;
-
-      if (data.user) {
-        toast({
-          title: "Success",
-          description: "Your account has been created successfully.",
         });
-        navigate('/');
+
+        if (error) throw error;
+
+        if (data.user) {
+          toast({
+            title: "Success",
+            description: "Your account has been created successfully.",
+          });
+          navigate('/');
+        }
+      } else {
+        // Regular email signup
+        const { data, error } = await supabase.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: {
+              username: username,
+              ...(signupMethod === 'phone' && { phone: phoneNumber }),
+              signup_method: signupMethod
+            },
+          },
+        });
+
+        if (error) throw error;
+
+        if (data.user) {
+          toast({
+            title: "Success",
+            description: "Your account has been created successfully.",
+          });
+          navigate('/');
+        }
       }
     } catch (error: any) {
       console.error('Signup error:', error);
@@ -281,7 +318,7 @@ export default function SignUp() {
               </div>
             </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <Button
                   variant={signupMethod === 'email' ? 'default' : 'outline'}
                   className={`w-full gap-2 relative overflow-hidden group ${
@@ -312,6 +349,21 @@ export default function SignUp() {
                     <span>Phone</span>
                   </div>
                 </Button>
+                <Button
+                  variant={signupMethod === 'username' ? 'default' : 'outline'}
+                  className={`w-full gap-2 relative overflow-hidden group ${
+                    signupMethod === 'username' ? 'text-white' : ''
+                  }`}
+                  onClick={() => setSignupMethod('username')}
+                >
+                  {signupMethod === 'username' && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500" />
+                  )}
+                  <div className="relative z-10 flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    <span>Username</span>
+                  </div>
+                </Button>
               </div>
 
               {signupMethod === 'email' ? (
@@ -330,7 +382,7 @@ export default function SignUp() {
                     className="mt-1"
                   />
                 </div>
-              ) : (
+              ) : signupMethod === 'phone' ? (
                 <div className="space-y-2">
                   <Label htmlFor="phone" className="flex items-center gap-2">
                     <PhoneCall className="h-4 w-4" />
@@ -346,14 +398,33 @@ export default function SignUp() {
                     className="mt-1"
                   />
                 </div>
+              ) : (
+                <div className="space-y-2">
+                  <Label htmlFor="username" className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    Username
+                  </Label>
+                  <Input
+                    id="username"
+                    type="text"
+                    placeholder="Choose a unique username"
+                    value={usernameInput}
+                    onChange={(e) => setUsernameInput(e.target.value)}
+                    disabled={isLoading}
+                    className="mt-1"
+                  />
+                </div>
               )}
 
             <Button
               onClick={handleSendVerification}
               className="w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90"
-              disabled={(!email && !phoneNumber) || isLoading}
+              disabled={(signupMethod === 'email' && !email) || 
+                       (signupMethod === 'phone' && !phoneNumber) || 
+                       (signupMethod === 'username' && !usernameInput) || 
+                       isLoading}
             >
-              Send Verification Code
+              {signupMethod === 'username' ? 'Continue' : 'Send Verification Code'}
             </Button>
           </div>
         );

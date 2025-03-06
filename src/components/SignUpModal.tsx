@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Check, X, Eye, EyeOff, Github, Twitter, Facebook, Apple, Info } from "lucide-react";
+import { Check, X, Eye, EyeOff, Github, Twitter, Facebook, Apple, Info, User } from "lucide-react";
 import zxcvbn from "zxcvbn";
 
 interface SignUpModalProps {
@@ -20,12 +20,14 @@ export function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState<1 | 2>(1);
+  const [signupMethod, setSignupMethod] = useState<'email' | 'username'>('email');
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [usernameInput, setUsernameInput] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [username, setUsername] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
 
   const passwordStrength = zxcvbn(password);
@@ -149,24 +151,77 @@ export function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-background px-2 text-muted-foreground">
-                    Or continue with email
+                    Or continue with
                   </span>
                 </div>
               </div>
 
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <Button
+                  variant={signupMethod === 'email' ? 'default' : 'outline'}
+                  className={`w-full gap-2 relative overflow-hidden group ${
+                    signupMethod === 'email' ? 'text-white' : ''
+                  }`}
+                  onClick={() => setSignupMethod('email')}
+                  disabled={isLoading}
+                >
+                  {signupMethod === 'email' && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500" />
+                  )}
+                  <div className="relative z-10 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                      <rect width="20" height="16" x="2" y="4" rx="2" />
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                    </svg>
+                    <span>Email</span>
+                  </div>
+                </Button>
+                <Button
+                  variant={signupMethod === 'username' ? 'default' : 'outline'}
+                  className={`w-full gap-2 relative overflow-hidden group ${
+                    signupMethod === 'username' ? 'text-white' : ''
+                  }`}
+                  onClick={() => setSignupMethod('username')}
+                  disabled={isLoading}
+                >
+                  {signupMethod === 'username' && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500" />
+                  )}
+                  <div className="relative z-10 flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    <span>Username</span>
+                  </div>
+                </Button>
+              </div>
+
               <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="name@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={isLoading}
-                    className="bg-background"
-                  />
-                </div>
+                {signupMethod === 'email' ? (
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="name@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={isLoading}
+                      className="bg-background"
+                    />
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Label htmlFor="usernameInput">Username</Label>
+                    <Input
+                      id="usernameInput"
+                      type="text"
+                      placeholder="Choose a unique username"
+                      value={usernameInput}
+                      onChange={(e) => setUsernameInput(e.target.value)}
+                      disabled={isLoading}
+                      className="bg-background"
+                    />
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
@@ -246,7 +301,14 @@ export function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
               <Button
                 onClick={() => setStep(2)}
                 className="w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90"
-                disabled={!email || !password || !confirmPassword || !agreeToTerms || isLoading}
+                disabled={
+                  (signupMethod === 'email' && !email) || 
+                  (signupMethod === 'username' && !usernameInput) || 
+                  !password || 
+                  !confirmPassword || 
+                  !agreeToTerms || 
+                  isLoading
+                }
               >
                 Continue
               </Button>
