@@ -29,9 +29,9 @@ export function StoryContent({
           </div>
         )}
         
-        <div className="mb-8">
-          <h3 className="text-2xl font-semibold mb-3 text-center">{currentContent.chapter}</h3>
-          <div className="flex items-center text-gray-600 mb-6 justify-center">
+        <div className="sticky top-[72px] bg-white py-4 z-10 mb-8">
+          <h3 className="text-2xl font-semibold text-center">{currentContent.chapter}</h3>
+          <div className="flex items-center text-gray-600 mt-2 justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
               <circle cx="12" cy="12" r="10" />
               <polyline points="12 6 12 12 16 14" />
