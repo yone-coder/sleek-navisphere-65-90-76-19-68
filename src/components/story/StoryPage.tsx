@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import BookChapters from '@/components/story/BookChapters';
@@ -111,7 +110,6 @@ const StoryPage = () => {
         handleLanguageChange={handleLanguageChange}
         languages={languages}
         progressPercentage={progressPercentage}
-        currentContent={currentContent}
       />
       
       <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative overflow-hidden">
