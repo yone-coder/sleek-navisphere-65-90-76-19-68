@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Clock, Calendar, UserCheck, AlertCircle, Check, Users, Eye, Heart, MessageCircle, Share } from 'lucide-react';
+import { Clock, Calendar, UserCheck, AlertCircle, Check, Users, Eye, Heart, MessageCircle, Share, Smile, Star, ThumbsUp, Award, Trophy } from 'lucide-react';
 import TikTokCommentsPanel from '@/components/comments/TikTokCommentsPanel';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface HoverValueType {
   percentage: string;
@@ -29,13 +35,26 @@ const WebinarComponent = () => {
     message: 'just registered',
     isVisible: false
   });
-  const [shares, setShares] = useState(125000);
-  const [likes, setLikes] = useState(8200);
-  const [comments, setComments] = useState(342);
+  
   const [isLiked, setIsLiked] = useState(false);
+  const [likes, setLikes] = useState(8200);
+  const [shares, setShares] = useState(125000);
+  const [comments, setComments] = useState(342);
   const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
+  const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
+  const [showEmojiMenu, setShowEmojiMenu] = useState(false);
 
   const eventDate = "March 12, 2025 • 4:45 PM";
+
+  // Emoji reaction options
+  const emojiReactions = [
+    { icon: <Heart size={14} className="mr-1" fill="currentColor" />, name: 'heart', color: 'text-red-500', label: 'Love' },
+    { icon: <ThumbsUp size={14} className="mr-1" fill="currentColor" />, name: 'thumbsUp', color: 'text-blue-500', label: 'Like' },
+    { icon: <Smile size={14} className="mr-1" fill="currentColor" />, name: 'smile', color: 'text-yellow-500', label: 'Happy' },
+    { icon: <Star size={14} className="mr-1" fill="currentColor" />, name: 'star', color: 'text-amber-500', label: 'Amazing' },
+    { icon: <Trophy size={14} className="mr-1" fill="currentColor" />, name: 'trophy', color: 'text-purple-500', label: 'Awesome' },
+    { icon: <Award size={14} className="mr-1" fill="currentColor" />, name: 'award', color: 'text-green-500', label: 'Great' },
+  ];
 
   function getRandomLetter() {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -137,6 +156,49 @@ const WebinarComponent = () => {
       clearInterval(participantTimer);
     };
   }, [participants, maxParticipants]);
+
+  const handleLikeWithEmoji = (emojiName: string) => {
+    if (selectedEmoji === emojiName) {
+      // Clicking same emoji again toggles it off
+      setIsLiked(false);
+      setSelectedEmoji(null);
+      setLikes(prev => prev - 1);
+    } else {
+      // New emoji selected
+      if (!isLiked) {
+        // If not already liked, increment count
+        setLikes(prev => prev + 1);
+      }
+      setIsLiked(true);
+      setSelectedEmoji(emojiName);
+    }
+    setShowEmojiMenu(false);
+  };
+
+  // Simple like without emoji selection
+  const handleLike = () => {
+    if (!isLiked) {
+      setIsLiked(true);
+      setSelectedEmoji('heart'); // Default to heart
+      setLikes(prev => prev + 1);
+    } else {
+      setIsLiked(false);
+      setSelectedEmoji(null);
+      setLikes(prev => prev - 1);
+    }
+  };
+
+  const handleOpenComments = () => {
+    setIsCommentsPanelOpen(true);
+  };
+
+  const closeCommentsPanel = () => {
+    setIsCommentsPanelOpen(false);
+  };
+
+  const handleShare = () => {
+    setShares(prev => prev + 1);
+  };
 
   const formatTime = (time: number) => {
     return time < 10 ? `0${time}` : time;
@@ -269,23 +331,6 @@ const WebinarComponent = () => {
     );
   };
 
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    setLikes(prev => isLiked ? prev - 1 : prev + 1);
-  };
-
-  const openCommentsPanel = () => {
-    setIsCommentsPanelOpen(true);
-  };
-
-  const closeCommentsPanel = () => {
-    setIsCommentsPanelOpen(false);
-  };
-
-  const handleShare = () => {
-    setShares(prev => prev + 1);
-  };
-
   return (
     <div className="w-full max-w-sm bg-white rounded-lg shadow-lg p-2 mx-auto">
       <div className="relative mb-2">
@@ -380,20 +425,50 @@ const WebinarComponent = () => {
       
       <div className="flex justify-between mb-2 text-sm">
         <div className="flex space-x-2 w-full">
+          <DropdownMenu open={showEmojiMenu} onOpenChange={setShowEmojiMenu}>
+            <DropdownMenuTrigger asChild>
+              <button 
+                className={`flex-1 bg-gray-100 px-3 py-1.5 rounded-full flex items-center justify-center ${
+                  isLiked ? selectedEmoji ? emojiReactions.find(r => r.name === selectedEmoji)?.color || 'text-red-500' : 'text-red-500' : 'text-gray-600'
+                }`}
+              >
+                {isLiked && selectedEmoji ? (
+                  emojiReactions.find(r => r.name === selectedEmoji)?.icon || 
+                  <Heart size={14} className="mr-1" fill="currentColor" />
+                ) : (
+                  <Heart size={14} className="mr-1" fill={isLiked ? "currentColor" : "none"} />
+                )}
+                <span className="font-medium">{formatNumber(likes)}</span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="center" className="bg-white rounded-lg shadow-lg border-none p-1 flex">
+              <div className="flex flex-wrap justify-center gap-1 p-1 w-48">
+                {emojiReactions.map((reaction) => (
+                  <DropdownMenuItem
+                    key={reaction.name}
+                    onClick={() => handleLikeWithEmoji(reaction.name)}
+                    className={`flex-1 min-w-[40px] flex flex-col items-center justify-center rounded-md p-2 cursor-pointer hover:bg-gray-100 transition-colors ${
+                      selectedEmoji === reaction.name ? `${reaction.color} bg-gray-100` : ''
+                    }`}
+                  >
+                    <div className={`w-7 h-7 rounded-full flex items-center justify-center ${reaction.color}`}>
+                      {React.cloneElement(reaction.icon as React.ReactElement, { size: 18, className: '' })}
+                    </div>
+                    <span className="text-xs mt-1">{reaction.label}</span>
+                  </DropdownMenuItem>
+                ))}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          
           <button 
-            onClick={handleLike}
-            className={`flex-1 bg-gray-100 px-3 py-1.5 rounded-full flex items-center justify-center ${isLiked ? 'text-red-500' : 'text-gray-600'}`}
-          >
-            <Heart size={14} className="mr-1" fill={isLiked ? "currentColor" : "none"} />
-            <span className="font-medium">{formatNumber(likes)}</span>
-          </button>
-          <button 
-            onClick={openCommentsPanel}
+            onClick={handleOpenComments}
             className="flex-1 bg-gray-100 px-3 py-1.5 rounded-full flex items-center justify-center text-gray-600"
           >
             <MessageCircle size={14} className="mr-1" />
             <span className="font-medium">{formatNumber(comments)}</span>
           </button>
+          
           <button 
             onClick={handleShare}
             className="flex-1 bg-gray-100 px-3 py-1.5 rounded-full flex items-center justify-center text-gray-600"
