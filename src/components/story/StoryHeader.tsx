@@ -73,6 +73,13 @@ export function StoryHeader({
         </div>
       </header>
       
+      <div className="w-full h-1 bg-gray-200">
+        <div 
+          className="h-full bg-blue-500 transition-all duration-300" 
+          style={{ width: `${progressPercentage}%` }}
+        />
+      </div>
+      
       {/* Chapter title section */}
       <div className="border-b border-gray-100 bg-white py-3">
         <div className="container mx-auto px-4">
@@ -84,13 +91,6 @@ export function StoryHeader({
             <h3 className="text-xl font-semibold text-center">{chapterTitle}</h3>
           )}
         </div>
-      </div>
-      
-      <div className="w-full h-1 bg-gray-200">
-        <div 
-          className="h-full bg-blue-500 transition-all duration-300" 
-          style={{ width: `${progressPercentage}%` }}
-        />
       </div>
     </div>
   );
