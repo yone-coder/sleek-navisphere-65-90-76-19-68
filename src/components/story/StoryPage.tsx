@@ -112,7 +112,7 @@ const StoryPage = () => {
         progressPercentage={progressPercentage}
       />
       
-      <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative overflow-hidden pt-[90px]">
+      <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative overflow-hidden">
         {isLoading ? (
           <StorySkeletonLoader />
         ) : (

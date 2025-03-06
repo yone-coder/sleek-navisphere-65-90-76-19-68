@@ -30,7 +30,7 @@ export function StoryHeader({
   progressPercentage
 }: StoryHeaderProps) {
   return (
-    <div className="fixed top-0 left-0 right-0 bg-white shadow-md z-30">
+    <div className="relative bg-white shadow-sm z-20 mt-12">
       <header className="bg-white transition-colors duration-300">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <button
