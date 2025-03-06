@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Clock, Calendar, UserCheck, AlertCircle, Check } from 'lucide-react';
 
@@ -258,9 +257,9 @@ const WebinarComponent = () => {
   };
 
   return (
-    <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-4 mx-auto">
+    <div className="w-full max-w-sm bg-white rounded-lg shadow-lg p-2 mx-auto">
       {/* Enhanced Progress and Register Section */}
-      <div className="relative mb-4">
+      <div className="relative mb-2">
         <div className="flex justify-between items-center mb-1 text-xs">
           <div className="flex items-center text-gray-600">
             <span>{participants.toLocaleString()} participants</span>
@@ -275,7 +274,7 @@ const WebinarComponent = () => {
         
         {/* Enhanced Progress Bar */}
         <div 
-          className="h-6 bg-gray-200 rounded-full overflow-hidden relative mt-2 cursor-pointer"
+          className="h-5 bg-gray-200 rounded-full overflow-hidden relative mt-1 cursor-pointer"
           onMouseMove={handleMouseMove}
           onMouseLeave={() => setShowTooltip(false)}
         >
@@ -318,30 +317,28 @@ const WebinarComponent = () => {
           </div>
         </div>
         
-        {/* Status indicators and statistics below progress bar */}
-        <div className="flex justify-between text-xs mt-2 text-gray-600">
-          <div className="flex flex-col">
+        {/* Status indicators and statistics below progress bar - more compact */}
+        <div className="flex justify-between text-xs mt-1 text-gray-600">
+          <div>
             <span className="font-medium">
               <span className="text-green-500">{spotsLeft.toLocaleString()}</span> spots left
             </span>
-            <span className="text-xs text-gray-500">Max capacity: {maxParticipants.toLocaleString()}</span>
           </div>
           
-          <div className="flex flex-col items-end">
+          <div className="text-right">
             <span className="font-medium flex items-center">
               <AlertCircle size={10} className="mr-1 text-orange-500" />
-              Est. time until full: {estimatedTimeUntilFull()}
+              Est. full: {estimatedTimeUntilFull()}
             </span>
-            <span className="text-xs text-gray-500">~{registrationRate} registrations/hour</span>
           </div>
         </div>
         
-        {/* Fixed height container for registration messages to prevent layout shift */}
-        <div className="mt-3 flex justify-between items-center">
-          <div className="flex items-center h-6"> {/* Fixed height container */}
+        {/* Compact date and time display */}
+        <div className="mt-1 flex justify-between items-center">
+          <div className="flex items-center h-5"> 
             {registrationMessage.isVisible ? (
               <div className="flex items-center text-xs animate-fade-in">
-                <div className="w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center mr-1 text-xs font-bold">
+                <div className="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center mr-1 text-xs font-bold">
                   {registrationMessage.profile}
                 </div>
                 <span className="text-blue-500 font-medium">
@@ -350,21 +347,21 @@ const WebinarComponent = () => {
               </div>
             ) : (
               <div className="flex items-center text-xs text-gray-600">
-                <Calendar size={14} className="mr-1 text-blue-500" />
+                <Calendar size={12} className="mr-1 text-blue-500" />
                 <span>{eventDate}</span>
               </div>
             )}
           </div>
           <div className="flex items-center text-xs text-gray-600">
-            <Clock size={14} className="mr-1 text-blue-500" />
+            <Clock size={12} className="mr-1 text-blue-500" />
             <span>{formatTime(timeLeft.days)}d:{formatTime(timeLeft.hours)}h:{formatTime(timeLeft.minutes)}m:{formatTime(timeLeft.seconds)}s</span>
           </div>
         </div>
       </div>
       
-      {/* Register Button */}
+      {/* Register Button - smaller */}
       <button 
-        className={`w-full py-3 px-4 font-medium rounded-md shadow-md transition-all duration-300 transform ${
+        className={`w-full py-2 px-3 font-medium rounded-md shadow-md text-sm transition-all duration-300 transform ${
           isRegistered
             ? 'bg-green-500 text-white hover:bg-green-600'
             : buttonHover
@@ -378,20 +375,20 @@ const WebinarComponent = () => {
         <div className="flex items-center justify-center">
           {isRegistered ? (
             <>
-              <Check size={18} className="mr-2 animate-bounce" />
+              <Check size={16} className="mr-2 animate-bounce" />
               <span>You're Registered!</span>
             </>
           ) : (
             <>
-              <UserCheck size={18} className={`mr-2 ${buttonHover ? 'animate-pulse' : ''}`} />
+              <UserCheck size={16} className={`mr-2 ${buttonHover ? 'animate-pulse' : ''}`} />
               <span>Register Now</span>
             </>
           )}
         </div>
       </button>
       
-      {/* Add animation styles */}
-      <style jsx>{`
+      {/* Add animation styles - fixed the jsx error by removing that property */}
+      <style>{`
         @keyframes fade-in {
           0% { opacity: 0; transform: translateY(5px); }
           100% { opacity: 1; transform: translateY(0); }
