@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp, BadgeCheck, Eye } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
 
@@ -8,6 +8,30 @@ const SeminarHomepage = () => {
   const [activeTab, setActiveTab] = useState(0);
   // State for follow button
   const [isFollowing, setIsFollowing] = useState(false);
+  // State for bottom padding
+  const [bottomPadding, setBottomPadding] = useState(0);
+  // Ref for the WebinarComponent
+  const webinarRef = useRef<HTMLDivElement>(null);
+  
+  // Effect to measure and set the bottom padding based on WebinarComponent height
+  useEffect(() => {
+    if (activeTab === 0 && webinarRef.current) {
+      const updatePadding = () => {
+        const height = webinarRef.current?.offsetHeight || 0;
+        setBottomPadding(height + 16); // Add 16px extra for spacing
+      };
+      
+      // Initial measurement
+      updatePadding();
+      
+      // Update on resize
+      window.addEventListener('resize', updatePadding);
+      
+      return () => {
+        window.removeEventListener('resize', updatePadding);
+      };
+    }
+  }, [activeTab]);
   
   // Tabs configuration
   const tabs = [
@@ -138,7 +162,7 @@ const SeminarHomepage = () => {
       <div className="flex-grow bg-white p-6">
         {/* Each tab has an empty container */}
         {activeTab === 0 && (
-          <div>
+          <div style={{ paddingBottom: `${bottomPadding}px` }}>
             {/* Removed "Video content area" div */}
             
             {/* Removed RegisterNowSection which contained the "Limited Time Offer" section */}
@@ -172,7 +196,7 @@ const SeminarHomepage = () => {
       
       {/* Fixed WebinarComponent at the bottom only for video tab - adjusted positioning and size */}
       {activeTab === 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 py-2 px-2 z-50">
+        <div ref={webinarRef} className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 py-2 px-2 z-50">
           <WebinarComponent />
         </div>
       )}
