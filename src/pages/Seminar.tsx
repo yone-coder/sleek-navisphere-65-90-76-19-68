@@ -1,8 +1,7 @@
 
 import React, { useState } from 'react';
-import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp, BadgeCheck, Eye, GraduationCap, UserCheck } from 'lucide-react';
+import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp, BadgeCheck, Eye } from 'lucide-react';
 import RegisterNowSection from '../components/seminar/RegisterNowSection';
-import { FloatingProgress } from '@/components/campaign/FloatingProgress';
 
 const SeminarHomepage = () => {
   // State for active tab
@@ -18,20 +17,6 @@ const SeminarHomepage = () => {
     { id: 3, name: "Testimonials", icon: <Users size={18} /> },
     { id: 4, name: "Register", icon: <Edit3 size={18} /> }
   ];
-  
-  // Floating progress data for seminar participants
-  const seminarProgressData = {
-    participants: 78,
-    progress: 78,
-    days: 7,
-    registered: 78,
-    capacity: 100
-  };
-  
-  const handleBackProjectClick = () => {
-    // Switch to Register tab
-    setActiveTab(4);
-  };
   
   return (
     <div className="flex flex-col w-full max-w-6xl mx-auto bg-gray-50 shadow-xl rounded-xl overflow-hidden">
@@ -160,19 +145,6 @@ const SeminarHomepage = () => {
             
             {/* Register Now Section */}
             <RegisterNowSection />
-            
-            {/* Floating Progress Section - Only visible on video tab */}
-            {activeTab === 0 && (
-              <FloatingProgress
-                backers={seminarProgressData.participants}
-                progress={seminarProgressData.progress}
-                days={seminarProgressData.days}
-                raised={seminarProgressData.registered}
-                goal={seminarProgressData.capacity}
-                onBackProjectClick={handleBackProjectClick}
-                isWebinar={true}
-              />
-            )}
           </div>
         )}
         
