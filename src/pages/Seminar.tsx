@@ -163,8 +163,8 @@ const SeminarHomepage = () => {
         {/* Each tab has an empty container */}
         {activeTab === 0 && (
           <div style={{ paddingBottom: `${bottomPadding}px` }}>
-            {/* Add WebinarInfoComponent at the end of the video tab - now full width */}
-            <div className="mt-8 w-full -mx-6">
+            {/* Add WebinarInfoComponent at the end of the video tab - now truly full width */}
+            <div className="mt-8 -mx-6 w-[calc(100%+3rem)]">
               <WebinarInfoComponent />
             </div>
           </div>
