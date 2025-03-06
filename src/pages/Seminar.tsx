@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp, BadgeCheck, Eye } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
@@ -164,8 +163,8 @@ const SeminarHomepage = () => {
         {/* Each tab has an empty container */}
         {activeTab === 0 && (
           <div style={{ paddingBottom: `${bottomPadding}px` }}>
-            {/* Add WebinarInfoComponent at the end of the video tab */}
-            <div className="mt-8 w-full">
+            {/* Add WebinarInfoComponent at the end of the video tab - now full width */}
+            <div className="mt-8 w-full -mx-6">
               <WebinarInfoComponent />
             </div>
           </div>
