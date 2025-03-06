@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ChevronDown } from 'lucide-react';
 import {
@@ -29,7 +30,7 @@ export function StoryHeader({
   progressPercentage
 }: StoryHeaderProps) {
   return (
-    <div className="relative bg-white shadow-sm z-20">
+    <div className="sticky top-0 bg-white shadow-sm z-20">
       <header className="bg-white transition-colors duration-300">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <button
