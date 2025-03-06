@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Clock, Calendar, UserCheck, AlertCircle, Check } from 'lucide-react';
+import { Clock, Calendar, UserCheck, AlertCircle, Check, Users } from 'lucide-react';
 
+// Define type for the hover value
 interface HoverValueType {
   percentage: string;
   participants: number;
@@ -14,7 +15,7 @@ const WebinarComponent = () => {
     minutes: 45,
     seconds: 30
   });
-  const [participants, setParticipants] = useState(1266);
+  const [participants, setParticipants] = useState(1267);
   const [maxParticipants, setMaxParticipants] = useState(2000);
   const [registrationStatus, setRegistrationStatus] = useState('available');
   const [registrationRate, setRegistrationRate] = useState(0);
@@ -38,6 +39,17 @@ const WebinarComponent = () => {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     return letters.charAt(Math.floor(Math.random() * letters.length));
   }
+
+  // Format number with k or m for thousands/millions
+  const formatNumber = (num: number): string => {
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'm';
+    }
+    if (num >= 1000) {
+      return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    }
+    return num.toString();
+  };
 
   // Calculate participation percentage and spots left
   const participationPercentage = (participants / maxParticipants) * 100;
@@ -261,13 +273,36 @@ const WebinarComponent = () => {
     );
   };
 
+  // Generate stacked profile images
+  const renderStackedProfiles = () => {
+    // Create an array of colors for the avatars
+    const colors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-yellow-500', 'bg-pink-500'];
+    
+    return (
+      <div className="flex -space-x-2 mr-2">
+        {[...Array(4)].map((_, i) => (
+          <div 
+            key={i} 
+            className={`w-5 h-5 rounded-full ${colors[i % colors.length]} text-white text-xs flex items-center justify-center border border-white`}
+          >
+            {getRandomLetter()}
+          </div>
+        ))}
+        <div className="w-5 h-5 rounded-full bg-gray-200 text-gray-600 text-xs flex items-center justify-center border border-white">
+          <Users size={10} />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="w-full max-w-sm bg-white rounded-lg shadow-lg p-2 mx-auto">
       {/* Enhanced Progress and Register Section */}
       <div className="relative mb-2">
         <div className="flex justify-between items-center mb-1 text-xs">
           <div className="flex items-center text-gray-600">
-            <span>{participants.toLocaleString()} participants</span>
+            {renderStackedProfiles()}
+            <span>{formatNumber(participants)} participants</span>
             <div className="flex ml-1 items-center">
               {renderSparkline()}
             </div>
@@ -293,7 +328,7 @@ const WebinarComponent = () => {
                 boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
               }}
             >
-              {hoverValue.participants.toLocaleString()} attendees ({hoverValue.percentage}%)
+              {formatNumber(hoverValue.participants)} attendees ({hoverValue.percentage}%)
               <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-gray-800"></div>
             </div>
           )}
@@ -326,7 +361,7 @@ const WebinarComponent = () => {
         <div className="flex justify-between text-xs mt-1 text-gray-600">
           <div>
             <span className="font-medium">
-              <span className="text-green-500">{spotsLeft.toLocaleString()}</span> spots left
+              <span className="text-green-500">{formatNumber(spotsLeft)}</span> spots left
             </span>
           </div>
           
