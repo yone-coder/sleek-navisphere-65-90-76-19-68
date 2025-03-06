@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp, BadgeCheck, Eye } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
+import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
 
 const SeminarHomepage = () => {
   // State for active tab
@@ -163,9 +164,10 @@ const SeminarHomepage = () => {
         {/* Each tab has an empty container */}
         {activeTab === 0 && (
           <div style={{ paddingBottom: `${bottomPadding}px` }}>
-            {/* Removed "Video content area" div */}
-            
-            {/* Removed RegisterNowSection which contained the "Limited Time Offer" section */}
+            {/* Add WebinarInfoComponent at the end of the video tab */}
+            <div className="mt-8 w-full">
+              <WebinarInfoComponent />
+            </div>
           </div>
         )}
         
