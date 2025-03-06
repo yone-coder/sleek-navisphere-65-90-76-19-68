@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import BookChapters from '@/components/story/BookChapters';
@@ -19,7 +18,6 @@ const StoryPage = () => {
   const [totalPages, setTotalPages] = useState(15);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Custom hooks
   const {
     currentPage,
     isPageAnimating,
@@ -114,7 +112,7 @@ const StoryPage = () => {
         progressPercentage={progressPercentage}
       />
       
-      <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative overflow-hidden pt-[132px]">
+      <main className="container mx-auto px-4 py-8 pb-32 max-w-3xl relative overflow-hidden pt-[90px]">
         {isLoading ? (
           <StorySkeletonLoader />
         ) : (
