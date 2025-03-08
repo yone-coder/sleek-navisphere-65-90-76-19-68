@@ -1,6 +1,6 @@
-
 import React, { useState, useRef } from 'react';
 import { ChevronRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface WebinarItem {
   title: string;
@@ -15,6 +15,8 @@ interface WebinarSection {
 }
 
 const WebinarInfoComponent = () => {
+  const { t } = useLanguage();
+  
   // Auto-expand the benefits section by default
   const [expandedSections, setExpandedSections] = useState([0]);
   const [activeItemIndex, setActiveItemIndex] = useState(0);
@@ -164,7 +166,7 @@ const WebinarInfoComponent = () => {
                       className="flex flex-col items-center text-black font-medium cursor-pointer self-center"
                       onClick={() => openDetailsPanel(item)}
                     >
-                      <span>Learn more</span>
+                      <span>{t('webinar.learnmore')}</span>
                       <ChevronDown className="h-5 w-5" />
                     </div>
                   </div>

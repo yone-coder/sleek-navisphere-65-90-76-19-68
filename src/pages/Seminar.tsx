@@ -1,9 +1,14 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp, BadgeCheck, Eye } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
 import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const SeminarHomepage = () => {
+  // Get language context
+  const { t, language, setLanguage } = useLanguage();
+  
   // State for active tab
   const [activeTab, setActiveTab] = useState(0);
   // State for follow button
@@ -12,6 +17,11 @@ const SeminarHomepage = () => {
   const [bottomPadding, setBottomPadding] = useState(0);
   // Ref for the WebinarComponent
   const webinarRef = useRef<HTMLDivElement>(null);
+  
+  // Effect to set language to French
+  useEffect(() => {
+    setLanguage('fr');
+  }, [setLanguage]);
   
   // Effect to measure and set the bottom padding based on WebinarComponent height
   useEffect(() => {
@@ -35,11 +45,11 @@ const SeminarHomepage = () => {
   
   // Tabs configuration
   const tabs = [
-    { id: 0, name: "Video", icon: <Play size={18} /> },
-    { id: 1, name: "Speakers", icon: <User size={18} /> },
-    { id: 2, name: "Highlights", icon: <Award size={18} /> },
-    { id: 3, name: "Testimonials", icon: <Users size={18} /> },
-    { id: 4, name: "Register", icon: <Edit3 size={18} /> }
+    { id: 0, name: t('seminar.tabs.video'), icon: <Play size={18} /> },
+    { id: 1, name: t('seminar.tabs.speakers'), icon: <User size={18} /> },
+    { id: 2, name: t('seminar.tabs.highlights'), icon: <Award size={18} /> },
+    { id: 3, name: t('seminar.tabs.testimonials'), icon: <Users size={18} /> },
+    { id: 4, name: t('seminar.tabs.register'), icon: <Edit3 size={18} /> }
   ];
   
   return (
@@ -79,12 +89,12 @@ const SeminarHomepage = () => {
           {/* Video Title and Stats - YouTube-like */}
           <div className="bg-white p-4">
             <h2 className="text-xl font-medium text-gray-900">
-              Mastering Modern Website Development: From Basics to Advanced Techniques
+              {t('seminar.video.title')}
             </h2>
             <div className="flex items-center mt-2 text-sm text-gray-600">
               <div className="flex items-center mr-4">
                 <Eye size={16} className="mr-1" />
-                <span>125K views</span>
+                <span>125K {t('seminar.video.views')}</span>
               </div>
               <div className="flex items-center mr-4">
                 <ThumbsUp size={16} className="mr-1" />
@@ -92,7 +102,7 @@ const SeminarHomepage = () => {
               </div>
               <div className="flex items-center">
                 <MessageCircle size={16} className="mr-1" />
-                <span>342 comments</span>
+                <span>342 {t('seminar.video.comments')}</span>
               </div>
             </div>
           </div>
@@ -113,7 +123,7 @@ const SeminarHomepage = () => {
             <div className="flex-grow min-w-0">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <h2 className="text-lg font-bold text-gray-900 truncate">Byte Academy</h2>
+                  <h2 className="text-lg font-bold text-gray-900 truncate">{t('seminar.academy.name')}</h2>
                   <BadgeCheck className="w-4 h-4 text-blue-500" />
                 </div>
                 <button 
@@ -124,12 +134,12 @@ const SeminarHomepage = () => {
                     : "bg-blue-600 hover:bg-blue-700 text-white"
                   }`}
                 >
-                  {isFollowing ? "Following" : "Follow"}
+                  {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
                 </button>
               </div>
               
               <div className="text-sm text-gray-500 mt-0.5">
-                <p>Future of Innovation Seminar 2025</p>
+                <p>{t('seminar.academy.description')}</p>
               </div>
             </div>
           </div>
@@ -139,11 +149,11 @@ const SeminarHomepage = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center text-sm text-gray-700">
                 <Users size={16} className="mr-1 text-gray-500" />
-                <span>126.5K foll.</span>
+                <span>126.5K {t('seminar.academy.followers')}</span>
               </div>
               <div className="flex items-center text-sm text-gray-700">
                 <Calendar size={16} className="mr-1 text-gray-500" />
-                <span>87 sémi.</span>
+                <span>87 {t('seminar.academy.seminars')}</span>
               </div>
               <div className="flex items-center text-sm text-gray-700">
                 <Star size={16} className="mr-1 text-yellow-500" />
@@ -153,7 +163,7 @@ const SeminarHomepage = () => {
           </div>
           
           <div className="mt-3 text-sm text-gray-700">
-            Join industry leaders for this exclusive 3-day event focused on emerging technologies, innovation strategies, and future business trends. March 15-17, 2025.
+            {t('seminar.description')}
           </div>
         </div>
       )}
@@ -172,25 +182,25 @@ const SeminarHomepage = () => {
         
         {activeTab === 1 && (
           <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500">
-            Speakers content area
+            {t('seminar.speakers')}
           </div>
         )}
         
         {activeTab === 2 && (
           <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500">
-            Highlights content area
+            {t('seminar.highlights')}
           </div>
         )}
         
         {activeTab === 3 && (
           <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500">
-            Testimonials content area
+            {t('seminar.testimonials')}
           </div>
         )}
         
         {activeTab === 4 && (
           <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500">
-            Registration content area
+            {t('seminar.register')}
           </div>
         )}
       </div>

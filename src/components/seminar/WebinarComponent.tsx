@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, Calendar, UserCheck, AlertCircle, Check, Users, Eye, Heart, MessageCircle, Share, Smile, Star, ThumbsUp, Award, Trophy } from 'lucide-react';
 import TikTokCommentsPanel from '@/components/comments/TikTokCommentsPanel';
+import { useLanguage } from '@/contexts/LanguageContext';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +15,8 @@ interface HoverValueType {
 }
 
 const WebinarComponent = () => {
+  const { t } = useLanguage();
+  
   const [timeLeft, setTimeLeft] = useState({
     days: 2,
     hours: 8,
@@ -46,7 +49,6 @@ const WebinarComponent = () => {
 
   const eventDate = "March 12, 2025 • 4:45 PM";
 
-  // Emoji reaction options
   const emojiReactions = [
     { icon: <Heart size={14} className="mr-1" fill="currentColor" />, name: 'heart', color: 'text-red-500', label: 'Love' },
     { icon: <ThumbsUp size={14} className="mr-1" fill="currentColor" />, name: 'thumbsUp', color: 'text-blue-500', label: 'Like' },
@@ -175,7 +177,6 @@ const WebinarComponent = () => {
     setShowEmojiMenu(false);
   };
 
-  // Simple like without emoji selection
   const handleLike = () => {
     if (!isLiked) {
       setIsLiked(true);
@@ -235,11 +236,11 @@ const WebinarComponent = () => {
   const getStatusText = () => {
     switch (registrationStatus) {
       case 'almost-full':
-        return <span className="text-red-500 font-medium animate-pulse">Almost Full!</span>;
+        return <span className="text-red-500 font-medium animate-pulse">{t('webinar.almostfull')}</span>;
       case 'filling-fast':
-        return <span className="text-orange-500 font-medium">Filling Fast</span>;
+        return <span className="text-orange-500 font-medium">{t('webinar.fillingfast')}</span>;
       default:
-        return <span className="text-green-500 font-medium">Spots Available</span>;
+        return <span className="text-green-500 font-medium">{t('webinar.spotsavailable')}</span>;
     }
   };
 
@@ -337,7 +338,7 @@ const WebinarComponent = () => {
         <div className="flex justify-between items-center mb-1 text-xs">
           <div className="flex items-center text-gray-600">
             {renderStackedProfiles()}
-            <span>{formatNumber(participants)} joined</span>
+            <span>{formatNumber(participants)} {t('webinar.joined')}</span>
             <div className="flex ml-1 items-center">
               {renderSparkline()}
             </div>
@@ -386,14 +387,14 @@ const WebinarComponent = () => {
         <div className="flex justify-between text-xs mt-1 text-gray-600">
           <div>
             <span className="font-medium">
-              <span className="text-green-500">{formatNumber(spotsLeft)}</span> spots left
+              <span className="text-green-500">{formatNumber(spotsLeft)}</span> {t('webinar.spotsleft')}
             </span>
           </div>
           
           <div className="text-right">
             <span className="font-medium flex items-center">
               <AlertCircle size={10} className="mr-1 text-orange-500" />
-              Est. full: {estimatedTimeUntilFull()}
+              {t('webinar.estfull')} {estimatedTimeUntilFull()}
             </span>
           </div>
         </div>
@@ -406,7 +407,7 @@ const WebinarComponent = () => {
                   {registrationMessage.profile}
                 </div>
                 <span className="text-blue-500 font-medium">
-                  {registrationMessage.message}
+                  {t('webinar.justregistered')}
                 </span>
               </div>
             ) : (
@@ -495,12 +496,12 @@ const WebinarComponent = () => {
           {isRegistered ? (
             <>
               <Check size={16} className="mr-2 animate-bounce" />
-              <span>You're Registered!</span>
+              <span>{t('webinar.registered')}</span>
             </>
           ) : (
             <>
               <UserCheck size={16} className={`mr-2 ${buttonHover ? 'animate-pulse' : ''}`} />
-              <span>Register Now</span>
+              <span>{t('webinar.register')}</span>
             </>
           )}
         </div>
