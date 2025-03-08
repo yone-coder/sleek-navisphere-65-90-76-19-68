@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap } from 'lucide-react';
+import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
 import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -99,7 +100,11 @@ const SeminarHomepage = () => {
                 <Zap size={16} className="mr-1 text-yellow-500" />
                 <span>8.2K interactions</span>
               </div>
-              <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded">4K</span>
+              <div className="flex items-center bg-gradient-to-r from-blue-600 to-blue-800 text-white text-xs px-2 py-0.5 rounded shadow-sm hover:from-blue-700 hover:to-blue-900 transition-all group">
+                <Tv size={14} className="mr-1 group-hover:animate-pulse" />
+                <span className="font-semibold tracking-wide">4K</span>
+                <span className="ml-1 text-blue-200 hidden group-hover:inline">Ultra HD</span>
+              </div>
             </div>
           </div>
         </div>
