@@ -121,7 +121,7 @@ const EventCard = () => {
           </div>
         </div>
         
-        {/* Registration Countdown - Direct with minimal padding */}
+        {/* Registration Countdown - full width with minimal padding */}
         <div className="w-full border-t border-gray-100 pt-2">
           <RegistrationCountdown />
         </div>
