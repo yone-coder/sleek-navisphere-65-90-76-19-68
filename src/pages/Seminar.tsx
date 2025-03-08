@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, ThumbsUp, BadgeCheck, Eye } from 'lucide-react';
+import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
 import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -88,21 +88,16 @@ const SeminarHomepage = () => {
           
           {/* Video Title and Stats - YouTube-like */}
           <div className="bg-white p-4">
-            <h2 className="text-xl font-medium text-gray-900">
-              {t('seminar.video.title')}
-            </h2>
+            <div className="flex items-center gap-2">
+              <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded">4K</span>
+              <h2 className="text-xl font-medium text-gray-900">
+                Maîtriser le Développement Web Moderne : Des Bases aux Techniques Avancées
+              </h2>
+            </div>
             <div className="flex items-center mt-2 text-sm text-gray-600">
-              <div className="flex items-center mr-4">
+              <div className="flex items-center">
                 <Eye size={16} className="mr-1" />
                 <span>125K {t('seminar.video.views')}</span>
-              </div>
-              <div className="flex items-center mr-4">
-                <ThumbsUp size={16} className="mr-1" />
-                <span>8.2K</span>
-              </div>
-              <div className="flex items-center">
-                <MessageCircle size={16} className="mr-1" />
-                <span>342 {t('seminar.video.comments')}</span>
               </div>
             </div>
           </div>
