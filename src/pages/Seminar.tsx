@@ -206,17 +206,17 @@ const SeminarHomepage = () => {
       )}
       
       {/* Tab Content Container */}
-      <div className="flex-grow bg-white p-6">
+      <div className="flex-grow bg-white">
         {/* Each tab has an empty container */}
         {activeTab === 0 && (
           <div style={{ paddingBottom: `${bottomPadding}px` }}>
-            {/* Add EventCard component before WebinarInfoComponent - now with no horizontal margin */}
-            <div className="mb-8 mx-auto w-full">
+            {/* EventCard component - full width with no padding */}
+            <div className="w-full">
               <EventCard />
             </div>
             
-            {/* Add WebinarInfoComponent at the end of the video tab - now truly full width */}
-            <div className="mt-8 -mx-6 w-[calc(100%+3rem)]">
+            {/* WebinarInfoComponent - also full width */}
+            <div className="w-full">
               <WebinarInfoComponent />
             </div>
           </div>
