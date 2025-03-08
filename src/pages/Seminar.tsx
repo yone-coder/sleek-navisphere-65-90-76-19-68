@@ -175,16 +175,14 @@ const SeminarHomepage = () => {
                 </button>
               </div>
               
-              <div className="flex items-start justify-between mt-0.5">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-700">Qui sommes-nous</h3>
-                  <p className="text-sm text-gray-500">{t('seminar.academy.description')}</p>
-                </div>
+              <div className="flex items-center justify-between mt-1">
+                <h3 className="text-sm font-medium text-gray-700">Qui sommes-nous</h3>
                 <button className="flex items-center text-blue-600 text-xs font-medium hover:text-blue-800 transition-colors">
                   Voir plus
                   <ChevronRight className="w-3 h-3 ml-0.5" />
                 </button>
               </div>
+              <p className="text-sm text-gray-500">{t('seminar.academy.description')}</p>
             </div>
           </div>
           
