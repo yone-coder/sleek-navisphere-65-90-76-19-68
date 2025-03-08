@@ -84,3 +84,25 @@
 .animate-shimmer {
   animation: shimmer 2s infinite;
 }
+
+@keyframes float-up {
+  0% {
+    transform: translateY(100%) scale(0.8) rotate(8deg);
+    opacity: 0.8;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-100%) scale(1.2) rotate(-8deg);
+    opacity: 0;
+  }
+}
+
+.animate-float-up {
+  animation: float-up ease-out forwards;
+}
+

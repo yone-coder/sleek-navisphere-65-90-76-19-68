@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Clock, Calendar, UserCheck, AlertCircle, Check, Users, Eye, Heart, MessageCircle, Share, Smile, Star, ThumbsUp, Award, Trophy } from 'lucide-react';
 import TikTokCommentsPanel from '@/components/comments/TikTokCommentsPanel';
 import { useLanguage } from '@/contexts/LanguageContext';
+import AnimatedHearts from './AnimatedHearts';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -46,6 +47,9 @@ const WebinarComponent = () => {
   const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
   const [showEmojiMenu, setShowEmojiMenu] = useState(false);
+
+  // New state for hearts animation
+  const [showHeartAnimation, setShowHeartAnimation] = useState(false);
 
   const eventDate = "March 12, 2025 • 4:45 PM";
 
@@ -111,8 +115,6 @@ const WebinarComponent = () => {
             minutes = 59;
             if (hours > 0) {
               hours -= 1;
-            } else {
-              hours = 23;
               if (days > 0) {
                 days -= 1;
               } else {
@@ -165,6 +167,7 @@ const WebinarComponent = () => {
       setIsLiked(false);
       setSelectedEmoji(null);
       setLikes(prev => prev - 1);
+      setShowHeartAnimation(false);
     } else {
       // New emoji selected
       if (!isLiked) {
@@ -173,6 +176,10 @@ const WebinarComponent = () => {
       }
       setIsLiked(true);
       setSelectedEmoji(emojiName);
+      
+      // Activate hearts animation
+      setShowHeartAnimation(true);
+      setTimeout(() => setShowHeartAnimation(false), 2000);
     }
     setShowEmojiMenu(false);
   };
@@ -182,10 +189,15 @@ const WebinarComponent = () => {
       setIsLiked(true);
       setSelectedEmoji('heart'); // Default to heart
       setLikes(prev => prev + 1);
+      
+      // Activate hearts animation
+      setShowHeartAnimation(true);
+      setTimeout(() => setShowHeartAnimation(false), 2000);
     } else {
       setIsLiked(false);
       setSelectedEmoji(null);
       setLikes(prev => prev - 1);
+      setShowHeartAnimation(false);
     }
   };
 
@@ -333,7 +345,11 @@ const WebinarComponent = () => {
   };
 
   return (
-    <div className="w-full max-w-sm bg-white rounded-lg shadow-lg p-2 mx-auto">
+    <div className="w-full max-w-sm bg-white rounded-lg shadow-lg p-2 mx-auto relative">
+      {/* Hearts animation container */}
+      <AnimatedHearts isActive={showHeartAnimation} />
+      
+      {/* Rest of the component */}
       <div className="relative mb-2">
         <div className="flex justify-between items-center mb-1 text-xs">
           <div className="flex items-center text-gray-600">
@@ -429,9 +445,10 @@ const WebinarComponent = () => {
           <DropdownMenu open={showEmojiMenu} onOpenChange={setShowEmojiMenu}>
             <DropdownMenuTrigger asChild>
               <button 
-                className={`flex-1 bg-gray-100 px-3 py-1.5 rounded-full flex items-center justify-center ${
+                className={`flex-1 bg-gray-100 px-3 py-1.5 rounded-full flex items-center justify-center relative overflow-hidden ${
                   isLiked ? selectedEmoji ? emojiReactions.find(r => r.name === selectedEmoji)?.color || 'text-red-500' : 'text-red-500' : 'text-gray-600'
                 }`}
+                onClick={handleLike}
               >
                 {isLiked && selectedEmoji ? (
                   emojiReactions.find(r => r.name === selectedEmoji)?.icon || 
@@ -440,6 +457,14 @@ const WebinarComponent = () => {
                   <Heart size={14} className="mr-1" fill={isLiked ? "currentColor" : "none"} />
                 )}
                 <span className="font-medium">{formatNumber(likes)}</span>
+                
+                {/* Ripple effect when liked */}
+                {isLiked && (
+                  <div 
+                    className="absolute inset-0 bg-pink-500/10 animate-fade-out"
+                    style={{ animationDuration: '0.5s' }}
+                  />
+                )}
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="center" className="bg-white rounded-lg shadow-lg border-none p-1 flex">
