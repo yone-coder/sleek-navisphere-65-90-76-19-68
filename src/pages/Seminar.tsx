@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye } from 'lucide-react';
+import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
 import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -94,10 +94,14 @@ const SeminarHomepage = () => {
                 Maîtriser le Développement Web Moderne : Des Bases aux Techniques Avancées
               </h2>
             </div>
-            <div className="flex items-center mt-2 text-sm text-gray-600">
+            <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
               <div className="flex items-center">
                 <Eye size={16} className="mr-1" />
                 <span>125K {t('seminar.video.views')}</span>
+              </div>
+              <div className="flex items-center">
+                <Zap size={16} className="mr-1 text-yellow-500" />
+                <span>8.2K interactions</span>
               </div>
             </div>
           </div>
