@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Heart, X, Send, Flag, ChevronDown, MoreHorizontal, Trash2, Edit, MessageCircle, ArrowLeft } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -62,7 +61,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   const [editingReply, setEditingReply] = useState<{commentId: number, replyId: number} | null>(null);
   const [editReplyText, setEditReplyText] = useState('');
   
-  // Authentication states
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [currentUser, setCurrentUser] = useState<{name: string; userId: string; isAnonymous: boolean} | null>(null);
@@ -93,7 +91,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     e.preventDefault();
     if (!commentText.trim()) return;
     
-    // Check if user is authenticated or has provided guest info
     if (!isAuthenticated && !currentUser) {
       setShowAuthModal(true);
       return;
@@ -152,32 +149,22 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     setCommentText('');
   };
   
-  // Handler for guest comment
   const handleGuestComment = (name: string | null) => {
     if (name) {
       if (name.startsWith('user')) {
-        // Anonymous user with generated ID
         setCurrentUser({ name: 'Anonymous', userId: name, isAnonymous: true });
       } else {
-        // Guest with name
         setCurrentUser({ name, userId: `guest_${Date.now()}`, isAnonymous: false });
       }
     }
   };
   
-  // Handlers for login/signup
   const handleLogin = () => {
-    // This would typically redirect to login page or open login modal
-    console.log('Login clicked');
-    // For demo, let's just set the user as authenticated
     setIsAuthenticated(true);
     setCurrentUser({ name: 'User', userId: 'user_authenticated', isAnonymous: false });
   };
   
   const handleSignup = () => {
-    // This would typically redirect to signup page or open signup modal
-    console.log('Signup clicked');
-    // For demo, let's just set the user as authenticated
     setIsAuthenticated(true);
     setCurrentUser({ name: 'NewUser', userId: 'newuser_authenticated', isAnonymous: false });
   };
@@ -217,8 +204,10 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   };
   
   const deleteComment = (id: number) => {
-    setComments(comments.filter(comment => comment.id !== id));
+    const updatedComments = comments.filter(comment => comment.id !== id);
+    setComments(updatedComments);
     setCommentMenuOpen(null);
+    
     toast({
       title: "Comment deleted",
       description: "Your comment has been removed",
@@ -227,7 +216,7 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   };
   
   const deleteReply = (commentId: number, replyId: number) => {
-    setComments(comments.map(comment => {
+    const updatedComments = comments.map(comment => {
       if (comment.id === commentId) {
         return {
           ...comment,
@@ -235,8 +224,11 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
         };
       }
       return comment;
-    }));
+    });
+    
+    setComments(updatedComments);
     setReplyMenuOpen(null);
+    
     toast({
       title: "Reply deleted",
       description: "Your reply has been removed",
@@ -332,7 +324,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     setCommentText('');
   };
   
-  // Check if a comment or reply belongs to the current user
   const isOwnContent = (userId?: string) => {
     if (!currentUser) return false;
     if (userId === 'me' || userId === currentUser.userId) return true;
@@ -533,7 +524,7 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
                                           <span>Edit</span>
                                         </li>
                                         <li 
-                                          className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
+                                          className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer text-red-500"
                                           onClick={() => deleteComment(comment.id)}
                                         >
                                           <Trash2 size={14} />
@@ -672,7 +663,7 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
                                                 <span>Edit</span>
                                               </li>
                                               <li 
-                                                className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
+                                                className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer text-red-500"
                                                 onClick={() => deleteReply(comment.id, reply.id)}
                                               >
                                                 <Trash2 size={14} />
@@ -783,7 +774,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
         </div>
       </div>
       
-      {/* Authentication Modal */}
       <CommentAuthModal 
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
