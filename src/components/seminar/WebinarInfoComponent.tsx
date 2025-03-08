@@ -175,9 +175,9 @@ const WebinarInfoComponent = () => {
         </div>
       ))}
 
-      {/* Details Panel (TikTok-style) */}
+      {/* Details Panel (TikTok-style) - Increased z-index to 60 */}
       <div 
-        className={`fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 rounded-t-3xl shadow-lg transition-transform duration-300 transform z-50 ${
+        className={`fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 rounded-t-3xl shadow-lg transition-transform duration-300 transform z-60 ${
           detailsPanelOpen ? 'translate-y-0' : 'translate-y-full'
         }`}
         style={{ maxHeight: '70vh', overflowY: 'auto' }}
@@ -209,10 +209,10 @@ const WebinarInfoComponent = () => {
         )}
       </div>
       
-      {/* Overlay for when panel is open */}
+      {/* Overlay for when panel is open - Increased z-index to 55 */}
       {detailsPanelOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="fixed inset-0 bg-black bg-opacity-50 z-55"
           onClick={closeDetailsPanel}
         />
       )}
