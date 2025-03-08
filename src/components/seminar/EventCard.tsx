@@ -36,7 +36,7 @@ const EventCard = () => {
   return (
     <div className="w-full bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
       {/* Card Content */}
-      <div className="p-4">
+      <div className="p-3">
         {/* Date and Time */}
         <div className="flex items-start mb-2">
           <Calendar className="w-5 h-5 text-blue-500 mt-0.5 mr-1.5 flex-shrink-0" />
@@ -52,7 +52,7 @@ const EventCard = () => {
         </div>
         
         {/* Enhanced Location */}
-        <div className="mb-4">
+        <div className="mb-3">
           <div className="flex items-start">
             <MapPin className="w-5 h-5 text-blue-500 mt-0.5 mr-1.5 flex-shrink-0" />
             <div className="flex-1">
@@ -121,8 +121,8 @@ const EventCard = () => {
           </div>
         </div>
         
-        {/* Registration Countdown - Full width without background */}
-        <div className="w-full border-t border-gray-100 pt-4">
+        {/* Registration Countdown - Direct with minimal padding */}
+        <div className="w-full border-t border-gray-100 pt-2">
           <RegistrationCountdown />
         </div>
       </div>

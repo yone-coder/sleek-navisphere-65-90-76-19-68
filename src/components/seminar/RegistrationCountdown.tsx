@@ -124,8 +124,8 @@ const RegistrationCountdown = () => {
   const timeZoneOffsetFormatted = `UTC${timeZoneOffset <= 0 ? '+' : '-'}${Math.abs(Math.floor(timeZoneOffset / 60))}:${String(Math.abs(timeZoneOffset % 60)).padStart(2, '0')}`;
   
   return (
-    <div className="w-full px-4 py-6">
-      <div className="mb-4 flex justify-between items-center">
+    <div className="w-full px-1 py-2">
+      <div className="mb-3 flex justify-between items-center">
         <div>
           <h2 className={`text-2xl font-bold ${theme.text}`}>Registration Closing Soon</h2>
           <p className="text-gray-600">Deadline: Thu, Apr 10, 2025, 07:59 PM</p>
@@ -140,28 +140,28 @@ const RegistrationCountdown = () => {
           style={{ width: `${progressPercentage}%` }}
         ></div>
       </div>
-      <div className="flex justify-between text-xs text-gray-500 mb-6">
+      <div className="flex justify-between text-xs text-gray-500 mb-4">
         <span>Registration Open</span>
         <span>{Math.round(progressPercentage)}% Complete</span>
         <span>Closing</span>
       </div>
       
       {/* Countdown timer with flip animation for seconds */}
-      <div className="grid grid-cols-4 gap-3 mb-6">
-        <div className={`flex flex-col items-center p-3 ${theme.accent} rounded-lg shadow-sm`}>
+      <div className="grid grid-cols-4 gap-2 mb-4">
+        <div className={`flex flex-col items-center p-2 ${theme.accent} rounded-lg shadow-sm`}>
           <div className={`text-3xl font-bold ${theme.text}`}>{formatNumber(timeLeft.days)}</div>
           <div className="text-sm text-gray-500">days</div>
         </div>
-        <div className={`flex flex-col items-center p-3 ${theme.accent} rounded-lg shadow-sm`}>
+        <div className={`flex flex-col items-center p-2 ${theme.accent} rounded-lg shadow-sm`}>
           <div className={`text-3xl font-bold ${theme.text}`}>{formatNumber(timeLeft.hours)}</div>
           <div className="text-sm text-gray-500">hours</div>
         </div>
-        <div className={`flex flex-col items-center p-3 ${theme.accent} rounded-lg shadow-sm`}>
+        <div className={`flex flex-col items-center p-2 ${theme.accent} rounded-lg shadow-sm`}>
           <div className={`text-3xl font-bold ${theme.text}`}>{formatNumber(timeLeft.minutes)}</div>
           <div className="text-sm text-gray-500">minutes</div>
         </div>
         <div 
-          className={`flex flex-col items-center p-3 ${theme.accent} rounded-lg shadow-sm transform transition-all duration-300 ${isFlipped ? 'scale-105' : 'scale-100'}`}
+          className={`flex flex-col items-center p-2 ${theme.accent} rounded-lg shadow-sm transform transition-all duration-300 ${isFlipped ? 'scale-105' : 'scale-100'}`}
         >
           <div className={`text-3xl font-bold ${theme.text}`}>{formatNumber(timeLeft.seconds)}</div>
           <div className="text-sm text-gray-500">seconds</div>
@@ -170,7 +170,7 @@ const RegistrationCountdown = () => {
       
       {/* Additional information panel */}
       <div 
-        className="mb-4 cursor-pointer" 
+        className="mb-3 cursor-pointer" 
         onClick={() => setShowDetails(!showDetails)}
       >
         <div className="flex justify-between items-center">
@@ -180,8 +180,8 @@ const RegistrationCountdown = () => {
       </div>
       
       {showDetails && (
-        <div className="mb-6 bg-white p-4 rounded-lg shadow-inner text-sm">
-          <div className="grid grid-cols-2 gap-4">
+        <div className="mb-4 bg-white p-3 rounded-lg shadow-inner text-sm">
+          <div className="grid grid-cols-2 gap-3">
             <div>
               <p className="text-gray-500">Business days left:</p>
               <p className="font-medium">{businessDays} days</p>
@@ -204,7 +204,7 @@ const RegistrationCountdown = () => {
       
       {/* Urgency notice when urgent or critical */}
       {urgencyLevel !== 'normal' && (
-        <div className={`flex items-center p-3 rounded ${urgencyLevel === 'critical' ? 'bg-red-100' : 'bg-yellow-100'} mb-4`}>
+        <div className={`flex items-center p-2 rounded ${urgencyLevel === 'critical' ? 'bg-red-100' : 'bg-yellow-100'} mb-3`}>
           <AlertTriangle size={16} className={urgencyLevel === 'critical' ? 'text-red-600' : 'text-yellow-600'} />
           <span className={`ml-2 text-sm font-medium ${urgencyLevel === 'critical' ? 'text-red-600' : 'text-yellow-600'}`}>
             {urgencyLevel === 'critical' ? 'Registration closing very soon!' : 'Registration deadline approaching!'}
