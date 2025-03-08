@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Video, Download, Info, Check, HelpCircle, ChevronDown, ExternalLink, Copy, Calendar, Mic, Settings, AlertTriangle } from 'lucide-react';
 
@@ -32,22 +31,22 @@ const VirtualMeetingHelper = () => {
         <p className="text-sm text-blue-700 font-medium">Meeting details will be shared after registration</p>
       </div>
       
-      {/* Quick Actions */}
+      {/* Quick Actions - Modified button sizes and layout */}
       <div className="p-4 border-b border-gray-200">
-        <div className="flex flex-wrap gap-3">
+        <div className="flex items-center justify-start gap-2">
           <button 
             onClick={handleCopy}
-            className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="flex items-center justify-center px-3 py-1.5 bg-white border border-gray-300 rounded-md text-xs font-medium text-gray-700 hover:bg-gray-50"
           >
-            {copied ? <Check size={16} className="mr-2" /> : <Copy size={16} className="mr-2" />}
+            {copied ? <Check size={14} className="mr-1.5" /> : <Copy size={14} className="mr-1.5" />}
             {copied ? "Copied!" : "Copy invitation"}
           </button>
           
           <button 
             onClick={handleConnectionTest}
-            className="flex items-center justify-center px-4 py-2 bg-blue-600 rounded-md text-sm font-medium text-white hover:bg-blue-700"
+            className="flex items-center justify-center px-3 py-1.5 bg-blue-600 rounded-md text-xs font-medium text-white hover:bg-blue-700"
           >
-            <Video size={16} className="mr-2" />
+            <Video size={14} className="mr-1.5" />
             Test connection
           </button>
         </div>
