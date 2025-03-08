@@ -61,14 +61,14 @@ const RegistrationCountdown = () => {
   }, [targetDate]);
   
   // Format with leading zeros
-  const formatNumber = (num: number) => {
+  const formatNumber = (num) => {
     return num < 10 ? `0${num}` : num;
   };
   
   // Progress percentage calculation
   const startDate = new Date('2025-03-08T00:00:00'); // Today's date
-  const totalDuration = targetDate.getTime() - startDate.getTime();
-  const elapsed = new Date().getTime() - startDate.getTime();
+  const totalDuration = targetDate - startDate;
+  const elapsed = new Date() - startDate;
   const progressPercentage = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
   
   // Calculate remaining business days (excluding weekends)
@@ -127,12 +127,12 @@ const RegistrationCountdown = () => {
   const timeZoneOffsetFormatted = `UTC${timeZoneOffset <= 0 ? '+' : '-'}${Math.abs(Math.floor(timeZoneOffset / 60))}:${String(Math.abs(timeZoneOffset % 60)).padStart(2, '0')}`;
   
   return (
-    <div className={`w-full px-1 py-2 ${theme.background} rounded-xl shadow-md border ${theme.border} transition-all duration-500`}>
+    <div className="w-full transition-all duration-500">
       {/* Title in a single horizontal line */}
-      <div className="mb-4 flex justify-between items-center">
+      <div className="mb-6 flex justify-between items-center">
         <div className="w-full">
           <h2 className={`text-2xl font-bold ${theme.text} whitespace-nowrap overflow-hidden text-ellipsis`}>Registration Closing Soon</h2>
-          <div className="mt-1">
+          <div className="mt-4">
             <div className="flex justify-between items-center">
               <div className={`px-2 py-0.5 rounded-md ${theme.accent} flex items-center`}>
                 <span className="text-xs text-gray-500 mr-1">Thu</span>

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Calendar, Clock, MapPin, Video, Globe, Users, ExternalLink, Copy } from 'lucide-react';
 import RegistrationCountdown from './RegistrationCountdown';
@@ -121,10 +120,8 @@ const EventCard = () => {
           </div>
         </div>
         
-        {/* Registration Countdown - full width with minimal padding */}
-        <div className="w-full border-t border-gray-100 pt-2">
-          <RegistrationCountdown />
-        </div>
+        {/* Registration Countdown - full width with no padding */}
+        <RegistrationCountdown />
       </div>
     </div>
   );
