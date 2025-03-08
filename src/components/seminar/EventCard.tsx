@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
-import { MapPin, Video, Globe, Users, ExternalLink, Copy } from 'lucide-react';
+import { MapPin, Copy } from 'lucide-react';
 import RegistrationCountdown from './RegistrationCountdown';
 import EnhancedDateTime from './EnhancedDateTime';
+import VirtualMeetingHelper from './VirtualMeetingHelper';
 
 const EventCard = () => {
   // Sample event data
@@ -18,17 +19,11 @@ const EventCard = () => {
   };
 
   const [copied, setCopied] = useState(false);
-  const [expanded, setExpanded] = useState(false);
   
   // Simulated copy to clipboard function
   const handleCopyMeetingInfo = () => {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  // Toggle expanded view
-  const toggleExpanded = () => {
-    setExpanded(!expanded);
   };
   
   // Calculate spots left percentage
@@ -41,74 +36,9 @@ const EventCard = () => {
         {/* Enhanced DateTime Component */}
         <EnhancedDateTime />
         
-        {/* Enhanced Location */}
-        <div className="mb-3">
-          <div className="flex items-start">
-            <MapPin className="w-5 h-5 text-blue-500 mt-0.5 mr-1.5 flex-shrink-0" />
-            <div className="flex-1">
-              <div className="flex justify-between items-center">
-                <p className="text-gray-900 font-medium flex items-center">
-                  <Video className="w-4 h-4 mr-1 text-green-500" />
-                  Virtual / {event.platform}
-                </p>
-                <button 
-                  onClick={toggleExpanded}
-                  className="text-blue-500 text-sm font-medium hover:text-blue-700 transition-colors"
-                >
-                  {expanded ? "Less info" : "More info"}
-                </button>
-              </div>
-              
-              {expanded ? (
-                <div className="mt-1.5 space-y-1.5 bg-gray-50 p-2 rounded-lg">
-                  <div className="flex items-center text-sm">
-                    <Globe className="w-4 h-4 text-gray-500 mr-1.5" />
-                    <span className="text-gray-700">Time zone: {event.timeZone}</span>
-                  </div>
-                  
-                  <div className="flex items-center text-sm">
-                    <Users className="w-4 h-4 text-gray-500 mr-1.5" />
-                    <span className="text-gray-700">
-                      Attendees: {event.attendees}/{event.maxAttendees}
-                      <span className="ml-1 text-green-600 font-medium">
-                        ({spotsLeftPercentage}% spots left)
-                      </span>
-                    </span>
-                  </div>
-                  
-                  <div className="flex flex-col space-y-1.5">
-                    <p className="text-sm text-gray-700">Meeting details will be shared after registration</p>
-                    
-                    <button 
-                      onClick={handleCopyMeetingInfo}
-                      className="flex items-center justify-center text-sm bg-blue-100 text-blue-700 py-1 px-2.5 rounded-lg hover:bg-blue-200 transition-colors"
-                    >
-                      {copied ? (
-                        <>
-                          <span>Copied to clipboard!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5 mr-1" />
-                          <span>Copy meeting invitation</span>
-                        </>
-                      )}
-                    </button>
-                    
-                    <a 
-                      href="#" 
-                      className="flex items-center justify-center text-sm text-gray-600 hover:text-gray-900 transition-colors"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5 mr-1" />
-                      <span>Test your connection before meeting</span>
-                    </a>
-                  </div>
-                </div>
-              ) : (
-                <p className="text-sm text-gray-500 mt-0.5">Link will be shared after registration</p>
-              )}
-            </div>
-          </div>
+        {/* Virtual Meeting Helper - Full Width */}
+        <div className="w-full mb-3">
+          <VirtualMeetingHelper />
         </div>
         
         {/* Registration Countdown - full width with no padding */}
