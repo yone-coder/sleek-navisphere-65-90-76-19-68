@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen } from 'lucide-react';
+import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
 import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
 import EventCard from '../components/seminar/EventCard';
@@ -175,8 +175,15 @@ const SeminarHomepage = () => {
                 </button>
               </div>
               
-              <div className="text-sm text-gray-500 mt-0.5">
-                <p>{t('seminar.academy.description')}</p>
+              <div className="flex items-start justify-between mt-0.5">
+                <div>
+                  <h3 className="text-sm font-medium text-gray-700">Qui sommes-nous</h3>
+                  <p className="text-sm text-gray-500">{t('seminar.academy.description')}</p>
+                </div>
+                <button className="flex items-center text-blue-600 text-xs font-medium hover:text-blue-800 transition-colors">
+                  Voir plus
+                  <ChevronRight className="w-3 h-3 ml-0.5" />
+                </button>
               </div>
             </div>
           </div>
