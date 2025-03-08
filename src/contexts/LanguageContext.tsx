@@ -29,6 +29,7 @@ export const translations: Translations = {
     // Seminar page translations
     'seminar.tabs.video': 'Video',
     'seminar.tabs.speakers': 'Speakers',
+    'seminar.tabs.subjects': 'Subjects',
     'seminar.tabs.highlights': 'Highlights',
     'seminar.tabs.testimonials': 'Testimonials',
     'seminar.tabs.register': 'Register',
@@ -78,6 +79,7 @@ export const translations: Translations = {
     // Seminar page translations
     'seminar.tabs.video': 'Video',
     'seminar.tabs.speakers': 'Ponentes',
+    'seminar.tabs.subjects': 'Temas',
     'seminar.tabs.highlights': 'Destacados',
     'seminar.tabs.testimonials': 'Testimonios',
     'seminar.tabs.register': 'Registrarse',
@@ -127,6 +129,7 @@ export const translations: Translations = {
     // Seminar page translations
     'seminar.tabs.video': 'Vidéo',
     'seminar.tabs.speakers': 'Intervenants',
+    'seminar.tabs.subjects': 'Sujets',
     'seminar.tabs.highlights': 'Points forts',
     'seminar.tabs.testimonials': 'Témoignages',
     'seminar.tabs.register': 'S\'inscrire',
@@ -176,6 +179,7 @@ export const translations: Translations = {
     // Seminar page translations
     'seminar.tabs.video': 'Videyo',
     'seminar.tabs.speakers': 'Oratè yo',
+    'seminar.tabs.subjects': 'Sijè',
     'seminar.tabs.highlights': 'Pwen Esansyèl yo',
     'seminar.tabs.testimonials': 'Temwayaj yo',
     'seminar.tabs.register': 'Enskri',

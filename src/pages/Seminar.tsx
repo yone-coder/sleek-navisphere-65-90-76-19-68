@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
@@ -47,7 +46,7 @@ const SeminarHomepage = () => {
     }
   }, [activeTab]);
   
-  // Tabs configuration - replaced 'speakers' with 'subjects' and updated the icon
+  // Tabs configuration - using the correct translation key for subjects
   const tabs = [
     { id: 0, name: t('seminar.tabs.video'), icon: <Play size={18} /> },
     { id: 1, name: t('seminar.tabs.subjects'), icon: <BookOpen size={18} /> },
