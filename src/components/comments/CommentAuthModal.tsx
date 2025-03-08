@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User, UserRound, SmilePlus, LogIn, UserPlus } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface CommentAuthModalProps {
   isOpen: boolean;
@@ -34,9 +35,39 @@ const CommentAuthModal: React.FC<CommentAuthModalProps> = ({
   const handleGuestComment = (isAnonymous: boolean = false) => {
     if (isAnonymous) {
       onGuestComment(null);
+      toast({
+        title: "Connected anonymously",
+        description: "You are commenting as an anonymous user",
+        duration: 3000,
+      });
     } else if (guestName.trim()) {
       onGuestComment(guestName);
+      toast({
+        title: "Connected as guest",
+        description: `You are commenting as ${guestName}`,
+        duration: 3000,
+      });
     }
+    onClose();
+  };
+  
+  const handleLogin = () => {
+    onLogin();
+    toast({
+      title: "Signing in",
+      description: "Redirecting to sign in page",
+      duration: 3000,
+    });
+    onClose();
+  };
+  
+  const handleSignup = () => {
+    onSignup();
+    toast({
+      title: "Creating account",
+      description: "Redirecting to sign up page",
+      duration: 3000,
+    });
     onClose();
   };
 
@@ -99,7 +130,7 @@ const CommentAuthModal: React.FC<CommentAuthModalProps> = ({
             <div className="flex flex-col space-y-4">
               <Button 
                 className="w-full justify-start" 
-                onClick={onLogin}
+                onClick={handleLogin}
               >
                 <LogIn className="h-5 w-5 mr-2" />
                 Sign in to comment
@@ -108,7 +139,7 @@ const CommentAuthModal: React.FC<CommentAuthModalProps> = ({
               <Button 
                 variant="outline" 
                 className="w-full justify-start"
-                onClick={onSignup}
+                onClick={handleSignup}
               >
                 <UserPlus className="h-5 w-5 mr-2" />
                 Sign up for an account
