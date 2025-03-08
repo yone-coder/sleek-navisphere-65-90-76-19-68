@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2 } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
 import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
+import EventCard from '../components/seminar/EventCard';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const SeminarHomepage = () => {
@@ -209,6 +210,11 @@ const SeminarHomepage = () => {
         {/* Each tab has an empty container */}
         {activeTab === 0 && (
           <div style={{ paddingBottom: `${bottomPadding}px` }}>
+            {/* Add EventCard component before WebinarInfoComponent */}
+            <div className="mb-8">
+              <EventCard />
+            </div>
+            
             {/* Add WebinarInfoComponent at the end of the video tab - now truly full width */}
             <div className="mt-8 -mx-6 w-[calc(100%+3rem)]">
               <WebinarInfoComponent />
