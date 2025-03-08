@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2 } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
@@ -210,7 +211,7 @@ const SeminarHomepage = () => {
         {activeTab === 0 && (
           <div style={{ paddingBottom: `${bottomPadding}px` }}>
             {/* Add EventCard component before WebinarInfoComponent - now with no horizontal margin */}
-            <div className="mb-8 mx-0">
+            <div className="mb-8 mx-auto w-full">
               <EventCard />
             </div>
             

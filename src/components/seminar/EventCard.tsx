@@ -60,7 +60,7 @@ const EventCard = () => {
   };
   
   return (
-    <div className="w-full bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 -mx-6">
+    <div className="w-full bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
       {/* Card Content */}
       <div className="p-4">
         {/* Date and Time */}
