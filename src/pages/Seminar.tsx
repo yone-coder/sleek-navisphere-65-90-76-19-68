@@ -45,8 +45,8 @@ const SeminarHomepage = () => {
   
   return (
     <div className="flex flex-col w-full max-w-6xl mx-auto bg-gray-50 shadow-xl rounded-xl overflow-hidden">
-      {/* Tab Navigation - Fixed and sticky */}
-      <div className="border-b border-gray-200 bg-white sticky top-0 z-40 shadow-sm">
+      {/* Tab Navigation - Properly fixed to the top with higher z-index */}
+      <div className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-md">
         <div className="flex overflow-x-auto py-2 px-4 gap-1 no-scrollbar">
           {tabs.map(tab => (
             <button
