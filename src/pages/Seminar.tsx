@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame } from 'lucide-react';
+import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2 } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
 import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -15,6 +14,8 @@ const SeminarHomepage = () => {
   const [isFollowing, setIsFollowing] = useState(false);
   // State for bottom padding
   const [bottomPadding, setBottomPadding] = useState(0);
+  // State for views hover
+  const [viewsHovered, setViewsHovered] = useState(false);
   // Ref for the WebinarComponent
   const webinarRef = useRef<HTMLDivElement>(null);
   
@@ -92,10 +93,26 @@ const SeminarHomepage = () => {
               Maîtriser le Développement Web Moderne : Des Bases aux Techniques Avancées
             </h2>
             <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
-              <div className="flex items-center">
-                <Eye size={16} className="mr-1" />
-                <span>125K {t('seminar.video.views')}</span>
+              <div 
+                className="flex items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 py-1 rounded-full shadow-sm group hover:shadow-md transition-all duration-300 cursor-pointer"
+                onMouseEnter={() => setViewsHovered(true)}
+                onMouseLeave={() => setViewsHovered(false)}
+              >
+                <Eye size={16} className={`mr-1.5 ${viewsHovered ? 'animate-pulse' : ''}`} />
+                <span className="font-bold tracking-wide">125K</span>
+                <span className="ml-1">{t('seminar.video.views')}</span>
+                {viewsHovered && (
+                  <div className="ml-2 flex items-center animate-fade-in">
+                    <TrendingUp size={14} className="text-green-200 mr-1" />
+                    <span className="text-xs">+12% {t('seminar.video.thisWeek')}</span>
+                  </div>
+                )}
+                <div className="ml-2 pl-2 border-l border-blue-300 hidden group-hover:flex items-center">
+                  <BarChart2 size={12} className="mr-1 text-blue-200" />
+                  <span className="text-xs font-medium">Top 5%</span>
+                </div>
               </div>
+              
               <div className="flex items-center bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs px-2 py-0.5 rounded-full shadow-sm group hover:shadow-md transition-all duration-300">
                 <Zap size={14} className="mr-1 group-hover:animate-ping" />
                 <span className="font-semibold tracking-wide">8.2K</span>
@@ -105,6 +122,7 @@ const SeminarHomepage = () => {
                   <Sparkles size={12} className="ml-1 text-yellow-100" />
                 </div>
               </div>
+              
               <div className="flex items-center bg-gradient-to-r from-blue-600 to-blue-800 text-white text-xs px-2 py-0.5 rounded shadow-sm hover:from-blue-700 hover:to-blue-900 transition-all group">
                 <Tv size={14} className="mr-1 group-hover:animate-pulse" />
                 <span className="font-semibold tracking-wide">4K</span>
