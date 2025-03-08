@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
@@ -88,13 +87,11 @@ const SeminarHomepage = () => {
           
           {/* Video Title and Stats - YouTube-like */}
           <div className="bg-white p-4">
-            <div className="flex items-center gap-2">
-              <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded">4K</span>
-              <h2 className="text-xl font-medium text-gray-900">
-                Maîtriser le Développement Web Moderne : Des Bases aux Techniques Avancées
-              </h2>
-            </div>
+            <h2 className="text-xl font-medium text-gray-900">
+              Maîtriser le Développement Web Moderne : Des Bases aux Techniques Avancées
+            </h2>
             <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+              <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded">4K</span>
               <div className="flex items-center">
                 <Eye size={16} className="mr-1" />
                 <span>125K {t('seminar.video.views')}</span>
