@@ -62,10 +62,10 @@ const EventCard = () => {
   return (
     <div className="w-full bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
       {/* Card Content */}
-      <div className="p-5">
+      <div className="p-4">
         {/* Date and Time */}
-        <div className="flex items-start mb-4">
-          <Calendar className="w-5 h-5 text-blue-500 mt-0.5 mr-3 flex-shrink-0" />
+        <div className="flex items-start mb-3">
+          <Calendar className="w-5 h-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
           <div className="flex-1">
             <p className="text-gray-900 font-medium">
               Tue, Apr 15, 2025, 10:00 AM
@@ -78,9 +78,9 @@ const EventCard = () => {
         </div>
         
         {/* Enhanced Location */}
-        <div className="mb-4">
+        <div className="mb-3">
           <div className="flex items-start">
-            <MapPin className="w-5 h-5 text-blue-500 mt-0.5 mr-3 flex-shrink-0" />
+            <MapPin className="w-5 h-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
             <div className="flex-1">
               <div className="flex justify-between items-center">
                 <p className="text-gray-900 font-medium flex items-center">
@@ -149,7 +149,7 @@ const EventCard = () => {
         
         {/* Registration Deadline */}
         <div className="flex items-start">
-          <AlertCircle className="w-5 h-5 text-blue-500 mt-0.5 mr-3 flex-shrink-0" />
+          <AlertCircle className="w-5 h-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
           <div>
             <p className="text-gray-900 font-medium">
               Registration closes on Thu, Apr 10, 2025, 07:59 PM
