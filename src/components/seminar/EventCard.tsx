@@ -62,15 +62,15 @@ const EventCard = () => {
   return (
     <div className="w-full bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
       {/* Card Content */}
-      <div className="p-4">
+      <div className="p-3">
         {/* Date and Time */}
-        <div className="flex items-start mb-3">
-          <Calendar className="w-5 h-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
+        <div className="flex items-start mb-2">
+          <Calendar className="w-5 h-5 text-blue-500 mt-0.5 mr-1.5 flex-shrink-0" />
           <div className="flex-1">
             <p className="text-gray-900 font-medium">
               Tue, Apr 15, 2025, 10:00 AM
             </p>
-            <div className="flex items-center text-sm text-gray-500 mt-1">
+            <div className="flex items-center text-sm text-gray-500 mt-0.5">
               <Clock className="w-3.5 h-3.5 mr-1" />
               <span>Duration: 2h 30m</span>
             </div>
@@ -78,9 +78,9 @@ const EventCard = () => {
         </div>
         
         {/* Enhanced Location */}
-        <div className="mb-3">
+        <div className="mb-2">
           <div className="flex items-start">
-            <MapPin className="w-5 h-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
+            <MapPin className="w-5 h-5 text-blue-500 mt-0.5 mr-1.5 flex-shrink-0" />
             <div className="flex-1">
               <div className="flex justify-between items-center">
                 <p className="text-gray-900 font-medium flex items-center">
@@ -96,14 +96,14 @@ const EventCard = () => {
               </div>
               
               {expanded ? (
-                <div className="mt-2 space-y-2 bg-gray-50 p-3 rounded-lg">
+                <div className="mt-1.5 space-y-1.5 bg-gray-50 p-2 rounded-lg">
                   <div className="flex items-center text-sm">
-                    <Globe className="w-4 h-4 text-gray-500 mr-2" />
+                    <Globe className="w-4 h-4 text-gray-500 mr-1.5" />
                     <span className="text-gray-700">Time zone: {event.timeZone}</span>
                   </div>
                   
                   <div className="flex items-center text-sm">
-                    <Users className="w-4 h-4 text-gray-500 mr-2" />
+                    <Users className="w-4 h-4 text-gray-500 mr-1.5" />
                     <span className="text-gray-700">
                       Attendees: {event.attendees}/{event.maxAttendees}
                       <span className="ml-1 text-green-600 font-medium">
@@ -112,12 +112,12 @@ const EventCard = () => {
                     </span>
                   </div>
                   
-                  <div className="flex flex-col space-y-2">
+                  <div className="flex flex-col space-y-1.5">
                     <p className="text-sm text-gray-700">Meeting details will be shared after registration</p>
                     
                     <button 
                       onClick={handleCopyMeetingInfo}
-                      className="flex items-center justify-center text-sm bg-blue-100 text-blue-700 py-1.5 px-3 rounded-lg hover:bg-blue-200 transition-colors"
+                      className="flex items-center justify-center text-sm bg-blue-100 text-blue-700 py-1 px-2.5 rounded-lg hover:bg-blue-200 transition-colors"
                     >
                       {copied ? (
                         <>
@@ -125,7 +125,7 @@ const EventCard = () => {
                         </>
                       ) : (
                         <>
-                          <Copy className="w-3.5 h-3.5 mr-1.5" />
+                          <Copy className="w-3.5 h-3.5 mr-1" />
                           <span>Copy meeting invitation</span>
                         </>
                       )}
@@ -135,13 +135,13 @@ const EventCard = () => {
                       href="#" 
                       className="flex items-center justify-center text-sm text-gray-600 hover:text-gray-900 transition-colors"
                     >
-                      <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
+                      <ExternalLink className="w-3.5 h-3.5 mr-1" />
                       <span>Test your connection before meeting</span>
                     </a>
                   </div>
                 </div>
               ) : (
-                <p className="text-sm text-gray-500 mt-1">Link will be shared after registration</p>
+                <p className="text-sm text-gray-500 mt-0.5">Link will be shared after registration</p>
               )}
             </div>
           </div>
@@ -149,19 +149,19 @@ const EventCard = () => {
         
         {/* Registration Deadline */}
         <div className="flex items-start">
-          <AlertCircle className="w-5 h-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
+          <AlertCircle className="w-5 h-5 text-blue-500 mt-0.5 mr-1.5 flex-shrink-0" />
           <div>
             <p className="text-gray-900 font-medium">
               Registration closes on Thu, Apr 10, 2025, 07:59 PM
             </p>
-            <div className="flex gap-2 text-sm mt-1">
-              <div className="bg-gray-100 rounded px-2 py-1">
+            <div className="flex gap-1.5 text-sm mt-0.5">
+              <div className="bg-gray-100 rounded px-2 py-0.5">
                 {countdown.days}d
               </div>
-              <div className="bg-gray-100 rounded px-2 py-1">
+              <div className="bg-gray-100 rounded px-2 py-0.5">
                 {countdown.hours}h
               </div>
-              <div className="bg-gray-100 rounded px-2 py-1">
+              <div className="bg-gray-100 rounded px-2 py-0.5">
                 {countdown.minutes}m
               </div>
             </div>
