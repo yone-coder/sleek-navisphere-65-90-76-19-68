@@ -1,8 +1,8 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Heart, X, Send, Flag, ChevronDown, MoreHorizontal, Trash2, Edit, MessageCircle, ArrowLeft } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import CommentAuthModal from './CommentAuthModal';
 
 interface Reply {
   id: number;
@@ -55,6 +55,11 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   const [editText, setEditText] = useState('');
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
   
+  // New states for authentication
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{name: string; isAnonymous: boolean} | null>(null);
+  
   const inputRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   
@@ -78,49 +83,83 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   
   const handleCommentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (commentText.trim()) {
-      if (replyingTo) {
-        const newReply: Reply = {
-          id: Date.now(),
-          username: '@me',
-          text: commentText,
-          likes: 0,
-          isLiked: false,
-          timestamp: 'Just now',
-          verified: false
-        };
-        
-        setComments(comments.map(comment => {
-          if (comment.id === replyingTo) {
-            return {
-              ...comment,
-              replies: [...(comment.replies || []), newReply]
-            };
-          }
-          return comment;
-        }));
-        
-        setReplyingTo(null);
-      } else {
-        const newComment: Comment = {
-          id: Date.now(),
-          username: '@me',
-          text: commentText,
-          likes: 0,
-          isLiked: false,
-          timestamp: 'Just now',
-          verified: false,
-          pinned: false,
-          replies: []
-        };
-        
-        const pinnedComments = comments.filter(c => c.pinned);
-        const unpinnedComments = comments.filter(c => !c.pinned);
-        setComments([...pinnedComments, newComment, ...unpinnedComments]);
-      }
-      
-      setCommentText('');
+    if (!commentText.trim()) return;
+    
+    // Check if user is authenticated or has provided guest info
+    if (!isAuthenticated && !currentUser) {
+      setShowAuthModal(true);
+      return;
     }
+
+    if (replyingTo) {
+      const newReply: Reply = {
+        id: Date.now(),
+        username: '@me',
+        text: commentText,
+        likes: 0,
+        isLiked: false,
+        timestamp: 'Just now',
+        verified: false
+      };
+      
+      setComments(comments.map(comment => {
+        if (comment.id === replyingTo) {
+          return {
+            ...comment,
+            replies: [...(comment.replies || []), newReply]
+          };
+        }
+        return comment;
+      }));
+      
+      setReplyingTo(null);
+    } else {
+      const newComment: Comment = {
+        id: Date.now(),
+        username: currentUser ? 
+          (currentUser.isAnonymous ? 'Anonymous' : `@${currentUser.name}`) : 
+          '@me',
+        text: commentText,
+        likes: 0,
+        isLiked: false,
+        timestamp: 'Just now',
+        verified: false,
+        pinned: false,
+        replies: []
+      };
+      
+      const pinnedComments = comments.filter(c => c.pinned);
+      const unpinnedComments = comments.filter(c => !c.pinned);
+      setComments([...pinnedComments, newComment, ...unpinnedComments]);
+    }
+    
+    setCommentText('');
+  };
+  
+  // Handler for guest comment
+  const handleGuestComment = (name: string | null) => {
+    if (name) {
+      setCurrentUser({ name, isAnonymous: false });
+    } else {
+      setCurrentUser({ name: 'Anonymous', isAnonymous: true });
+    }
+  };
+  
+  // Handlers for login/signup
+  const handleLogin = () => {
+    // This would typically redirect to login page or open login modal
+    console.log('Login clicked');
+    // For demo, let's just set the user as authenticated
+    setIsAuthenticated(true);
+    setCurrentUser({ name: 'User', isAnonymous: false });
+  };
+  
+  const handleSignup = () => {
+    // This would typically redirect to signup page or open signup modal
+    console.log('Signup clicked');
+    // For demo, let's just set the user as authenticated
+    setIsAuthenticated(true);
+    setCurrentUser({ name: 'NewUser', isAnonymous: false });
   };
   
   const toggleLike = (id: number, isReply = false, parentId: number | null = null) => {
@@ -215,321 +254,334 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   });
   
   return (
-    <div className={`fixed inset-0 bg-black bg-opacity-50 z-50 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-      <div 
-        className={`absolute bottom-0 left-0 right-0 h-[80vh] bg-white rounded-t-3xl transform transition-transform duration-300 ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
-      >
-        <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-1"></div>
-        
-        <div className="w-full h-[calc(100%-20px)] flex flex-col overflow-hidden">
-          <div className="px-4 py-2 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10">
-            <div className="flex items-center">
-              {replyingTo ? (
-                <div className="flex items-center">
-                  <Button 
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7 mr-2"
-                    onClick={cancelReply}
-                  >
-                    <ArrowLeft size={16} />
-                  </Button>
-                  <span className="font-medium">Reply</span>
-                </div>
-              ) : (
-                <>
-                  <h3 className="font-medium text-base">Comments</h3>
-                  <div className="relative ml-4" ref={menuRef}>
+    <>
+      <div className={`fixed inset-0 bg-black bg-opacity-50 z-50 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div 
+          className={`absolute bottom-0 left-0 right-0 h-[80vh] bg-white rounded-t-3xl transform transition-transform duration-300 ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
+        >
+          <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-1"></div>
+          
+          <div className="w-full h-[calc(100%-20px)] flex flex-col overflow-hidden">
+            <div className="px-4 py-2 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10">
+              <div className="flex items-center">
+                {replyingTo ? (
+                  <div className="flex items-center">
                     <Button 
                       variant="ghost"
-                      className="flex items-center space-x-1 text-xs text-gray-500 hover:text-black p-1 h-7"
-                      onClick={() => setShowFilterMenu(!showFilterMenu)}
+                      size="icon"
+                      className="h-7 w-7 mr-2"
+                      onClick={cancelReply}
                     >
-                      <span>
-                        {filter === 'all' ? 'All' : 
-                        filter === 'verified' ? 'Verified' : 
-                        filter === 'liked' ? 'Liked' : 'Donations'}
-                      </span>
-                      <ChevronDown size={14} />
+                      <ArrowLeft size={16} />
                     </Button>
-                    
-                    {showFilterMenu && (
-                      <div className="absolute top-full left-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
-                        <ul>
-                          <li 
-                            className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
-                            onClick={() => { setFilter('all'); setShowFilterMenu(false); }}
-                          >
-                            All comments
-                          </li>
-                          <li 
-                            className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
-                            onClick={() => { setFilter('verified'); setShowFilterMenu(false); }}
-                          >
-                            Verified only
-                          </li>
-                          <li 
-                            className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
-                            onClick={() => { setFilter('liked'); setShowFilterMenu(false); }}
-                          >
-                            Liked by me
-                          </li>
-                          <li 
-                            className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
-                            onClick={() => { setFilter('donations'); setShowFilterMenu(false); }}
-                          >
-                            Donations
-                          </li>
-                        </ul>
-                      </div>
-                    )}
+                    <span className="font-medium">Reply</span>
                   </div>
-                </>
+                ) : (
+                  <>
+                    <h3 className="font-medium text-base">Comments</h3>
+                    <div className="relative ml-4" ref={menuRef}>
+                      <Button 
+                        variant="ghost"
+                        className="flex items-center space-x-1 text-xs text-gray-500 hover:text-black p-1 h-7"
+                        onClick={() => setShowFilterMenu(!showFilterMenu)}
+                      >
+                        <span>
+                          {filter === 'all' ? 'All' : 
+                          filter === 'verified' ? 'Verified' : 
+                          filter === 'liked' ? 'Liked' : 'Donations'}
+                        </span>
+                        <ChevronDown size={14} />
+                      </Button>
+                      
+                      {showFilterMenu && (
+                        <div className="absolute top-full left-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                          <ul>
+                            <li 
+                              className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
+                              onClick={() => { setFilter('all'); setShowFilterMenu(false); }}
+                            >
+                              All comments
+                            </li>
+                            <li 
+                              className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
+                              onClick={() => { setFilter('verified'); setShowFilterMenu(false); }}
+                            >
+                              Verified only
+                            </li>
+                            <li 
+                              className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
+                              onClick={() => { setFilter('liked'); setShowFilterMenu(false); }}
+                            >
+                              Liked by me
+                            </li>
+                            <li 
+                              className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
+                              onClick={() => { setFilter('donations'); setShowFilterMenu(false); }}
+                            >
+                              Donations
+                            </li>
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+              
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-7 w-7"
+                onClick={onClose}
+              >
+                <X size={16} />
+              </Button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {sortedComments.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-32">
+                  <p className="text-sm text-gray-500">
+                    No comments to display.
+                  </p>
+                </div>
+              ) : (
+                sortedComments.map((comment) => (
+                  <div key={comment.id} className="space-y-4">
+                    <div className={`flex space-x-3 relative ${comment.pinned ? "p-3 border border-gray-200 rounded-lg bg-pink-50 bg-opacity-10" : ""}`}>
+                      {comment.pinned && (
+                        <div className="absolute top-0 left-0 px-2 py-0.5 bg-pink-500 text-white text-xs rounded-full transform -translate-y-1/2">
+                          Pinned
+                        </div>
+                      )}
+                      <div className={`w-10 h-10 rounded-full ${
+                        comment.username === '@creator' 
+                          ? 'bg-gradient-to-br from-red-500 to-pink-600' 
+                          : comment.username === '@me' 
+                            ? 'bg-gradient-to-br from-blue-400 to-blue-600' 
+                            : 'bg-gradient-to-br from-purple-400 to-pink-500'
+                        } flex-shrink-0 flex items-center justify-center`}>
+                        <span className="text-xs font-bold text-white">{comment.username.substring(1, 3).toUpperCase()}</span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex justify-between">
+                          <div className="flex items-center space-x-2">
+                            <h4 className="font-medium text-sm">{comment.username}</h4>
+                            {comment.verified && (
+                              <span className="inline-block rounded-full bg-blue-500 p-0.5 text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                  <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                              </span>
+                            )}
+                            {comment.donation && (
+                              <span className="text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
+                                ${comment.donation}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-xs text-gray-500">{comment.timestamp}</span>
+                            
+                            {(comment.username === '@me' || comment.username === '@creator') && (
+                              <div className="relative" ref={menuRef}>
+                                <Button 
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-6 w-6"
+                                  onClick={() => setCommentMenuOpen(commentMenuOpen === comment.id ? null : comment.id)}
+                                >
+                                  <MoreHorizontal size={14} />
+                                </Button>
+                                
+                                {commentMenuOpen === comment.id && (
+                                  <div className="absolute right-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                                    <ul>
+                                      {comment.username === '@me' && (
+                                        <>
+                                          <li 
+                                            className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
+                                            onClick={() => startEditComment(comment)}
+                                          >
+                                            <Edit size={14} />
+                                            <span>Edit</span>
+                                          </li>
+                                          <li 
+                                            className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
+                                            onClick={() => deleteComment(comment.id)}
+                                          >
+                                            <Trash2 size={14} />
+                                            <span>Delete</span>
+                                          </li>
+                                        </>
+                                      )}
+                                      {comment.username === '@creator' && (
+                                        <li 
+                                          className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
+                                          onClick={() => pinComment(comment.id)}
+                                        >
+                                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M12 5v14M18 11H6M4 7h16"/>
+                                          </svg>
+                                          <span>{comment.pinned ? 'Unpin' : 'Pin'}</span>
+                                        </li>
+                                      )}
+                                      <li 
+                                        className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
+                                      >
+                                        <Flag size={14} />
+                                        <span>Report</span>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        
+                        {editingComment === comment.id ? (
+                          <div className="mt-1">
+                            <Input
+                              ref={inputRef}
+                              type="text"
+                              value={editText}
+                              onChange={(e) => setEditText(e.target.value)}
+                              className="w-full bg-gray-100 text-sm"
+                            />
+                            <div className="flex justify-end space-x-2 mt-2">
+                              <Button 
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 text-xs text-gray-500 hover:text-black font-medium"
+                                onClick={() => setEditingComment(null)}
+                              >
+                                Cancel
+                              </Button>
+                              <Button 
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 text-xs text-pink-500 font-medium"
+                                onClick={saveEditComment}
+                              >
+                                Save
+                              </Button>
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-sm mt-1">{comment.text}</p>
+                        )}
+                        
+                        <div className="mt-2 flex space-x-4">
+                          <Button 
+                            variant="ghost"
+                            size="sm"
+                            className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
+                            onClick={() => toggleLike(comment.id)}
+                          >
+                            <Heart size={14} fill={comment.isLiked ? "#ff2d55" : "none"} stroke={comment.isLiked ? "#ff2d55" : "currentColor"} />
+                            <span className={comment.isLiked ? "text-pink-500" : ""}>{comment.likes}</span>
+                          </Button>
+                          
+                          <Button 
+                            variant="ghost"
+                            size="sm"
+                            className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
+                            onClick={() => startReply(comment.id)}
+                          >
+                            <MessageCircle size={14} />
+                            <span>{(comment.replies?.length || 0) > 0 ? comment.replies.length : "Reply"}</span>
+                          </Button>
+                        </div>
+                        
+                        {comment.replies && comment.replies.length > 0 && (
+                          <div className="mt-3 pl-4 border-l-2 border-gray-100 space-y-3">
+                            {comment.replies.map(reply => (
+                              <div key={reply.id} className="flex space-x-3">
+                                <div className={`w-8 h-8 rounded-full ${
+                                  reply.username === '@creator' 
+                                    ? 'bg-gradient-to-br from-red-500 to-pink-600' 
+                                    : reply.username === '@me' 
+                                      ? 'bg-gradient-to-br from-blue-400 to-blue-600' 
+                                      : 'bg-gradient-to-br from-purple-400 to-pink-500'
+                                  } flex-shrink-0 flex items-center justify-center`}>
+                                  <span className="text-xs font-bold text-white">{reply.username.substring(1, 3).toUpperCase()}</span>
+                                </div>
+                                <div className="flex-1">
+                                  <div className="flex items-center space-x-2">
+                                    <h4 className="font-medium text-sm">{reply.username}</h4>
+                                    {reply.verified && (
+                                      <span className="inline-block rounded-full bg-blue-500 p-0.5 text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                          <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                      </span>
+                                    )}
+                                    <span className="text-xs text-gray-500">{reply.timestamp}</span>
+                                  </div>
+                                  <p className="text-sm mt-1">{reply.text}</p>
+                                  <div className="mt-1">
+                                    <Button
+                                      variant="ghost"
+                                      size="sm" 
+                                      className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
+                                      onClick={() => toggleLike(reply.id, true, comment.id)}
+                                    >
+                                      <Heart size={12} fill={reply.isLiked ? "#ff2d55" : "none"} stroke={reply.isLiked ? "#ff2d55" : "currentColor"} />
+                                      <span className={reply.isLiked ? "text-pink-500" : ""}>{reply.likes}</span>
+                                    </Button>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))
               )}
             </div>
             
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-7 w-7"
-              onClick={onClose}
-            >
-              <X size={16} />
-            </Button>
-          </div>
-          
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {sortedComments.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-32">
-                <p className="text-sm text-gray-500">
-                  No comments to display.
-                </p>
-              </div>
-            ) : (
-              sortedComments.map((comment) => (
-                <div key={comment.id} className="space-y-4">
-                  <div className={`flex space-x-3 relative ${comment.pinned ? "p-3 border border-gray-200 rounded-lg bg-pink-50 bg-opacity-10" : ""}`}>
-                    {comment.pinned && (
-                      <div className="absolute top-0 left-0 px-2 py-0.5 bg-pink-500 text-white text-xs rounded-full transform -translate-y-1/2">
-                        Pinned
-                      </div>
-                    )}
-                    <div className={`w-10 h-10 rounded-full ${
-                      comment.username === '@creator' 
-                        ? 'bg-gradient-to-br from-red-500 to-pink-600' 
-                        : comment.username === '@me' 
-                          ? 'bg-gradient-to-br from-blue-400 to-blue-600' 
-                          : 'bg-gradient-to-br from-purple-400 to-pink-500'
-                      } flex-shrink-0 flex items-center justify-center`}>
-                      <span className="text-xs font-bold text-white">{comment.username.substring(1, 3).toUpperCase()}</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex justify-between">
-                        <div className="flex items-center space-x-2">
-                          <h4 className="font-medium text-sm">{comment.username}</h4>
-                          {comment.verified && (
-                            <span className="inline-block rounded-full bg-blue-500 p-0.5 text-white">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                              </svg>
-                            </span>
-                          )}
-                          {comment.donation && (
-                            <span className="text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
-                              ${comment.donation}
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-xs text-gray-500">{comment.timestamp}</span>
-                          
-                          {(comment.username === '@me' || comment.username === '@creator') && (
-                            <div className="relative" ref={menuRef}>
-                              <Button 
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6"
-                                onClick={() => setCommentMenuOpen(commentMenuOpen === comment.id ? null : comment.id)}
-                              >
-                                <MoreHorizontal size={14} />
-                              </Button>
-                              
-                              {commentMenuOpen === comment.id && (
-                                <div className="absolute right-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
-                                  <ul>
-                                    {comment.username === '@me' && (
-                                      <>
-                                        <li 
-                                          className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
-                                          onClick={() => startEditComment(comment)}
-                                        >
-                                          <Edit size={14} />
-                                          <span>Edit</span>
-                                        </li>
-                                        <li 
-                                          className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
-                                          onClick={() => deleteComment(comment.id)}
-                                        >
-                                          <Trash2 size={14} />
-                                          <span>Delete</span>
-                                        </li>
-                                      </>
-                                    )}
-                                    {comment.username === '@creator' && (
-                                      <li 
-                                        className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
-                                        onClick={() => pinComment(comment.id)}
-                                      >
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                          <path d="M12 5v14M18 11H6M4 7h16"/>
-                                        </svg>
-                                        <span>{comment.pinned ? 'Unpin' : 'Pin'}</span>
-                                      </li>
-                                    )}
-                                    <li 
-                                      className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
-                                    >
-                                      <Flag size={14} />
-                                      <span>Report</span>
-                                    </li>
-                                  </ul>
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      
-                      {editingComment === comment.id ? (
-                        <div className="mt-1">
-                          <Input
-                            ref={inputRef}
-                            type="text"
-                            value={editText}
-                            onChange={(e) => setEditText(e.target.value)}
-                            className="w-full bg-gray-100 text-sm"
-                          />
-                          <div className="flex justify-end space-x-2 mt-2">
-                            <Button 
-                              variant="ghost"
-                              size="sm"
-                              className="h-7 text-xs text-gray-500 hover:text-black font-medium"
-                              onClick={() => setEditingComment(null)}
-                            >
-                              Cancel
-                            </Button>
-                            <Button 
-                              variant="ghost"
-                              size="sm"
-                              className="h-7 text-xs text-pink-500 font-medium"
-                              onClick={saveEditComment}
-                            >
-                              Save
-                            </Button>
-                          </div>
-                        </div>
-                      ) : (
-                        <p className="text-sm mt-1">{comment.text}</p>
-                      )}
-                      
-                      <div className="mt-2 flex space-x-4">
-                        <Button 
-                          variant="ghost"
-                          size="sm"
-                          className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
-                          onClick={() => toggleLike(comment.id)}
-                        >
-                          <Heart size={14} fill={comment.isLiked ? "#ff2d55" : "none"} stroke={comment.isLiked ? "#ff2d55" : "currentColor"} />
-                          <span className={comment.isLiked ? "text-pink-500" : ""}>{comment.likes}</span>
-                        </Button>
-                        
-                        <Button 
-                          variant="ghost"
-                          size="sm"
-                          className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
-                          onClick={() => startReply(comment.id)}
-                        >
-                          <MessageCircle size={14} />
-                          <span>{(comment.replies?.length || 0) > 0 ? comment.replies.length : "Reply"}</span>
-                        </Button>
-                      </div>
-                      
-                      {comment.replies && comment.replies.length > 0 && (
-                        <div className="mt-3 pl-4 border-l-2 border-gray-100 space-y-3">
-                          {comment.replies.map(reply => (
-                            <div key={reply.id} className="flex space-x-3">
-                              <div className={`w-8 h-8 rounded-full ${
-                                reply.username === '@creator' 
-                                  ? 'bg-gradient-to-br from-red-500 to-pink-600' 
-                                  : reply.username === '@me' 
-                                    ? 'bg-gradient-to-br from-blue-400 to-blue-600' 
-                                    : 'bg-gradient-to-br from-purple-400 to-pink-500'
-                                } flex-shrink-0 flex items-center justify-center`}>
-                                <span className="text-xs font-bold text-white">{reply.username.substring(1, 3).toUpperCase()}</span>
-                              </div>
-                              <div className="flex-1">
-                                <div className="flex items-center space-x-2">
-                                  <h4 className="font-medium text-sm">{reply.username}</h4>
-                                  {reply.verified && (
-                                    <span className="inline-block rounded-full bg-blue-500 p-0.5 text-white">
-                                      <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                      </svg>
-                                    </span>
-                                  )}
-                                  <span className="text-xs text-gray-500">{reply.timestamp}</span>
-                                </div>
-                                <p className="text-sm mt-1">{reply.text}</p>
-                                <div className="mt-1">
-                                  <Button
-                                    variant="ghost"
-                                    size="sm" 
-                                    className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
-                                    onClick={() => toggleLike(reply.id, true, comment.id)}
-                                  >
-                                    <Heart size={12} fill={reply.isLiked ? "#ff2d55" : "none"} stroke={reply.isLiked ? "#ff2d55" : "currentColor"} />
-                                    <span className={reply.isLiked ? "text-pink-500" : ""}>{reply.likes}</span>
-                                  </Button>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
+            <div className="p-3 border-t border-gray-200 bg-white">
+              <form onSubmit={handleCommentSubmit} className="flex items-center space-x-3">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex-shrink-0 flex items-center justify-center">
+                  <span className="text-xs font-bold text-white">
+                    {currentUser ? (currentUser.isAnonymous ? 'A' : currentUser.name[0].toUpperCase()) : 'G'}
+                  </span>
                 </div>
-              ))
-            )}
-          </div>
-          
-          <div className="p-3 border-t border-gray-200 bg-white">
-            <form onSubmit={handleCommentSubmit} className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex-shrink-0 flex items-center justify-center">
-                <span className="text-xs font-bold text-white">ME</span>
-              </div>
-              <Input
-                ref={inputRef}
-                type="text"
-                placeholder={replyingTo ? `Reply to ${comments.find(c => c.id === replyingTo)?.username}...` : "Add comment..."}
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                className="flex-1 bg-gray-100 rounded-full h-9 text-sm border-0"
-              />
-              <Button 
-                type="submit" 
-                variant="ghost"
-                size="icon"
-                disabled={!commentText.trim()}
-                className={`h-8 w-8 ${commentText.trim() ? "text-pink-500" : "text-gray-300"}`}
-              >
-                <Send size={18} />
-              </Button>
-            </form>
+                <Input
+                  ref={inputRef}
+                  type="text"
+                  placeholder={replyingTo ? `Reply to ${comments.find(c => c.id === replyingTo)?.username}...` : "Add comment..."}
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  className="flex-1 bg-gray-100 rounded-full h-9 text-sm border-0"
+                />
+                <Button 
+                  type="submit" 
+                  variant="ghost"
+                  size="icon"
+                  disabled={!commentText.trim()}
+                  className={`h-8 w-8 ${commentText.trim() ? "text-pink-500" : "text-gray-300"}`}
+                >
+                  <Send size={18} />
+                </Button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      
+      {/* Authentication Modal */}
+      <CommentAuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onGuestComment={handleGuestComment}
+        onLogin={handleLogin}
+        onSignup={handleSignup}
+      />
+    </>
   );
 };
 
