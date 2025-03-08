@@ -24,7 +24,7 @@ const EventCard = () => {
     const calculateCountdown = () => {
       const now = new Date();
       const deadline = new Date(event.registrationDeadline);
-      const diff = deadline - now;
+      const diff = deadline.getTime() - now.getTime();
       
       if (diff <= 0) {
         setCountdown({ days: 0, hours: 0, minutes: 0 });
@@ -45,6 +45,9 @@ const EventCard = () => {
     // return () => clearInterval(timer);
   }, [event.registrationDeadline]);
 
+  // Calculate spots left percentage
+  const spotsLeftPercentage = Math.round(((event.maxAttendees - event.attendees) / event.maxAttendees) * 100);
+
   // Simulated copy to clipboard function
   const handleCopyMeetingInfo = () => {
     setCopied(true);
@@ -57,7 +60,7 @@ const EventCard = () => {
   };
   
   return (
-    <div className="max-w-md mx-auto bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+    <div className="w-full bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
       {/* Card Content */}
       <div className="p-5">
         {/* Date and Time */}
@@ -104,7 +107,7 @@ const EventCard = () => {
                     <span className="text-gray-700">
                       Attendees: {event.attendees}/{event.maxAttendees}
                       <span className="ml-1 text-green-600 font-medium">
-                        ({Math.round((event.maxAttendees - event.attendees) / event.maxAttendees * 100)}% spots left)
+                        ({spotsLeftPercentage}% spots left)
                       </span>
                     </span>
                   </div>
