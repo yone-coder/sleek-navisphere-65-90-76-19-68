@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv } from 'lucide-react';
+import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
 import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -96,9 +96,14 @@ const SeminarHomepage = () => {
                 <Eye size={16} className="mr-1" />
                 <span>125K {t('seminar.video.views')}</span>
               </div>
-              <div className="flex items-center">
-                <Zap size={16} className="mr-1 text-yellow-500" />
-                <span>8.2K interactions</span>
+              <div className="flex items-center bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs px-2 py-0.5 rounded-full shadow-sm group hover:shadow-md transition-all duration-300">
+                <Zap size={14} className="mr-1 group-hover:animate-ping" />
+                <span className="font-semibold tracking-wide">8.2K</span>
+                <span className="ml-1">interactions</span>
+                <div className="ml-1 hidden group-hover:flex items-center">
+                  <Flame size={12} className="ml-1 text-yellow-200 animate-pulse" />
+                  <Sparkles size={12} className="ml-1 text-yellow-100" />
+                </div>
               </div>
               <div className="flex items-center bg-gradient-to-r from-blue-600 to-blue-800 text-white text-xs px-2 py-0.5 rounded shadow-sm hover:from-blue-700 hover:to-blue-900 transition-all group">
                 <Tv size={14} className="mr-1 group-hover:animate-pulse" />
