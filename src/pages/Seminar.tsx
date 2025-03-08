@@ -1,10 +1,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2 } from 'lucide-react';
+import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
 import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
 import EventCard from '../components/seminar/EventCard';
 import { useLanguage } from '../contexts/LanguageContext';
+import WebinarSchedule from '../components/seminar/WebinarSchedule';
 
 const SeminarHomepage = () => {
   // Get language context
@@ -46,10 +47,10 @@ const SeminarHomepage = () => {
     }
   }, [activeTab]);
   
-  // Tabs configuration
+  // Tabs configuration - replaced 'speakers' with 'subjects' and updated the icon
   const tabs = [
     { id: 0, name: t('seminar.tabs.video'), icon: <Play size={18} /> },
-    { id: 1, name: t('seminar.tabs.speakers'), icon: <User size={18} /> },
+    { id: 1, name: t('seminar.tabs.subjects'), icon: <BookOpen size={18} /> },
     { id: 2, name: t('seminar.tabs.highlights'), icon: <Award size={18} /> },
     { id: 3, name: t('seminar.tabs.testimonials'), icon: <Users size={18} /> },
     { id: 4, name: t('seminar.tabs.register'), icon: <Edit3 size={18} /> }
@@ -223,8 +224,8 @@ const SeminarHomepage = () => {
         )}
         
         {activeTab === 1 && (
-          <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500">
-            {t('seminar.speakers')}
+          <div className="w-full p-4">
+            <WebinarSchedule />
           </div>
         )}
         
