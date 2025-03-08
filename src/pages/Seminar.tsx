@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
@@ -149,6 +150,15 @@ const SeminarHomepage = () => {
       {/* Enhanced Profile Section - Only shown for first tab */}
       {activeTab === 0 && (
         <div className="bg-white px-4 md:px-6 py-3 border-b border-gray-200">
+          {/* "Qui sommes-nous" heading and "Voir plus" button at the top */}
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-medium text-gray-700">Qui sommes-nous</h3>
+            <button className="flex items-center text-blue-600 text-xs font-medium hover:text-blue-800 transition-colors">
+              Voir plus
+              <ChevronRight className="w-3 h-3 ml-0.5" />
+            </button>
+          </div>
+          
           <div className="flex items-center gap-3">
             <div className="flex-shrink-0">
               <img 
@@ -172,14 +182,6 @@ const SeminarHomepage = () => {
                   }`}
                 >
                   {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
-                </button>
-              </div>
-              
-              <div className="flex items-center justify-between mt-1">
-                <h3 className="text-sm font-medium text-gray-700">Qui sommes-nous</h3>
-                <button className="flex items-center text-blue-600 text-xs font-medium hover:text-blue-800 transition-colors">
-                  Voir plus
-                  <ChevronRight className="w-3 h-3 ml-0.5" />
                 </button>
               </div>
               <p className="text-sm text-gray-500">{t('seminar.academy.description')}</p>
