@@ -1,6 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, MapPin, AlertCircle, Video, Globe, Users, ExternalLink, Copy } from 'lucide-react';
+import React, { useState } from 'react';
+import { Calendar, Clock, MapPin, Video, Globe, Users, ExternalLink, Copy } from 'lucide-react';
+import RegistrationCountdown from './RegistrationCountdown';
 
 const EventCard = () => {
   // Sample event data
@@ -15,39 +16,9 @@ const EventCard = () => {
     registrationDeadline: "2025-04-10T19:59:00",
   };
 
-  const [countdown, setCountdown] = useState({ days: 33, hours: 3, minutes: 29 });
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
   
-  // Calculate countdown to registration deadline
-  useEffect(() => {
-    const calculateCountdown = () => {
-      const now = new Date();
-      const deadline = new Date(event.registrationDeadline);
-      const diff = deadline.getTime() - now.getTime();
-      
-      if (diff <= 0) {
-        setCountdown({ days: 0, hours: 0, minutes: 0 });
-        return;
-      }
-      
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      
-      setCountdown({ days, hours, minutes });
-    };
-    
-    // Just for display purposes, we'll use the fixed values
-    // calculateCountdown();
-    // const timer = setInterval(calculateCountdown, 60000);
-    
-    // return () => clearInterval(timer);
-  }, [event.registrationDeadline]);
-
-  // Calculate spots left percentage
-  const spotsLeftPercentage = Math.round(((event.maxAttendees - event.attendees) / event.maxAttendees) * 100);
-
   // Simulated copy to clipboard function
   const handleCopyMeetingInfo = () => {
     setCopied(true);
@@ -58,6 +29,9 @@ const EventCard = () => {
   const toggleExpanded = () => {
     setExpanded(!expanded);
   };
+  
+  // Calculate spots left percentage
+  const spotsLeftPercentage = Math.round(((event.maxAttendees - event.attendees) / event.maxAttendees) * 100);
   
   return (
     <div className="w-full bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -78,7 +52,7 @@ const EventCard = () => {
         </div>
         
         {/* Enhanced Location */}
-        <div className="mb-2">
+        <div className="mb-4">
           <div className="flex items-start">
             <MapPin className="w-5 h-5 text-blue-500 mt-0.5 mr-1.5 flex-shrink-0" />
             <div className="flex-1">
@@ -147,26 +121,8 @@ const EventCard = () => {
           </div>
         </div>
         
-        {/* Registration Deadline */}
-        <div className="flex items-start">
-          <AlertCircle className="w-5 h-5 text-blue-500 mt-0.5 mr-1.5 flex-shrink-0" />
-          <div>
-            <p className="text-gray-900 font-medium">
-              Registration closes on Thu, Apr 10, 2025, 07:59 PM
-            </p>
-            <div className="flex gap-1.5 text-sm mt-0.5">
-              <div className="bg-gray-100 rounded px-2 py-0.5">
-                {countdown.days}d
-              </div>
-              <div className="bg-gray-100 rounded px-2 py-0.5">
-                {countdown.hours}h
-              </div>
-              <div className="bg-gray-100 rounded px-2 py-0.5">
-                {countdown.minutes}m
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Registration Countdown - Full width */}
+        <RegistrationCountdown />
       </div>
     </div>
   );
