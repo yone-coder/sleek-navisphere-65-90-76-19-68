@@ -1,6 +1,8 @@
+
 import React, { useState } from 'react';
-import { Calendar, Clock, MapPin, Video, Globe, Users, ExternalLink, Copy } from 'lucide-react';
+import { MapPin, Video, Globe, Users, ExternalLink, Copy } from 'lucide-react';
 import RegistrationCountdown from './RegistrationCountdown';
+import EnhancedDateTime from './EnhancedDateTime';
 
 const EventCard = () => {
   // Sample event data
@@ -36,19 +38,8 @@ const EventCard = () => {
     <div className="w-full bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
       {/* Card Content */}
       <div className="p-3">
-        {/* Date and Time */}
-        <div className="flex items-start mb-2">
-          <Calendar className="w-5 h-5 text-blue-500 mt-0.5 mr-1.5 flex-shrink-0" />
-          <div className="flex-1">
-            <p className="text-gray-900 font-medium">
-              Tue, Apr 15, 2025, 10:00 AM
-            </p>
-            <div className="flex items-center text-sm text-gray-500 mt-0.5">
-              <Clock className="w-3.5 h-3.5 mr-1" />
-              <span>Duration: 2h 30m</span>
-            </div>
-          </div>
-        </div>
+        {/* Enhanced DateTime Component */}
+        <EnhancedDateTime />
         
         {/* Enhanced Location */}
         <div className="mb-3">

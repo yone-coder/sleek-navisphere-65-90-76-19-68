@@ -61,14 +61,14 @@ const RegistrationCountdown = () => {
   }, [targetDate]);
   
   // Format with leading zeros
-  const formatNumber = (num) => {
+  const formatNumber = (num: number) => {
     return num < 10 ? `0${num}` : num;
   };
   
   // Progress percentage calculation
   const startDate = new Date('2025-03-08T00:00:00'); // Today's date
-  const totalDuration = targetDate - startDate;
-  const elapsed = new Date() - startDate;
+  const totalDuration = targetDate.getTime() - startDate.getTime();
+  const elapsed = new Date().getTime() - startDate.getTime();
   const progressPercentage = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
   
   // Calculate remaining business days (excluding weekends)
