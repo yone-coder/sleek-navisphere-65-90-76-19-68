@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2 } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
@@ -92,41 +93,52 @@ const SeminarHomepage = () => {
             <h2 className="text-xl font-medium text-gray-900">
               Maîtriser le Développement Web Moderne : Des Bases aux Techniques Avancées
             </h2>
-            <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+            
+            {/* Stat badges with improved layout */}
+            <div className="flex flex-wrap items-center gap-2 mt-2 text-sm text-gray-600">
+              {/* Views badge - adjusted size and responsive layout */}
               <div 
-                className="flex items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 py-1 rounded-full shadow-sm group hover:shadow-md transition-all duration-300 cursor-pointer"
+                className="flex items-center flex-shrink-0 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-2.5 py-1 rounded-full shadow-sm group hover:shadow-md transition-all duration-300 cursor-pointer"
                 onMouseEnter={() => setViewsHovered(true)}
                 onMouseLeave={() => setViewsHovered(false)}
               >
-                <Eye size={16} className={`mr-1.5 ${viewsHovered ? 'animate-pulse' : ''}`} />
+                <Eye size={14} className={`mr-1 ${viewsHovered ? 'animate-pulse' : ''}`} />
                 <span className="font-bold tracking-wide">125K</span>
-                <span className="ml-1">{t('seminar.video.views')}</span>
+                <span className="ml-0.5 text-xs">{t('seminar.video.views')}</span>
+                
+                {/* Conditional expanded content */}
                 {viewsHovered && (
-                  <div className="ml-2 flex items-center animate-fade-in">
-                    <TrendingUp size={14} className="text-green-200 mr-1" />
-                    <span className="text-xs">+12% {t('seminar.video.thisWeek')}</span>
+                  <div className="ml-1.5 flex items-center animate-fade-in">
+                    <TrendingUp size={12} className="text-green-200 mr-0.5" />
+                    <span className="text-xs">+12%</span>
                   </div>
                 )}
-                <div className="ml-2 pl-2 border-l border-blue-300 hidden group-hover:flex items-center">
-                  <BarChart2 size={12} className="mr-1 text-blue-200" />
+                
+                {/* Hover expanded content */}
+                <div className="ml-1.5 pl-1.5 border-l border-blue-300 hidden group-hover:flex items-center">
+                  <BarChart2 size={10} className="mr-0.5 text-blue-200" />
                   <span className="text-xs font-medium">Top 5%</span>
                 </div>
               </div>
               
-              <div className="flex items-center bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs px-2 py-0.5 rounded-full shadow-sm group hover:shadow-md transition-all duration-300">
+              {/* Interactions badge - adjusted size and responsive layout */}
+              <div className="flex items-center flex-shrink-0 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs px-2.5 py-1 rounded-full shadow-sm group hover:shadow-md transition-all duration-300">
                 <Zap size={14} className="mr-1 group-hover:animate-ping" />
                 <span className="font-semibold tracking-wide">8.2K</span>
-                <span className="ml-1">interactions</span>
-                <div className="ml-1 hidden group-hover:flex items-center">
-                  <Flame size={12} className="ml-1 text-yellow-200 animate-pulse" />
-                  <Sparkles size={12} className="ml-1 text-yellow-100" />
+                <span className="ml-0.5">interactions</span>
+                
+                {/* Hover icons */}
+                <div className="hidden group-hover:flex items-center ml-1">
+                  <Flame size={10} className="text-yellow-200 animate-pulse" />
+                  <Sparkles size={10} className="ml-0.5 text-yellow-100" />
                 </div>
               </div>
               
-              <div className="flex items-center bg-gradient-to-r from-blue-600 to-blue-800 text-white text-xs px-2 py-0.5 rounded shadow-sm hover:from-blue-700 hover:to-blue-900 transition-all group">
+              {/* 4K badge - adjusted size and responsive layout */}
+              <div className="flex items-center flex-shrink-0 bg-gradient-to-r from-blue-600 to-blue-800 text-white text-xs px-2.5 py-1 rounded-full shadow-sm hover:from-blue-700 hover:to-blue-900 transition-all group">
                 <Tv size={14} className="mr-1 group-hover:animate-pulse" />
                 <span className="font-semibold tracking-wide">4K</span>
-                <span className="ml-1 text-blue-200 hidden group-hover:inline">Ultra HD</span>
+                <span className="ml-0.5 text-blue-200 hidden group-hover:inline">Ultra HD</span>
               </div>
             </div>
           </div>
