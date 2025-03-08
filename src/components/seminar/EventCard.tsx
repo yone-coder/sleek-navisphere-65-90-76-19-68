@@ -121,8 +121,10 @@ const EventCard = () => {
           </div>
         </div>
         
-        {/* Registration Countdown - Full width */}
-        <RegistrationCountdown />
+        {/* Registration Countdown - Full width without background */}
+        <div className="w-full border-t border-gray-100 pt-4">
+          <RegistrationCountdown />
+        </div>
       </div>
     </div>
   );

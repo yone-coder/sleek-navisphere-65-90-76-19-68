@@ -93,7 +93,6 @@ const RegistrationCountdown = () => {
     switch (urgencyLevel) {
       case 'critical':
         return {
-          background: 'bg-red-50',
           border: 'border-red-200',
           text: 'text-red-700',
           progress: 'bg-red-500',
@@ -101,7 +100,6 @@ const RegistrationCountdown = () => {
         };
       case 'urgent':
         return {
-          background: 'bg-yellow-50',
           border: 'border-yellow-200',
           text: 'text-yellow-700',
           progress: 'bg-yellow-500',
@@ -109,7 +107,6 @@ const RegistrationCountdown = () => {
         };
       default:
         return {
-          background: 'bg-blue-50',
           border: 'border-blue-200',
           text: 'text-blue-700',
           progress: 'bg-blue-500',
@@ -127,7 +124,7 @@ const RegistrationCountdown = () => {
   const timeZoneOffsetFormatted = `UTC${timeZoneOffset <= 0 ? '+' : '-'}${Math.abs(Math.floor(timeZoneOffset / 60))}:${String(Math.abs(timeZoneOffset % 60)).padStart(2, '0')}`;
   
   return (
-    <div className={`w-full p-6 ${theme.background} rounded-xl shadow-md border ${theme.border} transition-all duration-500`}>
+    <div className="w-full px-4 py-6">
       <div className="mb-4 flex justify-between items-center">
         <div>
           <h2 className={`text-2xl font-bold ${theme.text}`}>Registration Closing Soon</h2>
