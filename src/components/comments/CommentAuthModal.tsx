@@ -32,12 +32,18 @@ const CommentAuthModal: React.FC<CommentAuthModalProps> = ({
   const [guestName, setGuestName] = useState("");
   const [activeTab, setActiveTab] = useState("guest");
 
+  const generateRandomUserId = () => {
+    const randomNumber = Math.floor(Math.random() * 10000000000);
+    return `user${randomNumber}`;
+  };
+
   const handleGuestComment = (isAnonymous: boolean = false) => {
     if (isAnonymous) {
-      onGuestComment(null);
+      const anonymousId = generateRandomUserId();
+      onGuestComment(anonymousId);
       toast({
         title: "Connected anonymously",
-        description: "You are commenting as an anonymous user",
+        description: `You are commenting as ${anonymousId}`,
         duration: 3000,
       });
     } else if (guestName.trim()) {
