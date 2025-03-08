@@ -91,7 +91,6 @@ const SeminarHomepage = () => {
               Maîtriser le Développement Web Moderne : Des Bases aux Techniques Avancées
             </h2>
             <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
-              <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded">4K</span>
               <div className="flex items-center">
                 <Eye size={16} className="mr-1" />
                 <span>125K {t('seminar.video.views')}</span>
@@ -100,6 +99,7 @@ const SeminarHomepage = () => {
                 <Zap size={16} className="mr-1 text-yellow-500" />
                 <span>8.2K interactions</span>
               </div>
+              <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded">4K</span>
             </div>
           </div>
         </div>
