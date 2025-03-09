@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight, ChevronDown, Globe, Twitter, Instagram, Linkedin, Facebook } from 'lucide-react';
+import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
 import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
 import EventCard from '../components/seminar/EventCard';
@@ -19,8 +19,6 @@ const SeminarHomepage = () => {
   const [bottomPadding, setBottomPadding] = useState(0);
   // State for views hover
   const [viewsHovered, setViewsHovered] = useState(false);
-  // State for instructor details expanded
-  const [instructorDetailsExpanded, setInstructorDetailsExpanded] = useState(false);
   // Ref for the WebinarComponent
   const webinarRef = useRef<HTMLDivElement>(null);
   
@@ -57,37 +55,6 @@ const SeminarHomepage = () => {
     { id: 3, name: t('seminar.tabs.testimonials'), icon: <Users size={18} /> },
     { id: 4, name: t('seminar.tabs.register'), icon: <Edit3 size={18} /> }
   ];
-
-  // Instructor data
-  const instructors = [
-    {
-      name: "Dr. Sophie Laurent",
-      title: "Web Development Lead",
-      bio: "Dr. Sophie Laurent is a web development expert with over 15 years of experience. She specializes in modern frontend frameworks and has led teams at major tech companies.",
-      image: "/api/placeholder/64/64",
-      social: {
-        twitter: "https://twitter.com/sophielaurent",
-        linkedin: "https://linkedin.com/in/sophielaurent",
-        website: "https://sophielaurent.dev"
-      }
-    },
-    {
-      name: "Marc Dubois",
-      title: "UX Design Specialist",
-      bio: "Marc Dubois brings 12 years of UX/UI design experience to the program. He has worked with startups and enterprise companies to create intuitive, accessible digital experiences.",
-      image: "/api/placeholder/64/64", 
-      social: {
-        instagram: "https://instagram.com/marcdesigns",
-        linkedin: "https://linkedin.com/in/marcdubois",
-        facebook: "https://facebook.com/marcdesigns"
-      }
-    }
-  ];
-  
-  // Toggle instructor details
-  const toggleInstructorDetails = () => {
-    setInstructorDetailsExpanded(!instructorDetailsExpanded);
-  };
   
   return (
     <div className="flex flex-col w-full max-w-6xl mx-auto bg-gray-50 shadow-xl rounded-xl overflow-hidden">
@@ -186,21 +153,9 @@ const SeminarHomepage = () => {
           {/* "Qui sommes-nous" heading and "Voir plus" button at the top */}
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-medium text-gray-700">Qui sommes-nous</h3>
-            <button 
-              onClick={toggleInstructorDetails}
-              className="flex items-center text-blue-600 text-xs font-medium hover:text-blue-800 transition-colors"
-            >
-              {instructorDetailsExpanded ? (
-                <>
-                  Voir moins
-                  <ChevronDown className="w-3 h-3 ml-0.5" />
-                </>
-              ) : (
-                <>
-                  Voir plus
-                  <ChevronRight className="w-3 h-3 ml-0.5" />
-                </>
-              )}
+            <button className="flex items-center text-blue-600 text-xs font-medium hover:text-blue-800 transition-colors">
+              Voir plus
+              <ChevronRight className="w-3 h-3 ml-0.5" />
             </button>
           </div>
           
@@ -232,69 +187,6 @@ const SeminarHomepage = () => {
               <p className="text-sm text-gray-500">{t('seminar.academy.description')}</p>
             </div>
           </div>
-          
-          {/* Expanded instructor details */}
-          {instructorDetailsExpanded && (
-            <div className="mt-4 border-t border-gray-200 pt-4 space-y-4 animate-fadeIn">
-              <h3 className="text-base font-semibold text-gray-800">Notre équipe d'instructeurs</h3>
-              
-              <div className="space-y-4">
-                {instructors.map((instructor, index) => (
-                  <div key={index} className="flex gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                    <img
-                      src={instructor.image}
-                      alt={`${instructor.name} profile`}
-                      className="w-16 h-16 rounded-full object-cover border-2 border-blue-500"
-                    />
-                    <div className="flex-1">
-                      <div className="flex flex-wrap justify-between items-start">
-                        <div>
-                          <h4 className="text-lg font-medium text-gray-900">{instructor.name}</h4>
-                          <p className="text-sm text-blue-600">{instructor.title}</p>
-                        </div>
-                        
-                        {/* Social Media Links */}
-                        <div className="flex gap-2 mt-1">
-                          {instructor.social.website && (
-                            <a href={instructor.social.website} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-blue-600 transition-colors">
-                              <Globe size={18} />
-                            </a>
-                          )}
-                          {instructor.social.twitter && (
-                            <a href={instructor.social.twitter} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-blue-500 transition-colors">
-                              <Twitter size={18} />
-                            </a>
-                          )}
-                          {instructor.social.linkedin && (
-                            <a href={instructor.social.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-blue-700 transition-colors">
-                              <Linkedin size={18} />
-                            </a>
-                          )}
-                          {instructor.social.instagram && (
-                            <a href={instructor.social.instagram} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-pink-600 transition-colors">
-                              <Instagram size={18} />
-                            </a>
-                          )}
-                          {instructor.social.facebook && (
-                            <a href={instructor.social.facebook} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-blue-800 transition-colors">
-                              <Facebook size={18} />
-                            </a>
-                          )}
-                        </div>
-                      </div>
-                      <p className="text-sm text-gray-600 mt-2">{instructor.bio}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="flex justify-center pt-2">
-                <a href="#" className="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                  Voir tous les instructeurs (8)
-                </a>
-              </div>
-            </div>
-          )}
           
           {/* Stats section */}
           <div className="mt-3 -mx-4 md:-mx-6 px-4 md:px-6 py-3 bg-gray-50 border-t border-b border-gray-200">
