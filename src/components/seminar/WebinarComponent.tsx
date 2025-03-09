@@ -1,6 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
 import { Clock, Calendar, UserCheck, AlertCircle, Check, Users, Eye, Heart, MessageCircle, Share, Smile, Star, ThumbsUp, Award, Trophy } from 'lucide-react';
-import TikTokCommentsPanel from '@/components/comments/TikTokCommentsPanel';
 import { useLanguage } from '@/contexts/LanguageContext';
 import AnimatedHearts from './AnimatedHearts';
 import {
@@ -15,7 +15,11 @@ interface HoverValueType {
   participants: number;
 }
 
-const WebinarComponent = () => {
+interface WebinarComponentProps {
+  onOpenComments: () => void;
+}
+
+const WebinarComponent = ({ onOpenComments }: WebinarComponentProps) => {
   const { t } = useLanguage();
   
   const [timeLeft, setTimeLeft] = useState({
@@ -44,7 +48,6 @@ const WebinarComponent = () => {
   const [likes, setLikes] = useState(8200);
   const [shares, setShares] = useState(125000);
   const [comments, setComments] = useState(342);
-  const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
   const [showEmojiMenu, setShowEmojiMenu] = useState(false);
 
@@ -202,11 +205,7 @@ const WebinarComponent = () => {
   };
 
   const handleOpenComments = () => {
-    setIsCommentsPanelOpen(true);
-  };
-
-  const closeCommentsPanel = () => {
-    setIsCommentsPanelOpen(false);
+    onOpenComments();
   };
 
   const handleShare = () => {
@@ -532,11 +531,6 @@ const WebinarComponent = () => {
         </div>
       </button>
       
-      <TikTokCommentsPanel 
-        isOpen={isCommentsPanelOpen} 
-        onClose={closeCommentsPanel} 
-      />
-      
       <style>{`
         @keyframes fade-in {
           0% { opacity: 0; transform: translateY(5px); }
@@ -544,6 +538,13 @@ const WebinarComponent = () => {
         }
         .animate-fade-in {
           animation: fade-in 0.3s ease-in-out;
+        }
+        @keyframes fade-out {
+          0% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+        .animate-fade-out {
+          animation: fade-out 0.3s ease-in-out forwards;
         }
         .bg-stripes {
           background-image: linear-gradient(
