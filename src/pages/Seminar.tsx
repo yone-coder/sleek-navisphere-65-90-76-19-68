@@ -6,6 +6,7 @@ import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
 import EventCard from '../components/seminar/EventCard';
 import { useLanguage } from '../contexts/LanguageContext';
 import WebinarSchedule from '../components/seminar/WebinarSchedule';
+import SeminarCommentsPanel from '../components/seminar/SeminarCommentsPanel';
 
 const SeminarHomepage = () => {
   // Get language context
@@ -19,6 +20,10 @@ const SeminarHomepage = () => {
   const [bottomPadding, setBottomPadding] = useState(0);
   // State for views hover
   const [viewsHovered, setViewsHovered] = useState(false);
+  // State for instructor details expanded
+  const [instructorDetailsExpanded, setInstructorDetailsExpanded] = useState(false);
+  // State for comments panel
+  const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
   // Ref for the WebinarComponent
   const webinarRef = useRef<HTMLDivElement>(null);
   
@@ -55,6 +60,21 @@ const SeminarHomepage = () => {
     { id: 3, name: t('seminar.tabs.testimonials'), icon: <Users size={18} /> },
     { id: 4, name: t('seminar.tabs.register'), icon: <Edit3 size={18} /> }
   ];
+
+  // Toggle instructor details
+  const toggleInstructorDetails = () => {
+    setInstructorDetailsExpanded(!instructorDetailsExpanded);
+  };
+
+  // Open comments panel
+  const openCommentsPanel = () => {
+    setIsCommentsPanelOpen(true);
+  };
+
+  // Close comments panel
+  const closeCommentsPanel = () => {
+    setIsCommentsPanelOpen(false);
+  };
   
   return (
     <div className="flex flex-col w-full max-w-6xl mx-auto bg-gray-50 shadow-xl rounded-xl overflow-hidden">
@@ -153,9 +173,12 @@ const SeminarHomepage = () => {
           {/* "Qui sommes-nous" heading and "Voir plus" button at the top */}
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-medium text-gray-700">Qui sommes-nous</h3>
-            <button className="flex items-center text-blue-600 text-xs font-medium hover:text-blue-800 transition-colors">
-              Voir plus
-              <ChevronRight className="w-3 h-3 ml-0.5" />
+            <button 
+              className="flex items-center text-blue-600 text-xs font-medium hover:text-blue-800 transition-colors"
+              onClick={toggleInstructorDetails}
+            >
+              {instructorDetailsExpanded ? "Voir moins" : "Voir plus"}
+              <ChevronRight className={`w-3 h-3 ml-0.5 transition-transform duration-300 ${instructorDetailsExpanded ? "rotate-90" : ""}`} />
             </button>
           </div>
           
@@ -185,6 +208,63 @@ const SeminarHomepage = () => {
                 </button>
               </div>
               <p className="text-sm text-gray-500">{t('seminar.academy.description')}</p>
+            </div>
+          </div>
+          
+          {/* Instructor details section - collapsible */}
+          <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            instructorDetailsExpanded ? "max-h-[500px] opacity-100 mt-4" : "max-h-0 opacity-0"
+          }`}>
+            <div className="border-t border-gray-200 pt-4">
+              <h4 className="text-sm font-medium text-gray-800 mb-3">Formateurs</h4>
+              
+              {/* Main instructor */}
+              <div className="mb-4 flex items-start gap-3">
+                <img 
+                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alexandre" 
+                  alt="Photo du formateur" 
+                  className="w-14 h-14 rounded-full object-cover border-2 border-blue-100"
+                />
+                <div>
+                  <h5 className="font-medium">Alexandre Martin</h5>
+                  <p className="text-sm text-gray-600">Développeur senior avec 12 ans d'expérience dans le développement web. Expert en React, Node.js et architectures cloud.</p>
+                  
+                  <div className="flex gap-2 mt-2">
+                    <a href="#" className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">LinkedIn</a>
+                    <a href="#" className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Portfolio</a>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Second instructor */}
+              <div className="mb-4 flex items-start gap-3">
+                <img 
+                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie" 
+                  alt="Photo de la formatrice" 
+                  className="w-14 h-14 rounded-full object-cover border-2 border-blue-100"
+                />
+                <div>
+                  <h5 className="font-medium">Sophie Dubois</h5>
+                  <p className="text-sm text-gray-600">UX/UI Designer et développeuse frontend. Spécialisée dans les interfaces utilisateur modernes et l'expérience utilisateur.</p>
+                  
+                  <div className="flex gap-2 mt-2">
+                    <a href="#" className="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">Dribbble</a>
+                    <a href="#" className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Twitter</a>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Social links */}
+              <div className="border-t border-gray-100 pt-3 mt-3">
+                <h4 className="text-sm font-medium text-gray-800 mb-2">Nos liens</h4>
+                <div className="flex flex-wrap gap-2">
+                  <a href="#" className="text-xs bg-blue-600 text-white px-2 py-1 rounded-full">Site Web</a>
+                  <a href="#" className="text-xs bg-purple-600 text-white px-2 py-1 rounded-full">Instagram</a>
+                  <a href="#" className="text-xs bg-blue-400 text-white px-2 py-1 rounded-full">Twitter</a>
+                  <a href="#" className="text-xs bg-red-600 text-white px-2 py-1 rounded-full">YouTube</a>
+                  <a href="#" className="text-xs bg-blue-800 text-white px-2 py-1 rounded-full">Facebook</a>
+                </div>
+              </div>
             </div>
           </div>
           
@@ -242,8 +322,52 @@ const SeminarHomepage = () => {
         )}
         
         {activeTab === 3 && (
-          <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500">
-            {t('seminar.testimonials')}
+          <div className="p-4">
+            <h3 className="text-lg font-semibold mb-4">Témoignages de nos participants</h3>
+            <div className="space-y-4">
+              <div className="border border-gray-200 rounded-lg p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Marie" alt="Marie" className="w-10 h-10 rounded-full" />
+                  <div>
+                    <h4 className="font-medium">Marie Dubois</h4>
+                    <div className="flex">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star key={star} size={14} className="text-yellow-400 fill-yellow-400" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-700">Cette formation a complètement transformé ma façon d'aborder le développement web. Les techniques enseignées sont immédiatement applicables et m'ont permis d'améliorer significativement mes projets professionnels.</p>
+              </div>
+              
+              <div className="border border-gray-200 rounded-lg p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Thomas" alt="Thomas" className="w-10 h-10 rounded-full" />
+                  <div>
+                    <h4 className="font-medium">Thomas Martin</h4>
+                    <div className="flex">
+                      {[1, 2, 3, 4].map((star) => (
+                        <Star key={star} size={14} className="text-yellow-400 fill-yellow-400" />
+                      ))}
+                      {[5].map((star) => (
+                        <Star key={star} size={14} className="text-gray-300" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-700">Excellente formation, à la fois théorique et pratique. J'apprécie particulièrement la qualité des supports pédagogiques et la disponibilité des formateurs pour répondre à nos questions spécifiques.</p>
+              </div>
+              
+              <div className="mt-4 flex justify-center">
+                <Button 
+                  onClick={openCommentsPanel}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+                >
+                  <MessageCircle size={18} />
+                  Voir tous les témoignages
+                </Button>
+              </div>
+            </div>
           </div>
         )}
         
@@ -257,9 +381,12 @@ const SeminarHomepage = () => {
       {/* Fixed WebinarComponent at the bottom only for video tab - adjusted positioning and size */}
       {activeTab === 0 && (
         <div ref={webinarRef} className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 py-2 px-2 z-40">
-          <WebinarComponent />
+          <WebinarComponent openCommentsPanel={openCommentsPanel} />
         </div>
       )}
+      
+      {/* Seminar Comments Panel */}
+      <SeminarCommentsPanel isOpen={isCommentsPanelOpen} onClose={closeCommentsPanel} />
     </div>
   );
 };
