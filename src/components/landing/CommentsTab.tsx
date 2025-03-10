@@ -2,13 +2,14 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Avatar } from '@/components/ui/avatar';
-import { Heart, MoreVertical, MessageCircle } from 'lucide-react';
+import { Heart, MoreVertical, MessageCircle, SmilePlus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Textarea } from '@/components/ui/textarea';
 import TikTokCommentsPanel from '../comments/TikTokCommentsPanel';
 
 export function CommentsTab() {
   const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
+  const [commentText, setCommentText] = useState('');
 
   const openCommentsPanel = () => {
     setIsCommentsPanelOpen(true);
@@ -18,18 +19,46 @@ export function CommentsTab() {
     setIsCommentsPanelOpen(false);
   };
 
+  const handleCommentSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!commentText.trim()) return;
+    // Handle comment submission
+    setCommentText('');
+  };
+
   return (
     <div className="max-w-3xl mx-auto">
-      <div className="flex gap-4 mb-8 sticky top-0 bg-white/95 backdrop-blur-sm p-4 -mx-4 z-30">
+      <div className="flex gap-4 mb-8 sticky top-0 bg-transparent backdrop-blur-sm p-4 -mx-4 z-30">
         <div className="flex-1">
-          <Textarea 
-            className="w-full p-4 border rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent resize-none text-sm h-[80px]"
-            placeholder="Add a comment..."
-            rows={3}
-          />
-          <div className="mt-2 flex justify-end">
-            <Button size="sm">Post</Button>
-          </div>
+          <form onSubmit={handleCommentSubmit} className="flex gap-2">
+            <div className="flex-1 flex items-center gap-2 pr-2 rounded-full bg-gray-100 overflow-hidden">
+              <Textarea
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                placeholder="Add a comment..."
+                className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent resize-none min-h-0 h-10 py-2.5 px-4"
+              />
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="rounded-full hover:bg-gray-200"
+              >
+                <SmilePlus className="h-5 w-5 text-gray-500" />
+              </Button>
+            </div>
+            <Button
+              type="submit"
+              size="icon"
+              className={`rounded-full ${commentText.trim() ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 text-gray-500'}`}
+              disabled={!commentText.trim()}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </Button>
+          </form>
         </div>
       </div>
 
@@ -74,7 +103,6 @@ export function CommentsTab() {
         ))}
       </div>
 
-      {/* TikTokCommentsPanel with fixed z-index to appear above all content */}
       <TikTokCommentsPanel
         isOpen={isCommentsPanelOpen}
         onClose={closeCommentsPanel}
