@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Avatar } from '@/components/ui/avatar';
-import { Heart, MoreVertical, MessageCircle, SmilePlus } from 'lucide-react';
+import { SmilePlus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Textarea } from '@/components/ui/textarea';
 import TikTokCommentsPanel from '../comments/TikTokCommentsPanel';
@@ -22,7 +22,11 @@ export function CommentsTab() {
   const handleCommentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!commentText.trim()) return;
-    // Handle comment submission
+    
+    // Open the TikTok comments panel when submitting a comment
+    openCommentsPanel();
+    
+    // The actual comment submission is handled in TikTokCommentsPanel
     setCommentText('');
   };
 
@@ -37,12 +41,14 @@ export function CommentsTab() {
                 onChange={(e) => setCommentText(e.target.value)}
                 placeholder="Add a comment..."
                 className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent resize-none min-h-0 h-10 py-2.5 px-4"
+                onClick={openCommentsPanel}
               />
               <Button
                 type="button"
                 size="icon"
                 variant="ghost"
                 className="rounded-full hover:bg-gray-200"
+                onClick={openCommentsPanel}
               >
                 <SmilePlus className="h-5 w-5 text-gray-500" />
               </Button>
@@ -62,6 +68,7 @@ export function CommentsTab() {
         </div>
       </div>
 
+      {/* Comment list now opens in TikTokCommentsPanel */}
       <div className="space-y-6 px-4 pb-20">
         {[1, 2, 3, 4, 5].map((_, i) => (
           <motion.div 
@@ -70,6 +77,7 @@ export function CommentsTab() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
+            onClick={openCommentsPanel}
           >
             <Avatar className="h-9 w-9">
               <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=user${i}`} alt="user avatar" />
@@ -80,22 +88,18 @@ export function CommentsTab() {
                   <h4 className="text-sm font-medium">User Name</h4>
                   <p className="text-sm text-gray-600 mt-1">This project looks amazing! Can't wait to see it come to life.</p>
                 </div>
-                <button className="text-gray-400 hover:text-gray-600">
-                  <MoreVertical className="h-5 w-5" />
-                </button>
               </div>
               <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
                 <span>2d ago</span>
-                <button className="flex items-center gap-1 hover:text-gray-700">
-                  <Heart className="h-4 w-4" />
-                  <span>24</span>
-                </button>
+                <span>24 likes</span>
                 <button 
-                  className="hover:text-gray-700 flex items-center gap-1"
-                  onClick={openCommentsPanel}
+                  className="hover:text-gray-700"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openCommentsPanel();
+                  }}
                 >
-                  <MessageCircle className="h-4 w-4" />
-                  <span>Reply</span>
+                  Reply
                 </button>
               </div>
             </div>
@@ -103,6 +107,7 @@ export function CommentsTab() {
         ))}
       </div>
 
+      {/* This is the actual TikTok Comments Panel that opens */}
       <TikTokCommentsPanel
         isOpen={isCommentsPanelOpen}
         onClose={closeCommentsPanel}
