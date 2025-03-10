@@ -163,17 +163,21 @@ const WebinarComponent = () => {
 
   const handleLikeWithEmoji = (emojiName: string) => {
     if (selectedEmoji === emojiName) {
+      // Clicking same emoji again toggles it off
       setIsLiked(false);
       setSelectedEmoji(null);
       setLikes(prev => prev - 1);
       setShowHeartAnimation(false);
     } else {
+      // New emoji selected
       if (!isLiked) {
+        // If not already liked, increment count
         setLikes(prev => prev + 1);
       }
       setIsLiked(true);
       setSelectedEmoji(emojiName);
       
+      // Activate hearts animation
       setShowHeartAnimation(true);
       setTimeout(() => setShowHeartAnimation(false), 2000);
     }
@@ -183,9 +187,10 @@ const WebinarComponent = () => {
   const handleLike = () => {
     if (!isLiked) {
       setIsLiked(true);
-      setSelectedEmoji('heart');
+      setSelectedEmoji('heart'); // Default to heart
       setLikes(prev => prev + 1);
       
+      // Activate hearts animation
       setShowHeartAnimation(true);
       setTimeout(() => setShowHeartAnimation(false), 2000);
     } else {
@@ -344,6 +349,7 @@ const WebinarComponent = () => {
       {/* Hearts animation container */}
       <AnimatedHearts isActive={showHeartAnimation} />
       
+      {/* Rest of the component */}
       <div className="relative mb-2">
         <div className="flex justify-between items-center mb-1 text-xs">
           <div className="flex items-center text-gray-600">
@@ -452,6 +458,7 @@ const WebinarComponent = () => {
                 )}
                 <span className="font-medium">{formatNumber(likes)}</span>
                 
+                {/* Ripple effect when liked */}
                 {isLiked && (
                   <div 
                     className="absolute inset-0 bg-pink-500/10 animate-fade-out"
