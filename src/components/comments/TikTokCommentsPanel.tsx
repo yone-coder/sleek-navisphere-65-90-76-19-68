@@ -9,6 +9,8 @@ import FAQsList from './FAQsList';
 import CommentPanelHeader from './CommentPanelHeader';
 import { Comment, Reply, FAQ } from './types';
 import ModernTabs from './ModernTabs';
+import { motion, PanInfo, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface TikTokCommentsPanelProps {
   onClose: () => void;
@@ -19,6 +21,17 @@ interface TikTokCommentsPanelProps {
 const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOpen, initialTab = 'comments' }) => {
   // State for active tab
   const [activeTab, setActiveTab] = useState(initialTab);
+  
+  // State for panel height
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [prevHeight, setPrevHeight] = useState<number | null>(null);
+  const isMobile = useIsMobile();
+  
+  // Motion values for dragging
+  const y = useMotionValue(0);
+  const panelHeight = useMotionValue('60vh');
+  const opacity = useTransform(y, [0, 200], [1, 0]);
   
   // Original comment state
   const [commentText, setCommentText] = useState('');
@@ -71,6 +84,7 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   
   const inputRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   
   // Effect for handling click outside
   useEffect(() => {
@@ -99,6 +113,93 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
       inputRef.current?.focus();
     }
   }, [editingComment, replyingTo, editingReply]);
+  
+  // Handle drag start
+  const handleDragStart = () => {
+    setIsDragging(true);
+    if (!prevHeight) {
+      const currentHeight = panelHeight.get();
+      if (typeof currentHeight === 'string') {
+        setPrevHeight(parseInt(currentHeight));
+      }
+    }
+  };
+
+  // Handle dragging
+  const handleDrag = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    const currentY = y.get();
+    const deltaY = info.delta.y;
+
+    if (currentY + deltaY < 0) {
+      // Dragging up (expanding)
+      const newHeight = Math.min(100, parseInt(panelHeight.get() as string) - deltaY / 10);
+      panelHeight.set(`${newHeight}vh`);
+      
+      if (newHeight >= 90) {
+        setIsFullscreen(true);
+      }
+    } else {
+      // Dragging down (collapsing)
+      const newHeight = Math.max(30, parseInt(panelHeight.get() as string) - deltaY / 10);
+      panelHeight.set(`${newHeight}vh`);
+      
+      if (newHeight < 90) {
+        setIsFullscreen(false);
+      }
+      
+      if (newHeight <= 10) {
+        // Close panel when dragged too far down
+        onClose();
+      }
+    }
+  };
+
+  // Handle drag end
+  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    setIsDragging(false);
+    
+    // Snap to positions
+    const currentHeight = parseInt(panelHeight.get() as string);
+    
+    if (info.velocity.y > 500) {
+      // Quick flick down, close panel
+      onClose();
+    } else if (info.velocity.y < -500) {
+      // Quick flick up, expand to fullscreen
+      setIsFullscreen(true);
+      panelHeight.set('95vh');
+    } else if (currentHeight < 40) {
+      // Dragged down significantly, close
+      onClose();
+    } else if (currentHeight > 80) {
+      // Expanded significantly, go fullscreen
+      setIsFullscreen(true);
+      panelHeight.set('95vh');
+    } else {
+      // Return to default position
+      setIsFullscreen(false);
+      panelHeight.set('60vh');
+    }
+    
+    // Reset y position
+    y.set(0);
+  };
+
+  // Handle toggle fullscreen
+  const toggleFullscreen = () => {
+    if (isFullscreen) {
+      setIsFullscreen(false);
+      if (prevHeight) {
+        panelHeight.set(`${prevHeight}vh`);
+      } else {
+        panelHeight.set('60vh');
+      }
+    } else {
+      setPrevHeight(parseInt(panelHeight.get() as string));
+      setIsFullscreen(true);
+      panelHeight.set('95vh');
+    }
+  };
   
   const handleCommentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -423,6 +524,13 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     { id: 'faqs', label: 'FAQs' },
   ];
   
+  // Define variants for animations
+  const panelVariants = {
+    hidden: { y: "100%" },
+    visible: { y: 0, transition: { type: "spring", damping: 20, stiffness: 300 } },
+    exit: { y: "100%", transition: { duration: 0.3, ease: "easeInOut" } }
+  };
+
   return (
     <>
       <div 
@@ -432,131 +540,197 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
         onClick={onClose}
       />
       
-      <div
-        className={`fixed bottom-0 inset-x-0 bg-white rounded-t-2xl shadow-lg z-50 transition-transform duration-300 ease-in-out transform ${
-          isOpen ? 'translate-y-0' : 'translate-y-full'
-        }`}
-        style={{ maxHeight: '90vh' }}
-      >
-        {/* Header with title and close button */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-          <CommentPanelHeader 
-            activeTab={activeTab}
-            replyingTo={replyingTo}
-            editingComment={editingComment}
-            editingReply={editingReply}
-            showFilterMenu={showFilterMenu}
-            filter={filter}
-            setActiveTab={setActiveTab}
-            cancelReply={cancelReply}
-            cancelEdit={cancelEdit}
-            setShowFilterMenu={setShowFilterMenu}
-            setFilter={setFilter}
-            menuRef={menuRef}
-            onClose={onClose}
-          />
-        </div>
-        
-        {/* Main content */}
-        <div className="h-full overflow-hidden flex flex-col">
-          {/* Tabs for different content types */}
-          {!replyingTo && !editingComment && !editingReply && (
-            <ModernTabs 
-              activeTab={activeTab} 
-              setActiveTab={setActiveTab}
-              tabs={tabItems}
-            >
-              <div className={`overflow-y-auto ${activeTab === 'comments' ? 'block' : 'hidden'}`} 
-                   style={{ maxHeight: 'calc(70vh - 8rem)' }}>
-                <div className="p-4 space-y-4">
-                  <CommentsList 
-                    comments={sortedComments}
-                    activeTab={activeTab}
-                    editingComment={editingComment}
-                    commentMenuOpen={commentMenuOpen}
-                    commentText={commentText}
-                    menuRef={menuRef}
-                    inputRef={inputRef}
-                    isOwnContent={isOwnContent}
-                    setCommentMenuOpen={setCommentMenuOpen}
-                    setCommentText={setCommentText}
-                    toggleLike={toggleLike}
-                    startReply={startReply}
-                    cancelEdit={cancelEdit}
-                    saveEditComment={saveEditComment}
-                    startEditComment={startEditComment}
-                    deleteComment={deleteComment}
-                    pinComment={pinComment}
-                  />
-                </div>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            ref={panelRef}
+            className="fixed bottom-0 inset-x-0 bg-white rounded-t-2xl shadow-lg z-50"
+            style={{ 
+              height: panelHeight, 
+              maxHeight: '95vh',
+              opacity: opacity 
+            }}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={panelVariants}
+            drag="y"
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={0.2}
+            onDragStart={handleDragStart}
+            onDrag={handleDrag}
+            onDragEnd={handleDragEnd}
+          >
+            {/* Drag handle */}
+            <div className="w-full flex justify-center cursor-grab active:cursor-grabbing">
+              <div className="w-12 h-1.5 bg-gray-300 rounded-full my-2"></div>
+            </div>
+            
+            {/* Header with title and close button */}
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={toggleFullscreen}
+                  className="p-1.5 rounded-full hover:bg-gray-100 transition-colors"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={isFullscreen ? "rotate-180" : ""}
+                  >
+                    {isFullscreen ? (
+                      <>
+                        <polyline points="4 14 10 14 10 20"></polyline>
+                        <polyline points="20 10 14 10 14 4"></polyline>
+                        <line x1="14" y1="10" x2="21" y2="3"></line>
+                        <line x1="3" y1="21" x2="10" y2="14"></line>
+                      </>
+                    ) : (
+                      <>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <polyline points="9 21 3 21 3 15"></polyline>
+                        <line x1="21" y1="3" x2="14" y2="10"></line>
+                        <line x1="3" y1="21" x2="10" y2="14"></line>
+                      </>
+                    )}
+                  </svg>
+                </button>
+                
+                <CommentPanelHeader 
+                  activeTab={activeTab}
+                  replyingTo={replyingTo}
+                  editingComment={editingComment}
+                  editingReply={editingReply}
+                  showFilterMenu={showFilterMenu}
+                  filter={filter}
+                  setActiveTab={setActiveTab}
+                  cancelReply={cancelReply}
+                  cancelEdit={cancelEdit}
+                  setShowFilterMenu={setShowFilterMenu}
+                  setFilter={setFilter}
+                  menuRef={menuRef}
+                  onClose={onClose}
+                />
               </div>
               
-              <div className={`overflow-y-auto ${activeTab === 'testimonials' ? 'block' : 'hidden'}`}
-                   style={{ maxHeight: 'calc(70vh - 8rem)' }}>
-                <div className="p-4 space-y-4">
-                  <CommentsList 
-                    comments={sortedComments}
-                    activeTab={activeTab}
-                    editingComment={editingComment}
-                    commentMenuOpen={commentMenuOpen}
-                    commentText={commentText}
-                    menuRef={menuRef}
-                    inputRef={inputRef}
-                    isOwnContent={isOwnContent}
-                    setCommentMenuOpen={setCommentMenuOpen}
-                    setCommentText={setCommentText}
-                    toggleLike={toggleLike}
-                    startReply={startReply}
-                    cancelEdit={cancelEdit}
-                    saveEditComment={saveEditComment}
-                    startEditComment={startEditComment}
-                    deleteComment={deleteComment}
-                    pinComment={pinComment}
-                  />
-                </div>
-              </div>
+              <button
+                onClick={onClose}
+                className="p-1.5 rounded-full hover:bg-gray-100 transition-colors"
+                aria-label="Close panel"
+              >
+                <X className="h-5 w-5 text-gray-500" />
+              </button>
+            </div>
+            
+            {/* Main content */}
+            <div className="h-full overflow-hidden flex flex-col">
+              {/* Tabs for different content types */}
+              {!replyingTo && !editingComment && !editingReply && (
+                <ModernTabs 
+                  activeTab={activeTab} 
+                  setActiveTab={setActiveTab}
+                  tabs={tabItems}
+                >
+                  <div className={`overflow-y-auto ${activeTab === 'comments' ? 'block' : 'hidden'}`} 
+                       style={{ maxHeight: 'calc(95vh - 10rem)' }}>
+                    <div className="p-4 space-y-4">
+                      <CommentsList 
+                        comments={sortedComments}
+                        activeTab={activeTab}
+                        editingComment={editingComment}
+                        commentMenuOpen={commentMenuOpen}
+                        commentText={commentText}
+                        menuRef={menuRef}
+                        inputRef={inputRef}
+                        isOwnContent={isOwnContent}
+                        setCommentMenuOpen={setCommentMenuOpen}
+                        setCommentText={setCommentText}
+                        toggleLike={toggleLike}
+                        startReply={startReply}
+                        cancelEdit={cancelEdit}
+                        saveEditComment={saveEditComment}
+                        startEditComment={startEditComment}
+                        deleteComment={deleteComment}
+                        pinComment={pinComment}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className={`overflow-y-auto ${activeTab === 'testimonials' ? 'block' : 'hidden'}`}
+                       style={{ maxHeight: 'calc(95vh - 10rem)' }}>
+                    <div className="p-4 space-y-4">
+                      <CommentsList 
+                        comments={sortedComments}
+                        activeTab={activeTab}
+                        editingComment={editingComment}
+                        commentMenuOpen={commentMenuOpen}
+                        commentText={commentText}
+                        menuRef={menuRef}
+                        inputRef={inputRef}
+                        isOwnContent={isOwnContent}
+                        setCommentMenuOpen={setCommentMenuOpen}
+                        setCommentText={setCommentText}
+                        toggleLike={toggleLike}
+                        startReply={startReply}
+                        cancelEdit={cancelEdit}
+                        saveEditComment={saveEditComment}
+                        startEditComment={startEditComment}
+                        deleteComment={deleteComment}
+                        pinComment={pinComment}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className={`overflow-y-auto ${activeTab === 'faqs' ? 'block' : 'hidden'}`}
+                       style={{ maxHeight: 'calc(95vh - 10rem)' }}>
+                    <div className="p-4 space-y-4">
+                      <FAQsList faqs={faqs} />
+                    </div>
+                  </div>
+                </ModernTabs>
+              )}
               
-              <div className={`overflow-y-auto ${activeTab === 'faqs' ? 'block' : 'hidden'}`}
-                   style={{ maxHeight: 'calc(70vh - 8rem)' }}>
-                <div className="p-4 space-y-4">
-                  <FAQsList faqs={faqs} />
+              {/* When replying or editing, show content */}
+              {(replyingTo || editingComment || editingReply) && (
+                <div className="overflow-y-auto p-4" style={{ maxHeight: 'calc(95vh - 10rem)' }}>
+                  {replyingTo && (
+                    <div className="bg-gray-50 p-3 rounded-lg mb-4">
+                      <p className="text-sm text-gray-700">
+                        {comments.find(c => c.id === replyingTo)?.text}
+                      </p>
+                    </div>
+                  )}
                 </div>
-              </div>
-            </ModernTabs>
-          )}
-          
-          {/* When replying or editing, show content */}
-          {(replyingTo || editingComment || editingReply) && (
-            <div className="overflow-y-auto p-4" style={{ maxHeight: 'calc(70vh - 8rem)' }}>
-              {replyingTo && (
-                <div className="bg-gray-50 p-3 rounded-lg mb-4">
-                  <p className="text-sm text-gray-700">
-                    {comments.find(c => c.id === replyingTo)?.text}
-                  </p>
+              )}
+              
+              {/* Comment input - not shown for FAQs */}
+              {activeTab !== 'faqs' && (
+                <div className="p-4 border-t border-gray-200 bg-white mt-auto">
+                  <CommentForm 
+                    commentText={commentText}
+                    setCommentText={setCommentText}
+                    handleCommentSubmit={handleCommentSubmit}
+                    replyingTo={replyingTo}
+                    editingComment={editingComment}
+                    editingReply={editingReply}
+                    cancelReply={cancelReply}
+                    cancelEdit={cancelEdit}
+                    inputRef={inputRef}
+                    isSubmitting={isSubmitting}
+                  />
                 </div>
               )}
             </div>
-          )}
-          
-          {/* Comment input - not shown for FAQs */}
-          {activeTab !== 'faqs' && (
-            <div className="p-4 border-t border-gray-200 bg-white mt-auto">
-              <CommentForm 
-                commentText={commentText}
-                setCommentText={setCommentText}
-                handleCommentSubmit={handleCommentSubmit}
-                replyingTo={replyingTo}
-                editingComment={editingComment}
-                editingReply={editingReply}
-                cancelReply={cancelReply}
-                cancelEdit={cancelEdit}
-                inputRef={inputRef}
-                isSubmitting={isSubmitting}
-              />
-            </div>
-          )}
-        </div>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       
       {/* Auth modal for guest comments */}
       <CommentAuthModal
@@ -571,4 +745,3 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
 };
 
 export default TikTokCommentsPanel;
-

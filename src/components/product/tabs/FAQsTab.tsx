@@ -1,6 +1,5 @@
 
 import { TabsContent } from "@/components/ui/tabs";
-import { HelpCircle } from "lucide-react";
 import FAQsList from "@/components/comments/FAQsList";
 import { FAQ } from "@/components/comments/types";
 
