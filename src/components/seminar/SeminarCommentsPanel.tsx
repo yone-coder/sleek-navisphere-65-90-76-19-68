@@ -1,11 +1,13 @@
+
 import React, { useState, useRef, useEffect } from 'react';
-import { Heart, X, Send, Flag, ChevronDown, MoreHorizontal, Trash2, Edit, MessageCircle, ArrowLeft, MessageSquare, ThumbsUp, HelpCircle } from 'lucide-react';
+import { Heart, X, Send, Flag, ChevronDown, MoreHorizontal, Trash2, Edit, MessageCircle, ArrowLeft, MessageSquare, ThumbsUp, HelpCircle, SmilePlus } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from "@/hooks/use-toast";
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Reply {
   id: number;
@@ -762,4 +764,205 @@ const SeminarCommentsPanel: React.FC<SeminarCommentsPanelProps> = ({ onClose, is
                                               variant="ghost"
                                               size="sm"
                                               className="h-7 text-xs text-gray-500 hover:text-black font-medium"
-                                              onClick={cancel
+                                              onClick={cancelEdit}
+                                            >
+                                              Cancel
+                                            </Button>
+                                            <Button 
+                                              variant="ghost"
+                                              size="sm"
+                                              className="h-7 text-xs text-pink-500 font-medium"
+                                              onClick={saveEditReply}
+                                            >
+                                              Save
+                                            </Button>
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        <p className="text-sm">{reply.text}</p>
+                                      )}
+                                      
+                                      <div className="mt-1 flex space-x-3">
+                                        <Button 
+                                          variant="ghost"
+                                          size="sm"
+                                          className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
+                                          onClick={() => toggleLike(reply.id, true, comment.id)}
+                                        >
+                                          <Heart size={12} fill={reply.isLiked ? "#ff2d55" : "none"} stroke={reply.isLiked ? "#ff2d55" : "currentColor"} />
+                                          <span className={reply.isLiked ? "text-pink-500" : ""}>{reply.likes}</span>
+                                        </Button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </ScrollArea>
+
+            {/* Input area */}
+            <div className="sticky bottom-0 p-4 border-t bg-background/80 backdrop-blur-lg">
+              <form onSubmit={handleCommentSubmit} className="flex gap-2">
+                <div className="flex-1 flex items-center gap-2 pr-2 rounded-full bg-gray-100 overflow-hidden">
+                  <Textarea
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    placeholder={getPlaceholderText()}
+                    className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent resize-none min-h-0 h-10 py-2.5"
+                  />
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    className="rounded-full hover:bg-gray-200"
+                  >
+                    <SmilePlus className="h-5 w-5 text-gray-500" />
+                  </Button>
+                </div>
+                <Button
+                  type="submit"
+                  size="icon"
+                  className={`rounded-full ${commentText.trim() ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 text-gray-500'}`}
+                  disabled={!commentText.trim()}
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </form>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="testimonials" className="flex-1 overflow-auto">
+            <div className="px-4 py-4">
+              <h3 className="font-medium mb-4">What students are saying</h3>
+              <div className="space-y-4">
+                {sortedComments.filter(c => c.tab === 'testimonials').map(comment => (
+                  <div 
+                    key={comment.id} 
+                    className="p-4 rounded-lg bg-blue-50"
+                  >
+                    <div className="flex items-start space-x-3">
+                      <div className={`w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex-shrink-0 flex items-center justify-center`}>
+                        <span className="text-xs font-bold text-white">
+                          {comment.username.substring(1, 3).toUpperCase()}
+                        </span>
+                      </div>
+                      <div>
+                        <div className="flex items-center">
+                          <h4 className="font-medium">{comment.username}</h4>
+                          {comment.verified && (
+                            <span className="ml-1 inline-block rounded-full bg-blue-500 p-0.5 text-white">
+                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                              </svg>
+                            </span>
+                          )}
+                        </div>
+                        <p className="mt-1">{comment.text}</p>
+                        <div className="mt-2 flex space-x-4">
+                          <Button 
+                            variant="ghost"
+                            size="sm"
+                            className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
+                            onClick={() => toggleLike(comment.id)}
+                          >
+                            <Heart size={14} fill={comment.isLiked ? "#ff2d55" : "none"} stroke={comment.isLiked ? "#ff2d55" : "currentColor"} />
+                            <span className={comment.isLiked ? "text-pink-500" : ""}>{comment.likes}</span>
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Input area for testimonials */}
+            <div className="sticky bottom-0 p-4 border-t bg-background/80 backdrop-blur-lg">
+              <form onSubmit={handleCommentSubmit} className="flex gap-2">
+                <div className="flex-1 flex items-center gap-2 pr-2 rounded-full bg-gray-100 overflow-hidden">
+                  <Textarea
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    placeholder="Share your experience..."
+                    className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent resize-none min-h-0 h-10 py-2.5"
+                  />
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    className="rounded-full hover:bg-gray-200"
+                  >
+                    <SmilePlus className="h-5 w-5 text-gray-500" />
+                  </Button>
+                </div>
+                <Button
+                  type="submit"
+                  size="icon"
+                  className={`rounded-full ${commentText.trim() ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 text-gray-500'}`}
+                  disabled={!commentText.trim()}
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </form>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="faqs" className="flex-1 overflow-auto">
+            <div className="px-4 py-4">
+              <h3 className="font-medium mb-4">Frequently Asked Questions</h3>
+              <div className="space-y-4">
+                {faqs.map(faq => (
+                  <div 
+                    key={faq.id} 
+                    className="p-4 rounded-lg border border-gray-200"
+                  >
+                    <h4 className="font-medium text-blue-600">{faq.question}</h4>
+                    <p className="mt-2 text-sm">{faq.answer}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Input area for FAQs */}
+            <div className="sticky bottom-0 p-4 border-t bg-background/80 backdrop-blur-lg">
+              <form onSubmit={handleCommentSubmit} className="flex gap-2">
+                <div className="flex-1 flex items-center gap-2 pr-2 rounded-full bg-gray-100 overflow-hidden">
+                  <Textarea
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    placeholder="Ask a question..."
+                    className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent resize-none min-h-0 h-10 py-2.5"
+                  />
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    className="rounded-full hover:bg-gray-200"
+                  >
+                    <SmilePlus className="h-5 w-5 text-gray-500" />
+                  </Button>
+                </div>
+                <Button
+                  type="submit"
+                  size="icon"
+                  className={`rounded-full ${commentText.trim() ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 text-gray-500'}`}
+                  disabled={!commentText.trim()}
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </form>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+};
+
+export default SeminarCommentsPanel;
