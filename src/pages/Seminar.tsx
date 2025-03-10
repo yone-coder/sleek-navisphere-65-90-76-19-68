@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -14,17 +15,11 @@ const SeminarHomepage = () => {
   
   // State for active tab
   const [activeTab, setActiveTab] = useState(0);
-  // State for follow button
   const [isFollowing, setIsFollowing] = useState(false);
-  // State for bottom padding
   const [bottomPadding, setBottomPadding] = useState(0);
-  // State for views hover
   const [viewsHovered, setViewsHovered] = useState(false);
-  // State for comments panel
   const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
-  // State for active comments tab
   const [activeCommentsTab, setActiveCommentsTab] = useState('comments');
-  // Ref for the WebinarComponent
   const webinarRef = useRef<HTMLDivElement>(null);
   
   // Effect to set language to French
@@ -63,6 +58,11 @@ const SeminarHomepage = () => {
   
   const handleTestimonialsClick = () => {
     setActiveCommentsTab('testimonials');
+    setIsCommentsPanelOpen(true);
+  };
+
+  const handleFAQsClick = () => {
+    setActiveCommentsTab('faqs');
     setIsCommentsPanelOpen(true);
   };
   
@@ -319,8 +319,22 @@ const SeminarHomepage = () => {
         )}
         
         {activeTab === 4 && (
-          <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500">
-            {t('seminar.register')}
+          <div className="p-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">{t('seminar.register')}</h3>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleFAQsClick}
+                className="text-blue-600 border-blue-300 hover:bg-blue-50"
+              >
+                <HelpCircle className="mr-1 h-4 w-4" />
+                {t('seminar.viewFAQs')}
+              </Button>
+            </div>
+            <div className="border border-gray-200 rounded-lg text-center text-gray-500 p-4">
+              {t('seminar.register')}
+            </div>
           </div>
         )}
       </div>

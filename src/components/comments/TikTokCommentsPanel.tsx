@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Heart, X, Send, Flag, ChevronDown, MoreHorizontal, Trash2, Edit, MessageCircle, ArrowLeft } from 'lucide-react';
+import { Heart, X, Send, Flag, ChevronDown, MoreHorizontal, Trash2, Edit, MessageCircle, ArrowLeft, Star, HelpCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import CommentAuthModal from './CommentAuthModal';
 import { toast } from "@/hooks/use-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Reply {
   id: number;
@@ -30,12 +31,23 @@ interface Comment {
   userId?: string; // Add userId for permission checking
 }
 
+interface FAQ {
+  id: number;
+  question: string;
+  answer: string;
+}
+
 interface TikTokCommentsPanelProps {
   onClose: () => void;
   isOpen: boolean;
+  initialTab?: string;
 }
 
-const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOpen }) => {
+const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOpen, initialTab = 'comments' }) => {
+  // State for active tab
+  const [activeTab, setActiveTab] = useState(initialTab);
+  
+  // Original comment state
   const [commentText, setCommentText] = useState('');
   const [comments, setComments] = useState<Comment[]>([
     { id: 1, username: '@user1', text: 'This is amazing! 🔥', likes: 342, isLiked: false, timestamp: '2d', verified: true, pinned: false, donation: 5, replies: [], userId: 'user1' },
@@ -49,6 +61,24 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     { id: 7, username: '@musiclover', text: 'The song choice is perfect! What\'s the name of this track?', likes: 94, isLiked: false, timestamp: '4h', verified: false, pinned: false, donation: 10, replies: [
       { id: 71, username: '@creator', text: 'It\'s "Electric Dreams" by SynthWave - glad you liked it!', likes: 32, isLiked: true, timestamp: '3h', verified: true, userId: 'creator' }
     ], userId: 'musiclover' }
+  ]);
+  
+  // Testimonials data
+  const [testimonials, setTestimonials] = useState<Comment[]>([
+    { id: 101, username: '@dev_expert', text: 'This seminar completely changed my approach to web development. The instructor explains complex concepts in such an accessible way!', likes: 542, isLiked: false, timestamp: '3d', verified: true, pinned: true, replies: [], userId: 'dev_expert' },
+    { id: 102, username: '@newcoder', text: 'As a beginner, I was worried the content would be too advanced, but the instructor breaks everything down perfectly. Highly recommend!', likes: 328, isLiked: false, timestamp: '2d', verified: false, pinned: false, replies: [], userId: 'newcoder' },
+    { id: 103, username: '@tech_lead', text: 'I\'ve been in the industry for 10 years, and I still learned so many new techniques from this seminar. Worth every penny!', likes: 406, isLiked: true, timestamp: '1d', verified: true, pinned: false, donation: 50, replies: [], userId: 'tech_lead' },
+    { id: 104, username: '@career_switcher', text: 'This seminar helped me transition from marketing to tech. I just landed my first developer job!', likes: 289, isLiked: false, timestamp: '5d', verified: false, pinned: false, replies: [], userId: 'career_switcher' },
+  ]);
+  
+  // FAQs data
+  const [faqs, setFaqs] = useState<FAQ[]>([
+    { id: 1, question: "What prior knowledge is required for this seminar?", answer: "This seminar is designed for all levels. Beginners will find the fundamentals easy to follow, while experienced developers will benefit from advanced techniques covered in later sections." },
+    { id: 2, question: "Will recordings be available after the live session?", answer: "Yes, all participants will receive access to the full recording for 6 months after the event." },
+    { id: 3, question: "Is there a certificate of completion?", answer: "Yes, you'll receive a certificate once you complete the seminar and the follow-up assessment." },
+    { id: 4, question: "What software or tools do I need to install beforehand?", answer: "You'll need a code editor (VS Code recommended), Node.js, and Git installed. A detailed setup guide will be sent after registration." },
+    { id: 5, question: "Can I ask questions during the seminar?", answer: "Absolutely! There will be dedicated Q&A sessions throughout the seminar." },
+    { id: 6, question: "Is there a refund policy?", answer: "We offer full refunds up to 7 days before the event. Partial refunds are available up to 48 hours before." },
   ]);
   
   const [showFilterMenu, setShowFilterMenu] = useState(false);
@@ -68,6 +98,7 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   const inputRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   
+  // Effect for handling click outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -81,6 +112,14 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Set active tab from prop when it changes
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
+
+  // Effect to focus input when editing
   useEffect(() => {
     if (editingComment || replyingTo || editingReply) {
       inputRef.current?.focus();
@@ -141,9 +180,15 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
         userId: currentUser?.userId || 'me'
       };
       
-      const pinnedComments = comments.filter(c => c.pinned);
-      const unpinnedComments = comments.filter(c => !c.pinned);
-      setComments([...pinnedComments, newComment, ...unpinnedComments]);
+      const dataToUpdate = activeTab === 'testimonials' ? testimonials : comments;
+      const pinnedItems = dataToUpdate.filter(c => c.pinned);
+      const unpinnedItems = dataToUpdate.filter(c => !c.pinned);
+      
+      if (activeTab === 'testimonials') {
+        setTestimonials([...pinnedItems, newComment, ...unpinnedItems]);
+      } else {
+        setComments([...pinnedItems, newComment, ...unpinnedItems]);
+      }
     }
     
     setCommentText('');
@@ -170,8 +215,10 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   };
   
   const toggleLike = (id: number, isReply = false, parentId: number | null = null) => {
+    const dataToUpdate = activeTab === 'testimonials' ? testimonials : comments;
+    
     if (isReply && parentId !== null) {
-      setComments(comments.map(comment => {
+      const updatedData = dataToUpdate.map(comment => {
         if (comment.id === parentId) {
           return {
             ...comment,
@@ -188,9 +235,15 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
           };
         }
         return comment;
-      }));
+      });
+      
+      if (activeTab === 'testimonials') {
+        setTestimonials(updatedData);
+      } else {
+        setComments(updatedData);
+      }
     } else {
-      setComments(comments.map(comment => {
+      const updatedData = dataToUpdate.map(comment => {
         if (comment.id === id) {
           return {
             ...comment,
@@ -199,24 +252,36 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
           };
         }
         return comment;
-      }));
+      });
+      
+      if (activeTab === 'testimonials') {
+        setTestimonials(updatedData);
+      } else {
+        setComments(updatedData);
+      }
     }
   };
   
   const deleteComment = (id: number) => {
-    const updatedComments = comments.filter(comment => comment.id !== id);
-    setComments(updatedComments);
+    if (activeTab === 'testimonials') {
+      const updatedTestimonials = testimonials.filter(testimonial => testimonial.id !== id);
+      setTestimonials(updatedTestimonials);
+    } else {
+      const updatedComments = comments.filter(comment => comment.id !== id);
+      setComments(updatedComments);
+    }
+    
     setCommentMenuOpen(null);
     
     toast({
-      title: "Comment deleted",
-      description: "Your comment has been removed",
+      title: activeTab === 'testimonials' ? "Testimonial deleted" : "Comment deleted",
+      description: `Your ${activeTab === 'testimonials' ? 'testimonial' : 'comment'} has been removed`,
       duration: 3000,
     });
   };
   
   const deleteReply = (commentId: number, replyId: number) => {
-    const updatedComments = comments.map(comment => {
+    const updatedData = (activeTab === 'testimonials' ? testimonials : comments).map(comment => {
       if (comment.id === commentId) {
         return {
           ...comment,
@@ -226,7 +291,12 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
       return comment;
     });
     
-    setComments(updatedComments);
+    if (activeTab === 'testimonials') {
+      setTestimonials(updatedData);
+    } else {
+      setComments(updatedData);
+    }
+    
     setReplyMenuOpen(null);
     
     toast({
@@ -260,15 +330,21 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   
   const saveEditComment = () => {
     if (commentText.trim() && editingComment) {
-      setComments(comments.map(comment => {
+      const updatedData = (activeTab === 'testimonials' ? testimonials : comments).map(comment => {
         if (comment.id === editingComment) {
           return { ...comment, text: commentText };
         }
         return comment;
-      }));
+      });
+      
+      if (activeTab === 'testimonials') {
+        setTestimonials(updatedData);
+      } else {
+        setComments(updatedData);
+      }
       
       toast({
-        title: "Comment updated",
+        title: activeTab === 'testimonials' ? "Testimonial updated" : "Comment updated", 
         description: "Your changes have been saved",
         duration: 3000,
       });
@@ -279,7 +355,7 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   
   const saveEditReply = () => {
     if (commentText.trim() && editingReply) {
-      setComments(comments.map(comment => {
+      const updatedData = (activeTab === 'testimonials' ? testimonials : comments).map(comment => {
         if (comment.id === editingReply.commentId) {
           return {
             ...comment,
@@ -292,7 +368,13 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
           };
         }
         return comment;
-      }));
+      });
+      
+      if (activeTab === 'testimonials') {
+        setTestimonials(updatedData);
+      } else {
+        setComments(updatedData);
+      }
       
       toast({
         title: "Reply updated",
@@ -305,12 +387,19 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   };
   
   const pinComment = (id: number) => {
-    setComments(comments.map(comment => {
+    const updatedData = (activeTab === 'testimonials' ? testimonials : comments).map(comment => {
       if (comment.id === id) {
         return { ...comment, pinned: !comment.pinned };
       }
       return comment;
-    }));
+    });
+    
+    if (activeTab === 'testimonials') {
+      setTestimonials(updatedData);
+    } else {
+      setComments(updatedData);
+    }
+    
     setCommentMenuOpen(null);
   };
   
@@ -330,459 +419,350 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     return false;
   };
   
-  const filteredComments = comments.filter(comment => {
-    if (filter === 'verified' && !comment.verified) return false;
-    if (filter === 'liked' && !comment.isLiked) return false;
-    if (filter === 'donations' && !comment.donation) return false;
-    return true;
-  });
+  // Filter and sort functions
+  const getFilteredData = () => {
+    const dataToFilter = activeTab === 'testimonials' ? testimonials : comments;
+    
+    return dataToFilter.filter(item => {
+      if (filter === 'verified' && !item.verified) return false;
+      if (filter === 'liked' && !item.isLiked) return false;
+      if (filter === 'donations' && !item.donation) return false;
+      return true;
+    });
+  };
   
-  const sortedComments = [...filteredComments].sort((a, b) => {
+  const sortedComments = [...getFilteredData()].sort((a, b) => {
     if (a.pinned && !b.pinned) return -1;
     if (!a.pinned && b.pinned) return 1;
     return 0;
   });
   
-  return (
-    <>
-      <div className={`fixed inset-0 bg-black bg-opacity-50 z-50 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-        <div 
-          className={`absolute bottom-0 left-0 right-0 h-[80vh] bg-white rounded-t-3xl transform transition-transform duration-300 ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
-        >
-          <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mt-3 mb-1"></div>
-          
-          <div className="w-full h-[calc(100%-20px)] flex flex-col overflow-hidden">
-            <div className="px-4 py-2 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10">
-              <div className="flex items-center">
-                {replyingTo ? (
-                  <div className="flex items-center">
-                    <Button 
-                      variant="ghost"
-                      size="icon"
-                      className="h-7 w-7 mr-2"
-                      onClick={cancelReply}
-                    >
-                      <ArrowLeft size={16} />
-                    </Button>
-                    <span className="font-medium">Reply</span>
-                  </div>
-                ) : editingComment ? (
-                  <div className="flex items-center">
-                    <Button 
-                      variant="ghost"
-                      size="icon"
-                      className="h-7 w-7 mr-2"
-                      onClick={cancelEdit}
-                    >
-                      <ArrowLeft size={16} />
-                    </Button>
-                    <span className="font-medium">Edit Comment</span>
-                  </div>
-                ) : editingReply ? (
-                  <div className="flex items-center">
-                    <Button 
-                      variant="ghost"
-                      size="icon"
-                      className="h-7 w-7 mr-2"
-                      onClick={cancelEdit}
-                    >
-                      <ArrowLeft size={16} />
-                    </Button>
-                    <span className="font-medium">Edit Reply</span>
-                  </div>
-                ) : (
-                  <>
-                    <h3 className="font-medium text-base">Comments</h3>
-                    <div className="relative ml-4" ref={menuRef}>
-                      <Button 
-                        variant="ghost"
-                        className="flex items-center space-x-1 text-xs text-gray-500 hover:text-black p-1 h-7"
-                        onClick={() => setShowFilterMenu(!showFilterMenu)}
-                      >
-                        <span>
-                          {filter === 'all' ? 'All' : 
-                          filter === 'verified' ? 'Verified' : 
-                          filter === 'liked' ? 'Liked' : 'Donations'}
-                        </span>
-                        <ChevronDown size={14} />
-                      </Button>
-                      
-                      {showFilterMenu && (
-                        <div className="absolute top-full left-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
-                          <ul>
-                            <li 
-                              className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
-                              onClick={() => { setFilter('all'); setShowFilterMenu(false); }}
-                            >
-                              All comments
-                            </li>
-                            <li 
-                              className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
-                              onClick={() => { setFilter('verified'); setShowFilterMenu(false); }}
-                            >
-                              Verified only
-                            </li>
-                            <li 
-                              className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
-                              onClick={() => { setFilter('liked'); setShowFilterMenu(false); }}
-                            >
-                              Liked by me
-                            </li>
-                            <li 
-                              className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
-                              onClick={() => { setFilter('donations'); setShowFilterMenu(false); }}
-                            >
-                              Donations
-                            </li>
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </>
-                )}
-              </div>
-              
+  // Function to render the header based on active state
+  const renderHeader = () => {
+    if (replyingTo) {
+      return (
+        <div className="flex items-center">
+          <Button 
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 mr-2"
+            onClick={cancelReply}
+          >
+            <ArrowLeft size={16} />
+          </Button>
+          <span className="font-medium">Reply</span>
+        </div>
+      );
+    } else if (editingComment) {
+      return (
+        <div className="flex items-center">
+          <Button 
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 mr-2"
+            onClick={cancelEdit}
+          >
+            <ArrowLeft size={16} />
+          </Button>
+          <span className="font-medium">Edit {activeTab === 'testimonials' ? 'Testimonial' : 'Comment'}</span>
+        </div>
+      );
+    } else if (editingReply) {
+      return (
+        <div className="flex items-center">
+          <Button 
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 mr-2"
+            onClick={cancelEdit}
+          >
+            <ArrowLeft size={16} />
+          </Button>
+          <span className="font-medium">Edit Reply</span>
+        </div>
+      );
+    } else {
+      return (
+        <div className="flex items-center">
+          <h3 className="font-medium text-base capitalize">{activeTab}</h3>
+          {(activeTab === 'comments' || activeTab === 'testimonials') && (
+            <div className="relative ml-4" ref={menuRef}>
               <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-7 w-7"
-                onClick={onClose}
+                variant="ghost"
+                className="flex items-center space-x-1 text-xs text-gray-500 hover:text-black p-1 h-7"
+                onClick={() => setShowFilterMenu(!showFilterMenu)}
               >
-                <X size={16} />
+                <span>
+                  {filter === 'all' ? 'All' : 
+                  filter === 'verified' ? 'Verified' : 
+                  filter === 'liked' ? 'Liked' : 'Donations'}
+                </span>
+                <ChevronDown size={14} />
               </Button>
-            </div>
-            
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {sortedComments.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-32">
-                  <p className="text-sm text-gray-500">
-                    No comments to display.
-                  </p>
+              
+              {showFilterMenu && (
+                <div className="absolute top-full left-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                  <ul>
+                    <li 
+                      className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
+                      onClick={() => { setFilter('all'); setShowFilterMenu(false); }}
+                    >
+                      All {activeTab}
+                    </li>
+                    <li 
+                      className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
+                      onClick={() => { setFilter('verified'); setShowFilterMenu(false); }}
+                    >
+                      Verified only
+                    </li>
+                    <li 
+                      className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
+                      onClick={() => { setFilter('liked'); setShowFilterMenu(false); }}
+                    >
+                      Liked by me
+                    </li>
+                    <li 
+                      className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
+                      onClick={() => { setFilter('donations'); setShowFilterMenu(false); }}
+                    >
+                      Donations
+                    </li>
+                  </ul>
                 </div>
-              ) : (
-                sortedComments.map((comment) => (
-                  <div key={comment.id} className="space-y-4">
-                    <div className={`flex space-x-3 relative ${comment.pinned ? "p-3 border border-gray-200 rounded-lg bg-pink-50 bg-opacity-10" : ""}`}>
-                      {comment.pinned && (
-                        <div className="absolute top-0 left-0 px-2 py-0.5 bg-pink-500 text-white text-xs rounded-full transform -translate-y-1/2">
-                          Pinned
-                        </div>
-                      )}
-                      <div className={`w-10 h-10 rounded-full ${
-                        comment.username === '@creator' 
-                          ? 'bg-gradient-to-br from-red-500 to-pink-600' 
-                          : comment.username === '@me' || isOwnContent(comment.userId)
-                            ? 'bg-gradient-to-br from-blue-400 to-blue-600' 
-                            : 'bg-gradient-to-br from-purple-400 to-pink-500'
-                        } flex-shrink-0 flex items-center justify-center`}>
-                        <span className="text-xs font-bold text-white">
-                          {comment.username.startsWith('@') 
-                            ? comment.username.substring(1, 3).toUpperCase() 
-                            : comment.username.substring(0, 2).toUpperCase()}
-                        </span>
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex justify-between">
-                          <div className="flex items-center space-x-2">
-                            <h4 className="font-medium text-sm">{comment.username}</h4>
-                            {comment.verified && (
-                              <span className="inline-block rounded-full bg-blue-500 p-0.5 text-white">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                  <polyline points="20 6 9 17 4 12"></polyline>
-                                </svg>
-                              </span>
-                            )}
-                            {comment.donation && (
-                              <span className="text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
-                                ${comment.donation}
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <span className="text-xs text-gray-500">{comment.timestamp}</span>
-                            
-                            <div className="relative" ref={menuRef}>
-                              <Button 
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6"
-                                onClick={() => setCommentMenuOpen(commentMenuOpen === comment.id ? null : comment.id)}
-                              >
-                                <MoreHorizontal size={14} />
-                              </Button>
-                              
-                              {commentMenuOpen === comment.id && (
-                                <div className="absolute right-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
-                                  <ul>
-                                    {(isOwnContent(comment.userId) || comment.username === '@me') && (
-                                      <>
-                                        <li 
-                                          className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
-                                          onClick={() => startEditComment(comment)}
-                                        >
-                                          <Edit size={14} />
-                                          <span>Edit</span>
-                                        </li>
-                                        <li 
-                                          className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer text-red-500"
-                                          onClick={() => deleteComment(comment.id)}
-                                        >
-                                          <Trash2 size={14} />
-                                          <span>Delete</span>
-                                        </li>
-                                      </>
-                                    )}
-                                    {comment.username === '@creator' && (
-                                      <li 
-                                        className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
-                                        onClick={() => pinComment(comment.id)}
-                                      >
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                          <path d="M12 5v14M18 11H6M4 7h16"/>
-                                        </svg>
-                                        <span>{comment.pinned ? 'Unpin' : 'Pin'}</span>
-                                      </li>
-                                    )}
-                                    <li 
-                                      className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
-                                    >
-                                      <Flag size={14} />
-                                      <span>Report</span>
-                                    </li>
-                                  </ul>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {editingComment === comment.id ? (
-                          <div className="mt-1">
-                            <Input
-                              ref={inputRef}
-                              type="text"
-                              value={commentText}
-                              onChange={(e) => setCommentText(e.target.value)}
-                              className="w-full bg-gray-100 text-sm"
-                            />
-                            <div className="flex justify-end space-x-2 mt-2">
-                              <Button 
-                                variant="ghost"
-                                size="sm"
-                                className="h-7 text-xs text-gray-500 hover:text-black font-medium"
-                                onClick={cancelEdit}
-                              >
-                                Cancel
-                              </Button>
-                              <Button 
-                                variant="ghost"
-                                size="sm"
-                                className="h-7 text-xs text-pink-500 font-medium"
-                                onClick={saveEditComment}
-                              >
-                                Save
-                              </Button>
-                            </div>
-                          </div>
-                        ) : (
-                          <p className="text-sm mt-1">{comment.text}</p>
-                        )}
-                        
-                        <div className="mt-2 flex space-x-4">
-                          <Button 
-                            variant="ghost"
-                            size="sm"
-                            className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
-                            onClick={() => toggleLike(comment.id)}
-                          >
-                            <Heart size={14} fill={comment.isLiked ? "#ff2d55" : "none"} stroke={comment.isLiked ? "#ff2d55" : "currentColor"} />
-                            <span className={comment.isLiked ? "text-pink-500" : ""}>{comment.likes}</span>
-                          </Button>
-                          
-                          <Button 
-                            variant="ghost"
-                            size="sm"
-                            className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
-                            onClick={() => startReply(comment.id)}
-                          >
-                            <MessageCircle size={14} />
-                            <span>{(comment.replies?.length || 0) > 0 ? comment.replies.length : "Reply"}</span>
-                          </Button>
-                        </div>
-                        
-                        {comment.replies && comment.replies.length > 0 && (
-                          <div className="mt-3 pl-4 border-l-2 border-gray-100 space-y-3">
-                            {comment.replies.map(reply => (
-                              <div key={reply.id} className="flex space-x-3">
-                                <div className={`w-8 h-8 rounded-full ${
-                                  reply.username === '@creator' 
-                                    ? 'bg-gradient-to-br from-red-500 to-pink-600' 
-                                    : reply.username === '@me' || isOwnContent(reply.userId)
-                                      ? 'bg-gradient-to-br from-blue-400 to-blue-600' 
-                                      : 'bg-gradient-to-br from-purple-400 to-pink-500'
-                                  } flex-shrink-0 flex items-center justify-center`}>
-                                  <span className="text-xs font-bold text-white">
-                                    {reply.username.startsWith('@') 
-                                      ? reply.username.substring(1, 3).toUpperCase() 
-                                      : reply.username.substring(0, 2).toUpperCase()}
-                                  </span>
-                                </div>
-                                <div className="flex-1">
-                                  <div className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-2">
-                                      <h4 className="font-medium text-sm">{reply.username}</h4>
-                                      {reply.verified && (
-                                        <span className="inline-block rounded-full bg-blue-500 p-0.5 text-white">
-                                          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                            <polyline points="20 6 9 17 4 12"></polyline>
-                                          </svg>
-                                        </span>
-                                      )}
-                                      <span className="text-xs text-gray-500">{reply.timestamp}</span>
-                                    </div>
-                                    
-                                    {(isOwnContent(reply.userId) || reply.username === '@me') && (
-                                      <div className="relative">
-                                        <Button 
-                                          variant="ghost"
-                                          size="icon"
-                                          className="h-6 w-6"
-                                          onClick={() => setReplyMenuOpen(replyMenuOpen === reply.id ? null : reply.id)}
-                                        >
-                                          <MoreHorizontal size={14} />
-                                        </Button>
-                                        
-                                        {replyMenuOpen === reply.id && (
-                                          <div className="absolute right-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
-                                            <ul>
-                                              <li 
-                                                className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
-                                                onClick={() => startEditReply(comment.id, reply)}
-                                              >
-                                                <Edit size={14} />
-                                                <span>Edit</span>
-                                              </li>
-                                              <li 
-                                                className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer text-red-500"
-                                                onClick={() => deleteReply(comment.id, reply.id)}
-                                              >
-                                                <Trash2 size={14} />
-                                                <span>Delete</span>
-                                              </li>
-                                            </ul>
-                                          </div>
-                                        )}
-                                      </div>
-                                    )}
-                                  </div>
-                                  
-                                  {editingReply && editingReply.replyId === reply.id ? (
-                                    <div className="mt-1">
-                                      <Input
-                                        ref={inputRef}
-                                        type="text"
-                                        value={commentText}
-                                        onChange={(e) => setCommentText(e.target.value)}
-                                        className="w-full bg-gray-100 text-sm"
-                                      />
-                                      <div className="flex justify-end space-x-2 mt-2">
-                                        <Button 
-                                          variant="ghost"
-                                          size="sm"
-                                          className="h-7 text-xs text-gray-500 hover:text-black font-medium"
-                                          onClick={cancelEdit}
-                                        >
-                                          Cancel
-                                        </Button>
-                                        <Button 
-                                          variant="ghost"
-                                          size="sm"
-                                          className="h-7 text-xs text-pink-500 font-medium"
-                                          onClick={saveEditReply}
-                                        >
-                                          Save
-                                        </Button>
-                                      </div>
-                                    </div>
-                                  ) : (
-                                    <p className="text-sm mt-1">{reply.text}</p>
-                                  )}
-                                  
-                                  <div className="mt-1">
-                                    <Button
-                                      variant="ghost"
-                                      size="sm" 
-                                      className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
-                                      onClick={() => toggleLike(reply.id, true, comment.id)}
-                                    >
-                                      <Heart size={12} fill={reply.isLiked ? "#ff2d55" : "none"} stroke={reply.isLiked ? "#ff2d55" : "currentColor"} />
-                                      <span className={reply.isLiked ? "text-pink-500" : ""}>{reply.likes}</span>
-                                    </Button>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))
               )}
             </div>
-            
-            <div className="p-3 border-t border-gray-200 bg-white">
-              <form onSubmit={handleCommentSubmit} className="flex items-center space-x-3">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex-shrink-0 flex items-center justify-center">
-                  <span className="text-xs font-bold text-white">
-                    {currentUser ? (currentUser.isAnonymous ? 'A' : currentUser.name[0].toUpperCase()) : 'G'}
+          )}
+        </div>
+      );
+    }
+  };
+  
+  // Render comments and testimonials list
+  const renderCommentsList = () => {
+    if (sortedComments.length === 0) {
+      return (
+        <div className="flex flex-col items-center justify-center h-32">
+          <p className="text-sm text-gray-500">
+            No {activeTab} to display.
+          </p>
+        </div>
+      );
+    }
+    
+    return sortedComments.map((comment) => (
+      <div key={comment.id} className="space-y-4">
+        <div className={`flex space-x-3 relative ${comment.pinned ? "p-3 border border-gray-200 rounded-lg bg-pink-50 bg-opacity-10" : ""}`}>
+          {comment.pinned && (
+            <div className="absolute top-0 left-0 px-2 py-0.5 bg-pink-500 text-white text-xs rounded-full transform -translate-y-1/2">
+              Pinned
+            </div>
+          )}
+          <div className={`w-10 h-10 rounded-full ${
+            comment.username === '@creator' 
+              ? 'bg-gradient-to-br from-red-500 to-pink-600' 
+              : comment.username === '@me' || isOwnContent(comment.userId)
+                ? 'bg-gradient-to-br from-blue-400 to-blue-600' 
+                : 'bg-gradient-to-br from-purple-400 to-pink-500'
+            } flex-shrink-0 flex items-center justify-center`}>
+            <span className="text-xs font-bold text-white">
+              {comment.username.startsWith('@') 
+                ? comment.username.substring(1, 3).toUpperCase() 
+                : comment.username.substring(0, 2).toUpperCase()}
+            </span>
+          </div>
+          <div className="flex-1">
+            <div className="flex justify-between">
+              <div className="flex items-center space-x-2">
+                <h4 className="font-medium text-sm">{comment.username}</h4>
+                {comment.verified && (
+                  <span className="inline-block rounded-full bg-blue-500 p-0.5 text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
                   </span>
+                )}
+                {comment.donation && (
+                  <span className="text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
+                    ${comment.donation}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-xs text-gray-500">{comment.timestamp}</span>
+                
+                <div className="relative" ref={menuRef}>
+                  <Button 
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6"
+                    onClick={() => setCommentMenuOpen(commentMenuOpen === comment.id ? null : comment.id)}
+                  >
+                    <MoreHorizontal size={14} />
+                  </Button>
+                  
+                  {commentMenuOpen === comment.id && (
+                    <div className="absolute right-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                      <ul>
+                        {(isOwnContent(comment.userId) || comment.username === '@me') && (
+                          <>
+                            <li 
+                              className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
+                              onClick={() => startEditComment(comment)}
+                            >
+                              <Edit size={14} />
+                              <span>Edit</span>
+                            </li>
+                            <li 
+                              className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer text-red-500"
+                              onClick={() => deleteComment(comment.id)}
+                            >
+                              <Trash2 size={14} />
+                              <span>Delete</span>
+                            </li>
+                          </>
+                        )}
+                        {comment.username === '@creator' && (
+                          <li 
+                            className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
+                            onClick={() => pinComment(comment.id)}
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M12 5v14M18 11H6M4 7h16"/>
+                            </svg>
+                            <span>{comment.pinned ? 'Unpin' : 'Pin'}</span>
+                          </li>
+                        )}
+                        <li 
+                          className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
+                        >
+                          <Flag size={14} />
+                          <span>Report</span>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
                 </div>
+              </div>
+            </div>
+            
+            {editingComment === comment.id ? (
+              <div className="mt-1">
                 <Input
                   ref={inputRef}
                   type="text"
-                  placeholder={
-                    editingComment 
-                      ? "Edit your comment..." 
-                      : editingReply 
-                        ? "Edit your reply..." 
-                        : replyingTo 
-                          ? `Reply to ${comments.find(c => c.id === replyingTo)?.username}...` 
-                          : "Add comment..."
-                  }
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
-                  className="flex-1 bg-gray-100 rounded-full h-9 text-sm border-0"
-                  onClick={() => {
-                    if (!isAuthenticated && !currentUser && !editingComment && !editingReply && !replyingTo) {
-                      setShowAuthModal(true);
-                    }
-                  }}
+                  className="w-full bg-gray-100 text-sm"
                 />
-                <Button 
-                  type="submit" 
-                  variant="ghost"
-                  size="icon"
-                  disabled={!commentText.trim()}
-                  className={`h-8 w-8 ${commentText.trim() ? "text-pink-500" : "text-gray-300"}`}
-                >
-                  <Send size={18} />
-                </Button>
-              </form>
+                <div className="flex justify-end space-x-2 mt-2">
+                  <Button 
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 text-xs text-gray-500 hover:text-black font-medium"
+                    onClick={cancelEdit}
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 text-xs text-pink-500 font-medium"
+                    onClick={saveEditComment}
+                  >
+                    Save
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm mt-1">{comment.text}</p>
+            )}
+            
+            <div className="mt-2 flex space-x-4">
+              <Button 
+                variant="ghost"
+                size="sm"
+                className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
+                onClick={() => toggleLike(comment.id)}
+              >
+                <Heart size={14} fill={comment.isLiked ? "#ff2d55" : "none"} stroke={comment.isLiked ? "#ff2d55" : "currentColor"} />
+                <span className={comment.isLiked ? "text-pink-500" : ""}>{comment.likes}</span>
+              </Button>
+              
+              <Button 
+                variant="ghost"
+                size="sm"
+                className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
+                onClick={() => startReply(comment.id)}
+              >
+                <MessageCircle size={14} />
+                <span>{(comment.replies?.length || 0) > 0 ? comment.replies.length : "Reply"}</span>
+              </Button>
             </div>
-          </div>
-        </div>
-      </div>
-      
-      <CommentAuthModal 
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        onGuestComment={handleGuestComment}
-        onLogin={handleLogin}
-        onSignup={handleSignup}
-      />
-    </>
-  );
-};
-
-export default TikTokCommentsPanel;
+            
+            {comment.replies && comment.replies.length > 0 && (
+              <div className="mt-3 pl-4 border-l-2 border-gray-100 space-y-3">
+                {comment.replies.map(reply => (
+                  <div key={reply.id} className="flex space-x-3">
+                    <div className={`w-8 h-8 rounded-full ${
+                      reply.username === '@creator' 
+                        ? 'bg-gradient-to-br from-red-500 to-pink-600' 
+                        : reply.username === '@me' || isOwnContent(reply.userId)
+                          ? 'bg-gradient-to-br from-blue-400 to-blue-600' 
+                          : 'bg-gradient-to-br from-purple-400 to-pink-500'
+                      } flex-shrink-0 flex items-center justify-center`}>
+                      <span className="text-xs font-bold text-white">
+                        {reply.username.startsWith('@') 
+                          ? reply.username.substring(1, 3).toUpperCase() 
+                          : reply.username.substring(0, 2).toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <h4 className="font-medium text-sm">{reply.username}</h4>
+                          {reply.verified && (
+                            <span className="inline-block rounded-full bg-blue-500 p-0.5 text-white">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                              </svg>
+                            </span>
+                          )}
+                          <span className="text-xs text-gray-500">{reply.timestamp}</span>
+                        </div>
+                        
+                        {(isOwnContent(reply.userId) || reply.username === '@me') && (
+                          <div className="relative">
+                            <Button 
+                              variant="ghost"
+                              size="icon"
+                              className="h-6 w-6"
+                              onClick={() => setReplyMenuOpen(replyMenuOpen === reply.id ? null : reply.id)}
+                            >
+                              <MoreHorizontal size={14} />
+                            </Button>
+                            
+                            {replyMenuOpen === reply.id && (
+                              <div className="absolute right-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                                <ul>
+                                  <li 
+                                    className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
+                                    onClick={() => startEditReply(comment.id, reply)}
+                                  >
+                                    <Edit size={14} />
+                                    <span>Edit</span>
+                                  </li>
+                                  <li 
+                                    className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer text-red-500"
+                                    onClick={() => deleteReply(comment.id, reply.id)}
+                                  >
+                                    <Trash2 size={14} />
+                                    <span>Delete</span>
+                                  </li>
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      
+                      {editingReply && editingReply.replyId === reply.id
