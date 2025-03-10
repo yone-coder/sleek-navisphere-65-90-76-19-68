@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Heart, X, Send, Flag, ChevronDown, MoreHorizontal, Trash2, Edit, MessageCircle, ArrowLeft, Star, HelpCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -765,4 +766,218 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
                         )}
                       </div>
                       
-                      {editingReply && editingReply.replyId === reply.id
+                      {editingReply && editingReply.replyId === reply.id ? (
+                        <div className="mt-1">
+                          <Input
+                            ref={inputRef}
+                            type="text"
+                            value={commentText}
+                            onChange={(e) => setCommentText(e.target.value)}
+                            className="w-full bg-gray-100 text-sm"
+                          />
+                          <div className="flex justify-end space-x-2 mt-2">
+                            <Button 
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 text-xs text-gray-500 hover:text-black font-medium"
+                              onClick={cancelEdit}
+                            >
+                              Cancel
+                            </Button>
+                            <Button 
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 text-xs text-pink-500 font-medium"
+                              onClick={saveEditReply}
+                            >
+                              Save
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-sm mt-1">{reply.text}</p>
+                      )}
+                      
+                      <div className="mt-2">
+                        <Button 
+                          variant="ghost"
+                          size="sm"
+                          className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
+                          onClick={() => toggleLike(reply.id, true, comment.id)}
+                        >
+                          <Heart size={12} fill={reply.isLiked ? "#ff2d55" : "none"} stroke={reply.isLiked ? "#ff2d55" : "currentColor"} />
+                          <span className={reply.isLiked ? "text-pink-500" : ""}>{reply.likes}</span>
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    ));
+  };
+  
+  // Render FAQs list
+  const renderFAQsList = () => {
+    if (faqs.length === 0) {
+      return (
+        <div className="flex flex-col items-center justify-center h-32">
+          <p className="text-sm text-gray-500">No FAQs available.</p>
+        </div>
+      );
+    }
+    
+    return (
+      <div className="space-y-4 mt-2">
+        {faqs.map((faq) => (
+          <div key={faq.id} className="border border-gray-200 rounded-lg overflow-hidden">
+            <div className="bg-gray-50 px-4 py-3 flex items-start">
+              <HelpCircle className="h-5 w-5 text-blue-500 mr-2 mt-0.5" />
+              <h4 className="font-medium text-gray-900">{faq.question}</h4>
+            </div>
+            <div className="px-6 py-4">
+              <p className="text-gray-700 text-sm">{faq.answer}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  
+  // Main render function for comment panel
+  return (
+    <>
+      <div 
+        className={`fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity ${
+          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={onClose}
+      />
+      
+      <div
+        className={`fixed bottom-0 inset-x-0 bg-white rounded-t-2xl shadow-lg z-50 transition-transform duration-300 ease-in-out transform ${
+          isOpen ? 'translate-y-0' : 'translate-y-full'
+        }`}
+        style={{ maxHeight: '90vh' }}
+      >
+        {/* Header with title and close button */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+          {renderHeader()}
+          
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 rounded-full hover:bg-gray-100"
+            onClick={onClose}
+          >
+            <X size={16} />
+          </Button>
+        </div>
+        
+        {/* Main content */}
+        <div className="h-full overflow-hidden flex flex-col">
+          {/* Tabs for different content types */}
+          {!replyingTo && !editingComment && !editingReply && (
+            <Tabs 
+              value={activeTab} 
+              onValueChange={setActiveTab}
+              className="w-full"
+            >
+              <div className="border-b">
+                <TabsList className="w-full justify-between bg-transparent px-4 h-12">
+                  <TabsTrigger 
+                    value="comments" 
+                    className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-pink-500 data-[state=active]:shadow-none rounded-none"
+                  >
+                    Comments
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="testimonials" 
+                    className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-pink-500 data-[state=active]:shadow-none rounded-none"
+                  >
+                    Testimonials
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="faqs" 
+                    className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-pink-500 data-[state=active]:shadow-none rounded-none"
+                  >
+                    FAQs
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+              
+              <div className="overflow-y-auto" style={{ maxHeight: 'calc(70vh - 8rem)' }}>
+                <TabsContent value="comments" className="p-4 space-y-4 m-0">
+                  {renderCommentsList()}
+                </TabsContent>
+                
+                <TabsContent value="testimonials" className="p-4 space-y-4 m-0">
+                  {renderCommentsList()}
+                </TabsContent>
+                
+                <TabsContent value="faqs" className="p-4 space-y-4 m-0">
+                  {renderFAQsList()}
+                </TabsContent>
+              </div>
+            </Tabs>
+          )}
+          
+          {/* When replying or editing, show content */}
+          {(replyingTo || editingComment || editingReply) && (
+            <div className="overflow-y-auto p-4" style={{ maxHeight: 'calc(70vh - 8rem)' }}>
+              {replyingTo && (
+                <div className="bg-gray-50 p-3 rounded-lg mb-4">
+                  <p className="text-sm text-gray-700">
+                    {comments.find(c => c.id === replyingTo)?.text}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {/* Comment input - not shown for FAQs */}
+          {activeTab !== 'faqs' && (
+            <div className="p-4 border-t border-gray-200 bg-white mt-auto">
+              <form onSubmit={handleCommentSubmit} className="flex space-x-2">
+                <Input
+                  ref={inputRef}
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  placeholder={
+                    replyingTo 
+                      ? "Add a reply..." 
+                      : editingComment || editingReply 
+                        ? "Edit your message..." 
+                        : `Add a ${activeTab === 'testimonials' ? 'testimonial' : 'comment'}...`
+                  }
+                  className="flex-grow rounded-full bg-gray-100 border-0 focus:ring-1 focus:ring-pink-500"
+                />
+                <Button 
+                  type="submit" 
+                  disabled={!commentText.trim()}
+                  className="rounded-full px-3 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Send size={18} className="text-white" />
+                </Button>
+              </form>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {/* Auth modal for guest comments */}
+      <CommentAuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onGuestComment={handleGuestComment}
+        onLogin={handleLogin}
+        onSignup={handleSignup}
+      />
+    </>
+  );
+};
+
+export default TikTokCommentsPanel;
