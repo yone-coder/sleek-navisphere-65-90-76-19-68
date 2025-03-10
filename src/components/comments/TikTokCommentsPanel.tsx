@@ -1,42 +1,15 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Heart, X, Send, Flag, ChevronDown, MoreHorizontal, Trash2, Edit, MessageCircle, ArrowLeft, Star, HelpCircle } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { X } from 'lucide-react';
+import { Sheet, SheetContent, SheetHeader } from '@/components/ui/sheet';
 import CommentAuthModal from './CommentAuthModal';
 import { toast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-interface Reply {
-  id: number;
-  username: string;
-  text: string;
-  likes: number;
-  isLiked: boolean;
-  timestamp: string;
-  verified: boolean;
-  userId?: string; // Add userId for permission checking
-}
-
-interface Comment {
-  id: number;
-  username: string;
-  text: string;
-  likes: number;
-  isLiked: boolean;
-  timestamp: string;
-  verified: boolean;
-  pinned: boolean;
-  donation?: number;
-  replies: Reply[];
-  userId?: string; // Add userId for permission checking
-}
-
-interface FAQ {
-  id: number;
-  question: string;
-  answer: string;
-}
+import CommentsList from './CommentsList';
+import CommentForm from './CommentForm';
+import FAQsList from './FAQsList';
+import CommentPanelHeader from './CommentPanelHeader';
+import { Comment, Reply, FAQ } from './types';
 
 interface TikTokCommentsPanelProps {
   onClose: () => void;
@@ -91,6 +64,7 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   const [replyMenuOpen, setReplyMenuOpen] = useState<number | null>(null);
   const [editingReply, setEditingReply] = useState<{commentId: number, replyId: number} | null>(null);
   const [editReplyText, setEditReplyText] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -136,63 +110,69 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
       return;
     }
 
-    if (replyingTo) {
-      const newReply: Reply = {
-        id: Date.now(),
-        username: currentUser ? 
-          (currentUser.isAnonymous ? currentUser.userId : `@${currentUser.name}`) : 
-          '@me',
-        text: commentText,
-        likes: 0,
-        isLiked: false,
-        timestamp: 'Just now',
-        verified: false,
-        userId: currentUser?.userId || 'me'
-      };
-      
-      setComments(comments.map(comment => {
-        if (comment.id === replyingTo) {
-          return {
-            ...comment,
-            replies: [...(comment.replies || []), newReply]
-          };
-        }
-        return comment;
-      }));
-      
-      setReplyingTo(null);
-    } else if (editingComment) {
-      saveEditComment();
-    } else if (editingReply) {
-      saveEditReply();
-    } else {
-      const newComment: Comment = {
-        id: Date.now(),
-        username: currentUser ? 
-          (currentUser.isAnonymous ? currentUser.userId : `@${currentUser.name}`) : 
-          '@me',
-        text: commentText,
-        likes: 0,
-        isLiked: false,
-        timestamp: 'Just now',
-        verified: false,
-        pinned: false,
-        replies: [],
-        userId: currentUser?.userId || 'me'
-      };
-      
-      const dataToUpdate = activeTab === 'testimonials' ? testimonials : comments;
-      const pinnedItems = dataToUpdate.filter(c => c.pinned);
-      const unpinnedItems = dataToUpdate.filter(c => !c.pinned);
-      
-      if (activeTab === 'testimonials') {
-        setTestimonials([...pinnedItems, newComment, ...unpinnedItems]);
+    setIsSubmitting(true);
+
+    try {
+      if (replyingTo) {
+        const newReply: Reply = {
+          id: Date.now(),
+          username: currentUser ? 
+            (currentUser.isAnonymous ? currentUser.userId : `@${currentUser.name}`) : 
+            '@me',
+          text: commentText,
+          likes: 0,
+          isLiked: false,
+          timestamp: 'Just now',
+          verified: false,
+          userId: currentUser?.userId || 'me'
+        };
+        
+        setComments(comments.map(comment => {
+          if (comment.id === replyingTo) {
+            return {
+              ...comment,
+              replies: [...(comment.replies || []), newReply]
+            };
+          }
+          return comment;
+        }));
+        
+        setReplyingTo(null);
+      } else if (editingComment) {
+        saveEditComment();
+      } else if (editingReply) {
+        saveEditReply();
       } else {
-        setComments([...pinnedItems, newComment, ...unpinnedItems]);
+        const newComment: Comment = {
+          id: Date.now(),
+          username: currentUser ? 
+            (currentUser.isAnonymous ? currentUser.userId : `@${currentUser.name}`) : 
+            '@me',
+          text: commentText,
+          likes: 0,
+          isLiked: false,
+          timestamp: 'Just now',
+          verified: false,
+          pinned: false,
+          replies: [],
+          userId: currentUser?.userId || 'me'
+        };
+        
+        const dataToUpdate = activeTab === 'testimonials' ? testimonials : comments;
+        const pinnedItems = dataToUpdate.filter(c => c.pinned);
+        const unpinnedItems = dataToUpdate.filter(c => !c.pinned);
+        
+        if (activeTab === 'testimonials') {
+          setTestimonials([...pinnedItems, newComment, ...unpinnedItems]);
+        } else {
+          setComments([...pinnedItems, newComment, ...unpinnedItems]);
+        }
       }
+      
+      setCommentText('');
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    setCommentText('');
   };
   
   const handleGuestComment = (name: string | null) => {
@@ -438,416 +418,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     return 0;
   });
   
-  // Function to render the header based on active state
-  const renderHeader = () => {
-    if (replyingTo) {
-      return (
-        <div className="flex items-center">
-          <Button 
-            variant="ghost"
-            size="icon"
-            className="h-7 w-7 mr-2"
-            onClick={cancelReply}
-          >
-            <ArrowLeft size={16} />
-          </Button>
-          <span className="font-medium">Reply</span>
-        </div>
-      );
-    } else if (editingComment) {
-      return (
-        <div className="flex items-center">
-          <Button 
-            variant="ghost"
-            size="icon"
-            className="h-7 w-7 mr-2"
-            onClick={cancelEdit}
-          >
-            <ArrowLeft size={16} />
-          </Button>
-          <span className="font-medium">Edit {activeTab === 'testimonials' ? 'Testimonial' : 'Comment'}</span>
-        </div>
-      );
-    } else if (editingReply) {
-      return (
-        <div className="flex items-center">
-          <Button 
-            variant="ghost"
-            size="icon"
-            className="h-7 w-7 mr-2"
-            onClick={cancelEdit}
-          >
-            <ArrowLeft size={16} />
-          </Button>
-          <span className="font-medium">Edit Reply</span>
-        </div>
-      );
-    } else {
-      return (
-        <div className="flex items-center">
-          <h3 className="font-medium text-base capitalize">{activeTab}</h3>
-          {(activeTab === 'comments' || activeTab === 'testimonials') && (
-            <div className="relative ml-4" ref={menuRef}>
-              <Button 
-                variant="ghost"
-                className="flex items-center space-x-1 text-xs text-gray-500 hover:text-black p-1 h-7"
-                onClick={() => setShowFilterMenu(!showFilterMenu)}
-              >
-                <span>
-                  {filter === 'all' ? 'All' : 
-                  filter === 'verified' ? 'Verified' : 
-                  filter === 'liked' ? 'Liked' : 'Donations'}
-                </span>
-                <ChevronDown size={14} />
-              </Button>
-              
-              {showFilterMenu && (
-                <div className="absolute top-full left-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
-                  <ul>
-                    <li 
-                      className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
-                      onClick={() => { setFilter('all'); setShowFilterMenu(false); }}
-                    >
-                      All {activeTab}
-                    </li>
-                    <li 
-                      className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
-                      onClick={() => { setFilter('verified'); setShowFilterMenu(false); }}
-                    >
-                      Verified only
-                    </li>
-                    <li 
-                      className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
-                      onClick={() => { setFilter('liked'); setShowFilterMenu(false); }}
-                    >
-                      Liked by me
-                    </li>
-                    <li 
-                      className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer text-xs"
-                      onClick={() => { setFilter('donations'); setShowFilterMenu(false); }}
-                    >
-                      Donations
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      );
-    }
-  };
-  
-  // Render comments and testimonials list
-  const renderCommentsList = () => {
-    if (sortedComments.length === 0) {
-      return (
-        <div className="flex flex-col items-center justify-center h-32">
-          <p className="text-sm text-gray-500">
-            No {activeTab} to display.
-          </p>
-        </div>
-      );
-    }
-    
-    return sortedComments.map((comment) => (
-      <div key={comment.id} className="space-y-4">
-        <div className={`flex space-x-3 relative ${comment.pinned ? "p-3 border border-gray-200 rounded-lg bg-pink-50 bg-opacity-10" : ""}`}>
-          {comment.pinned && (
-            <div className="absolute top-0 left-0 px-2 py-0.5 bg-pink-500 text-white text-xs rounded-full transform -translate-y-1/2">
-              Pinned
-            </div>
-          )}
-          <div className={`w-10 h-10 rounded-full ${
-            comment.username === '@creator' 
-              ? 'bg-gradient-to-br from-red-500 to-pink-600' 
-              : comment.username === '@me' || isOwnContent(comment.userId)
-                ? 'bg-gradient-to-br from-blue-400 to-blue-600' 
-                : 'bg-gradient-to-br from-purple-400 to-pink-500'
-            } flex-shrink-0 flex items-center justify-center`}>
-            <span className="text-xs font-bold text-white">
-              {comment.username.startsWith('@') 
-                ? comment.username.substring(1, 3).toUpperCase() 
-                : comment.username.substring(0, 2).toUpperCase()}
-            </span>
-          </div>
-          <div className="flex-1">
-            <div className="flex justify-between">
-              <div className="flex items-center space-x-2">
-                <h4 className="font-medium text-sm">{comment.username}</h4>
-                {comment.verified && (
-                  <span className="inline-block rounded-full bg-blue-500 p-0.5 text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                  </span>
-                )}
-                {comment.donation && (
-                  <span className="text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
-                    ${comment.donation}
-                  </span>
-                )}
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="text-xs text-gray-500">{comment.timestamp}</span>
-                
-                <div className="relative" ref={menuRef}>
-                  <Button 
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6"
-                    onClick={() => setCommentMenuOpen(commentMenuOpen === comment.id ? null : comment.id)}
-                  >
-                    <MoreHorizontal size={14} />
-                  </Button>
-                  
-                  {commentMenuOpen === comment.id && (
-                    <div className="absolute right-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
-                      <ul>
-                        {(isOwnContent(comment.userId) || comment.username === '@me') && (
-                          <>
-                            <li 
-                              className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
-                              onClick={() => startEditComment(comment)}
-                            >
-                              <Edit size={14} />
-                              <span>Edit</span>
-                            </li>
-                            <li 
-                              className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer text-red-500"
-                              onClick={() => deleteComment(comment.id)}
-                            >
-                              <Trash2 size={14} />
-                              <span>Delete</span>
-                            </li>
-                          </>
-                        )}
-                        {comment.username === '@creator' && (
-                          <li 
-                            className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
-                            onClick={() => pinComment(comment.id)}
-                          >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M12 5v14M18 11H6M4 7h16"/>
-                            </svg>
-                            <span>{comment.pinned ? 'Unpin' : 'Pin'}</span>
-                          </li>
-                        )}
-                        <li 
-                          className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
-                        >
-                          <Flag size={14} />
-                          <span>Report</span>
-                        </li>
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-            
-            {editingComment === comment.id ? (
-              <div className="mt-1">
-                <Input
-                  ref={inputRef}
-                  type="text"
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  className="w-full bg-gray-100 text-sm"
-                />
-                <div className="flex justify-end space-x-2 mt-2">
-                  <Button 
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 text-xs text-gray-500 hover:text-black font-medium"
-                    onClick={cancelEdit}
-                  >
-                    Cancel
-                  </Button>
-                  <Button 
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 text-xs text-pink-500 font-medium"
-                    onClick={saveEditComment}
-                  >
-                    Save
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <p className="text-sm mt-1">{comment.text}</p>
-            )}
-            
-            <div className="mt-2 flex space-x-4">
-              <Button 
-                variant="ghost"
-                size="sm"
-                className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
-                onClick={() => toggleLike(comment.id)}
-              >
-                <Heart size={14} fill={comment.isLiked ? "#ff2d55" : "none"} stroke={comment.isLiked ? "#ff2d55" : "currentColor"} />
-                <span className={comment.isLiked ? "text-pink-500" : ""}>{comment.likes}</span>
-              </Button>
-              
-              <Button 
-                variant="ghost"
-                size="sm"
-                className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
-                onClick={() => startReply(comment.id)}
-              >
-                <MessageCircle size={14} />
-                <span>{(comment.replies?.length || 0) > 0 ? comment.replies.length : "Reply"}</span>
-              </Button>
-            </div>
-            
-            {comment.replies && comment.replies.length > 0 && (
-              <div className="mt-3 pl-4 border-l-2 border-gray-100 space-y-3">
-                {comment.replies.map(reply => (
-                  <div key={reply.id} className="flex space-x-3">
-                    <div className={`w-8 h-8 rounded-full ${
-                      reply.username === '@creator' 
-                        ? 'bg-gradient-to-br from-red-500 to-pink-600' 
-                        : reply.username === '@me' || isOwnContent(reply.userId)
-                          ? 'bg-gradient-to-br from-blue-400 to-blue-600' 
-                          : 'bg-gradient-to-br from-purple-400 to-pink-500'
-                      } flex-shrink-0 flex items-center justify-center`}>
-                      <span className="text-xs font-bold text-white">
-                        {reply.username.startsWith('@') 
-                          ? reply.username.substring(1, 3).toUpperCase() 
-                          : reply.username.substring(0, 2).toUpperCase()}
-                      </span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <h4 className="font-medium text-sm">{reply.username}</h4>
-                          {reply.verified && (
-                            <span className="inline-block rounded-full bg-blue-500 p-0.5 text-white">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                              </svg>
-                            </span>
-                          )}
-                          <span className="text-xs text-gray-500">{reply.timestamp}</span>
-                        </div>
-                        
-                        {(isOwnContent(reply.userId) || reply.username === '@me') && (
-                          <div className="relative">
-                            <Button 
-                              variant="ghost"
-                              size="icon"
-                              className="h-6 w-6"
-                              onClick={() => setReplyMenuOpen(replyMenuOpen === reply.id ? null : reply.id)}
-                            >
-                              <MoreHorizontal size={14} />
-                            </Button>
-                            
-                            {replyMenuOpen === reply.id && (
-                              <div className="absolute right-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
-                                <ul>
-                                  <li 
-                                    className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
-                                    onClick={() => startEditReply(comment.id, reply)}
-                                  >
-                                    <Edit size={14} />
-                                    <span>Edit</span>
-                                  </li>
-                                  <li 
-                                    className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer text-red-500"
-                                    onClick={() => deleteReply(comment.id, reply.id)}
-                                  >
-                                    <Trash2 size={14} />
-                                    <span>Delete</span>
-                                  </li>
-                                </ul>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      
-                      {editingReply && editingReply.replyId === reply.id ? (
-                        <div className="mt-1">
-                          <Input
-                            ref={inputRef}
-                            type="text"
-                            value={commentText}
-                            onChange={(e) => setCommentText(e.target.value)}
-                            className="w-full bg-gray-100 text-sm"
-                          />
-                          <div className="flex justify-end space-x-2 mt-2">
-                            <Button 
-                              variant="ghost"
-                              size="sm"
-                              className="h-7 text-xs text-gray-500 hover:text-black font-medium"
-                              onClick={cancelEdit}
-                            >
-                              Cancel
-                            </Button>
-                            <Button 
-                              variant="ghost"
-                              size="sm"
-                              className="h-7 text-xs text-pink-500 font-medium"
-                              onClick={saveEditReply}
-                            >
-                              Save
-                            </Button>
-                          </div>
-                        </div>
-                      ) : (
-                        <p className="text-sm mt-1">{reply.text}</p>
-                      )}
-                      
-                      <div className="mt-2">
-                        <Button 
-                          variant="ghost"
-                          size="sm"
-                          className="flex items-center space-x-1 text-xs text-gray-500 h-6 px-1"
-                          onClick={() => toggleLike(reply.id, true, comment.id)}
-                        >
-                          <Heart size={12} fill={reply.isLiked ? "#ff2d55" : "none"} stroke={reply.isLiked ? "#ff2d55" : "currentColor"} />
-                          <span className={reply.isLiked ? "text-pink-500" : ""}>{reply.likes}</span>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    ));
-  };
-  
-  // Render FAQs list
-  const renderFAQsList = () => {
-    if (faqs.length === 0) {
-      return (
-        <div className="flex flex-col items-center justify-center h-32">
-          <p className="text-sm text-gray-500">No FAQs available.</p>
-        </div>
-      );
-    }
-    
-    return (
-      <div className="space-y-4 mt-2">
-        {faqs.map((faq) => (
-          <div key={faq.id} className="border border-gray-200 rounded-lg overflow-hidden">
-            <div className="bg-gray-50 px-4 py-3 flex items-start">
-              <HelpCircle className="h-5 w-5 text-blue-500 mr-2 mt-0.5" />
-              <h4 className="font-medium text-gray-900">{faq.question}</h4>
-            </div>
-            <div className="px-6 py-4">
-              <p className="text-gray-700 text-sm">{faq.answer}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  };
-  
-  // Main render function for comment panel
   return (
     <>
       <div 
@@ -865,16 +435,21 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
       >
         {/* Header with title and close button */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
-          {renderHeader()}
-          
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 rounded-full hover:bg-gray-100"
-            onClick={onClose}
-          >
-            <X size={16} />
-          </Button>
+          <CommentPanelHeader 
+            activeTab={activeTab}
+            replyingTo={replyingTo}
+            editingComment={editingComment}
+            editingReply={editingReply}
+            showFilterMenu={showFilterMenu}
+            filter={filter}
+            setActiveTab={setActiveTab}
+            cancelReply={cancelReply}
+            cancelEdit={cancelEdit}
+            setShowFilterMenu={setShowFilterMenu}
+            setFilter={setFilter}
+            menuRef={menuRef}
+            onClose={onClose}
+          />
         </div>
         
         {/* Main content */}
@@ -911,15 +486,51 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
               
               <div className="overflow-y-auto" style={{ maxHeight: 'calc(70vh - 8rem)' }}>
                 <TabsContent value="comments" className="p-4 space-y-4 m-0">
-                  {renderCommentsList()}
+                  <CommentsList 
+                    comments={sortedComments}
+                    activeTab={activeTab}
+                    editingComment={editingComment}
+                    commentMenuOpen={commentMenuOpen}
+                    commentText={commentText}
+                    menuRef={menuRef}
+                    inputRef={inputRef}
+                    isOwnContent={isOwnContent}
+                    setCommentMenuOpen={setCommentMenuOpen}
+                    setCommentText={setCommentText}
+                    toggleLike={toggleLike}
+                    startReply={startReply}
+                    cancelEdit={cancelEdit}
+                    saveEditComment={saveEditComment}
+                    startEditComment={startEditComment}
+                    deleteComment={deleteComment}
+                    pinComment={pinComment}
+                  />
                 </TabsContent>
                 
                 <TabsContent value="testimonials" className="p-4 space-y-4 m-0">
-                  {renderCommentsList()}
+                  <CommentsList 
+                    comments={sortedComments}
+                    activeTab={activeTab}
+                    editingComment={editingComment}
+                    commentMenuOpen={commentMenuOpen}
+                    commentText={commentText}
+                    menuRef={menuRef}
+                    inputRef={inputRef}
+                    isOwnContent={isOwnContent}
+                    setCommentMenuOpen={setCommentMenuOpen}
+                    setCommentText={setCommentText}
+                    toggleLike={toggleLike}
+                    startReply={startReply}
+                    cancelEdit={cancelEdit}
+                    saveEditComment={saveEditComment}
+                    startEditComment={startEditComment}
+                    deleteComment={deleteComment}
+                    pinComment={pinComment}
+                  />
                 </TabsContent>
                 
                 <TabsContent value="faqs" className="p-4 space-y-4 m-0">
-                  {renderFAQsList()}
+                  <FAQsList faqs={faqs} />
                 </TabsContent>
               </div>
             </Tabs>
@@ -941,28 +552,18 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
           {/* Comment input - not shown for FAQs */}
           {activeTab !== 'faqs' && (
             <div className="p-4 border-t border-gray-200 bg-white mt-auto">
-              <form onSubmit={handleCommentSubmit} className="flex space-x-2">
-                <Input
-                  ref={inputRef}
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  placeholder={
-                    replyingTo 
-                      ? "Add a reply..." 
-                      : editingComment || editingReply 
-                        ? "Edit your message..." 
-                        : `Add a ${activeTab === 'testimonials' ? 'testimonial' : 'comment'}...`
-                  }
-                  className="flex-grow rounded-full bg-gray-100 border-0 focus:ring-1 focus:ring-pink-500"
-                />
-                <Button 
-                  type="submit" 
-                  disabled={!commentText.trim()}
-                  className="rounded-full px-3 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <Send size={18} className="text-white" />
-                </Button>
-              </form>
+              <CommentForm 
+                commentText={commentText}
+                setCommentText={setCommentText}
+                handleCommentSubmit={handleCommentSubmit}
+                replyingTo={replyingTo}
+                editingComment={editingComment}
+                editingReply={editingReply}
+                cancelReply={cancelReply}
+                cancelEdit={cancelEdit}
+                inputRef={inputRef}
+                isSubmitting={isSubmitting}
+              />
             </div>
           )}
         </div>
