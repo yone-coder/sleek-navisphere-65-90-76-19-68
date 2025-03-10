@@ -345,7 +345,7 @@ const WebinarComponent = () => {
   };
 
   return (
-    <div className="w-full max-w-sm bg-white rounded-lg shadow-lg p-2 mx-auto relative">
+    <div className="w-full max-w-sm bg-transparent rounded-lg p-2 mx-auto relative">
       {/* Hearts animation container */}
       <AnimatedHearts isActive={showHeartAnimation} />
       
