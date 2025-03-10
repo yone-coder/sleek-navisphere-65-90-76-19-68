@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Clock, Calendar, UserCheck, AlertCircle, Check, Users, Eye, Heart, MessageCircle, Share, Smile, Star, ThumbsUp, Award, Trophy } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import AnimatedHearts from './AnimatedHearts';
@@ -8,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import SeminarCommentsPanel from './SeminarCommentsPanel';
 
 interface HoverValueType {
   percentage: string;
@@ -49,6 +50,8 @@ const WebinarComponent = ({ onOpenComments }: WebinarComponentProps) => {
   const [comments, setComments] = useState(342);
   const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
   const [showEmojiMenu, setShowEmojiMenu] = useState(false);
+  const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
+  const [activeCommentsTab, setActiveCommentsTab] = useState('comments');
 
   const [showHeartAnimation, setShowHeartAnimation] = useState(false);
 
@@ -198,7 +201,7 @@ const WebinarComponent = ({ onOpenComments }: WebinarComponentProps) => {
   };
 
   const handleOpenComments = () => {
-    onOpenComments();
+    setIsCommentsPanelOpen(true);
   };
 
   const handleShare = () => {
@@ -337,190 +340,200 @@ const WebinarComponent = ({ onOpenComments }: WebinarComponentProps) => {
   };
 
   return (
-    <div className="w-full max-w-sm bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg shadow-lg p-2 mx-auto relative">
+    <div className="w-full max-w-sm mx-auto py-2 px-2">
       {/* Hearts animation container */}
       <AnimatedHearts isActive={showHeartAnimation} />
       
-      <div className="relative mb-2">
-        <div className="flex justify-between items-center mb-1 text-xs">
-          <div className="flex items-center text-gray-600">
-            {renderStackedProfiles()}
-            <span>{formatNumber(participants)} {t('webinar.joined')}</span>
-            <div className="flex ml-1 items-center">
-              {renderSparkline()}
+      {/* Glassmorphic container */}
+      <div className="w-full backdrop-blur-lg bg-white/30 border border-white/20 rounded-lg shadow-lg p-2 relative">
+        <div className="relative mb-2">
+          <div className="flex justify-between items-center mb-1 text-xs">
+            <div className="flex items-center text-gray-600">
+              {renderStackedProfiles()}
+              <span>{formatNumber(participants)} {t('webinar.joined')}</span>
+              <div className="flex ml-1 items-center">
+                {renderSparkline()}
+              </div>
+            </div>
+            <div className="flex items-center">
+              {getStatusText()}
             </div>
           </div>
-          <div className="flex items-center">
-            {getStatusText()}
-          </div>
-        </div>
-        
-        <div 
-          className="h-5 bg-gray-200 rounded-full overflow-hidden relative mt-1 cursor-pointer"
-          onMouseMove={handleMouseMove}
-          onMouseLeave={() => setShowTooltip(false)}
-        >
-          {showTooltip && hoverValue && (
-            <div 
-              className="absolute -top-8 py-1 px-2 bg-gray-800 text-white rounded text-xs whitespace-nowrap z-10"
-              style={{ 
-                left: tooltipPosition, 
-                transform: 'translateX(-50%)',
-                boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
-              }}
-            >
-              {formatNumber(hoverValue.participants)} attendees ({hoverValue.percentage}%)
-              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-gray-800"></div>
-            </div>
-          )}
-          
-          {renderMilestones()}
           
           <div 
-            className={`h-full ${getProgressBarClasses()} rounded-full transition-all duration-500 relative overflow-hidden`}
-            style={{ width: `${participationPercentage}%` }}
+            className="h-5 bg-gray-200 rounded-full overflow-hidden relative mt-1 cursor-pointer"
+            onMouseMove={handleMouseMove}
+            onMouseLeave={() => setShowTooltip(false)}
           >
-            <div className="absolute inset-0 bg-stripes opacity-20"></div>
-            <div className="absolute top-0 left-0 right-0 h-1/3 bg-white opacity-20 rounded-full"></div>
-            {registrationStatus === 'almost-full' && (
-              <div className="absolute right-0 top-0 h-full w-1 bg-white animate-pulse"></div>
+            {showTooltip && hoverValue && (
+              <div 
+                className="absolute -top-8 py-1 px-2 bg-gray-800 text-white rounded text-xs whitespace-nowrap z-10"
+                style={{ 
+                  left: tooltipPosition, 
+                  transform: 'translateX(-50%)',
+                  boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                }}
+              >
+                {formatNumber(hoverValue.participants)} attendees ({hoverValue.percentage}%)
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-gray-800"></div>
+              </div>
             )}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs font-medium text-white px-1 py-0.5">
-              {Math.round(participationPercentage)}% Full
+            
+            {renderMilestones()}
+            
+            <div 
+              className={`h-full ${getProgressBarClasses()} rounded-full transition-all duration-500 relative overflow-hidden`}
+              style={{ width: `${participationPercentage}%` }}
+            >
+              <div className="absolute inset-0 bg-stripes opacity-20"></div>
+              <div className="absolute top-0 left-0 right-0 h-1/3 bg-white opacity-20 rounded-full"></div>
+              {registrationStatus === 'almost-full' && (
+                <div className="absolute right-0 top-0 h-full w-1 bg-white animate-pulse"></div>
+              )}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs font-medium text-white px-1 py-0.5">
+                {Math.round(participationPercentage)}% Full
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex justify-between text-xs mt-1 text-gray-600">
+            <div>
+              <span className="font-medium">
+                <span className="text-green-500">{formatNumber(spotsLeft)}</span> {t('webinar.spotsleft')}
+              </span>
+            </div>
+            
+            <div className="text-right">
+              <span className="font-medium flex items-center">
+                <AlertCircle size={10} className="mr-1 text-orange-500" />
+                {t('webinar.estfull')} {estimatedTimeUntilFull()}
+              </span>
+            </div>
+          </div>
+          
+          <div className="mt-1 flex justify-between items-center">
+            <div className="flex items-center h-5"> 
+              {registrationMessage.isVisible ? (
+                <div className="flex items-center text-xs animate-fade-in">
+                  <div className="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center mr-1 text-xs font-bold">
+                    {registrationMessage.profile}
+                  </div>
+                  <span className="text-blue-500 font-medium">
+                    {t('webinar.justregistered')}
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center text-xs text-gray-600">
+                  <Calendar size={12} className="mr-1 text-blue-500" />
+                  <span>{eventDate}</span>
+                </div>
+              )}
+            </div>
+            <div className="flex items-center text-xs text-gray-600">
+              <Clock size={12} className="mr-1 text-blue-500" />
+              <span>{formatTime(timeLeft.days)}d:{formatTime(timeLeft.hours)}h:{formatTime(timeLeft.minutes)}m:{formatTime(timeLeft.seconds)}s</span>
             </div>
           </div>
         </div>
         
-        <div className="flex justify-between text-xs mt-1 text-gray-600">
-          <div>
-            <span className="font-medium">
-              <span className="text-green-500">{formatNumber(spotsLeft)}</span> {t('webinar.spotsleft')}
-            </span>
-          </div>
-          
-          <div className="text-right">
-            <span className="font-medium flex items-center">
-              <AlertCircle size={10} className="mr-1 text-orange-500" />
-              {t('webinar.estfull')} {estimatedTimeUntilFull()}
-            </span>
+        <div className="flex justify-between mb-2 text-sm">
+          <div className="flex space-x-2 w-full">
+            <DropdownMenu open={showEmojiMenu} onOpenChange={setShowEmojiMenu}>
+              <DropdownMenuTrigger asChild>
+                <button 
+                  className={`flex-1 bg-gray-100 px-3 py-1.5 rounded-full flex items-center justify-center relative overflow-hidden ${
+                    isLiked ? selectedEmoji ? emojiReactions.find(r => r.name === selectedEmoji)?.color || 'text-red-500' : 'text-red-500' : 'text-gray-600'
+                  }`}
+                  onClick={handleLike}
+                >
+                  {isLiked && selectedEmoji ? (
+                    emojiReactions.find(r => r.name === selectedEmoji)?.icon || 
+                    <Heart size={14} className="mr-1" fill="currentColor" />
+                  ) : (
+                    <Heart size={14} className="mr-1" fill={isLiked ? "currentColor" : "none"} />
+                  )}
+                  <span className="font-medium">{formatNumber(likes)}</span>
+                  
+                  {isLiked && (
+                    <div 
+                      className="absolute inset-0 bg-pink-500/10 animate-fade-out"
+                      style={{ animationDuration: '0.5s' }}
+                    />
+                  )}
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" className="bg-white rounded-lg shadow-lg border-none p-1 flex">
+                <div className="flex flex-wrap justify-center gap-1 p-1 w-48">
+                  {emojiReactions.map((reaction) => (
+                    <DropdownMenuItem
+                      key={reaction.name}
+                      onClick={() => handleLikeWithEmoji(reaction.name)}
+                      className={`flex-1 min-w-[40px] flex flex-col items-center justify-center rounded-md p-2 cursor-pointer hover:bg-gray-100 transition-colors ${
+                        selectedEmoji === reaction.name ? `${reaction.color} bg-gray-100` : ''
+                      }`}
+                    >
+                      <div className={`w-7 h-7 rounded-full flex items-center justify-center ${reaction.color}`}>
+                        {React.cloneElement(reaction.icon as React.ReactElement, { size: 18, className: '' })}
+                      </div>
+                      <span className="text-xs mt-1">{reaction.label}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
+            <button 
+              onClick={handleOpenComments}
+              className="flex-1 bg-gray-100 px-3 py-1.5 rounded-full flex items-center justify-center text-gray-600"
+            >
+              <MessageCircle size={14} className="mr-1" />
+              <span className="font-medium">{formatNumber(comments)}</span>
+            </button>
+            
+            <button 
+              onClick={handleShare}
+              className="flex-1 bg-gray-100 px-3 py-1.5 rounded-full flex items-center justify-center text-gray-600"
+            >
+              <Share size={14} className="mr-1" />
+              <span className="font-medium">{formatNumber(shares)}</span>
+            </button>
           </div>
         </div>
         
-        <div className="mt-1 flex justify-between items-center">
-          <div className="flex items-center h-5"> 
-            {registrationMessage.isVisible ? (
-              <div className="flex items-center text-xs animate-fade-in">
-                <div className="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center mr-1 text-xs font-bold">
-                  {registrationMessage.profile}
-                </div>
-                <span className="text-blue-500 font-medium">
-                  {t('webinar.justregistered')}
-                </span>
-              </div>
+        <button 
+          className={`w-full py-2 px-3 font-medium rounded-md shadow-md text-sm transition-all duration-300 transform ${
+            isRegistered
+              ? 'bg-green-500 text-white hover:bg-green-600'
+              : buttonHover
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg -translate-y-0.5'
+                : 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:shadow-lg hover:-translate-y-0.5'
+          }`}
+          onMouseEnter={() => setButtonHover(true)}
+          onMouseLeave={() => setButtonHover(false)}
+          onClick={handleRegister}
+        >
+          <div className="flex items-center justify-center">
+            {isRegistered ? (
+              <>
+                <Check size={16} className="mr-2 animate-bounce" />
+                <span>{t('webinar.registered')}</span>
+              </>
             ) : (
-              <div className="flex items-center text-xs text-gray-600">
-                <Calendar size={12} className="mr-1 text-blue-500" />
-                <span>{eventDate}</span>
-              </div>
+              <>
+                <UserCheck size={16} className={`mr-2 ${buttonHover ? 'animate-pulse' : ''}`} />
+                <span>{t('webinar.register')}</span>
+              </>
             )}
           </div>
-          <div className="flex items-center text-xs text-gray-600">
-            <Clock size={12} className="mr-1 text-blue-500" />
-            <span>{formatTime(timeLeft.days)}d:{formatTime(timeLeft.hours)}h:{formatTime(timeLeft.minutes)}m:{formatTime(timeLeft.seconds)}s</span>
-          </div>
-        </div>
+        </button>
       </div>
       
-      <div className="flex justify-between mb-2 text-sm">
-        <div className="flex space-x-2 w-full">
-          <DropdownMenu open={showEmojiMenu} onOpenChange={setShowEmojiMenu}>
-            <DropdownMenuTrigger asChild>
-              <button 
-                className={`flex-1 bg-gray-100 px-3 py-1.5 rounded-full flex items-center justify-center relative overflow-hidden ${
-                  isLiked ? selectedEmoji ? emojiReactions.find(r => r.name === selectedEmoji)?.color || 'text-red-500' : 'text-red-500' : 'text-gray-600'
-                }`}
-                onClick={handleLike}
-              >
-                {isLiked && selectedEmoji ? (
-                  emojiReactions.find(r => r.name === selectedEmoji)?.icon || 
-                  <Heart size={14} className="mr-1" fill="currentColor" />
-                ) : (
-                  <Heart size={14} className="mr-1" fill={isLiked ? "currentColor" : "none"} />
-                )}
-                <span className="font-medium">{formatNumber(likes)}</span>
-                
-                {isLiked && (
-                  <div 
-                    className="absolute inset-0 bg-pink-500/10 animate-fade-out"
-                    style={{ animationDuration: '0.5s' }}
-                  />
-                )}
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="center" className="bg-white rounded-lg shadow-lg border-none p-1 flex">
-              <div className="flex flex-wrap justify-center gap-1 p-1 w-48">
-                {emojiReactions.map((reaction) => (
-                  <DropdownMenuItem
-                    key={reaction.name}
-                    onClick={() => handleLikeWithEmoji(reaction.name)}
-                    className={`flex-1 min-w-[40px] flex flex-col items-center justify-center rounded-md p-2 cursor-pointer hover:bg-gray-100 transition-colors ${
-                      selectedEmoji === reaction.name ? `${reaction.color} bg-gray-100` : ''
-                    }`}
-                  >
-                    <div className={`w-7 h-7 rounded-full flex items-center justify-center ${reaction.color}`}>
-                      {React.cloneElement(reaction.icon as React.ReactElement, { size: 18, className: '' })}
-                    </div>
-                    <span className="text-xs mt-1">{reaction.label}</span>
-                  </DropdownMenuItem>
-                ))}
-              </div>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          
-          <button 
-            onClick={handleOpenComments}
-            className="flex-1 bg-gray-100 px-3 py-1.5 rounded-full flex items-center justify-center text-gray-600"
-          >
-            <MessageCircle size={14} className="mr-1" />
-            <span className="font-medium">{formatNumber(comments)}</span>
-          </button>
-          
-          <button 
-            onClick={handleShare}
-            className="flex-1 bg-gray-100 px-3 py-1.5 rounded-full flex items-center justify-center text-gray-600"
-          >
-            <Share size={14} className="mr-1" />
-            <span className="font-medium">{formatNumber(shares)}</span>
-          </button>
-        </div>
-      </div>
-      
-      <button 
-        className={`w-full py-2 px-3 font-medium rounded-md shadow-md text-sm transition-all duration-300 transform ${
-          isRegistered
-            ? 'bg-green-500 text-white hover:bg-green-600'
-            : buttonHover
-              ? 'bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg -translate-y-0.5'
-              : 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:shadow-lg hover:-translate-y-0.5'
-        }`}
-        onMouseEnter={() => setButtonHover(true)}
-        onMouseLeave={() => setButtonHover(false)}
-        onClick={handleRegister}
-      >
-        <div className="flex items-center justify-center">
-          {isRegistered ? (
-            <>
-              <Check size={16} className="mr-2 animate-bounce" />
-              <span>{t('webinar.registered')}</span>
-            </>
-          ) : (
-            <>
-              <UserCheck size={16} className={`mr-2 ${buttonHover ? 'animate-pulse' : ''}`} />
-              <span>{t('webinar.register')}</span>
-            </>
-          )}
-        </div>
-      </button>
+      {/* Comments Panel */}
+      <SeminarCommentsPanel 
+        isOpen={isCommentsPanelOpen} 
+        onClose={() => setIsCommentsPanelOpen(false)}
+        initialTab={activeCommentsTab} 
+      />
       
       <style>{`
         @keyframes fade-in {

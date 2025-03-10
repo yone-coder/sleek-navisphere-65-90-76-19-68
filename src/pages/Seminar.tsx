@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,7 +7,6 @@ import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
 import EventCard from '../components/seminar/EventCard';
 import { useLanguage } from '../contexts/LanguageContext';
 import WebinarSchedule from '../components/seminar/WebinarSchedule';
-import SeminarCommentsPanel from '../components/seminar/SeminarCommentsPanel';
 
 const SeminarHomepage = () => {
   // Get language context
@@ -327,17 +327,10 @@ const SeminarHomepage = () => {
       
       {/* Fixed WebinarComponent at the bottom only for video tab - fully transparent without glassmorphism */}
       {activeTab === 0 && (
-        <div ref={webinarRef} className="fixed bottom-0 left-0 right-0 bg-transparent py-2 px-2 z-40">
+        <div ref={webinarRef} className="fixed bottom-0 left-0 right-0 bg-transparent z-40">
           <WebinarComponent onOpenComments={() => setIsCommentsPanelOpen(true)} />
         </div>
       )}
-      
-      {/* Comments Panel - Using our new SeminarCommentsPanel component */}
-      <SeminarCommentsPanel 
-        isOpen={isCommentsPanelOpen} 
-        onClose={() => setIsCommentsPanelOpen(false)}
-        initialTab={activeCommentsTab} 
-      />
     </div>
   );
 };
