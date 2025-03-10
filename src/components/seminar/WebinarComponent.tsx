@@ -402,5 +402,146 @@ const WebinarComponent = () => {
             
             <div className="text-right">
               <span className="font-medium flex items-center">
-                <Alert
+                <AlertCircle size={12} className="mr-1" />
+                {t('webinar.fillingup')} {estimatedTimeUntilFull()}
+              </span>
+            </div>
+          </div>
+          
+          {registrationMessage.isVisible && (
+            <div className="mt-2 py-1 px-2 bg-blue-50 text-blue-700 text-xs rounded-full flex items-center animate-fade-in">
+              <div className="w-4 h-4 rounded-full bg-blue-500 text-white text-[10px] flex items-center justify-center mr-1.5">
+                {registrationMessage.profile}
+              </div>
+              <span className="font-medium">{registrationMessage.message}</span>
+            </div>
+          )}
+        </div>
+        
+        <div className="relative flex flex-col space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                <Calendar size={20} />
+              </div>
+              <div>
+                <h2 className="text-sm font-semibold">{t('webinar.eventtitle')}</h2>
+                <div className="flex items-center text-xs text-gray-600 space-x-1">
+                  <Calendar size={12} />
+                  <span>{eventDate}</span>
+                </div>
+              </div>
+            </div>
+            
+            <button 
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 ${
+                isRegistered 
+                  ? 'bg-green-100 text-green-700' 
+                  : buttonHover 
+                    ? 'bg-blue-600 text-white' 
+                    : 'bg-blue-500 text-white hover:bg-blue-600'
+              }`}
+              onMouseEnter={() => setButtonHover(true)}
+              onMouseLeave={() => setButtonHover(false)}
+              onClick={handleRegister}
+              disabled={isRegistered}
+            >
+              {isRegistered ? (
+                <div className="flex items-center">
+                  <Check size={14} className="mr-1" />
+                  {t('webinar.registered')}
+                </div>
+              ) : (
+                t('webinar.register')
+              )}
+            </button>
+          </div>
+          
+          <div className="flex justify-between">
+            <div className="flex-1 grid grid-cols-4 divide-x divide-gray-200">
+              <div className="flex flex-col items-center px-2">
+                <div className="text-sm font-bold">{formatTime(timeLeft.days)}</div>
+                <div className="text-xs text-gray-500">{t('webinar.days')}</div>
+              </div>
+              <div className="flex flex-col items-center px-2">
+                <div className="text-sm font-bold">{formatTime(timeLeft.hours)}</div>
+                <div className="text-xs text-gray-500">{t('webinar.hours')}</div>
+              </div>
+              <div className="flex flex-col items-center px-2">
+                <div className="text-sm font-bold">{formatTime(timeLeft.minutes)}</div>
+                <div className="text-xs text-gray-500">{t('webinar.minutes')}</div>
+              </div>
+              <div className="flex flex-col items-center px-2">
+                <div className="text-sm font-bold">{formatTime(timeLeft.seconds)}</div>
+                <div className="text-xs text-gray-500">{t('webinar.seconds')}</div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex justify-between border-t border-gray-200 pt-3">
+            <div className="flex space-x-4">
+              <button 
+                onClick={handleLike}
+                className={`flex items-center text-xs font-medium ${isLiked ? selectedEmoji ? emojiReactions.find(e => e.name === selectedEmoji)?.color || 'text-red-500' : 'text-red-500' : 'text-gray-600'}`}
+              >
+                {isLiked && selectedEmoji ? (
+                  emojiReactions.find(e => e.name === selectedEmoji)?.icon || <Heart size={14} className="mr-1" fill="currentColor" />
+                ) : (
+                  <Heart size={14} className="mr-1" fill={isLiked ? "currentColor" : "none"} />
+                )}
+                <span>{formatNumber(likes)}</span>
+              </button>
+              
+              <button 
+                onClick={handleOpenComments} 
+                className="flex items-center text-xs font-medium text-gray-600"
+              >
+                <MessageCircle size={14} className="mr-1" />
+                <span>{formatNumber(comments)}</span>
+              </button>
+              
+              <button 
+                onClick={handleShare} 
+                className="flex items-center text-xs font-medium text-gray-600"
+              >
+                <Share size={14} className="mr-1" />
+                <span>{formatNumber(shares)}</span>
+              </button>
+            </div>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button 
+                  onClick={() => setShowEmojiMenu(!showEmojiMenu)} 
+                  className="flex items-center text-xs font-medium text-gray-600"
+                >
+                  <Smile size={14} className="mr-1" />
+                  <span>React</span>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="flex flex-col p-1 space-y-1">
+                {emojiReactions.map((reaction) => (
+                  <DropdownMenuItem 
+                    key={reaction.name} 
+                    onClick={() => handleLikeWithEmoji(reaction.name)}
+                    className={`flex items-center cursor-pointer px-2 py-1 rounded hover:bg-gray-100 ${selectedEmoji === reaction.name ? reaction.color + ' bg-gray-100' : ''}`}
+                  >
+                    {reaction.icon}
+                    <span>{reaction.label}</span>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+      </div>
+      
+      <TikTokCommentsPanel 
+        isOpen={isCommentsPanelOpen}
+        onClose={closeCommentsPanel}
+      />
+    </div>
+  );
+};
 
+export default WebinarComponent;
