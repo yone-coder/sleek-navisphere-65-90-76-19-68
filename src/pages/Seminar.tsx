@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight } from 'lucide-react';
 import WebinarComponent from '../components/seminar/WebinarComponent';
@@ -254,9 +253,9 @@ const SeminarHomepage = () => {
         )}
       </div>
       
-      {/* Fixed WebinarComponent at the bottom only for video tab - adjusted positioning and size */}
+      {/* Fixed WebinarComponent at the bottom only for video tab - now fully transparent with no border-t */}
       {activeTab === 0 && (
-        <div ref={webinarRef} className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 py-2 px-2 z-40">
+        <div ref={webinarRef} className="fixed bottom-0 left-0 right-0 bg-transparent py-2 px-2 z-40">
           <WebinarComponent />
         </div>
       )}
