@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,7 +6,7 @@ import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
 import EventCard from '../components/seminar/EventCard';
 import { useLanguage } from '../contexts/LanguageContext';
 import WebinarSchedule from '../components/seminar/WebinarSchedule';
-import { TikTokCommentsPanel } from '../components/comments/TikTokCommentsPanel';
+import TikTokCommentsPanel from '../components/comments/TikTokCommentsPanel';
 
 const SeminarHomepage = () => {
   // Get language context
@@ -335,8 +334,8 @@ const SeminarHomepage = () => {
       
       {/* TikTok Comments Panel */}
       <TikTokCommentsPanel 
-        open={isCommentsPanelOpen} 
-        onOpenChange={setIsCommentsPanelOpen}
+        isOpen={isCommentsPanelOpen} 
+        onClose={() => setIsCommentsPanelOpen(false)}
         initialTab={activeCommentsTab} 
       />
     </div>
