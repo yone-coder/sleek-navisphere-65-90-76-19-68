@@ -325,9 +325,9 @@ const SeminarHomepage = () => {
         )}
       </div>
       
-      {/* Fixed WebinarComponent at the bottom only for video tab - made fully transparent */}
+      {/* Fixed WebinarComponent at the bottom only for video tab - fully transparent without glassmorphism */}
       {activeTab === 0 && (
-        <div ref={webinarRef} className="fixed bottom-0 left-0 right-0 backdrop-blur-md bg-transparent py-2 px-2 z-40">
+        <div ref={webinarRef} className="fixed bottom-0 left-0 right-0 bg-transparent py-2 px-2 z-40">
           <WebinarComponent onOpenComments={() => setIsCommentsPanelOpen(true)} />
         </div>
       )}
