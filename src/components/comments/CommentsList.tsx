@@ -44,7 +44,7 @@ const CommentsList: React.FC<CommentsListProps> = ({
 }) => {
   if (comments.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-32">
+      <div className="flex flex-col items-center justify-center p-8">
         <p className="text-sm text-gray-500">
           No {activeTab} to display.
         </p>

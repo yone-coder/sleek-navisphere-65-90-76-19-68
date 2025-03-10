@@ -40,7 +40,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
   };
 
   return (
-    <form onSubmit={handleCommentSubmit} className="flex space-x-2 items-center">
+    <form onSubmit={handleCommentSubmit} className="flex space-x-2 items-center w-full">
       {(replyingTo || editingComment || editingReply) && (
         <Button
           type="button"

@@ -21,8 +21,8 @@ const ModernTabs: React.FC<ModernTabsProps> = ({
   children 
 }) => {
   return (
-    <div className="w-full flex flex-col flex-1 min-h-0 overflow-hidden">
-      <div className="px-3 py-2.5 relative">
+    <div className="w-full flex flex-col flex-1 min-h-0">
+      <div className="px-3 py-2.5 shrink-0">
         <div className="flex items-center justify-center gap-1 p-1 rounded-full bg-gray-100 relative z-10">
           {tabs.map((tab) => (
             <button
@@ -45,7 +45,7 @@ const ModernTabs: React.FC<ModernTabsProps> = ({
         </div>
       </div>
       
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden min-h-0">
         {children}
       </div>
     </div>
