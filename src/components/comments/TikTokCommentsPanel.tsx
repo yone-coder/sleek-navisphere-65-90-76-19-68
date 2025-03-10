@@ -23,14 +23,14 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   const [activeTab, setActiveTab] = useState(initialTab);
   
   // State for panel height
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const [prevHeight, setPrevHeight] = useState<number | null>(null);
   const isMobile = useIsMobile();
   
   // Motion values for dragging
   const y = useMotionValue(0);
-  const panelHeight = useMotionValue('60vh');
+  const panelHeight = useMotionValue('95vh');
   const opacity = useTransform(y, [0, 200], [1, 0]);
   
   // Original comment state
@@ -85,6 +85,7 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   const inputRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const commentInputRef = useRef<HTMLDivElement>(null);
   
   // Effect for handling click outside
   useEffect(() => {
@@ -106,6 +107,15 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
       setActiveTab(initialTab);
     }
   }, [initialTab]);
+
+  // Scroll to comment input when panel opens
+  useEffect(() => {
+    if (isOpen && commentInputRef.current) {
+      setTimeout(() => {
+        commentInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }, 300);
+    }
+  }, [isOpen]);
 
   // Effect to focus input when editing
   useEffect(() => {
@@ -500,7 +510,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     return false;
   };
   
-  // Filter and sort functions
   const getFilteredData = () => {
     const dataToFilter = activeTab === 'testimonials' ? testimonials : comments;
     
@@ -524,7 +533,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     { id: 'faqs', label: 'FAQs' },
   ];
   
-  // Define variants for animations
   const panelVariants = {
     hidden: { y: "100%" },
     visible: { y: 0, transition: { type: "spring", damping: 20, stiffness: 300 } },
@@ -544,7 +552,7 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
         {isOpen && (
           <motion.div
             ref={panelRef}
-            className="fixed bottom-0 inset-x-0 bg-white rounded-t-2xl shadow-lg z-50"
+            className="fixed bottom-0 inset-x-0 bg-white rounded-t-2xl shadow-lg z-50 flex flex-col"
             style={{ 
               height: panelHeight, 
               maxHeight: '95vh',
@@ -561,12 +569,10 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
             onDrag={handleDrag}
             onDragEnd={handleDragEnd}
           >
-            {/* Drag handle */}
             <div className="w-full flex justify-center cursor-grab active:cursor-grabbing">
               <div className="w-12 h-1.5 bg-gray-300 rounded-full my-2"></div>
             </div>
             
-            {/* Header with title and close button */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
               <div className="flex items-center gap-2">
                 <button
@@ -629,77 +635,69 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
               </button>
             </div>
             
-            {/* Main content */}
-            <div className="h-full overflow-hidden flex flex-col">
-              {/* Tabs for different content types */}
-              {!replyingTo && !editingComment && !editingReply && (
-                <ModernTabs 
-                  activeTab={activeTab} 
-                  setActiveTab={setActiveTab}
-                  tabs={tabItems}
-                >
-                  <div className={`overflow-y-auto ${activeTab === 'comments' ? 'block' : 'hidden'}`} 
-                       style={{ maxHeight: 'calc(95vh - 10rem)' }}>
-                    <div className="p-4 space-y-4">
-                      <CommentsList 
-                        comments={sortedComments}
-                        activeTab={activeTab}
-                        editingComment={editingComment}
-                        commentMenuOpen={commentMenuOpen}
-                        commentText={commentText}
-                        menuRef={menuRef}
-                        inputRef={inputRef}
-                        isOwnContent={isOwnContent}
-                        setCommentMenuOpen={setCommentMenuOpen}
-                        setCommentText={setCommentText}
-                        toggleLike={toggleLike}
-                        startReply={startReply}
-                        cancelEdit={cancelEdit}
-                        saveEditComment={saveEditComment}
-                        startEditComment={startEditComment}
-                        deleteComment={deleteComment}
-                        pinComment={pinComment}
-                      />
-                    </div>
+            <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+              <ModernTabs 
+                activeTab={activeTab} 
+                setActiveTab={setActiveTab}
+                tabs={tabItems}
+              >
+                <div className={`overflow-y-auto flex-1 ${activeTab === 'comments' ? 'block' : 'hidden'}`}>
+                  <div className="p-4 space-y-4">
+                    <CommentsList 
+                      comments={sortedComments}
+                      activeTab={activeTab}
+                      editingComment={editingComment}
+                      commentMenuOpen={commentMenuOpen}
+                      commentText={commentText}
+                      menuRef={menuRef}
+                      inputRef={inputRef}
+                      isOwnContent={isOwnContent}
+                      setCommentMenuOpen={setCommentMenuOpen}
+                      setCommentText={setCommentText}
+                      toggleLike={toggleLike}
+                      startReply={startReply}
+                      cancelEdit={cancelEdit}
+                      saveEditComment={saveEditComment}
+                      startEditComment={startEditComment}
+                      deleteComment={deleteComment}
+                      pinComment={pinComment}
+                    />
                   </div>
-                  
-                  <div className={`overflow-y-auto ${activeTab === 'testimonials' ? 'block' : 'hidden'}`}
-                       style={{ maxHeight: 'calc(95vh - 10rem)' }}>
-                    <div className="p-4 space-y-4">
-                      <CommentsList 
-                        comments={sortedComments}
-                        activeTab={activeTab}
-                        editingComment={editingComment}
-                        commentMenuOpen={commentMenuOpen}
-                        commentText={commentText}
-                        menuRef={menuRef}
-                        inputRef={inputRef}
-                        isOwnContent={isOwnContent}
-                        setCommentMenuOpen={setCommentMenuOpen}
-                        setCommentText={setCommentText}
-                        toggleLike={toggleLike}
-                        startReply={startReply}
-                        cancelEdit={cancelEdit}
-                        saveEditComment={saveEditComment}
-                        startEditComment={startEditComment}
-                        deleteComment={deleteComment}
-                        pinComment={pinComment}
-                      />
-                    </div>
+                </div>
+                
+                <div className={`overflow-y-auto flex-1 ${activeTab === 'testimonials' ? 'block' : 'hidden'}`}>
+                  <div className="p-4 space-y-4">
+                    <CommentsList 
+                      comments={sortedComments}
+                      activeTab={activeTab}
+                      editingComment={editingComment}
+                      commentMenuOpen={commentMenuOpen}
+                      commentText={commentText}
+                      menuRef={menuRef}
+                      inputRef={inputRef}
+                      isOwnContent={isOwnContent}
+                      setCommentMenuOpen={setCommentMenuOpen}
+                      setCommentText={setCommentText}
+                      toggleLike={toggleLike}
+                      startReply={startReply}
+                      cancelEdit={cancelEdit}
+                      saveEditComment={saveEditComment}
+                      startEditComment={startEditComment}
+                      deleteComment={deleteComment}
+                      pinComment={pinComment}
+                    />
                   </div>
-                  
-                  <div className={`overflow-y-auto ${activeTab === 'faqs' ? 'block' : 'hidden'}`}
-                       style={{ maxHeight: 'calc(95vh - 10rem)' }}>
-                    <div className="p-4 space-y-4">
-                      <FAQsList faqs={faqs} />
-                    </div>
+                </div>
+                
+                <div className={`overflow-y-auto flex-1 ${activeTab === 'faqs' ? 'block' : 'hidden'}`}>
+                  <div className="p-4 space-y-4">
+                    <FAQsList faqs={faqs} />
                   </div>
-                </ModernTabs>
-              )}
+                </div>
+              </ModernTabs>
               
-              {/* When replying or editing, show content */}
               {(replyingTo || editingComment || editingReply) && (
-                <div className="overflow-y-auto p-4" style={{ maxHeight: 'calc(95vh - 10rem)' }}>
+                <div className="overflow-y-auto flex-1 p-4">
                   {replyingTo && (
                     <div className="bg-gray-50 p-3 rounded-lg mb-4">
                       <p className="text-sm text-gray-700">
@@ -710,9 +708,8 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
                 </div>
               )}
               
-              {/* Comment input - not shown for FAQs */}
               {activeTab !== 'faqs' && (
-                <div className="p-4 border-t border-gray-200 bg-white mt-auto">
+                <div ref={commentInputRef} className="p-4 border-t border-gray-200 bg-white mt-auto sticky bottom-0">
                   <CommentForm 
                     commentText={commentText}
                     setCommentText={setCommentText}
@@ -732,7 +729,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
         )}
       </AnimatePresence>
       
-      {/* Auth modal for guest comments */}
       <CommentAuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
