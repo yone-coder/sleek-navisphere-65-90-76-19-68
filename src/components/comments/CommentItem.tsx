@@ -1,5 +1,5 @@
 
-import React, { useRef } from 'react';
+import React from 'react';
 import { Heart, MessageCircle, MoreHorizontal, Trash2, Edit, Flag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,7 +17,7 @@ interface CommentItemProps {
   isOwnContent: (userId?: string) => boolean;
   setCommentMenuOpen: (id: number | null) => void;
   setCommentText: (text: string) => void;
-  toggleLike: (id: number) => void;
+  toggleLike: (id: number, isReply?: boolean, parentId?: number | null) => void;
   startReply: (id: number) => void;
   cancelEdit: () => void;
   saveEditComment: () => void;
@@ -45,6 +45,32 @@ const CommentItem: React.FC<CommentItemProps> = ({
   deleteComment,
   pinComment
 }) => {
+  // State for reply menu and editing replies
+  const [replyMenuOpen, setReplyMenuOpen] = React.useState<number | null>(null);
+  const [editingReply, setEditingReply] = React.useState<{ commentId: number, replyId: number } | null>(null);
+
+  // Start editing a reply
+  const handleStartEditReply = (commentId: number, reply: Reply) => {
+    setEditingReply({ commentId, replyId: reply.id });
+    setCommentText(reply.text);
+    setReplyMenuOpen(null);
+  };
+
+  // Save an edited reply
+  const handleSaveEditReply = () => {
+    if (editingReply) {
+      // The parent component handles the actual saving
+      saveEditComment();
+      setEditingReply(null);
+    }
+  };
+
+  // Delete a reply
+  const handleDeleteReply = (commentId: number, replyId: number) => {
+    deleteComment(replyId);
+    setReplyMenuOpen(null);
+  };
+
   return (
     <div className="space-y-4">
       <div className={`flex space-x-3 relative ${comment.pinned ? "p-3 border border-gray-200 rounded-lg bg-pink-50 bg-opacity-10" : ""}`}>
@@ -86,7 +112,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
             <div className="flex items-center space-x-2">
               <span className="text-xs text-gray-500">{comment.timestamp}</span>
               
-              <div className="relative" ref={menuRef}>
+              <div className="relative">
                 <Button 
                   variant="ghost"
                   size="icon"
@@ -97,7 +123,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 </Button>
                 
                 {commentMenuOpen === comment.id && (
-                  <div className="absolute right-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                  <div ref={menuRef} className="absolute right-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
                     <ul>
                       {(isOwnContent(comment.userId) || comment.username === '@me') && (
                         <>
@@ -117,7 +143,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                           </li>
                         </>
                       )}
-                      {comment.username === '@creator' && (
+                      {(comment.username === '@creator' || isOwnContent(comment.userId)) && (
                         <li 
                           className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
                           onClick={() => pinComment(comment.id)}
@@ -202,21 +228,21 @@ const CommentItem: React.FC<CommentItemProps> = ({
                   key={reply.id}
                   reply={reply}
                   comment={comment}
-                  replyMenuOpen={commentMenuOpen}
-                  setReplyMenuOpen={setCommentMenuOpen}
-                  menuRef={menuRef}
-                  isOwnContent={isOwnContent}
-                  toggleLike={toggleLike}
+                  replyMenuOpen={replyMenuOpen}
+                  editingReply={editingReply}
+                  isEditing={editingReply?.replyId === reply.id}
+                  commentText={commentText}
                   commentId={comment.id}
-                  deleteReply={(commentId, replyId) => deleteComment(replyId)}
-                  startEditReply={() => {}}
-                  isEditing={false}
-                  commentText=""
+                  menuRef={menuRef}
                   inputRef={inputRef}
-                  setCommentText={() => {}}
-                  cancelEdit={() => {}}
-                  saveEditReply={() => {}}
-                  editingReply={null}
+                  isOwnContent={isOwnContent}
+                  setReplyMenuOpen={setReplyMenuOpen}
+                  toggleLike={toggleLike}
+                  deleteReply={handleDeleteReply}
+                  startEditReply={handleStartEditReply}
+                  setCommentText={setCommentText}
+                  cancelEdit={cancelEdit}
+                  saveEditReply={handleSaveEditReply}
                 />
               ))}
             </div>

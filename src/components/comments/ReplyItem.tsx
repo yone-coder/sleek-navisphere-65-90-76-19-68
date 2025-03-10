@@ -85,7 +85,7 @@ const ReplyItem: React.FC<ReplyItemProps> = ({
               </Button>
               
               {replyMenuOpen === reply.id && (
-                <div className="absolute right-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                <div ref={menuRef} className="absolute right-0 mt-1 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
                   <ul>
                     <li 
                       className="px-3 py-2 flex items-center space-x-2 hover:bg-gray-100 cursor-pointer"
@@ -108,7 +108,7 @@ const ReplyItem: React.FC<ReplyItemProps> = ({
           )}
         </div>
         
-        {editingReply && editingReply.replyId === reply.id ? (
+        {editingReply && editingReply.commentId === comment.id && editingReply.replyId === reply.id ? (
           <div className="mt-1">
             <Input
               ref={inputRef}

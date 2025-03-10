@@ -15,6 +15,8 @@ interface CommentFormProps {
   cancelEdit: () => void;
   inputRef: React.RefObject<HTMLInputElement>;
   isSubmitting?: boolean;
+  isAuthenticated?: boolean;
+  onFocus?: () => void;
 }
 
 const CommentForm: React.FC<CommentFormProps> = ({
@@ -27,7 +29,9 @@ const CommentForm: React.FC<CommentFormProps> = ({
   cancelReply,
   cancelEdit,
   inputRef,
-  isSubmitting = false
+  isSubmitting = false,
+  isAuthenticated = false,
+  onFocus
 }) => {
   const getPlaceholderText = () => {
     if (replyingTo) {
@@ -36,6 +40,12 @@ const CommentForm: React.FC<CommentFormProps> = ({
       return "Edit your message...";
     } else {
       return "Add a comment...";
+    }
+  };
+
+  const handleInputFocus = () => {
+    if (!isAuthenticated && onFocus) {
+      onFocus();
     }
   };
 
@@ -56,6 +66,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
         ref={inputRef}
         value={commentText}
         onChange={(e) => setCommentText(e.target.value)}
+        onFocus={handleInputFocus}
         placeholder={getPlaceholderText()}
         className="flex-grow rounded-full bg-gray-100 border-0 focus:ring-1 focus:ring-pink-500 py-6 px-4 text-base"
         autoFocus={replyingTo !== null || editingComment !== null || editingReply !== null}

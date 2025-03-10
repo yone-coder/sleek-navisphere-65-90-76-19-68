@@ -22,7 +22,7 @@ const ModernTabs: React.FC<ModernTabsProps> = ({
 }) => {
   return (
     <div className="w-full flex flex-col flex-1 min-h-0">
-      <div className="px-3 py-2.5 shrink-0">
+      <div className="px-3 py-2.5 shrink-0 sticky top-0 z-10 bg-white">
         <div className="flex items-center justify-center gap-1 p-1 rounded-full bg-gray-100 relative z-10">
           {tabs.map((tab) => (
             <button

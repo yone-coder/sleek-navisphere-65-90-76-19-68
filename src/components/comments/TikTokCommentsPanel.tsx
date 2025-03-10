@@ -87,7 +87,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   const panelRef = useRef<HTMLDivElement>(null);
   const commentInputRef = useRef<HTMLDivElement>(null);
   
-  // Effect for handling click outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -101,14 +100,12 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Set active tab from prop when it changes
   useEffect(() => {
     if (initialTab) {
       setActiveTab(initialTab);
     }
   }, [initialTab]);
 
-  // Scroll to comment input when panel opens
   useEffect(() => {
     if (isOpen && commentInputRef.current) {
       setTimeout(() => {
@@ -117,14 +114,12 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     }
   }, [isOpen]);
 
-  // Effect to focus input when editing
   useEffect(() => {
     if (editingComment || replyingTo || editingReply) {
       inputRef.current?.focus();
     }
   }, [editingComment, replyingTo, editingReply]);
   
-  // Handle drag start
   const handleDragStart = () => {
     setIsDragging(true);
     if (!prevHeight) {
@@ -135,13 +130,11 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
     }
   };
 
-  // Handle dragging
   const handleDrag = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const currentY = y.get();
     const deltaY = info.delta.y;
 
     if (currentY + deltaY < 0) {
-      // Dragging up (expanding)
       const newHeight = Math.min(100, parseInt(panelHeight.get() as string) - deltaY / 10);
       panelHeight.set(`${newHeight}vh`);
       
@@ -149,7 +142,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
         setIsFullscreen(true);
       }
     } else {
-      // Dragging down (collapsing)
       const newHeight = Math.max(30, parseInt(panelHeight.get() as string) - deltaY / 10);
       panelHeight.set(`${newHeight}vh`);
       
@@ -158,44 +150,34 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
       }
       
       if (newHeight <= 10) {
-        // Close panel when dragged too far down
         onClose();
       }
     }
   };
 
-  // Handle drag end
   const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     setIsDragging(false);
     
-    // Snap to positions
     const currentHeight = parseInt(panelHeight.get() as string);
     
     if (info.velocity.y > 500) {
-      // Quick flick down, close panel
       onClose();
     } else if (info.velocity.y < -500) {
-      // Quick flick up, expand to fullscreen
       setIsFullscreen(true);
       panelHeight.set('95vh');
     } else if (currentHeight < 40) {
-      // Dragged down significantly, close
       onClose();
     } else if (currentHeight > 80) {
-      // Expanded significantly, go fullscreen
       setIsFullscreen(true);
       panelHeight.set('95vh');
     } else {
-      // Return to default position
       setIsFullscreen(false);
       panelHeight.set('60vh');
     }
     
-    // Reset y position
     y.set(0);
   };
 
-  // Handle toggle fullscreen
   const toggleFullscreen = () => {
     if (isFullscreen) {
       setIsFullscreen(false);
@@ -208,6 +190,12 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
       setPrevHeight(parseInt(panelHeight.get() as string));
       setIsFullscreen(true);
       panelHeight.set('95vh');
+    }
+  };
+
+  const handleInputFocus = () => {
+    if (!isAuthenticated && !currentUser) {
+      setShowAuthModal(true);
     }
   };
   
@@ -354,6 +342,30 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   };
   
   const deleteComment = (id: number) => {
+    for (const comment of (activeTab === 'testimonials' ? testimonials : comments)) {
+      if (comment.replies?.some(reply => reply.id === id)) {
+        if (activeTab === 'testimonials') {
+          setTestimonials(testimonials.map(c => ({
+            ...c,
+            replies: c.replies.filter(r => r.id !== id)
+          })));
+        } else {
+          setComments(comments.map(c => ({
+            ...c,
+            replies: c.replies.filter(r => r.id !== id)
+          })));
+        }
+        
+        toast({
+          title: "Reply deleted",
+          description: "Your reply has been removed",
+          duration: 3000,
+        });
+        
+        return;
+      }
+    }
+    
     if (activeTab === 'testimonials') {
       const updatedTestimonials = testimonials.filter(testimonial => testimonial.id !== id);
       setTestimonials(updatedTestimonials);
@@ -420,28 +432,61 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   };
   
   const saveEditComment = () => {
-    if (commentText.trim() && editingComment) {
-      const updatedData = (activeTab === 'testimonials' ? testimonials : comments).map(comment => {
-        if (comment.id === editingComment) {
-          return { ...comment, text: commentText };
+    if (commentText.trim()) {
+      if (editingComment) {
+        const updatedData = (activeTab === 'testimonials' ? testimonials : comments).map(comment => {
+          if (comment.id === editingComment) {
+            return { ...comment, text: commentText };
+          }
+          return comment;
+        });
+        
+        if (activeTab === 'testimonials') {
+          setTestimonials(updatedData);
+        } else {
+          setComments(updatedData);
         }
-        return comment;
-      });
-      
-      if (activeTab === 'testimonials') {
-        setTestimonials(updatedData);
-      } else {
-        setComments(updatedData);
+        
+        toast({
+          title: activeTab === 'testimonials' ? "Testimonial updated" : "Comment updated", 
+          description: "Your changes have been saved",
+          duration: 3000,
+        });
+        
+        setEditingComment(null);
+      } else if (editingReply) {
+        const updatedData = (activeTab === 'testimonials' ? testimonials : comments).map(comment => {
+          if (comment.id === editingReply.commentId) {
+            return {
+              ...comment,
+              replies: comment.replies.map(reply => {
+                if (reply.id === editingReply.replyId) {
+                  return { ...reply, text: commentText };
+                }
+                return reply;
+              })
+            };
+          }
+          return comment;
+        });
+        
+        if (activeTab === 'testimonials') {
+          setTestimonials(updatedData);
+        } else {
+          setComments(updatedData);
+        }
+        
+        toast({
+          title: "Reply updated",
+          description: "Your changes have been saved",
+          duration: 3000,
+        });
+        
+        setEditingReply(null);
       }
       
-      toast({
-        title: activeTab === 'testimonials' ? "Testimonial updated" : "Comment updated", 
-        description: "Your changes have been saved",
-        duration: 3000,
-      });
+      setCommentText('');
     }
-    setEditingComment(null);
-    setCommentText('');
   };
   
   const saveEditReply = () => {
@@ -495,6 +540,11 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
   };
   
   const startReply = (commentId: number) => {
+    if (!isAuthenticated && !currentUser) {
+      setShowAuthModal(true);
+      return;
+    }
+    
     setReplyingTo(commentId);
     setCommentText('');
   };
@@ -569,12 +619,10 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
             onDrag={handleDrag}
             onDragEnd={handleDragEnd}
           >
-            {/* Drag handle */}
             <div className="w-full flex justify-center cursor-grab active:cursor-grabbing shrink-0">
               <div className="w-12 h-1.5 bg-gray-300 rounded-full my-2"></div>
             </div>
             
-            {/* Fixed header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-30 shrink-0">
               <div className="flex items-center gap-2">
                 <button
@@ -637,14 +685,12 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
               </button>
             </div>
             
-            {/* Main content area - Flexbox layout with proper overflow handling */}
             <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
               <ModernTabs 
                 activeTab={activeTab} 
                 setActiveTab={setActiveTab}
                 tabs={tabItems}
               >
-                {/* Comments tab */}
                 <div className={`h-full overflow-y-auto flex-1 ${activeTab === 'comments' ? 'block' : 'hidden'}`}>
                   <div className="p-4 pb-20 space-y-4">
                     <CommentsList 
@@ -669,7 +715,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
                   </div>
                 </div>
                 
-                {/* Testimonials tab */}
                 <div className={`h-full overflow-y-auto flex-1 ${activeTab === 'testimonials' ? 'block' : 'hidden'}`}>
                   <div className="p-4 pb-20 space-y-4">
                     <CommentsList 
@@ -694,7 +739,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
                   </div>
                 </div>
                 
-                {/* FAQs tab */}
                 <div className={`h-full overflow-y-auto flex-1 ${activeTab === 'faqs' ? 'block' : 'hidden'}`}>
                   <div className="p-4 pb-20 space-y-4">
                     <FAQsList faqs={faqs} />
@@ -702,7 +746,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
                 </div>
               </ModernTabs>
               
-              {/* Reply/Edit context */}
               {(replyingTo || editingComment || editingReply) && (
                 <div className="p-4 bg-white border-t border-gray-100 shrink-0">
                   {replyingTo && (
@@ -715,7 +758,6 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
                 </div>
               )}
               
-              {/* Fixed comment input at bottom */}
               {activeTab !== 'faqs' && (
                 <div 
                   ref={commentInputRef} 
@@ -732,6 +774,8 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
                     cancelEdit={cancelEdit}
                     inputRef={inputRef}
                     isSubmitting={isSubmitting}
+                    isAuthenticated={isAuthenticated || !!currentUser}
+                    onFocus={handleInputFocus}
                   />
                 </div>
               )}
