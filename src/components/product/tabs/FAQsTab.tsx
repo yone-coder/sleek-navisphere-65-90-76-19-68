@@ -31,7 +31,9 @@ export function FAQsTab() {
 
   return (
     <TabsContent value="faqs" className="space-y-6 mt-6 animate-in fade-in">
-      <FAQsList faqs={faqs} />
+      <div className="px-1">
+        <FAQsList faqs={faqs} />
+      </div>
     </TabsContent>
   );
 }
