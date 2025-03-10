@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader } from '@/components/ui/sheet';
@@ -462,22 +461,22 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
               className="w-full"
             >
               <div className="border-b">
-                <TabsList className="w-full justify-between bg-transparent px-4 h-12">
+                <TabsList className="w-full justify-center bg-transparent px-4 py-1 gap-1 h-auto relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:bg-gray-200">
                   <TabsTrigger 
                     value="comments" 
-                    className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-pink-500 data-[state=active]:shadow-none rounded-none"
+                    className="flex-1 px-4 py-2.5 data-[state=active]:text-pink-500 data-[state=active]:font-medium data-[state=active]:after:content-[''] data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:right-0 data-[state=active]:after:h-[2px] data-[state=active]:after:bg-pink-500 data-[state=active]:after:rounded-t-full relative data-[state=active]:shadow-none rounded-none text-sm transition-all"
                   >
                     Comments
                   </TabsTrigger>
                   <TabsTrigger 
                     value="testimonials" 
-                    className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-pink-500 data-[state=active]:shadow-none rounded-none"
+                    className="flex-1 px-4 py-2.5 data-[state=active]:text-pink-500 data-[state=active]:font-medium data-[state=active]:after:content-[''] data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:right-0 data-[state=active]:after:h-[2px] data-[state=active]:after:bg-pink-500 data-[state=active]:after:rounded-t-full relative data-[state=active]:shadow-none rounded-none text-sm transition-all"
                   >
                     Testimonials
                   </TabsTrigger>
                   <TabsTrigger 
                     value="faqs" 
-                    className="flex-1 data-[state=active]:border-b-2 data-[state=active]:border-pink-500 data-[state=active]:shadow-none rounded-none"
+                    className="flex-1 px-4 py-2.5 data-[state=active]:text-pink-500 data-[state=active]:font-medium data-[state=active]:after:content-[''] data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:right-0 data-[state=active]:after:h-[2px] data-[state=active]:after:bg-pink-500 data-[state=active]:after:rounded-t-full relative data-[state=active]:shadow-none rounded-none text-sm transition-all"
                   >
                     FAQs
                   </TabsTrigger>

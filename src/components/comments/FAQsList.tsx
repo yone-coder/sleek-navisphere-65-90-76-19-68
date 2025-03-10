@@ -17,7 +17,7 @@ const FAQsList: React.FC<FAQsListProps> = ({ faqs }) => {
   }
 
   return (
-    <div className="space-y-4 mt-2">
+    <div className="space-y-4 mt-2 animate-in fade-in">
       {faqs.map((faq) => (
         <FAQItem key={faq.id} faq={faq} />
       ))}
