@@ -1,11 +1,12 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import WebinarComponent from '../components/seminar/WebinarComponent';
 import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
 import EventCard from '../components/seminar/EventCard';
 import { useLanguage } from '../contexts/LanguageContext';
 import WebinarSchedule from '../components/seminar/WebinarSchedule';
+import SeminarCommentsPanel from '../components/seminar/SeminarCommentsPanel';
 
 const SeminarHomepage = () => {
   // Get language context
@@ -19,6 +20,10 @@ const SeminarHomepage = () => {
   const [bottomPadding, setBottomPadding] = useState(0);
   // State for views hover
   const [viewsHovered, setViewsHovered] = useState(false);
+  // State for comments panel
+  const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
+  // State for active comments tab
+  const [activeCommentsTab, setActiveCommentsTab] = useState('comments');
   // Ref for the WebinarComponent
   const webinarRef = useRef<HTMLDivElement>(null);
   
@@ -55,6 +60,11 @@ const SeminarHomepage = () => {
     { id: 3, name: t('seminar.tabs.testimonials'), icon: <Users size={18} /> },
     { id: 4, name: t('seminar.tabs.register'), icon: <Edit3 size={18} /> }
   ];
+  
+  const handleTestimonialsClick = () => {
+    setActiveCommentsTab('testimonials');
+    setIsCommentsPanelOpen(true);
+  };
   
   return (
     <div className="flex flex-col w-full max-w-6xl mx-auto bg-gray-50 shadow-xl rounded-xl overflow-hidden">
@@ -242,8 +252,69 @@ const SeminarHomepage = () => {
         )}
         
         {activeTab === 3 && (
-          <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500">
-            {t('seminar.testimonials')}
+          <div className="p-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">{t('seminar.tabs.testimonials')}</h3>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleTestimonialsClick}
+                className="text-blue-600 border-blue-300 hover:bg-blue-50"
+              >
+                {t('seminar.viewAllTestimonials')}
+                <ChevronRight className="ml-1 h-4 w-4" />
+              </Button>
+            </div>
+            
+            <div className="space-y-4">
+              {/* Sample testimonials - we're showing just a few here */}
+              <div className="bg-blue-50 rounded-lg p-4">
+                <div className="flex items-start">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex-shrink-0 flex items-center justify-center mr-3">
+                    <span className="text-xs font-bold text-white">LE</span>
+                  </div>
+                  <div>
+                    <div className="flex items-center">
+                      <h4 className="font-medium text-sm">@learner1</h4>
+                      <span className="ml-2 flex items-center text-yellow-500">
+                        <Star size={14} className="fill-current" />
+                        <Star size={14} className="fill-current" />
+                        <Star size={14} className="fill-current" />
+                        <Star size={14} className="fill-current" />
+                        <Star size={14} className="fill-current" />
+                      </span>
+                    </div>
+                    <p className="text-sm mt-1">This seminar changed my career! I was able to get a job as a developer right after completing it.</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-gray-50 rounded-lg p-4">
+                <div className="flex items-start">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex-shrink-0 flex items-center justify-center mr-3">
+                    <span className="text-xs font-bold text-white">DP</span>
+                  </div>
+                  <div>
+                    <div className="flex items-center">
+                      <h4 className="font-medium text-sm">@devpro</h4>
+                      <span className="inline-block rounded-full bg-blue-500 p-0.5 text-white ml-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                      </span>
+                      <span className="ml-2 flex items-center text-yellow-500">
+                        <Star size={14} className="fill-current" />
+                        <Star size={14} className="fill-current" />
+                        <Star size={14} className="fill-current" />
+                        <Star size={14} className="fill-current" />
+                        <Star size={14} className="fill-current" />
+                      </span>
+                    </div>
+                    <p className="text-sm mt-1">The instructor knows the subject matter deeply. Very impressed with the quality of content!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
         
@@ -254,12 +325,19 @@ const SeminarHomepage = () => {
         )}
       </div>
       
-      {/* Fixed WebinarComponent at the bottom only for video tab - adjusted positioning and size */}
+      {/* Fixed WebinarComponent at the bottom only for video tab - fully transparent without glassmorphism */}
       {activeTab === 0 && (
-        <div ref={webinarRef} className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 py-2 px-2 z-40">
-          <WebinarComponent />
+        <div ref={webinarRef} className="fixed bottom-0 left-0 right-0 bg-transparent py-2 px-2 z-40">
+          <WebinarComponent onOpenComments={() => setIsCommentsPanelOpen(true)} />
         </div>
       )}
+      
+      {/* Comments Panel - Using our new SeminarCommentsPanel component */}
+      <SeminarCommentsPanel 
+        isOpen={isCommentsPanelOpen} 
+        onClose={() => setIsCommentsPanelOpen(false)}
+        initialTab={activeCommentsTab} 
+      />
     </div>
   );
 };
