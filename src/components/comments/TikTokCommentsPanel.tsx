@@ -569,11 +569,13 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
             onDrag={handleDrag}
             onDragEnd={handleDragEnd}
           >
+            {/* Drag handle */}
             <div className="w-full flex justify-center cursor-grab active:cursor-grabbing">
               <div className="w-12 h-1.5 bg-gray-300 rounded-full my-2"></div>
             </div>
             
-            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+            {/* Fixed header */}
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white/80 backdrop-blur-sm">
               <div className="flex items-center gap-2">
                 <button
                   onClick={toggleFullscreen}
@@ -635,13 +637,15 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
               </button>
             </div>
             
+            {/* Scrollable content */}
             <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
               <ModernTabs 
                 activeTab={activeTab} 
                 setActiveTab={setActiveTab}
                 tabs={tabItems}
               >
-                <div className={`overflow-y-auto flex-1 ${activeTab === 'comments' ? 'block' : 'hidden'}`}>
+                {/* Comments tab */}
+                <div className={`h-full overflow-y-auto flex-1 ${activeTab === 'comments' ? 'block' : 'hidden'}`}>
                   <div className="p-4 space-y-4">
                     <CommentsList 
                       comments={sortedComments}
@@ -665,7 +669,8 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
                   </div>
                 </div>
                 
-                <div className={`overflow-y-auto flex-1 ${activeTab === 'testimonials' ? 'block' : 'hidden'}`}>
+                {/* Testimonials tab */}
+                <div className={`h-full overflow-y-auto flex-1 ${activeTab === 'testimonials' ? 'block' : 'hidden'}`}>
                   <div className="p-4 space-y-4">
                     <CommentsList 
                       comments={sortedComments}
@@ -689,13 +694,15 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
                   </div>
                 </div>
                 
-                <div className={`overflow-y-auto flex-1 ${activeTab === 'faqs' ? 'block' : 'hidden'}`}>
+                {/* FAQs tab */}
+                <div className={`h-full overflow-y-auto flex-1 ${activeTab === 'faqs' ? 'block' : 'hidden'}`}>
                   <div className="p-4 space-y-4">
                     <FAQsList faqs={faqs} />
                   </div>
                 </div>
               </ModernTabs>
               
+              {/* Reply/Edit context */}
               {(replyingTo || editingComment || editingReply) && (
                 <div className="overflow-y-auto flex-1 p-4">
                   {replyingTo && (
@@ -708,8 +715,9 @@ const TikTokCommentsPanel: React.FC<TikTokCommentsPanelProps> = ({ onClose, isOp
                 </div>
               )}
               
+              {/* Fixed comment input at bottom */}
               {activeTab !== 'faqs' && (
-                <div ref={commentInputRef} className="p-4 border-t border-gray-200 bg-white mt-auto sticky bottom-0">
+                <div ref={commentInputRef} className="p-4 border-t border-gray-200 bg-white sticky bottom-0">
                   <CommentForm 
                     commentText={commentText}
                     setCommentText={setCommentText}
