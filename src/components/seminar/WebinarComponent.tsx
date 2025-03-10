@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Clock, Calendar, UserCheck, AlertCircle, Check, Users, Eye, Heart, MessageCircle, Share, Smile, Star, ThumbsUp, Award, Trophy } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -51,7 +50,6 @@ const WebinarComponent = ({ onOpenComments }: WebinarComponentProps) => {
   const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
   const [showEmojiMenu, setShowEmojiMenu] = useState(false);
 
-  // New state for hearts animation
   const [showHeartAnimation, setShowHeartAnimation] = useState(false);
 
   const eventDate = "March 12, 2025 • 4:45 PM";
@@ -166,21 +164,17 @@ const WebinarComponent = ({ onOpenComments }: WebinarComponentProps) => {
 
   const handleLikeWithEmoji = (emojiName: string) => {
     if (selectedEmoji === emojiName) {
-      // Clicking same emoji again toggles it off
       setIsLiked(false);
       setSelectedEmoji(null);
       setLikes(prev => prev - 1);
       setShowHeartAnimation(false);
     } else {
-      // New emoji selected
       if (!isLiked) {
-        // If not already liked, increment count
         setLikes(prev => prev + 1);
       }
       setIsLiked(true);
       setSelectedEmoji(emojiName);
       
-      // Activate hearts animation
       setShowHeartAnimation(true);
       setTimeout(() => setShowHeartAnimation(false), 2000);
     }
@@ -190,10 +184,9 @@ const WebinarComponent = ({ onOpenComments }: WebinarComponentProps) => {
   const handleLike = () => {
     if (!isLiked) {
       setIsLiked(true);
-      setSelectedEmoji('heart'); // Default to heart
+      setSelectedEmoji('heart');
       setLikes(prev => prev + 1);
       
-      // Activate hearts animation
       setShowHeartAnimation(true);
       setTimeout(() => setShowHeartAnimation(false), 2000);
     } else {
@@ -344,11 +337,10 @@ const WebinarComponent = ({ onOpenComments }: WebinarComponentProps) => {
   };
 
   return (
-    <div className="w-full max-w-sm bg-white rounded-lg shadow-lg p-2 mx-auto relative">
+    <div className="w-full max-w-sm bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg shadow-lg p-2 mx-auto relative">
       {/* Hearts animation container */}
       <AnimatedHearts isActive={showHeartAnimation} />
       
-      {/* Rest of the component */}
       <div className="relative mb-2">
         <div className="flex justify-between items-center mb-1 text-xs">
           <div className="flex items-center text-gray-600">
@@ -457,7 +449,6 @@ const WebinarComponent = ({ onOpenComments }: WebinarComponentProps) => {
                 )}
                 <span className="font-medium">{formatNumber(likes)}</span>
                 
-                {/* Ripple effect when liked */}
                 {isLiked && (
                   <div 
                     className="absolute inset-0 bg-pink-500/10 animate-fade-out"
