@@ -68,7 +68,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
         onChange={(e) => setCommentText(e.target.value)}
         onFocus={handleInputFocus}
         placeholder={getPlaceholderText()}
-        className="flex-grow rounded-full bg-gray-100 border-0 focus:ring-1 focus:ring-pink-500 py-6 px-4 text-base"
+        className="flex-grow rounded-full bg-gray-100 border-0 focus:ring-1 focus:ring-pink-500 h-10 px-4 text-sm"
         autoFocus={replyingTo !== null || editingComment !== null || editingReply !== null}
       />
       <Button 
@@ -82,7 +82,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
       <Button 
         type="submit" 
         disabled={!commentText.trim() || isSubmitting}
-        className={`rounded-full px-3 aspect-square ${
+        className={`rounded-full h-10 w-10 ${
           commentText.trim() 
             ? "bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700" 
             : "bg-muted text-muted-foreground"
