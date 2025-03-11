@@ -13,6 +13,7 @@ const RegistrationCountdown = () => {
   const targetDate = new Date('2025-04-10T19:59:00');
   
   useEffect(() => {
+    // Define the calculation function inside useEffect
     const calculateTimeLeft = () => {
       const now = new Date();
       const difference = targetDate.getTime() - now.getTime();
@@ -40,7 +41,7 @@ const RegistrationCountdown = () => {
     return () => {
       clearInterval(timer);
     };
-  }, [targetDate]);
+  }, [targetDate]); // Add targetDate as a dependency to ensure the effect runs only when targetDate changes
   
   // Format with leading zeros
   const formatNumber = (num: number) => {
