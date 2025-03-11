@@ -48,25 +48,22 @@ const RegistrationCountdown = () => {
   };
   
   return (
-    <div className="w-full transition-all duration-500">
-      {/* Countdown timer with simple design */}
-      <div className="grid grid-cols-4 gap-3 mb-6">
-        <div className="flex flex-col items-center p-3 bg-blue-50 rounded-lg shadow-sm">
-          <div className="text-3xl font-bold text-blue-700">{formatNumber(timeLeft.days)}</div>
-          <div className="text-sm text-gray-500">days</div>
-        </div>
-        <div className="flex flex-col items-center p-3 bg-blue-50 rounded-lg shadow-sm">
-          <div className="text-3xl font-bold text-blue-700">{formatNumber(timeLeft.hours)}</div>
-          <div className="text-sm text-gray-500">hours</div>
-        </div>
-        <div className="flex flex-col items-center p-3 bg-blue-50 rounded-lg shadow-sm">
-          <div className="text-3xl font-bold text-blue-700">{formatNumber(timeLeft.minutes)}</div>
-          <div className="text-sm text-gray-500">minutes</div>
-        </div>
-        <div className="flex flex-col items-center p-3 bg-blue-50 rounded-lg shadow-sm">
-          <div className="text-3xl font-bold text-blue-700">{formatNumber(timeLeft.seconds)}</div>
-          <div className="text-sm text-gray-500">seconds</div>
-        </div>
+    <div className="grid grid-cols-4 gap-3 mb-6">
+      <div className="flex flex-col items-center p-3 bg-blue-50 rounded-lg shadow-sm">
+        <div className="text-3xl font-bold text-blue-700">{formatNumber(timeLeft.days)}</div>
+        <div className="text-sm text-gray-500">days</div>
+      </div>
+      <div className="flex flex-col items-center p-3 bg-blue-50 rounded-lg shadow-sm">
+        <div className="text-3xl font-bold text-blue-700">{formatNumber(timeLeft.hours)}</div>
+        <div className="text-sm text-gray-500">hours</div>
+      </div>
+      <div className="flex flex-col items-center p-3 bg-blue-50 rounded-lg shadow-sm">
+        <div className="text-3xl font-bold text-blue-700">{formatNumber(timeLeft.minutes)}</div>
+        <div className="text-sm text-gray-500">minutes</div>
+      </div>
+      <div className="flex flex-col items-center p-3 bg-blue-50 rounded-lg shadow-sm">
+        <div className="text-3xl font-bold text-blue-700">{formatNumber(timeLeft.seconds)}</div>
+        <div className="text-sm text-gray-500">seconds</div>
       </div>
     </div>
   );
