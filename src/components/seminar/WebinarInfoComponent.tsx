@@ -1,6 +1,6 @@
 
 import React, { useState, useRef } from 'react';
-import { ChevronRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronRight, ChevronDown, ChevronUp, Users, Calendar } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface WebinarItem {
@@ -30,9 +30,28 @@ const WebinarInfoComponent = () => {
     setDetailsPanelOpen(false);
   };
 
-  // We're removing the benefits section entirely, so the component will just render the details panel
+  // Statistics data
+  const stats = {
+    followers: "126.5K",
+    seminars: "87"
+  };
+
   return (
     <div className="font-sans w-full bg-white text-black relative">
+      {/* Stats Section */}
+      <div className="p-4 bg-gray-50 border-t border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center text-sm text-gray-700">
+            <Users size={16} className="mr-1 text-gray-500" />
+            <span>{stats.followers} {t('seminar.academy.followers')}</span>
+          </div>
+          <div className="flex items-center text-sm text-gray-700">
+            <Calendar size={16} className="mr-1 text-gray-500" />
+            <span>{stats.seminars} {t('seminar.academy.seminars')}</span>
+          </div>
+        </div>
+      </div>
+      
       {/* Details Panel (TikTok-style) - Increased z-index to 60 */}
       <div 
         className={`fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 rounded-t-3xl shadow-lg transition-transform duration-300 transform z-60 ${
