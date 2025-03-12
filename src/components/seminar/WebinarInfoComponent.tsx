@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { ChevronRight, ChevronDown, ChevronUp, Users, Calendar, Bell, BellDot } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -87,7 +86,7 @@ const WebinarInfoComponent = () => {
 
   return (
     <div className="font-sans w-full bg-white text-black relative">
-      {/* Academy Header Section - Modified to match requirements */}
+      {/* Academy Header Section */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -109,30 +108,13 @@ const WebinarInfoComponent = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center text-base font-medium text-gray-700">
-              <Users size={18} className="mr-1.5 text-gray-600" />
-              <span>{stats.followers}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button
-                onClick={toggleFollow}
-                className="bg-red-500 hover:bg-red-600 text-white"
-                size="sm"
-              >
-                {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
-              </Button>
-              
-              <Button
-                onClick={toggleNotifications}
-                variant="outline"
-                size="icon"
-                className={`${notificationsEnabled ? 'text-red-500 border-red-300' : 'text-gray-500 border-gray-300'}`}
-              >
-                {notificationsEnabled ? <BellDot size={20} /> : <Bell size={20} />}
-              </Button>
-            </div>
-          </div>
+          <Button
+            onClick={toggleFollow}
+            className="bg-red-500 hover:bg-red-600 text-white"
+            size="sm"
+          >
+            {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
+          </Button>
         </div>
       </div>
       
@@ -143,9 +125,19 @@ const WebinarInfoComponent = () => {
             <Users size={16} className="mr-1 text-gray-500" />
             <span>{stats.followers} {t('seminar.academy.followers')}</span>
           </div>
-          <div className="flex items-center text-sm text-gray-700">
-            <Calendar size={16} className="mr-1 text-gray-500" />
-            <span>{stats.seminars} {t('seminar.academy.seminars')}</span>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center text-sm text-gray-700">
+              <Calendar size={16} className="mr-1 text-gray-500" />
+              <span>{stats.seminars} {t('seminar.academy.seminars')}</span>
+            </div>
+            <Button
+              onClick={toggleNotifications}
+              variant="outline"
+              size="icon"
+              className={`${notificationsEnabled ? 'text-red-500 border-red-300' : 'text-gray-500 border-gray-300'}`}
+            >
+              {notificationsEnabled ? <BellDot size={16} /> : <Bell size={16} />}
+            </Button>
           </div>
         </div>
       </div>
