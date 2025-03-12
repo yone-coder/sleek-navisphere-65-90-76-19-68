@@ -57,7 +57,7 @@ const WebinarInfoComponent = () => {
                   </svg>
                 </Badge>
               </div>
-              <p className="text-sm text-gray-500 mt-0.5">{stats.followers} abonnés • {stats.seminars} séminaires</p>
+              <p className="text-sm text-gray-500 mt-0.5 whitespace-nowrap">{stats.followers} abonnés • {stats.seminars} séminaires</p>
             </div>
           </div>
           
