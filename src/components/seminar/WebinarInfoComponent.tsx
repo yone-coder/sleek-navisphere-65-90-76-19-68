@@ -39,7 +39,7 @@ const WebinarInfoComponent = () => {
     <div className="px-0 py-2">
       {/* YouTube-style channel section */}
       <div className="flex flex-col">
-        {/* Channel info and follow button */}
+        {/* Channel info with follow button moved to the right */}
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-3">
             <Avatar className="h-12 w-12 rounded-full flex-shrink-0">
@@ -55,22 +55,22 @@ const WebinarInfoComponent = () => {
                     <path d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" />
                   </svg>
                 </Badge>
-                
-                {/* Follow button next to academy name */}
-                <Button
-                  onClick={toggleFollow}
-                  variant="outline"
-                  size="sm"
-                  className={`ml-2 h-7 text-xs ${isFollowing 
-                    ? "bg-gray-100 hover:bg-gray-200 text-gray-900 border-gray-200" 
-                    : "bg-blue-50 hover:bg-blue-100 text-blue-600 border-blue-200"}`}
-                >
-                  {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
-                </Button>
               </div>
               <p className="text-sm text-gray-500 mt-0.5">{stats.followers} {t('seminar.academy.followers')} • {stats.seminars} {t('seminar.academy.seminars')}</p>
             </div>
           </div>
+          
+          {/* Follow button moved to the right */}
+          <Button
+            onClick={toggleFollow}
+            variant="outline"
+            size="sm"
+            className={`h-8 text-xs ${isFollowing 
+              ? "bg-gray-100 hover:bg-gray-200 text-gray-900 border-gray-200" 
+              : "bg-blue-50 hover:bg-blue-100 text-blue-600 border-blue-200"}`}
+          >
+            {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
+          </Button>
         </div>
       </div>
     </div>
@@ -78,4 +78,3 @@ const WebinarInfoComponent = () => {
 };
 
 export default WebinarInfoComponent;
-
