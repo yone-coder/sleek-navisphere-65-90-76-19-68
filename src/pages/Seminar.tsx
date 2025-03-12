@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -122,14 +121,14 @@ const SeminarHomepage = () => {
               <span>Diffusé il y a 2 jours</span>
             </div>
             
-            {/* WebinarComponent moved to the top here, replacing the removed action buttons */}
+            {/* Channel Info with WebinarInfoComponent - Moved here directly below the views info */}
+            <WebinarInfoComponent />
+            
+            {/* WebinarComponent - Keep after the WebinarInfoComponent */}
             <div ref={webinarRef} className="mb-4">
               <WebinarComponent onOpenComments={() => setIsCommentsPanelOpen(true)} />
             </div>
           </div>
-          
-          {/* Channel Info with WebinarInfoComponent - Only include this profile section, remove duplicates */}
-          <WebinarInfoComponent />
           
           {/* Video Description Section */}
           <div className="p-4 border-b border-gray-100">
@@ -323,8 +322,6 @@ const SeminarHomepage = () => {
           </div>
         </div>
       )}
-      
-      {/* Removed the fixed WebinarComponent since it's now at the top */}
       
       {/* TikTok Comments Panel */}
       <TikTokCommentsPanel 
