@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -51,17 +50,6 @@ const SeminarHomepage = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
-  
-  // Add useEffect to handle scroll behavior
-  useEffect(() => {
-    const handleScroll = () => {
-      // Optional: Add custom scroll logic here if needed
-      // For example, adding/removing classes based on scroll position
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
   useEffect(() => {
@@ -123,7 +111,6 @@ const SeminarHomepage = () => {
   
   return (
     <div className="flex flex-col w-full max-w-6xl mx-auto bg-gray-50 shadow-xl rounded-xl overflow-hidden">
-      {/* Tab Navigation - Fixed to the top with z-index to stay above video */}
       <div className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-md">
         <div className="flex overflow-x-auto py-2 px-4 gap-1 no-scrollbar">
           {tabs.map(tab => (
@@ -144,12 +131,10 @@ const SeminarHomepage = () => {
       </div>
       
       {activeTab === 0 && (
-        <div className="relative">
-          {/* Video container - Sticky positioning with correct offset */}
+        <div className="flex flex-col">
           <div 
             ref={videoContainerRef}
-            className="sticky top-[56px] z-40 w-full bg-black"
-            style={{ height: 'fit-content' }}
+            className="sticky top-[3.5rem] z-40 w-full bg-black"
           >
             <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
               <iframe
@@ -161,8 +146,7 @@ const SeminarHomepage = () => {
             </div>
           </div>
           
-          {/* Scrollable content that appears below the sticky video */}
-          <div className="relative bg-white">
+          <div className="bg-white">
             <div className="p-4">
               <h1 className="text-xl font-bold text-gray-900 mb-1">
                 Maîtriser le Développement Web Moderne : Des Bases aux Techniques Avancées
