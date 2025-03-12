@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from "@/components/ui/button";
@@ -59,16 +60,18 @@ const WebinarInfoComponent = () => {
             </div>
           </div>
           
-          <Button
-            onClick={toggleFollow}
-            variant="outline"
-            size="sm"
-            className={`h-9 my-auto transition-all duration-300 flex-shrink-0 ${isFollowing 
-              ? "bg-gray-100 hover:bg-gray-200 text-gray-900 border-gray-200" 
-              : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white border-transparent shadow-md hover:shadow-lg"}`}
-          >
-            {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
-          </Button>
+          <div className="flex items-center">
+            <Button
+              onClick={toggleFollow}
+              variant="outline"
+              size="sm"
+              className={`h-9 transition-all duration-300 flex-shrink-0 ${isFollowing 
+                ? "bg-gray-100 hover:bg-gray-200 text-gray-900 border-gray-200" 
+                : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white border-transparent shadow-md hover:shadow-lg"}`}
+            >
+              {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
+            </Button>
+          </div>
         </div>
       </div>
       

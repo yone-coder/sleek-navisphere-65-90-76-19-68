@@ -143,15 +143,25 @@ const SeminarHomepage = () => {
       {/* YouTube-Style Video Page */}
       {activeTab === 0 && (
         <div className="bg-white">
-          {/* Video Player Section - Made sticky */}
+          {/* Video Player Section - Now properly sticky */}
           <div 
             ref={videoContainerRef}
-            className="sticky top-14 z-40 bg-white"
+            className="relative"
           >
-            <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
-              <div className="absolute inset-0 flex items-center justify-center bg-black">
-                <div className="w-full h-full bg-gray-800 flex items-center justify-center cursor-pointer">
-                  <Play size={64} className="text-white opacity-80 hover:opacity-100 transition-opacity" />
+            {/* Replace the existing video player with our VideoSection component */}
+            <div className="w-full">
+              <div className="videoSection-wrapper">
+                {/* Import and use the VideoSection component */}
+                {/* Using direct iframe for now */}
+                <div className="w-full sticky top-14 z-40 bg-black">
+                  <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+                    <iframe
+                      src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                      className="absolute inset-0 w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
                 </div>
               </div>
             </div>
