@@ -12,10 +12,12 @@ import { AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { useToast } from "@/hooks/use-toast";
 
 const SeminarHomepage = () => {
   // Get language context
   const { t, language, setLanguage } = useLanguage();
+  const { toast } = useToast();
   
   // State for active tab
   const [activeTab, setActiveTab] = useState(0);
@@ -24,6 +26,10 @@ const SeminarHomepage = () => {
   const [activeCommentsTab, setActiveCommentsTab] = useState('comments');
   const [showDescription, setShowDescription] = useState(false);
   const webinarRef = useRef<HTMLDivElement>(null);
+  
+  // State for follow and register buttons
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
   
   // Effect to set language to French
   useEffect(() => {
@@ -72,6 +78,40 @@ const SeminarHomepage = () => {
   const handleCommentsClick = () => {
     setActiveCommentsTab('comments');
     setIsCommentsPanelOpen(true);
+  };
+  
+  const toggleFollow = () => {
+    const newFollowState = !isFollowing;
+    setIsFollowing(newFollowState);
+    
+    if (newFollowState) {
+      toast({
+        title: t('seminar.notifications.followed'),
+        description: t('seminar.notifications.followedDescription') || "You'll receive updates from Académie Byte",
+      });
+    } else {
+      toast({
+        title: t('seminar.notifications.unfollowed'),
+        description: t('seminar.notifications.unfollowedDescription') || "You won't receive updates from Académie Byte anymore",
+      });
+    }
+  };
+
+  const toggleRegister = () => {
+    const newRegisteredState = !isRegistered;
+    setIsRegistered(newRegisteredState);
+    
+    if (newRegisteredState) {
+      toast({
+        title: t('seminar.notifications.registered') || "Registered!",
+        description: t('seminar.notifications.registeredDescription') || "You've successfully registered for this seminar",
+      });
+    } else {
+      toast({
+        title: t('seminar.notifications.unregistered') || "Unregistered",
+        description: t('seminar.notifications.unregisteredDescription') || "You've unregistered from this seminar",
+      });
+    }
   };
   
   return (
@@ -127,6 +167,29 @@ const SeminarHomepage = () => {
             {/* WebinarComponent - Keep after the WebinarInfoComponent */}
             <div ref={webinarRef} className="mb-4">
               <WebinarComponent onOpenComments={() => setIsCommentsPanelOpen(true)} />
+            </div>
+            
+            {/* Follow and Register buttons below WebinarComponent */}
+            <div className="flex gap-2 mt-2 mb-4">
+              <Button
+                onClick={toggleFollow}
+                className={`flex-1 ${isFollowing 
+                  ? "bg-gray-100 hover:bg-gray-200 text-gray-900" 
+                  : "bg-blue-600 hover:bg-blue-700 text-white"}`}
+                size="sm"
+              >
+                {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
+              </Button>
+              
+              <Button
+                onClick={toggleRegister}
+                className={`flex-1 ${isRegistered 
+                  ? "bg-green-500 hover:bg-green-600 text-white" 
+                  : "bg-red-600 hover:bg-red-700 text-white"}`}
+                size="sm"
+              >
+                {isRegistered ? t('seminar.registered') || "Registered" : t('seminar.register') || "Register"}
+              </Button>
             </div>
           </div>
           

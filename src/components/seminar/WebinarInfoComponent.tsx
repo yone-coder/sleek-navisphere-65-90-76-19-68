@@ -104,29 +104,6 @@ const WebinarInfoComponent = () => {
                 </Badge>
               </div>
               <p className="text-sm text-gray-500 mt-0.5">{stats.followers} {t('seminar.academy.followers')} • {stats.seminars} {t('seminar.academy.seminars')}</p>
-              
-              {/* Move follow and register buttons back here */}
-              <div className="mt-3 flex gap-2">
-                <Button
-                  onClick={toggleFollow}
-                  className={`${isFollowing 
-                    ? "bg-gray-100 hover:bg-gray-200 text-gray-900" 
-                    : "bg-blue-600 hover:bg-blue-700 text-white"}`}
-                  size="sm"
-                >
-                  {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
-                </Button>
-                
-                <Button
-                  onClick={toggleRegister}
-                  className={`${isRegistered 
-                    ? "bg-green-500 hover:bg-green-600 text-white" 
-                    : "bg-red-600 hover:bg-red-700 text-white"}`}
-                  size="sm"
-                >
-                  {isRegistered ? t('seminar.registered') || "Registered" : t('seminar.register') || "Register"}
-                </Button>
-              </div>
             </div>
           </div>
           
