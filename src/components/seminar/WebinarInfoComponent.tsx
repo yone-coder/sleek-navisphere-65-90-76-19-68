@@ -48,7 +48,7 @@ const WebinarInfoComponent = () => {
               <AvatarFallback>AB</AvatarFallback>
             </Avatar>
             
-            <div>
+            <div className="flex-1 min-w-0 pr-2">
               <div className="flex items-center">
                 <h3 className="font-bold text-gray-900 text-base">{t('seminar.academy.name')}</h3>
                 <Badge variant="outline" className="ml-2 bg-transparent border-none p-0">
@@ -57,16 +57,16 @@ const WebinarInfoComponent = () => {
                   </svg>
                 </Badge>
               </div>
-              <p className="text-sm text-gray-500 mt-0.5 whitespace-nowrap">{stats.followers} abonnés • {stats.seminars} séminaires</p>
+              <p className="text-sm text-gray-500 mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis">{stats.followers} abonnés • {stats.seminars} séminaires</p>
             </div>
           </div>
           
-          {/* Follow button moved to the right */}
+          {/* Follow button positioned at the right */}
           <Button
             onClick={toggleFollow}
             variant="outline"
             size="sm"
-            className={`h-8 text-xs ${isFollowing 
+            className={`h-8 text-xs flex-shrink-0 ${isFollowing 
               ? "bg-gray-100 hover:bg-gray-200 text-gray-900 border-gray-200" 
               : "bg-blue-50 hover:bg-blue-100 text-blue-600 border-blue-200"}`}
           >
