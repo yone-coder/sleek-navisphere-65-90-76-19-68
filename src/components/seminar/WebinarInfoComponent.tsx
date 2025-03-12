@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { Bell } from 'lucide-react';
 
 const WebinarInfoComponent = () => {
   const { t } = useLanguage();
@@ -39,8 +41,8 @@ const WebinarInfoComponent = () => {
       {/* YouTube-style channel section */}
       <div className="flex flex-col">
         {/* Channel info with follow button moved to the right */}
-        <div className="flex items-start justify-between">
-          <div className="flex items-start gap-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
             <Avatar className="h-12 w-12 rounded-full flex-shrink-0">
               <AvatarImage src="/api/placeholder/48/48" alt="Académie Byte" />
               <AvatarFallback>AB</AvatarFallback>
@@ -59,16 +61,23 @@ const WebinarInfoComponent = () => {
             </div>
           </div>
           
-          {/* Follow button positioned at the right */}
+          {/* Enhanced Follow button with animation and icon */}
           <Button
             onClick={toggleFollow}
             variant="outline"
             size="sm"
-            className={`h-8 text-xs flex-shrink-0 ${isFollowing 
+            className={`h-9 my-auto transition-all duration-300 flex-shrink-0 ${isFollowing 
               ? "bg-gray-100 hover:bg-gray-200 text-gray-900 border-gray-200" 
-              : "bg-blue-50 hover:bg-blue-100 text-blue-600 border-blue-200"}`}
+              : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white border-transparent shadow-md hover:shadow-lg"}`}
           >
-            {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
+            {isFollowing ? (
+              <>
+                <Bell className="mr-1 h-4 w-4" />
+                {t('seminar.academy.following')}
+              </>
+            ) : (
+              t('seminar.academy.follow')
+            )}
           </Button>
         </div>
       </div>
