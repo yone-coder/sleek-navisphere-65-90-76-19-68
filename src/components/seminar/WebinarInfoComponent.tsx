@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 
 const WebinarInfoComponent = () => {
   const { t } = useLanguage();
@@ -73,6 +74,9 @@ const WebinarInfoComponent = () => {
           </Button>
         </div>
       </div>
+      
+      {/* Added separator and spacing after the profile section */}
+      <Separator className="my-4" />
     </div>
   );
 };
