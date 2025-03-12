@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from "@/components/ui/button";
@@ -16,7 +15,6 @@ const WebinarInfoComponent = () => {
   // Statistics data
   const stats = {
     followers: "126.5K",
-    seminars: "87"
   };
 
   const toggleFollow = () => {
@@ -57,7 +55,7 @@ const WebinarInfoComponent = () => {
                   </svg>
                 </Badge>
               </div>
-              <p className="text-sm text-gray-500 mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis">{stats.followers} abonnés • {stats.seminars} séminaires</p>
+              <p className="text-sm text-gray-500 mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis">{stats.followers} abonnés</p>
             </div>
           </div>
           
