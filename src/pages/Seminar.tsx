@@ -143,32 +143,23 @@ const SeminarHomepage = () => {
       {/* YouTube-Style Video Page */}
       {activeTab === 0 && (
         <div className="bg-white">
-          {/* Video Player Section - Now properly sticky */}
+          {/* Video Player Section - Sticky with content scrolling underneath */}
           <div 
             ref={videoContainerRef}
-            className="relative"
+            className="w-full sticky top-14 z-40 bg-black"
           >
-            {/* Replace the existing video player with our VideoSection component */}
-            <div className="w-full">
-              <div className="videoSection-wrapper">
-                {/* Import and use the VideoSection component */}
-                {/* Using direct iframe for now */}
-                <div className="w-full sticky top-14 z-40 bg-black">
-                  <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
-                    <iframe
-                      src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                      className="absolute inset-0 w-full h-full"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  </div>
-                </div>
-              </div>
+            <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                className="absolute inset-0 w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
             </div>
           </div>
           
-          {/* Content that will scroll beneath the sticky video */}
-          <div ref={contentRef} className="relative z-30">
+          {/* Content that scrolls underneath the sticky video */}
+          <div className="relative z-30">
             {/* Video Info and Actions Section */}
             <div className="p-4">
               {/* Title and Views */}
