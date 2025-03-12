@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight, HelpCircle } from 'lucide-react';
+import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight, HelpCircle, ThumbsUp, ThumbsDown, Share2, MessageSquare, BookmarkPlus, Menu, Bookmark, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import WebinarComponent from '../components/seminar/WebinarComponent';
 import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
@@ -7,6 +7,10 @@ import EventCard from '../components/seminar/EventCard';
 import { useLanguage } from '../contexts/LanguageContext';
 import WebinarSchedule from '../components/seminar/WebinarSchedule';
 import TikTokCommentsPanel from '../components/comments/TikTokCommentsPanel';
+import { Avatar } from '@/components/ui/avatar';
+import { AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 
 const SeminarHomepage = () => {
   // Get language context
@@ -15,9 +19,9 @@ const SeminarHomepage = () => {
   // State for active tab
   const [activeTab, setActiveTab] = useState(0);
   const [bottomPadding, setBottomPadding] = useState(0);
-  const [viewsHovered, setViewsHovered] = useState(false);
   const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
   const [activeCommentsTab, setActiveCommentsTab] = useState('comments');
+  const [showDescription, setShowDescription] = useState(false);
   const webinarRef = useRef<HTMLDivElement>(null);
   
   // Effect to set language to French
@@ -63,6 +67,11 @@ const SeminarHomepage = () => {
     setActiveCommentsTab('faqs');
     setIsCommentsPanelOpen(true);
   };
+
+  const handleCommentsClick = () => {
+    setActiveCommentsTab('comments');
+    setIsCommentsPanelOpen(true);
+  };
   
   return (
     <div className="flex flex-col w-full max-w-6xl mx-auto bg-gray-50 shadow-xl rounded-xl overflow-hidden">
@@ -86,244 +95,278 @@ const SeminarHomepage = () => {
         </div>
       </div>
       
-      {/* Video Section - Replaces the Hero Banner */}
+      {/* YouTube-Style Video Page */}
       {activeTab === 0 && (
-        <div className="bg-black">
-          {/* Video Player */}
+        <div className="bg-white">
+          {/* Video Player Section */}
           <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full h-full bg-gray-800 flex items-center justify-center">
-                <Play size={64} className="text-white opacity-80" />
+            <div className="absolute inset-0 flex items-center justify-center bg-black">
+              <div className="w-full h-full bg-gray-800 flex items-center justify-center cursor-pointer">
+                <Play size={64} className="text-white opacity-80 hover:opacity-100 transition-opacity" />
               </div>
             </div>
           </div>
           
-          {/* Video Title and Stats - YouTube-like */}
-          <div className="bg-white p-4">
-            <h2 className="text-xl font-medium text-gray-900">
+          {/* Video Info and Actions Section */}
+          <div className="p-4">
+            {/* Title and Views */}
+            <h1 className="text-xl font-bold text-gray-900 mb-1">
               Maîtriser le Développement Web Moderne : Des Bases aux Techniques Avancées
-            </h2>
+            </h1>
             
-            {/* Stat badges with improved layout */}
-            <div className="flex flex-wrap items-center gap-2 mt-2 text-sm text-gray-600">
-              {/* Views badge - adjusted size and responsive layout */}
-              <div 
-                className="flex items-center flex-shrink-0 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-2.5 py-1 rounded-full shadow-sm group hover:shadow-md transition-all duration-300 cursor-pointer"
-                onMouseEnter={() => setViewsHovered(true)}
-                onMouseLeave={() => setViewsHovered(false)}
-              >
-                <Eye size={14} className={`mr-1 ${viewsHovered ? 'animate-pulse' : ''}`} />
-                <span className="font-bold tracking-wide">125K</span>
-                <span className="ml-0.5 text-xs">{t('seminar.video.views')}</span>
-                
-                {/* Conditional expanded content */}
-                {viewsHovered && (
-                  <div className="ml-1.5 flex items-center animate-fade-in">
-                    <TrendingUp size={12} className="text-green-200 mr-0.5" />
-                    <span className="text-xs">+12%</span>
-                  </div>
-                )}
-                
-                {/* Hover expanded content */}
-                <div className="ml-1.5 pl-1.5 border-l border-blue-300 hidden group-hover:flex items-center">
-                  <BarChart2 size={10} className="mr-0.5 text-blue-200" />
-                  <span className="text-xs font-medium">Top 5%</span>
-                </div>
-              </div>
-              
-              {/* Interactions badge - adjusted size and responsive layout */}
-              <div className="flex items-center flex-shrink-0 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs px-2.5 py-1 rounded-full shadow-sm group hover:shadow-md transition-all duration-300">
-                <Zap size={14} className="mr-1 group-hover:animate-ping" />
-                <span className="font-semibold tracking-wide">8.2K</span>
-                <span className="ml-0.5">interactions</span>
-                
-                {/* Hover icons */}
-                <div className="hidden group-hover:flex items-center ml-1">
-                  <Flame size={10} className="text-yellow-200 animate-pulse" />
-                  <Sparkles size={10} className="ml-0.5 text-yellow-100" />
-                </div>
-              </div>
-              
-              {/* 4K badge - adjusted size and responsive layout */}
-              <div className="flex items-center flex-shrink-0 bg-gradient-to-r from-blue-600 to-blue-800 text-white text-xs px-2.5 py-1 rounded-full shadow-sm hover:from-blue-700 hover:to-blue-900 transition-all group">
-                <Tv size={14} className="mr-1 group-hover:animate-pulse" />
-                <span className="font-semibold tracking-wide">4K</span>
-                <span className="ml-0.5 text-blue-200 hidden group-hover:inline">Ultra HD</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      
-      {/* Enhanced Profile Section - Only shown for first tab */}
-      {activeTab === 0 && (
-        <div className="bg-white px-4 md:px-6 py-3 border-b border-gray-200">
-          {/* "Qui sommes-nous" heading and "Voir plus" button at the top */}
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-medium text-gray-700">Qui sommes-nous</h3>
-            <button className="flex items-center text-blue-600 text-xs font-medium hover:text-blue-800 transition-colors">
-              Voir plus
-              <ChevronRight className="w-3 h-3 ml-0.5" />
-            </button>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <div className="flex-shrink-0">
-              <img 
-                src="/api/placeholder/64/64" 
-                alt="Byte Academy Logo" 
-                className="w-12 h-12 rounded-full object-cover border-2 border-blue-500"
-              />
-            </div>
-            <div className="flex-grow min-w-0">
-              <div className="flex items-center">
-                <h2 className="text-lg font-bold text-gray-900 truncate">{t('seminar.academy.name')}</h2>
-                <BadgeCheck className="w-4 h-4 text-blue-500 ml-1" />
-              </div>
-              <p className="text-sm text-gray-500">{t('seminar.academy.description')}</p>
-            </div>
-          </div>
-          
-          {/* Stats section */}
-          <div className="mt-3 -mx-4 md:-mx-6 px-4 md:px-6 py-3 bg-gray-50 border-t border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center text-sm text-gray-700">
-                <Users size={16} className="mr-1 text-gray-500" />
-                <span>126.5K {t('seminar.academy.followers')}</span>
-              </div>
-              <div className="flex items-center text-sm text-gray-700">
-                <Calendar size={16} className="mr-1 text-gray-500" />
-                <span>87 {t('seminar.academy.seminars')}</span>
-              </div>
-              <div className="flex items-center text-sm text-gray-700">
-                <Star size={16} className="mr-1 text-yellow-500" />
-                <span>4.8</span>
-              </div>
-            </div>
-          </div>
-          
-          <div className="mt-3 text-sm text-gray-700">
-            {t('seminar.description')}
-          </div>
-        </div>
-      )}
-      
-      {/* Tab Content Container */}
-      <div className="flex-grow bg-white">
-        {/* Each tab has an empty container */}
-        {activeTab === 0 && (
-          <div style={{ paddingBottom: `${bottomPadding}px` }}>
-            {/* EventCard component - full width with no padding */}
-            <div className="w-full">
-              <EventCard />
+            <div className="flex items-center text-sm text-gray-500 mb-4">
+              <span>125K vues</span>
+              <span className="mx-1">•</span>
+              <span>Diffusé il y a 2 jours</span>
             </div>
             
-            {/* WebinarInfoComponent - also full width */}
-            <div className="w-full">
+            {/* Action Buttons */}
+            <div className="flex flex-wrap gap-2 py-2 border-t border-b border-gray-100">
+              <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                <ThumbsUp size={16} />
+                <span>12K</span>
+              </Button>
+              
+              <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                <ThumbsDown size={16} />
+                <span>243</span>
+              </Button>
+              
+              <Button variant="ghost" size="sm" className="flex items-center gap-1" onClick={handleCommentsClick}>
+                <MessageSquare size={16} />
+                <span>Commentaires</span>
+              </Button>
+              
+              <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                <Share2 size={16} />
+                <span>Partager</span>
+              </Button>
+              
+              <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                <Bookmark size={16} />
+                <span>Enregistrer</span>
+              </Button>
+              
+              <Button variant="ghost" size="sm" className="flex items-center">
+                <MoreVertical size={16} />
+              </Button>
+            </div>
+          </div>
+          
+          {/* Channel Info */}
+          <div className="px-4 py-4 flex justify-between items-start border-b border-gray-100">
+            <div className="flex gap-3">
+              <Avatar className="h-10 w-10 border-2 border-blue-500">
+                <AvatarImage src="/api/placeholder/48/48" alt="Académie Byte" />
+                <AvatarFallback>AB</AvatarFallback>
+              </Avatar>
+              
+              <div>
+                <div className="flex items-center">
+                  <h3 className="font-bold text-gray-900">{t('seminar.academy.name')}</h3>
+                  <BadgeCheck className="w-4 h-4 text-blue-500 ml-1" />
+                </div>
+                <p className="text-sm text-gray-500">126.5K abonnés</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2">
               <WebinarInfoComponent />
             </div>
           </div>
-        )}
-        
-        {activeTab === 1 && (
-          <div className="w-full p-4">
-            <WebinarSchedule />
+          
+          {/* Video Description Section */}
+          <div className="p-4 border-b border-gray-100">
+            <div className={`${showDescription ? '' : 'max-h-20 overflow-hidden'} relative`}>
+              <div className="text-sm text-gray-700 whitespace-pre-line">
+                <p className="mb-2"><strong>Découvrez les dernières avancées en développement web dans ce séminaire intensif</strong></p>
+                <p className="mb-2">Dans ce séminaire, nous aborderons les technologies modernes du développement web, de la conception responsive aux frameworks JavaScript avancés. Idéal pour les débutants comme pour les professionnels souhaitant mettre à jour leurs compétences.</p>
+                <p className="mb-2">🔹 React et l'écosystème moderne<br />🔹 Optimisation des performances<br />🔹 TypeScript pour des applications robustes<br />🔹 Architecture microservices<br />🔹 Tests automatisés et déploiement continu</p>
+                <p className="mb-2">Rejoignez-nous pour approfondir vos compétences et rester à la pointe de l'innovation web.</p>
+                <p className="text-xs text-gray-500 mt-4">Publié le 15 avril 2023 • #développement #web #javascript #react</p>
+              </div>
+              
+              {!showDescription && (
+                <div className="absolute bottom-0 inset-x-0 h-10 bg-gradient-to-t from-white to-transparent"></div>
+              )}
+            </div>
+            
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="mt-1 w-full justify-center"
+              onClick={() => setShowDescription(!showDescription)}
+            >
+              {showDescription ? "Afficher moins" : "... Plus"}
+            </Button>
           </div>
-        )}
-        
-        {activeTab === 2 && (
-          <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500">
-            {t('seminar.highlights')}
-          </div>
-        )}
-        
-        {activeTab === 3 && (
-          <div className="p-4">
+          
+          {/* Comments Preview */}
+          <div className="p-4 border-b border-gray-100">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">{t('seminar.tabs.testimonials')}</h3>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleTestimonialsClick}
-                className="text-blue-600 border-blue-300 hover:bg-blue-50"
-              >
-                {t('seminar.viewAllTestimonials')}
-                <ChevronRight className="ml-1 h-4 w-4" />
+              <h3 className="font-medium">Commentaires <span className="text-gray-500 text-sm">8.2K</span></h3>
+              <Button variant="ghost" size="sm" onClick={handleCommentsClick}>
+                Voir tous
               </Button>
             </div>
             
             <div className="space-y-4">
-              {/* Sample testimonials - we're showing just a few here */}
-              <div className="bg-blue-50 rounded-lg p-4">
-                <div className="flex items-start">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex-shrink-0 flex items-center justify-center mr-3">
-                    <span className="text-xs font-bold text-white">LE</span>
+              <div className="flex gap-3">
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback>U1</AvatarFallback>
+                </Avatar>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-sm">@user1</span>
+                    <span className="text-xs text-gray-500">il y a 2 jours</span>
                   </div>
-                  <div>
-                    <div className="flex items-center">
-                      <h4 className="font-medium text-sm">@learner1</h4>
-                      <span className="ml-2 flex items-center text-yellow-500">
-                        <Star size={14} className="fill-current" />
-                        <Star size={14} className="fill-current" />
-                        <Star size={14} className="fill-current" />
-                        <Star size={14} className="fill-current" />
-                        <Star size={14} className="fill-current" />
-                      </span>
-                    </div>
-                    <p className="text-sm mt-1">This seminar changed my career! I was able to get a job as a developer right after completing it.</p>
-                  </div>
+                  <p className="text-sm text-gray-700">Ce séminaire a changé ma carrière ! J'ai pu décrocher un emploi en tant que développeur juste après l'avoir terminé.</p>
                 </div>
               </div>
               
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-start">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex-shrink-0 flex items-center justify-center mr-3">
-                    <span className="text-xs font-bold text-white">DP</span>
+              <div className="flex gap-3">
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback>DP</AvatarFallback>
+                </Avatar>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-sm">@devpro</span>
+                    <BadgeCheck className="w-3 h-3 text-blue-500" />
+                    <span className="text-xs text-gray-500">il y a 1 jour</span>
                   </div>
-                  <div>
-                    <div className="flex items-center">
-                      <h4 className="font-medium text-sm">@devpro</h4>
-                      <span className="inline-block rounded-full bg-blue-500 p-0.5 text-white ml-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                      </span>
-                      <span className="ml-2 flex items-center text-yellow-500">
-                        <Star size={14} className="fill-current" />
-                        <Star size={14} className="fill-current" />
-                        <Star size={14} className="fill-current" />
-                        <Star size={14} className="fill-current" />
-                        <Star size={14} className="fill-current" />
-                      </span>
-                    </div>
-                    <p className="text-sm mt-1">The instructor knows the subject matter deeply. Very impressed with the quality of content!</p>
-                  </div>
+                  <p className="text-sm text-gray-700">L'instructeur connaît parfaitement le sujet. Très impressionné par la qualité du contenu !</p>
                 </div>
               </div>
             </div>
           </div>
-        )}
-        
-        {activeTab === 4 && (
+          
+          {/* Up Next / Related Videos */}
           <div className="p-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">{t('seminar.register')}</h3>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleFAQsClick}
-                className="text-blue-600 border-blue-300 hover:bg-blue-50"
-              >
-                <HelpCircle className="mr-1 h-4 w-4" />
-                {t('seminar.viewFAQs')}
-              </Button>
-            </div>
-            <div className="border border-gray-200 rounded-lg text-center text-gray-500 p-4">
-              {t('seminar.register')}
+            <h3 className="font-medium mb-4">À suivre</h3>
+            
+            <div className="space-y-4">
+              {[1, 2, 3].map((index) => (
+                <div key={index} className="flex gap-3">
+                  <div className="relative rounded overflow-hidden w-40 h-20 flex-shrink-0">
+                    <div className="absolute inset-0 bg-gray-300 flex items-center justify-center">
+                      <Play size={24} className="text-white" />
+                    </div>
+                    <div className="absolute bottom-1 right-1 bg-black bg-opacity-70 text-white text-xs px-1 rounded">
+                      45:12
+                    </div>
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-medium text-sm line-clamp-2">Les bases de TypeScript pour le développement web moderne</h4>
+                    <p className="text-xs text-gray-500 mt-1">Académie Byte</p>
+                    <p className="text-xs text-gray-500">89K vues • il y a 3 semaines</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+      
+      {/* Other Tab Contents - Keep Unchanged */}
+      {activeTab === 1 && (
+        <div className="w-full p-4">
+          <WebinarSchedule />
+        </div>
+      )}
+      
+      {activeTab === 2 && (
+        <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500">
+          {t('seminar.highlights')}
+        </div>
+      )}
+      
+      {activeTab === 3 && (
+        <div className="p-4">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">{t('seminar.tabs.testimonials')}</h3>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleTestimonialsClick}
+              className="text-blue-600 border-blue-300 hover:bg-blue-50"
+            >
+              {t('seminar.viewAllTestimonials')}
+              <ChevronRight className="ml-1 h-4 w-4" />
+            </Button>
+          </div>
+          
+          <div className="space-y-4">
+            {/* Sample testimonials - we're showing just a few here */}
+            <div className="bg-blue-50 rounded-lg p-4">
+              <div className="flex items-start">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex-shrink-0 flex items-center justify-center mr-3">
+                  <span className="text-xs font-bold text-white">LE</span>
+                </div>
+                <div>
+                  <div className="flex items-center">
+                    <h4 className="font-medium text-sm">@learner1</h4>
+                    <span className="ml-2 flex items-center text-yellow-500">
+                      <Star size={14} className="fill-current" />
+                      <Star size={14} className="fill-current" />
+                      <Star size={14} className="fill-current" />
+                      <Star size={14} className="fill-current" />
+                      <Star size={14} className="fill-current" />
+                    </span>
+                  </div>
+                  <p className="text-sm mt-1">This seminar changed my career! I was able to get a job as a developer right after completing it.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-gray-50 rounded-lg p-4">
+              <div className="flex items-start">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex-shrink-0 flex items-center justify-center mr-3">
+                  <span className="text-xs font-bold text-white">DP</span>
+                </div>
+                <div>
+                  <div className="flex items-center">
+                    <h4 className="font-medium text-sm">@devpro</h4>
+                    <span className="inline-block rounded-full bg-blue-500 p-0.5 text-white ml-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </span>
+                    <span className="ml-2 flex items-center text-yellow-500">
+                      <Star size={14} className="fill-current" />
+                      <Star size={14} className="fill-current" />
+                      <Star size={14} className="fill-current" />
+                      <Star size={14} className="fill-current" />
+                      <Star size={14} className="fill-current" />
+                    </span>
+                  </div>
+                  <p className="text-sm mt-1">The instructor knows the subject matter deeply. Very impressed with the quality of content!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {activeTab === 4 && (
+        <div className="p-4">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">{t('seminar.register')}</h3>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleFAQsClick}
+              className="text-blue-600 border-blue-300 hover:bg-blue-50"
+            >
+              <HelpCircle className="mr-1 h-4 w-4" />
+              {t('seminar.viewFAQs')}
+            </Button>
+          </div>
+          <div className="border border-gray-200 rounded-lg text-center text-gray-500 p-4">
+            {t('seminar.register')}
+          </div>
+        </div>
+      )}
       
       {/* Fixed WebinarComponent at the bottom only for video tab - fully transparent without border */}
       {activeTab === 0 && (
