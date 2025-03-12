@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -15,7 +14,6 @@ const SeminarHomepage = () => {
   
   // State for active tab
   const [activeTab, setActiveTab] = useState(0);
-  const [isFollowing, setIsFollowing] = useState(false);
   const [bottomPadding, setBottomPadding] = useState(0);
   const [viewsHovered, setViewsHovered] = useState(false);
   const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
@@ -32,7 +30,7 @@ const SeminarHomepage = () => {
     if (activeTab === 0 && webinarRef.current) {
       const updatePadding = () => {
         const height = webinarRef.current?.offsetHeight || 0;
-        setBottomPadding(height + 16); // Add 16px extra for spacing
+        setBottomPadding(height + 72); // Increased padding for follow button
       };
       
       // Initial measurement
@@ -178,21 +176,9 @@ const SeminarHomepage = () => {
               />
             </div>
             <div className="flex-grow min-w-0">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <h2 className="text-lg font-bold text-gray-900 truncate">{t('seminar.academy.name')}</h2>
-                  <BadgeCheck className="w-4 h-4 text-blue-500" />
-                </div>
-                <button 
-                  onClick={() => setIsFollowing(!isFollowing)}
-                  className={`px-4 py-1.5 text-sm font-semibold rounded-full transition ${
-                    isFollowing 
-                    ? "bg-gray-200 text-gray-800 hover:bg-gray-300" 
-                    : "bg-blue-600 hover:bg-blue-700 text-white"
-                  }`}
-                >
-                  {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
-                </button>
+              <div className="flex items-center">
+                <h2 className="text-lg font-bold text-gray-900 truncate">{t('seminar.academy.name')}</h2>
+                <BadgeCheck className="w-4 h-4 text-blue-500 ml-1" />
               </div>
               <p className="text-sm text-gray-500">{t('seminar.academy.description')}</p>
             </div>

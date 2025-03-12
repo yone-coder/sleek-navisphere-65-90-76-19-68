@@ -1,7 +1,9 @@
 
 import React, { useState, useRef } from 'react';
-import { ChevronRight, ChevronDown, ChevronUp, Users, Calendar } from 'lucide-react';
+import { ChevronRight, ChevronDown, ChevronUp, Users, Calendar, Bell, BellDot } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 interface WebinarItem {
   title: string;
@@ -17,9 +19,12 @@ interface WebinarSection {
 
 const WebinarInfoComponent = () => {
   const { t } = useLanguage();
+  const { toast } = useToast();
   
   const [detailsPanelOpen, setDetailsPanelOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<WebinarItem | null>(null);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   
   const openDetailsPanel = (item: WebinarItem) => {
     setSelectedItem(item);
@@ -36,8 +41,81 @@ const WebinarInfoComponent = () => {
     seminars: "87"
   };
 
+  const toggleFollow = () => {
+    const newFollowState = !isFollowing;
+    setIsFollowing(newFollowState);
+    
+    if (newFollowState) {
+      toast({
+        title: t('seminar.notifications.followed'),
+        description: t('seminar.notifications.followedDescription') || "You'll receive updates from Académie Byte",
+      });
+    } else {
+      setNotificationsEnabled(false);
+      toast({
+        title: t('seminar.notifications.unfollowed'),
+        description: t('seminar.notifications.unfollowedDescription') || "You won't receive updates from Académie Byte anymore",
+      });
+    }
+  };
+
+  const toggleNotifications = () => {
+    if (!isFollowing) {
+      setIsFollowing(true);
+      setNotificationsEnabled(true);
+      toast({
+        title: t('seminar.notifications.enabled'),
+        description: t('seminar.notifications.enabledDescription') || "You'll receive notifications for new seminars",
+      });
+    } else {
+      const newNotificationState = !notificationsEnabled;
+      setNotificationsEnabled(newNotificationState);
+      
+      if (newNotificationState) {
+        toast({
+          title: t('seminar.notifications.enabled'),
+          description: t('seminar.notifications.enabledDescription') || "You'll receive notifications for new seminars",
+        });
+      } else {
+        toast({
+          title: t('seminar.notifications.disabled'),
+          description: t('seminar.notifications.disabledDescription') || "You won't receive notifications for new seminars",
+        });
+      }
+    }
+  };
+
   return (
     <div className="font-sans w-full bg-white text-black relative">
+      {/* Academy Header Section */}
+      <div className="p-4 border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex-shrink-0">
+              <img 
+                src="/api/placeholder/48/48" 
+                alt="Académie Byte Logo" 
+                className="w-12 h-12 rounded-full object-cover border-2 border-blue-500"
+              />
+            </div>
+            <div>
+              <div className="flex items-center">
+                <h2 className="text-lg font-bold text-gray-900">{t('seminar.academy.name')}</h2>
+                <span className="inline-block rounded-full bg-blue-500 p-0.5 text-white ml-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center text-base font-medium text-gray-700">
+            <Users size={18} className="mr-1.5 text-gray-600" />
+            <span>{stats.followers}</span>
+          </div>
+        </div>
+      </div>
+      
       {/* Stats Section */}
       <div className="p-4 bg-gray-50 border-t border-b border-gray-200">
         <div className="flex items-center justify-between">
@@ -49,6 +127,27 @@ const WebinarInfoComponent = () => {
             <Calendar size={16} className="mr-1 text-gray-500" />
             <span>{stats.seminars} {t('seminar.academy.seminars')}</span>
           </div>
+        </div>
+      </div>
+      
+      {/* Follow Button Section - New at the bottom */}
+      <div className="p-4 bg-white border-t border-gray-200 sticky bottom-16 z-30">
+        <div className="flex items-center gap-3">
+          <Button
+            onClick={toggleFollow}
+            className="flex-1 bg-red-500 hover:bg-red-600 text-white"
+          >
+            {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
+          </Button>
+          
+          <Button
+            onClick={toggleNotifications}
+            variant="outline"
+            size="icon"
+            className={`${notificationsEnabled ? 'text-red-500 border-red-300' : 'text-gray-500 border-gray-300'}`}
+          >
+            {notificationsEnabled ? <BellDot size={20} /> : <Bell size={20} />}
+          </Button>
         </div>
       </div>
       
