@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -183,14 +182,16 @@ const SeminarHomepage = () => {
               )}
             </div>
             
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="mt-1 w-full justify-center"
-              onClick={() => setShowDescription(!showDescription)}
-            >
-              {showDescription ? "Afficher moins" : "Afficher plus"}
-            </Button>
+            <div className="bg-gray-100 rounded-lg mt-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="mt-1 w-full justify-center text-gray-700 hover:bg-gray-200"
+                onClick={() => setShowDescription(!showDescription)}
+              >
+                {showDescription ? "Afficher moins" : "Afficher plus"}
+              </Button>
+            </div>
           </div>
           
           {/* Up Next / Related Videos */}
