@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight, HelpCircle, ThumbsUp, ThumbsDown, Share2, MessageSquare, BookmarkPlus, Menu, Bookmark, MoreVertical } from 'lucide-react';
+import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import WebinarComponent from '../components/seminar/WebinarComponent';
 import WebinarInfoComponent from '../components/seminar/WebinarInfoComponent';
@@ -121,37 +121,7 @@ const SeminarHomepage = () => {
               <span>Diffusé il y a 2 jours</span>
             </div>
             
-            {/* Action Buttons */}
-            <div className="flex flex-wrap gap-2 py-2 border-t border-b border-gray-100">
-              <Button variant="ghost" size="sm" className="flex items-center gap-1">
-                <ThumbsUp size={16} />
-                <span>12K</span>
-              </Button>
-              
-              <Button variant="ghost" size="sm" className="flex items-center gap-1">
-                <ThumbsDown size={16} />
-                <span>243</span>
-              </Button>
-              
-              <Button variant="ghost" size="sm" className="flex items-center gap-1" onClick={handleCommentsClick}>
-                <MessageSquare size={16} />
-                <span>Commentaires</span>
-              </Button>
-              
-              <Button variant="ghost" size="sm" className="flex items-center gap-1">
-                <Share2 size={16} />
-                <span>Partager</span>
-              </Button>
-              
-              <Button variant="ghost" size="sm" className="flex items-center gap-1">
-                <Bookmark size={16} />
-                <span>Enregistrer</span>
-              </Button>
-              
-              <Button variant="ghost" size="sm" className="flex items-center">
-                <MoreVertical size={16} />
-              </Button>
-            </div>
+            {/* Removed the action buttons section here */}
           </div>
           
           {/* Channel Info with WebinarInfoComponent - Only include this profile section, remove duplicates */}
@@ -257,7 +227,6 @@ const SeminarHomepage = () => {
         </div>
       )}
       
-      {/* Other Tab Contents - Keep Unchanged */}
       {activeTab === 2 && (
         <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500">
           {t('seminar.highlights')}
