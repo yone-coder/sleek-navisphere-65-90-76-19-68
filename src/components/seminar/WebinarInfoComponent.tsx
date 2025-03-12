@@ -67,39 +67,29 @@ const WebinarInfoComponent = () => {
   return (
     <div className="px-4 py-3 border-b border-gray-100">
       {/* YouTube-style channel section */}
-      <div className="flex items-start justify-between">
-        {/* Left side - Channel info */}
-        <div className="flex items-start gap-3">
-          <Avatar className="h-12 w-12 rounded-full flex-shrink-0">
-            <AvatarImage src="/api/placeholder/48/48" alt="Académie Byte" />
-            <AvatarFallback>AB</AvatarFallback>
-          </Avatar>
-          
-          <div>
-            <div className="flex items-center">
-              <h3 className="font-bold text-gray-900 text-base">{t('seminar.academy.name')}</h3>
-              <Badge variant="outline" className="ml-2 bg-transparent border-none p-0">
-                <svg className="h-4 w-4 text-gray-500 fill-gray-500" viewBox="0 0 24 24">
-                  <path d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" />
-                </svg>
-              </Badge>
+      <div className="flex flex-col">
+        {/* Channel info and notification button */}
+        <div className="flex items-start justify-between">
+          <div className="flex items-start gap-3">
+            <Avatar className="h-12 w-12 rounded-full flex-shrink-0">
+              <AvatarImage src="/api/placeholder/48/48" alt="Académie Byte" />
+              <AvatarFallback>AB</AvatarFallback>
+            </Avatar>
+            
+            <div>
+              <div className="flex items-center">
+                <h3 className="font-bold text-gray-900 text-base">{t('seminar.academy.name')}</h3>
+                <Badge variant="outline" className="ml-2 bg-transparent border-none p-0">
+                  <svg className="h-4 w-4 text-gray-500 fill-gray-500" viewBox="0 0 24 24">
+                    <path d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" />
+                  </svg>
+                </Badge>
+              </div>
+              <p className="text-sm text-gray-500 mt-0.5">{stats.followers} {t('seminar.academy.followers')} • {stats.seminars} {t('seminar.academy.seminars')}</p>
             </div>
-            <p className="text-sm text-gray-500 mt-0.5">{stats.followers} {t('seminar.academy.followers')} • {stats.seminars} {t('seminar.academy.seminars')}</p>
           </div>
-        </div>
-        
-        {/* Right side - Subscribe and notification buttons */}
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={toggleFollow}
-            className={isFollowing 
-              ? "bg-gray-100 hover:bg-gray-200 text-gray-900" 
-              : "bg-red-600 hover:bg-red-700 text-white"}
-            size="sm"
-          >
-            {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
-          </Button>
           
+          {/* Only notification button in the top section */}
           {isFollowing && (
             <Button
               onClick={toggleNotifications}
@@ -110,6 +100,19 @@ const WebinarInfoComponent = () => {
               {notificationsEnabled ? <BellDot className="h-5 w-5 text-gray-700" /> : <Bell className="h-5 w-5 text-gray-700" />}
             </Button>
           )}
+        </div>
+        
+        {/* Full-width follow button at the bottom */}
+        <div className="mt-3">
+          <Button
+            onClick={toggleFollow}
+            className={`w-full ${isFollowing 
+              ? "bg-gray-100 hover:bg-gray-200 text-gray-900" 
+              : "bg-red-600 hover:bg-red-700 text-white"}`}
+            size="sm"
+          >
+            {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
+          </Button>
         </div>
       </div>
     </div>
