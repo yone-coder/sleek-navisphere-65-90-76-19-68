@@ -192,45 +192,6 @@ const SeminarHomepage = () => {
             </Button>
           </div>
           
-          {/* Comments Preview */}
-          <div className="p-4 border-b border-gray-100">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-medium">Commentaires <span className="text-gray-500 text-sm">8.2K</span></h3>
-              <Button variant="ghost" size="sm" onClick={handleCommentsClick}>
-                Voir tous
-              </Button>
-            </div>
-            
-            <div className="space-y-4">
-              <div className="flex gap-3">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback>U1</AvatarFallback>
-                </Avatar>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-sm">@user1</span>
-                    <span className="text-xs text-gray-500">il y a 2 jours</span>
-                  </div>
-                  <p className="text-sm text-gray-700">Ce séminaire a changé ma carrière ! J'ai pu décrocher un emploi en tant que développeur juste après l'avoir terminé.</p>
-                </div>
-              </div>
-              
-              <div className="flex gap-3">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback>DP</AvatarFallback>
-                </Avatar>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-sm">@devpro</span>
-                    <BadgeCheck className="w-3 h-3 text-blue-500" />
-                    <span className="text-xs text-gray-500">il y a 1 jour</span>
-                  </div>
-                  <p className="text-sm text-gray-700">L'instructeur connaît parfaitement le sujet. Très impressionné par la qualité du contenu !</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
           {/* Up Next / Related Videos */}
           <div className="p-4">
             <h3 className="font-medium mb-4">À suivre</h3>
