@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight, HelpCircle, ThumbsUp, ThumbsDown, Share2, MessageSquare, BookmarkPlus, Menu, Bookmark, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -155,27 +154,8 @@ const SeminarHomepage = () => {
             </div>
           </div>
           
-          {/* Channel Info with WebinarInfoComponent - Single combined profile section */}
-          <div className="px-4 py-4 flex justify-between items-start border-b border-gray-100">
-            <div className="flex gap-3">
-              <Avatar className="h-10 w-10 border-2 border-blue-500">
-                <AvatarImage src="/api/placeholder/48/48" alt="Académie Byte" />
-                <AvatarFallback>AB</AvatarFallback>
-              </Avatar>
-              
-              <div>
-                <div className="flex items-center">
-                  <h3 className="font-bold text-gray-900">{t('seminar.academy.name')}</h3>
-                  <BadgeCheck className="w-4 h-4 text-blue-500 ml-1" />
-                </div>
-                <p className="text-sm text-gray-500">126.5K abonnés</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <WebinarInfoComponent />
-            </div>
-          </div>
+          {/* Channel Info with WebinarInfoComponent - Only include this profile section, remove duplicates */}
+          <WebinarInfoComponent />
           
           {/* Video Description Section */}
           <div className="p-4 border-b border-gray-100">
