@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from "@/components/ui/button";
@@ -6,7 +5,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Bell } from 'lucide-react';
 
 const WebinarInfoComponent = () => {
   const { t } = useLanguage();
@@ -61,7 +59,6 @@ const WebinarInfoComponent = () => {
             </div>
           </div>
           
-          {/* Enhanced Follow button with animation and icon */}
           <Button
             onClick={toggleFollow}
             variant="outline"
@@ -70,19 +67,11 @@ const WebinarInfoComponent = () => {
               ? "bg-gray-100 hover:bg-gray-200 text-gray-900 border-gray-200" 
               : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white border-transparent shadow-md hover:shadow-lg"}`}
           >
-            {isFollowing ? (
-              <>
-                <Bell className="mr-1 h-4 w-4" />
-                {t('seminar.academy.following')}
-              </>
-            ) : (
-              t('seminar.academy.follow')
-            )}
+            {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
           </Button>
         </div>
       </div>
       
-      {/* Added separator and spacing after the profile section */}
       <Separator className="my-4" />
     </div>
   );
