@@ -70,12 +70,11 @@ const SeminarHomepage = () => {
     }
   }, [activeTab]);
   
+  // Updated tabs array with only Video and Participants tabs
   const tabs = [
     { id: 0, name: t('seminar.tabs.video'), icon: <Play size={18} /> },
-    { id: 1, name: t('seminar.tabs.subjects'), icon: <BookOpen size={18} /> },
-    { id: 2, name: t('seminar.tabs.highlights'), icon: <Award size={18} /> },
-    { id: 3, name: t('seminar.tabs.testimonials'), icon: <Users size={18} /> },
-    { id: 4, name: t('seminar.tabs.register'), icon: <Edit3 size={18} /> }
+    { id: 1, name: "Programme", icon: <Calendar size={18} /> },
+    { id: 2, name: "Participants", icon: <Users size={18} /> }
   ];
   
   const handleTestimonialsClick = () => {
@@ -234,98 +233,29 @@ const SeminarHomepage = () => {
         
         {activeTab === 1 && (
           <div className="w-full p-4">
+            <h2 className="text-xl font-bold mb-4">Programme du Séminaire</h2>
             <WebinarSchedule />
           </div>
         )}
         
         {activeTab === 2 && (
-          <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500">
-            {t('seminar.highlights')}
-          </div>
-        )}
-        
-        {activeTab === 3 && (
           <div className="p-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">{t('seminar.tabs.testimonials')}</h3>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleTestimonialsClick}
-                className="text-blue-600 border-blue-300 hover:bg-blue-50"
-              >
-                {t('seminar.viewAllTestimonials')}
-                <ChevronRight className="ml-1 h-4 w-4" />
-              </Button>
-            </div>
-            
-            <div className="space-y-4">
-              <div className="bg-blue-50 rounded-lg p-4">
-                <div className="flex items-start">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex-shrink-0 flex items-center justify-center mr-3">
-                    <span className="text-xs font-bold text-white">LE</span>
+            <h2 className="text-xl font-bold mb-4">Participants</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[1, 2, 3, 4, 5, 6].map((index) => (
+                <div key={index} className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors">
+                  <Avatar className="h-12 w-12 border border-gray-200">
+                    <AvatarFallback className="bg-gradient-to-br from-blue-400 to-blue-600 text-white">
+                      {String.fromCharCode(64 + index)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <h3 className="font-medium">Participant {index}</h3>
+                    <p className="text-sm text-gray-500">Rôle: {index % 2 === 0 ? 'Développeur' : 'Designer'}</p>
                   </div>
-                  <div>
-                    <div className="flex items-center">
-                      <h4 className="font-medium text-sm">@learner1</h4>
-                      <span className="ml-2 flex items-center text-yellow-500">
-                        <Star size={14} className="fill-current" />
-                        <Star size={14} className="fill-current" />
-                        <Star size={14} className="fill-current" />
-                        <Star size={14} className="fill-current" />
-                        <Star size={14} className="fill-current" />
-                      </span>
-                    </div>
-                    <p className="text-sm mt-1">This seminar changed my career! I was able to get a job as a developer right after completing it.</p>
-                  </div>
+                  <Badge className="ml-auto">{index % 3 === 0 ? 'Présentateur' : 'Participant'}</Badge>
                 </div>
-              </div>
-              
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-start">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex-shrink-0 flex items-center justify-center mr-3">
-                    <span className="text-xs font-bold text-white">DP</span>
-                  </div>
-                  <div>
-                    <div className="flex items-center">
-                      <h4 className="font-medium text-sm">@devpro</h4>
-                      <span className="inline-block rounded-full bg-blue-500 p-0.5 text-white ml-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                      </span>
-                      <span className="ml-2 flex items-center text-yellow-500">
-                        <Star size={14} className="fill-current" />
-                        <Star size={14} className="fill-current" />
-                        <Star size={14} className="fill-current" />
-                        <Star size={14} className="fill-current" />
-                        <Star size={14} className="fill-current" />
-                      </span>
-                    </div>
-                    <p className="text-sm mt-1">The instructor knows the subject matter deeply. Very impressed with the quality of content!</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {activeTab === 4 && (
-          <div className="p-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">{t('seminar.register')}</h3>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleFAQsClick}
-                className="text-blue-600 border-blue-300 hover:bg-blue-50"
-              >
-                <HelpCircle className="mr-1 h-4 w-4" />
-                {t('seminar.viewFAQs')}
-              </Button>
-            </div>
-            <div className="border border-gray-200 rounded-lg text-center text-gray-500 p-4">
-              {t('seminar.register')}
+              ))}
             </div>
           </div>
         )}
