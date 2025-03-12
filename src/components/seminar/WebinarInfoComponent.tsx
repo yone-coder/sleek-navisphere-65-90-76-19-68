@@ -12,6 +12,7 @@ const WebinarInfoComponent = () => {
   const { toast } = useToast();
   
   const [isFollowing, setIsFollowing] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
 
   // Statistics data
@@ -34,6 +35,23 @@ const WebinarInfoComponent = () => {
       toast({
         title: t('seminar.notifications.unfollowed'),
         description: t('seminar.notifications.unfollowedDescription') || "You won't receive updates from Académie Byte anymore",
+      });
+    }
+  };
+
+  const toggleRegister = () => {
+    const newRegisteredState = !isRegistered;
+    setIsRegistered(newRegisteredState);
+    
+    if (newRegisteredState) {
+      toast({
+        title: t('seminar.notifications.registered') || "Registered!",
+        description: t('seminar.notifications.registeredDescription') || "You've successfully registered for this seminar",
+      });
+    } else {
+      toast({
+        title: t('seminar.notifications.unregistered') || "Unregistered",
+        description: t('seminar.notifications.unregisteredDescription') || "You've unregistered from this seminar",
       });
     }
   };
@@ -65,7 +83,7 @@ const WebinarInfoComponent = () => {
   };
 
   return (
-    <div className="px-4 py-3 border-b border-gray-100">
+    <div className="px-2 py-3">
       {/* YouTube-style channel section */}
       <div className="flex flex-col">
         {/* Channel info and notification button */}
@@ -102,16 +120,26 @@ const WebinarInfoComponent = () => {
           )}
         </div>
         
-        {/* Full-width follow button at the bottom */}
-        <div className="mt-3">
+        {/* Two buttons: Follow and Register - side by side */}
+        <div className="mt-3 flex gap-2">
           <Button
             onClick={toggleFollow}
-            className={`w-full ${isFollowing 
+            className={`flex-1 ${isFollowing 
               ? "bg-gray-100 hover:bg-gray-200 text-gray-900" 
-              : "bg-red-600 hover:bg-red-700 text-white"}`}
+              : "bg-blue-600 hover:bg-blue-700 text-white"}`}
             size="sm"
           >
             {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
+          </Button>
+          
+          <Button
+            onClick={toggleRegister}
+            className={`flex-1 ${isRegistered 
+              ? "bg-green-500 hover:bg-green-600 text-white" 
+              : "bg-red-600 hover:bg-red-700 text-white"}`}
+            size="sm"
+          >
+            {isRegistered ? t('seminar.registered') || "Registered" : t('seminar.register') || "Register"}
           </Button>
         </div>
       </div>
