@@ -87,7 +87,7 @@ const WebinarInfoComponent = () => {
 
   return (
     <div className="font-sans w-full bg-white text-black relative">
-      {/* Academy Header Section */}
+      {/* Academy Header Section - Modified to match requirements */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -109,9 +109,29 @@ const WebinarInfoComponent = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center text-base font-medium text-gray-700">
-            <Users size={18} className="mr-1.5 text-gray-600" />
-            <span>{stats.followers}</span>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center text-base font-medium text-gray-700">
+              <Users size={18} className="mr-1.5 text-gray-600" />
+              <span>{stats.followers}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={toggleFollow}
+                className="bg-red-500 hover:bg-red-600 text-white"
+                size="sm"
+              >
+                {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
+              </Button>
+              
+              <Button
+                onClick={toggleNotifications}
+                variant="outline"
+                size="icon"
+                className={`${notificationsEnabled ? 'text-red-500 border-red-300' : 'text-gray-500 border-gray-300'}`}
+              >
+                {notificationsEnabled ? <BellDot size={20} /> : <Bell size={20} />}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -127,27 +147,6 @@ const WebinarInfoComponent = () => {
             <Calendar size={16} className="mr-1 text-gray-500" />
             <span>{stats.seminars} {t('seminar.academy.seminars')}</span>
           </div>
-        </div>
-      </div>
-      
-      {/* Follow Button Section - New at the bottom */}
-      <div className="p-4 bg-white border-t border-gray-200 sticky bottom-16 z-30">
-        <div className="flex items-center gap-3">
-          <Button
-            onClick={toggleFollow}
-            className="flex-1 bg-red-500 hover:bg-red-600 text-white"
-          >
-            {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
-          </Button>
-          
-          <Button
-            onClick={toggleNotifications}
-            variant="outline"
-            size="icon"
-            className={`${notificationsEnabled ? 'text-red-500 border-red-300' : 'text-gray-500 border-gray-300'}`}
-          >
-            {notificationsEnabled ? <BellDot size={20} /> : <Bell size={20} />}
-          </Button>
         </div>
       </div>
       

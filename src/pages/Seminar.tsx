@@ -30,7 +30,7 @@ const SeminarHomepage = () => {
     if (activeTab === 0 && webinarRef.current) {
       const updatePadding = () => {
         const height = webinarRef.current?.offsetHeight || 0;
-        setBottomPadding(height + 72); // Increased padding for follow button
+        setBottomPadding(height + 16); // Reduced padding since follow button is now at top
       };
       
       // Initial measurement
