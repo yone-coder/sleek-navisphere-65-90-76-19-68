@@ -11,6 +11,7 @@ import { Avatar } from '@/components/ui/avatar';
 import { AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 const SeminarHomepage = () => {
   // Get language context
@@ -153,7 +154,7 @@ const SeminarHomepage = () => {
             </div>
           </div>
           
-          {/* Channel Info */}
+          {/* Channel Info - Keep only one profile section */}
           <div className="px-4 py-4 flex justify-between items-start border-b border-gray-100">
             <div className="flex gap-3">
               <Avatar className="h-10 w-10 border-2 border-blue-500">
@@ -268,13 +269,14 @@ const SeminarHomepage = () => {
         </div>
       )}
       
-      {/* Other Tab Contents - Keep Unchanged */}
+      {/* Subjects Tab - Making it full width */}
       {activeTab === 1 && (
         <div className="w-full p-4">
           <WebinarSchedule />
         </div>
       )}
       
+      {/* Other Tab Contents - Keep Unchanged */}
       {activeTab === 2 && (
         <div className="p-4 border border-gray-200 rounded-lg text-center text-gray-500">
           {t('seminar.highlights')}
