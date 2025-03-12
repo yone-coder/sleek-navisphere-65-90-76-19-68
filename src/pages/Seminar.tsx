@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -142,24 +143,27 @@ const SeminarHomepage = () => {
       
       {/* YouTube-Style Video Page */}
       {activeTab === 0 && (
-        <div className="bg-white">
-          {/* Video Player Section - Sticky with content scrolling underneath */}
+        <div className="bg-white flex flex-col">
+          {/* Fixed container for the video */}
           <div 
-            ref={videoContainerRef}
-            className="w-full sticky top-14 z-40 bg-black"
+            className="sticky top-[56px] z-40 w-full"
+            style={{ height: "auto" }}
           >
-            <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
-              <iframe
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                className="absolute inset-0 w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+            {/* Video container with aspect ratio */}
+            <div className="w-full bg-black">
+              <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+                <iframe
+                  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                  className="absolute inset-0 w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
             </div>
           </div>
           
-          {/* Content that scrolls underneath the sticky video */}
-          <div className="relative z-30">
+          {/* Content below the video that can scroll independently */}
+          <div className="relative mt-0 z-30 bg-white">
             {/* Video Info and Actions Section */}
             <div className="p-4">
               {/* Title and Views */}
@@ -173,10 +177,10 @@ const SeminarHomepage = () => {
                 <span>Diffusé il y a 2 jours</span>
               </div>
               
-              {/* Channel Info with WebinarInfoComponent - Moved here directly below the views info */}
+              {/* Channel Info with WebinarInfoComponent */}
               <WebinarInfoComponent />
               
-              {/* WebinarComponent - Keep after the WebinarInfoComponent */}
+              {/* WebinarComponent */}
               <div ref={webinarRef} className="mb-4">
                 <WebinarComponent onOpenComments={() => setIsCommentsPanelOpen(true)} />
               </div>
