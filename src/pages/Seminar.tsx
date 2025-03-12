@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -16,11 +15,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useToast } from "@/hooks/use-toast";
 
 const SeminarHomepage = () => {
-  // Get language context
   const { t, language, setLanguage } = useLanguage();
   const { toast } = useToast();
   
-  // State for active tab
   const [activeTab, setActiveTab] = useState(0);
   const [bottomPadding, setBottomPadding] = useState(0);
   const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
@@ -31,16 +28,13 @@ const SeminarHomepage = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [videoHeight, setVideoHeight] = useState(0);
   
-  // State for follow and register buttons
   const [isFollowing, setIsFollowing] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
   
-  // Effect to set language to French
   useEffect(() => {
     setLanguage('fr');
   }, [setLanguage]);
   
-  // Effect to measure video container height
   useEffect(() => {
     if (videoContainerRef.current) {
       setVideoHeight(videoContainerRef.current.offsetHeight);
@@ -58,18 +52,15 @@ const SeminarHomepage = () => {
     };
   }, []);
   
-  // Effect to measure and set the bottom padding based on WebinarComponent height
   useEffect(() => {
     if (activeTab === 0 && webinarRef.current) {
       const updatePadding = () => {
         const height = webinarRef.current?.offsetHeight || 0;
-        setBottomPadding(height + 16); // Reduced padding since follow button is now at top
+        setBottomPadding(height + 16);
       };
       
-      // Initial measurement
       updatePadding();
       
-      // Update on resize
       window.addEventListener('resize', updatePadding);
       
       return () => {
@@ -78,7 +69,6 @@ const SeminarHomepage = () => {
     }
   }, [activeTab]);
   
-  // Tabs configuration - using the correct translation key for subjects
   const tabs = [
     { id: 0, name: t('seminar.tabs.video'), icon: <Play size={18} /> },
     { id: 1, name: t('seminar.tabs.subjects'), icon: <BookOpen size={18} /> },
@@ -121,7 +111,6 @@ const SeminarHomepage = () => {
   
   return (
     <div className="flex flex-col w-full max-w-6xl mx-auto bg-gray-50 shadow-xl rounded-xl overflow-hidden">
-      {/* Tab Navigation - Properly fixed to the top with higher z-index */}
       <div className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-md">
         <div className="flex overflow-x-auto py-2 px-4 gap-1 no-scrollbar">
           {tabs.map(tab => (
@@ -141,32 +130,25 @@ const SeminarHomepage = () => {
         </div>
       </div>
       
-      {/* YouTube-Style Video Page */}
       {activeTab === 0 && (
-        <div className="bg-white flex flex-col">
-          {/* Fixed container for the video */}
+        <div className="relative">
           <div 
-            className="sticky top-[56px] z-40 w-full"
-            style={{ height: "auto" }}
+            ref={videoContainerRef}
+            className="sticky top-[56px] z-40 w-full bg-black"
+            style={{ height: 'fit-content' }}
           >
-            {/* Video container with aspect ratio */}
-            <div className="w-full bg-black">
-              <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
-                <iframe
-                  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                  className="absolute inset-0 w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
+            <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                className="absolute inset-0 w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
             </div>
           </div>
           
-          {/* Content below the video that can scroll independently */}
-          <div className="relative mt-0 z-30 bg-white">
-            {/* Video Info and Actions Section */}
+          <div className="relative bg-white">
             <div className="p-4">
-              {/* Title and Views */}
               <h1 className="text-xl font-bold text-gray-900 mb-1">
                 Maîtriser le Développement Web Moderne : Des Bases aux Techniques Avancées
               </h1>
@@ -177,15 +159,12 @@ const SeminarHomepage = () => {
                 <span>Diffusé il y a 2 jours</span>
               </div>
               
-              {/* Channel Info with WebinarInfoComponent */}
               <WebinarInfoComponent />
               
-              {/* WebinarComponent */}
               <div ref={webinarRef} className="mb-4">
                 <WebinarComponent onOpenComments={() => setIsCommentsPanelOpen(true)} />
               </div>
               
-              {/* Only Register button below WebinarComponent */}
               <div className="mt-2 mb-4">
                 <Button
                   onClick={toggleRegister}
@@ -199,7 +178,6 @@ const SeminarHomepage = () => {
               </div>
             </div>
             
-            {/* Video Description Section */}
             <div className="p-4 border-b border-gray-100">
               <div className={`${showDescription ? '' : 'max-h-20 overflow-hidden'} relative`}>
                 <div className="text-sm text-gray-700 whitespace-pre-line">
@@ -225,7 +203,6 @@ const SeminarHomepage = () => {
               </Button>
             </div>
             
-            {/* Up Next / Related Videos */}
             <div className="p-4">
               <h3 className="font-medium mb-4">À suivre</h3>
               
@@ -254,7 +231,6 @@ const SeminarHomepage = () => {
         </div>
       )}
       
-      {/* Subjects Tab - Making it full width */}
       {activeTab === 1 && (
         <div className="w-full p-4">
           <WebinarSchedule />
@@ -283,7 +259,6 @@ const SeminarHomepage = () => {
           </div>
           
           <div className="space-y-4">
-            {/* Sample testimonials - we're showing just a few here */}
             <div className="bg-blue-50 rounded-lg p-4">
               <div className="flex items-start">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex-shrink-0 flex items-center justify-center mr-3">
@@ -354,7 +329,6 @@ const SeminarHomepage = () => {
         </div>
       )}
       
-      {/* TikTok Comments Panel */}
       <TikTokCommentsPanel 
         isOpen={isCommentsPanelOpen} 
         onClose={() => setIsCommentsPanelOpen(false)}
