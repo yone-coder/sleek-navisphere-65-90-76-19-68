@@ -337,7 +337,7 @@ const WebinarComponent = ({ onOpenComments }: WebinarComponentProps) => {
   };
 
   return (
-    <div className="w-full max-w-sm bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg shadow-lg p-2 mx-auto relative">
+    <div className="w-full max-w-sm bg-white/10 backdrop-blur-lg rounded-lg shadow-lg p-2 mx-auto relative">
       {/* Hearts animation container */}
       <AnimatedHearts isActive={showHeartAnimation} />
       
@@ -494,33 +494,6 @@ const WebinarComponent = ({ onOpenComments }: WebinarComponentProps) => {
           </button>
         </div>
       </div>
-      
-      <button 
-        className={`w-full py-2 px-3 font-medium rounded-md shadow-md text-sm transition-all duration-300 transform ${
-          isRegistered
-            ? 'bg-green-500 text-white hover:bg-green-600'
-            : buttonHover
-              ? 'bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg -translate-y-0.5'
-              : 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:shadow-lg hover:-translate-y-0.5'
-        }`}
-        onMouseEnter={() => setButtonHover(true)}
-        onMouseLeave={() => setButtonHover(false)}
-        onClick={handleRegister}
-      >
-        <div className="flex items-center justify-center">
-          {isRegistered ? (
-            <>
-              <Check size={16} className="mr-2 animate-bounce" />
-              <span>{t('webinar.registered')}</span>
-            </>
-          ) : (
-            <>
-              <UserCheck size={16} className={`mr-2 ${buttonHover ? 'animate-pulse' : ''}`} />
-              <span>{t('webinar.register')}</span>
-            </>
-          )}
-        </div>
-      </button>
       
       <style>{`
         @keyframes fade-in {
