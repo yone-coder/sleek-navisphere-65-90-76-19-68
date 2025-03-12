@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight, HelpCircle, ThumbsUp, ThumbsDown, Share2, MessageSquare, BookmarkPlus, Menu, Bookmark, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -154,7 +155,7 @@ const SeminarHomepage = () => {
             </div>
           </div>
           
-          {/* Channel Info - Keep only one profile section */}
+          {/* Channel Info with WebinarInfoComponent - Single combined profile section */}
           <div className="px-4 py-4 flex justify-between items-start border-b border-gray-100">
             <div className="flex gap-3">
               <Avatar className="h-10 w-10 border-2 border-blue-500">
