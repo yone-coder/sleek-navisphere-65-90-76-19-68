@@ -80,23 +80,6 @@ const SeminarHomepage = () => {
     setIsCommentsPanelOpen(true);
   };
   
-  const toggleFollow = () => {
-    const newFollowState = !isFollowing;
-    setIsFollowing(newFollowState);
-    
-    if (newFollowState) {
-      toast({
-        title: t('seminar.notifications.followed'),
-        description: t('seminar.notifications.followedDescription') || "You'll receive updates from Académie Byte",
-      });
-    } else {
-      toast({
-        title: t('seminar.notifications.unfollowed'),
-        description: t('seminar.notifications.unfollowedDescription') || "You won't receive updates from Académie Byte anymore",
-      });
-    }
-  };
-
   const toggleRegister = () => {
     const newRegisteredState = !isRegistered;
     setIsRegistered(newRegisteredState);
@@ -169,26 +152,16 @@ const SeminarHomepage = () => {
               <WebinarComponent onOpenComments={() => setIsCommentsPanelOpen(true)} />
             </div>
             
-            {/* Follow and Register buttons below WebinarComponent */}
-            <div className="flex gap-2 mt-2 mb-4">
-              <Button
-                onClick={toggleFollow}
-                className={`flex-1 ${isFollowing 
-                  ? "bg-gray-100 hover:bg-gray-200 text-gray-900" 
-                  : "bg-blue-600 hover:bg-blue-700 text-white"}`}
-                size="sm"
-              >
-                {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
-              </Button>
-              
+            {/* Only Register button below WebinarComponent */}
+            <div className="mt-2 mb-4">
               <Button
                 onClick={toggleRegister}
-                className={`flex-1 ${isRegistered 
+                className={`w-full ${isRegistered 
                   ? "bg-green-500 hover:bg-green-600 text-white" 
                   : "bg-red-600 hover:bg-red-700 text-white"}`}
-                size="sm"
+                size="lg"
               >
-                {isRegistered ? t('seminar.registered') || "Registered" : t('seminar.register') || "Register"}
+                {isRegistered ? "Inscrit" : "S'inscrire maintenant"}
               </Button>
             </div>
           </div>
