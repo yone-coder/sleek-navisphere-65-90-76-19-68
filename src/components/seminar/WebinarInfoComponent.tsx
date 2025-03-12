@@ -83,7 +83,7 @@ const WebinarInfoComponent = () => {
   };
 
   return (
-    <div className="px-2 py-3">
+    <div className="px-2 py-2">
       {/* YouTube-style channel section */}
       <div className="flex flex-col">
         {/* Channel info and notification button */}
@@ -104,6 +104,29 @@ const WebinarInfoComponent = () => {
                 </Badge>
               </div>
               <p className="text-sm text-gray-500 mt-0.5">{stats.followers} {t('seminar.academy.followers')} • {stats.seminars} {t('seminar.academy.seminars')}</p>
+              
+              {/* Move follow and register buttons back here */}
+              <div className="mt-3 flex gap-2">
+                <Button
+                  onClick={toggleFollow}
+                  className={`${isFollowing 
+                    ? "bg-gray-100 hover:bg-gray-200 text-gray-900" 
+                    : "bg-blue-600 hover:bg-blue-700 text-white"}`}
+                  size="sm"
+                >
+                  {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
+                </Button>
+                
+                <Button
+                  onClick={toggleRegister}
+                  className={`${isRegistered 
+                    ? "bg-green-500 hover:bg-green-600 text-white" 
+                    : "bg-red-600 hover:bg-red-700 text-white"}`}
+                  size="sm"
+                >
+                  {isRegistered ? t('seminar.registered') || "Registered" : t('seminar.register') || "Register"}
+                </Button>
+              </div>
             </div>
           </div>
           
@@ -118,29 +141,6 @@ const WebinarInfoComponent = () => {
               {notificationsEnabled ? <BellDot className="h-5 w-5 text-gray-700" /> : <Bell className="h-5 w-5 text-gray-700" />}
             </Button>
           )}
-        </div>
-        
-        {/* Two buttons: Follow and Register - side by side */}
-        <div className="mt-3 flex gap-2">
-          <Button
-            onClick={toggleFollow}
-            className={`flex-1 ${isFollowing 
-              ? "bg-gray-100 hover:bg-gray-200 text-gray-900" 
-              : "bg-blue-600 hover:bg-blue-700 text-white"}`}
-            size="sm"
-          >
-            {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
-          </Button>
-          
-          <Button
-            onClick={toggleRegister}
-            className={`flex-1 ${isRegistered 
-              ? "bg-green-500 hover:bg-green-600 text-white" 
-              : "bg-red-600 hover:bg-red-700 text-white"}`}
-            size="sm"
-          >
-            {isRegistered ? t('seminar.registered') || "Registered" : t('seminar.register') || "Register"}
-          </Button>
         </div>
       </div>
     </div>
