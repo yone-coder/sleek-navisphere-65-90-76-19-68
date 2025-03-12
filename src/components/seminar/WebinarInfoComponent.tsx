@@ -39,23 +39,6 @@ const WebinarInfoComponent = () => {
     }
   };
 
-  const toggleRegister = () => {
-    const newRegisteredState = !isRegistered;
-    setIsRegistered(newRegisteredState);
-    
-    if (newRegisteredState) {
-      toast({
-        title: t('seminar.notifications.registered') || "Registered!",
-        description: t('seminar.notifications.registeredDescription') || "You've successfully registered for this seminar",
-      });
-    } else {
-      toast({
-        title: t('seminar.notifications.unregistered') || "Unregistered",
-        description: t('seminar.notifications.unregisteredDescription') || "You've unregistered from this seminar",
-      });
-    }
-  };
-
   const toggleNotifications = () => {
     if (!isFollowing) {
       setIsFollowing(true);
@@ -83,7 +66,7 @@ const WebinarInfoComponent = () => {
   };
 
   return (
-    <div className="px-2 py-2">
+    <div className="px-0 py-2">
       {/* YouTube-style channel section */}
       <div className="flex flex-col">
         {/* Channel info and notification button */}
@@ -102,6 +85,18 @@ const WebinarInfoComponent = () => {
                     <path d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" />
                   </svg>
                 </Badge>
+                
+                {/* Follow button moved next to academy name */}
+                <Button
+                  onClick={toggleFollow}
+                  variant="outline"
+                  size="sm"
+                  className={`ml-2 h-7 text-xs ${isFollowing 
+                    ? "bg-gray-100 hover:bg-gray-200 text-gray-900 border-gray-200" 
+                    : "bg-blue-50 hover:bg-blue-100 text-blue-600 border-blue-200"}`}
+                >
+                  {isFollowing ? t('seminar.academy.following') : t('seminar.academy.follow')}
+                </Button>
               </div>
               <p className="text-sm text-gray-500 mt-0.5">{stats.followers} {t('seminar.academy.followers')} • {stats.seminars} {t('seminar.academy.seminars')}</p>
             </div>
