@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, User, Clock, MessageCircle, Bell, Award, Users, Edit3, Star, Calendar, BadgeCheck, Eye, Zap, Tv, Sparkles, Flame, TrendingUp, BarChart2, BookOpen, ChevronRight, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -70,7 +69,6 @@ const SeminarHomepage = () => {
     }
   }, [activeTab]);
   
-  // Updated tabs array with only Video and Participants tabs
   const tabs = [
     { id: 0, name: t('seminar.tabs.video'), icon: <Play size={18} /> },
     { id: 1, name: "Programme", icon: <Calendar size={18} /> },
@@ -232,8 +230,7 @@ const SeminarHomepage = () => {
         )}
         
         {activeTab === 1 && (
-          <div className="w-full p-4">
-            <h2 className="text-xl font-bold mb-4">Programme du Séminaire</h2>
+          <div className="w-full px-0 py-4">
             <WebinarSchedule />
           </div>
         )}
