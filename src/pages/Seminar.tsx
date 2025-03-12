@@ -26,6 +26,9 @@ const SeminarHomepage = () => {
   const [activeCommentsTab, setActiveCommentsTab] = useState('comments');
   const [showDescription, setShowDescription] = useState(false);
   const webinarRef = useRef<HTMLDivElement>(null);
+  const videoContainerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [videoHeight, setVideoHeight] = useState(0);
   
   // State for follow and register buttons
   const [isFollowing, setIsFollowing] = useState(false);
@@ -35,6 +38,24 @@ const SeminarHomepage = () => {
   useEffect(() => {
     setLanguage('fr');
   }, [setLanguage]);
+  
+  // Effect to measure video container height
+  useEffect(() => {
+    if (videoContainerRef.current) {
+      setVideoHeight(videoContainerRef.current.offsetHeight);
+    }
+    
+    const handleResize = () => {
+      if (videoContainerRef.current) {
+        setVideoHeight(videoContainerRef.current.offsetHeight);
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   
   // Effect to measure and set the bottom padding based on WebinarComponent height
   useEffect(() => {
@@ -122,99 +143,107 @@ const SeminarHomepage = () => {
       {/* YouTube-Style Video Page */}
       {activeTab === 0 && (
         <div className="bg-white">
-          {/* Video Player Section */}
-          <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
-            <div className="absolute inset-0 flex items-center justify-center bg-black">
-              <div className="w-full h-full bg-gray-800 flex items-center justify-center cursor-pointer">
-                <Play size={64} className="text-white opacity-80 hover:opacity-100 transition-opacity" />
+          {/* Video Player Section - Made sticky */}
+          <div 
+            ref={videoContainerRef}
+            className="sticky top-14 z-40 bg-white"
+          >
+            <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+              <div className="absolute inset-0 flex items-center justify-center bg-black">
+                <div className="w-full h-full bg-gray-800 flex items-center justify-center cursor-pointer">
+                  <Play size={64} className="text-white opacity-80 hover:opacity-100 transition-opacity" />
+                </div>
               </div>
             </div>
           </div>
           
-          {/* Video Info and Actions Section */}
-          <div className="p-4">
-            {/* Title and Views */}
-            <h1 className="text-xl font-bold text-gray-900 mb-1">
-              Maîtriser le Développement Web Moderne : Des Bases aux Techniques Avancées
-            </h1>
-            
-            <div className="flex items-center text-sm text-gray-500 mb-4">
-              <span>125K vues</span>
-              <span className="mx-1">•</span>
-              <span>Diffusé il y a 2 jours</span>
-            </div>
-            
-            {/* Channel Info with WebinarInfoComponent - Moved here directly below the views info */}
-            <WebinarInfoComponent />
-            
-            {/* WebinarComponent - Keep after the WebinarInfoComponent */}
-            <div ref={webinarRef} className="mb-4">
-              <WebinarComponent onOpenComments={() => setIsCommentsPanelOpen(true)} />
-            </div>
-            
-            {/* Only Register button below WebinarComponent */}
-            <div className="mt-2 mb-4">
-              <Button
-                onClick={toggleRegister}
-                className={`w-full ${isRegistered 
-                  ? "bg-green-500 hover:bg-green-600 text-white" 
-                  : "bg-red-600 hover:bg-red-700 text-white"}`}
-                size="lg"
-              >
-                {isRegistered ? "Inscrit" : "S'inscrire maintenant"}
-              </Button>
-            </div>
-          </div>
-          
-          {/* Video Description Section */}
-          <div className="p-4 border-b border-gray-100">
-            <div className={`${showDescription ? '' : 'max-h-20 overflow-hidden'} relative`}>
-              <div className="text-sm text-gray-700 whitespace-pre-line">
-                <p className="mb-2"><strong>Découvrez les dernières avancées en développement web dans ce séminaire intensif</strong></p>
-                <p className="mb-2">Dans ce séminaire, nous aborderons les technologies modernes du développement web, de la conception responsive aux frameworks JavaScript avancés. Idéal pour les débutants comme pour les professionnels souhaitant mettre à jour leurs compétences.</p>
-                <p className="mb-2">🔹 React et l'écosystème moderne<br />🔹 Optimisation des performances<br />🔹 TypeScript pour des applications robustes<br />🔹 Architecture microservices<br />🔹 Tests automatisés et déploiement continu</p>
-                <p className="mb-2">Rejoignez-nous pour approfondir vos compétences et rester à la pointe de l'innovation web.</p>
-                <p className="text-xs text-gray-500 mt-4">Publié le 15 avril 2023 • #développement #web #javascript #react</p>
+          {/* Content that will scroll beneath the sticky video */}
+          <div ref={contentRef} className="relative z-30">
+            {/* Video Info and Actions Section */}
+            <div className="p-4">
+              {/* Title and Views */}
+              <h1 className="text-xl font-bold text-gray-900 mb-1">
+                Maîtriser le Développement Web Moderne : Des Bases aux Techniques Avancées
+              </h1>
+              
+              <div className="flex items-center text-sm text-gray-500 mb-4">
+                <span>125K vues</span>
+                <span className="mx-1">•</span>
+                <span>Diffusé il y a 2 jours</span>
               </div>
               
-              {!showDescription && (
-                <div className="absolute bottom-0 inset-x-0 h-10 bg-gradient-to-t from-white to-transparent"></div>
-              )}
+              {/* Channel Info with WebinarInfoComponent - Moved here directly below the views info */}
+              <WebinarInfoComponent />
+              
+              {/* WebinarComponent - Keep after the WebinarInfoComponent */}
+              <div ref={webinarRef} className="mb-4">
+                <WebinarComponent onOpenComments={() => setIsCommentsPanelOpen(true)} />
+              </div>
+              
+              {/* Only Register button below WebinarComponent */}
+              <div className="mt-2 mb-4">
+                <Button
+                  onClick={toggleRegister}
+                  className={`w-full ${isRegistered 
+                    ? "bg-green-500 hover:bg-green-600 text-white" 
+                    : "bg-red-600 hover:bg-red-700 text-white"}`}
+                  size="lg"
+                >
+                  {isRegistered ? "Inscrit" : "S'inscrire maintenant"}
+                </Button>
+              </div>
             </div>
             
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="mt-1 w-full justify-center bg-gray-100"
-              onClick={() => setShowDescription(!showDescription)}
-            >
-              {showDescription ? "Afficher moins" : "Afficher plus"}
-            </Button>
-          </div>
-          
-          {/* Up Next / Related Videos */}
-          <div className="p-4">
-            <h3 className="font-medium mb-4">À suivre</h3>
-            
-            <div className="space-y-4">
-              {[1, 2, 3].map((index) => (
-                <div key={index} className="flex gap-3">
-                  <div className="relative rounded overflow-hidden w-40 h-20 flex-shrink-0">
-                    <div className="absolute inset-0 bg-gray-300 flex items-center justify-center">
-                      <Play size={24} className="text-white" />
-                    </div>
-                    <div className="absolute bottom-1 right-1 bg-black bg-opacity-70 text-white text-xs px-1 rounded">
-                      45:12
-                    </div>
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-medium text-sm line-clamp-2">Les bases de TypeScript pour le développement web moderne</h4>
-                    <p className="text-xs text-gray-500 mt-1">Académie Byte</p>
-                    <p className="text-xs text-gray-500">89K vues • il y a 3 semaines</p>
-                  </div>
+            {/* Video Description Section */}
+            <div className="p-4 border-b border-gray-100">
+              <div className={`${showDescription ? '' : 'max-h-20 overflow-hidden'} relative`}>
+                <div className="text-sm text-gray-700 whitespace-pre-line">
+                  <p className="mb-2"><strong>Découvrez les dernières avancées en développement web dans ce séminaire intensif</strong></p>
+                  <p className="mb-2">Dans ce séminaire, nous aborderons les technologies modernes du développement web, de la conception responsive aux frameworks JavaScript avancés. Idéal pour les débutants comme pour les professionnels souhaitant mettre à jour leurs compétences.</p>
+                  <p className="mb-2">🔹 React et l'écosystème moderne<br />🔹 Optimisation des performances<br />🔹 TypeScript pour des applications robustes<br />🔹 Architecture microservices<br />🔹 Tests automatisés et déploiement continu</p>
+                  <p className="mb-2">Rejoignez-nous pour approfondir vos compétences et rester à la pointe de l'innovation web.</p>
+                  <p className="text-xs text-gray-500 mt-4">Publié le 15 avril 2023 • #développement #web #javascript #react</p>
                 </div>
-              ))}
+                
+                {!showDescription && (
+                  <div className="absolute bottom-0 inset-x-0 h-10 bg-gradient-to-t from-white to-transparent"></div>
+                )}
+              </div>
+              
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="mt-1 w-full justify-center bg-gray-100"
+                onClick={() => setShowDescription(!showDescription)}
+              >
+                {showDescription ? "Afficher moins" : "Afficher plus"}
+              </Button>
+            </div>
+            
+            {/* Up Next / Related Videos */}
+            <div className="p-4">
+              <h3 className="font-medium mb-4">À suivre</h3>
+              
+              <div className="space-y-4">
+                {[1, 2, 3].map((index) => (
+                  <div key={index} className="flex gap-3">
+                    <div className="relative rounded overflow-hidden w-40 h-20 flex-shrink-0">
+                      <div className="absolute inset-0 bg-gray-300 flex items-center justify-center">
+                        <Play size={24} className="text-white" />
+                      </div>
+                      <div className="absolute bottom-1 right-1 bg-black bg-opacity-70 text-white text-xs px-1 rounded">
+                        45:12
+                      </div>
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium text-sm line-clamp-2">Les bases de TypeScript pour le développement web moderne</h4>
+                      <p className="text-xs text-gray-500 mt-1">Académie Byte</p>
+                      <p className="text-xs text-gray-500">89K vues • il y a 3 semaines</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
