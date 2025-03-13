@@ -1,5 +1,5 @@
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { DescriptionTab } from "./tabs/DescriptionTab";
 import { WarrantyTab } from "./tabs/WarrantyTab";
@@ -71,10 +71,18 @@ export function ProductTabs({
       </div>
 
       <div className="mt-6">
-        <DescriptionTab description={description} highlights={highlights} />
-        <WarrantyTab />
-        <ReviewsTab rating={rating} reviews={reviews} />
-        <FAQsTab />
+        <TabsContent value="description">
+          <DescriptionTab description={description} highlights={highlights} />
+        </TabsContent>
+        <TabsContent value="warranty">
+          <WarrantyTab />
+        </TabsContent>
+        <TabsContent value="reviews">
+          <ReviewsTab rating={rating} reviews={reviews} />
+        </TabsContent>
+        <TabsContent value="faqs">
+          <FAQsTab />
+        </TabsContent>
       </div>
     </Tabs>
   );
