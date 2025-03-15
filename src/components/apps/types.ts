@@ -19,7 +19,8 @@ export type AppCategory =
   | "Nonprofit" 
   | "Food" 
   | "Services" 
-  | "Real Estate";
+  | "Real Estate"
+  | "Sellers";
 
 export type IconComponent = LucideIcon;
 

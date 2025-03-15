@@ -1,8 +1,21 @@
 import React from 'react';
-import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe, Heart, Building, Presentation } from "lucide-react";
+import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe, Heart, Building, Presentation, UserPlus } from "lucide-react";
 import type { App, AppCategory } from "../types";
 
 export const apps: App[] = [
+  {
+    name: "Shopr Seller",
+    description: "Sign up to sell products on the Shopr marketplace",
+    icon: UserPlus,
+    route: "/shopr-seller",
+    color: "bg-emerald-500",
+    category: "Sellers",
+    status: "new",
+    users: "4.2K+",
+    lastUsed: "Just now",
+    rating: 4.9,
+    updates: 2
+  },
   {
     name: "Morpion",
     description: "Classic Tic-tac-toe game with a modern twist",
@@ -351,7 +364,8 @@ export const appCategories = [
   "Nonprofit",
   "Food",
   "Services",
-  "Real Estate"
+  "Real Estate",
+  "Sellers"
 ] as const;
 
 export const categories = [
