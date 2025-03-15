@@ -15,7 +15,11 @@ import {
   Star, 
   Filter, 
   ArrowLeft, 
-  ArrowRight 
+  ArrowRight,
+  Info,
+  AlertCircle,
+  TrendingUp,
+  Sparkles
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -28,6 +32,17 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Mock data for latest picks with different lottery types
 const latestPicks = [
@@ -42,6 +57,8 @@ const latestPicks = [
       { number: 78, label: '3rd' }
     ],
     color: '#8B5CF6',
+    hotNumber: 45,
+    coldNumber: 12,
     pastResults: [
       { date: 'Oct 14, 2023', picks: [{ number: 11, label: '1st' }, { number: 22, label: '2nd' }, { number: 33, label: '3rd' }] },
       { date: 'Oct 13, 2023', picks: [{ number: 44, label: '1st' }, { number: 55, label: '2nd' }, { number: 66, label: '3rd' }] }
@@ -53,14 +70,16 @@ const latestPicks = [
     time: 'Midday - 1:30 PM',
     date: 'Oct 15, 2023',
     picks: [
-      { number: 234, label: '1st' },
-      { number: 567, label: '2nd' },
-      { number: 890, label: '3rd' }
+      { number: 2, label: '1st' },
+      { number: 5, label: '2nd' },
+      { number: 8, label: '3rd' }
     ],
     color: '#D946EF',
+    hotNumber: 2,
+    coldNumber: 8,
     pastResults: [
-      { date: 'Oct 14, 2023', picks: [{ number: 321, label: '1st' }, { number: 654, label: '2nd' }, { number: 987, label: '3rd' }] },
-      { date: 'Oct 13, 2023', picks: [{ number: 135, label: '1st' }, { number: 246, label: '2nd' }, { number: 357, label: '3rd' }] }
+      { date: 'Oct 14, 2023', picks: [{ number: 3, label: '1st' }, { number: 6, label: '2nd' }, { number: 9, label: '3rd' }] },
+      { date: 'Oct 13, 2023', picks: [{ number: 1, label: '1st' }, { number: 2, label: '2nd' }, { number: 3, label: '3rd' }] }
     ]
   },
   {
@@ -71,13 +90,14 @@ const latestPicks = [
     picks: [
       { number: 3, label: '1st' },
       { number: 4, label: '2nd' },
-      { number: 5, label: '3rd' },
-      { number: 9, label: '4th' }
+      { number: 5, label: '3rd' }
     ],
     color: '#F97316',
+    hotNumber: 5,
+    coldNumber: 3,
     pastResults: [
-      { date: 'Oct 14, 2023', picks: [{ number: 7, label: '1st' }, { number: 8, label: '2nd' }, { number: 9, label: '3rd' }, { number: 1, label: '4th' }] },
-      { date: 'Oct 13, 2023', picks: [{ number: 4, label: '1st' }, { number: 5, label: '2nd' }, { number: 6, label: '3rd' }, { number: 2, label: '4th' }] }
+      { date: 'Oct 14, 2023', picks: [{ number: 7, label: '1st' }, { number: 8, label: '2nd' }, { number: 9, label: '3rd' }] },
+      { date: 'Oct 13, 2023', picks: [{ number: 4, label: '1st' }, { number: 5, label: '2nd' }, { number: 6, label: '3rd' }] }
     ]
   },
   {
@@ -87,12 +107,15 @@ const latestPicks = [
     date: 'Oct 15, 2023',
     picks: [
       { number: 23, label: '1st' },
-      { number: 47, label: '2nd' }
+      { number: 47, label: '2nd' },
+      { number: 91, label: '3rd' }
     ],
     color: '#EF4444',
+    hotNumber: 47,
+    coldNumber: 91,
     pastResults: [
-      { date: 'Oct 14, 2023', picks: [{ number: 19, label: '1st' }, { number: 38, label: '2nd' }] },
-      { date: 'Oct 13, 2023', picks: [{ number: 92, label: '1st' }, { number: 64, label: '2nd' }] }
+      { date: 'Oct 14, 2023', picks: [{ number: 19, label: '1st' }, { number: 38, label: '2nd' }, { number: 72, label: '3rd' }] },
+      { date: 'Oct 13, 2023', picks: [{ number: 92, label: '1st' }, { number: 64, label: '2nd' }, { number: 81, label: '3rd' }] }
     ]
   },
   {
@@ -101,14 +124,34 @@ const latestPicks = [
     time: 'Midday - 2:00 PM',
     date: 'Oct 15, 2023',
     picks: [
-      { number: 123, label: '1st' },
-      { number: 456, label: '2nd' },
-      { number: 789, label: '3rd' }
+      { number: 1, label: '1st' },
+      { number: 4, label: '2nd' },
+      { number: 7, label: '3rd' }
     ],
     color: '#0EA5E9',
+    hotNumber: 7,
+    coldNumber: 1,
     pastResults: [
-      { date: 'Oct 14, 2023', picks: [{ number: 147, label: '1st' }, { number: 258, label: '2nd' }, { number: 369, label: '3rd' }] },
-      { date: 'Oct 13, 2023', picks: [{ number: 753, label: '1st' }, { number: 951, label: '2nd' }, { number: 426, label: '3rd' }] }
+      { date: 'Oct 14, 2023', picks: [{ number: 1, label: '1st' }, { number: 2, label: '2nd' }, { number: 3, label: '3rd' }] },
+      { date: 'Oct 13, 2023', picks: [{ number: 7, label: '1st' }, { number: 5, label: '2nd' }, { number: 2, label: '3rd' }] }
+    ]
+  },
+  {
+    state: 'France',
+    type: 'Borlette',
+    time: 'Evening - 9:00 PM',
+    date: 'Oct 15, 2023',
+    picks: [
+      { number: 33, label: '1st' },
+      { number: 66, label: '2nd' },
+      { number: 99, label: '3rd' }
+    ],
+    color: '#3B82F6',
+    hotNumber: 66,
+    coldNumber: 33,
+    pastResults: [
+      { date: 'Oct 14, 2023', picks: [{ number: 22, label: '1st' }, { number: 44, label: '2nd' }, { number: 88, label: '3rd' }] },
+      { date: 'Oct 13, 2023', picks: [{ number: 11, label: '1st' }, { number: 55, label: '2nd' }, { number: 77, label: '3rd' }] }
     ]
   }
 ];
@@ -118,6 +161,8 @@ export const BorletteLatestPicks = () => {
   const [openStates, setOpenStates] = useState<string[]>([]);
   const [favoriteNumbers, setFavoriteNumbers] = useState<number[]>([]);
   const [filter, setFilter] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [statsView, setStatsView] = useState(false);
   
   const filteredPicks = filter 
     ? latestPicks.filter(pick => pick.type === filter)
@@ -154,10 +199,45 @@ export const BorletteLatestPicks = () => {
     });
   };
 
+  const downloadResults = (state: string) => {
+    toast({
+      title: "Download started",
+      description: `${state} lottery results are being downloaded.`,
+      duration: 3000,
+    });
+  };
+
+  const toggleStatsView = () => {
+    setStatsView(!statsView);
+    toast({
+      title: statsView ? "Standard view activated" : "Statistics view activated",
+      description: `Switched to ${statsView ? 'standard' : 'statistics'} view for lottery results.`,
+      duration: 3000,
+    });
+  };
+
+  const clearFilters = () => {
+    setFilter(null);
+    setSelectedDate(null);
+    toast({
+      title: "Filters cleared",
+      description: "All filters have been reset.",
+      duration: 3000,
+    });
+  };
+
+  const selectDate = (date: string) => {
+    setSelectedDate(date === selectedDate ? null : date);
+  };
+
+  const getFrequencyColor = (isHot: boolean) => {
+    return isHot ? 'text-red-500' : 'text-blue-500';
+  };
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+        <div className="flex flex-wrap items-center gap-1.5">
           <Button 
             variant="ghost" 
             size="sm" 
@@ -203,10 +283,42 @@ export const BorletteLatestPicks = () => {
             Lotto 4
           </Button>
         </div>
-        <Button variant="ghost" size="sm" className="text-xs flex items-center gap-1">
-          <Filter className="h-3 w-3" />
-          <span>More Filters</span>
-        </Button>
+        <div className="flex items-center gap-1.5">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-xs flex items-center gap-1 h-7 px-2"
+            onClick={toggleStatsView}
+          >
+            <TrendingUp className="h-3 w-3" />
+            <span>{statsView ? "Hide Stats" : "Show Stats"}</span>
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-xs flex items-center gap-1 h-7 px-2"
+            onClick={clearFilters}
+          >
+            <Filter className="h-3 w-3" />
+            <span>Clear Filters</span>
+          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  className="h-7 w-7 rounded-full"
+                >
+                  <Info className="h-3.5 w-3.5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="text-xs">Click on a date to filter by date</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </div>
       
       <Carousel
@@ -241,12 +353,7 @@ export const BorletteLatestPicks = () => {
                     </div>
                   </CardHeader>
                   <CardContent className="pt-3 pb-4">
-                    <div className={cn(
-                      "grid gap-2",
-                      result.picks.length === 2 ? "grid-cols-2" :
-                      result.picks.length === 3 ? "grid-cols-3" :
-                      "grid-cols-4"
-                    )}>
+                    <div className="grid grid-cols-3 gap-2">
                       {result.picks.map((pick, idx) => (
                         <div 
                           key={idx} 
@@ -281,6 +388,23 @@ export const BorletteLatestPicks = () => {
                       ))}
                     </div>
 
+                    {statsView && (
+                      <div className="mt-3 p-2 bg-gray-50 rounded-lg text-xs">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="font-medium">Hot Number:</span>
+                          <span className={getFrequencyColor(true)}>
+                            {result.hotNumber} <Sparkles className="inline h-3 w-3" />
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="font-medium">Cold Number:</span>
+                          <span className={getFrequencyColor(false)}>
+                            {result.coldNumber} <AlertCircle className="inline h-3 w-3" />
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
                     <div className="flex justify-between mt-3">
                       <CollapsibleTrigger asChild>
                         <Button 
@@ -304,6 +428,7 @@ export const BorletteLatestPicks = () => {
                           variant="ghost" 
                           size="icon" 
                           className="h-7 w-7"
+                          onClick={() => downloadResults(result.state)}
                         >
                           <Download className="h-3.5 w-3.5 text-gray-500" />
                         </Button>
@@ -316,11 +441,18 @@ export const BorletteLatestPicks = () => {
                         <ScrollArea className="h-[120px]">
                           {result.pastResults.map((pastResult, pastIdx) => (
                             <div key={pastIdx} className="mb-2 last:mb-0">
-                              <div className="text-xs text-gray-500 mb-1">{pastResult.date}</div>
-                              <div className={cn(
-                                "flex gap-2",
-                                pastResult.picks.length > 3 && "flex-wrap"
-                              )}>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className={cn(
+                                  "w-full text-xs justify-start font-normal py-1 mb-1",
+                                  selectedDate === pastResult.date ? "bg-gray-200" : ""
+                                )}
+                                onClick={() => selectDate(pastResult.date)}
+                              >
+                                {pastResult.date}
+                              </Button>
+                              <div className="grid grid-cols-3 gap-2">
                                 {pastResult.picks.map((pick, pickIdx) => (
                                   <div 
                                     key={pickIdx}
