@@ -4,6 +4,19 @@ import type { App, AppCategory } from "../types";
 
 export const apps: App[] = [
   {
+    name: "Borlette",
+    description: "Play lottery games from different states",
+    icon: Ticket,
+    route: "/borlette",
+    color: "bg-zinc-800",
+    category: "Entertainment",
+    status: "new",
+    users: "5.7K+",
+    lastUsed: "Just now",
+    rating: 4.9,
+    updates: 1
+  },
+  {
     name: "Shopr Seller",
     description: "Sign up to sell products on the Shopr marketplace",
     icon: UserPlus,
@@ -19,7 +32,7 @@ export const apps: App[] = [
   {
     name: "Morpion",
     description: "Classic Tic-tac-toe game with a modern twist",
-    icon: Gamepad2, // Changed from custom component to Lucide icon
+    icon: Gamepad2,
     route: "/games/morpion-details",
     color: "bg-indigo-500",
     category: "Gaming",

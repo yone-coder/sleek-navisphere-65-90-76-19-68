@@ -44,6 +44,7 @@ const GameDetails = lazy(() => import("./pages/GameDetails"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const Seminar = lazy(() => import("./pages/Seminar"));
 const ShopSeller = lazy(() => import("./pages/ShopSeller"));
+const Borlette = lazy(() => import("./pages/Borlette"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen p-8 space-y-4">
@@ -73,7 +74,7 @@ const queryClient = new QueryClient({
 
 const AppContent = () => {
   const location = useLocation();
-  const hideBottomNavRoutes = ['/marketplace', '/games/', '/landing', '/seminar', '/shopr-seller'];
+  const hideBottomNavRoutes = ['/marketplace', '/games/', '/landing', '/seminar', '/shopr-seller', '/borlette'];
   const isAdminRoute = location.pathname.startsWith('/admin');
   const shouldShowBottomNav = !isAdminRoute && 
     !hideBottomNavRoutes.some(route => location.pathname.startsWith(route));
@@ -116,6 +117,7 @@ const AppContent = () => {
           <Route path="/search" element={<Search />} />
           <Route path="/seminar" element={<Seminar />} />
           <Route path="/shopr-seller" element={<ShopSeller />} />
+          <Route path="/borlette" element={<Borlette />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
