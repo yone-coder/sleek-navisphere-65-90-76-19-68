@@ -14,8 +14,8 @@ export function ProfileSection({
   creatorBio = "Investment Holding Company"
 }: ProfileSectionProps) {
   return (
-    <div className="w-full">
-      <div className="max-w-md mx-auto p-3">
+    <div className="w-full bg-white border-b">
+      <div className="max-w-4xl mx-auto p-4">
         <div className="flex items-start gap-3">
           {/* Profile Image and Badge */}
           <div className="relative">

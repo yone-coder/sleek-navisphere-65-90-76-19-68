@@ -39,6 +39,14 @@ export interface SeminarCardProps {
   popularity?: number; // 1-100 score for popularity
 }
 
+const seminarImages = [
+  "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=300&h=180&q=80",
+  "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=300&h=180&q=80",
+  "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=300&h=180&q=80",
+  "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=300&h=180&q=80",
+  "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&w=300&h=180&q=80"
+];
+
 export function SeminarCard({
   id,
   title,
@@ -65,6 +73,12 @@ export function SeminarCard({
   popularity = 70
 }: SeminarCardProps) {
   const navigate = useNavigate();
+  
+  const getImageForSeminar = () => {
+    const idNum = parseInt(id, 10) || id.charCodeAt(0);
+    const index = idNum % seminarImages.length;
+    return seminarImages[index];
+  };
   
   const handleCardClick = () => {
     navigate(`/seminar/${id}`);
@@ -97,6 +111,8 @@ export function SeminarCard({
     }
   };
   
+  const displayImage = image && !image.includes('/api/placeholder') ? image : getImageForSeminar();
+  
   return (
     <Card 
       className={cn(
@@ -118,17 +134,11 @@ export function SeminarCard({
       )}
       
       <div className="relative h-32 overflow-hidden bg-gray-100">
-        {image ? (
-          <img 
-            src={image} 
-            alt={title} 
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full bg-gradient-to-r from-blue-400 to-purple-500">
-            <span className="text-white font-medium text-sm">{title.substring(0, 30)}</span>
-          </div>
-        )}
+        <img 
+          src={displayImage} 
+          alt={title} 
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+        />
         
         <div className="absolute top-2 left-2 flex flex-col gap-1">
           <Badge variant="secondary" className="bg-white/90 text-gray-800 shadow-sm text-[10px] px-1.5 py-0">

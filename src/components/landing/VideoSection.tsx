@@ -22,7 +22,7 @@ export function VideoSection() {
   return (
     <div 
       ref={videoContainerRef}
-      className="w-full bg-gray-900 sticky top-0 z-30"
+      className="w-full bg-gray-900 sticky top-0 z-30 overflow-hidden"
     >
       <div className="relative w-full h-full">
         <iframe

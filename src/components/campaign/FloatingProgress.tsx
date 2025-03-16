@@ -94,7 +94,7 @@ export function FloatingProgress({
             />
           </div>
           
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
             <div>
               <div className="flex flex-col">
                 <div className="flex items-center gap-2 mb-1">
@@ -112,35 +112,29 @@ export function FloatingProgress({
                     <span className="text-[10px] font-medium text-emerald-600">+2.5k today</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex -space-x-1 shrink-0">
-                    <div className="h-4 w-4 rounded-full bg-blue-400 ring-2 ring-white" />
-                    <div className="h-4 w-4 rounded-full bg-purple-400 ring-2 ring-white" />
-                    <div className="h-4 w-4 rounded-full bg-pink-400 ring-2 ring-white" />
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="flex -space-x-1 shrink-0">
+                      <div className="h-4 w-4 rounded-full bg-blue-400 ring-2 ring-white" />
+                      <div className="h-4 w-4 rounded-full bg-purple-400 ring-2 ring-white" />
+                      <div className="h-4 w-4 rounded-full bg-pink-400 ring-2 ring-white" />
+                    </div>
+                    <span className="text-[10px] text-gray-500 whitespace-nowrap">+12 backers in the last hour</span>
                   </div>
-                  <span className="text-[10px] text-gray-500 whitespace-nowrap">+12 backers in the last hour</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="text-right">
-              <div className="flex items-center justify-end whitespace-nowrap">
-                <div className="flex flex-col items-end">
-                  <span className="text-lg md:text-xl font-bold text-gray-900">
-                    {days}
-                  </span>
-                  <div className="flex items-center gap-1 text-gray-500">
-                    <span className="text-[10px]">
-                      days to go
-                    </span>
-                    <Shield className="h-3 w-3" aria-label="Protected campaign" />
+                  
+                  <div className="flex items-center whitespace-nowrap ml-auto">
+                    <span className="text-base font-bold text-gray-900 mr-1">{days}</span>
+                    <div className="flex items-center gap-1 text-gray-500">
+                      <span className="text-[10px]">days to go</span>
+                      <Shield className="h-3 w-3" aria-label="Protected campaign" />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 mt-2">
             <Button 
               size="sm"
               className="bg-emerald-500 hover:bg-emerald-600 text-white flex-1 group relative overflow-hidden pr-20"
