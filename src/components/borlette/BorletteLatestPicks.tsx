@@ -86,7 +86,6 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
-// Mock data for latest picks with different lottery types
 const latestPicks = [
   {
     state: 'New York',
@@ -311,22 +310,18 @@ export const BorletteLatestPicks = () => {
   };
 
   const downloadResults = (state: string) => {
-    // Create a CSV format for the results
     const result = latestPicks.find(pick => pick.state === state);
     if (!result) return;
     
     let csvContent = "data:text/csv;charset=utf-8,";
     csvContent += "Date,1st,2nd,3rd\n";
     
-    // Add current result
     csvContent += `${result.date},${result.picks.map(p => p.number).join(',')}\n`;
     
-    // Add past results
     result.pastResults.forEach(pastResult => {
       csvContent += `${pastResult.date},${pastResult.picks.map(p => p.number).join(',')}\n`;
     });
     
-    // Create download link
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -404,7 +399,6 @@ export const BorletteLatestPicks = () => {
     
     setSearchResults(true);
     
-    // Check if number exists in any results
     const found = latestPicks.some(pick => 
       pick.picks.some(p => p.number === num) || 
       pick.pastResults.some(past => past.picks.some(p => p.number === num))
@@ -458,7 +452,6 @@ export const BorletteLatestPicks = () => {
       duration: 5000,
     });
     
-    // Add to favorites automatically
     if (!favoriteNumbers.includes(randomPick)) {
       setFavoriteNumbers(prev => [...prev, randomPick]);
     }
@@ -469,14 +462,12 @@ export const BorletteLatestPicks = () => {
   };
 
   useEffect(() => {
-    // Show a welcome toast on first render
     toast({
       title: "Welcome to Borlette Results",
       description: "View the latest lottery results and analyze patterns.",
       duration: 5000,
     });
     
-    // Set up periodic updates if notification is enabled
     const notificationInterval = setInterval(() => {
       if (notificationEnabled.length > 0) {
         const randomState = notificationEnabled[Math.floor(Math.random() * notificationEnabled.length)];
@@ -486,7 +477,7 @@ export const BorletteLatestPicks = () => {
           duration: 5000,
         });
       }
-    }, 60000); // Check every minute
+    }, 60000);
     
     return () => {
       clearInterval(notificationInterval);
@@ -495,7 +486,6 @@ export const BorletteLatestPicks = () => {
 
   return (
     <div className="space-y-4">
-      {/* Advanced Tools Bar */}
       <div className="flex flex-wrap items-center justify-between gap-2 mb-2 p-2 bg-gray-50 rounded-lg border border-gray-100">
         <div className="flex flex-wrap items-center gap-1.5">
           <TooltipProvider>
@@ -584,7 +574,6 @@ export const BorletteLatestPicks = () => {
         </div>
         
         <div className="flex flex-wrap items-center gap-1.5">
-          {/* Number Search */}
           <div className="flex items-center gap-1.5">
             <Input
               type="number"
@@ -604,7 +593,6 @@ export const BorletteLatestPicks = () => {
             </Button>
           </div>
           
-          {/* Stats Toggle */}
           <Button 
             variant="ghost" 
             size="sm" 
@@ -618,7 +606,6 @@ export const BorletteLatestPicks = () => {
             <span>{statsView ? "Hide Stats" : "Show Stats"}</span>
           </Button>
           
-          {/* Patterns Toggle */}
           <Button 
             variant="ghost" 
             size="sm" 
@@ -632,7 +619,6 @@ export const BorletteLatestPicks = () => {
             <span>{showPatterns ? "Hide Patterns" : "Show Patterns"}</span>
           </Button>
           
-          {/* Compare Toggle */}
           <Button 
             variant="ghost" 
             size="sm" 
@@ -646,7 +632,6 @@ export const BorletteLatestPicks = () => {
             <span>{compareMode ? "Exit Compare" : "Compare"}</span>
           </Button>
 
-          {/* Lucky Pick Generator */}
           <Button 
             variant="ghost" 
             size="sm" 
@@ -657,7 +642,6 @@ export const BorletteLatestPicks = () => {
             <span>Lucky Pick</span>
           </Button>
           
-          {/* Advanced Settings */}
           <Sheet>
             <SheetTrigger asChild>
               <Button 
@@ -771,10 +755,8 @@ export const BorletteLatestPicks = () => {
                     checked={notificationEnabled.length > 0}
                     onCheckedChange={(checked) => {
                       if (checked) {
-                        // Enable for all
                         setNotificationEnabled(latestPicks.map(p => p.state));
                       } else {
-                        // Disable for all
                         setNotificationEnabled([]);
                       }
                     }}
@@ -811,7 +793,6 @@ export const BorletteLatestPicks = () => {
         </div>
       </div>
       
-      {/* Compare Mode Panel */}
       {compareMode && compareItems.length > 0 && (
         <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm mb-4">
           <h3 className="text-sm font-medium mb-2 flex items-center">
@@ -852,4 +833,27 @@ export const BorletteLatestPicks = () => {
                 
                 return (
                   <Card key={idx} className="overflow-hidden border">
-                    <CardHeader className="p-3 pb-1
+                    <CardHeader className="p-3 pb-1">
+                      <CardTitle className="text-sm font-medium">{stateData.state}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-3 pt-1">
+                      <div className="text-xs text-gray-500 mb-2">{stateData.type}</div>
+                      <div className="grid grid-cols-3 gap-2">
+                        {stateData.picks.map((pick, i) => (
+                          <div key={i} className="flex flex-col items-center">
+                            <div className="text-xs text-gray-400">{pick.label}</div>
+                            <div className="font-bold">{pick.number}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
