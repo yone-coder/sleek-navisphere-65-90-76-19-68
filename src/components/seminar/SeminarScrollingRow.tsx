@@ -24,7 +24,7 @@ export function SeminarScrollingRow({
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({
-        left: -280,
+        left: -320,
         behavior: 'smooth'
       });
     }
@@ -33,7 +33,7 @@ export function SeminarScrollingRow({
   const scrollRight = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({
-        left: 280,
+        left: 320,
         behavior: 'smooth'
       });
     }
@@ -58,7 +58,7 @@ export function SeminarScrollingRow({
               <div 
                 key={seminar.id} 
                 className={cn(
-                  "min-w-[280px] max-w-[280px] w-[280px]",
+                  "min-w-[300px] max-w-[300px] w-[300px]",
                   index === seminars.length - 1 ? "pr-4" : ""
                 )}
               >

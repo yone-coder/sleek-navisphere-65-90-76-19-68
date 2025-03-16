@@ -57,13 +57,13 @@ export function SeminarMasonryGrid({
       {/* Desktop: Multi-column puzzle-like layout */}
       <div className="hidden md:grid gap-4 lg:gap-5" 
            style={{ 
-             gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+             gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
              gridAutoRows: "10px"
            }}>
         {seminars.map((seminar, index) => {
           // Calculate different heights for cards to create puzzle effect
           // Each card will span a different number of rows to create visual interest
-          const spanRows = 22 + (index % 4) * 2; // Between 22-28 rows (each row is 10px)
+          const spanRows = 26 + (index % 4) * 2; // Increased height to accommodate larger cards
           
           return (
             <div key={seminar.id} 

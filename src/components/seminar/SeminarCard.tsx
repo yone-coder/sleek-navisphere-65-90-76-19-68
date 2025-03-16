@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Badge } from "@/components/ui/badge";
@@ -104,7 +103,7 @@ export function SeminarCard({
   return (
     <Card 
       className={cn(
-        "w-[220px] overflow-hidden transition-all hover:shadow-md cursor-pointer group relative shrink-0",
+        "w-[300px] overflow-hidden transition-all hover:shadow-md cursor-pointer group relative shrink-0",
         featured && "border-blue-200 bg-blue-50/40"
       )} 
       onClick={handleCardClick}
@@ -121,7 +120,7 @@ export function SeminarCard({
         </div>
       )}
       
-      <div className="relative h-28 overflow-hidden bg-gray-100">
+      <div className="relative h-36 overflow-hidden bg-gray-100">
         {image ? (
           <img 
             src={image} 
@@ -130,7 +129,7 @@ export function SeminarCard({
           />
         ) : (
           <div className="flex items-center justify-center h-full bg-gradient-to-r from-blue-400 to-purple-500">
-            <span className="text-white font-medium text-xs">{title.substring(0, 30)}</span>
+            <span className="text-white font-medium text-sm">{title.substring(0, 30)}</span>
           </div>
         )}
         
@@ -167,43 +166,43 @@ export function SeminarCard({
         )}
       </div>
       
-      <CardHeader className="p-2 pb-0">
-        <h3 className="font-medium text-xs line-clamp-2 h-8">{title}</h3>
+      <CardHeader className="p-3 pb-0">
+        <h3 className="font-medium text-sm line-clamp-2 h-10">{title}</h3>
       </CardHeader>
       
-      <CardContent className="p-2 pt-1 space-y-1">
-        <div className="flex items-center text-[10px] text-gray-500">
-          <Calendar className="w-2.5 h-2.5 mr-1 flex-shrink-0" />
+      <CardContent className="p-3 pt-2 space-y-1.5">
+        <div className="flex items-center text-xs text-gray-500">
+          <Calendar className="w-3 h-3 mr-1 flex-shrink-0" />
           <span className="truncate">{date}</span>
           {time && (
             <>
               <span className="mx-1">•</span>
-              <Clock className="w-2.5 h-2.5 mr-1 flex-shrink-0" />
+              <Clock className="w-3 h-3 mr-1 flex-shrink-0" />
               <span>{time}</span>
             </>
           )}
         </div>
         
-        <div className="flex items-center text-[10px] text-gray-500">
-          <MapPin className="w-2.5 h-2.5 mr-1 flex-shrink-0" />
+        <div className="flex items-center text-xs text-gray-500">
+          <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
           <span className="truncate">{location}</span>
         </div>
 
-        <div className="flex items-center text-[10px] text-gray-500">
-          <Clock3 className="w-2.5 h-2.5 mr-1 flex-shrink-0" />
+        <div className="flex items-center text-xs text-gray-500">
+          <Clock3 className="w-3 h-3 mr-1 flex-shrink-0" />
           <span>{duration || '3 hours'}</span>
           <span className="mx-1">•</span>
-          <Video className="w-2.5 h-2.5 mr-1 flex-shrink-0" />
+          <Video className="w-3 h-3 mr-1 flex-shrink-0" />
           <span>{language}</span>
         </div>
         
         {rating && (
-          <div className="flex items-center text-[10px]">
+          <div className="flex items-center text-xs">
             <div className="flex items-center text-yellow-500 mr-1.5">
               {Array(5).fill(0).map((_, i) => (
                 <Star 
                   key={i} 
-                  className="w-2.5 h-2.5" 
+                  className="w-3 h-3" 
                   fill={i < Math.floor(rating) ? "currentColor" : "none"}
                 />
               ))}
@@ -213,34 +212,34 @@ export function SeminarCard({
         )}
 
         <div className="flex items-center gap-1">
-          <Badge variant="outline" className={cn(getDifficultyColor(), "text-[9px] px-1 py-0 h-4")}>
-            <Zap className="w-2 h-2 mr-1" />
+          <Badge variant="outline" className={cn(getDifficultyColor(), "text-[10px] px-1.5 py-0.5 h-5")}>
+            <Zap className="w-2.5 h-2.5 mr-1" />
             {difficultyLevel}
           </Badge>
         </div>
       </CardContent>
       
-      <CardFooter className="p-2 pt-0 flex items-center justify-between">
+      <CardFooter className="p-3 pt-1 flex items-center justify-between">
         <div className="flex items-center">
-          <div className="flex -space-x-1.5 mr-1">
+          <div className="flex -space-x-2 mr-1.5">
             {speakerImages.length > 0 ? (
               speakerImages.slice(0, 2).map((img, i) => (
-                <Avatar key={i} className="w-4 h-4 border border-white">
+                <Avatar key={i} className="w-5 h-5 border border-white">
                   <AvatarImage src={img} />
-                  <AvatarFallback className="text-[6px] bg-gray-200">
+                  <AvatarFallback className="text-[7px] bg-gray-200">
                     SP
                   </AvatarFallback>
                 </Avatar>
               ))
             ) : (
-              <Avatar className="w-4 h-4 border border-white">
-                <AvatarFallback className="text-[6px] bg-gray-200">
+              <Avatar className="w-5 h-5 border border-white">
+                <AvatarFallback className="text-[7px] bg-gray-200">
                   SP
                 </AvatarFallback>
               </Avatar>
             )}
           </div>
-          <span className="text-[9px] text-gray-500">
+          <span className="text-[10px] text-gray-500">
             {speakersCount} {speakersCount === 1 ? 'Speaker' : 'Speakers'}
           </span>
         </div>
@@ -248,7 +247,7 @@ export function SeminarCard({
         <div className="text-right">
           {price !== undefined && (
             <div className={cn(
-              "text-xs font-medium",
+              "text-sm font-medium",
               typeof price === 'number' && price === 0 ? "text-green-600" : "text-blue-600"
             )}>
               {typeof price === 'number' && price === 0 ? 'Free' : 
@@ -261,9 +260,9 @@ export function SeminarCard({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <div className="text-[9px] text-gray-500 flex items-center">
-                    <Users className="w-2 h-2 mr-1" />
-                    <div className="w-12 h-1 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="text-[10px] text-gray-500 flex items-center">
+                    <Users className="w-2.5 h-2.5 mr-1" />
+                    <div className="w-14 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                       <div 
                         className={`h-full ${getAvailabilityColor()}`} 
                         style={{ width: `${percentageFilled}%` }}
