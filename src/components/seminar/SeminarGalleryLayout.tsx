@@ -28,15 +28,17 @@ export function SeminarGalleryLayout({
   return (
     <div className={cn("w-full", className)}>
       {/* Featured row */}
-      <div className="my-4 px-4 sm:pl-0 -mx-4 md:-mx-6 lg:-mx-8">
-        <ScrollArea className="pb-4">
-          <div className="pl-4 md:pl-6 lg:pl-8 pr-4">
-            <SeminarSectionHeading 
-              title="Featured Seminars" 
-              subtitle="Discover our top picks for this month"
-              icon={<Award className="h-5 w-5" />}
-              className="mb-4"
-            />
+      <div className="my-4 -mx-4 md:-mx-6 lg:-mx-8">
+        <div className="px-4 md:px-6 lg:px-8">
+          <SeminarSectionHeading 
+            title="Featured Seminars" 
+            subtitle="Discover our top picks for this month"
+            icon={<Award className="h-5 w-5" />}
+            className="mb-4"
+          />
+        </div>
+        <ScrollArea className="pb-4 w-full">
+          <div className="px-4 md:px-6 lg:px-8">
             <div className="overflow-visible pb-1">
               <SeminarScrollingRow 
                 title="" 
@@ -49,15 +51,17 @@ export function SeminarGalleryLayout({
       </div>
 
       {/* Upcoming row */}
-      <div className="mt-6 px-4 sm:pl-0 -mx-4 md:-mx-6 lg:-mx-8">
-        <ScrollArea className="pb-4">
-          <div className="pl-4 md:pl-6 lg:pl-8 pr-4">
-            <SeminarSectionHeading 
-              title="Upcoming Seminars" 
-              subtitle="Don't miss these events coming soon"
-              icon={<Calendar className="h-5 w-5" />}
-              className="mb-4" 
-            />
+      <div className="mt-6 -mx-4 md:-mx-6 lg:-mx-8">
+        <div className="px-4 md:px-6 lg:px-8">
+          <SeminarSectionHeading 
+            title="Upcoming Seminars" 
+            subtitle="Don't miss these events coming soon"
+            icon={<Calendar className="h-5 w-5" />}
+            className="mb-4" 
+          />
+        </div>
+        <ScrollArea className="pb-4 w-full">
+          <div className="px-4 md:px-6 lg:px-8">
             <div className="overflow-visible pb-1">
               <SeminarScrollingRow 
                 title="" 
@@ -70,15 +74,17 @@ export function SeminarGalleryLayout({
       </div>
 
       {/* Popular row */}
-      <div className="mt-6 px-4 sm:pl-0 -mx-4 md:-mx-6 lg:-mx-8">
-        <ScrollArea className="pb-4">
-          <div className="pl-4 md:pl-6 lg:pl-8 pr-4">
-            <SeminarSectionHeading 
-              title="Trending Seminars" 
-              subtitle="Most popular among our users"
-              icon={<TrendingUp className="h-5 w-5" />}
-              className="mb-4"
-            />
+      <div className="mt-6 -mx-4 md:-mx-6 lg:-mx-8">
+        <div className="px-4 md:px-6 lg:px-8">
+          <SeminarSectionHeading 
+            title="Trending Seminars" 
+            subtitle="Most popular among our users"
+            icon={<TrendingUp className="h-5 w-5" />}
+            className="mb-4"
+          />
+        </div>
+        <ScrollArea className="pb-4 w-full">
+          <div className="px-4 md:px-6 lg:px-8">
             <div className="overflow-visible pb-1">
               <SeminarScrollingRow 
                 title="" 

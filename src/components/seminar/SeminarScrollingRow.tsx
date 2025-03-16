@@ -24,7 +24,7 @@ export function SeminarScrollingRow({
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({
-        left: -220,
+        left: -280,
         behavior: 'smooth'
       });
     }
@@ -33,14 +33,14 @@ export function SeminarScrollingRow({
   const scrollRight = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({
-        left: 220,
+        left: 280,
         behavior: 'smooth'
       });
     }
   };
 
   return (
-    <div className={cn("relative group", className)}>
+    <div className={cn("relative group w-full", className)}>
       <div className="flex items-center justify-between mb-2">
         {title && <h3 className="text-lg font-medium text-gray-900">{title}</h3>}
         <Button variant="ghost" size="sm" className="text-sm">
@@ -52,14 +52,15 @@ export function SeminarScrollingRow({
         <ScrollArea className="w-full overflow-x-auto pb-4 -mx-4 px-4">
           <div
             ref={scrollContainerRef}
-            className="flex gap-2 w-max min-w-full pl-0 pr-4"
+            className="flex gap-3 w-max min-w-full pl-0 pr-8"
           >
             {seminars.map((seminar) => (
-              <SeminarCard
-                key={seminar.id}
-                {...seminar}
-                onToggleSave={onSaveSeminar}
-              />
+              <div key={seminar.id} className="min-w-[260px] max-w-[260px] w-[260px]">
+                <SeminarCard
+                  {...seminar}
+                  onToggleSave={onSaveSeminar}
+                />
+              </div>
             ))}
           </div>
           <ScrollBar orientation="horizontal" className="h-1.5" />
