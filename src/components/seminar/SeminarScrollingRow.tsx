@@ -68,8 +68,8 @@ export function SeminarScrollingRow({
                 />
               </div>
             ))}
-            {/* Add a very small spacer to show just a tiny glimpse of the next card */}
-            <div className="min-w-[8px] max-w-[8px] w-[8px] flex-shrink-0"></div>
+            {/* Show just a tiny glimpse of the next card */}
+            <div className="min-w-[4px] max-w-[4px] w-[4px] flex-shrink-0"></div>
           </div>
           <ScrollBar orientation="horizontal" className="h-1.5" />
         </ScrollArea>
