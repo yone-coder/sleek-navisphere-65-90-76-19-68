@@ -24,7 +24,7 @@ export function SeminarScrollingRow({
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({
-        left: -220,
+        left: -280,
         behavior: 'smooth'
       });
     }
@@ -33,7 +33,7 @@ export function SeminarScrollingRow({
   const scrollRight = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({
-        left: 220,
+        left: 280,
         behavior: 'smooth'
       });
     }
@@ -57,10 +57,10 @@ export function SeminarScrollingRow({
             {seminars.map((seminar, index) => (
               <div 
                 key={seminar.id} 
-                className="min-w-[220px] max-w-[220px] w-[220px]"
-                style={{
-                  flexShrink: 0
-                }}
+                className={cn(
+                  "min-w-[280px] max-w-[280px] w-[280px]",
+                  index === seminars.length - 1 ? "pr-4" : ""
+                )}
               >
                 <SeminarCard
                   {...seminar}
@@ -68,7 +68,8 @@ export function SeminarScrollingRow({
                 />
               </div>
             ))}
-            <div className="min-w-[24px] w-[24px] flex-shrink-0" />
+            {/* Add a very small spacer to show just a tiny glimpse of the next card */}
+            <div className="min-w-[8px] max-w-[8px] w-[8px] flex-shrink-0"></div>
           </div>
           <ScrollBar orientation="horizontal" className="h-1.5" />
         </ScrollArea>
