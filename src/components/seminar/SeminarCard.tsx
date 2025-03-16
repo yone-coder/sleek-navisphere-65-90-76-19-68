@@ -104,7 +104,7 @@ export function SeminarCard({
   return (
     <Card 
       className={cn(
-        "w-[260px] overflow-hidden transition-all hover:shadow-md cursor-pointer group relative shrink-0",
+        "w-[220px] overflow-hidden transition-all hover:shadow-md cursor-pointer group relative shrink-0",
         featured && "border-blue-200 bg-blue-50/40"
       )} 
       onClick={handleCardClick}
@@ -121,7 +121,7 @@ export function SeminarCard({
         </div>
       )}
       
-      <div className="relative h-32 overflow-hidden bg-gray-100">
+      <div className="relative h-28 overflow-hidden bg-gray-100">
         {image ? (
           <img 
             src={image} 
@@ -171,8 +171,8 @@ export function SeminarCard({
         <h3 className="font-medium text-xs line-clamp-2 h-8">{title}</h3>
       </CardHeader>
       
-      <CardContent className="p-2 pt-1 space-y-1.5">
-        <div className="flex items-center text-[11px] text-gray-500">
+      <CardContent className="p-2 pt-1 space-y-1">
+        <div className="flex items-center text-[10px] text-gray-500">
           <Calendar className="w-2.5 h-2.5 mr-1 flex-shrink-0" />
           <span className="truncate">{date}</span>
           {time && (
@@ -184,12 +184,12 @@ export function SeminarCard({
           )}
         </div>
         
-        <div className="flex items-center text-[11px] text-gray-500">
+        <div className="flex items-center text-[10px] text-gray-500">
           <MapPin className="w-2.5 h-2.5 mr-1 flex-shrink-0" />
           <span className="truncate">{location}</span>
         </div>
 
-        <div className="flex items-center text-[11px] text-gray-500">
+        <div className="flex items-center text-[10px] text-gray-500">
           <Clock3 className="w-2.5 h-2.5 mr-1 flex-shrink-0" />
           <span>{duration || '3 hours'}</span>
           <span className="mx-1">•</span>
@@ -198,7 +198,7 @@ export function SeminarCard({
         </div>
         
         {rating && (
-          <div className="flex items-center text-[11px]">
+          <div className="flex items-center text-[10px]">
             <div className="flex items-center text-yellow-500 mr-1.5">
               {Array(5).fill(0).map((_, i) => (
                 <Star 
@@ -212,9 +212,8 @@ export function SeminarCard({
           </div>
         )}
 
-        {/* Difficulty level badge */}
         <div className="flex items-center gap-1">
-          <Badge variant="outline" className={cn(getDifficultyColor(), "text-[9px] px-1.5 py-0 h-4")}>
+          <Badge variant="outline" className={cn(getDifficultyColor(), "text-[9px] px-1 py-0 h-4")}>
             <Zap className="w-2 h-2 mr-1" />
             {difficultyLevel}
           </Badge>
@@ -225,23 +224,23 @@ export function SeminarCard({
         <div className="flex items-center">
           <div className="flex -space-x-1.5 mr-1">
             {speakerImages.length > 0 ? (
-              speakerImages.slice(0, 3).map((img, i) => (
-                <Avatar key={i} className="w-5 h-5 border border-white">
+              speakerImages.slice(0, 2).map((img, i) => (
+                <Avatar key={i} className="w-4 h-4 border border-white">
                   <AvatarImage src={img} />
-                  <AvatarFallback className="text-[7px] bg-gray-200">
+                  <AvatarFallback className="text-[6px] bg-gray-200">
                     SP
                   </AvatarFallback>
                 </Avatar>
               ))
             ) : (
-              <Avatar className="w-5 h-5 border border-white">
-                <AvatarFallback className="text-[7px] bg-gray-200">
+              <Avatar className="w-4 h-4 border border-white">
+                <AvatarFallback className="text-[6px] bg-gray-200">
                   SP
                 </AvatarFallback>
               </Avatar>
             )}
           </div>
-          <span className="text-[10px] text-gray-500">
+          <span className="text-[9px] text-gray-500">
             {speakersCount} {speakersCount === 1 ? 'Speaker' : 'Speakers'}
           </span>
         </div>
@@ -262,9 +261,9 @@ export function SeminarCard({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <div className="text-[10px] text-gray-500 flex items-center">
-                    <Users className="w-2.5 h-2.5 mr-1" />
-                    <div className="w-16 h-1 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="text-[9px] text-gray-500 flex items-center">
+                    <Users className="w-2 h-2 mr-1" />
+                    <div className="w-12 h-1 bg-gray-200 rounded-full overflow-hidden">
                       <div 
                         className={`h-full ${getAvailabilityColor()}`} 
                         style={{ width: `${percentageFilled}%` }}

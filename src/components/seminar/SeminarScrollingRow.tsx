@@ -24,7 +24,7 @@ export function SeminarScrollingRow({
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({
-        left: -260,
+        left: -220,
         behavior: 'smooth'
       });
     }
@@ -33,7 +33,7 @@ export function SeminarScrollingRow({
   const scrollRight = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({
-        left: 260,
+        left: 220,
         behavior: 'smooth'
       });
     }
@@ -41,18 +41,18 @@ export function SeminarScrollingRow({
 
   return (
     <div className={cn("relative group", className)}>
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-lg font-medium text-gray-900">{title}</h3>
+      <div className="flex items-center justify-between mb-2">
+        {title && <h3 className="text-lg font-medium text-gray-900">{title}</h3>}
         <Button variant="ghost" size="sm" className="text-sm">
           See all
         </Button>
       </div>
 
       <div className="relative">
-        <ScrollArea className="w-full overflow-x-auto pb-4">
+        <ScrollArea className="w-full overflow-x-auto pb-4 -mx-4 px-4">
           <div
             ref={scrollContainerRef}
-            className="flex gap-3 px-1 w-max min-w-full"
+            className="flex gap-2 w-max min-w-full pl-0 pr-4"
           >
             {seminars.map((seminar) => (
               <SeminarCard

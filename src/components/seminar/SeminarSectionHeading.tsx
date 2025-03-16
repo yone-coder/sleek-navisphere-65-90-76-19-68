@@ -21,11 +21,11 @@ export function SeminarSectionHeading({
   className
 }: SeminarSectionHeadingProps) {
   return (
-    <div className={cn("mb-6 mt-8 first:mt-0", className)}>
+    <div className={cn("mb-4 mt-6 first:mt-0", className)}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {icon && <div className="text-primary">{icon}</div>}
-          <h2 className="text-xl font-bold text-gray-900">{title}</h2>
+          <h2 className="text-lg font-bold text-gray-900">{title}</h2>
         </div>
         
         {actionText && onAction && (
@@ -41,7 +41,7 @@ export function SeminarSectionHeading({
       </div>
       
       {subtitle && (
-        <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
+        <p className="text-sm text-gray-500 mt-0.5">{subtitle}</p>
       )}
     </div>
   );

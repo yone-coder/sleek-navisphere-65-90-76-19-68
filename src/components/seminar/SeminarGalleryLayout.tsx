@@ -4,7 +4,7 @@ import { SeminarScrollingRow } from './SeminarScrollingRow';
 import { SeminarMasonryGrid } from './SeminarMasonryGrid';
 import { SeminarSectionHeading } from './SeminarSectionHeading';
 import { SeminarCardProps } from './SeminarCard';
-import { Fire, Calendar, Award, TrendingUp, Zap } from 'lucide-react';
+import { Calendar, Award, TrendingUp, Zap, Flame } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 
