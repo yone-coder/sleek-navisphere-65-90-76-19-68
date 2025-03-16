@@ -58,8 +58,8 @@ export function SeminarScrollingRow({
               <div 
                 key={seminar.id} 
                 className={cn(
-                  "min-w-[260px] max-w-[260px] w-[260px]",
-                  index === seminars.length - 1 ? "pr-8" : ""
+                  "min-w-[280px] max-w-[280px] w-[280px]",
+                  index === seminars.length - 1 ? "pr-4" : ""
                 )}
               >
                 <SeminarCard
@@ -68,8 +68,8 @@ export function SeminarScrollingRow({
                 />
               </div>
             ))}
-            {/* Add a small spacer to show a glimpse of the next card */}
-            <div className="min-w-[15px] max-w-[15px] w-[15px]"></div>
+            {/* Add a very small spacer to show just a tiny glimpse of the next card */}
+            <div className="min-w-[8px] max-w-[8px] w-[8px] flex-shrink-0"></div>
           </div>
           <ScrollBar orientation="horizontal" className="h-1.5" />
         </ScrollArea>
