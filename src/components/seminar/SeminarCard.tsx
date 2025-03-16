@@ -77,12 +77,10 @@ export function SeminarCard({
     }
   };
 
-  // Calculate percentage of seats filled
   const percentageFilled = attendees && maxAttendees 
     ? Math.round((attendees / maxAttendees) * 100) 
     : null;
   
-  // Get color based on availability
   const getAvailabilityColor = () => {
     if (!percentageFilled) return 'bg-gray-200';
     if (percentageFilled > 80) return 'bg-red-500';
@@ -90,7 +88,6 @@ export function SeminarCard({
     return 'bg-green-500';
   };
 
-  // Get difficulty level color
   const getDifficultyColor = () => {
     switch(difficultyLevel) {
       case 'Beginner': return 'bg-green-100 text-green-800 border-green-200';
@@ -103,7 +100,7 @@ export function SeminarCard({
   return (
     <Card 
       className={cn(
-        "w-[300px] overflow-hidden transition-all hover:shadow-md cursor-pointer group relative shrink-0",
+        "w-[260px] overflow-hidden transition-all hover:shadow-md cursor-pointer group relative shrink-0",
         featured && "border-blue-200 bg-blue-50/40"
       )} 
       onClick={handleCardClick}
@@ -120,7 +117,7 @@ export function SeminarCard({
         </div>
       )}
       
-      <div className="relative h-36 overflow-hidden bg-gray-100">
+      <div className="relative h-32 overflow-hidden bg-gray-100">
         {image ? (
           <img 
             src={image} 
@@ -157,7 +154,6 @@ export function SeminarCard({
           <Bookmark className="w-3.5 h-3.5" fill={isSaved ? "currentColor" : "none"} />
         </button>
 
-        {/* Popularity indicator */}
         {popularity > 0 && (
           <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 rounded-full px-1.5 py-0.5">
             <TrendingUp className="w-2.5 h-2.5 text-white" />
