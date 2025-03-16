@@ -13,22 +13,23 @@ function MorpionNewGame() {
   const [joinRoomId, setJoinRoomId] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
   const [gameStarted, setGameStarted] = useState(false);
+  const [showPopup, setShowPopup] = useState(false); // Controls popup visibility
+  const [popupMessage, setPopupMessage] = useState(''); // Popup message content
 
   useEffect(() => {
-    const newSocket = io('https://morpion-backend.onrender.com'); // Replace with your Render URL
+    const newSocket = io('https://morpion-backend.onrender.com'); // Replace with your backend URL
     setSocket(newSocket);
 
     newSocket.on('roomCreated', ({ roomId }) => {
       setRoomId(roomId);
       setPlayer('X');
       setStatus('Waiting for opponent...');
-      setGameStarted(false); // Explicitly ensure game hasn't started
+      setGameStarted(false);
     });
 
     newSocket.on('roomJoined', ({ roomId, player }) => {
       setRoomId(roomId);
       setPlayer(player);
-      // Don't set gameStarted here; wait for gameStart event
     });
 
     newSocket.on('gameStart', ({ board, turn }) => {
@@ -36,7 +37,7 @@ function MorpionNewGame() {
       setTurn(turn);
       setWinner(null);
       setLastMove(null);
-      setGameStarted(true); // Game starts only here
+      setGameStarted(true);
       setStatus(`Game Started! You are ${player}`);
     });
 
@@ -49,11 +50,15 @@ function MorpionNewGame() {
     newSocket.on('gameOver', ({ winner, reason }) => {
       setWinner(winner);
       setStatus(`Game Over: ${winner === 'draw' ? 'It\'s a Draw!' : `${winner} Wins by ${reason}`}`);
+      setPopupMessage(winner === 'draw' ? "It's a Draw!" : `${winner} Wins!`);
+      setShowPopup(true);
       setGameStarted(false);
     });
 
     newSocket.on('opponentDisconnected', () => {
       setStatus('Opponent Disconnected');
+      setPopupMessage('Opponent Disconnected');
+      setShowPopup(true);
       setRoomId(null);
       setPlayer(null);
       setBoard(Array(50).fill().map(() => Array(50).fill(null)));
@@ -81,6 +86,18 @@ function MorpionNewGame() {
     setTimeout(() => setErrorMessage(null), 2000);
   };
 
+  const resetGame = () => {
+    setRoomId(null);
+    setPlayer(null);
+    setBoard(Array(50).fill().map(() => Array(50).fill(null)));
+    setTurn('X');
+    setWinner(null);
+    setLastMove(null);
+    setGameStarted(false);
+    setStatus('Create or Join a Game');
+    setShowPopup(false);
+  };
+
   const renderCell = (x, y) => {
     const isLastMove = lastMove && lastMove.x === x && lastMove.y === y;
     return (
@@ -99,7 +116,6 @@ function MorpionNewGame() {
           backgroundColor: isLastMove ? 'rgba(255, 215, 0, 0.3)' : board[x][y] ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
           cursor: !board[x][y] && !winner && player === turn && gameStarted ? 'pointer' : 'default',
           transition: 'all 0.3s ease',
-          ':hover': !board[x][y] && !winner && player === turn && gameStarted ? { backgroundColor: 'rgba(255, 255, 255, 0.1)' } : {},
         }}
       >
         {board[x][y]}
@@ -135,7 +151,6 @@ function MorpionNewGame() {
             padding: '10px 20px',
             borderRadius: '10px',
             boxShadow: '0 5px 15px rgba(0, 0, 0, 0.2)',
-            transition: 'all 0.3s ease',
           }}>
             {errorMessage}
           </div>
@@ -158,8 +173,9 @@ function MorpionNewGame() {
                 cursor: 'pointer',
                 boxShadow: '0 5px 15px rgba(255, 107, 107, 0.4)',
                 transition: 'transform 0.2s ease',
-                ':hover': { transform: 'scale(1.05)' },
               }}
+              onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+              onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
             >
               Create New Game
             </button>
@@ -194,8 +210,9 @@ function MorpionNewGame() {
                   cursor: 'pointer',
                   boxShadow: '0 5px 15px rgba(78, 205, 196, 0.4)',
                   transition: 'transform 0.2s ease',
-                  ':hover': { transform: 'scale(1.05)' },
                 }}
+                onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+                onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
               >
                 Join Game
               </button>
@@ -204,7 +221,7 @@ function MorpionNewGame() {
         ) : (
           <div style={{ textAlign: 'center' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <p style={{ fontSize: '18px', opacity: 0.8 }}>
+              <p style={{ fontSize: '18px', opacity: '0.8' }}>
                 Room ID: {roomId}
                 <button
                   onClick={copyRoomId}
@@ -218,8 +235,9 @@ function MorpionNewGame() {
                     color: '#fff',
                     cursor: 'pointer',
                     transition: 'background 0.3s ease',
-                    ':hover': { background: 'rgba(255, 255, 255, 0.3)' },
                   }}
+                  onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.3)'}
+                  onMouseLeave={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.2)'}
                 >
                   Copy
                 </button>
@@ -256,12 +274,60 @@ function MorpionNewGame() {
                   cursor: 'pointer',
                   boxShadow: '0 5px 15px rgba(255, 71, 87, 0.4)',
                   transition: 'transform 0.2s ease',
-                  ':hover': { transform: 'scale(1.05)' },
                 }}
+                onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+                onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
               >
                 Resign
               </button>
             )}
+          </div>
+        )}
+        {showPopup && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000,
+          }} onClick={resetGame}>
+            <div style={{
+              backgroundColor: '#2d2d44',
+              padding: '40px',
+              borderRadius: '20px',
+              textAlign: 'center',
+              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)',
+              maxWidth: '400px',
+              width: '90%',
+            }} onClick={(e) => e.stopPropagation()}>
+              <h2 style={{ fontSize: '32px', marginBottom: '20px', color: '#ffffff' }}>
+                {popupMessage}
+              </h2>
+              <button
+                onClick={resetGame}
+                style={{
+                  padding: '15px 30px',
+                  fontSize: '18px',
+                  fontWeight: '500',
+                  background: 'linear-gradient(90deg, #ff6b6b, #ff8e53)',
+                  border: 'none',
+                  borderRadius: '50px',
+                  color: '#fff',
+                  cursor: 'pointer',
+                  boxShadow: '0 5px 15px rgba(255, 107, 107, 0.4)',
+                  transition: 'transform 0.2s ease',
+                }}
+                onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+                onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+              >
+                Start New Game
+              </button>
+            </div>
           </div>
         )}
       </div>
