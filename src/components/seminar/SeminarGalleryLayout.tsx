@@ -36,13 +36,11 @@ export function SeminarGalleryLayout({
             className="mb-4"
           />
         </div>
-        <div className="w-full -mx-4">
-          <SeminarScrollingRow 
-            title="" 
-            seminars={featuredSeminars} 
-            onSaveSeminar={onSaveSeminar}
-          />
-        </div>
+        <SeminarScrollingRow 
+          title="" 
+          seminars={featuredSeminars} 
+          onSaveSeminar={onSaveSeminar}
+        />
       </div>
 
       {/* Upcoming row */}
@@ -55,13 +53,11 @@ export function SeminarGalleryLayout({
             className="mb-4" 
           />
         </div>
-        <div className="w-full -mx-4">
-          <SeminarScrollingRow 
-            title="" 
-            seminars={upcomingSeminars} 
-            onSaveSeminar={onSaveSeminar}
-          />
-        </div>
+        <SeminarScrollingRow 
+          title="" 
+          seminars={upcomingSeminars} 
+          onSaveSeminar={onSaveSeminar}
+        />
       </div>
 
       {/* Popular row */}
@@ -74,13 +70,11 @@ export function SeminarGalleryLayout({
             className="mb-4"
           />
         </div>
-        <div className="w-full -mx-4">
-          <SeminarScrollingRow 
-            title="" 
-            seminars={popularSeminars} 
-            onSaveSeminar={onSaveSeminar}
-          />
-        </div>
+        <SeminarScrollingRow 
+          title="" 
+          seminars={popularSeminars} 
+          onSaveSeminar={onSaveSeminar}
+        />
       </div>
 
       {/* All seminars in masonry grid */}

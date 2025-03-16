@@ -42,7 +42,7 @@ export function SeminarScrollingRow({
   return (
     <div className={cn("relative group w-full", className)}>
       {title && (
-        <div className="flex items-center justify-between mb-2 px-4 md:px-6 lg:px-8">
+        <div className="flex items-center justify-between mb-2">
           <h3 className="text-lg font-medium text-gray-900">{title}</h3>
           <Button variant="ghost" size="sm" className="text-sm text-blue-600 hover:text-blue-800">
             See all
@@ -54,7 +54,7 @@ export function SeminarScrollingRow({
         <ScrollArea className="w-full overflow-x-auto pb-4">
           <div
             ref={scrollContainerRef}
-            className="flex gap-3 w-max min-w-full pl-4 pr-4"
+            className="flex gap-3 w-max min-w-full pl-4"
           >
             {seminars.map((seminar) => (
               <div 
