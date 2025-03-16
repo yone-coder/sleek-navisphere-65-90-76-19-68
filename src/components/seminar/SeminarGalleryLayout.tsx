@@ -37,7 +37,7 @@ export function SeminarGalleryLayout({
             className="mb-4"
           />
         </div>
-        <ScrollArea className="pb-4 w-full">
+        <div className="w-full">
           <div className="px-4 md:px-6 lg:px-8">
             <div className="overflow-visible pb-1">
               <SeminarScrollingRow 
@@ -47,7 +47,7 @@ export function SeminarGalleryLayout({
               />
             </div>
           </div>
-        </ScrollArea>
+        </div>
       </div>
 
       {/* Upcoming row */}
@@ -60,7 +60,7 @@ export function SeminarGalleryLayout({
             className="mb-4" 
           />
         </div>
-        <ScrollArea className="pb-4 w-full">
+        <div className="w-full">
           <div className="px-4 md:px-6 lg:px-8">
             <div className="overflow-visible pb-1">
               <SeminarScrollingRow 
@@ -70,7 +70,7 @@ export function SeminarGalleryLayout({
               />
             </div>
           </div>
-        </ScrollArea>
+        </div>
       </div>
 
       {/* Popular row */}
@@ -83,7 +83,7 @@ export function SeminarGalleryLayout({
             className="mb-4"
           />
         </div>
-        <ScrollArea className="pb-4 w-full">
+        <div className="w-full">
           <div className="px-4 md:px-6 lg:px-8">
             <div className="overflow-visible pb-1">
               <SeminarScrollingRow 
@@ -93,7 +93,7 @@ export function SeminarGalleryLayout({
               />
             </div>
           </div>
-        </ScrollArea>
+        </div>
       </div>
 
       {/* All seminars in masonry grid */}

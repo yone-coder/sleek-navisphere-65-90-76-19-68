@@ -52,16 +52,24 @@ export function SeminarScrollingRow({
         <ScrollArea className="w-full overflow-x-auto pb-4 -mx-4 px-4">
           <div
             ref={scrollContainerRef}
-            className="flex gap-3 w-max min-w-full pl-0 pr-8"
+            className="flex gap-3 w-max min-w-full pl-0 pr-4"
           >
-            {seminars.map((seminar) => (
-              <div key={seminar.id} className="min-w-[260px] max-w-[260px] w-[260px]">
+            {seminars.map((seminar, index) => (
+              <div 
+                key={seminar.id} 
+                className={cn(
+                  "min-w-[260px] max-w-[260px] w-[260px]",
+                  index === seminars.length - 1 ? "pr-8" : ""
+                )}
+              >
                 <SeminarCard
                   {...seminar}
                   onToggleSave={onSaveSeminar}
                 />
               </div>
             ))}
+            {/* Add a small spacer to show a glimpse of the next card */}
+            <div className="min-w-[15px] max-w-[15px] w-[15px]"></div>
           </div>
           <ScrollBar orientation="horizontal" className="h-1.5" />
         </ScrollArea>
