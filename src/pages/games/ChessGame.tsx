@@ -2,55 +2,73 @@
 import React, { useState, useEffect } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { Button } from "@/components/ui/button";
-import { AlertCircle, Copy } from 'lucide-react';
-import { toast } from 'sonner';
 import io from 'socket.io-client';
 
-// Connect to the provided backend URL
-const socket = io('https://chess-backend-jlvx.onrender.com');
+// Replace with your Render backend URL or use localhost for development
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001';
+const socket = io(BACKEND_URL);
 
 const ChessGame = () => {
-  const [roomId, setRoomId] = useState<string | null>(null); // Game room ID
-  const [color, setColor] = useState<string | null>(null);   // Player color
-  const [fen, setFen] = useState('start');    // Board position
-  const [status, setStatus] = useState('waiting'); // Game status
-  const [joinId, setJoinId] = useState('');   // Input for room ID
+  const [roomId, setRoomId] = useState<string | null>(null);           // Current room ID
+  const [color, setColor] = useState<'white' | 'black' | null>(null);  // Player's color (white/black)
+  const [fen, setFen] = useState('start');                             // Chessboard position (FEN)
+  const [gameStatus, setGameStatus] = useState<string | null>(null);   // null, 'waitingForOpponent', 'playing', 'gameOver', 'opponentDisconnected'
+  const [turn, setTurn] = useState('white');                           // Current turn
+  const [result, setResult] = useState<string | null>(null);           // Game result: null, 'white wins', 'black wins', 'draw'
+  const [lastMove, setLastMove] = useState<{ from: string; to: string } | null>(null); // Last move for highlighting
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Error messages
+  const [joinId, setJoinId] = useState('');                            // Input for joining a room
 
-  // Socket.io event listeners
+  // Set up Socket.io listeners
   useEffect(() => {
-    socket.on('roomCreated', ({ roomId, color }: { roomId: string, color: string }) => {
+    socket.on('roomCreated', ({ roomId, color }: { roomId: string, color: 'white' | 'black' }) => {
       setRoomId(roomId);
       setColor(color);
-      setStatus('waiting for opponent');
+      setGameStatus('waitingForOpponent');
     });
 
-    socket.on('roomJoined', ({ roomId, color }: { roomId: string, color: string }) => {
+    socket.on('roomJoined', ({ roomId, color }: { roomId: string, color: 'white' | 'black' }) => {
       setRoomId(roomId);
       setColor(color);
-      setStatus('game started');
+      // Wait for gameStart to set 'playing'
     });
 
     socket.on('gameStart', ({ fen }: { fen: string }) => {
       setFen(fen);
-      setStatus('game started');
+      setTurn(fen.split(' ')[1] === 'w' ? 'white' : 'black');
+      setGameStatus('playing');
     });
 
-    socket.on('boardUpdate', ({ fen }: { fen: string }) => {
+    socket.on('boardUpdate', ({ fen, lastMove }: { fen: string, lastMove: { from: string; to: string } }) => {
       setFen(fen);
+      setTurn(fen.split(' ')[1] === 'w' ? 'white' : 'black');
+      setLastMove(lastMove);
     });
 
-    socket.on('gameOver', ({ winner }: { winner: string }) => {
-      setStatus(`game over, ${winner} wins`);
+    socket.on('gameOver', ({ winner, result, reason }: { winner: string, result: string, reason?: string }) => {
+      if (result === 'draw') {
+        setResult('draw');
+      } else {
+        setResult(`${winner} wins${reason ? ` by ${reason}` : ''}`);
+      }
+      setGameStatus('gameOver');
     });
 
     socket.on('opponentDisconnected', () => {
-      setStatus('opponent disconnected');
+      setGameStatus('opponentDisconnected');
     });
 
     socket.on('error', (message: string) => {
-      toast.error(message);
+      setErrorMessage(message);
+      setTimeout(() => setErrorMessage(null), 3000);
     });
 
+    socket.on('invalidMove', () => {
+      setErrorMessage('Invalid move');
+      setTimeout(() => setErrorMessage(null), 3000);
+    });
+
+    // Cleanup listeners on unmount
     return () => {
       socket.off('roomCreated');
       socket.off('roomJoined');
@@ -59,41 +77,50 @@ const ChessGame = () => {
       socket.off('gameOver');
       socket.off('opponentDisconnected');
       socket.off('error');
+      socket.off('invalidMove');
     };
   }, []);
 
-  // Create a new game
+  // Create a new game room
   const createRoom = () => {
     socket.emit('createRoom');
   };
 
-  // Join an existing game
+  // Join an existing game room
   const joinRoom = () => {
     if (!joinId) {
-      toast.error('Please enter a Room ID');
+      setErrorMessage('Please enter a Room ID');
+      setTimeout(() => setErrorMessage(null), 3000);
       return;
     }
     socket.emit('joinRoom', joinId);
   };
 
-  // Handle piece drop
+  // Handle piece movement
   const onDrop = (sourceSquare: string, targetSquare: string) => {
-    if (status !== 'game started') return false;
+    if (gameStatus !== 'playing') return false;
     const move = { from: sourceSquare, to: targetSquare };
     socket.emit('move', { roomId, move });
-    return true;
+    return true; // Optimistic update; server will validate
   };
 
-  // Copy room ID to clipboard
-  const copyRoomId = () => {
-    if (roomId) {
-      navigator.clipboard.writeText(roomId);
-      toast.success('Room ID copied to clipboard');
+  // Resign from the game
+  const resign = () => {
+    if (window.confirm('Are you sure you want to resign?')) {
+      socket.emit('resign', roomId);
     }
   };
 
-  // Check if it's the player's turn
-  const isMyTurn = color && ((color === 'white' && fen.split(' ')[1] === 'w') || (color === 'black' && fen.split(' ')[1] === 'b'));
+  // Determine if it's the player's turn
+  const isMyTurn = color && turn === color;
+
+  // Highlight the last move
+  const squareStyles = lastMove
+    ? {
+        [lastMove.from]: { backgroundColor: 'rgba(255, 255, 0, 0.4)' },
+        [lastMove.to]: { backgroundColor: 'rgba(255, 255, 0, 0.4)' },
+      }
+    : {};
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 pt-16 pb-24">
@@ -101,58 +128,13 @@ const ChessGame = () => {
         <div className="max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold text-center mb-4">Chess Game</h1>
           
-          {roomId ? (
-            <div>
-              <div className="mb-4 bg-white p-4 rounded-lg shadow-md">
-                <div className="flex items-center justify-between">
-                  <p className="text-gray-700">
-                    <strong>Status:</strong> {status}
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <p>
-                      <strong>Room ID:</strong> {roomId}
-                    </p>
-                    <button 
-                      onClick={copyRoomId}
-                      className="p-1 rounded-full hover:bg-gray-100"
-                    >
-                      <Copy className="h-4 w-4 text-gray-600" />
-                    </button>
-                  </div>
-                </div>
-                
-                {status === 'waiting for opponent' && (
-                  <div className="mt-2 flex items-center text-amber-600 bg-amber-50 p-2 rounded-md">
-                    <AlertCircle className="h-4 w-4 mr-2" />
-                    <span className="text-sm">Waiting for opponent to join with code: <strong>{roomId}</strong></span>
-                  </div>
-                )}
-              </div>
-              
-              <div className="bg-white p-4 rounded-lg shadow-lg mb-4">
-                <Chessboard
-                  position={fen}
-                  onPieceDrop={onDrop}
-                  boardOrientation={(color as 'white' | 'black') || 'white'}
-                  arePiecesDraggable={Boolean(isMyTurn)}
-                  customBoardStyle={{
-                    borderRadius: '4px',
-                    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)'
-                  }}
-                />
-              </div>
-              
-              <div className="bg-white p-4 rounded-lg shadow-md">
-                <h2 className="text-lg font-semibold mb-2">Game Information</h2>
-                <p className="text-gray-700">
-                  You are playing as: <span className="font-medium">{color}</span>
-                </p>
-                <p className="text-gray-700 mt-1">
-                  Turn: <span className="font-medium">{fen.split(' ')[1] === 'w' ? 'White' : 'Black'}</span>
-                </p>
-              </div>
+          {errorMessage && (
+            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-center">
+              {errorMessage}
             </div>
-          ) : (
+          )}
+          
+          {!roomId ? (
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-xl font-semibold mb-4 text-center">Join or Create a Game</h2>
               
@@ -172,6 +154,69 @@ const ChessGame = () => {
                   Join Game
                 </Button>
               </div>
+            </div>
+          ) : (
+            <div>
+              <div className="mb-4 bg-white p-4 rounded-lg shadow-md">
+                <div className="flex flex-col md:flex-row md:justify-between gap-2">
+                  <p>
+                    <strong>Room ID:</strong> {roomId}
+                  </p>
+                  <p>
+                    <strong>You are:</strong> {color}
+                  </p>
+                </div>
+                
+                {gameStatus === 'waitingForOpponent' && (
+                  <div className="mt-2 text-amber-600 bg-amber-50 p-2 rounded-md">
+                    <p className="text-center">Waiting for opponent to join...</p>
+                  </div>
+                )}
+                
+                {gameStatus === 'playing' && (
+                  <p className="mt-2 text-center font-medium">
+                    It's {turn}'s turn {isMyTurn ? '(your turn)' : ''}
+                  </p>
+                )}
+                
+                {gameStatus === 'gameOver' && (
+                  <p className="mt-2 text-center font-medium text-blue-600">
+                    Game over: {result}
+                  </p>
+                )}
+                
+                {gameStatus === 'opponentDisconnected' && (
+                  <p className="mt-2 text-center text-red-600">
+                    Opponent disconnected. Game over.
+                  </p>
+                )}
+              </div>
+              
+              <div className="bg-white p-4 rounded-lg shadow-lg mb-4">
+                <Chessboard
+                  position={fen}
+                  onPieceDrop={onDrop}
+                  boardOrientation={color || 'white'}
+                  arePiecesDraggable={Boolean(isMyTurn)}
+                  customSquareStyles={squareStyles}
+                  customBoardStyle={{
+                    borderRadius: '4px',
+                    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)'
+                  }}
+                />
+              </div>
+              
+              {gameStatus === 'playing' && (
+                <div className="text-center">
+                  <Button 
+                    variant="destructive" 
+                    onClick={resign} 
+                    className="mt-2"
+                  >
+                    Resign
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </div>
