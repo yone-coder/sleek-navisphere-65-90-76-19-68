@@ -41,26 +41,23 @@ export function SeminarScrollingRow({
 
   return (
     <div className={cn("relative group w-full", className)}>
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between mb-2 px-4 md:px-6 lg:px-8">
         {title && <h3 className="text-lg font-medium text-gray-900">{title}</h3>}
         <Button variant="ghost" size="sm" className="text-sm">
           See all
         </Button>
       </div>
 
-      <div className="relative">
-        <ScrollArea className="w-full overflow-x-auto pb-4 -mx-4 px-4">
+      <div className="relative w-full">
+        <ScrollArea className="w-full overflow-x-auto pb-4">
           <div
             ref={scrollContainerRef}
-            className="flex gap-3 w-max min-w-full pl-0 pr-4"
+            className="flex gap-3 w-max min-w-full pl-4 md:pl-6 lg:pl-8 pr-4 md:pr-6 lg:pr-8"
           >
             {seminars.map((seminar, index) => (
               <div 
                 key={seminar.id} 
-                className={cn(
-                  "min-w-[260px] max-w-[260px] w-[260px]",
-                  index === seminars.length - 1 ? "pr-4" : ""
-                )}
+                className="min-w-[260px] max-w-[260px] w-[260px] flex-shrink-0"
               >
                 <SeminarCard
                   {...seminar}
@@ -68,14 +65,13 @@ export function SeminarScrollingRow({
                 />
               </div>
             ))}
-            {/* Show just a tiny glimpse of the next card */}
-            <div className="min-w-[4px] max-w-[4px] w-[4px] flex-shrink-0"></div>
+            <div className="min-w-[16px] max-w-[16px] w-[16px] flex-shrink-0"></div>
           </div>
           <ScrollBar orientation="horizontal" className="h-1.5" />
         </ScrollArea>
 
         {/* Navigation buttons */}
-        <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between pointer-events-none px-1">
+        <div className="absolute top-1/2 -translate-y-1/2 left-2 right-2 flex justify-between pointer-events-none">
           <Button
             variant="secondary"
             size="icon"

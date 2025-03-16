@@ -4,8 +4,7 @@ import { SeminarScrollingRow } from './SeminarScrollingRow';
 import { SeminarMasonryGrid } from './SeminarMasonryGrid';
 import { SeminarSectionHeading } from './SeminarSectionHeading';
 import { SeminarCardProps } from './SeminarCard';
-import { Calendar, Award, TrendingUp, Zap, Flame } from 'lucide-react';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Calendar, Award, TrendingUp, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface SeminarGalleryLayoutProps {
@@ -28,7 +27,7 @@ export function SeminarGalleryLayout({
   return (
     <div className={cn("w-full", className)}>
       {/* Featured row */}
-      <div className="my-4 -mx-4 md:-mx-6 lg:-mx-8">
+      <div className="my-4 w-full">
         <div className="px-4 md:px-6 lg:px-8">
           <SeminarSectionHeading 
             title="Featured Seminars" 
@@ -38,20 +37,16 @@ export function SeminarGalleryLayout({
           />
         </div>
         <div className="w-full">
-          <div className="px-0">
-            <div className="overflow-visible pb-1">
-              <SeminarScrollingRow 
-                title="" 
-                seminars={featuredSeminars} 
-                onSaveSeminar={onSaveSeminar}
-              />
-            </div>
-          </div>
+          <SeminarScrollingRow 
+            title="" 
+            seminars={featuredSeminars} 
+            onSaveSeminar={onSaveSeminar}
+          />
         </div>
       </div>
 
       {/* Upcoming row */}
-      <div className="mt-6 -mx-4 md:-mx-6 lg:-mx-8">
+      <div className="mt-6 w-full">
         <div className="px-4 md:px-6 lg:px-8">
           <SeminarSectionHeading 
             title="Upcoming Seminars" 
@@ -61,20 +56,16 @@ export function SeminarGalleryLayout({
           />
         </div>
         <div className="w-full">
-          <div className="px-0">
-            <div className="overflow-visible pb-1">
-              <SeminarScrollingRow 
-                title="" 
-                seminars={upcomingSeminars} 
-                onSaveSeminar={onSaveSeminar}
-              />
-            </div>
-          </div>
+          <SeminarScrollingRow 
+            title="" 
+            seminars={upcomingSeminars} 
+            onSaveSeminar={onSaveSeminar}
+          />
         </div>
       </div>
 
       {/* Popular row */}
-      <div className="mt-6 -mx-4 md:-mx-6 lg:-mx-8">
+      <div className="mt-6 w-full">
         <div className="px-4 md:px-6 lg:px-8">
           <SeminarSectionHeading 
             title="Trending Seminars" 
@@ -84,20 +75,16 @@ export function SeminarGalleryLayout({
           />
         </div>
         <div className="w-full">
-          <div className="px-0">
-            <div className="overflow-visible pb-1">
-              <SeminarScrollingRow 
-                title="" 
-                seminars={popularSeminars} 
-                onSaveSeminar={onSaveSeminar}
-              />
-            </div>
-          </div>
+          <SeminarScrollingRow 
+            title="" 
+            seminars={popularSeminars} 
+            onSaveSeminar={onSaveSeminar}
+          />
         </div>
       </div>
 
       {/* All seminars in masonry grid */}
-      <div className="mt-10 px-4">
+      <div className="mt-10 px-4 md:px-6 lg:px-8">
         <SeminarSectionHeading 
           title="Explore All Seminars" 
           subtitle="Discover seminars tailored to your interests"
