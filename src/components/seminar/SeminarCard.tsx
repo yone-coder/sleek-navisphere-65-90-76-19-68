@@ -5,8 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Bookmark, Calendar, Clock, MapPin, Star, Tag, Users } from 'lucide-react';
+import { Bookmark, Calendar, Clock, MapPin, Star, Tag, Users, Award, TrendingUp, Clock3, Video, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export interface SeminarCardProps {
   id: string;
@@ -27,6 +33,11 @@ export interface SeminarCardProps {
   speakerImages?: string[];
   isSaved?: boolean;
   onToggleSave?: (id: string) => void;
+  isLive?: boolean;
+  isCertified?: boolean;
+  language?: string;
+  difficultyLevel?: 'Beginner' | 'Intermediate' | 'Advanced' | 'All Levels';
+  popularity?: number; // 1-100 score for popularity
 }
 
 export function SeminarCard({
@@ -47,7 +58,12 @@ export function SeminarCard({
   topic,
   speakerImages = [],
   isSaved,
-  onToggleSave
+  onToggleSave,
+  isLive = false,
+  isCertified = false,
+  language = 'English',
+  difficultyLevel = 'All Levels',
+  popularity = 70
 }: SeminarCardProps) {
   const navigate = useNavigate();
   
@@ -61,11 +77,34 @@ export function SeminarCard({
       onToggleSave(id);
     }
   };
+
+  // Calculate percentage of seats filled
+  const percentageFilled = attendees && maxAttendees 
+    ? Math.round((attendees / maxAttendees) * 100) 
+    : null;
+  
+  // Get color based on availability
+  const getAvailabilityColor = () => {
+    if (!percentageFilled) return 'bg-gray-200';
+    if (percentageFilled > 80) return 'bg-red-500';
+    if (percentageFilled > 50) return 'bg-yellow-500';
+    return 'bg-green-500';
+  };
+
+  // Get difficulty level color
+  const getDifficultyColor = () => {
+    switch(difficultyLevel) {
+      case 'Beginner': return 'bg-green-100 text-green-800 border-green-200';
+      case 'Intermediate': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'Advanced': return 'bg-red-100 text-red-800 border-red-200';
+      default: return 'bg-blue-100 text-blue-800 border-blue-200';
+    }
+  };
   
   return (
     <Card 
       className={cn(
-        "w-[300px] overflow-hidden transition-all hover:shadow-md cursor-pointer group relative",
+        "w-[320px] overflow-hidden transition-all hover:shadow-md cursor-pointer group relative",
         featured && "border-blue-200 bg-blue-50/40"
       )} 
       onClick={handleCardClick}
@@ -75,8 +114,14 @@ export function SeminarCard({
           Featured
         </div>
       )}
+
+      {isLive && (
+        <div className="absolute top-0 left-0 bg-red-500 text-white text-xs px-2 py-1 rounded-br-md z-10 flex items-center">
+          <span className="animate-pulse w-2 h-2 bg-white rounded-full mr-1"></span> LIVE
+        </div>
+      )}
       
-      <div className="relative h-36 overflow-hidden bg-gray-100">
+      <div className="relative h-40 overflow-hidden bg-gray-100">
         {image ? (
           <img 
             src={image} 
@@ -89,11 +134,18 @@ export function SeminarCard({
           </div>
         )}
         
-        <div className="absolute top-2 left-2">
+        <div className="absolute top-2 left-2 flex flex-col gap-1">
           <Badge variant="secondary" className="bg-white/90 text-gray-800 shadow-sm">
             <Tag className="w-3 h-3 mr-1" />
             {category}
           </Badge>
+          
+          {isCertified && (
+            <Badge variant="secondary" className="bg-white/90 text-green-700 shadow-sm">
+              <Award className="w-3 h-3 mr-1" />
+              Certified
+            </Badge>
+          )}
         </div>
         
         <button
@@ -105,6 +157,14 @@ export function SeminarCard({
         >
           <Bookmark className="w-4 h-4" fill={isSaved ? "currentColor" : "none"} />
         </button>
+
+        {/* Popularity indicator */}
+        {popularity > 0 && (
+          <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 rounded-full px-1.5 py-0.5">
+            <TrendingUp className="w-3 h-3 text-white" />
+            <span className="text-[10px] text-white font-medium">{popularity}% Popular</span>
+          </div>
+        )}
       </div>
       
       <CardHeader className="p-3 pb-0">
@@ -128,6 +188,14 @@ export function SeminarCard({
           <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
           <span className="truncate">{location}</span>
         </div>
+
+        <div className="flex items-center text-xs text-gray-500">
+          <Clock3 className="w-3 h-3 mr-1 flex-shrink-0" />
+          <span>{duration || '3 hours'}</span>
+          <span className="mx-1">•</span>
+          <Video className="w-3 h-3 mr-1 flex-shrink-0" />
+          <span>{language}</span>
+        </div>
         
         {rating && (
           <div className="flex items-center text-xs">
@@ -143,6 +211,14 @@ export function SeminarCard({
             <span className="text-gray-600">{rating.toFixed(1)}</span>
           </div>
         )}
+
+        {/* Difficulty level badge */}
+        <div className="flex items-center gap-1">
+          <Badge variant="outline" className={getDifficultyColor()}>
+            <Zap className="w-3 h-3 mr-1" />
+            {difficultyLevel}
+          </Badge>
+        </div>
       </CardContent>
       
       <CardFooter className="p-3 pt-0 flex items-center justify-between">
@@ -183,10 +259,24 @@ export function SeminarCard({
           )}
           
           {attendees !== undefined && maxAttendees && (
-            <div className="text-xs text-gray-500 flex items-center">
-              <Users className="w-3 h-3 mr-1" />
-              <span>{attendees}/{maxAttendees}</span>
-            </div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="text-xs text-gray-500 flex items-center">
+                    <Users className="w-3 h-3 mr-1" />
+                    <div className="w-20 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                      <div 
+                        className={`h-full ${getAvailabilityColor()}`} 
+                        style={{ width: `${percentageFilled}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="text-xs">
+                  <p>{attendees} of {maxAttendees} seats filled ({percentageFilled}%)</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           )}
         </div>
       </CardFooter>

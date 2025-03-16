@@ -17,7 +17,12 @@ import {
   Search, 
   Star, 
   Tag,
-  Users
+  Users,
+  Edit,
+  LightningBolt,
+  RotateCcw,
+  BarChart2,
+  Smartphone as Mobile
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -588,15 +593,15 @@ const SeminarsPage = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {Object.entries({
               'Development': { icon: <BookOpen className="h-5 w-5" />, color: 'bg-blue-500' },
-              'Design': { icon: <PenSquare className="h-5 w-5" />, color: 'bg-pink-500' },
-              'AI': { icon: <Zap className="h-5 w-5" />, color: 'bg-purple-500' },
+              'Design': { icon: <Edit className="h-5 w-5" />, color: 'bg-pink-500' },
+              'AI': { icon: <LightningBolt className="h-5 w-5" />, color: 'bg-purple-500' },
               'Cloud': { icon: <Globe className="h-5 w-5" />, color: 'bg-cyan-500' },
               'Security': { icon: <Info className="h-5 w-5" />, color: 'bg-red-500' },
-              'DevOps': { icon: <RefreshCcw className="h-5 w-5" />, color: 'bg-green-500' },
+              'DevOps': { icon: <RotateCcw className="h-5 w-5" />, color: 'bg-green-500' },
               'Blockchain': { icon: <Link className="h-5 w-5" />, color: 'bg-yellow-500' },
               'Management': { icon: <Users className="h-5 w-5" />, color: 'bg-indigo-500' },
-              'Data': { icon: <BarChart4 className="h-5 w-5" />, color: 'bg-orange-500' },
-              'Mobile': { icon: <Smartphone className="h-5 w-5" />, color: 'bg-emerald-500' }
+              'Data': { icon: <BarChart2 className="h-5 w-5" />, color: 'bg-orange-500' },
+              'Mobile': { icon: <Mobile className="h-5 w-5" />, color: 'bg-emerald-500' }
             }).map(([category, { icon, color }]) => (
               <Link 
                 key={category} 
