@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -40,6 +39,7 @@ import {
 } from "@/components/ui/tabs";
 import { Badge } from '@/components/ui/badge';
 import { HeroSection } from '@/components/seminar/HeroSection';
+import { useToast } from "@/hooks/use-toast";
 
 // Sample data for seminars
 const SEMINARS_DATA = [
@@ -60,6 +60,11 @@ const SEMINARS_DATA = [
     featured: true,
     topic: 'Web Development',
     speakerImages: ['/api/placeholder/32/32', '/api/placeholder/32/32', '/api/placeholder/32/32'],
+    isLive: false,
+    isCertified: true,
+    language: 'English',
+    difficultyLevel: 'Intermediate',
+    popularity: 85,
   },
   {
     id: '2',
@@ -269,6 +274,7 @@ const SeminarsPage = () => {
   const [savedSeminars, setSavedSeminars] = useState<string[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [filteredSeminars, setFilteredSeminars] = useState<any[]>(SEMINARS_DATA);
   const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({
     featured: true,
     upcoming: true,
@@ -276,13 +282,39 @@ const SeminarsPage = () => {
     virtual: true,
     byTopic: true
   });
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (searchQuery.trim() === '') {
+      setFilteredSeminars(SEMINARS_DATA);
+    } else {
+      const lowercasedQuery = searchQuery.toLowerCase();
+      setFilteredSeminars(
+        SEMINARS_DATA.filter(
+          seminar => 
+            seminar.title.toLowerCase().includes(lowercasedQuery) ||
+            seminar.category.toLowerCase().includes(lowercasedQuery) ||
+            (seminar.topic && seminar.topic.toLowerCase().includes(lowercasedQuery))
+        )
+      );
+    }
+  }, [searchQuery]);
 
   const handleToggleSave = (id: string) => {
-    setSavedSeminars(prev => 
-      prev.includes(id) 
+    setSavedSeminars(prev => {
+      const newSavedSeminars = prev.includes(id) 
         ? prev.filter(seminarId => seminarId !== id) 
-        : [...prev, id]
-    );
+        : [...prev, id];
+      
+      toast({
+        title: prev.includes(id) ? "Removed from saved" : "Added to saved",
+        description: prev.includes(id) 
+          ? "The seminar has been removed from your saved list." 
+          : "The seminar has been added to your saved list.",
+      });
+      
+      return newSavedSeminars;
+    });
   };
 
   const toggleSectionVisibility = (section: string) => {
@@ -291,6 +323,17 @@ const SeminarsPage = () => {
       [section]: !prev[section]
     }));
   };
+
+  const getFilteredByCategory = () => {
+    if (activeCategory === 'all') return filteredSeminars;
+    return filteredSeminars.filter(
+      seminar => 
+        seminar.category.toLowerCase() === activeCategory.toLowerCase() ||
+        (seminar.topic && seminar.topic.toLowerCase().includes(activeCategory.toLowerCase()))
+    );
+  };
+
+  const categoryFilteredSeminars = getFilteredByCategory();
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
@@ -370,72 +413,29 @@ const SeminarsPage = () => {
           </Tabs>
         </div>
         
-        {/* Featured Seminars Section */}
-        {visibleSections.featured && (
+        {searchQuery.trim() !== '' && (
           <div className="mb-12">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
-                <Flame className="h-5 w-5 text-orange-500 mr-2" />
-                <h2 className="text-xl font-bold text-gray-900">Featured Seminars</h2>
-              </div>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="text-sm"
-                onClick={() => toggleSectionVisibility('featured')}
-              >
-                Hide Section
-              </Button>
-            </div>
-            
-            <ScrollArea className="w-full whitespace-nowrap pb-4">
-              <div className="flex space-x-4 pb-4">
-                {FEATURED_SEMINARS.map(seminar => (
-                  <SeminarCard
-                    key={seminar.id}
-                    {...seminar}
-                    isSaved={savedSeminars.includes(seminar.id)}
-                    onToggleSave={handleToggleSave}
-                  />
-                ))}
-              </div>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-          </div>
-        )}
-        
-        {/* Upcoming Seminars Section */}
-        {visibleSections.upcoming && (
-          <div className="mb-12">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                <Calendar className="h-5 w-5 text-blue-500 mr-2" />
-                <h2 className="text-xl font-bold text-gray-900">Upcoming Seminars</h2>
-                <Badge variant="outline" className="ml-2 bg-blue-50 text-blue-700 border-blue-200">
-                  {UPCOMING_SEMINARS.length}
+                <Search className="h-5 w-5 text-gray-500 mr-2" />
+                <h2 className="text-xl font-bold text-gray-900">Search Results</h2>
+                <Badge variant="outline" className="ml-2 bg-gray-100 text-gray-700 border-gray-200">
+                  {categoryFilteredSeminars.length}
                 </Badge>
               </div>
-              
-              <div className="flex items-center gap-2">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="text-sm"
-                  onClick={() => toggleSectionVisibility('upcoming')}
-                >
-                  Hide Section
-                </Button>
-                <Link to="/seminars/all">
-                  <Button variant="outline" size="sm" className="text-sm">
-                    View All <ArrowRight className="h-4 w-4 ml-1" />
-                  </Button>
-                </Link>
-              </div>
             </div>
             
-            <ScrollArea className="w-full whitespace-nowrap pb-4">
-              <div className="flex space-x-4 pb-4">
-                {UPCOMING_SEMINARS.map(seminar => (
+            {categoryFilteredSeminars.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center bg-gray-50 rounded-lg">
+                <Search className="h-12 w-12 text-gray-300 mb-4" />
+                <h3 className="text-lg font-medium text-gray-700">No seminars found</h3>
+                <p className="text-gray-500 max-w-md mt-2">
+                  We couldn't find any seminars matching your search criteria. Try different keywords or filters.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {categoryFilteredSeminars.map(seminar => (
                   <SeminarCard
                     key={seminar.id}
                     {...seminar}
@@ -444,182 +444,250 @@ const SeminarsPage = () => {
                   />
                 ))}
               </div>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
+            )}
           </div>
         )}
         
-        {/* Development Seminars Section */}
-        {visibleSections.byTopic && (
-          <div className="mb-12">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                <BookOpen className="h-5 w-5 text-indigo-500 mr-2" />
-                <h2 className="text-xl font-bold text-gray-900">Development Seminars</h2>
-                <Badge variant="outline" className="ml-2 bg-indigo-50 text-indigo-700 border-indigo-200">
-                  {BY_TOPIC['Development'].length}
-                </Badge>
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="text-sm"
-                  onClick={() => toggleSectionVisibility('byTopic')}
-                >
-                  Hide Section
-                </Button>
-                <Link to="/seminars/development">
-                  <Button variant="outline" size="sm" className="text-sm">
-                    View All <ArrowRight className="h-4 w-4 ml-1" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            
-            <ScrollArea className="w-full whitespace-nowrap pb-4">
-              <div className="flex space-x-4 pb-4">
-                {BY_TOPIC['Development'].map(seminar => (
-                  <SeminarCard
-                    key={seminar.id}
-                    {...seminar}
-                    isSaved={savedSeminars.includes(seminar.id)}
-                    onToggleSave={handleToggleSave}
-                  />
-                ))}
-              </div>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-          </div>
-        )}
-        
-        {/* Free Seminars Section */}
-        {visibleSections.free && (
-          <div className="mb-12">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                <Tag className="h-5 w-5 text-green-500 mr-2" />
-                <h2 className="text-xl font-bold text-gray-900">Free Seminars</h2>
-                <Badge variant="outline" className="ml-2 bg-green-50 text-green-700 border-green-200">
-                  {FREE_SEMINARS.length}
-                </Badge>
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="text-sm"
-                  onClick={() => toggleSectionVisibility('free')}
-                >
-                  Hide Section
-                </Button>
-                <Link to="/seminars/free">
-                  <Button variant="outline" size="sm" className="text-sm">
-                    View All <ArrowRight className="h-4 w-4 ml-1" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            
-            <ScrollArea className="w-full whitespace-nowrap pb-4">
-              <div className="flex space-x-4 pb-4">
-                {FREE_SEMINARS.map(seminar => (
-                  <SeminarCard
-                    key={seminar.id}
-                    {...seminar}
-                    isSaved={savedSeminars.includes(seminar.id)}
-                    onToggleSave={handleToggleSave}
-                  />
-                ))}
-              </div>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-          </div>
-        )}
-        
-        {/* Virtual Seminars Section */}
-        {visibleSections.virtual && (
-          <div className="mb-12">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                <Globe className="h-5 w-5 text-purple-500 mr-2" />
-                <h2 className="text-xl font-bold text-gray-900">Virtual Seminars</h2>
-                <Badge variant="outline" className="ml-2 bg-purple-50 text-purple-700 border-purple-200">
-                  {VIRTUAL_SEMINARS.length}
-                </Badge>
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="text-sm"
-                  onClick={() => toggleSectionVisibility('virtual')}
-                >
-                  Hide Section
-                </Button>
-                <Link to="/seminars/virtual">
-                  <Button variant="outline" size="sm" className="text-sm">
-                    View All <ArrowRight className="h-4 w-4 ml-1" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            
-            <ScrollArea className="w-full whitespace-nowrap pb-4">
-              <div className="flex space-x-4 pb-4">
-                {VIRTUAL_SEMINARS.map(seminar => (
-                  <SeminarCard
-                    key={seminar.id}
-                    {...seminar}
-                    isSaved={savedSeminars.includes(seminar.id)}
-                    onToggleSave={handleToggleSave}
-                  />
-                ))}
-              </div>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-          </div>
-        )}
-        
-        {/* Categories Explorer */}
-        <div className="mb-12">
-          <div className="flex items-center mb-4">
-            <Tag className="h-5 w-5 text-gray-700 mr-2" />
-            <h2 className="text-xl font-bold text-gray-900">Browse by Category</h2>
-          </div>
-          
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {Object.entries({
-              'Development': { icon: <BookOpen className="h-5 w-5" />, color: 'bg-blue-500' },
-              'Design': { icon: <Edit className="h-5 w-5" />, color: 'bg-pink-500' },
-              'AI': { icon: <Zap className="h-5 w-5" />, color: 'bg-purple-500' },
-              'Cloud': { icon: <Globe className="h-5 w-5" />, color: 'bg-cyan-500' },
-              'Security': { icon: <Info className="h-5 w-5" />, color: 'bg-red-500' },
-              'DevOps': { icon: <RotateCcw className="h-5 w-5" />, color: 'bg-green-500' },
-              'Blockchain': { icon: <LinkIcon className="h-5 w-5" />, color: 'bg-yellow-500' },
-              'Management': { icon: <Users className="h-5 w-5" />, color: 'bg-indigo-500' },
-              'Data': { icon: <BarChart2 className="h-5 w-5" />, color: 'bg-orange-500' },
-              'Mobile': { icon: <Mobile className="h-5 w-5" />, color: 'bg-emerald-500' }
-            }).map(([category, { icon, color }]) => (
-              <Link 
-                key={category} 
-                to={`/seminars/category/${category.toLowerCase()}`}
-                className="flex flex-col items-center p-4 border rounded-xl hover:shadow-md transition-shadow text-center gap-2"
-              >
-                <div className={`p-3 rounded-full ${color} text-white`}>
-                  {icon}
+        {searchQuery.trim() === '' && (
+          <>
+            <div className="mb-12">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <Flame className="h-5 w-5 text-orange-500 mr-2" />
+                  <h2 className="text-xl font-bold text-gray-900">Featured Seminars</h2>
                 </div>
-                <span className="font-medium text-sm">{category}</span>
-                <span className="text-xs text-gray-500">
-                  {BY_TOPIC[category]?.length || Math.floor(Math.random() * 10) + 2} events
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-sm"
+                  onClick={() => toggleSectionVisibility('featured')}
+                >
+                  Hide Section
+                </Button>
+              </div>
+              
+              <ScrollArea className="w-full whitespace-nowrap pb-4">
+                <div className="flex space-x-4 pb-4">
+                  {FEATURED_SEMINARS.map(seminar => (
+                    <SeminarCard
+                      key={seminar.id}
+                      {...seminar}
+                      isSaved={savedSeminars.includes(seminar.id)}
+                      onToggleSave={handleToggleSave}
+                    />
+                  ))}
+                </div>
+                <ScrollBar orientation="horizontal" />
+              </ScrollArea>
+            </div>
+            
+            <div className="mb-12">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <Calendar className="h-5 w-5 text-blue-500 mr-2" />
+                  <h2 className="text-xl font-bold text-gray-900">Upcoming Seminars</h2>
+                  <Badge variant="outline" className="ml-2 bg-blue-50 text-blue-700 border-blue-200">
+                    {UPCOMING_SEMINARS.length}
+                  </Badge>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-sm"
+                    onClick={() => toggleSectionVisibility('upcoming')}
+                  >
+                    Hide Section
+                  </Button>
+                  <Link to="/seminars/all">
+                    <Button variant="outline" size="sm" className="text-sm">
+                      View All <ArrowRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+              
+              <ScrollArea className="w-full whitespace-nowrap pb-4">
+                <div className="flex space-x-4 pb-4">
+                  {UPCOMING_SEMINARS.map(seminar => (
+                    <SeminarCard
+                      key={seminar.id}
+                      {...seminar}
+                      isSaved={savedSeminars.includes(seminar.id)}
+                      onToggleSave={handleToggleSave}
+                    />
+                  ))}
+                </div>
+                <ScrollBar orientation="horizontal" />
+              </ScrollArea>
+            </div>
+            
+            <div className="mb-12">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <BookOpen className="h-5 w-5 text-indigo-500 mr-2" />
+                  <h2 className="text-xl font-bold text-gray-900">Development Seminars</h2>
+                  <Badge variant="outline" className="ml-2 bg-indigo-50 text-indigo-700 border-indigo-200">
+                    {BY_TOPIC['Development'].length}
+                  </Badge>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-sm"
+                    onClick={() => toggleSectionVisibility('byTopic')}
+                  >
+                    Hide Section
+                  </Button>
+                  <Link to="/seminars/development">
+                    <Button variant="outline" size="sm" className="text-sm">
+                      View All <ArrowRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+              
+              <ScrollArea className="w-full whitespace-nowrap pb-4">
+                <div className="flex space-x-4 pb-4">
+                  {BY_TOPIC['Development'].map(seminar => (
+                    <SeminarCard
+                      key={seminar.id}
+                      {...seminar}
+                      isSaved={savedSeminars.includes(seminar.id)}
+                      onToggleSave={handleToggleSave}
+                    />
+                  ))}
+                </div>
+                <ScrollBar orientation="horizontal" />
+              </ScrollArea>
+            </div>
+            
+            <div className="mb-12">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <Tag className="h-5 w-5 text-green-500 mr-2" />
+                  <h2 className="text-xl font-bold text-gray-900">Free Seminars</h2>
+                  <Badge variant="outline" className="ml-2 bg-green-50 text-green-700 border-green-200">
+                    {FREE_SEMINARS.length}
+                  </Badge>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-sm"
+                    onClick={() => toggleSectionVisibility('free')}
+                  >
+                    Hide Section
+                  </Button>
+                  <Link to="/seminars/free">
+                    <Button variant="outline" size="sm" className="text-sm">
+                      View All <ArrowRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+              
+              <ScrollArea className="w-full whitespace-nowrap pb-4">
+                <div className="flex space-x-4 pb-4">
+                  {FREE_SEMINARS.map(seminar => (
+                    <SeminarCard
+                      key={seminar.id}
+                      {...seminar}
+                      isSaved={savedSeminars.includes(seminar.id)}
+                      onToggleSave={handleToggleSave}
+                    />
+                  ))}
+                </div>
+                <ScrollBar orientation="horizontal" />
+              </ScrollArea>
+            </div>
+            
+            <div className="mb-12">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <Globe className="h-5 w-5 text-purple-500 mr-2" />
+                  <h2 className="text-xl font-bold text-gray-900">Virtual Seminars</h2>
+                  <Badge variant="outline" className="ml-2 bg-purple-50 text-purple-700 border-purple-200">
+                    {VIRTUAL_SEMINARS.length}
+                  </Badge>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-sm"
+                    onClick={() => toggleSectionVisibility('virtual')}
+                  >
+                    Hide Section
+                  </Button>
+                  <Link to="/seminars/virtual">
+                    <Button variant="outline" size="sm" className="text-sm">
+                      View All <ArrowRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+              
+              <ScrollArea className="w-full whitespace-nowrap pb-4">
+                <div className="flex space-x-4 pb-4">
+                  {VIRTUAL_SEMINARS.map(seminar => (
+                    <SeminarCard
+                      key={seminar.id}
+                      {...seminar}
+                      isSaved={savedSeminars.includes(seminar.id)}
+                      onToggleSave={handleToggleSave}
+                    />
+                  ))}
+                </div>
+                <ScrollBar orientation="horizontal" />
+              </ScrollArea>
+            </div>
+            
+            <div className="mb-12">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <Tag className="h-5 w-5 text-gray-700 mr-2" />
+                  <h2 className="text-xl font-bold text-gray-900">Browse by Category</h2>
+                </div>
+                
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                  {Object.entries({
+                    'Development': { icon: <BookOpen className="h-5 w-5" />, color: 'bg-blue-500' },
+                    'Design': { icon: <Edit className="h-5 w-5" />, color: 'bg-pink-500' },
+                    'AI': { icon: <Zap className="h-5 w-5" />, color: 'bg-purple-500' },
+                    'Cloud': { icon: <Globe className="h-5 w-5" />, color: 'bg-cyan-500' },
+                    'Security': { icon: <Info className="h-5 w-5" />, color: 'bg-red-500' },
+                    'DevOps': { icon: <RotateCcw className="h-5 w-5" />, color: 'bg-green-500' },
+                    'Blockchain': { icon: <LinkIcon className="h-5 w-5" />, color: 'bg-yellow-500' },
+                    'Management': { icon: <Users className="h-5 w-5" />, color: 'bg-indigo-500' },
+                    'Data': { icon: <BarChart2 className="h-5 w-5" />, color: 'bg-orange-500' },
+                    'Mobile': { icon: <Mobile className="h-5 w-5" />, color: 'bg-emerald-500' }
+                  }).map(([category, { icon, color }]) => (
+                    <Link 
+                      key={category} 
+                      to={`/seminars/category/${category.toLowerCase()}`}
+                      className="flex flex-col items-center p-4 border rounded-xl hover:shadow-md transition-shadow text-center gap-2"
+                    >
+                      <div className={`p-3 rounded-full ${color} text-white`}>
+                        {icon}
+                      </div>
+                      <span className="font-medium text-sm">{category}</span>
+                      <span className="text-xs text-gray-500">
+                        {BY_TOPIC[category]?.length || Math.floor(Math.random() * 10) + 2} events
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
