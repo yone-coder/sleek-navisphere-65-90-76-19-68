@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +8,7 @@ import { Copy, RefreshCw, Flag, MessageSquare } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 
 function MorpionNewGame() {
-  const [socket, setSocket] = useState<any>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
   const [roomId, setRoomId] = useState<string | null>(null);
   const [player, setPlayer] = useState<string | null>(null);
   const [board, setBoard] = useState<(string | null)[][]>(Array(50).fill(null).map(() => Array(50).fill(null)));
@@ -88,7 +87,9 @@ function MorpionNewGame() {
       setTimeout(() => setErrorMessage(null), 3000);
     });
 
-    return () => newSocket.disconnect();
+    return () => {
+      newSocket.disconnect();
+    };
   }, []);
 
   const createRoom = () => {
@@ -127,7 +128,6 @@ function MorpionNewGame() {
     }
   };
 
-  // Determine the visible area of the board
   const visibleSize = Math.min(15, 50); // Show a 15x15 grid or less
   const halfSize = Math.floor(visibleSize / 2);
   const startX = Math.max(0, Math.min(viewPosition.x - halfSize, 50 - visibleSize));
@@ -135,7 +135,6 @@ function MorpionNewGame() {
   const endX = Math.min(startX + visibleSize, 50);
   const endY = Math.min(startY + visibleSize, 50);
 
-  // Navigation functions
   const moveView = (dx: number, dy: number) => {
     setViewPosition(prev => ({
       x: Math.max(0, Math.min(prev.x + dx, 49)),
