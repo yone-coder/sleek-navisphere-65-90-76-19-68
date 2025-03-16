@@ -69,11 +69,11 @@ export default function GamesPages() {
             <MainContent />
           </>
         } />
-        <Route path="game-search/*" element={<GamesExplore />} />
-        <Route path="contest/*" element={<ContestsPage />} />
-        <Route path="morpion" element={<Morpion />} />
-        <Route path="gomoku" element={<Gomoku />} />
-        <Route path="chess" element={<Chess />} />
+        <Route path="/game-search/*" element={<GamesExplore />} />
+        <Route path="/contest/*" element={<ContestsPage />} />
+        <Route path="/morpion" element={<Morpion />} />
+        <Route path="/gomoku" element={<Gomoku />} />
+        <Route path="/chess" element={<Chess />} />
       </Routes>
 
       <GamesBottomNav />

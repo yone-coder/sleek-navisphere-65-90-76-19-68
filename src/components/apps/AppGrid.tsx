@@ -17,7 +17,9 @@ export const AppGrid = ({ apps, favorites, onToggleFavorite, viewMode = "grid" }
   const AppComponent = viewMode === "grid" ? AppGridItem : AppListItem;
   
   const handleAppClick = (app: App) => {
-    if (app.category === "Gaming") {
+    if (app.name === "Chess") {
+      navigate('/games/chess');
+    } else if (app.category === "Gaming") {
       const gameId = app.name.toLowerCase().replace(/\s+/g, '-');
       navigate(`/games/${gameId}`);
     } else {
