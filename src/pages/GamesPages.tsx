@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate, Routes, Route } from "react-router-dom";
 import { GameSearchOverlay } from "@/components/search/GameSearchOverlay";
@@ -5,6 +6,7 @@ import { GamesBottomNav } from "@/components/games/GamesBottomNav";
 import GamesExplore from "./games/GamesExplore";
 import ContestsPage from "./games/ContestsPage";
 import Morpion from "./games/Morpion";
+import MorpionNewGame from "./games/MorpionNewGame";
 import Gomoku from "./games/Gomoku";
 import ChessGame from "./games/ChessGame";
 import GamesHeader from "@/components/games/pages/GamesHeader";
@@ -70,6 +72,7 @@ export default function GamesPages() {
         <Route path="/game-search/*" element={<GamesExplore />} />
         <Route path="/contest/*" element={<ContestsPage />} />
         <Route path="/morpion" element={<Morpion />} />
+        <Route path="/morpion-new" element={<MorpionNewGame />} />
         <Route path="/gomoku" element={<Gomoku />} />
         <Route path="/chess" element={<ChessGame />} />
       </Routes>

@@ -4,6 +4,19 @@ import type { App, AppCategory } from "../types";
 
 export const apps: App[] = [
   {
+    name: "Morpion New",
+    description: "Play online Morpion with a large 50x50 board",
+    icon: Gamepad2,
+    route: "/games/morpion-new",
+    color: "bg-green-600",
+    category: "Gaming",
+    status: "new",
+    users: "2.1K+",
+    lastUsed: "Just now",
+    rating: 4.8,
+    updates: 1
+  },
+  {
     name: "Chess",
     description: "Play real-time chess games with friends",
     icon: Gamepad2,

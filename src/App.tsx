@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
@@ -27,6 +28,7 @@ const Tournaments = lazy(() => import("./pages/Tournaments"));
 const TournamentDetails = lazy(() => import("./pages/TournamentDetails"));
 const Gomoku = lazy(() => import("./pages/games/Gomoku"));
 const Morpion = lazy(() => import("./pages/games/Morpion"));
+const MorpionNewGame = lazy(() => import("./pages/games/MorpionNewGame"));
 const ChessGame = lazy(() => import("./pages/games/ChessGame"));
 const MatchDetails = lazy(() => import("./pages/MatchDetails"));
 const Marketplace = lazy(() => import("./pages/Marketplace"));
@@ -100,6 +102,7 @@ const AppContent = () => {
           <Route path="/games/:id" element={<GameDetails />} />
           <Route path="/games/morpion-details" element={<GameDetails />} />
           <Route path="/games/morpion" element={<Morpion />} />
+          <Route path="/games/morpion-new" element={<MorpionNewGame />} />
           <Route path="/games/gomoku" element={<Gomoku />} />
           <Route path="/games/chess" element={<ChessGame />} />
           <Route path="/games/winnr" element={<Navigate to="/games" replace />} />
