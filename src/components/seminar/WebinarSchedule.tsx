@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Calendar, Clock, Users, MapPin, Globe, Search, Filter, ChevronDown, ChevronRight, Check, X, FileText, Download, Star, MessageCircle, Plus, List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -21,7 +20,6 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Types for the schedule data
 interface Speaker {
   id: string;
   name: string;
@@ -62,18 +60,14 @@ interface Day {
 const WebinarSchedule: React.FC = () => {
   const { toast } = useToast();
 
-  // State for filtering and view options
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedTracks, setSelectedTracks] = useState<string[]>([]);
   const [selectedDifficulties, setSelectedDifficulties] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
-  const [viewMode, setViewMode] = useState<'timeline' | 'compact'>('timeline');
   const [expandedSessions, setExpandedSessions] = useState<Set<string>>(new Set());
   const [currentDay, setCurrentDay] = useState(0);
-  const timelineRef = useRef<HTMLDivElement>(null);
-  
-  // Mock schedule data
+
   const scheduleData: Day[] = [
     {
       date: "15 Juin 2023",
@@ -352,7 +346,6 @@ const WebinarSchedule: React.FC = () => {
     }
   ];
 
-  // Function to toggle session expansion
   const toggleSessionExpansion = (sessionId: string) => {
     const newSet = new Set(expandedSessions);
     if (newSet.has(sessionId)) {
@@ -363,10 +356,8 @@ const WebinarSchedule: React.FC = () => {
     setExpandedSessions(newSet);
   };
 
-  // Filter sessions based on search and filters
   const getFilteredSessions = (day: Day) => {
     return day.sessions.filter(session => {
-      // Search in title and description
       const searchMatch = searchQuery === '' || 
         session.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
         session.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -377,14 +368,11 @@ const WebinarSchedule: React.FC = () => {
         ) ||
         session.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
 
-      // Type filter
       const typeMatch = selectedTypes.length === 0 || selectedTypes.includes(session.type);
 
-      // Track filter
       const trackMatch = selectedTracks.length === 0 || 
         (session.track && selectedTracks.includes(session.track));
 
-      // Difficulty filter
       const difficultyMatch = selectedDifficulties.length === 0 || 
         (session.difficulty && selectedDifficulties.includes(session.difficulty));
 
@@ -392,7 +380,6 @@ const WebinarSchedule: React.FC = () => {
     });
   };
 
-  // Toggle selection in a filter array
   const toggleFilter = (array: string[], item: string) => {
     if (array.includes(item)) {
       return array.filter(i => i !== item);
@@ -401,22 +388,18 @@ const WebinarSchedule: React.FC = () => {
     }
   };
 
-  // Handle toggling session types in filter
   const toggleSessionType = (type: string) => {
     setSelectedTypes(prev => toggleFilter(prev, type));
   };
 
-  // Handle toggling tracks in filter
   const toggleTrack = (track: string) => {
     setSelectedTracks(prev => toggleFilter(prev, track));
   };
 
-  // Handle toggling difficulty levels in filter
   const toggleDifficulty = (difficulty: string) => {
     setSelectedDifficulties(prev => toggleFilter(prev, difficulty));
   };
 
-  // Get all unique tracks
   const allTracks = Array.from(new Set(
     scheduleData.flatMap(day => 
       day.sessions
@@ -425,16 +408,13 @@ const WebinarSchedule: React.FC = () => {
     )
   ));
 
-  // Handle adding session to favorites
   const toggleFavorite = (sessionId: string) => {
-    // In a real app, this would save to state or database
     toast({
       title: "Favori mis à jour",
       description: "Vos sessions favorites ont été mises à jour",
     });
   };
 
-  // Handle registering for a session
   const registerForSession = (sessionId: string) => {
     toast({
       title: "Inscription confirmée",
@@ -442,7 +422,6 @@ const WebinarSchedule: React.FC = () => {
     });
   };
 
-  // Handle downloading materials
   const downloadMaterials = (type: string, url: string) => {
     window.open(url, '_blank');
     toast({
@@ -451,22 +430,6 @@ const WebinarSchedule: React.FC = () => {
     });
   };
 
-  // Scroll timeline to current time
-  useEffect(() => {
-    if (viewMode === 'timeline' && timelineRef.current) {
-      // In a real app, this would scroll to the current time
-      const now = new Date();
-      const hours = now.getHours();
-      const minutes = now.getMinutes();
-      const timePosition = (hours * 60 + minutes - 9 * 60) * 2; // 2px per minute, starting from 9AM
-      
-      if (timePosition > 0) {
-        timelineRef.current.scrollTop = timePosition - 100; // Center current time with some offset
-      }
-    }
-  }, [viewMode]);
-
-  // Get session color based on type
   const getSessionTypeColor = (type: string) => {
     switch (type) {
       case 'keynote':
@@ -486,7 +449,6 @@ const WebinarSchedule: React.FC = () => {
     }
   };
 
-  // Get session width and position for timeline view
   const getSessionStyles = (session: Session) => {
     const startParts = session.startTime.split(':');
     const endParts = session.endTime.split(':');
@@ -495,16 +457,14 @@ const WebinarSchedule: React.FC = () => {
     const endMinutes = parseInt(endParts[0]) * 60 + parseInt(endParts[1]);
     const durationMinutes = endMinutes - startMinutes;
     
-    // Start from 9:00 as reference point (9 * 60 = 540 minutes)
     const startPosition = startMinutes - 9 * 60;
     
     return {
-      height: `${durationMinutes * 2}px`, // 2px per minute
-      top: `${startPosition * 2}px`, // 2px per minute
+      height: `${durationMinutes * 2}px`,
+      top: `${startPosition * 2}px`,
     };
   };
 
-  // Get difficulty badge
   const getDifficultyBadge = (difficulty: string | undefined) => {
     if (!difficulty) return null;
     
@@ -527,13 +487,11 @@ const WebinarSchedule: React.FC = () => {
     );
   };
 
-  // Get time slot label
   const getTimeSlotLabel = (time: string) => {
     const [hours, minutes] = time.split(':');
     return `${hours}:${minutes}`;
   };
 
-  // Session type labels in French
   const sessionTypeLabels: Record<string, string> = {
     'keynote': 'Keynote',
     'workshop': 'Atelier',
@@ -543,7 +501,6 @@ const WebinarSchedule: React.FC = () => {
     'break': 'Pause'
   };
 
-  // Reset all filters
   const resetFilters = () => {
     setSearchQuery('');
     setSelectedTypes([]);
@@ -552,34 +509,12 @@ const WebinarSchedule: React.FC = () => {
   };
 
   return (
-    <div className="w-full">
-      {/* Header section with filters */}
+    <div className="w-full px-4">
       <div className="mb-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
           <h2 className="text-2xl font-bold">Programme du séminaire</h2>
-
-          {/* View mode toggle */}
-          <div className="flex gap-2">
-            <Button 
-              variant={viewMode === 'timeline' ? 'default' : 'outline'} 
-              className="h-9"
-              onClick={() => setViewMode('timeline')}
-            >
-              <Calendar className="w-4 h-4 mr-2" />
-              Timeline
-            </Button>
-            <Button 
-              variant={viewMode === 'compact' ? 'default' : 'outline'} 
-              className="h-9"
-              onClick={() => setViewMode('compact')}
-            >
-              <List className="w-4 h-4 mr-2" />
-              Compact
-            </Button>
-          </div>
         </div>
 
-        {/* Search and filters */}
         <div className="flex flex-col sm:flex-row gap-3 mb-4">
           <div className="relative flex-grow">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -605,7 +540,6 @@ const WebinarSchedule: React.FC = () => {
           </Button>
         </div>
 
-        {/* Expanded filters section */}
         <AnimatePresence>
           {showFilters && (
             <motion.div
@@ -616,7 +550,6 @@ const WebinarSchedule: React.FC = () => {
             >
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="flex flex-wrap gap-6">
-                  {/* Session type filters */}
                   <div className="flex-1 min-w-[200px]">
                     <h3 className="text-sm font-semibold mb-2">Type de session</h3>
                     <div className="space-y-2">
@@ -642,7 +575,6 @@ const WebinarSchedule: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Tracks filters */}
                   <div className="flex-1 min-w-[200px]">
                     <h3 className="text-sm font-semibold mb-2">Parcours</h3>
                     <div className="space-y-2">
@@ -668,7 +600,6 @@ const WebinarSchedule: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Difficulty filters */}
                   <div className="flex-1 min-w-[200px]">
                     <h3 className="text-sm font-semibold mb-2">Niveau</h3>
                     <div className="space-y-2">
@@ -708,7 +639,6 @@ const WebinarSchedule: React.FC = () => {
           )}
         </AnimatePresence>
 
-        {/* Day tabs */}
         <div className="flex space-x-2 mt-4">
           {scheduleData.map((day, index) => (
             <Button
@@ -724,282 +654,200 @@ const WebinarSchedule: React.FC = () => {
         </div>
       </div>
 
-      {/* Schedule display - Timeline View */}
-      {viewMode === 'timeline' && (
-        <div className="relative">
-          {/* Time indicators on the left */}
-          <div className="absolute left-0 top-0 bottom-0 w-16 bg-white z-10 border-r">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div 
-                key={i} 
-                className="absolute text-xs text-gray-500 font-medium"
-                style={{ top: `${i * 120}px` }}
-              >
-                {`${i + 9}:00`}
-              </div>
-            ))}
-          </div>
-
-          {/* Timeline tracks */}
-          <div 
-            ref={timelineRef}
-            className="ml-16 overflow-y-auto"
-            style={{ height: '600px' }}
-          >
-            {/* Current time indicator */}
-            <div className="sticky top-0 z-20 w-full">
-              <div className="absolute left-0 right-0 h-0.5 bg-red-500"></div>
-              <div className="absolute -left-4 -top-2 rounded-full bg-red-500 p-1">
-                <Clock className="h-3 w-3 text-white" />
-              </div>
+      <div className="space-y-4 max-w-4xl mx-auto">
+        {getFilteredSessions(scheduleData[currentDay]).length === 0 ? (
+          <div className="text-center py-12 bg-gray-50 rounded-lg">
+            <div className="text-gray-400 mb-2">
+              <Search className="h-12 w-12 mx-auto" />
             </div>
-
-            {/* Session cards in timeline view */}
-            <div className="relative">
-              {getFilteredSessions(scheduleData[currentDay]).map(session => (
-                <div
-                  key={session.id}
-                  className={`absolute left-4 right-4 md:right-8 p-3 rounded-lg border ${getSessionTypeColor(session.type)} shadow-sm transition-all hover:shadow z-10`}
-                  style={getSessionStyles(session)}
-                >
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <div className="text-xs font-medium mb-1">
-                        {getTimeSlotLabel(session.startTime)} - {getTimeSlotLabel(session.endTime)}
-                        {session.room && <span className="ml-2">• {session.room}</span>}
-                      </div>
-                      <h3 className="font-medium text-sm">{session.title}</h3>
-                      
-                      {session.speakers.length > 0 && (
-                        <div className="flex items-center mt-1 space-x-1">
-                          {session.speakers.map((speaker, i) => (
-                            <span key={speaker.id} className="text-xs">
-                              {i > 0 && ", "}
-                              {speaker.name}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="flex space-x-1">
-                      {session.difficulty && getDifficultyBadge(session.difficulty)}
+            <h3 className="text-lg font-medium text-gray-700">Aucune session trouvée</h3>
+            <p className="text-gray-500 mt-1">Essayez d'ajuster vos filtres de recherche</p>
+            <Button variant="outline" className="mt-4" onClick={resetFilters}>
+              Réinitialiser les filtres
+            </Button>
+          </div>
+        ) : (
+          getFilteredSessions(scheduleData[currentDay]).map(session => (
+            <Collapsible
+              key={session.id}
+              open={expandedSessions.has(session.id)}
+              onOpenChange={() => toggleSessionExpansion(session.id)}
+              className={`rounded-lg border shadow-sm ${
+                expandedSessions.has(session.id) 
+                  ? 'bg-white border-gray-200' 
+                  : `${getSessionTypeColor(session.type)} border-opacity-70`
+              }`}
+            >
+              <div className="p-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
                       <Badge variant="outline" className={`text-xs ${getSessionTypeColor(session.type)}`}>
                         {sessionTypeLabels[session.type]}
                       </Badge>
+                      {session.difficulty && getDifficultyBadge(session.difficulty)}
+                      {session.track && (
+                        <Badge variant="secondary" className="text-xs">
+                          {session.track}
+                        </Badge>
+                      )}
+                    </div>
+                    <h3 className="font-semibold text-base">{session.title}</h3>
+                    <div className="flex items-center gap-2 mt-1 text-gray-500 text-sm">
+                      <div className="flex items-center">
+                        <Clock className="h-3.5 w-3.5 mr-1" />
+                        {session.startTime} - {session.endTime}
+                      </div>
+                      {session.room && (
+                        <div className="flex items-center">
+                          <MapPin className="h-3.5 w-3.5 mr-1" />
+                          {session.room}
+                        </div>
+                      )}
+                      {session.capacity && (
+                        <div className="flex items-center">
+                          <Users className="h-3.5 w-3.5 mr-1" />
+                          {session.registered}/{session.capacity}
+                        </div>
+                      )}
                     </div>
                   </div>
-                  
-                  {session.track && (
-                    <div className="mt-1">
-                      <Badge variant="secondary" className="text-xs">
-                        {session.track}
-                      </Badge>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
 
-      {/* Schedule display - Compact View */}
-      {viewMode === 'compact' && (
-        <div className="space-y-4">
-          {getFilteredSessions(scheduleData[currentDay]).length === 0 ? (
-            <div className="text-center py-12 bg-gray-50 rounded-lg">
-              <div className="text-gray-400 mb-2">
-                <Search className="h-12 w-12 mx-auto" />
-              </div>
-              <h3 className="text-lg font-medium text-gray-700">Aucune session trouvée</h3>
-              <p className="text-gray-500 mt-1">Essayez d'ajuster vos filtres de recherche</p>
-              <Button variant="outline" className="mt-4" onClick={resetFilters}>
-                Réinitialiser les filtres
-              </Button>
-            </div>
-          ) : (
-            getFilteredSessions(scheduleData[currentDay]).map(session => (
-              <Collapsible
-                key={session.id}
-                open={expandedSessions.has(session.id)}
-                onOpenChange={() => toggleSessionExpansion(session.id)}
-                className={`rounded-lg border ${
-                  expandedSessions.has(session.id) 
-                    ? 'bg-white border-gray-200 shadow-sm' 
-                    : `${getSessionTypeColor(session.type)} border-opacity-70`
-                }`}
-              >
-                <div className="p-4">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <Badge variant="outline" className={`text-xs ${getSessionTypeColor(session.type)}`}>
-                          {sessionTypeLabels[session.type]}
-                        </Badge>
-                        {session.difficulty && getDifficultyBadge(session.difficulty)}
-                        {session.track && (
-                          <Badge variant="secondary" className="text-xs">
-                            {session.track}
-                          </Badge>
-                        )}
-                      </div>
-                      <h3 className="font-semibold text-base">{session.title}</h3>
-                      <div className="flex items-center gap-2 mt-1 text-gray-500 text-sm">
-                        <div className="flex items-center">
-                          <Clock className="h-3.5 w-3.5 mr-1" />
-                          {session.startTime} - {session.endTime}
-                        </div>
-                        {session.room && (
-                          <div className="flex items-center">
-                            <MapPin className="h-3.5 w-3.5 mr-1" />
-                            {session.room}
-                          </div>
-                        )}
-                        {session.capacity && (
-                          <div className="flex items-center">
-                            <Users className="h-3.5 w-3.5 mr-1" />
-                            {session.registered}/{session.capacity}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 w-8 p-0"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(session.id);
+                      }}
+                    >
+                      <Star className={`h-4 w-4 ${session.isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
+                    </Button>
+                    
+                    <CollapsibleTrigger asChild>
                       <Button
                         variant="ghost"
                         size="sm"
                         className="h-8 w-8 p-0"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleFavorite(session.id);
-                        }}
                       >
-                        <Star className={`h-4 w-4 ${session.isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
+                        {expandedSessions.has(session.id) ? (
+                          <ChevronDown className="h-4 w-4" />
+                        ) : (
+                          <ChevronRight className="h-4 w-4" />
+                        )}
                       </Button>
-                      
-                      <CollapsibleTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0"
-                        >
-                          {expandedSessions.has(session.id) ? (
-                            <ChevronDown className="h-4 w-4" />
-                          ) : (
-                            <ChevronRight className="h-4 w-4" />
-                          )}
-                        </Button>
-                      </CollapsibleTrigger>
-                    </div>
+                    </CollapsibleTrigger>
+                  </div>
+                </div>
+                
+                {session.speakers.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {session.speakers.map(speaker => (
+                      <div 
+                        key={speaker.id}
+                        className="flex items-center bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-800"
+                      >
+                        <span className="font-medium">{speaker.name}</span>
+                        <span className="mx-1">•</span>
+                        <span className="text-gray-600">{speaker.role}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              <CollapsibleContent>
+                <div className="px-4 pb-4">
+                  <Separator className="mb-4" />
+                  
+                  <div className="text-sm text-gray-700 mb-4">
+                    {session.description}
                   </div>
                   
-                  {session.speakers.length > 0 && (
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {session.speakers.map(speaker => (
-                        <div 
-                          key={speaker.id}
-                          className="flex items-center bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-800"
-                        >
-                          <span className="font-medium">{speaker.name}</span>
-                          <span className="mx-1">•</span>
-                          <span className="text-gray-600">{speaker.role}</span>
-                        </div>
+                  {session.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {session.tags.map((tag, i) => (
+                        <Badge key={i} variant="secondary" className="text-xs">
+                          {tag}
+                        </Badge>
                       ))}
                     </div>
                   )}
-                </div>
-                
-                <CollapsibleContent>
-                  <div className="px-4 pb-4">
-                    <Separator className="mb-4" />
-                    
-                    <div className="text-sm text-gray-700 mb-4">
-                      {session.description}
-                    </div>
-                    
-                    {session.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mb-4">
-                        {session.tags.map((tag, i) => (
-                          <Badge key={i} variant="secondary" className="text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
+                  
+                  {session.materials && Object.keys(session.materials).length > 0 && (
+                    <div className="mb-4">
+                      <h4 className="text-sm font-medium mb-2">Ressources</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {session.materials.slides && (
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="h-8 text-xs"
+                            onClick={() => downloadMaterials('Slides', session.materials!.slides!)}
+                          >
+                            <FileText className="h-3.5 w-3.5 mr-1.5" />
+                            Slides
+                          </Button>
+                        )}
+                        {session.materials.repo && (
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="h-8 text-xs"
+                            onClick={() => downloadMaterials('Code Repository', session.materials!.repo!)}
+                          >
+                            <Download className="h-3.5 w-3.5 mr-1.5" />
+                            Repository
+                          </Button>
+                        )}
+                        {session.materials.resources && (
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="h-8 text-xs"
+                            onClick={() => downloadMaterials('Resources', session.materials!.resources!)}
+                          >
+                            <Download className="h-3.5 w-3.5 mr-1.5" />
+                            Resources
+                          </Button>
+                        )}
                       </div>
-                    )}
-                    
-                    {session.materials && Object.keys(session.materials).length > 0 && (
-                      <div className="mb-4">
-                        <h4 className="text-sm font-medium mb-2">Ressources</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {session.materials.slides && (
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              className="h-8 text-xs"
-                              onClick={() => downloadMaterials('Slides', session.materials!.slides!)}
-                            >
-                              <FileText className="h-3.5 w-3.5 mr-1.5" />
-                              Slides
-                            </Button>
-                          )}
-                          {session.materials.repo && (
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              className="h-8 text-xs"
-                              onClick={() => downloadMaterials('Code Repository', session.materials!.repo!)}
-                            >
-                              <Download className="h-3.5 w-3.5 mr-1.5" />
-                              Repository
-                            </Button>
-                          )}
-                          {session.materials.resources && (
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              className="h-8 text-xs"
-                              onClick={() => downloadMaterials('Resources', session.materials!.resources!)}
-                            >
-                              <Download className="h-3.5 w-3.5 mr-1.5" />
-                              Resources
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                    
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      <Button 
-                        variant="default" 
-                        size="sm"
-                        className="h-9"
-                        onClick={() => registerForSession(session.id)}
-                      >
-                        {session.registered === session.capacity ? 'Rejoindre liste d\'attente' : 'S\'inscrire'}
-                      </Button>
-                      
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="h-9"
-                        onClick={() => {
-                          // Open comments section
-                        }}
-                      >
-                        <MessageCircle className="h-4 w-4 mr-1.5" />
-                        Commentaires
-                      </Button>
                     </div>
+                  )}
+                  
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    <Button 
+                      variant="default" 
+                      size="sm"
+                      className="h-9"
+                      onClick={() => registerForSession(session.id)}
+                    >
+                      {session.registered === session.capacity ? 'Rejoindre liste d\'attente' : 'S\'inscrire'}
+                    </Button>
+                    
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="h-9"
+                      onClick={() => {
+                        // Open comments section
+                      }}
+                    >
+                      <MessageCircle className="h-4 w-4 mr-1.5" />
+                      Commentaires
+                    </Button>
                   </div>
-                </CollapsibleContent>
-              </Collapsible>
-            ))
-          )}
-        </div>
-      )}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          ))
+        )}
+      </div>
     </div>
   );
 };
 
 export default WebinarSchedule;
+

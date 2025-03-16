@@ -41,7 +41,8 @@ import { Badge } from '@/components/ui/badge';
 import { HeroSection } from '@/components/seminar/HeroSection';
 import { useToast } from "@/hooks/use-toast";
 
-// Sample data for seminars
+type DifficultyLevel = 'Beginner' | 'Intermediate' | 'Advanced' | 'All Levels';
+
 const SEMINARS_DATA = [
   {
     id: '1',
@@ -63,7 +64,7 @@ const SEMINARS_DATA = [
     isLive: false,
     isCertified: true,
     language: 'English',
-    difficultyLevel: 'Intermediate',
+    difficultyLevel: 'Intermediate' as DifficultyLevel,
     popularity: 85,
   },
   {
@@ -82,6 +83,7 @@ const SEMINARS_DATA = [
     maxAttendees: 1500,
     topic: 'Artificial Intelligence',
     speakerImages: ['/api/placeholder/32/32', '/api/placeholder/32/32'],
+    difficultyLevel: 'Advanced' as DifficultyLevel,
   },
   {
     id: '3',
@@ -99,6 +101,7 @@ const SEMINARS_DATA = [
     maxAttendees: 500,
     topic: 'User Experience',
     speakerImages: ['/api/placeholder/32/32'],
+    difficultyLevel: 'Beginner' as DifficultyLevel,
   },
   {
     id: '4',
@@ -116,6 +119,7 @@ const SEMINARS_DATA = [
     maxAttendees: 1200,
     topic: 'Cybersecurity',
     speakerImages: ['/api/placeholder/32/32', '/api/placeholder/32/32'],
+    difficultyLevel: 'Intermediate' as DifficultyLevel,
   },
   {
     id: '5',
@@ -133,6 +137,7 @@ const SEMINARS_DATA = [
     maxAttendees: 600,
     topic: 'DevOps',
     speakerImages: ['/api/placeholder/32/32'],
+    difficultyLevel: 'Advanced' as DifficultyLevel,
   },
   {
     id: '6',
@@ -151,6 +156,7 @@ const SEMINARS_DATA = [
     featured: true,
     topic: 'Product Management',
     speakerImages: ['/api/placeholder/32/32'],
+    difficultyLevel: 'Intermediate' as DifficultyLevel,
   },
   {
     id: '7',
@@ -168,6 +174,7 @@ const SEMINARS_DATA = [
     maxAttendees: 800,
     topic: 'Data Science',
     speakerImages: ['/api/placeholder/32/32', '/api/placeholder/32/32'],
+    difficultyLevel: 'Intermediate' as DifficultyLevel,
   },
   {
     id: '8',
@@ -185,6 +192,7 @@ const SEMINARS_DATA = [
     maxAttendees: 500,
     topic: 'JavaScript',
     speakerImages: ['/api/placeholder/32/32'],
+    difficultyLevel: 'Beginner' as DifficultyLevel,
   },
   {
     id: '9',
@@ -202,6 +210,7 @@ const SEMINARS_DATA = [
     maxAttendees: 1000,
     topic: 'Blockchain',
     speakerImages: ['/api/placeholder/32/32', '/api/placeholder/32/32', '/api/placeholder/32/32'],
+    difficultyLevel: 'Advanced' as DifficultyLevel,
   },
   {
     id: '10',
@@ -219,6 +228,7 @@ const SEMINARS_DATA = [
     maxAttendees: 1200,
     topic: 'Cloud Computing',
     speakerImages: ['/api/placeholder/32/32', '/api/placeholder/32/32'],
+    difficultyLevel: 'Intermediate' as DifficultyLevel,
   },
   {
     id: '11',
@@ -237,6 +247,7 @@ const SEMINARS_DATA = [
     featured: true,
     topic: 'Mobile Development',
     speakerImages: ['/api/placeholder/32/32', '/api/placeholder/32/32'],
+    difficultyLevel: 'Advanced' as DifficultyLevel,
   },
   {
     id: '12',
@@ -254,10 +265,10 @@ const SEMINARS_DATA = [
     maxAttendees: 400,
     topic: 'AI Ethics',
     speakerImages: ['/api/placeholder/32/32'],
+    difficultyLevel: 'All Levels' as DifficultyLevel,
   }
 ];
 
-// Categorization of seminars
 const FEATURED_SEMINARS = SEMINARS_DATA.filter(seminar => seminar.featured);
 const UPCOMING_SEMINARS = SEMINARS_DATA.slice(0, 8);
 const BY_TOPIC = {
@@ -655,35 +666,35 @@ const SeminarsPage = () => {
                   <Tag className="h-5 w-5 text-gray-700 mr-2" />
                   <h2 className="text-xl font-bold text-gray-900">Browse by Category</h2>
                 </div>
-                
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                  {Object.entries({
-                    'Development': { icon: <BookOpen className="h-5 w-5" />, color: 'bg-blue-500' },
-                    'Design': { icon: <Edit className="h-5 w-5" />, color: 'bg-pink-500' },
-                    'AI': { icon: <Zap className="h-5 w-5" />, color: 'bg-purple-500' },
-                    'Cloud': { icon: <Globe className="h-5 w-5" />, color: 'bg-cyan-500' },
-                    'Security': { icon: <Info className="h-5 w-5" />, color: 'bg-red-500' },
-                    'DevOps': { icon: <RotateCcw className="h-5 w-5" />, color: 'bg-green-500' },
-                    'Blockchain': { icon: <LinkIcon className="h-5 w-5" />, color: 'bg-yellow-500' },
-                    'Management': { icon: <Users className="h-5 w-5" />, color: 'bg-indigo-500' },
-                    'Data': { icon: <BarChart2 className="h-5 w-5" />, color: 'bg-orange-500' },
-                    'Mobile': { icon: <Mobile className="h-5 w-5" />, color: 'bg-emerald-500' }
-                  }).map(([category, { icon, color }]) => (
-                    <Link 
-                      key={category} 
-                      to={`/seminars/category/${category.toLowerCase()}`}
-                      className="flex flex-col items-center p-4 border rounded-xl hover:shadow-md transition-shadow text-center gap-2"
-                    >
-                      <div className={`p-3 rounded-full ${color} text-white`}>
-                        {icon}
-                      </div>
-                      <span className="font-medium text-sm">{category}</span>
-                      <span className="text-xs text-gray-500">
-                        {BY_TOPIC[category]?.length || Math.floor(Math.random() * 10) + 2} events
-                      </span>
-                    </Link>
-                  ))}
-                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {Object.entries({
+                  'Development': { icon: <BookOpen className="h-5 w-5" />, color: 'bg-blue-500' },
+                  'Design': { icon: <Edit className="h-5 w-5" />, color: 'bg-pink-500' },
+                  'AI': { icon: <Zap className="h-5 w-5" />, color: 'bg-purple-500' },
+                  'Cloud': { icon: <Globe className="h-5 w-5" />, color: 'bg-cyan-500' },
+                  'Security': { icon: <Info className="h-5 w-5" />, color: 'bg-red-500' },
+                  'DevOps': { icon: <RotateCcw className="h-5 w-5" />, color: 'bg-green-500' },
+                  'Blockchain': { icon: <LinkIcon className="h-5 w-5" />, color: 'bg-yellow-500' },
+                  'Management': { icon: <Users className="h-5 w-5" />, color: 'bg-indigo-500' },
+                  'Data': { icon: <BarChart2 className="h-5 w-5" />, color: 'bg-orange-500' },
+                  'Mobile': { icon: <Mobile className="h-5 w-5" />, color: 'bg-emerald-500' }
+                }).map(([category, { icon, color }]) => (
+                  <Link 
+                    key={category} 
+                    to={`/seminars/category/${category.toLowerCase()}`}
+                    className="flex flex-col items-center p-4 border rounded-xl hover:shadow-md transition-shadow text-center gap-2"
+                  >
+                    <div className={`p-3 rounded-full ${color} text-white`}>
+                      {icon}
+                    </div>
+                    <span className="font-medium text-sm">{category}</span>
+                    <span className="text-xs text-gray-500">
+                      {BY_TOPIC[category]?.length || Math.floor(Math.random() * 10) + 2} events
+                    </span>
+                  </Link>
+                ))}
               </div>
             </div>
           </>
@@ -694,3 +705,4 @@ const SeminarsPage = () => {
 };
 
 export default SeminarsPage;
+
