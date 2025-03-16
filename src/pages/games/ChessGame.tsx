@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Chessboard } from 'react-chessboard';
 import io from 'socket.io-client';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Copy, RefreshCw, Flag, MessageSquare } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 
