@@ -52,7 +52,7 @@ export function SeminarScrollingRow({
         <ScrollArea className="w-full overflow-x-auto pb-4">
           <div
             ref={scrollContainerRef}
-            className="flex gap-3 w-max min-w-full pl-4 md:pl-6 lg:pl-8 pr-4 md:pr-6 lg:pr-8"
+            className="flex gap-3 w-max min-w-full pl-4 pr-4"
           >
             {seminars.map((seminar, index) => (
               <div 

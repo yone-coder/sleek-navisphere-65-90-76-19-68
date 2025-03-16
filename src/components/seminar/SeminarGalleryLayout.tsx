@@ -36,7 +36,7 @@ export function SeminarGalleryLayout({
             className="mb-4"
           />
         </div>
-        <div className="w-full">
+        <div className="w-full -mx-4">
           <SeminarScrollingRow 
             title="" 
             seminars={featuredSeminars} 
@@ -55,7 +55,7 @@ export function SeminarGalleryLayout({
             className="mb-4" 
           />
         </div>
-        <div className="w-full">
+        <div className="w-full -mx-4">
           <SeminarScrollingRow 
             title="" 
             seminars={upcomingSeminars} 
@@ -74,7 +74,7 @@ export function SeminarGalleryLayout({
             className="mb-4"
           />
         </div>
-        <div className="w-full">
+        <div className="w-full -mx-4">
           <SeminarScrollingRow 
             title="" 
             seminars={popularSeminars} 
