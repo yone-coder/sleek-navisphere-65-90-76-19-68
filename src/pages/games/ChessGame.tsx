@@ -1,25 +1,12 @@
-
 import React, { useState, useEffect } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { Button } from "@/components/ui/button";
 import { AlertCircle, Copy } from 'lucide-react';
 import { toast } from 'sonner';
+import io from 'socket.io-client';
 
-// Mock socket implementation for demonstration
-const mockSocket = {
-  on: (event: string, callback: Function) => {
-    console.log(`Registered listener for ${event}`);
-  },
-  emit: (event: string, data?: any) => {
-    console.log(`Emitted ${event}`, data);
-  },
-  off: (event: string) => {
-    console.log(`Removed listener for ${event}`);
-  }
-};
-
-// Using mock socket instead of real connection
-const socket = mockSocket;
+// Connect to the provided backend URL
+const socket = io('https://chess-backend-jlvx.onrender.com');
 
 const ChessGame = () => {
   const [roomId, setRoomId] = useState<string | null>(null); // Game room ID
@@ -77,14 +64,6 @@ const ChessGame = () => {
   // Create a new game
   const createRoom = () => {
     socket.emit('createRoom');
-    // Mock response for demonstration
-    setTimeout(() => {
-      const mockRoomId = Math.random().toString(36).substring(2, 8).toUpperCase();
-      setRoomId(mockRoomId);
-      setColor('white');
-      setStatus('waiting for opponent');
-      toast.success(`Game room created: ${mockRoomId}`);
-    }, 500);
   };
 
   // Join an existing game
@@ -94,13 +73,6 @@ const ChessGame = () => {
       return;
     }
     socket.emit('joinRoom', joinId);
-    // Mock response for demonstration
-    setTimeout(() => {
-      setRoomId(joinId);
-      setColor('black');
-      setStatus('game started');
-      toast.success(`Joined game room: ${joinId}`);
-    }, 500);
   };
 
   // Handle piece drop
