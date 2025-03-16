@@ -83,16 +83,14 @@ export const useGameState = ({ boardSize }: UseGameStateProps) => {
 
     playMoveSound(currentPlayer);
 
-    const historyEntry: GameHistory = {
+    setGameHistory([...gameHistory, {
       board: JSON.parse(JSON.stringify(board)),
       currentPlayer,
       moves,
       lastMove,
       timeLeft: { ...timeLeft },
       inactivityTime
-    };
-
-    setGameHistory([...gameHistory, historyEntry]);
+    }]);
 
     setBoard(newBoard);
     setLastMove({ row, col });
