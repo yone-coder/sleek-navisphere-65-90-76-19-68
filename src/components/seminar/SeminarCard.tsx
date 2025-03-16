@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Badge } from "@/components/ui/badge";
@@ -104,7 +103,7 @@ export function SeminarCard({
   return (
     <Card 
       className={cn(
-        "w-[220px] overflow-hidden transition-all hover:shadow-md cursor-pointer group relative shrink-0",
+        "w-full overflow-hidden transition-all hover:shadow-md cursor-pointer group relative shrink-0",
         featured && "border-blue-200 bg-blue-50/40"
       )} 
       onClick={handleCardClick}
@@ -121,7 +120,7 @@ export function SeminarCard({
         </div>
       )}
       
-      <div className="relative h-28 overflow-hidden bg-gray-100">
+      <div className="relative h-32 overflow-hidden bg-gray-100">
         {image ? (
           <img 
             src={image} 

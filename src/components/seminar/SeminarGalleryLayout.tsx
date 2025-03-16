@@ -28,76 +28,55 @@ export function SeminarGalleryLayout({
   return (
     <div className={cn("w-full", className)}>
       {/* Featured row */}
-      <div className="my-4 -mx-4 md:-mx-6 lg:-mx-8">
-        <div className="px-4 md:px-6 lg:px-8">
+      <div className="my-4 -mx-6 md:-mx-8 lg:-mx-10">
+        <div className="px-6 md:px-8 lg:px-10 mb-4">
           <SeminarSectionHeading 
             title="Featured Seminars" 
             subtitle="Discover our top picks for this month"
             icon={<Award className="h-5 w-5" />}
-            className="mb-4"
           />
         </div>
-        <div className="w-full">
-          <div className="px-0">
-            <div className="overflow-visible pb-1">
-              <SeminarScrollingRow 
-                title="" 
-                seminars={featuredSeminars} 
-                onSaveSeminar={onSaveSeminar}
-              />
-            </div>
-          </div>
-        </div>
+        <SeminarScrollingRow 
+          title="" 
+          seminars={featuredSeminars} 
+          onSaveSeminar={onSaveSeminar}
+        />
       </div>
 
       {/* Upcoming row */}
-      <div className="mt-6 -mx-4 md:-mx-6 lg:-mx-8">
-        <div className="px-4 md:px-6 lg:px-8">
+      <div className="mt-8 -mx-6 md:-mx-8 lg:-mx-10">
+        <div className="px-6 md:px-8 lg:px-10 mb-4">
           <SeminarSectionHeading 
             title="Upcoming Seminars" 
             subtitle="Don't miss these events coming soon"
             icon={<Calendar className="h-5 w-5" />}
-            className="mb-4" 
           />
         </div>
-        <div className="w-full">
-          <div className="px-0">
-            <div className="overflow-visible pb-1">
-              <SeminarScrollingRow 
-                title="" 
-                seminars={upcomingSeminars} 
-                onSaveSeminar={onSaveSeminar}
-              />
-            </div>
-          </div>
-        </div>
+        <SeminarScrollingRow 
+          title="" 
+          seminars={upcomingSeminars} 
+          onSaveSeminar={onSaveSeminar}
+        />
       </div>
 
       {/* Popular row */}
-      <div className="mt-6 -mx-4 md:-mx-6 lg:-mx-8">
-        <div className="px-4 md:px-6 lg:px-8">
+      <div className="mt-8 -mx-6 md:-mx-8 lg:-mx-10">
+        <div className="px-6 md:px-8 lg:px-10 mb-4">
           <SeminarSectionHeading 
             title="Trending Seminars" 
             subtitle="Most popular among our users"
             icon={<TrendingUp className="h-5 w-5" />}
-            className="mb-4"
           />
         </div>
-        <div className="w-full">
-          <div className="px-0">
-            <div className="overflow-visible pb-1">
-              <SeminarScrollingRow 
-                title="" 
-                seminars={popularSeminars} 
-                onSaveSeminar={onSaveSeminar}
-              />
-            </div>
-          </div>
-        </div>
+        <SeminarScrollingRow 
+          title="" 
+          seminars={popularSeminars} 
+          onSaveSeminar={onSaveSeminar}
+        />
       </div>
 
       {/* All seminars in masonry grid */}
-      <div className="mt-10 px-4">
+      <div className="mt-12 px-4">
         <SeminarSectionHeading 
           title="Explore All Seminars" 
           subtitle="Discover seminars tailored to your interests"
