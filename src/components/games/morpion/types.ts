@@ -2,6 +2,7 @@
 export interface Position {
   row: number;
   col: number;
+  invalid?: boolean;
 }
 
 export interface GameHistory {
@@ -9,6 +10,8 @@ export interface GameHistory {
   currentPlayer: 'X' | 'O';
   moves: number;
   lastMove: Position | null;
+  timeLeft?: TimeLeft;
+  inactivityTime?: number;
 }
 
 export interface WinningLine {
@@ -22,3 +25,5 @@ export interface TimeLeft {
   X: number;
   O: number;
 }
+
+export type GameMode = 'local' | 'bot' | 'online' | 'blitz';
