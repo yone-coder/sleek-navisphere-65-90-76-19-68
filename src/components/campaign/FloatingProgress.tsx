@@ -119,14 +119,16 @@ export function FloatingProgress({
                       <div className="h-4 w-4 rounded-full bg-purple-400 ring-2 ring-white" />
                       <div className="h-4 w-4 rounded-full bg-pink-400 ring-2 ring-white" />
                     </div>
-                    <span className="text-[10px] text-gray-500 whitespace-nowrap">+12 backers in the last hour</span>
-                  </div>
-                  
-                  <div className="flex items-center whitespace-nowrap ml-auto">
-                    <span className="text-base font-bold text-gray-900 mr-1">{days}</span>
-                    <div className="flex items-center gap-1 text-gray-500">
-                      <span className="text-[10px]">days to go</span>
-                      <Shield className="h-3 w-3" aria-label="Protected campaign" />
+                    <div className="flex items-center justify-between w-full">
+                      <span className="text-[10px] text-gray-500 whitespace-nowrap">+12 backers in the last hour</span>
+                      
+                      <div className="flex items-center whitespace-nowrap ml-4">
+                        <span className="text-base font-bold text-gray-900 mr-1">{days}</span>
+                        <div className="flex items-center gap-1 text-gray-500">
+                          <span className="text-[10px]">days to go</span>
+                          <Shield className="h-3 w-3" aria-label="Protected campaign" />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

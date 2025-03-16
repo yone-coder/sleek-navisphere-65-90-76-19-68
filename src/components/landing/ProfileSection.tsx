@@ -15,7 +15,7 @@ export function ProfileSection({
 }: ProfileSectionProps) {
   return (
     <div className="w-full bg-white border-b">
-      <div className="max-w-4xl mx-auto p-4">
+      <div className="w-full mx-auto p-4">
         <div className="flex items-start gap-3">
           {/* Profile Image and Badge */}
           <div className="relative">

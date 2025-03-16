@@ -6,6 +6,8 @@ import { GamesBottomNav } from "@/components/games/GamesBottomNav";
 import GamesExplore from "./games/GamesExplore";
 import ContestsPage from "./games/ContestsPage";
 import Morpion from "./games/Morpion";
+import Gomoku from "./games/Gomoku";
+import Chess from "./games/Chess";
 import GamesHeader from "@/components/games/pages/GamesHeader";
 import EventsSection from "@/components/games/pages/EventsSection";
 import SponsoredGames from "@/components/games/pages/SponsoredGames";
@@ -70,6 +72,8 @@ export default function GamesPages() {
         <Route path="game-search/*" element={<GamesExplore />} />
         <Route path="contest/*" element={<ContestsPage />} />
         <Route path="morpion" element={<Morpion />} />
+        <Route path="gomoku" element={<Gomoku />} />
+        <Route path="chess" element={<Chess />} />
       </Routes>
 
       <GamesBottomNav />
