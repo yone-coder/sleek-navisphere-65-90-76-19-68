@@ -133,7 +133,7 @@ const ChessGame = () => {
                 <Chessboard
                   position={fen}
                   onPieceDrop={onDrop}
-                  boardOrientation={color || 'white'}
+                  boardOrientation={(color as 'white' | 'black') || 'white'}
                   arePiecesDraggable={Boolean(isMyTurn)}
                   customBoardStyle={{
                     borderRadius: '4px',
