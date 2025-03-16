@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -67,6 +66,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { SeminarsSearchPanel } from '@/components/search/SeminarsSearchPanel';
 
 type DifficultyLevel = 'Beginner' | 'Intermediate' | 'Advanced' | 'All Levels';
 
@@ -326,13 +326,19 @@ const SeminarsPage = () => {
   const [locationFilter, setLocationFilter] = useState<'all' | 'virtual' | 'in-person'>('all');
   const [sortOrder, setSortOrder] = useState<'popular' | 'recent' | 'price-low' | 'price-high'>('popular');
   const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+  const [isSearchPanelOpen, setIsSearchPanelOpen] = useState(false);
   
   const { toast } = useToast();
+
+  const categories = [
+    'All Seminars', 'Development', 'Design', 'AI & Machine Learning', 
+    'Management', 'Data Science', 'DevOps', 'Cybersecurity', 
+    'Blockchain', 'Cloud Computing', 'Mobile Development'
+  ];
 
   useEffect(() => {
     let filtered = [...SEMINARS_DATA];
     
-    // Apply search filter
     if (searchQuery.trim() !== '') {
       const lowercasedQuery = searchQuery.toLowerCase();
       filtered = filtered.filter(
@@ -343,7 +349,6 @@ const SeminarsPage = () => {
       );
     }
     
-    // Apply category filter
     if (activeCategory !== 'all') {
       filtered = filtered.filter(
         seminar => 
@@ -352,21 +357,18 @@ const SeminarsPage = () => {
       );
     }
     
-    // Apply price filter
     if (priceFilter === 'free') {
       filtered = filtered.filter(seminar => seminar.price === 0);
     } else if (priceFilter === 'paid') {
       filtered = filtered.filter(seminar => seminar.price > 0);
     }
     
-    // Apply difficulty filter
     if (difficultyFilter.length > 0) {
       filtered = filtered.filter(seminar => 
         difficultyFilter.includes(seminar.difficultyLevel || 'All Levels')
       );
     }
     
-    // Apply location filter
     if (locationFilter === 'virtual') {
       filtered = filtered.filter(seminar => 
         seminar.location.toLowerCase().includes('virtual')
@@ -377,18 +379,15 @@ const SeminarsPage = () => {
       );
     }
     
-    // Apply favorites filter
     if (showOnlyFavorites) {
       filtered = filtered.filter(seminar => 
         savedSeminars.includes(seminar.id)
       );
     }
     
-    // Apply sorting
     filtered.sort((a, b) => {
       switch (sortOrder) {
         case 'recent':
-          // This is a mock sorting based on dates
           return new Date(b.date).getTime() - new Date(a.date).getTime();
         case 'price-low':
           return a.price - b.price;
@@ -452,198 +451,98 @@ const SeminarsPage = () => {
 
   const categoryFilteredSeminars = filteredSeminars;
 
+  const handleOpenSearchPanel = () => {
+    setIsSearchPanelOpen(true);
+  };
+
+  const handleCloseSearchPanel = () => {
+    setIsSearchPanelOpen(false);
+  };
+
+  const handleApplyFilters = (filters: any) => {
+    if (filters.priceFilter) setPriceFilter(filters.priceFilter);
+    if (filters.difficultyFilter) setDifficultyFilter(filters.difficultyFilter);
+    if (filters.locationFilter) setLocationFilter(filters.locationFilter);
+  };
+
+  const handleSelectCategory = (category: string) => {
+    if (category === 'All Seminars') {
+      setActiveCategory('all');
+    } else {
+      setActiveCategory(category.toLowerCase());
+    }
+  };
+
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
-      <div className="my-8">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Explore Seminars & Workshops</h1>
-          
-          <div className="flex items-center gap-2">
-            <div className="relative w-full sm:w-64">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+    <div className="max-w-7xl mx-auto pb-6">
+      <div className="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
+        <div className="px-4 py-3">
+          <div className="flex items-center justify-between gap-4">
+            <div className="relative w-full max-w-lg" onClick={handleOpenSearchPanel}>
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
               <Input
                 type="text"
-                placeholder="Search seminars..."
-                className="pl-9 h-9"
+                placeholder="Search seminars, workshops, and courses..."
+                className="w-full pl-10 pr-3 cursor-pointer"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                readOnly
               />
             </div>
             
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" size="sm" className="h-9 gap-1">
-                  <SlidersHorizontal className="h-4 w-4" />
-                  <span className="hidden sm:inline">Filters</span>
-                  {(priceFilter !== 'all' || difficultyFilter.length > 0 || locationFilter !== 'all') && (
-                    <Badge variant="secondary" className="ml-1 h-5 px-1">
-                      {(priceFilter !== 'all' ? 1 : 0) + 
-                      (difficultyFilter.length > 0 ? 1 : 0) + 
-                      (locationFilter !== 'all' ? 1 : 0)}
-                    </Badge>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-72 p-4" align="end">
-                <h3 className="font-medium mb-3">Filter Seminars</h3>
-                
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="text-sm font-medium mb-2">Price</h4>
-                    <div className="grid grid-cols-3 gap-2">
-                      <Button 
-                        variant={priceFilter === 'all' ? "default" : "outline"} 
-                        size="sm"
-                        className="w-full text-xs h-8" 
-                        onClick={() => setPriceFilter('all')}
-                      >
-                        All
-                      </Button>
-                      <Button 
-                        variant={priceFilter === 'free' ? "default" : "outline"} 
-                        size="sm"
-                        className="w-full text-xs h-8" 
-                        onClick={() => setPriceFilter('free')}
-                      >
-                        Free
-                      </Button>
-                      <Button 
-                        variant={priceFilter === 'paid' ? "default" : "outline"} 
-                        size="sm"
-                        className="w-full text-xs h-8" 
-                        onClick={() => setPriceFilter('paid')}
-                      >
-                        Paid
-                      </Button>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h4 className="text-sm font-medium mb-2">Difficulty</h4>
-                    <div className="grid grid-cols-2 gap-2">
-                      {['Beginner', 'Intermediate', 'Advanced', 'All Levels'].map((level) => (
-                        <Button 
-                          key={level}
-                          variant={difficultyFilter.includes(level) ? "default" : "outline"} 
-                          size="sm"
-                          className="w-full text-xs h-8" 
-                          onClick={() => toggleDifficultyFilter(level)}
-                        >
-                          {level}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h4 className="text-sm font-medium mb-2">Location</h4>
-                    <div className="grid grid-cols-3 gap-2">
-                      <Button 
-                        variant={locationFilter === 'all' ? "default" : "outline"} 
-                        size="sm"
-                        className="w-full text-xs h-8" 
-                        onClick={() => setLocationFilter('all')}
-                      >
-                        All
-                      </Button>
-                      <Button 
-                        variant={locationFilter === 'virtual' ? "default" : "outline"} 
-                        size="sm"
-                        className="w-full text-xs h-8" 
-                        onClick={() => setLocationFilter('virtual')}
-                      >
-                        Virtual
-                      </Button>
-                      <Button 
-                        variant={locationFilter === 'in-person' ? "default" : "outline"} 
-                        size="sm"
-                        className="w-full text-xs h-8" 
-                        onClick={() => setLocationFilter('in-person')}
-                      >
-                        In-person
-                      </Button>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="favorites-only" className="text-sm font-medium cursor-pointer">
-                        Show favorites only
-                      </Label>
-                      <Switch 
-                        id="favorites-only" 
-                        checked={showOnlyFavorites}
-                        onCheckedChange={setShowOnlyFavorites}
-                      />
-                    </div>
-                  </div>
-                  
-                  <Separator />
-                  
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={clearAllFilters}
-                    className="w-full"
-                  >
-                    Clear All Filters
+            <div className="flex items-center gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="h-9 gap-1">
+                    <TrendingUp className="h-4 w-4" />
+                    <span className="hidden sm:inline">Sort</span>
                   </Button>
-                </div>
-              </PopoverContent>
-            </Popover>
-            
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="h-9 gap-1">
-                  <TrendingUp className="h-4 w-4" />
-                  <span className="hidden sm:inline">Sort</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuRadioGroup value={sortOrder} onValueChange={(value) => setSortOrder(value as any)}>
-                  <DropdownMenuRadioItem value="popular">
-                    <Users className="h-4 w-4 mr-2" /> Most Popular
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="recent">
-                    <Calendar className="h-4 w-4 mr-2" /> Most Recent
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="price-low">
-                    <ArrowRight className="h-4 w-4 mr-2 rotate-90" /> Price: Low to High
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="price-high">
-                    <ArrowRight className="h-4 w-4 mr-2 -rotate-90" /> Price: High to Low
-                  </DropdownMenuRadioItem>
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button 
-                    variant="outline" 
-                    size="icon" 
-                    className="h-9 w-9"
-                    onClick={() => setViewMode(viewMode === 'grid' ? 'compact' : 'grid')}
-                  >
-                    {viewMode === 'grid' ? (
-                      <Tag className="h-4 w-4" />
-                    ) : (
-                      <LayoutGrid className="h-4 w-4" />
-                    )}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Toggle {viewMode === 'grid' ? 'Compact' : 'Grid'} View</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuRadioGroup value={sortOrder} onValueChange={(value) => setSortOrder(value as any)}>
+                    <DropdownMenuRadioItem value="popular">
+                      <Users className="h-4 w-4 mr-2" /> Most Popular
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="recent">
+                      <Calendar className="h-4 w-4 mr-2" /> Most Recent
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="price-low">
+                      <ArrowRight className="h-4 w-4 mr-2 rotate-90" /> Price: Low to High
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="price-high">
+                      <ArrowRight className="h-4 w-4 mr-2 -rotate-90" /> Price: High to Low
+                    </DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      size="icon" 
+                      className="h-9 w-9"
+                      onClick={() => setViewMode(viewMode === 'grid' ? 'compact' : 'grid')}
+                    >
+                      {viewMode === 'grid' ? (
+                        <Tag className="h-4 w-4" />
+                      ) : (
+                        <LayoutGrid className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Toggle {viewMode === 'grid' ? 'Compact' : 'Grid'} View</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </div>
         </div>
         
-        <div className="mb-8">
+        <div className="px-4 overflow-x-auto">
           <Tabs defaultValue="all" className="w-full">
-            <TabsList className="mb-4 overflow-x-auto flex py-2 w-full justify-start gap-1">
+            <TabsList className="mb-2 overflow-x-auto flex py-2 w-full justify-start gap-1">
               <TabsTrigger value="all" onClick={() => setActiveCategory('all')}>
                 All Seminars
               </TabsTrigger>
@@ -665,7 +564,9 @@ const SeminarsPage = () => {
             </TabsList>
           </Tabs>
         </div>
-        
+      </div>
+
+      <div className="px-4 mt-6">
         {searchQuery.trim() !== '' || activeCategory !== 'all' || priceFilter !== 'all' || difficultyFilter.length > 0 || locationFilter !== 'all' || showOnlyFavorites ? (
           <div className="mb-12">
             <div className="flex items-center justify-between mb-4">
@@ -730,32 +631,32 @@ const SeminarsPage = () => {
                 <div className="flex items-center">
                   <Flame className="h-5 w-5 text-orange-500 mr-2" />
                   <h2 className="text-xl font-bold text-gray-900">Featured Seminars</h2>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-sm"
+                    onClick={() => toggleSectionVisibility('featured')}
+                  >
+                    {visibleSections.featured ? 'Hide Section' : 'Show Section'}
+                  </Button>
                 </div>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="text-sm"
-                  onClick={() => toggleSectionVisibility('featured')}
-                >
-                  {visibleSections.featured ? 'Hide Section' : 'Show Section'}
-                </Button>
+                
+                {visibleSections.featured && (
+                  <ScrollArea className="w-full whitespace-nowrap pb-4">
+                    <div className="flex space-x-4 pb-4">
+                      {FEATURED_SEMINARS.map(seminar => (
+                        <SeminarCard
+                          key={seminar.id}
+                          {...seminar}
+                          isSaved={savedSeminars.includes(seminar.id)}
+                          onToggleSave={handleToggleSave}
+                        />
+                      ))}
+                    </div>
+                    <ScrollBar orientation="horizontal" />
+                  </ScrollArea>
+                )}
               </div>
-              
-              {visibleSections.featured && (
-                <ScrollArea className="w-full whitespace-nowrap pb-4">
-                  <div className="flex space-x-4 pb-4">
-                    {FEATURED_SEMINARS.map(seminar => (
-                      <SeminarCard
-                        key={seminar.id}
-                        {...seminar}
-                        isSaved={savedSeminars.includes(seminar.id)}
-                        onToggleSave={handleToggleSave}
-                      />
-                    ))}
-                  </div>
-                  <ScrollBar orientation="horizontal" />
-                </ScrollArea>
-              )}
             </div>
             
             <div className="mb-12">
@@ -974,6 +875,16 @@ const SeminarsPage = () => {
           </>
         )}
       </div>
+
+      <SeminarsSearchPanel 
+        isOpen={isSearchPanelOpen}
+        onClose={handleCloseSearchPanel}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        categories={categories}
+        onSelectCategory={handleSelectCategory}
+        onApplyFilters={handleApplyFilters}
+      />
     </div>
   );
   
@@ -992,7 +903,6 @@ const SeminarsPage = () => {
 
 export default SeminarsPage;
 
-// Create a new component for the compact seminar card view
 interface CompactSeminarCardProps {
   id: string;
   title: string;
@@ -1124,7 +1034,6 @@ const CompactSeminarCard: React.FC<CompactSeminarCardProps> = ({
   );
 };
 
-// For the missing LayoutGrid component
 const LayoutGrid = ({ className }: { className?: string }) => {
   return (
     <svg 
@@ -1146,4 +1055,3 @@ const LayoutGrid = ({ className }: { className?: string }) => {
     </svg>
   );
 };
-
