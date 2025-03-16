@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { SeminarCard, SeminarCardProps } from './SeminarCard';
 import { cn } from '@/lib/utils';
@@ -21,7 +22,7 @@ export function SeminarMasonryGrid({
   return (
     <div className={cn("w-full", className)}>
       {/* Mobile: One column */}
-      <div className="grid grid-cols-1 gap-4 sm:hidden">
+      <div className="grid grid-cols-1 gap-6 sm:hidden">
         {seminars.map((seminar) => (
           <SeminarCard
             key={seminar.id}
@@ -32,8 +33,8 @@ export function SeminarMasonryGrid({
       </div>
 
       {/* Tablet: Two columns staggered layout */}
-      <div className="hidden sm:grid md:hidden grid-cols-2 gap-4">
-        <div className="space-y-4">
+      <div className="hidden sm:grid md:hidden grid-cols-2 gap-6">
+        <div className="space-y-6">
           {getColumnSeminars(0, 2).map((seminar) => (
             <SeminarCard
               key={seminar.id}
@@ -42,7 +43,7 @@ export function SeminarMasonryGrid({
             />
           ))}
         </div>
-        <div className="space-y-4 mt-8">
+        <div className="space-y-6 mt-10">
           {getColumnSeminars(1, 2).map((seminar) => (
             <SeminarCard
               key={seminar.id}
@@ -54,7 +55,7 @@ export function SeminarMasonryGrid({
       </div>
 
       {/* Desktop: Multi-column puzzle-like layout */}
-      <div className="hidden md:grid gap-4 lg:gap-5" 
+      <div className="hidden md:grid gap-6 lg:gap-8" 
            style={{ 
              gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
              gridAutoRows: "10px"
@@ -66,7 +67,7 @@ export function SeminarMasonryGrid({
           return (
             <div key={seminar.id} 
                  style={{ gridRowEnd: `span ${spanRows}` }} 
-                 className="overflow-hidden">
+                 className="overflow-hidden transform hover:-translate-y-1 transition-transform duration-200">
               <SeminarCard
                 {...seminar}
                 onToggleSave={onSaveSeminar}

@@ -25,14 +25,14 @@ export function SeminarSectionHeading({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {icon && <div className="text-primary">{icon}</div>}
-          <h2 className="text-lg font-bold text-gray-900">{title}</h2>
+          <h2 className="text-xl font-bold text-gray-900">{title}</h2>
         </div>
         
         {actionText && onAction && (
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
-            className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+            className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 border-blue-200"
             onClick={onAction}
           >
             {actionText}
@@ -41,7 +41,7 @@ export function SeminarSectionHeading({
       </div>
       
       {subtitle && (
-        <p className="text-sm text-gray-500 mt-0.5">{subtitle}</p>
+        <p className="text-sm text-gray-500 mt-1.5 max-w-xl">{subtitle}</p>
       )}
     </div>
   );

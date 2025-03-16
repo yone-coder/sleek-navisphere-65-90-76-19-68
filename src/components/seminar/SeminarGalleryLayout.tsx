@@ -25,14 +25,14 @@ export function SeminarGalleryLayout({
   className
 }: SeminarGalleryLayoutProps) {
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn("w-full space-y-8", className)}>
       {/* Featured row */}
-      <div className="my-4 w-full">
+      <div className="w-full">
         <div className="px-4 md:px-6 lg:px-8">
           <SeminarSectionHeading 
             title="Featured Seminars" 
             subtitle="Discover our top picks for this month"
-            icon={<Award className="h-5 w-5" />}
+            icon={<Award className="h-5 w-5 text-amber-500" />}
             className="mb-4"
           />
         </div>
@@ -46,12 +46,12 @@ export function SeminarGalleryLayout({
       </div>
 
       {/* Upcoming row */}
-      <div className="mt-6 w-full">
+      <div className="w-full">
         <div className="px-4 md:px-6 lg:px-8">
           <SeminarSectionHeading 
             title="Upcoming Seminars" 
             subtitle="Don't miss these events coming soon"
-            icon={<Calendar className="h-5 w-5" />}
+            icon={<Calendar className="h-5 w-5 text-blue-500" />}
             className="mb-4" 
           />
         </div>
@@ -65,12 +65,12 @@ export function SeminarGalleryLayout({
       </div>
 
       {/* Popular row */}
-      <div className="mt-6 w-full">
+      <div className="w-full">
         <div className="px-4 md:px-6 lg:px-8">
           <SeminarSectionHeading 
             title="Trending Seminars" 
             subtitle="Most popular among our users"
-            icon={<TrendingUp className="h-5 w-5" />}
+            icon={<TrendingUp className="h-5 w-5 text-rose-500" />}
             className="mb-4"
           />
         </div>
@@ -84,19 +84,20 @@ export function SeminarGalleryLayout({
       </div>
 
       {/* All seminars in masonry grid */}
-      <div className="mt-10 px-4 md:px-6 lg:px-8">
+      <div className="mt-12 px-4 md:px-6 lg:px-8">
         <SeminarSectionHeading 
           title="Explore All Seminars" 
           subtitle="Discover seminars tailored to your interests"
-          icon={<Zap className="h-5 w-5" />}
+          icon={<Zap className="h-5 w-5 text-purple-500" />}
           actionText="Filter"
           onAction={() => console.log("Filter clicked")}
+          className="mb-6"
         />
         
         <SeminarMasonryGrid 
           seminars={allSeminars}
           onSaveSeminar={onSaveSeminar}
-          className="mt-6"
+          className="mt-4"
         />
       </div>
     </div>
