@@ -1,14 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { Chessboard } from 'react-chessboard';
-import { Button } from "@/components/ui/button";
 import io from 'socket.io-client';
 
-// Replace with your Render backend URL or use localhost for development
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001';
+// Backend URL set to your Render deployment
+const BACKEND_URL = 'https://chess-backend-jlvx.onrender.com';
 const socket = io(BACKEND_URL);
 
-const ChessGame = () => {
+function ChessGame() {
   const [roomId, setRoomId] = useState<string | null>(null);           // Current room ID
   const [color, setColor] = useState<'white' | 'black' | null>(null);  // Player's color (white/black)
   const [fen, setFen] = useState('start');                             // Chessboard position (FEN)
@@ -122,105 +121,83 @@ const ChessGame = () => {
       }
     : {};
 
+  // Inline styles for basic layout and responsiveness
+  const containerStyle = {
+    maxWidth: '600px',
+    margin: '0 auto',
+    padding: '20px',
+    fontFamily: 'Arial, sans-serif',
+  };
+
+  const buttonStyle = {
+    padding: '10px 20px',
+    margin: '5px',
+    cursor: 'pointer',
+    backgroundColor: '#4CAF50',
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+  };
+
+  const errorStyle = {
+    color: 'red',
+    marginBottom: '10px',
+    textAlign: 'center',
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 pt-16 pb-24">
-      <div className="container mx-auto px-4">
-        <div className="max-w-2xl mx-auto">
-          <h1 className="text-3xl font-bold text-center mb-4">Chess Game</h1>
-          
-          {errorMessage && (
-            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-center">
-              {errorMessage}
-            </div>
+    <div style={containerStyle}>
+      {errorMessage && <div style={errorStyle}>{errorMessage}</div>}
+      {!roomId ? (
+        <div>
+          <button style={buttonStyle} onClick={createRoom}>
+            Create New Game
+          </button>
+          <div style={{ marginTop: '10px' }}>
+            <input
+              type="text"
+              placeholder="Enter Room ID"
+              value={joinId}
+              onChange={(e) => setJoinId(e.target.value)}
+              style={{ padding: '8px', marginRight: '10px', borderRadius: '4px' }}
+            />
+            <button style={buttonStyle} onClick={joinRoom}>
+              Join Game
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div>
+          <p>
+            <strong>Room ID:</strong> {roomId}
+          </p>
+          <p>
+            <strong>You are:</strong> {color}
+          </p>
+          {gameStatus === 'waitingForOpponent' && (
+            <p>Waiting for opponent to join...</p>
           )}
-          
-          {!roomId ? (
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-xl font-semibold mb-4 text-center">Join or Create a Game</h2>
-              
-              <Button onClick={createRoom} className="w-full mb-4">
-                Create New Game
-              </Button>
-              
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Enter Room ID"
-                  value={joinId}
-                  onChange={(e) => setJoinId(e.target.value)}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <Button onClick={joinRoom}>
-                  Join Game
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <div className="mb-4 bg-white p-4 rounded-lg shadow-md">
-                <div className="flex flex-col md:flex-row md:justify-between gap-2">
-                  <p>
-                    <strong>Room ID:</strong> {roomId}
-                  </p>
-                  <p>
-                    <strong>You are:</strong> {color}
-                  </p>
-                </div>
-                
-                {gameStatus === 'waitingForOpponent' && (
-                  <div className="mt-2 text-amber-600 bg-amber-50 p-2 rounded-md">
-                    <p className="text-center">Waiting for opponent to join...</p>
-                  </div>
-                )}
-                
-                {gameStatus === 'playing' && (
-                  <p className="mt-2 text-center font-medium">
-                    It's {turn}'s turn {isMyTurn ? '(your turn)' : ''}
-                  </p>
-                )}
-                
-                {gameStatus === 'gameOver' && (
-                  <p className="mt-2 text-center font-medium text-blue-600">
-                    Game over: {result}
-                  </p>
-                )}
-                
-                {gameStatus === 'opponentDisconnected' && (
-                  <p className="mt-2 text-center text-red-600">
-                    Opponent disconnected. Game over.
-                  </p>
-                )}
-              </div>
-              
-              <div className="bg-white p-4 rounded-lg shadow-lg mb-4">
-                <Chessboard
-                  position={fen}
-                  onPieceDrop={onDrop}
-                  boardOrientation={color || 'white'}
-                  arePiecesDraggable={Boolean(isMyTurn)}
-                  customSquareStyles={squareStyles}
-                  customBoardStyle={{
-                    borderRadius: '4px',
-                    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)'
-                  }}
-                />
-              </div>
-              
-              {gameStatus === 'playing' && (
-                <div className="text-center">
-                  <Button 
-                    variant="destructive" 
-                    onClick={resign} 
-                    className="mt-2"
-                  >
-                    Resign
-                  </Button>
-                </div>
-              )}
-            </div>
+          {gameStatus === 'playing' && <p>It's {turn}'s turn</p>}
+          {gameStatus === 'gameOver' && <p>Game over: {result}</p>}
+          {gameStatus === 'opponentDisconnected' && (
+            <p>Opponent disconnected. Game over.</p>
+          )}
+          {gameStatus === 'playing' && (
+            <Chessboard
+              position={fen}
+              onPieceDrop={onDrop}
+              boardOrientation={color as 'white' | 'black'}
+              arePiecesDraggable={Boolean(isMyTurn)}
+              customSquareStyles={squareStyles}
+            />
+          )}
+          {gameStatus === 'playing' && (
+            <button style={{ ...buttonStyle, backgroundColor: '#f44336' }} onClick={resign}>
+              Resign
+            </button>
           )}
         </div>
-      </div>
+      )}
     </div>
   );
 }
