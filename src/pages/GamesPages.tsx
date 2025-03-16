@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate, Routes, Route } from "react-router-dom";
 import { GameSearchOverlay } from "@/components/search/GameSearchOverlay";
@@ -7,7 +6,7 @@ import GamesExplore from "./games/GamesExplore";
 import ContestsPage from "./games/ContestsPage";
 import Morpion from "./games/Morpion";
 import Gomoku from "./games/Gomoku";
-import Chess from "./games/Chess";
+import ChessGame from "./games/ChessGame";
 import GamesHeader from "@/components/games/pages/GamesHeader";
 import EventsSection from "@/components/games/pages/EventsSection";
 import SponsoredGames from "@/components/games/pages/SponsoredGames";
@@ -24,7 +23,6 @@ export default function GamesPages() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Simulate loading state
   React.useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -73,7 +71,7 @@ export default function GamesPages() {
         <Route path="/contest/*" element={<ContestsPage />} />
         <Route path="/morpion" element={<Morpion />} />
         <Route path="/gomoku" element={<Gomoku />} />
-        <Route path="/chess" element={<Chess />} />
+        <Route path="/chess" element={<ChessGame />} />
       </Routes>
 
       <GamesBottomNav />

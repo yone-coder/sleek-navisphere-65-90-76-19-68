@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
@@ -28,6 +27,7 @@ const Tournaments = lazy(() => import("./pages/Tournaments"));
 const TournamentDetails = lazy(() => import("./pages/TournamentDetails"));
 const Gomoku = lazy(() => import("./pages/games/Gomoku"));
 const Morpion = lazy(() => import("./pages/games/Morpion"));
+const ChessGame = lazy(() => import("./pages/games/ChessGame"));
 const MatchDetails = lazy(() => import("./pages/MatchDetails"));
 const Marketplace = lazy(() => import("./pages/Marketplace"));
 const ProductDetails = lazy(() => import("./pages/ProductDetails"));
@@ -64,7 +64,6 @@ const LoadingFallback = () => (
   </div>
 );
 
-// Initialize QueryClient outside of the component
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -102,7 +101,7 @@ const AppContent = () => {
           <Route path="/games/morpion-details" element={<GameDetails />} />
           <Route path="/games/morpion" element={<Morpion />} />
           <Route path="/games/gomoku" element={<Gomoku />} />
-          <Route path="/games/chess" element={<Chess />} />
+          <Route path="/games/chess" element={<ChessGame />} />
           <Route path="/games/winnr" element={<Navigate to="/games" replace />} />
           <Route path="/feeds" element={<Feeds />} />
           <Route path="/profile" element={<Profile />} />
@@ -124,7 +123,6 @@ const AppContent = () => {
           <Route path="/shopr-seller" element={<ShopSeller />} />
           <Route path="/borlette" element={<Borlette />} />
           
-          {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="banners" element={<AdminBanners />} />
@@ -145,7 +143,6 @@ const AppContent = () => {
   );
 };
 
-// Root component where we set up providers
 const Root = () => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -160,7 +157,6 @@ const Root = () => {
   );
 };
 
-// Main App component
 const App = () => {
   return (
     <React.StrictMode>

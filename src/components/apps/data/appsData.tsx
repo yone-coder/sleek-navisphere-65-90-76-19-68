@@ -4,6 +4,19 @@ import type { App, AppCategory } from "../types";
 
 export const apps: App[] = [
   {
+    name: "Chess",
+    description: "Play real-time chess games with friends",
+    icon: Gamepad2,
+    route: "/games/chess",
+    color: "bg-slate-800",
+    category: "Gaming",
+    status: "new",
+    users: "3.2K+",
+    lastUsed: "Just now",
+    rating: 4.9,
+    updates: 2
+  },
+  {
     name: "Borlette",
     description: "Play lottery games from different states",
     icon: Ticket,
