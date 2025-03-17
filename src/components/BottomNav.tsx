@@ -1,5 +1,5 @@
 
-import { Home, ChevronRight, Clock, Wallet } from 'lucide-react';
+import { Home, ChevronRight, Clock, CreditCard, Wallet, AppWindow, Gamepad2, ShoppingBag, Book, BookType } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -20,6 +20,29 @@ export const BottomNav = () => {
     return null;
   }
 
+  // Determine which wallet icon to show based on the current route
+  const getWalletIcon = () => {
+    if (location.pathname.includes('marketplace')) {
+      return ShoppingBag;
+    } else if (location.pathname.includes('games') || 
+               location.pathname.includes('tournament') ||
+               location.pathname.includes('morpion')) {
+      return Gamepad2;
+    } else if (location.pathname.includes('seminar') || 
+               location.pathname.includes('borlette')) {
+      return Book;
+    } else if (location.pathname.includes('story')) {
+      return BookType;
+    } else if (location.pathname.includes('deposit')) {
+      return CreditCard;
+    } else {
+      return Wallet;
+    }
+  };
+
+  // Get the appropriate icon component
+  const WalletIcon = getWalletIcon();
+
   const navItems = [
     { 
       icon: Home, 
@@ -28,7 +51,7 @@ export const BottomNav = () => {
       color: 'from-blue-500 to-indigo-500'
     },
     { 
-      icon: Wallet, 
+      icon: WalletIcon, 
       label: 'Wallet', 
       path: '/wallet',
       color: 'from-violet-500 to-purple-500'
