@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
@@ -79,10 +80,10 @@ const queryClient = new QueryClient({
 
 const AppContent = () => {
   const location = useLocation();
-  const hideBottomNavRoutes = ['/marketplace', '/games/', '/landing', '/seminar', '/seminars', '/shopr-seller', '/borlette', '/deposit', '/simple-deposit'];
   const isAdminRoute = location.pathname.startsWith('/admin');
-  const shouldShowBottomNav = !isAdminRoute && 
-    !hideBottomNavRoutes.some(route => location.pathname.startsWith(route));
+  
+  // Show bottom nav on all routes except admin
+  const shouldShowBottomNav = !isAdminRoute;
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
