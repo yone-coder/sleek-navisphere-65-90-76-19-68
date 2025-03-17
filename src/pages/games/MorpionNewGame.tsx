@@ -1,20 +1,21 @@
+
 import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 
 function MorpionNewGame() {
-  const [socket, setSocket] = useState(null);
-  const [roomId, setRoomId] = useState(null);
-  const [player, setPlayer] = useState(null);
-  const [board, setBoard] = useState(Array(50).fill().map(() => Array(50).fill(null)));
-  const [turn, setTurn] = useState('X');
-  const [winner, setWinner] = useState(null);
-  const [lastMove, setLastMove] = useState(null);
-  const [status, setStatus] = useState('Create or Join a Game');
-  const [joinRoomId, setJoinRoomId] = useState('');
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [gameStarted, setGameStarted] = useState(false);
-  const [showPopup, setShowPopup] = useState(false); // Controls popup visibility
-  const [popupMessage, setPopupMessage] = useState(''); // Popup message content
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [roomId, setRoomId] = useState<string | null>(null);
+  const [player, setPlayer] = useState<string | null>(null);
+  const [board, setBoard] = useState<(string | null)[][]>(Array(50).fill(null).map(() => Array(50).fill(null)));
+  const [turn, setTurn] = useState<string>('X');
+  const [winner, setWinner] = useState<string | null>(null);
+  const [lastMove, setLastMove] = useState<{x: number, y: number} | null>(null);
+  const [status, setStatus] = useState<string>('Create or Join a Game');
+  const [joinRoomId, setJoinRoomId] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [gameStarted, setGameStarted] = useState<boolean>(false);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [popupMessage, setPopupMessage] = useState<string>('');
 
   useEffect(() => {
     const newSocket = io('https://morpion-backend.onrender.com'); // Replace with your backend URL
@@ -61,7 +62,7 @@ function MorpionNewGame() {
       setShowPopup(true);
       setRoomId(null);
       setPlayer(null);
-      setBoard(Array(50).fill().map(() => Array(50).fill(null)));
+      setBoard(Array(50).fill(null).map(() => Array(50).fill(null)));
       setTurn('X');
       setWinner(null);
       setLastMove(null);
@@ -76,20 +77,22 @@ function MorpionNewGame() {
     return () => newSocket.disconnect();
   }, []);
 
-  const createRoom = () => socket.emit('createRoom');
-  const joinRoom = () => joinRoomId ? socket.emit('joinRoom', joinRoomId) : setErrorMessage('Enter a Room ID');
-  const makeMove = (x, y) => player === turn && !board[x][y] && !winner && gameStarted && socket.emit('move', { roomId, x, y });
-  const resign = () => window.confirm('Are you sure you want to resign?') && socket.emit('resign', roomId);
+  const createRoom = () => socket?.emit('createRoom');
+  const joinRoom = () => joinRoomId ? socket?.emit('joinRoom', joinRoomId) : setErrorMessage('Enter a Room ID');
+  const makeMove = (x: number, y: number) => player === turn && !board[x][y] && !winner && gameStarted && socket?.emit('move', { roomId, x, y });
+  const resign = () => window.confirm('Are you sure you want to resign?') && socket?.emit('resign', roomId);
   const copyRoomId = () => {
-    navigator.clipboard.writeText(roomId);
-    setErrorMessage('Room ID copied!');
-    setTimeout(() => setErrorMessage(null), 2000);
+    if (roomId) {
+      navigator.clipboard.writeText(roomId);
+      setErrorMessage('Room ID copied!');
+      setTimeout(() => setErrorMessage(null), 2000);
+    }
   };
 
   const resetGame = () => {
     setRoomId(null);
     setPlayer(null);
-    setBoard(Array(50).fill().map(() => Array(50).fill(null)));
+    setBoard(Array(50).fill(null).map(() => Array(50).fill(null)));
     setTurn('X');
     setWinner(null);
     setLastMove(null);
@@ -98,7 +101,7 @@ function MorpionNewGame() {
     setShowPopup(false);
   };
 
-  const renderCell = (x, y) => {
+  const renderCell = (x: number, y: number) => {
     const isLastMove = lastMove && lastMove.x === x && lastMove.y === y;
     return (
       <div
@@ -174,8 +177,14 @@ function MorpionNewGame() {
                 boxShadow: '0 5px 15px rgba(255, 107, 107, 0.4)',
                 transition: 'transform 0.2s ease',
               }}
-              onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
-              onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+              onMouseEnter={(e) => {
+                const target = e.target as HTMLElement;
+                target.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={(e) => {
+                const target = e.target as HTMLElement;
+                target.style.transform = 'scale(1)';
+              }}
             >
               Create New Game
             </button>
@@ -211,8 +220,14 @@ function MorpionNewGame() {
                   boxShadow: '0 5px 15px rgba(78, 205, 196, 0.4)',
                   transition: 'transform 0.2s ease',
                 }}
-                onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
-                onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                onMouseEnter={(e) => {
+                  const target = e.target as HTMLElement;
+                  target.style.transform = 'scale(1.05)';
+                }}
+                onMouseLeave={(e) => {
+                  const target = e.target as HTMLElement;
+                  target.style.transform = 'scale(1)';
+                }}
               >
                 Join Game
               </button>
@@ -236,8 +251,14 @@ function MorpionNewGame() {
                     cursor: 'pointer',
                     transition: 'background 0.3s ease',
                   }}
-                  onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.3)'}
-                  onMouseLeave={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.2)'}
+                  onMouseEnter={(e) => {
+                    const target = e.target as HTMLElement;
+                    target.style.background = 'rgba(255, 255, 255, 0.3)';
+                  }}
+                  onMouseLeave={(e) => {
+                    const target = e.target as HTMLElement;
+                    target.style.background = 'rgba(255, 255, 255, 0.2)';
+                  }}
                 >
                   Copy
                 </button>
@@ -275,8 +296,14 @@ function MorpionNewGame() {
                   boxShadow: '0 5px 15px rgba(255, 71, 87, 0.4)',
                   transition: 'transform 0.2s ease',
                 }}
-                onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
-                onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                onMouseEnter={(e) => {
+                  const target = e.target as HTMLElement;
+                  target.style.transform = 'scale(1.05)';
+                }}
+                onMouseLeave={(e) => {
+                  const target = e.target as HTMLElement;
+                  target.style.transform = 'scale(1)';
+                }}
               >
                 Resign
               </button>
@@ -322,8 +349,14 @@ function MorpionNewGame() {
                   boxShadow: '0 5px 15px rgba(255, 107, 107, 0.4)',
                   transition: 'transform 0.2s ease',
                 }}
-                onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
-                onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                onMouseEnter={(e) => {
+                  const target = e.target as HTMLElement;
+                  target.style.transform = 'scale(1.05)';
+                }}
+                onMouseLeave={(e) => {
+                  const target = e.target as HTMLElement;
+                  target.style.transform = 'scale(1)';
+                }}
               >
                 Start New Game
               </button>
