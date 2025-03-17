@@ -7,31 +7,31 @@
  * @returns The response from the function
  */
 export async function callEdgeFunction<T = any>(functionName: string, payload?: any): Promise<T> {
-  // Determine if we're in development or production
-  const isDevelopment = import.meta.env.DEV;
-  
-  // Local testing often uses a different port like 54321
-  const devUrl = 'http://localhost:54321/functions/v1';
-  
-  // Get the project URL from environment variables (if available)
+  // Always use the production URL when deployed
+  // Local development should use Supabase CLI for local testing
   const projectRef = import.meta.env.VITE_SUPABASE_PROJECT_REF || 'wkfzhcszhgewkvwukzes';
-  const prodUrl = `https://${projectRef}.functions.supabase.co`;
+  const baseUrl = `https://${projectRef}.functions.supabase.co`;
   
-  const baseUrl = isDevelopment ? devUrl : prodUrl;
-  
-  const response = await fetch(`${baseUrl}/${functionName}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: payload ? JSON.stringify(payload) : undefined,
-  });
-  
-  const data = await response.json();
-  
-  if (!response.ok) {
-    throw new Error(data.error || `Error calling ${functionName}`);
+  try {
+    const response = await fetch(`${baseUrl}/${functionName}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Add Authorization header if you're using Supabase Auth
+        // 'Authorization': `Bearer ${supabaseClient.auth.session()?.access_token}`,
+      },
+      body: payload ? JSON.stringify(payload) : undefined,
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Error calling ${functionName}: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error calling ${functionName}:`, error);
+    throw error;
   }
-  
-  return data;
 }

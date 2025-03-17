@@ -1,10 +1,12 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, AlertCircle } from "lucide-react";
 import { callEdgeFunction } from '@/utils/supabaseEdgeFunctions';
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const MonCashTest: React.FC = () => {
   const [amount, setAmount] = useState<string>("10");
@@ -12,10 +14,12 @@ const MonCashTest: React.FC = () => {
   const [paymentUrl, setPaymentUrl] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
   const getToken = async () => {
     setIsLoading(true);
+    setError(null);
     try {
       const data = await callEdgeFunction<{ accessToken: string }>('get-token');
       setAccessToken(data.accessToken);
@@ -23,8 +27,9 @@ const MonCashTest: React.FC = () => {
         title: "Success",
         description: "Access token obtained successfully",
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error getting token:', error);
+      setError(`Failed to get access token: ${error.message}`);
       toast({
         title: "Error",
         description: error.message || "Failed to get access token",
@@ -55,6 +60,7 @@ const MonCashTest: React.FC = () => {
     }
 
     setIsPaymentLoading(true);
+    setError(null);
     try {
       const data = await callEdgeFunction<{ paymentUrl: string }>('create-payment', { 
         accessToken, 
@@ -70,8 +76,9 @@ const MonCashTest: React.FC = () => {
       } else {
         throw new Error('No payment URL returned');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating payment:', error);
+      setError(`Failed to create payment: ${error.message}`);
       toast({
         title: "Error",
         description: error.message || "Failed to create payment",
@@ -90,6 +97,13 @@ const MonCashTest: React.FC = () => {
           <CardDescription>Test your MonCash Supabase Edge Functions</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          
           <div className="space-y-2">
             <h3 className="text-sm font-medium">Step 1: Get Access Token</h3>
             <Button 
@@ -153,8 +167,9 @@ const MonCashTest: React.FC = () => {
             )}
           </div>
         </CardContent>
-        <CardFooter className="border-t pt-4 text-xs text-gray-500">
-          Note: You need valid CLIENT_ID and CLIENT_SECRET environment variables set in your Supabase project.
+        <CardFooter className="border-t pt-4 flex flex-col items-start text-xs text-gray-500">
+          <p className="mb-2"><strong>Note:</strong> You need valid CLIENT_ID and CLIENT_SECRET environment variables set in your Supabase project.</p>
+          <p>Make sure to set these secrets in your Supabase dashboard under Project Settings → API → Edge Functions.</p>
         </CardFooter>
       </Card>
     </div>

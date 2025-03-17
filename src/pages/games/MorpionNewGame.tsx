@@ -18,9 +18,11 @@ function MorpionNewGame() {
   const [popupMessage, setPopupMessage] = useState<string>('');
 
   useEffect(() => {
+    // Create socket connection
     const newSocket = io('https://morpion-backend.onrender.com'); // Replace with your backend URL
     setSocket(newSocket);
 
+    // Setup socket event listeners
     newSocket.on('roomCreated', ({ roomId }) => {
       setRoomId(roomId);
       setPlayer('X');
@@ -74,13 +76,34 @@ function MorpionNewGame() {
       setTimeout(() => setErrorMessage(null), 3000);
     });
 
-    return () => newSocket.disconnect();
+    // Cleanup function
+    return () => {
+      newSocket.disconnect();
+    };
   }, []);
 
   const createRoom = () => socket?.emit('createRoom');
-  const joinRoom = () => joinRoomId ? socket?.emit('joinRoom', joinRoomId) : setErrorMessage('Enter a Room ID');
-  const makeMove = (x: number, y: number) => player === turn && !board[x][y] && !winner && gameStarted && socket?.emit('move', { roomId, x, y });
-  const resign = () => window.confirm('Are you sure you want to resign?') && socket?.emit('resign', roomId);
+  
+  const joinRoom = () => {
+    if (joinRoomId) {
+      socket?.emit('joinRoom', joinRoomId);
+    } else {
+      setErrorMessage('Enter a Room ID');
+    }
+  };
+  
+  const makeMove = (x: number, y: number) => {
+    if (player === turn && !board[x][y] && !winner && gameStarted) {
+      socket?.emit('move', { roomId, x, y });
+    }
+  };
+  
+  const resign = () => {
+    if (window.confirm('Are you sure you want to resign?')) {
+      socket?.emit('resign', roomId);
+    }
+  };
+  
   const copyRoomId = () => {
     if (roomId) {
       navigator.clipboard.writeText(roomId);
@@ -178,11 +201,11 @@ function MorpionNewGame() {
                 transition: 'transform 0.2s ease',
               }}
               onMouseEnter={(e) => {
-                const target = e.target as HTMLElement;
+                const target = e.currentTarget as HTMLElement;
                 target.style.transform = 'scale(1.05)';
               }}
               onMouseLeave={(e) => {
-                const target = e.target as HTMLElement;
+                const target = e.currentTarget as HTMLElement;
                 target.style.transform = 'scale(1)';
               }}
             >
@@ -221,11 +244,11 @@ function MorpionNewGame() {
                   transition: 'transform 0.2s ease',
                 }}
                 onMouseEnter={(e) => {
-                  const target = e.target as HTMLElement;
+                  const target = e.currentTarget as HTMLElement;
                   target.style.transform = 'scale(1.05)';
                 }}
                 onMouseLeave={(e) => {
-                  const target = e.target as HTMLElement;
+                  const target = e.currentTarget as HTMLElement;
                   target.style.transform = 'scale(1)';
                 }}
               >
@@ -252,11 +275,11 @@ function MorpionNewGame() {
                     transition: 'background 0.3s ease',
                   }}
                   onMouseEnter={(e) => {
-                    const target = e.target as HTMLElement;
+                    const target = e.currentTarget as HTMLElement;
                     target.style.background = 'rgba(255, 255, 255, 0.3)';
                   }}
                   onMouseLeave={(e) => {
-                    const target = e.target as HTMLElement;
+                    const target = e.currentTarget as HTMLElement;
                     target.style.background = 'rgba(255, 255, 255, 0.2)';
                   }}
                 >
@@ -297,11 +320,11 @@ function MorpionNewGame() {
                   transition: 'transform 0.2s ease',
                 }}
                 onMouseEnter={(e) => {
-                  const target = e.target as HTMLElement;
+                  const target = e.currentTarget as HTMLElement;
                   target.style.transform = 'scale(1.05)';
                 }}
                 onMouseLeave={(e) => {
-                  const target = e.target as HTMLElement;
+                  const target = e.currentTarget as HTMLElement;
                   target.style.transform = 'scale(1)';
                 }}
               >
@@ -350,11 +373,11 @@ function MorpionNewGame() {
                   transition: 'transform 0.2s ease',
                 }}
                 onMouseEnter={(e) => {
-                  const target = e.target as HTMLElement;
+                  const target = e.currentTarget as HTMLElement;
                   target.style.transform = 'scale(1.05)';
                 }}
                 onMouseLeave={(e) => {
-                  const target = e.target as HTMLElement;
+                  const target = e.currentTarget as HTMLElement;
                   target.style.transform = 'scale(1)';
                 }}
               >
