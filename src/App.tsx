@@ -50,6 +50,7 @@ const Borlette = lazy(() => import("./pages/Borlette"));
 const Seminars = lazy(() => import("./pages/Seminars"));
 const MonCashTest = lazy(() => import("./pages/MonCashTest"));
 const DepositPage = lazy(() => import("./pages/DepositPage"));
+const SimpleDepositPage = lazy(() => import("./pages/SimpleDepositPage"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen p-8 space-y-4">
@@ -78,7 +79,7 @@ const queryClient = new QueryClient({
 
 const AppContent = () => {
   const location = useLocation();
-  const hideBottomNavRoutes = ['/marketplace', '/games/', '/landing', '/seminar', '/seminars', '/shopr-seller', '/borlette', '/deposit'];
+  const hideBottomNavRoutes = ['/marketplace', '/games/', '/landing', '/seminar', '/seminars', '/shopr-seller', '/borlette', '/deposit', '/simple-deposit'];
   const isAdminRoute = location.pathname.startsWith('/admin');
   const shouldShowBottomNav = !isAdminRoute && 
     !hideBottomNavRoutes.some(route => location.pathname.startsWith(route));
@@ -128,6 +129,7 @@ const AppContent = () => {
           <Route path="/borlette" element={<Borlette />} />
           <Route path="/moncash-test" element={<MonCashTest />} />
           <Route path="/deposit" element={<DepositPage />} />
+          <Route path="/simple-deposit" element={<SimpleDepositPage />} />
           
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
