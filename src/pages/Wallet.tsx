@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -152,11 +151,11 @@ const WalletPage = () => {
                   {quickActions.map((action, index) => (
                     <motion.button
                       key={index}
-                      className="flex flex-col items-center justify-center p-3 bg-gray-900/70 rounded-xl border border-gray-800"
+                      className="flex flex-col items-center gap-1.5 p-2 rounded-xl transition-all duration-300"
                       whileTap={{ scale: 0.95 }}
                       onClick={action.action}
                     >
-                      <div className="h-10 w-10 rounded-full bg-purple-900/40 flex items-center justify-center mb-2">
+                      <div className="h-10 w-10 rounded-full bg-purple-900/40 flex items-center justify-center mb-1">
                         <action.icon className="h-5 w-5 text-purple-400" />
                       </div>
                       <span className="text-xs text-gray-300">{action.label}</span>
@@ -638,52 +637,4 @@ const WalletPage = () => {
                   </div>
                 </div>
                 
-                <Button variant="outline" className="w-full border-red-800 text-red-400 hover:bg-red-900/20 mt-6">
-                  <LogOut className="h-4 w-4 mr-2" /> Sign Out
-                </Button>
-              </div>
-            </div>
-          </TabsContent>
-          
-          {/* Bottom Navigation */}
-          <div className="fixed bottom-0 left-0 right-0 z-10 bg-black/90 backdrop-blur-lg border-t border-gray-800">
-            <TabsList className="w-full bg-transparent border-t border-gray-800">
-              <TabsTrigger value="home" className="flex-1 py-2 data-[state=active]:bg-transparent data-[state=active]:text-purple-400">
-                <div className="flex flex-col items-center">
-                  <Wallet className="h-5 w-5" />
-                  <span className="text-[10px] mt-1">Home</span>
-                </div>
-              </TabsTrigger>
-              <TabsTrigger value="activity" className="flex-1 py-2 data-[state=active]:bg-transparent data-[state=active]:text-purple-400">
-                <div className="flex flex-col items-center">
-                  <History className="h-5 w-5" />
-                  <span className="text-[10px] mt-1">Activity</span>
-                </div>
-              </TabsTrigger>
-              <TabsTrigger value="cards" className="flex-1 py-2 data-[state=active]:bg-transparent data-[state=active]:text-purple-400">
-                <div className="flex flex-col items-center">
-                  <CreditCard className="h-5 w-5" />
-                  <span className="text-[10px] mt-1">Cards</span>
-                </div>
-              </TabsTrigger>
-              <TabsTrigger value="stats" className="flex-1 py-2 data-[state=active]:bg-transparent data-[state=active]:text-purple-400">
-                <div className="flex flex-col items-center">
-                  <PieChart className="h-5 w-5" />
-                  <span className="text-[10px] mt-1">Stats</span>
-                </div>
-              </TabsTrigger>
-              <TabsTrigger value="profile" className="flex-1 py-2 data-[state=active]:bg-transparent data-[state=active]:text-purple-400">
-                <div className="flex flex-col items-center">
-                  <User className="h-5 w-5" />
-                  <span className="text-[10px] mt-1">Profile</span>
-                </div>
-              </TabsTrigger>
-            </TabsList>
-          </div>
-        </Tabs>
-      </main>
-    </div>
-  );
-};
-
-export default WalletPage;
+                <Button variant="outline" className="w-full border-red-800 text-red-400 hover:bg-red-9
