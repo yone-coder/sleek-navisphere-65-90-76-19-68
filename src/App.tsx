@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
@@ -49,6 +48,7 @@ const Seminar = lazy(() => import("./pages/Seminar"));
 const ShopSeller = lazy(() => import("./pages/ShopSeller"));
 const Borlette = lazy(() => import("./pages/Borlette"));
 const Seminars = lazy(() => import("./pages/Seminars"));
+const MonCashTest = lazy(() => import("./pages/MonCashTest"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen p-8 space-y-4">
@@ -125,6 +125,7 @@ const AppContent = () => {
           <Route path="/seminar/:id" element={<Seminar />} />
           <Route path="/shopr-seller" element={<ShopSeller />} />
           <Route path="/borlette" element={<Borlette />} />
+          <Route path="/moncash-test" element={<MonCashTest />} />
           
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
