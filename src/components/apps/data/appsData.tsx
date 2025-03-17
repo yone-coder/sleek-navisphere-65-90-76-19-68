@@ -4,6 +4,19 @@ import type { App, AppCategory } from "../types";
 
 export const apps: App[] = [
   {
+    name: "Wallet",
+    description: "Manage your finances, track spending, and make payments",
+    icon: Wallet,
+    route: "/wallet",
+    color: "bg-purple-600",
+    category: "Finance",
+    status: "new",
+    users: "8.5K+",
+    lastUsed: "Just now",
+    rating: 4.9,
+    updates: 2
+  },
+  {
     name: "Morpion New",
     description: "Play online Morpion with a large 50x50 board",
     icon: Gamepad2,

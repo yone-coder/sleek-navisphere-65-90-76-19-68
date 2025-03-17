@@ -1,5 +1,5 @@
 
-import { Home, ChevronRight, Clock } from 'lucide-react';
+import { Home, ChevronRight, Clock, Wallet } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -26,6 +26,12 @@ export const BottomNav = () => {
       label: t('nav.home'), 
       path: '/',
       color: 'from-blue-500 to-indigo-500'
+    },
+    { 
+      icon: Wallet, 
+      label: 'Wallet', 
+      path: '/wallet',
+      color: 'from-violet-500 to-purple-500'
     },
     { 
       icon: Clock, 
