@@ -52,6 +52,7 @@ const MonCashTest = lazy(() => import("./pages/MonCashTest"));
 const DepositPage = lazy(() => import("./pages/DepositPage"));
 const SimpleDepositPage = lazy(() => import("./pages/SimpleDepositPage"));
 const StoryPage = lazy(() => import("./components/story/StoryPage"));
+const Modish = lazy(() => import("./pages/Modish"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen p-8 space-y-4">
@@ -132,6 +133,9 @@ const AppContent = () => {
           <Route path="/deposit" element={<DepositPage />} />
           <Route path="/simple-deposit" element={<SimpleDepositPage />} />
           <Route path="/story" element={<StoryPage />} />
+          
+          <Route path="/modish" element={<Modish />} />
+          <Route path="/modish/:id" element={<Modish />} />
           
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />

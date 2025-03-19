@@ -1,8 +1,21 @@
 import React from 'react';
-import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe, Heart, Building, Presentation, UserPlus } from "lucide-react";
+import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe, Heart, Building, Presentation, UserPlus, Shirt } from "lucide-react";
 import type { App, AppCategory } from "../types";
 
 export const apps: App[] = [
+  {
+    name: "Modish",
+    description: "Premium fashion and furniture marketplace",
+    icon: Shirt,
+    route: "/modish",
+    color: "bg-slate-800",
+    category: "Shopping",
+    status: "new",
+    users: "3.2K+",
+    lastUsed: "Just now",
+    rating: 4.9,
+    updates: 2
+  },
   {
     name: "Wallet",
     description: "Manage your finances, track spending, and make payments",
@@ -402,6 +415,7 @@ export const apps: App[] = [
 export const appCategories = [
   "All",
   "Shopping",
+  "Fashion",
   "Finance",
   "Entertainment",
   "Gaming",
