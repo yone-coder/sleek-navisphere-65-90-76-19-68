@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Info, Design, Layers, Armchair, Sofa, ThumbsUp, Star, ShieldCheck, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Info, Layers, Armchair, ThumbsUp, Star, ShieldCheck, Check, Pencil, Settings, LayoutPanelTop } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -18,14 +17,15 @@ type ModishFeaturesProps = {
 };
 
 const iconMap = {
-  Design: Design,
+  Design: LayoutPanelTop,
   Layers: Layers,
   Armchair: Armchair,
-  Sofa: Sofa,
+  Sofa: Settings,
   ThumbsUp: ThumbsUp,
   Star: Star,
   ShieldCheck: ShieldCheck,
   Check: Check,
+  Pencil: Pencil,
 };
 
 const colorMap = {
@@ -75,12 +75,10 @@ export function ModishFeatures({ features }: ModishFeaturesProps) {
   const colors = colorMap[currentFeature.color as keyof typeof colorMap] || colorMap.blue;
   const IconComponent = iconMap[currentFeature.icon as keyof typeof iconMap] || Check;
   
-  // Effect to cycle through features every 5 seconds if not paused
   useEffect(() => {
     if (!isPaused) {
       const interval = setInterval(() => {
         setCurrentFeatureIndex((prevIndex) => (prevIndex + 1) % features.length);
-        // Auto-hide details when switching features
         setShowFeatureDetails(false);
       }, 5000);
       
@@ -132,7 +130,6 @@ export function ModishFeatures({ features }: ModishFeaturesProps) {
       >
         <div className={`absolute top-0 left-0 right-0 h-1 ${colors.accent} transition-all duration-300`}></div>
         
-        {/* Navigation arrows */}
         <button 
           onClick={goToPrevFeature} 
           className="absolute left-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center shadow-md z-10 hover:bg-white transition-all duration-200"
@@ -151,12 +148,10 @@ export function ModishFeatures({ features }: ModishFeaturesProps) {
         
         <CardContent className={`p-0 ${colors.bg} transition-all duration-300`}>
           <div className="p-6 text-center">
-            {/* Feature counter indicator */}
             <div className="absolute top-2 right-2 text-xs font-medium bg-white/90 rounded-full px-2 py-0.5 shadow-sm border border-gray-100">
               {currentFeatureIndex + 1}/{features.length}
             </div>
             
-            {/* Info/Details toggle button */}
             <button 
               onClick={toggleFeatureDetails}
               className={`absolute top-2 left-2 z-10 w-6 h-6 rounded-full flex items-center justify-center shadow-sm border border-gray-100 hover:bg-white transition-colors ${showFeatureDetails ? 'bg-gray-100' : 'bg-white/90'}`}
@@ -165,7 +160,6 @@ export function ModishFeatures({ features }: ModishFeaturesProps) {
               <Info className="w-3.5 h-3.5" />
             </button>
             
-            {/* Icon with background */}
             <div className={`mx-auto w-16 h-16 rounded-full ${colors.iconBg} flex items-center justify-center mb-3`}>
               <IconComponent className={`w-8 h-8 ${colors.icon}`} />
             </div>
@@ -173,7 +167,6 @@ export function ModishFeatures({ features }: ModishFeaturesProps) {
             <h3 className={`text-lg font-semibold ${colors.text} mb-1`}>{currentFeature.title}</h3>
             <p className="text-sm text-gray-600 mb-2">{currentFeature.description}</p>
             
-            {/* Expanded content */}
             {showFeatureDetails && (
               <div className="animate-fade-in mt-3">
                 <p className="text-sm text-gray-700 mb-3">{currentFeature.details}</p>
@@ -187,7 +180,6 @@ export function ModishFeatures({ features }: ModishFeaturesProps) {
             )}
           </div>
           
-          {/* Progress bar */}
           <div className="w-full h-1 bg-gray-200 overflow-hidden">
             <div 
               className={`h-full transition-all duration-300 ${colors.accent}`} 
@@ -197,7 +189,6 @@ export function ModishFeatures({ features }: ModishFeaturesProps) {
         </CardContent>
       </Card>
       
-      {/* Smaller feature list below the card for quick reference */}
       <div className="mt-4 space-y-1">
         {features.map((feature, index) => (
           <button
