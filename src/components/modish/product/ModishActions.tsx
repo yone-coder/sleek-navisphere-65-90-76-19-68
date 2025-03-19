@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
-import { Heart, Share2, MessageCircle, CreditCard, Truck, RefreshCw, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Heart, Share2, MessageCircle, CreditCard, Truck, RefreshCw, Clock, ChevronLeft, ChevronRight, ShieldCheck, Info, Tag } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
 import ModishCommentPanel from './ModishCommentPanel';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { Card, CardContent } from '@/components/ui/card';
 
 type ModishActionsProps = {
   product: any;
@@ -13,28 +14,67 @@ type ModishActionsProps = {
   quantity: number;
 };
 
-// Define the benefit card data
+// Enhanced benefit card data with more details
 const benefitCards = [
   {
-    icon: <Truck className="w-6 h-6 text-blue-600 mb-2" />,
+    icon: <Truck className="w-8 h-8 text-blue-600 mb-2" />,
     title: "Free Shipping",
     description: "For orders over $100",
+    details: "All orders are processed within 24 hours. Premium shipping options available at checkout.",
+    actionLabel: "Shipping Policy",
+    actionLink: "#shipping-policy",
     bgColor: "bg-blue-50",
-    accent: "border-blue-200"
+    accent: "border-blue-300",
+    accentColor: "text-blue-700",
+    iconBg: "bg-blue-100"
   },
   {
-    icon: <RefreshCw className="w-6 h-6 text-green-600 mb-2" />,
+    icon: <RefreshCw className="w-8 h-8 text-green-600 mb-2" />,
     title: "Easy Returns",
     description: "30-day money back",
+    details: "No questions asked returns for all unworn items in original packaging. Fast refund processing.",
+    actionLabel: "Return Process",
+    actionLink: "#return-process",
     bgColor: "bg-green-50",
-    accent: "border-green-200"
+    accent: "border-green-300",
+    accentColor: "text-green-700",
+    iconBg: "bg-green-100"
   },
   {
-    icon: <Clock className="w-6 h-6 text-purple-600 mb-2" />,
+    icon: <Clock className="w-8 h-8 text-purple-600 mb-2" />,
     title: "Fast Delivery",
     description: (product) => product.deliveryTime,
+    details: "Order before 2PM for same-day processing. Track your package in real-time through our app.",
+    actionLabel: "Track Order",
+    actionLink: "#track-order",
     bgColor: "bg-purple-50",
-    accent: "border-purple-200"
+    accent: "border-purple-300",
+    accentColor: "text-purple-700",
+    iconBg: "bg-purple-100"
+  },
+  {
+    icon: <ShieldCheck className="w-8 h-8 text-orange-600 mb-2" />,
+    title: "Quality Guarantee",
+    description: "100% Authentic",
+    details: "Every product is verified for authenticity and quality before shipping to ensure your satisfaction.",
+    actionLabel: "Our Standards",
+    actionLink: "#quality-standards",
+    bgColor: "bg-orange-50",
+    accent: "border-orange-300",
+    accentColor: "text-orange-700",
+    iconBg: "bg-orange-100"
+  },
+  {
+    icon: <Tag className="w-8 h-8 text-red-600 mb-2" />,
+    title: "Price Match",
+    description: "Found it cheaper?",
+    details: "If you find the same product at a lower price elsewhere, we'll match it and give an extra 5% off.",
+    actionLabel: "Learn More",
+    actionLink: "#price-match",
+    bgColor: "bg-red-50",
+    accent: "border-red-300",
+    accentColor: "text-red-700",
+    iconBg: "bg-red-100"
   }
 ];
 
@@ -42,6 +82,7 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
   const [liked, setLiked] = useState(false);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [showCardDetails, setShowCardDetails] = useState(false);
   const navigate = useNavigate();
   
   // Sample counters for social interactions
@@ -52,11 +93,13 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
   // Effect to cycle through benefit cards every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentCardIndex((prevIndex) => (prevIndex + 1) % benefitCards.length);
+      if (!showCardDetails) {
+        setCurrentCardIndex((prevIndex) => (prevIndex + 1) % benefitCards.length);
+      }
     }, 5000);
     
     return () => clearInterval(interval);
-  }, []);
+  }, [showCardDetails]);
   
   const handleLikeToggle = () => {
     setLiked(prev => !prev);
@@ -100,6 +143,15 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
 
   const goToPrevCard = () => {
     setCurrentCardIndex((prevIndex) => (prevIndex - 1 + benefitCards.length) % benefitCards.length);
+  };
+
+  const toggleCardDetails = () => {
+    setShowCardDetails(prev => !prev);
+  };
+
+  const handleActionClick = (actionLink: string) => {
+    // In a real app, this would navigate to the specific policy or action page
+    toast.info(`Navigating to ${actionLink.replace('#', '')}`);
   };
 
   return (
@@ -148,42 +200,72 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
         Buy Now · ${(product.discountPrice * quantity).toLocaleString()}
       </button>
       
-      {/* Enhanced benefit card carousel */}
+      {/* Enhanced interactive benefit card carousel */}
       <div className="pt-4">
-        <div className={`relative border-2 ${currentCard.accent} rounded-xl overflow-hidden shadow-sm transition-all duration-300`}>
+        <Card className={`relative overflow-hidden transition-all duration-300 ${showCardDetails ? 'min-h-[200px]' : 'min-h-[150px]'}`}>
+          <div className={`absolute top-0 left-0 right-0 h-1 ${currentCard.accent} transition-all duration-300`}></div>
+          
           {/* Navigation arrows */}
           <button 
             onClick={goToPrevCard} 
-            className="absolute left-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center shadow-md z-10 hover:bg-white"
+            className="absolute left-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center shadow-md z-10 hover:bg-white transition-all duration-200"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
           
           <button 
             onClick={goToNextCard} 
-            className="absolute right-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center shadow-md z-10 hover:bg-white"
+            className="absolute right-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center shadow-md z-10 hover:bg-white transition-all duration-200"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
           
-          <div className={`flex flex-col items-center text-center p-6 ${currentCard.bgColor} min-h-[150px] justify-center`}>
-            <div className="absolute top-2 right-2 text-xs font-medium bg-white/80 rounded-full px-2 py-0.5 shadow-sm">
-              {currentCardIndex + 1}/{benefitCards.length}
+          <CardContent className={`p-0 ${currentCard.bgColor} transition-all duration-300`}>
+            <div className="p-6 text-center">
+              {/* Card counter indicator */}
+              <div className="absolute top-2 right-2 text-xs font-medium bg-white/90 rounded-full px-2 py-0.5 shadow-sm border border-gray-100">
+                {currentCardIndex + 1}/{benefitCards.length}
+              </div>
+              
+              {/* Info/Details toggle button */}
+              <button 
+                onClick={toggleCardDetails}
+                className="absolute top-2 left-2 z-10 w-6 h-6 rounded-full bg-white/90 flex items-center justify-center shadow-sm border border-gray-100 hover:bg-white transition-colors"
+              >
+                <Info className="w-3.5 h-3.5" />
+              </button>
+              
+              {/* Icon with background */}
+              <div className={`mx-auto w-16 h-16 rounded-full ${currentCard.iconBg} flex items-center justify-center mb-3`}>
+                {currentCard.icon}
+              </div>
+              
+              <h3 className={`text-lg font-semibold ${currentCard.accentColor} mb-1`}>{currentCard.title}</h3>
+              <p className="text-sm text-gray-600 mb-2">{description}</p>
+              
+              {/* Expanded content */}
+              {showCardDetails && (
+                <div className="animate-fade-in mt-3">
+                  <p className="text-sm text-gray-700 mb-3">{currentCard.details}</p>
+                  <button 
+                    onClick={() => handleActionClick(currentCard.actionLink)}
+                    className={`text-xs font-medium ${currentCard.accentColor} underline`}
+                  >
+                    {currentCard.actionLabel}
+                  </button>
+                </div>
+              )}
             </div>
             
-            {currentCard.icon}
-            <h3 className="text-base font-semibold text-gray-900 mt-1">{currentCard.title}</h3>
-            <p className="text-sm text-gray-600 mt-1">{description}</p>
-            
             {/* Progress bar */}
-            <div className="w-full mt-4 bg-gray-200 h-1 rounded-full overflow-hidden">
+            <div className="w-full h-1 bg-gray-200 overflow-hidden">
               <div 
-                className="h-full bg-gray-700 rounded-full transition-all duration-300" 
+                className="h-full bg-gray-700 transition-all duration-300" 
                 style={{ width: `${((currentCardIndex + 1) / benefitCards.length) * 100}%` }}
               />
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
