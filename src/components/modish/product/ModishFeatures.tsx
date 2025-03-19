@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Info, Layers, Armchair, ThumbsUp, Star, ShieldCheck, Check, Pencil, Settings, LayoutPanelTop } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -206,7 +207,9 @@ export function ModishFeatures({ features }: ModishFeaturesProps) {
             )}
           >
             <div className="flex items-center">
-              <span className="mr-2">{index + 1}.</span>
+              <div className={`w-5 h-5 rounded-full ${colorMap[feature.color as keyof typeof colorMap]?.iconBg} flex items-center justify-center mr-2`}>
+                <Check className={`w-3 h-3 ${colorMap[feature.color as keyof typeof colorMap]?.icon}`} />
+              </div>
               {feature.title}
             </div>
           </button>
