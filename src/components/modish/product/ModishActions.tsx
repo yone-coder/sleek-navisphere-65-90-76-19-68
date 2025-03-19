@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Heart, Share2, MessageCircle, CreditCard, Truck, RefreshCw, Clock } from 'lucide-react';
+import { Heart, Share2, MessageCircle, CreditCard, Truck, RefreshCw, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
 import ModishCommentPanel from './ModishCommentPanel';
@@ -16,22 +16,25 @@ type ModishActionsProps = {
 // Define the benefit card data
 const benefitCards = [
   {
-    icon: <Truck className="w-5 h-5 text-blue-600 mb-2" />,
+    icon: <Truck className="w-6 h-6 text-blue-600 mb-2" />,
     title: "Free Shipping",
     description: "For orders over $100",
-    bgColor: "bg-blue-50"
+    bgColor: "bg-blue-50",
+    accent: "border-blue-200"
   },
   {
-    icon: <RefreshCw className="w-5 h-5 text-green-600 mb-2" />,
+    icon: <RefreshCw className="w-6 h-6 text-green-600 mb-2" />,
     title: "Easy Returns",
     description: "30-day money back",
-    bgColor: "bg-green-50"
+    bgColor: "bg-green-50",
+    accent: "border-green-200"
   },
   {
-    icon: <Clock className="w-5 h-5 text-purple-600 mb-2" />,
+    icon: <Clock className="w-6 h-6 text-purple-600 mb-2" />,
     title: "Fast Delivery",
     description: (product) => product.deliveryTime,
-    bgColor: "bg-purple-50"
+    bgColor: "bg-purple-50",
+    accent: "border-purple-200"
   }
 ];
 
@@ -90,6 +93,15 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
     ? currentCard.description(product) 
     : currentCard.description;
 
+  // Handle manual card navigation
+  const goToNextCard = () => {
+    setCurrentCardIndex((prevIndex) => (prevIndex + 1) % benefitCards.length);
+  };
+
+  const goToPrevCard = () => {
+    setCurrentCardIndex((prevIndex) => (prevIndex - 1 + benefitCards.length) % benefitCards.length);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex gap-3">
@@ -136,24 +148,40 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
         Buy Now · ${(product.discountPrice * quantity).toLocaleString()}
       </button>
       
-      {/* Single rotating benefit card */}
-      <div className="flex justify-center pt-4">
-        <div className={`flex flex-col items-center text-center p-4 rounded-lg w-full transition-all duration-500 ${currentCard.bgColor}`}>
-          {currentCard.icon}
-          <span className="text-sm font-medium text-gray-900">{currentCard.title}</span>
-          <span className="text-xs text-gray-500">{description}</span>
+      {/* Enhanced benefit card carousel */}
+      <div className="pt-4">
+        <div className={`relative border-2 ${currentCard.accent} rounded-xl overflow-hidden shadow-sm transition-all duration-300`}>
+          {/* Navigation arrows */}
+          <button 
+            onClick={goToPrevCard} 
+            className="absolute left-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center shadow-md z-10 hover:bg-white"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
           
-          {/* Card indicator dots */}
-          <div className="flex gap-1.5 mt-2">
-            {benefitCards.map((_, index) => (
+          <button 
+            onClick={goToNextCard} 
+            className="absolute right-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center shadow-md z-10 hover:bg-white"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+          
+          <div className={`flex flex-col items-center text-center p-6 ${currentCard.bgColor} min-h-[150px] justify-center`}>
+            <div className="absolute top-2 right-2 text-xs font-medium bg-white/80 rounded-full px-2 py-0.5 shadow-sm">
+              {currentCardIndex + 1}/{benefitCards.length}
+            </div>
+            
+            {currentCard.icon}
+            <h3 className="text-base font-semibold text-gray-900 mt-1">{currentCard.title}</h3>
+            <p className="text-sm text-gray-600 mt-1">{description}</p>
+            
+            {/* Progress bar */}
+            <div className="w-full mt-4 bg-gray-200 h-1 rounded-full overflow-hidden">
               <div 
-                key={index} 
-                className={cn(
-                  "w-1.5 h-1.5 rounded-full transition-colors",
-                  currentCardIndex === index ? "bg-gray-700" : "bg-gray-300"
-                )}
+                className="h-full bg-gray-700 rounded-full transition-all duration-300" 
+                style={{ width: `${((currentCardIndex + 1) / benefitCards.length) * 100}%` }}
               />
-            ))}
+            </div>
           </div>
         </div>
       </div>
