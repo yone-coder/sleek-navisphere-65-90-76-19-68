@@ -23,7 +23,7 @@ export const SuggestionCard = ({ app, animationDelay }: SuggestionCardProps) => 
     >
       <div className="relative w-full overflow-hidden">
         <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
-          <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
+          <div className={`w-14 h-14 rounded-2xl bg-gradient-to-tr ${app.color} flex items-center justify-center relative`}>
             <app.icon className="w-8 h-8 text-white" strokeWidth={2} />
             {app.updates > 0 && (
               <Badge 

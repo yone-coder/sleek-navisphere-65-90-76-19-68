@@ -15,7 +15,7 @@ export const AppListItem = ({ app, isFavorite, onToggleFavorite, onClick }: AppL
   return (
     <div className="relative w-full p-3 hover:bg-gray-50 rounded-lg transition-colors" onClick={onClick}>
       <div className="flex items-center gap-4">
-        <div className={`w-12 h-12 rounded-xl ${app.color} flex items-center justify-center relative flex-shrink-0`}>
+        <div className={`w-12 h-12 rounded-xl bg-gradient-to-tr ${app.color} flex items-center justify-center relative flex-shrink-0`}>
           <app.icon className="w-6 h-6 text-white" />
           {app.updates > 0 && (
             <Badge className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5">

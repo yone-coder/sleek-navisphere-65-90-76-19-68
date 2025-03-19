@@ -21,7 +21,7 @@ export const QuickActions = ({ actions }: QuickActionsProps) => {
           variant="ghost"
           className="flex flex-col items-center gap-3 p-4 h-auto hover:bg-gray-50 group"
         >
-          <div className={`${action.color} p-3 rounded-xl group-hover:scale-105 transition-transform duration-300`}>
+          <div className={`bg-gradient-to-tr ${action.color} p-3 rounded-xl group-hover:scale-105 transition-transform duration-300`}>
             <action.icon className="w-6 h-6 text-white" />
           </div>
           <div className="text-center">
