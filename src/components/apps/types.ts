@@ -5,6 +5,7 @@ import { LucideIcon } from "lucide-react";
 export type AppCategory = 
   | "All" 
   | "Shopping" 
+  | "Fashion"  // Added Fashion here
   | "Finance" 
   | "Entertainment" 
   | "Gaming" 
