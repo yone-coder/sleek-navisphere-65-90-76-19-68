@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type ModishGalleryProps = {
   images: string[];
@@ -11,6 +12,7 @@ type ModishGalleryProps = {
 export function ModishGallery({ images, name }: ModishGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const isMobile = useIsMobile();
 
   const goToNext = () => {
     setActiveIndex((prev) => (prev + 1) % images.length);
@@ -21,8 +23,8 @@ export function ModishGallery({ images, name }: ModishGalleryProps) {
   };
 
   return (
-    <div className="relative w-full mt-12">
-      <div className="aspect-[4/3] overflow-hidden rounded-2xl relative">
+    <div className="relative w-full mt-0">
+      <div className="aspect-square overflow-hidden relative">
         <div 
           className="absolute inset-0 flex transition-transform duration-700 ease-out"
           style={{ transform: `translateX(-${activeIndex * 100}%)` }}
@@ -49,7 +51,7 @@ export function ModishGallery({ images, name }: ModishGalleryProps) {
           <Maximize2 className="w-4 h-4" />
         </button>
         
-        {/* Navigation buttons */}
+        {/* Navigation indicators */}
         <div className="absolute inset-x-0 bottom-4 flex justify-center gap-2">
           {images.map((_, idx) => (
             <button
@@ -81,14 +83,17 @@ export function ModishGallery({ images, name }: ModishGalleryProps) {
         </button>
       </div>
       
-      {/* Thumbnails */}
-      <div className="mt-4 flex gap-2 px-4 overflow-x-auto scrollbar-none pb-2">
+      {/* Thumbnails with improved mobile layout */}
+      <div className={cn(
+        "mt-4 flex gap-2 px-4 overflow-x-auto pb-3 scrollbar-none",
+        isMobile ? "justify-start" : "justify-center"
+      )}>
         {images.map((img, idx) => (
           <button
             key={idx}
             onClick={() => setActiveIndex(idx)}
             className={cn(
-              "flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden transition-all duration-300",
+              "flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden transition-all duration-300",
               idx === activeIndex 
                 ? "ring-2 ring-black ring-offset-2" 
                 : "opacity-70 hover:opacity-100"

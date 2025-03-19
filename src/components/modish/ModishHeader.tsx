@@ -1,12 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Search, ShoppingBag, Heart } from 'lucide-react';
+import { Search, ShoppingBag, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function ModishHeader() {
   const [scrolled, setScrolled] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,21 +25,12 @@ export function ModishHeader() {
       )}
     >
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <button 
-            onClick={() => navigate(-1)}
-            className="w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center text-gray-700 hover:bg-white transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          
-          <h1 className={cn(
-            "font-medium transition-all duration-300",
-            scrolled ? "text-gray-900 text-lg" : "text-gray-600 text-base"
-          )}>
-            Modish
-          </h1>
-        </div>
+        <h1 className={cn(
+          "font-bold tracking-widest transition-all duration-300 uppercase",
+          scrolled ? "text-gray-900 text-lg" : "text-gray-800 text-xl"
+        )}>
+          MODISH
+        </h1>
 
         <div className="flex items-center gap-3">
           <button className="w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center text-gray-700 hover:bg-white transition-colors">

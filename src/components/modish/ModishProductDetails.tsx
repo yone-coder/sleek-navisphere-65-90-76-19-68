@@ -60,7 +60,7 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
   const [quantity, setQuantity] = useState(1);
   
   return (
-    <div className="pt-16 pb-28 min-h-screen bg-gradient-to-b from-gray-50/50 to-white">
+    <div className="pb-28 min-h-screen bg-gradient-to-b from-gray-50/50 to-white">
       <ModishGallery images={product.images} name={product.name} />
       
       <div className="max-w-2xl mx-auto px-4 mt-6 space-y-12">
