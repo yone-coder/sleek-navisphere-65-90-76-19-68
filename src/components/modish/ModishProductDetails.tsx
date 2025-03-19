@@ -6,6 +6,7 @@ import { ModishOptions } from './product/ModishOptions';
 import { ModishActions } from './product/ModishActions';
 import { ModishReviews } from './product/ModishReviews';
 import { ModishSimilar } from './product/ModishSimilar';
+import { ModishFeatures } from './product/ModishFeatures';
 
 // Sample product data
 const products = {
@@ -37,11 +38,41 @@ const products = {
       { name: 'Warranty', value: '5 years' },
     ],
     features: [
-      '5-point ergonomic design',
-      'Premium Italian leather upholstery',
-      'Solid walnut frame construction',
-      'Memory foam cushioning',
-      'Adjustable recline settings',
+      {
+        title: '5-point ergonomic design',
+        description: 'Scientifically engineered with 5 key support points to provide optimal posture and comfort for extended sitting periods.',
+        icon: 'Design',
+        color: 'blue',
+        details: 'The 5-point design supports your neck, upper back, lower back, thighs, and feet in perfect alignment, reducing pressure and preventing pain.'
+      },
+      {
+        title: 'Premium Italian leather upholstery',
+        description: 'Wrapped in luxurious full-grain Italian leather that ages beautifully and becomes more comfortable over time.',
+        icon: 'Layers',
+        color: 'amber',
+        details: 'Our leather is sourced from the finest tanneries in Italy, treated with natural oils for a buttery soft feel, and hand-selected for consistent quality.'
+      },
+      {
+        title: 'Solid walnut frame construction',
+        description: 'Built on a foundation of kiln-dried solid walnut for exceptional durability and timeless aesthetics.',
+        icon: 'Armchair',
+        color: 'brown',
+        details: 'The walnut is sustainably harvested, precision-cut, and joined using traditional woodworking techniques that ensure stability for decades of use.'
+      },
+      {
+        title: 'Memory foam cushioning',
+        description: 'High-density memory foam that contours to your body and springs back when you stand up.',
+        icon: 'Sofa',
+        color: 'purple',
+        details: 'Our proprietary foam formula combines the responsiveness of latex with the body-contouring benefits of memory foam, offering superior pressure relief.'
+      },
+      {
+        title: 'Adjustable recline settings',
+        description: 'Multiple recline positions that can be easily adjusted to match your preferred sitting angle.',
+        icon: 'ThumbsUp',
+        color: 'green',
+        details: 'The patented reclining mechanism offers 5 distinct positions from upright to fully reclined, with a smooth transition between each setting.'
+      },
     ],
     stock: 12,
     freeShipping: true,
@@ -101,17 +132,7 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
           </div>
         </div>
         
-        <div className="space-y-3 pt-4">
-          <h3 className="text-lg font-medium text-gray-900">Key Features</h3>
-          <ul className="space-y-2">
-            {product.features.map((feature, index) => (
-              <li key={index} className="flex items-start gap-2">
-                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center mt-0.5">✓</span>
-                <span className="text-sm text-gray-700">{feature}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ModishFeatures features={product.features} />
         
         <ModishReviews rating={product.rating} reviewCount={product.reviewCount} />
         
