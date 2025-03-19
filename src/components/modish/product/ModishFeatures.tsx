@@ -125,52 +125,40 @@ export function ModishFeatures({ features }: ModishFeaturesProps) {
       <h3 className="text-lg font-medium text-gray-900">Key Features</h3>
       
       <Card 
-        className={`relative overflow-hidden transition-all duration-300 ${showFeatureDetails ? 'min-h-[220px]' : 'min-h-[160px]'}`}
+        className={`relative overflow-hidden transition-all duration-300 ${showFeatureDetails ? 'min-h-[130px]' : 'min-h-[90px]'}`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         <div className={`absolute top-0 left-0 right-0 h-1 ${colors.accent} transition-all duration-300`}></div>
         
+        {/* Info/Details toggle button */}
         <button 
-          onClick={goToPrevFeature} 
-          className="absolute left-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center shadow-md z-10 hover:bg-white transition-all duration-200"
-          aria-label="Previous feature"
+          onClick={toggleFeatureDetails}
+          className={`absolute top-2 left-2 z-10 w-6 h-6 rounded-full flex items-center justify-center shadow-sm border border-gray-100 hover:bg-white transition-colors ${showFeatureDetails ? 'bg-gray-100' : 'bg-white/90'}`}
+          aria-label={showFeatureDetails ? "Hide details" : "Show details"}
         >
-          <ChevronLeft className="w-4 h-4" />
+          <Info className="w-3.5 h-3.5" />
         </button>
         
-        <button 
-          onClick={goToNextFeature} 
-          className="absolute right-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center shadow-md z-10 hover:bg-white transition-all duration-200"
-          aria-label="Next feature"
-        >
-          <ChevronRight className="w-4 h-4" />
-        </button>
+        <div className="absolute top-2 right-2 text-xs font-medium bg-white/90 rounded-full px-2 py-0.5 shadow-sm border border-gray-100">
+          {currentFeatureIndex + 1}/{features.length}
+        </div>
         
         <CardContent className={`p-0 ${colors.bg} transition-all duration-300`}>
-          <div className="p-6 text-center">
-            <div className="absolute top-2 right-2 text-xs font-medium bg-white/90 rounded-full px-2 py-0.5 shadow-sm border border-gray-100">
-              {currentFeatureIndex + 1}/{features.length}
+          <div className="p-4 pb-10 text-center">
+            {/* Redesigned - Icon and title on the same horizontal line */}
+            <div className="flex items-center justify-center gap-2 mb-1">
+              <div className={`w-7 h-7 rounded-full ${colors.iconBg} flex items-center justify-center`}>
+                <IconComponent className={`w-4 h-4 ${colors.icon}`} />
+              </div>
+              <h3 className={`text-base font-semibold ${colors.text}`}>{currentFeature.title}</h3>
             </div>
             
-            <button 
-              onClick={toggleFeatureDetails}
-              className={`absolute top-2 left-2 z-10 w-6 h-6 rounded-full flex items-center justify-center shadow-sm border border-gray-100 hover:bg-white transition-colors ${showFeatureDetails ? 'bg-gray-100' : 'bg-white/90'}`}
-              aria-label={showFeatureDetails ? "Hide details" : "Show details"}
-            >
-              <Info className="w-3.5 h-3.5" />
-            </button>
-            
-            <div className={`mx-auto w-16 h-16 rounded-full ${colors.iconBg} flex items-center justify-center mb-3`}>
-              <IconComponent className={`w-8 h-8 ${colors.icon}`} />
-            </div>
-            
-            <h3 className={`text-lg font-semibold ${colors.text} mb-1`}>{currentFeature.title}</h3>
-            <p className="text-sm text-gray-600 mb-2">{currentFeature.description}</p>
+            <p className="text-sm text-gray-600 mb-1">{currentFeature.description}</p>
             
             {showFeatureDetails && (
-              <div className="animate-fade-in mt-3">
-                <p className="text-sm text-gray-700 mb-3">{currentFeature.details}</p>
+              <div className="animate-fade-in mt-1">
+                <p className="text-xs text-gray-700 mb-1.5">{currentFeature.details}</p>
                 <button 
                   onClick={handleLearnMore}
                   className={`text-xs font-medium ${colors.text} underline`}
@@ -181,6 +169,25 @@ export function ModishFeatures({ features }: ModishFeaturesProps) {
             )}
           </div>
           
+          {/* Navigation buttons at bottom right */}
+          <div className="absolute bottom-2 right-2 flex gap-1 z-10">
+            <button 
+              onClick={goToPrevFeature} 
+              className="w-6 h-6 rounded-full bg-white/80 flex items-center justify-center shadow-md hover:bg-white transition-all duration-200"
+              aria-label="Previous feature"
+            >
+              <ChevronLeft className="w-3 h-3" />
+            </button>
+            
+            <button 
+              onClick={goToNextFeature} 
+              className="w-6 h-6 rounded-full bg-white/80 flex items-center justify-center shadow-md hover:bg-white transition-all duration-200"
+              aria-label="Next feature"
+            >
+              <ChevronRight className="w-3 h-3" />
+            </button>
+          </div>
+          
           <div className="w-full h-1 bg-gray-200 overflow-hidden">
             <div 
               className={`h-full transition-all duration-300 ${colors.accent}`} 
@@ -189,32 +196,6 @@ export function ModishFeatures({ features }: ModishFeaturesProps) {
           </div>
         </CardContent>
       </Card>
-      
-      <div className="mt-4 space-y-1">
-        {features.map((feature, index) => (
-          <button
-            key={index}
-            onClick={() => {
-              setCurrentFeatureIndex(index);
-              setShowFeatureDetails(true);
-              setIsPaused(true);
-            }}
-            className={cn(
-              "w-full text-left px-3 py-2 rounded-md text-sm transition-colors",
-              currentFeatureIndex === index 
-                ? `${colorMap[feature.color as keyof typeof colorMap]?.bg} ${colorMap[feature.color as keyof typeof colorMap]?.text} font-medium`
-                : "text-gray-600 hover:bg-gray-50"
-            )}
-          >
-            <div className="flex items-center">
-              <div className={`w-5 h-5 rounded-full ${colorMap[feature.color as keyof typeof colorMap]?.iconBg} flex items-center justify-center mr-2`}>
-                <Check className={`w-3 h-3 ${colorMap[feature.color as keyof typeof colorMap]?.icon}`} />
-              </div>
-              {feature.title}
-            </div>
-          </button>
-        ))}
-      </div>
     </div>
   );
 }
