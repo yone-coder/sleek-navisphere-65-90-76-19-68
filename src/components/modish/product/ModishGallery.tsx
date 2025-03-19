@@ -83,9 +83,9 @@ export function ModishGallery({ images, name }: ModishGalleryProps) {
         </button>
       </div>
       
-      {/* Thumbnails with improved padding to ensure rings are fully visible */}
+      {/* Thumbnails with improved padding and margin for better visibility of selection rings */}
       <div className={cn(
-        "mt-4 flex gap-3 px-4 overflow-x-auto pb-4 pt-2 scrollbar-none",
+        "mt-4 flex gap-3 px-4 overflow-x-auto pb-6 pt-3 scrollbar-none",
         isMobile ? "justify-start" : "justify-center"
       )}>
         {images.map((img, idx) => (
@@ -93,16 +93,16 @@ export function ModishGallery({ images, name }: ModishGalleryProps) {
             key={idx}
             onClick={() => setActiveIndex(idx)}
             className={cn(
-              "flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden transition-all duration-300",
+              "flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden transition-all duration-300 relative p-0.5",
               idx === activeIndex 
-                ? "ring-2 ring-black ring-offset-2" 
+                ? "ring-2 ring-black" 
                 : "opacity-70 hover:opacity-100"
             )}
           >
             <img 
               src={img} 
               alt={`Thumbnail ${idx + 1}`} 
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-lg"
             />
           </button>
         ))}

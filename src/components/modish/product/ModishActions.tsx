@@ -1,6 +1,9 @@
 
-import React from 'react';
-import { Heart, Share2, ShoppingBag, CreditCard, Truck, Clock, RefreshCw } from 'lucide-react';
+import React, { useState } from 'react';
+import { Heart, Share2, MessageCircle, CreditCard, Truck, Clock, RefreshCw } from 'lucide-react';
+import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
+import { cn } from '@/lib/utils';
+import ModishCommentPanel from './ModishCommentPanel';
 
 type ModishActionsProps = {
   product: any;
@@ -9,22 +12,50 @@ type ModishActionsProps = {
 };
 
 export function ModishActions({ product, selectedColor, quantity }: ModishActionsProps) {
+  const [isCommentsOpen, setIsCommentsOpen] = useState(false);
+  const [liked, setLiked] = useState(false);
+  
+  // Sample counters for social interactions
+  const likeCount = liked ? 124 : 123;
+  const commentCount = 47;
+  const shareCount = 18;
+  
+  const handleLikeToggle = () => {
+    setLiked(prev => !prev);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex gap-3">
-        <button className="flex-1 bg-black text-white h-12 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-gray-900 transition-colors">
-          <ShoppingBag className="w-4 h-4" />
-          Add to Cart
+        {/* Social interaction buttons with counters */}
+        <button 
+          onClick={handleLikeToggle}
+          className={cn(
+            "flex-1 h-12 rounded-full font-medium flex items-center justify-center gap-2 transition-colors border",
+            liked 
+              ? "bg-red-50 border-red-200 text-red-500" 
+              : "bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
+          )}
+        >
+          <Heart className={cn("w-5 h-5", liked && "fill-red-500")} />
+          <span>{likeCount}</span>
         </button>
         
-        <button className="bg-white border border-gray-200 text-gray-700 h-12 px-4 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors">
-          <Heart className="w-4 h-4" />
-          <span className="sr-only md:not-sr-only">Wishlist</span>
-        </button>
+        <Drawer open={isCommentsOpen} onOpenChange={setIsCommentsOpen}>
+          <DrawerTrigger asChild>
+            <button className="flex-1 bg-gray-50 border border-gray-200 text-gray-700 h-12 rounded-full font-medium flex items-center justify-center gap-2 hover:bg-gray-100 transition-colors">
+              <MessageCircle className="w-5 h-5" />
+              <span>{commentCount}</span>
+            </button>
+          </DrawerTrigger>
+          <DrawerContent className="h-[85vh] rounded-t-[20px] p-0">
+            <ModishCommentPanel onClose={() => setIsCommentsOpen(false)} />
+          </DrawerContent>
+        </Drawer>
         
-        <button className="bg-white border border-gray-200 text-gray-700 h-12 px-4 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors">
-          <Share2 className="w-4 h-4" />
-          <span className="sr-only md:not-sr-only">Share</span>
+        <button className="flex-1 bg-gray-50 border border-gray-200 text-gray-700 h-12 rounded-full font-medium flex items-center justify-center gap-2 hover:bg-gray-100 transition-colors">
+          <Share2 className="w-5 h-5" />
+          <span>{shareCount}</span>
         </button>
       </div>
       
