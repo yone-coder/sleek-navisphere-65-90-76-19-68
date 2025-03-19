@@ -16,7 +16,7 @@ type ModishActionsProps = {
 // Enhanced benefit card data with more details
 const benefitCards = [
   {
-    icon: <Truck className="w-8 h-8 text-blue-600 mb-2" />,
+    icon: <Truck className="w-5 h-5 text-blue-600" />,
     title: "Free Shipping",
     description: "For orders over $100",
     details: "All orders are processed within 24 hours. Premium shipping options available at checkout.",
@@ -28,7 +28,7 @@ const benefitCards = [
     iconBg: "bg-blue-100"
   },
   {
-    icon: <RefreshCw className="w-8 h-8 text-green-600 mb-2" />,
+    icon: <RefreshCw className="w-5 h-5 text-green-600" />,
     title: "Easy Returns",
     description: "30-day money back",
     details: "No questions asked returns for all unworn items in original packaging. Fast refund processing.",
@@ -40,7 +40,7 @@ const benefitCards = [
     iconBg: "bg-green-100"
   },
   {
-    icon: <Clock className="w-8 h-8 text-purple-600 mb-2" />,
+    icon: <Clock className="w-5 h-5 text-purple-600" />,
     title: "Fast Delivery",
     description: (product) => product.deliveryTime,
     details: "Order before 2PM for same-day processing. Track your package in real-time through our app.",
@@ -52,7 +52,7 @@ const benefitCards = [
     iconBg: "bg-purple-100"
   },
   {
-    icon: <ShieldCheck className="w-8 h-8 text-orange-600 mb-2" />,
+    icon: <ShieldCheck className="w-5 h-5 text-orange-600" />,
     title: "Quality Guarantee",
     description: "100% Authentic",
     details: "Every product is verified for authenticity and quality before shipping to ensure your satisfaction.",
@@ -64,7 +64,7 @@ const benefitCards = [
     iconBg: "bg-orange-100"
   },
   {
-    icon: <Tag className="w-8 h-8 text-red-600 mb-2" />,
+    icon: <Tag className="w-5 h-5 text-red-600" />,
     title: "Price Match",
     description: "Found it cheaper?",
     details: "If you find the same product at a lower price elsewhere, we'll match it and give an extra 5% off.",
@@ -199,9 +199,9 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
         Buy Now · ${(product.discountPrice * quantity).toLocaleString()}
       </button>
       
-      {/* Modified benefit card with reduced height and repositioned nav buttons */}
-      <div className="pt-4">
-        <Card className={`relative overflow-hidden transition-all duration-300 ${showCardDetails ? 'min-h-[160px]' : 'min-h-[120px]'}`}>
+      {/* Significantly reduced-height benefit card with horizontal icon/title layout */}
+      <div className="pt-2">
+        <Card className={`relative overflow-hidden transition-all duration-300 ${showCardDetails ? 'min-h-[130px]' : 'min-h-[90px]'}`}>
           <div className={`absolute top-0 left-0 right-0 h-1 ${currentCard.accent} transition-all duration-300`}></div>
           
           {/* Info/Details toggle button */}
@@ -219,18 +219,20 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
           
           <CardContent className={`p-0 ${currentCard.bgColor} transition-all duration-300`}>
             <div className="p-4 pb-10 text-center">
-              {/* Icon with background */}
-              <div className={`mx-auto w-12 h-12 rounded-full ${currentCard.iconBg} flex items-center justify-center mb-2`}>
-                {React.cloneElement(currentCard.icon, { className: 'w-6 h-6' })}
+              {/* Redesigned - Icon and title on the same horizontal line */}
+              <div className="flex items-center justify-center gap-2 mb-1">
+                <div className={`w-7 h-7 rounded-full ${currentCard.iconBg} flex items-center justify-center`}>
+                  {React.cloneElement(currentCard.icon, { className: 'w-4 h-4' })}
+                </div>
+                <h3 className={`text-base font-semibold ${currentCard.accentColor}`}>{currentCard.title}</h3>
               </div>
               
-              <h3 className={`text-base font-semibold ${currentCard.accentColor} mb-0.5`}>{currentCard.title}</h3>
               <p className="text-sm text-gray-600 mb-1">{description}</p>
               
               {/* Expanded content */}
               {showCardDetails && (
-                <div className="animate-fade-in mt-2">
-                  <p className="text-xs text-gray-700 mb-2">{currentCard.details}</p>
+                <div className="animate-fade-in mt-1">
+                  <p className="text-xs text-gray-700 mb-1.5">{currentCard.details}</p>
                   <button 
                     onClick={() => handleActionClick(currentCard.actionLink)}
                     className={`text-xs font-medium ${currentCard.accentColor} underline`}
@@ -241,7 +243,7 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
               )}
             </div>
             
-            {/* Navigation buttons moved to bottom right */}
+            {/* Navigation buttons at bottom right */}
             <div className="absolute bottom-2 right-2 flex gap-1 z-10">
               <button 
                 onClick={goToPrevCard} 
