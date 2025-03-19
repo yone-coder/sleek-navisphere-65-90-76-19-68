@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Heart, Share2, MessageCircle, CreditCard, Truck, RefreshCw, Clock, ChevronLeft, ChevronRight, ShieldCheck, Info, Tag } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
@@ -200,53 +199,38 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
         Buy Now · ${(product.discountPrice * quantity).toLocaleString()}
       </button>
       
-      {/* Enhanced interactive benefit card carousel */}
+      {/* Modified benefit card with reduced height and repositioned nav buttons */}
       <div className="pt-4">
-        <Card className={`relative overflow-hidden transition-all duration-300 ${showCardDetails ? 'min-h-[200px]' : 'min-h-[150px]'}`}>
+        <Card className={`relative overflow-hidden transition-all duration-300 ${showCardDetails ? 'min-h-[160px]' : 'min-h-[120px]'}`}>
           <div className={`absolute top-0 left-0 right-0 h-1 ${currentCard.accent} transition-all duration-300`}></div>
           
-          {/* Navigation arrows */}
+          {/* Info/Details toggle button */}
           <button 
-            onClick={goToPrevCard} 
-            className="absolute left-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center shadow-md z-10 hover:bg-white transition-all duration-200"
+            onClick={toggleCardDetails}
+            className="absolute top-2 left-2 z-10 w-6 h-6 rounded-full bg-white/90 flex items-center justify-center shadow-sm border border-gray-100 hover:bg-white transition-colors"
           >
-            <ChevronLeft className="w-4 h-4" />
+            <Info className="w-3.5 h-3.5" />
           </button>
           
-          <button 
-            onClick={goToNextCard} 
-            className="absolute right-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center shadow-md z-10 hover:bg-white transition-all duration-200"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
+          {/* Card counter indicator */}
+          <div className="absolute top-2 right-2 text-xs font-medium bg-white/90 rounded-full px-2 py-0.5 shadow-sm border border-gray-100">
+            {currentCardIndex + 1}/{benefitCards.length}
+          </div>
           
           <CardContent className={`p-0 ${currentCard.bgColor} transition-all duration-300`}>
-            <div className="p-6 text-center">
-              {/* Card counter indicator */}
-              <div className="absolute top-2 right-2 text-xs font-medium bg-white/90 rounded-full px-2 py-0.5 shadow-sm border border-gray-100">
-                {currentCardIndex + 1}/{benefitCards.length}
-              </div>
-              
-              {/* Info/Details toggle button */}
-              <button 
-                onClick={toggleCardDetails}
-                className="absolute top-2 left-2 z-10 w-6 h-6 rounded-full bg-white/90 flex items-center justify-center shadow-sm border border-gray-100 hover:bg-white transition-colors"
-              >
-                <Info className="w-3.5 h-3.5" />
-              </button>
-              
+            <div className="p-4 pb-10 text-center">
               {/* Icon with background */}
-              <div className={`mx-auto w-16 h-16 rounded-full ${currentCard.iconBg} flex items-center justify-center mb-3`}>
-                {currentCard.icon}
+              <div className={`mx-auto w-12 h-12 rounded-full ${currentCard.iconBg} flex items-center justify-center mb-2`}>
+                {React.cloneElement(currentCard.icon, { className: 'w-6 h-6' })}
               </div>
               
-              <h3 className={`text-lg font-semibold ${currentCard.accentColor} mb-1`}>{currentCard.title}</h3>
-              <p className="text-sm text-gray-600 mb-2">{description}</p>
+              <h3 className={`text-base font-semibold ${currentCard.accentColor} mb-0.5`}>{currentCard.title}</h3>
+              <p className="text-sm text-gray-600 mb-1">{description}</p>
               
               {/* Expanded content */}
               {showCardDetails && (
-                <div className="animate-fade-in mt-3">
-                  <p className="text-sm text-gray-700 mb-3">{currentCard.details}</p>
+                <div className="animate-fade-in mt-2">
+                  <p className="text-xs text-gray-700 mb-2">{currentCard.details}</p>
                   <button 
                     onClick={() => handleActionClick(currentCard.actionLink)}
                     className={`text-xs font-medium ${currentCard.accentColor} underline`}
@@ -255,6 +239,23 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
                   </button>
                 </div>
               )}
+            </div>
+            
+            {/* Navigation buttons moved to bottom right */}
+            <div className="absolute bottom-2 right-2 flex gap-1 z-10">
+              <button 
+                onClick={goToPrevCard} 
+                className="w-6 h-6 rounded-full bg-white/80 flex items-center justify-center shadow-md hover:bg-white transition-all duration-200"
+              >
+                <ChevronLeft className="w-3 h-3" />
+              </button>
+              
+              <button 
+                onClick={goToNextCard} 
+                className="w-6 h-6 rounded-full bg-white/80 flex items-center justify-center shadow-md hover:bg-white transition-all duration-200"
+              >
+                <ChevronRight className="w-3 h-3" />
+              </button>
             </div>
             
             {/* Progress bar */}
