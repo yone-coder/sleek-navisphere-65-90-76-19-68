@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Heart, Share2, MessageCircle, CreditCard, Truck, Clock, RefreshCw, ArrowRight, CheckCircle, ChevronLeft } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
@@ -156,7 +155,7 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
     };
   }, []);
 
-  // If payment flow is active, show the payment steps
+  // If payment flow is active, show the payment steps as a full page
   if (isPaymentFlow) {
     return (
       <div className="fixed inset-0 bg-white z-50 flex flex-col">
@@ -169,9 +168,7 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
             <ChevronLeft className="w-5 h-5" />
           </button>
           <div className="flex-1 text-center font-medium">
-            {paymentStep === 1 ? 'Order Details' : 
-             paymentStep === 2 ? 'Delivery Information' :
-             'Payment'}
+            Order Details
           </div>
           <button 
             className="p-2 rounded-full hover:bg-gray-100 text-gray-500" 
