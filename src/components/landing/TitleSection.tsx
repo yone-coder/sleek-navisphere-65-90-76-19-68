@@ -6,8 +6,8 @@ export function TitleSection() {
   return (
     <div className="w-full py-8 px-4">
       <div className="max-w-3xl mx-auto text-center space-y-6">
-        {/* Main Title with Gradient */}
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#9b87f5] to-[#7E69AB]">
+        {/* Main Title with Enhanced Gradient */}
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 animate-gradient">
           Mima
         </h1>
         
@@ -16,24 +16,24 @@ export function TitleSection() {
           <span>A Digital Home for</span>
           <div className="flex items-center gap-4 px-3 py-1.5 bg-white/50 backdrop-blur-sm rounded-full shadow-sm border border-gray-100">
             <div className="flex items-center gap-1">
-              <Users className="w-4 h-4 text-[#9b87f5]" />
+              <Users className="w-4 h-4 text-blue-500" />
               <span>Community</span>
             </div>
             <span className="text-gray-400">&middot;</span>
             <div className="flex items-center gap-1">
-              <ShoppingCart className="w-4 h-4 text-[#9b87f5]" />
+              <ShoppingCart className="w-4 h-4 text-purple-500" />
               <span>Commerce</span>
             </div>
             <span className="text-gray-400">&middot;</span>
             <div className="flex items-center gap-1">
-              <Trophy className="w-4 h-4 text-[#9b87f5]" />
+              <Trophy className="w-4 h-4 text-pink-500" />
               <span>Competition</span>
             </div>
           </div>
         </div>
 
-        {/* Decorative Line */}
-        <div className="w-24 h-1 mx-auto bg-gradient-to-r from-[#9b87f5] to-[#7E69AB] rounded-full opacity-50" />
+        {/* Enhanced Decorative Line */}
+        <div className="w-24 h-1 mx-auto bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full opacity-70" />
       </div>
     </div>
   );
