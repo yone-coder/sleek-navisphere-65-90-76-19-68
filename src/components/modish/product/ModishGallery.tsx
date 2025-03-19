@@ -83,9 +83,9 @@ export function ModishGallery({ images, name }: ModishGalleryProps) {
         </button>
       </div>
       
-      {/* Thumbnails with improved mobile layout */}
+      {/* Thumbnails with improved padding to ensure rings are fully visible */}
       <div className={cn(
-        "mt-4 flex gap-2 px-4 overflow-x-auto pb-3 scrollbar-none",
+        "mt-4 flex gap-3 px-4 overflow-x-auto pb-4 pt-2 scrollbar-none",
         isMobile ? "justify-start" : "justify-center"
       )}>
         {images.map((img, idx) => (
