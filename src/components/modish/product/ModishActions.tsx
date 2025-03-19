@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { Heart, Share2, MessageCircle, CreditCard, Truck, Clock, RefreshCw } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Heart, Share2, MessageCircle, CreditCard, Truck, RefreshCw, Clock } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
 import ModishCommentPanel from './ModishCommentPanel';
@@ -13,15 +13,47 @@ type ModishActionsProps = {
   quantity: number;
 };
 
+// Define the benefit card data
+const benefitCards = [
+  {
+    icon: <Truck className="w-5 h-5 text-blue-600 mb-2" />,
+    title: "Free Shipping",
+    description: "For orders over $100",
+    bgColor: "bg-blue-50"
+  },
+  {
+    icon: <RefreshCw className="w-5 h-5 text-green-600 mb-2" />,
+    title: "Easy Returns",
+    description: "30-day money back",
+    bgColor: "bg-green-50"
+  },
+  {
+    icon: <Clock className="w-5 h-5 text-purple-600 mb-2" />,
+    title: "Fast Delivery",
+    description: (product) => product.deliveryTime,
+    bgColor: "bg-purple-50"
+  }
+];
+
 export function ModishActions({ product, selectedColor, quantity }: ModishActionsProps) {
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const navigate = useNavigate();
   
   // Sample counters for social interactions
   const likeCount = liked ? 124 : 123;
   const commentCount = 47;
   const shareCount = 18;
+  
+  // Effect to cycle through benefit cards every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentCardIndex((prevIndex) => (prevIndex + 1) % benefitCards.length);
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, []);
   
   const handleLikeToggle = () => {
     setLiked(prev => !prev);
@@ -51,6 +83,12 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
       } 
     });
   };
+
+  // Get the current benefit card
+  const currentCard = benefitCards[currentCardIndex];
+  const description = typeof currentCard.description === 'function' 
+    ? currentCard.description(product) 
+    : currentCard.description;
 
   return (
     <div className="space-y-6">
@@ -98,23 +136,25 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
         Buy Now · ${(product.discountPrice * quantity).toLocaleString()}
       </button>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-4">
-        <div className="flex flex-col items-center text-center p-3 rounded-lg bg-blue-50">
-          <Truck className="w-5 h-5 text-blue-600 mb-2" />
-          <span className="text-sm font-medium text-gray-900">Free Shipping</span>
-          <span className="text-xs text-gray-500">For orders over $100</span>
-        </div>
-        
-        <div className="flex flex-col items-center text-center p-3 rounded-lg bg-green-50">
-          <RefreshCw className="w-5 h-5 text-green-600 mb-2" />
-          <span className="text-sm font-medium text-gray-900">Easy Returns</span>
-          <span className="text-xs text-gray-500">30-day money back</span>
-        </div>
-        
-        <div className="flex flex-col items-center text-center p-3 rounded-lg bg-purple-50">
-          <Clock className="w-5 h-5 text-purple-600 mb-2" />
-          <span className="text-sm font-medium text-gray-900">Fast Delivery</span>
-          <span className="text-xs text-gray-500">{product.deliveryTime}</span>
+      {/* Single rotating benefit card */}
+      <div className="flex justify-center pt-4">
+        <div className={`flex flex-col items-center text-center p-4 rounded-lg w-full transition-all duration-500 ${currentCard.bgColor}`}>
+          {currentCard.icon}
+          <span className="text-sm font-medium text-gray-900">{currentCard.title}</span>
+          <span className="text-xs text-gray-500">{description}</span>
+          
+          {/* Card indicator dots */}
+          <div className="flex gap-1.5 mt-2">
+            {benefitCards.map((_, index) => (
+              <div 
+                key={index} 
+                className={cn(
+                  "w-1.5 h-1.5 rounded-full transition-colors",
+                  currentCardIndex === index ? "bg-gray-700" : "bg-gray-300"
+                )}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
