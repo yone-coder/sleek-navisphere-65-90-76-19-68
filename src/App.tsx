@@ -53,6 +53,7 @@ const DepositPage = lazy(() => import("./pages/DepositPage"));
 const SimpleDepositPage = lazy(() => import("./pages/SimpleDepositPage"));
 const StoryPage = lazy(() => import("./components/story/StoryPage"));
 const Modish = lazy(() => import("./pages/Modish"));
+const ModishCheckout = lazy(() => import("./pages/ModishCheckout"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen p-8 space-y-4">
@@ -82,9 +83,10 @@ const queryClient = new QueryClient({
 const AppContent = () => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
+  const isModishCheckout = location.pathname === '/modish/checkout';
   
-  // Show bottom nav on all routes except admin
-  const shouldShowBottomNav = !isAdminRoute;
+  // Show bottom nav on all routes except admin and modish checkout
+  const shouldShowBottomNav = !isAdminRoute && !isModishCheckout;
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
@@ -136,6 +138,7 @@ const AppContent = () => {
           
           <Route path="/modish" element={<Modish />} />
           <Route path="/modish/:id" element={<Modish />} />
+          <Route path="/modish/checkout" element={<ModishCheckout />} />
           
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
