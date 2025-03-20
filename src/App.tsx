@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
@@ -55,6 +54,7 @@ const SimpleDepositPage = lazy(() => import("./pages/SimpleDepositPage"));
 const StoryPage = lazy(() => import("./components/story/StoryPage"));
 const Modish = lazy(() => import("./pages/Modish"));
 const ModishCheckout = lazy(() => import("./pages/ModishCheckout"));
+const AppStore = lazy(() => import("./pages/AppStore"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen p-8 space-y-4">
@@ -88,9 +88,10 @@ const AppContent = () => {
   const isAdminRoute = location.pathname.startsWith('/admin');
   const isModishRoute = location.pathname.startsWith('/modish');
   const isCheckoutRoute = location.pathname.includes('checkout');
+  const isAppStoreRoute = location.pathname.startsWith('/appstore');
   
   // Hide bottom nav on specific routes
-  const shouldShowBottomNav = !isAdminRoute && !isModishRoute && !isCheckoutRoute;
+  const shouldShowBottomNav = !isAdminRoute && !isModishRoute && !isCheckoutRoute && !isAppStoreRoute;
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
@@ -143,6 +144,8 @@ const AppContent = () => {
           <Route path="/modish" element={<Modish />} />
           <Route path="/modish/:id" element={<Modish />} />
           <Route path="/modish/checkout" element={<ModishCheckout />} />
+          
+          <Route path="/appstore" element={<AppStore />} />
           
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
