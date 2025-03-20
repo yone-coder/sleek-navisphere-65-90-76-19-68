@@ -26,10 +26,10 @@ export function ProductTabs({
   return (
     <Tabs defaultValue="description" className="w-full max-w-full">
       {/* Tab navigation */}
-      <div className="relative overflow-hidden mx-auto border-b border-gray-100">
-        <ScrollArea className="pb-4 w-full">
-          <div className="px-2 md:px-6 flex justify-center">
-            <TabsList className="flex w-max h-12 bg-gradient-to-b from-gray-50/50 to-white p-2 rounded-2xl mx-auto mb-2">
+      <div className="relative border-b border-gray-100">
+        <ScrollArea className="pb-4 w-full" orientation="horizontal">
+          <div className="px-2 md:px-6 flex justify-start min-w-max">
+            <TabsList className="flex w-max h-12 bg-gradient-to-b from-gray-50/50 to-white p-2 rounded-2xl mb-2 overflow-visible">
               <TabsTrigger 
                 value="description"
                 className="relative h-full px-3 md:px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
