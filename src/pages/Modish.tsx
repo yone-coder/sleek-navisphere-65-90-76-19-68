@@ -27,7 +27,7 @@ const Modish = () => {
   return (
     <div className="min-h-screen bg-white pb-[150px] overflow-x-hidden">
       <ModishHeader />
-      <div className="container mx-auto px-2 sm:px-4 max-w-4xl">
+      <div className="w-full mx-auto px-0">
         <ModishProductDetails productId={productId} />
       </div>
       <ModishFloatingActions 

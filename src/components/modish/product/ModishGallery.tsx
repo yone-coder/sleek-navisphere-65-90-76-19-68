@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { Maximize2, Heart, Play, Camera, Share2, Award } from 'lucide-react';
+import { Maximize2, Heart, Play, Camera, Share2, Award, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 
