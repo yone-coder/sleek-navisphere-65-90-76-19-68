@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { ArrowUp, Heart, MessageSquare, Share2, ShoppingCart, Tag, Star, Shield } from 'lucide-react';
+import { ArrowUp, Heart, MessageSquare, Share2, ShoppingCart, Tag, Star, Shield, Truck, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
