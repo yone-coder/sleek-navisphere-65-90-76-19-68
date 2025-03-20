@@ -19,6 +19,20 @@ const Modish = () => {
   const discountPrice = 149.99;  // Discounted price
   const stock = 68;
 
+  // Create more complete product object
+  const product = {
+    id: productId,
+    name: "Noise Cancelling Wireless Bluetooth Headphones with Microphone",
+    price: productPrice,
+    discountPrice: discountPrice,
+    brand: "AudioTech",
+    description: "Experience premium sound quality with our latest noise cancelling headphones. Perfect for work, travel, or everyday use. Features include Bluetooth 5.0, 30-hour battery life, and comfortable over-ear design.",
+    rating: 4.8,
+    reviewCount: 1245,
+    stock: stock,
+    images: ['/lovable-uploads/7751a0aa-bb1f-47c5-b434-e63e68dbc0d0.png', '/api/placeholder/400/400', '/api/placeholder/400/400']
+  };
+
   const handleAddToCart = () => {
     toast({
       title: "Added to cart",
@@ -36,9 +50,9 @@ const Modish = () => {
     
     // Create mock product data for the checkout page
     const mockProduct = {
-      name: "Noise Cancelling Wireless Bluetooth Headphones with Microphone",
-      discountPrice: discountPrice,
-      originalPrice: productPrice,
+      name: product.name,
+      discountPrice: product.discountPrice,
+      originalPrice: product.price,
       images: ['/lovable-uploads/7751a0aa-bb1f-47c5-b434-e63e68dbc0d0.png']
     };
     
@@ -56,11 +70,7 @@ const Modish = () => {
     <div className="min-h-screen bg-gray-50 pb-[150px] overflow-x-hidden">
       <ModishHeader />
       <div className="w-full mx-auto px-0 mt-14">
-        <ModishProductDetails 
-          productId={productId} 
-          price={productPrice}
-          discountPrice={discountPrice}
-        />
+        <ModishProductDetails product={product} />
       </div>
       <ModishFloatingActions 
         price={discountPrice}

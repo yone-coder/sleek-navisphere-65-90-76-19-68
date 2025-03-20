@@ -30,25 +30,34 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 
-type ModishProductDetailsProps = {
-  productId: string;
+// Define product type
+type ProductType = {
+  id: string;
+  name: string;
   price: number;
   discountPrice: number;
+  brand: string;
+  description: string;
+  rating: number;
+  reviewCount: number;
+  stock: number;
+  images: string[];
+};
+
+type ModishProductDetailsProps = {
+  product: ProductType;
 }
 
-export function ModishProductDetails({ productId, price, discountPrice }: ModishProductDetailsProps) {
+export function ModishProductDetails({ product }: ModishProductDetailsProps) {
   const [activeTab, setActiveTab] = useState('description');
+  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedSize, setSelectedSize] = useState('');
+  const [quantity, setQuantity] = useState(1);
   const { toast } = useToast();
 
-  // Mock product data - in a real app would come from an API call
-  const product = {
-    id: productId,
-    name: "Noise Cancelling Wireless Bluetooth Headphones with Microphone",
-    price: price,
-    discountPrice: discountPrice,
-    rating: 4.8,
-    reviewCount: 1245,
-    description: "Experience premium sound quality with our latest noise cancelling headphones. Perfect for work, travel, or everyday use. Features include Bluetooth 5.0, 30-hour battery life, and comfortable over-ear design.",
+  // Extended product data - in a real app more would come from an API call
+  const extendedProduct = {
+    ...product,
     highlights: [
       "Active Noise Cancellation technology reduces ambient noise",
       "30-hour battery life on a single charge",
@@ -58,7 +67,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
       "Bluetooth 5.0 with seamless connectivity"
     ],
     specifications: {
-      brand: "AudioTech",
+      brand: product.brand,
       model: "ATH-NC700",
       color: "Black",
       connectivity: "Bluetooth 5.0, 3.5mm jack",
@@ -76,16 +85,16 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
       warranty: "2-year manufacturer warranty"
     },
     variants: {
-      colors: ["Black", "White", "Blue", "Red"],
-      sizes: ["One Size"]
-    },
-    images: [
-      '/lovable-uploads/7751a0aa-bb1f-47c5-b434-e63e68dbc0d0.png',
-      '/api/placeholder/400/400',
-      '/api/placeholder/400/400',
-      '/api/placeholder/400/400',
-      '/api/placeholder/400/400'
-    ]
+      colors: [
+        { name: "Black", value: "#000000" },
+        { name: "White", value: "#FFFFFF" },
+        { name: "Blue", value: "#0000FF" },
+        { name: "Red", value: "#FF0000" }
+      ],
+      sizes: [
+        { name: "One Size", available: true }
+      ]
+    }
   };
 
   const tabs = [
@@ -109,6 +118,18 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
     });
   };
 
+  const handleColorSelect = (color: string) => {
+    setSelectedColor(color);
+  };
+
+  const handleSizeSelect = (size: string) => {
+    setSelectedSize(size);
+  };
+
+  const handleUpdateQuantity = (qty: number) => {
+    setQuantity(qty);
+  };
+
   return (
     <div className="pb-6">
       {/* Product Gallery */}
@@ -118,10 +139,12 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
       <div className="px-4 py-3">
         <ModishInfo 
           name={product.name}
+          brand={product.brand}
           price={product.price}
           discountPrice={product.discountPrice}
           rating={product.rating}
           reviewCount={product.reviewCount}
+          description={product.description}
         />
         
         {/* Quick stats bar */}
@@ -158,8 +181,17 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
       {/* Options Selection */}
       <div className="px-4 mt-2">
         <ModishOptions
-          colors={product.variants.colors}
-          sizes={product.variants.sizes}
+          colors={extendedProduct.variants.colors}
+          selectedColor={selectedColor}
+          onSelectColor={handleColorSelect}
+          quantity={quantity}
+          onUpdateQuantity={handleUpdateQuantity}
+          stock={product.stock}
+          price={product.price}
+          discountPrice={product.discountPrice}
+          sizes={extendedProduct.variants.sizes}
+          selectedSize={selectedSize}
+          onSelectSize={handleSizeSelect}
         />
       </div>
       
@@ -210,7 +242,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         {activeTab === 'description' && (
           <DescriptionTab 
             description={product.description}
-            highlights={product.highlights}
+            highlights={extendedProduct.highlights}
           />
         )}
         
@@ -218,7 +250,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Technical Specifications</h3>
             <div className="space-y-2">
-              {Object.entries(product.specifications).map(([key, value]) => (
+              {Object.entries(extendedProduct.specifications).map(([key, value]) => (
                 <div key={key} className="flex border-b border-gray-100 py-2">
                   <div className="w-1/3 text-gray-500 capitalize">{key}</div>
                   <div className="w-2/3 font-medium">{value}</div>
@@ -233,7 +265,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
             <div>
               <h3 className="text-lg font-medium mb-3">Shipping Options</h3>
               <div className="space-y-3">
-                {product.shipping.methods.map((method, index) => (
+                {extendedProduct.shipping.methods.map((method, index) => (
                   <div key={index} className="flex justify-between border-b border-gray-100 pb-2">
                     <div>
                       <div className="font-medium">{method.name}</div>
@@ -257,7 +289,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
                   <Calendar className="h-5 w-5 text-gray-500 mt-0.5" />
                   <div>
                     <div className="font-medium">Returns Policy</div>
-                    <div className="text-sm text-gray-600">{product.shipping.returns}</div>
+                    <div className="text-sm text-gray-600">{extendedProduct.shipping.returns}</div>
                   </div>
                 </div>
                 
@@ -265,7 +297,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
                   <Shield className="h-5 w-5 text-gray-500 mt-0.5" />
                   <div>
                     <div className="font-medium">Warranty Information</div>
-                    <div className="text-sm text-gray-600">{product.shipping.warranty}</div>
+                    <div className="text-sm text-gray-600">{extendedProduct.shipping.warranty}</div>
                   </div>
                 </div>
               </div>
@@ -293,14 +325,11 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
       
       {/* Similar Products */}
       <div className="mt-6 px-4">
-        <ModishSimilar />
+        <ModishSimilar currentProductId={product.id} />
       </div>
       
-      {/* Product Actions - Add to Cart, Buy Now */}
-      <ModishActions
-        price={product.discountPrice}
-        originalPrice={product.price}
-      />
+      {/* Product Actions - Using onSubmit handlers instead of direct price props */}
+      <ModishActions />
     </div>
   );
 }
