@@ -26,9 +26,9 @@ export function ProductTabs({
   return (
     <Tabs defaultValue="description" className="w-full max-w-full">
       {/* Tab navigation */}
-      <div className="relative border-b border-gray-100">
-        <ScrollArea className="pb-4 w-full scrollbar-thin">
-          <div className="px-2 md:px-6 flex justify-start w-max">
+      <div className="relative border-b border-gray-100 overflow-hidden">
+        <div className="overflow-x-auto scrollbar-thin pb-4 w-full">
+          <div className="px-2 md:px-6 flex justify-start min-w-max">
             <TabsList className="flex w-max h-12 bg-gradient-to-b from-gray-50/50 to-white p-2 rounded-2xl mb-2 overflow-visible">
               <TabsTrigger 
                 value="description"
@@ -86,7 +86,7 @@ export function ProductTabs({
               </TabsTrigger>
             </TabsList>
           </div>
-        </ScrollArea>
+        </div>
       </div>
 
       {/* Tab content - contained within fixed width to prevent overflow */}
