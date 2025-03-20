@@ -7,8 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 type ModishReviewsProps = {
-  rating: number;
-  reviewCount: number;
+  productId: string;
 };
 
 type Review = {
@@ -21,7 +20,11 @@ type Review = {
   helpful: number;
 };
 
-export function ModishReviews({ rating, reviewCount }: ModishReviewsProps) {
+export function ModishReviews({ productId }: ModishReviewsProps) {
+  // Mock data - would come from API in real app
+  const rating = 4.5;
+  const reviewCount = 120;
+
   // Mock review data
   const ratingBreakdown = [
     { stars: 5, percentage: 72 },
