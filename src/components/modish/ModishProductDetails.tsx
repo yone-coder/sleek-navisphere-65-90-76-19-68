@@ -209,7 +209,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
           offsetHeight += tabsNavRef.current.clientHeight;
         }
         
-        offsetHeight += 48;
+        offsetHeight += 32;
         
         const elementPosition = tabContentElement.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.scrollY - offsetHeight;
@@ -863,3 +863,4 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
     </div>
   );
 }
+
