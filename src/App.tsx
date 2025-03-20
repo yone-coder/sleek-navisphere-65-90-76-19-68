@@ -83,11 +83,14 @@ const queryClient = new QueryClient({
 
 const AppContent = () => {
   const location = useLocation();
+  
+  // Don't show bottom nav on admin routes, modish routes, or checkout routes
   const isAdminRoute = location.pathname.startsWith('/admin');
   const isModishRoute = location.pathname.startsWith('/modish');
+  const isCheckoutRoute = location.pathname.includes('checkout');
   
-  // Show bottom nav on all routes except admin and modish
-  const shouldShowBottomNav = !isAdminRoute && !isModishRoute;
+  // Hide bottom nav on specific routes
+  const shouldShowBottomNav = !isAdminRoute && !isModishRoute && !isCheckoutRoute;
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
