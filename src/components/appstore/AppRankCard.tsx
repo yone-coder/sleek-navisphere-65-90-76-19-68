@@ -1,6 +1,7 @@
 
-import { Star, Download } from "lucide-react";
+import { Star, Download, Info } from "lucide-react";
 import { App } from "./types";
+import { Badge } from "@/components/ui/badge";
 
 interface AppRankCardProps {
   app: App;
@@ -19,21 +20,26 @@ export function AppRankCard({ app, rank }: AppRankCardProps) {
       <div className="flex-1 min-w-0">
         <h3 className="font-medium text-sm truncate">{app.name}</h3>
         <p className="text-xs text-gray-500 truncate">{app.category}</p>
-        <div className="flex items-center gap-1 mt-1">
-          <div className="flex items-center">
-            {[...Array(5)].map((_, i) => (
-              <Star 
-                key={i} 
-                className={`w-3 h-3 ${i < Math.floor(app.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
-              />
-            ))}
+        <div className="flex items-center gap-2 mt-1">
+          <div className="flex items-center gap-1">
+            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+            <span className="text-xs font-medium">{app.rating.toFixed(1)}</span>
           </div>
-          <span className="text-xs text-gray-500">{app.downloads}</span>
+          <span className="text-xs text-gray-500">•</span>
+          <span className="text-xs text-gray-500">{app.size}</span>
+          {app.age && (
+            <>
+              <span className="text-xs text-gray-500">•</span>
+              <Badge variant="outline" className="h-4 text-[10px] font-normal px-1 py-0">
+                {app.age}
+              </Badge>
+            </>
+          )}
         </div>
       </div>
       
-      <button className="bg-gray-100 hover:bg-gray-200 text-xs font-medium py-1.5 px-4 rounded-full">
-        GET
+      <button className="bg-gray-100 hover:bg-gray-200 text-xs font-medium py-1.5 px-4 rounded-full transition">
+        {app.price === 0 ? "GET" : `$${app.price.toFixed(2)}`}
       </button>
     </div>
   );
