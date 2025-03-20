@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ModishGallery } from '@/components/modish/product/ModishGallery';
@@ -690,4 +691,3 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
     </div>
   );
 }
-</
