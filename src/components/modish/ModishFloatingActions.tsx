@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ArrowUp, Heart, MessageSquare, Share2, ShoppingCart, Tag, Star, Shield, Truck, DollarSign, Package, CreditCard, Check } from 'lucide-react';
+import { ArrowUp, Heart, MessageSquare, Share2, ShoppingCart, Tag, Star, Shield, Truck, DollarSign, Package, CreditCard, Check, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -15,6 +15,18 @@ import {
   DrawerTrigger
 } from '@/components/ui/drawer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface ModishFloatingActionsProps {
   price: number;
@@ -47,6 +59,7 @@ export function ModishFloatingActions({
   const [showReviewsDrawer, setShowReviewsDrawer] = useState(false);
   const [buyLoading, setBuyLoading] = useState(false);
   const [cartLoading, setCartLoading] = useState(false);
+  const [showPaymentMethods, setShowPaymentMethods] = useState(false);
   
   const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
   const rating = 4.8; // Example rating
@@ -102,6 +115,15 @@ export function ModishFloatingActions({
       setBuyLoading(false);
       onBuyNow();
     }, 800);
+  };
+  
+  const handlePaymentMethodSelect = (method: string) => {
+    toast({
+      title: `Payment method selected`,
+      description: `Proceeding with ${method} payment`,
+      duration: 2000,
+    });
+    handleBuyNow();
   };
 
   return (
@@ -208,26 +230,98 @@ export function ModishFloatingActions({
             </div>
             
             <div className="col-span-8 h-12">
-              <Button
-                onClick={handleBuyNow}
-                className="w-full h-full rounded-none bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base relative overflow-hidden group"
-                disabled={stock === 0 || buyLoading}
-              >
-                <div className="absolute inset-0 bg-orange-600 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-out"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  {buyLoading ? (
-                    <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  ) : (
-                    <>
-                      <CreditCard className="mr-1.5 h-5 w-5 relative z-10" />
-                      <span className="relative z-10">BUY NOW</span>
-                      {stock > 0 && stock < 10 && (
-                        <span className="relative z-10 ml-1 text-xs">({stock} left)</span>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    className="w-full h-full rounded-none bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base relative overflow-hidden group"
+                    disabled={stock === 0 || buyLoading}
+                  >
+                    <div className="absolute inset-0 bg-orange-600 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-out"></div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      {buyLoading ? (
+                        <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      ) : (
+                        <>
+                          <CreditCard className="mr-1.5 h-5 w-5 relative z-10" />
+                          <span className="relative z-10">BUY NOW</span>
+                          <ChevronDown className="ml-1 h-3 w-3 relative z-10 opacity-70" />
+                          {stock > 0 && stock < 10 && (
+                            <span className="relative z-10 ml-1 text-xs">({stock} left)</span>
+                          )}
+                        </>
                       )}
-                    </>
-                  )}
-                </div>
-              </Button>
+                    </div>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent 
+                  className="p-0 w-full rounded-t-none border-t-0 animate-in fade-in-50 slide-in-from-bottom-5" 
+                  sideOffset={0} 
+                  align="end" 
+                  side="bottom"
+                >
+                  <div className="grid grid-cols-3 gap-0">
+                    <button 
+                      className="flex flex-col items-center py-2 hover:bg-gray-50 transition-colors border-r border-b"
+                      onClick={() => handlePaymentMethodSelect('Credit Card')}
+                    >
+                      <svg className="w-8 h-8 mb-1" viewBox="0 0 24 24" fill="none">
+                        <rect width="20" height="14" x="2" y="5" rx="2" fill="#1E40AF" />
+                        <path d="M2 10h20M7 15h2" stroke="#fff" strokeWidth="1.5" />
+                      </svg>
+                      <span className="text-xs">Credit Card</span>
+                    </button>
+                    <button 
+                      className="flex flex-col items-center py-2 hover:bg-gray-50 transition-colors border-r border-b"
+                      onClick={() => handlePaymentMethodSelect('PayPal')}
+                    >
+                      <svg className="w-8 h-8 mb-1" viewBox="0 0 24 24" fill="none">
+                        <path d="M8 16h8a6 6 0 0 0 6-6c0-3.5-2.5-6-6-6H8" stroke="#3B82F6" strokeWidth="1.5" />
+                        <path d="M5 10h8a6 6 0 0 1 6 6v1c0 1.5-1 3-3 3H8l-3-10z" fill="#DBEAFE" stroke="#3B82F6" strokeWidth="1.5" />
+                      </svg>
+                      <span className="text-xs">PayPal</span>
+                    </button>
+                    <button 
+                      className="flex flex-col items-center py-2 hover:bg-gray-50 transition-colors border-b"
+                      onClick={() => handlePaymentMethodSelect('Apple Pay')}
+                    >
+                      <svg className="w-8 h-8 mb-1" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 4c3.5 0 4 2 4 2s-2 1-2 3c0 3 3 4 3 4s-1 3-3 4c-1.5.5-3 0-4 0s-2.5.5-4 0c-2-1-3-4-3-4s3-1 3-4c0-2-2-3-2-3s.5-2 4-2z" fill="#000" />
+                      </svg>
+                      <span className="text-xs">Apple Pay</span>
+                    </button>
+                    <button 
+                      className="flex flex-col items-center py-2 hover:bg-gray-50 transition-colors border-r"
+                      onClick={() => handlePaymentMethodSelect('Google Pay')}
+                    >
+                      <svg className="w-8 h-8 mb-1" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 12h12M12 6v12" stroke="#34A853" strokeWidth="2" />
+                        <circle cx="12" cy="12" r="10" stroke="#4285F4" strokeWidth="1.5" />
+                      </svg>
+                      <span className="text-xs">Google Pay</span>
+                    </button>
+                    <button 
+                      className="flex flex-col items-center py-2 hover:bg-gray-50 transition-colors border-r"
+                      onClick={() => handlePaymentMethodSelect('Crypto')}
+                    >
+                      <svg className="w-8 h-8 mb-1" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" fill="#F7931A" />
+                        <path d="M8 13.5h8.5c1 0 1.5-1 1.5-2s-.5-2-1.5-2H8v4zm0-4V6m0 7.5V17m3-7.5h.01M11 17h2" stroke="#fff" strokeWidth="1.5" />
+                      </svg>
+                      <span className="text-xs">Crypto</span>
+                    </button>
+                    <button 
+                      className="flex flex-col items-center py-2 hover:bg-gray-50 transition-colors"
+                      onClick={() => handlePaymentMethodSelect('Klarna')}
+                    >
+                      <svg className="w-8 h-8 mb-1" viewBox="0 0 24 24" fill="none">
+                        <rect width="20" height="14" x="2" y="5" rx="2" fill="#FFB3C7" />
+                        <path d="M7 9.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm5 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm5 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z" fill="#0D1C2E" />
+                      </svg>
+                      <span className="text-xs">Klarna</span>
+                    </button>
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
         </div>
@@ -473,4 +567,3 @@ export function ModishFloatingActions({
     </>
   );
 }
-
