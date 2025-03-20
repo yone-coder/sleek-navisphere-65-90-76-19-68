@@ -26,7 +26,7 @@ export function ModishInfo({
   const discountPercentage = Math.round(((price - discountPrice) / price) * 100);
   
   return (
-    <div className="space-y-3 px-3">
+    <div className="space-y-3">
       {/* Price section - AliExpress style with large prominent pricing */}
       <div className="flex items-baseline gap-2 mt-1">
         <div className="flex items-center">

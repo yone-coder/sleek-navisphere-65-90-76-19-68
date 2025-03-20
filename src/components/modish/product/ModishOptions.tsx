@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Plus, Minus, Check, AlertCircle, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -52,7 +53,7 @@ export function ModishOptions({
     'text-green-600 bg-green-50';
 
   return (
-    <div className="space-y-5 px-3">
+    <div className="space-y-5">
       {/* Specification label */}
       <div className="text-sm font-medium text-gray-700 pb-1 border-b border-gray-100">Specifications</div>
       
