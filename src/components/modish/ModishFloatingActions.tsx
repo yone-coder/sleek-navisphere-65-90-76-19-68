@@ -47,12 +47,20 @@ export function ModishFloatingActions({
   const [showReviewsDrawer, setShowReviewsDrawer] = useState(false);
   const [buyLoading, setBuyLoading] = useState(false);
   const [cartLoading, setCartLoading] = useState(false);
+  const [showPaymentOptions, setShowPaymentOptions] = useState(false);
   
   const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
   const rating = 4.8; // Example rating
   const reviewCount = 1280; // Example review count
   const wishlistCount = 427; // Example wishlist count
   const shareCount = 89; // Example share count
+  
+  // Payment method options to display in the animation
+  const paymentMethods = [
+    { name: "Card", icon: <CreditCard className="h-4 w-4" /> },
+    { name: "PayPal", icon: <DollarSign className="h-4 w-4" /> },
+    { name: "Apple Pay", icon: <DollarSign className="h-4 w-4" /> }
+  ];
   
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -95,13 +103,20 @@ export function ModishFloatingActions({
   };
   
   const handleBuyNow = () => {
-    setBuyLoading(true);
+    // First show payment options animation
+    setShowPaymentOptions(true);
     
-    // Simulate network request
+    // After animation completes, start loading
     setTimeout(() => {
-      setBuyLoading(false);
-      onBuyNow();
-    }, 800);
+      setShowPaymentOptions(false);
+      setBuyLoading(true);
+      
+      // Simulate network request
+      setTimeout(() => {
+        setBuyLoading(false);
+        onBuyNow();
+      }, 800);
+    }, 2000); // Show payment options for 2 seconds
   };
 
   return (
@@ -211,21 +226,38 @@ export function ModishFloatingActions({
               <Button
                 onClick={handleBuyNow}
                 className="w-full h-full rounded-none bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base relative overflow-hidden group"
-                disabled={stock === 0 || buyLoading}
+                disabled={stock === 0 || buyLoading || showPaymentOptions}
               >
                 <div className="absolute inset-0 bg-orange-600 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-out"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  {buyLoading ? (
-                    <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  ) : (
-                    <>
-                      <CreditCard className="mr-1.5 h-5 w-5 relative z-10" />
-                      <span className="relative z-10">BUY NOW</span>
-                      {stock > 0 && stock < 10 && (
-                        <span className="relative z-10 ml-1 text-xs">({stock} left)</span>
-                      )}
-                    </>
+                
+                {/* Payment options animation container */}
+                <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${showPaymentOptions ? 'opacity-100' : 'opacity-0'}`}>
+                  <div className="flex space-x-2 items-center">
+                    {paymentMethods.map((method, index) => (
+                      <div 
+                        key={index} 
+                        className="flex flex-col items-center px-2 py-1 bg-orange-600 rounded-md animate-fade-in"
+                        style={{ animationDelay: `${index * 200}ms` }}
+                      >
+                        {method.icon}
+                        <span className="text-xs mt-0.5">{method.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Standard buy now content */}
+                <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${!showPaymentOptions && !buyLoading ? 'opacity-100' : 'opacity-0'}`}>
+                  <CreditCard className="mr-1.5 h-5 w-5 relative z-10" />
+                  <span className="relative z-10">BUY NOW</span>
+                  {stock > 0 && stock < 10 && (
+                    <span className="relative z-10 ml-1 text-xs">({stock} left)</span>
                   )}
+                </div>
+                
+                {/* Loading spinner */}
+                <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${buyLoading ? 'opacity-100' : 'opacity-0'}`}>
+                  <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 </div>
               </Button>
             </div>
@@ -473,4 +505,3 @@ export function ModishFloatingActions({
     </>
   );
 }
-
