@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ModishGallery } from './product/ModishGallery';
 import { ModishInfo } from './product/ModishInfo';
@@ -8,10 +7,11 @@ import { ModishReviews } from './product/ModishReviews';
 import { ModishSimilar } from './product/ModishSimilar';
 import { ModishFeatures } from './product/ModishFeatures';
 import { Card, CardContent } from '@/components/ui/card';
-import { AlertCircle, Clock, Eye, History, TrendingUp, Users } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { AlertCircle, Clock, Eye, History, Shield, Star, TrendingUp, Truck, Users } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { toast } from 'sonner';
 
-// Sample product data
 const products = {
   '1': {
     id: '1',
@@ -87,10 +87,8 @@ const products = {
     freeShipping: true,
     deliveryTime: '3-5 days',
   },
-  // Add more products as needed
 };
 
-// Recently viewed products placeholder
 const recentlyViewedProducts = [
   {
     id: '2',
@@ -120,29 +118,78 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
   const [peakViewers, setPeakViewers] = useState(0);
   const [popularity, setPopularity] = useState<string>('');
   const [stockTrend, setStockTrend] = useState<'increasing' | 'decreasing' | 'stable'>('stable');
+  const [couponExpiry, setCouponExpiry] = useState<Date>(new Date(Date.now() + 3600000 * 8));
+  const [timeRemaining, setTimeRemaining] = useState<string>("");
+  const [recentPurchases, setRecentPurchases] = useState<number>(0);
+  const [showShippingInfo, setShowShippingInfo] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>("description");
   const isMobile = useIsMobile();
   
-  // Simulate view counter and other dynamic data
   useEffect(() => {
-    // Random number between 10-50
     const randomViewers = Math.floor(Math.random() * 40) + 10;
     setViewCount(randomViewers);
     
-    // Set a random time for "last viewed"
     const minutes = Math.floor(Math.random() * 30) + 1;
     setLastViewed(`${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`);
     
-    // Set peak viewers (slightly higher than current)
     setPeakViewers(randomViewers + Math.floor(Math.random() * 20) + 5);
     
-    // Set popularity status
     const popularityOptions = ['Rising fast', 'Popular choice', 'Trending'];
     setPopularity(popularityOptions[Math.floor(Math.random() * popularityOptions.length)]);
     
-    // Set stock trend
     const trends: Array<'increasing' | 'decreasing' | 'stable'> = ['increasing', 'decreasing', 'stable'];
     setStockTrend(trends[Math.floor(Math.random() * trends.length)]);
+    
+    setRecentPurchases(Math.floor(Math.random() * 200) + 50);
+    
+    const timerInterval = setInterval(() => {
+      const now = new Date();
+      const diff = couponExpiry.getTime() - now.getTime();
+      
+      if (diff <= 0) {
+        clearInterval(timerInterval);
+        setTimeRemaining("Expired");
+        return;
+      }
+      
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      
+      setTimeRemaining(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+    }, 1000);
+    
+    return () => clearInterval(timerInterval);
+  }, [couponExpiry]);
+  
+  useEffect(() => {
+    const activityInterval = setInterval(() => {
+      if (Math.random() > 0.7) {
+        const activities = [
+          `Someone in New York just purchased this item`,
+          `${Math.floor(Math.random() * 5) + 1} people added this to cart in the last hour`,
+          `${Math.floor(Math.random() * 3) + 1} people bought this together with another item`,
+          `This item was just added to ${Math.floor(Math.random() * 7) + 2} wishlists`
+        ];
+        
+        const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+        toast(randomActivity, {
+          duration: 4000,
+          position: "bottom-right"
+        });
+      }
+    }, 25000);
+    
+    return () => clearInterval(activityInterval);
   }, []);
+  
+  const toggleShippingInfo = () => {
+    setShowShippingInfo(prev => !prev);
+  };
+  
+  const formatMoney = (amount: number) => {
+    return `US $${amount.toFixed(2)}`;
+  };
   
   return (
     <div className="pb-28 min-h-screen bg-white">
@@ -151,7 +198,6 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
       </div>
       
       <div className="max-w-2xl mx-auto px-4 py-4 relative -mt-8">
-        {/* AliExpress-style price tag at the top */}
         <div className="bg-[#ea384c] text-white p-3 rounded-t-lg shadow-md mb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-baseline gap-2">
@@ -165,10 +211,31 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
               {Math.round(((product.price - product.discountPrice) / product.price) * 100)}% OFF
             </div>
           </div>
-          <div className="text-xs mt-1 opacity-90">Limited time offer • {product.stock < 10 ? 'Almost gone!' : 'In high demand'}</div>
+          <div className="flex items-center justify-between mt-2">
+            <div className="text-xs opacity-90">Limited time offer • {product.stock < 10 ? 'Almost gone!' : 'In high demand'}</div>
+            <div className="text-xs bg-black/20 px-2 py-0.5 rounded flex items-center gap-1">
+              <Clock className="w-3 h-3" />
+              <span>Ends in: {timeRemaining}</span>
+            </div>
+          </div>
         </div>
         
-        {/* Live activity indicator - AliExpress style */}
+        <div className="flex items-center gap-2 bg-orange-50 border border-orange-200 rounded-md p-2 mb-4">
+          <div className="relative">
+            <div className="w-16 h-10 bg-orange-500 flex items-center justify-center text-white font-bold rounded-l-md after:content-[''] after:absolute after:right-0 after:top-0 after:bottom-0 after:border-r-[6px] after:border-r-white after:border-y-transparent after:border-y-[20px]">
+              <span className="text-lg">-$10</span>
+            </div>
+          </div>
+          <div className="flex-1">
+            <div className="text-xs font-medium text-gray-700">Extra $10 off with coupon</div>
+            <div className="text-xs text-gray-500">Min. spend: ${(product.discountPrice * 1.5).toFixed(0)}</div>
+          </div>
+          <button className="bg-orange-500 text-white text-xs font-medium px-3 py-1 rounded-full" 
+            onClick={() => toast.success("Coupon applied!")}>
+            Get
+          </button>
+        </div>
+        
         <Card className="overflow-hidden border border-gray-200 mb-4 rounded-md shadow-sm">
           <CardContent className={`p-0 ${isMobile ? 'flex flex-col' : 'flex items-center'} text-xs divide-x-0 divide-y sm:divide-y-0 sm:divide-x divide-gray-100`}>
             <div className={`${isMobile ? 'w-full' : ''} px-3 py-2 flex items-center gap-2`}>
@@ -220,6 +287,15 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
             )}
           </CardContent>
         </Card>
+        
+        <div className="bg-green-50 border border-green-100 rounded-md p-2 mb-4 flex items-center gap-2">
+          <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+            <Star className="w-3 h-3 text-white" />
+          </div>
+          <div className="text-xs text-gray-700">
+            <span className="font-medium text-green-700">{recentPurchases}+ bought</span> in the past month
+          </div>
+        </div>
       
         <ModishInfo
           name={product.name}
@@ -231,24 +307,61 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
           description={product.description}
         />
         
-        {/* AliExpress-style free shipping banner */}
-        {product.freeShipping && (
-          <div className="bg-gray-50 border border-gray-200 rounded-md p-2.5 mt-3 flex items-center gap-3">
-            <div className="bg-[#ea384c] rounded-full w-8 h-8 flex items-center justify-center text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                <rect width="16" height="10" x="4" y="6" rx="2" />
-                <path d="M10 10h4" />
-                <circle cx="9" cy="18" r="2" />
-                <circle cx="15" cy="18" r="2" />
-                <path d="M10 6V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2" />
-              </svg>
+        <div className="mt-4 border border-gray-200 rounded-md divide-y">
+          <div className="p-3 flex items-center justify-between" onClick={toggleShippingInfo}>
+            <div className="flex items-center gap-3">
+              <Truck className="w-5 h-5 text-gray-500" />
+              <div>
+                <div className="text-sm font-medium text-gray-800">Shipping</div>
+                <div className="text-xs text-gray-500">
+                  {product.freeShipping ? 'Free Shipping' : `$${(Math.random() * 10 + 5).toFixed(2)} Standard Shipping`}
+                </div>
+              </div>
             </div>
-            <div>
-              <div className="text-sm font-semibold text-gray-900">Free Shipping</div>
-              <div className="text-xs text-gray-500">Estimated delivery: {product.deliveryTime}</div>
+            <div className="text-xs text-blue-600">
+              {showShippingInfo ? "Hide" : "Show options"}
             </div>
           </div>
-        )}
+          
+          {showShippingInfo && (
+            <div className="p-3 bg-gray-50">
+              <div className="text-xs mb-2 font-medium">Shipping options:</div>
+              <div className="flex items-center justify-between py-1.5 border-b border-gray-100">
+                <div className="flex items-center gap-2">
+                  <input type="radio" name="shipping" id="shipping-standard" defaultChecked />
+                  <label htmlFor="shipping-standard" className="text-xs">Standard Shipping</label>
+                </div>
+                <div className="text-xs font-medium text-gray-700">
+                  {product.freeShipping ? 'Free' : `$${(Math.random() * 10 + 5).toFixed(2)}`}
+                </div>
+              </div>
+              <div className="flex items-center justify-between py-1.5 border-b border-gray-100">
+                <div className="flex items-center gap-2">
+                  <input type="radio" name="shipping" id="shipping-express" />
+                  <label htmlFor="shipping-express" className="text-xs">Express Shipping</label>
+                </div>
+                <div className="text-xs font-medium text-gray-700">
+                  ${(Math.random() * 15 + 10).toFixed(2)}
+                </div>
+              </div>
+              <div className="text-xs text-gray-500 mt-2">
+                Estimated delivery: {product.deliveryTime}
+              </div>
+            </div>
+          )}
+          
+          <div className="p-3 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Shield className="w-5 h-5 text-gray-500" />
+              <div>
+                <div className="text-sm font-medium text-gray-800">Buyer Protection</div>
+                <div className="text-xs text-gray-500">
+                  Money back guarantee • 30 day returns
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         
         <ModishOptions
           colors={product.colors}
@@ -269,23 +382,45 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
           selectedSize={selectedSize}
         />
         
-        <div className="space-y-3 pt-6 border-t border-gray-100 mt-6">
-          <h3 className="text-base font-medium text-gray-900">Specifications</h3>
-          <div className="grid grid-cols-1 gap-y-2">
-            {product.specifications.map((spec) => (
-              <div key={spec.name} className="flex justify-between py-2 border-b border-gray-100">
-                <span className="text-sm text-gray-500">{spec.name}</span>
-                <span className="text-sm font-medium text-gray-900">{spec.value}</span>
+        <div className="mt-6 border-t border-gray-200 pt-6">
+          <Tabs defaultValue="description" value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="w-full flex justify-between">
+              <TabsTrigger value="description" className="flex-1 text-xs">Description</TabsTrigger>
+              <TabsTrigger value="specs" className="flex-1 text-xs">Specifications</TabsTrigger>
+              <TabsTrigger value="reviews" className="flex-1 text-xs">Reviews</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="description">
+              <div className="space-y-3 mt-4">
+                <h3 className="text-base font-medium text-gray-900">Product Description</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {product.description} Experience the pinnacle of design and craftsmanship with our premium furniture piece.
+                  Built to last and designed for comfort, this item will elevate any space with its elegant aesthetics and functional excellence.
+                </p>
+                <ModishFeatures features={product.features} />
               </div>
-            ))}
-          </div>
+            </TabsContent>
+            
+            <TabsContent value="specs">
+              <div className="space-y-3 mt-4">
+                <h3 className="text-base font-medium text-gray-900">Specifications</h3>
+                <div className="grid grid-cols-1 gap-y-2">
+                  {product.specifications.map((spec) => (
+                    <div key={spec.name} className="flex justify-between py-2 border-b border-gray-100">
+                      <span className="text-sm text-gray-500">{spec.name}</span>
+                      <span className="text-sm font-medium text-gray-900">{spec.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="reviews">
+              <ModishReviews rating={product.rating} reviewCount={product.reviewCount} />
+            </TabsContent>
+          </Tabs>
         </div>
         
-        <ModishFeatures features={product.features} />
-        
-        <ModishReviews rating={product.rating} reviewCount={product.reviewCount} />
-        
-        {/* Recently Viewed Section - AliExpress style */}
         <div className="space-y-4 pt-6 border-t border-gray-100 mt-6">
           <h3 className="text-base font-medium text-gray-900">You may also like</h3>
           <div className="grid grid-cols-2 gap-3">
@@ -326,7 +461,6 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
         <ModishSimilar currentProductId={product.id} />
       </div>
       
-      {/* AliExpress-style fixed bottom bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex items-center p-2 z-10 shadow-[0_-4px_12px_-6px_rgba(0,0,0,0.1)]">
         <div className="flex items-center divide-x divide-gray-200 flex-1">
           <button className="flex flex-col items-center justify-center p-2 w-1/4">
@@ -357,10 +491,16 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
           </button>
         </div>
         <div className="flex">
-          <button className="bg-orange-500 text-white font-medium px-4 py-2 rounded-l-md text-sm">
+          <button 
+            className="bg-orange-500 text-white font-medium px-4 py-2 rounded-l-md text-sm"
+            onClick={() => toast.success("Added to cart!")}
+          >
             Add to Cart
           </button>
-          <button className="bg-[#ea384c] text-white font-medium px-4 py-2 rounded-r-md text-sm">
+          <button 
+            className="bg-[#ea384c] text-white font-medium px-4 py-2 rounded-r-md text-sm"
+            onClick={() => toast.success("Proceeding to checkout!")}
+          >
             Buy Now
           </button>
         </div>
