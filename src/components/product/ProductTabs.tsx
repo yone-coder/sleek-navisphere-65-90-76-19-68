@@ -2,567 +2,368 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { DescriptionTab } from "./tabs/DescriptionTab";
-import { WarrantyTab } from "./tabs/WarrantyTab";
-import { ReviewsTab } from "./tabs/ReviewsTab";
 import { FAQsTab } from "./tabs/FAQsTab";
-import { 
-  FileText, Shield, MessageSquare, HelpCircle, Settings, 
-  Truck, Star, BarChart3, Calendar, Award, Tag
-} from "lucide-react";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { 
+  Truck,
+  Package,
+  Award,
+  BarChart4, 
+  Star, 
+  MessageSquare, 
+  ThumbsUp, 
+  Search,
+  Filter
+} from "lucide-react";
+import { useState } from "react";
 
 type ProductTabsProps = {
   description: string;
-  highlights: string[];
-  rating: number;
-  reviews: number;
+  specifications?: { name: string; value: string }[];
 };
 
-export function ProductTabs({
-  description,
-  highlights,
-  rating,
-  reviews,
-}: ProductTabsProps) {
-  const { isMobile } = useIsMobile();
+export function ProductTabs({ description, specifications = [] }: ProductTabsProps) {
+  const [activeTab, setActiveTab] = useState("description");
 
   return (
-    <Tabs defaultValue="description" className="w-full max-w-full">
-      {/* Tab navigation */}
-      <div className="relative border-b border-gray-100 overflow-hidden">
-        <div className="overflow-x-auto scrollbar-thin pb-4 w-full">
-          <div className="px-2 md:px-6 flex justify-start min-w-max">
-            <TabsList className="flex w-max h-12 bg-gradient-to-b from-gray-50/50 to-white p-2 rounded-2xl mb-2 overflow-visible">
-              <TabsTrigger 
-                value="description"
-                className="relative h-full px-3 md:px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
-              >
-                <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4" />
-                  <span className="font-medium text-sm">Description</span>
-                </div>
-              </TabsTrigger>
-              
-              <TabsTrigger 
-                value="specifications"
-                className="relative h-full px-3 md:px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
-              >
-                <div className="flex items-center gap-2">
-                  <Settings className="w-4 h-4" />
-                  <span className="font-medium text-sm">{isMobile ? "Specs" : "Specifications"}</span>
-                </div>
-              </TabsTrigger>
-              
-              <TabsTrigger 
-                value="shipping"
-                className="relative h-full px-3 md:px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
-              >
-                <div className="flex items-center gap-2">
-                  <Truck className="w-4 h-4" />
-                  <span className="font-medium text-sm">{isMobile ? "Shipping" : "Shipping & Delivery"}</span>
-                </div>
-              </TabsTrigger>
-              
-              <TabsTrigger 
-                value="warranty"
-                className="relative h-full px-3 md:px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
-              >
-                <div className="flex items-center gap-2">
-                  <Shield className="w-4 h-4" />
-                  <span className="font-medium text-sm">{isMobile ? "Support" : "Warranty & Support"}</span>
-                </div>
-              </TabsTrigger>
-              
-              <TabsTrigger 
-                value="reviews"
-                className="relative h-full px-3 md:px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
-              >
-                <div className="flex items-center gap-2">
-                  <MessageSquare className="w-4 h-4" />
-                  <span className="font-medium text-sm">Reviews</span>
-                  <div className="inline-flex">
-                    <span className="inline-flex items-center justify-center h-5 min-w-5 px-1.5 text-xs font-medium bg-gradient-to-r from-violet-500 to-indigo-500 text-white rounded-full shadow-sm">
-                      {reviews}
-                    </span>
-                  </div>
-                </div>
-              </TabsTrigger>
-              
-              <TabsTrigger 
-                value="faqs"
-                className="relative h-full px-3 md:px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
-              >
-                <div className="flex items-center gap-2">
-                  <HelpCircle className="w-4 h-4" />
-                  <span className="font-medium text-sm">Q&A</span>
-                </div>
-              </TabsTrigger>
-            </TabsList>
-          </div>
-        </div>
-      </div>
-
-      {/* Tab content - contained within fixed width to prevent overflow */}
-      <div className="mt-6 w-full max-w-full overflow-hidden">
-        <DescriptionTab description={description} highlights={highlights} />
+    <Tabs 
+      defaultValue="description" 
+      className="w-full mt-8"
+      onValueChange={(value) => setActiveTab(value)}
+    >
+      <TabsList className="grid grid-cols-5 h-auto p-0 bg-transparent">
+        <TabsTrigger 
+          value="description" 
+          className={`flex flex-col items-center justify-center py-3 rounded-none border-b-2 ${
+            activeTab === "description" ? "border-primary text-primary" : "border-transparent"
+          } transition-colors hover:text-primary data-[state=active]:bg-transparent data-[state=active]:text-primary`}
+        >
+          Description
+        </TabsTrigger>
+        <TabsTrigger 
+          value="specs" 
+          className={`flex flex-col items-center justify-center py-3 rounded-none border-b-2 ${
+            activeTab === "specs" ? "border-primary text-primary" : "border-transparent"
+          } transition-colors hover:text-primary data-[state=active]:bg-transparent data-[state=active]:text-primary`}
+        >
+          Specs
+        </TabsTrigger>
+        <TabsTrigger 
+          value="shipping" 
+          className={`flex flex-col items-center justify-center py-3 rounded-none border-b-2 ${
+            activeTab === "shipping" ? "border-primary text-primary" : "border-transparent"
+          } transition-colors hover:text-primary data-[state=active]:bg-transparent data-[state=active]:text-primary`}
+        >
+          Shipping
+        </TabsTrigger>
+        <TabsTrigger 
+          value="reviews" 
+          className={`flex flex-col items-center justify-center py-3 rounded-none border-b-2 ${
+            activeTab === "reviews" ? "border-primary text-primary" : "border-transparent"
+          } transition-colors hover:text-primary data-[state=active]:bg-transparent data-[state=active]:text-primary`}
+        >
+          Reviews
+        </TabsTrigger>
+        <TabsTrigger 
+          value="faqs" 
+          className={`flex flex-col items-center justify-center py-3 rounded-none border-b-2 ${
+            activeTab === "faqs" ? "border-primary text-primary" : "border-transparent"
+          } transition-colors hover:text-primary data-[state=active]:bg-transparent data-[state=active]:text-primary`}
+        >
+          FAQs
+        </TabsTrigger>
+      </TabsList>
+      
+      <div className="mt-6">
+        <TabsContent value="description" className="mt-0">
+          <DescriptionTab description={description} />
+        </TabsContent>
         
-        <TabsContent value="specifications" className="w-full max-w-full">
+        <TabsContent value="specs" className="mt-0">
           <div className="space-y-6">
-            <div className="bg-gray-50/50 rounded-lg p-6">
-              <h3 className="font-medium text-lg mb-4">Product Specifications</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-white p-4 rounded-md shadow-sm border border-gray-100">
-                  <p className="text-sm font-medium text-gray-500">Material</p>
-                  <p className="font-medium text-gray-900">Premium Cotton Blend</p>
+            <h3 className="text-lg font-medium flex items-center gap-2">
+              <Award className="w-5 h-5 text-primary" />
+              Product Specifications
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {specifications.map((spec, index) => (
+                <div key={index} className="flex border-b border-gray-100 pb-3">
+                  <span className="w-1/2 text-gray-500">{spec.name}</span>
+                  <span className="w-1/2 font-medium">{spec.value}</span>
                 </div>
-                <div className="bg-white p-4 rounded-md shadow-sm border border-gray-100">
-                  <p className="text-sm font-medium text-gray-500">Weight</p>
-                  <p className="font-medium text-gray-900">0.3 kg</p>
+              ))}
+            </div>
+            
+            <div className="rounded-lg bg-gray-50 p-4 border border-gray-100">
+              <h4 className="font-medium mb-2">Product Dimensions</h4>
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <span className="block text-gray-500 text-sm">Height</span>
+                  <span className="font-medium">12 cm</span>
                 </div>
-                <div className="bg-white p-4 rounded-md shadow-sm border border-gray-100">
-                  <p className="text-sm font-medium text-gray-500">Dimensions</p>
-                  <p className="font-medium text-gray-900">24 × 12 × 3 cm</p>
+                <div>
+                  <span className="block text-gray-500 text-sm">Width</span>
+                  <span className="font-medium">36 cm</span>
                 </div>
-                <div className="bg-white p-4 rounded-md shadow-sm border border-gray-100">
-                  <p className="text-sm font-medium text-gray-500">Care Instructions</p>
-                  <p className="font-medium text-gray-900">Machine wash cold</p>
+                <div>
+                  <span className="block text-gray-500 text-sm">Depth</span>
+                  <span className="font-medium">8 cm</span>
                 </div>
               </div>
             </div>
+            
+            <div>
+              <h4 className="font-medium mb-3">Certifications</h4>
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="outline" className="bg-gray-50">ISO 9001</Badge>
+                <Badge variant="outline" className="bg-gray-50">CE Certified</Badge>
+                <Badge variant="outline" className="bg-gray-50">RoHS Compliant</Badge>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="shipping" className="mt-0">
+          <div className="space-y-6">
+            <h3 className="text-lg font-medium flex items-center gap-2">
+              <Truck className="w-5 h-5 text-primary" />
+              Shipping Information
+            </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <h4 className="font-medium text-gray-900">Technical Details</h4>
+                <h4 className="font-medium">Delivery Options</h4>
                 <div className="space-y-2">
-                  {[
-                    { label: "Product ID", value: "BT-583-2023-X" },
-                    { label: "Manufacturer", value: "AudioTech Industries" },
-                    { label: "Country of Origin", value: "Japan" },
-                    { label: "Production Date", value: "2023" },
-                    { label: "Warranty", value: "2 Years Limited" }
-                  ].map((item, idx) => (
-                    <div key={idx} className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="text-sm text-gray-500">{item.label}</span>
-                      <span className="text-sm font-medium text-gray-900">{item.value}</span>
+                  <div className="flex justify-between items-center p-3 border rounded-lg hover:border-primary transition-colors">
+                    <div className="flex items-center gap-3">
+                      <Truck className="w-5 h-5 text-primary" />
+                      <div>
+                        <p className="font-medium">Standard Shipping</p>
+                        <p className="text-sm text-gray-500">4-7 business days</p>
+                      </div>
                     </div>
-                  ))}
+                    <p className="font-medium">$4.99</p>
+                  </div>
+                  
+                  <div className="flex justify-between items-center p-3 border rounded-lg hover:border-primary transition-colors">
+                    <div className="flex items-center gap-3">
+                      <Package className="w-5 h-5 text-primary" />
+                      <div>
+                        <p className="font-medium">Express Delivery</p>
+                        <p className="text-sm text-gray-500">2-3 business days</p>
+                      </div>
+                    </div>
+                    <p className="font-medium">$12.99</p>
+                  </div>
+                  
+                  <div className="flex justify-between items-center p-3 border rounded-lg hover:border-primary transition-colors">
+                    <div className="flex items-center gap-3">
+                      <Package className="w-5 h-5 text-green-500" />
+                      <div>
+                        <p className="font-medium">Free Shipping</p>
+                        <p className="text-sm text-gray-500">On orders over $75</p>
+                      </div>
+                    </div>
+                    <Badge>Free</Badge>
+                  </div>
                 </div>
               </div>
               
               <div className="space-y-4">
-                <h4 className="font-medium text-gray-900">Performance Metrics</h4>
-                <div className="space-y-2">
-                  {[
-                    { label: "Battery Life", value: "Up to 15 hours" },
-                    { label: "Charging Time", value: "2.5 hours" },
-                    { label: "Bluetooth Range", value: "10 meters" },
-                    { label: "Water Resistance", value: "IPX7 Rating" },
-                    { label: "Audio Output", value: "20W RMS" }
-                  ].map((item, idx) => (
-                    <div key={idx} className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="text-sm text-gray-500">{item.label}</span>
-                      <span className="text-sm font-medium text-gray-900">{item.value}</span>
-                    </div>
-                  ))}
-                </div>
+                <h4 className="font-medium">International Shipping</h4>
+                <p className="text-gray-600">We ship to over 100 countries worldwide. International shipping rates vary based on location and order size.</p>
+                <table className="w-full text-sm">
+                  <thead className="border-b">
+                    <tr>
+                      <th className="text-left py-2">Region</th>
+                      <th className="text-left py-2">Delivery Time</th>
+                      <th className="text-right py-2">Starting Cost</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b">
+                      <td className="py-2">Europe</td>
+                      <td className="py-2">7-10 days</td>
+                      <td className="text-right py-2">$15.99</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="py-2">Asia</td>
+                      <td className="py-2">10-14 days</td>
+                      <td className="text-right py-2">$18.99</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2">Other regions</td>
+                      <td className="py-2">14-21 days</td>
+                      <td className="text-right py-2">$24.99</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
             
-            <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
-              <h4 className="font-medium text-blue-900 mb-3">What's in the Box</h4>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {[
-                  "1 x Main Product Unit",
-                  "1 x USB-C Charging Cable",
-                  "1 x User Manual",
-                  "1 x Quick Start Guide",
-                  "1 x Warranty Card",
-                  "1 x Travel Pouch"
-                ].map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-2 text-sm text-blue-800">
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="shipping" className="w-full max-w-full">
-          <div className="space-y-8">
-            {/* Quick Stats Banner */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-white border border-gray-100 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Truck className="h-5 w-5 text-green-600" />
-                </div>
-                <h4 className="text-sm font-medium text-gray-900 mb-1">Free Shipping</h4>
-                <p className="text-xs text-gray-500">On orders over $50</p>
-              </div>
-              <div className="bg-white border border-gray-100 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Calendar className="h-5 w-5 text-blue-600" />
-                </div>
-                <h4 className="text-sm font-medium text-gray-900 mb-1">Fast Delivery</h4>
-                <p className="text-xs text-gray-500">2-5 business days</p>
-              </div>
-              <div className="bg-white border border-gray-100 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Award className="h-5 w-5 text-purple-600" />
-                </div>
-                <h4 className="text-sm font-medium text-gray-900 mb-1">Guaranteed</h4>
-                <p className="text-xs text-gray-500">100% secure shipping</p>
-              </div>
-              <div className="bg-white border border-gray-100 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Tag className="h-5 w-5 text-amber-600" />
-                </div>
-                <h4 className="text-sm font-medium text-gray-900 mb-1">Track Orders</h4>
-                <p className="text-xs text-gray-500">Real-time updates</p>
-              </div>
-            </div>
-
-            {/* Delivery Options */}
-            <div className="bg-white border border-gray-100 rounded-lg p-6 shadow-sm">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Delivery Options</h3>
-              <div className="space-y-4">
-                <div className="flex items-start border-b border-gray-100 pb-4">
-                  <div className="h-6 w-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-xs font-medium text-green-600">1</span>
+            <div className="space-y-4">
+              <h4 className="font-medium">Order Tracking</h4>
+              <p className="text-gray-600">Once your order ships, you will receive a confirmation email with a tracking number and link to monitor your shipment's progress.</p>
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                <h5 className="font-medium mb-3">Shipping FAQs</h5>
+                <div className="space-y-2">
+                  <div>
+                    <p className="font-medium">Do you ship to P.O. boxes?</p>
+                    <p className="text-sm text-gray-600">Yes, we do ship to P.O. boxes for standard shipping only.</p>
                   </div>
-                  <div className="ml-4">
-                    <h4 className="text-sm font-medium text-gray-900">Standard Shipping</h4>
-                    <p className="text-xs text-gray-500 mt-1">Delivery in 3-5 business days</p>
-                    <div className="mt-2 flex items-center gap-2">
-                      <Badge variant="outline" className="bg-gray-50 text-gray-700">Free over $50</Badge>
-                      <Badge variant="outline" className="bg-gray-50 text-gray-700">$4.99 standard</Badge>
-                    </div>
+                  <div>
+                    <p className="font-medium">What if my package is damaged?</p>
+                    <p className="text-sm text-gray-600">Please contact customer service within 48 hours of delivery with photos of the damage.</p>
                   </div>
-                </div>
-                
-                <div className="flex items-start border-b border-gray-100 pb-4">
-                  <div className="h-6 w-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-xs font-medium text-blue-600">2</span>
-                  </div>
-                  <div className="ml-4">
-                    <h4 className="text-sm font-medium text-gray-900">Express Shipping</h4>
-                    <p className="text-xs text-gray-500 mt-1">Delivery in 1-2 business days</p>
-                    <div className="mt-2">
-                      <Badge variant="outline" className="bg-gray-50 text-gray-700">$12.99</Badge>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="h-6 w-6 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-xs font-medium text-purple-600">3</span>
-                  </div>
-                  <div className="ml-4">
-                    <h4 className="text-sm font-medium text-gray-900">Same Day Delivery</h4>
-                    <p className="text-xs text-gray-500 mt-1">Available in select cities for orders placed before 11am</p>
-                    <div className="mt-2">
-                      <Badge variant="outline" className="bg-gray-50 text-gray-700">$19.99</Badge>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Shipping Estimator */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-100">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Shipping Estimator</h3>
-              <div className="flex items-center gap-2 mb-4">
-                <input 
-                  type="text" 
-                  placeholder="Enter ZIP/Postal Code" 
-                  className="px-3 py-2 border border-gray-300 rounded-md text-sm flex-1"
-                />
-                <Button className="bg-blue-600 hover:bg-blue-700">Check</Button>
-              </div>
-              <div className="text-xs text-blue-700 italic">
-                Enter your ZIP/Postal code to check delivery options and estimated arrival dates
-              </div>
-            </div>
-
-            {/* International Shipping */}
-            <div className="bg-white border border-gray-100 rounded-lg p-6 shadow-sm">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">International Shipping</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
-                    <span className="text-sm text-gray-900">North America</span>
-                  </div>
-                  <div className="text-sm font-medium text-gray-900">$12.99 - $24.99</div>
-                </div>
-                
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
-                    <span className="text-sm text-gray-900">Europe</span>
-                  </div>
-                  <div className="text-sm font-medium text-gray-900">$19.99 - $29.99</div>
-                </div>
-                
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
-                    <span className="text-sm text-gray-900">Asia-Pacific</span>
-                  </div>
-                  <div className="text-sm font-medium text-gray-900">$24.99 - $39.99</div>
-                </div>
-                
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
-                    <span className="text-sm text-gray-900">Rest of World</span>
-                  </div>
-                  <div className="text-sm font-medium text-gray-900">$29.99 - $49.99</div>
-                </div>
-              </div>
-              <div className="mt-4 text-xs text-gray-500">
-                Note: International shipping times may vary. Customs duties and taxes may apply and are the responsibility of the customer.
-              </div>
-            </div>
-
-            {/* Order Tracking */}
-            <div className="bg-white border border-gray-100 rounded-lg p-6 shadow-sm">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Track Your Order</h3>
-              <div className="flex items-center gap-2 mb-4">
-                <input 
-                  type="text" 
-                  placeholder="Enter Order Number" 
-                  className="px-3 py-2 border border-gray-300 rounded-md text-sm flex-1"
-                />
-                <Button className="bg-blue-600 hover:bg-blue-700">Track</Button>
-              </div>
-              <div className="flex items-center justify-center gap-3 py-6 border-t border-b border-gray-100">
-                <div className="text-center">
-                  <div className="w-8 h-8 rounded-full bg-green-500 mx-auto flex items-center justify-center">
-                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <div className="text-xs mt-2">Order Placed</div>
-                </div>
-                <div className="flex-1 h-1 bg-green-500"></div>
-                <div className="text-center">
-                  <div className="w-8 h-8 rounded-full bg-green-500 mx-auto flex items-center justify-center">
-                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <div className="text-xs mt-2">Processing</div>
-                </div>
-                <div className="flex-1 h-1 bg-gray-300"></div>
-                <div className="text-center">
-                  <div className="w-8 h-8 rounded-full bg-gray-300 mx-auto flex items-center justify-center">
-                    <span className="text-xs text-gray-600">3</span>
-                  </div>
-                  <div className="text-xs mt-2">Shipped</div>
-                </div>
-                <div className="flex-1 h-1 bg-gray-300"></div>
-                <div className="text-center">
-                  <div className="w-8 h-8 rounded-full bg-gray-300 mx-auto flex items-center justify-center">
-                    <span className="text-xs text-gray-600">4</span>
-                  </div>
-                  <div className="text-xs mt-2">Delivered</div>
-                </div>
-              </div>
-              <div className="mt-4 text-xs text-center text-gray-500">
-                Example tracking visualization. Enter your order number to see actual status.
-              </div>
-            </div>
-
-            {/* Shipping FAQ */}
-            <div className="bg-white border border-gray-100 rounded-lg p-6 shadow-sm">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Shipping FAQ</h3>
-              <div className="space-y-4">
-                <div className="border-b border-gray-100 pb-3">
-                  <h4 className="text-sm font-medium text-gray-900 mb-2">How long will it take to receive my order?</h4>
-                  <p className="text-xs text-gray-600">Standard shipping takes 3-5 business days within the continental US. Express shipping is 1-2 business days. International shipping varies by region.</p>
-                </div>
-                <div className="border-b border-gray-100 pb-3">
-                  <h4 className="text-sm font-medium text-gray-900 mb-2">Do you ship to PO boxes?</h4>
-                  <p className="text-xs text-gray-600">Yes, we ship to PO boxes, but express shipping and same-day delivery options are not available for these addresses.</p>
-                </div>
-                <div className="border-b border-gray-100 pb-3">
-                  <h4 className="text-sm font-medium text-gray-900 mb-2">What happens if my package is lost?</h4>
-                  <p className="text-xs text-gray-600">If your package is lost during shipping, please contact our customer service team within 14 days of the expected delivery date for assistance.</p>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-900 mb-2">Can I change my shipping address after placing an order?</h4>
-                  <p className="text-xs text-gray-600">Address changes can be made if the order has not yet been processed. Please contact customer service immediately with your order number to request an address change.</p>
                 </div>
               </div>
             </div>
           </div>
         </TabsContent>
         
-        <WarrantyTab />
-        
-        <TabsContent value="reviews" className="mt-6 animate-in fade-in">
-          <div className="space-y-8">
-            {/* Reviews Summary */}
-            <div className="bg-white border border-gray-100 rounded-lg p-6 shadow-sm">
-              <div className="flex flex-col md:flex-row gap-6">
-                <div className="flex-1 flex flex-col items-center justify-center">
-                  <div className="text-4xl font-bold text-gray-900">{rating}</div>
-                  <div className="flex items-center mt-2">
-                    {[...Array(5)].map((_, i) => (
-                      <Star 
-                        key={i} 
-                        className={`w-4 h-4 ${i < Math.floor(rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} 
-                      />
+        <TabsContent value="reviews" className="mt-0">
+          <div className="space-y-6">
+            <h3 className="text-lg font-medium flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-primary" />
+              Customer Reviews
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="md:col-span-1 space-y-6">
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="text-center">
+                    <h4 className="text-3xl font-bold">4.8</h4>
+                    <div className="flex justify-center my-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star key={star} className={`w-4 h-4 ${star <= 4 ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300 fill-gray-300'}`} />
+                      ))}
+                    </div>
+                    <p className="text-sm text-gray-500">Based on 128 reviews</p>
+                  </div>
+                  
+                  <div className="mt-4 space-y-2">
+                    {[5, 4, 3, 2, 1].map((rating) => (
+                      <div key={rating} className="flex items-center gap-2">
+                        <span className="text-sm text-gray-600 w-2">{rating}</span>
+                        <Star className="w-3.5 h-3.5 text-gray-400" />
+                        <Progress 
+                          value={rating === 5 ? 75 : rating === 4 ? 18 : rating === 3 ? 5 : rating === 2 ? 2 : 0} 
+                          max={100} 
+                          className="h-2 flex-1"
+                          background="bg-gray-200"
+                          fill={rating >= 4 ? "bg-green-500" : rating === 3 ? "bg-yellow-500" : "bg-red-500"}
+                        />
+                        <span className="text-sm text-gray-600 w-8">
+                          {rating === 5 ? '75%' : rating === 4 ? '18%' : rating === 3 ? '5%' : rating === 2 ? '2%' : '0%'}
+                        </span>
+                      </div>
                     ))}
                   </div>
-                  <div className="text-sm text-gray-500 mt-2">Based on {reviews} reviews</div>
                 </div>
                 
-                <div className="flex-[2] space-y-2">
-                  {[5, 4, 3, 2, 1].map((star) => {
-                    // Calculate percentage based on star rating (mock data)
-                    const percentage = star === 5 ? 65 : 
-                                      star === 4 ? 20 : 
-                                      star === 3 ? 10 : 
-                                      star === 2 ? 3 : 2;
-                    
-                    return (
-                      <div key={star} className="flex items-center gap-3">
-                        <div className="flex items-center w-24">
-                          <span className="text-sm text-gray-600">{star}</span>
-                          <Star className="w-3.5 h-3.5 ml-1 text-yellow-400 fill-yellow-400" />
-                        </div>
-                        <div className="flex-1">
-                          <Progress value={percentage} className="h-2" />
-                        </div>
-                        <div className="w-12 text-xs text-gray-500 text-right">{percentage}%</div>
-                      </div>
-                    );
-                  })}
+                <div>
+                  <h4 className="font-medium mb-3">Review Filters</h4>
+                  <div className="space-y-2">
+                    <Button variant="outline" size="sm" className="w-full justify-start">
+                      <Filter className="w-4 h-4 mr-2" />
+                      All Reviews
+                    </Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start">
+                      <ThumbsUp className="w-4 h-4 mr-2" />
+                      Positive Only
+                    </Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start">
+                      <Star className="w-4 h-4 mr-2 fill-yellow-400 text-yellow-400" />
+                      With Photos
+                    </Button>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium mb-3">Search Reviews</h4>
+                  <div className="relative">
+                    <input
+                      type="search"
+                      placeholder="Search in reviews..."
+                      className="w-full px-3 py-2 pr-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                    />
+                    <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  </div>
                 </div>
               </div>
               
-              <div className="flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-100">
-                <Button className="bg-blue-600 hover:bg-blue-700">Write a Review</Button>
-                <Button variant="outline">See All Reviews</Button>
-              </div>
-            </div>
-            
-            {/* Review Filters */}
-            <div className="flex overflow-x-auto gap-2 pb-2 scrollbar-none">
-              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 cursor-pointer">
-                All Reviews
-              </Badge>
-              <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200 cursor-pointer">
-                5 Star
-              </Badge>
-              <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200 cursor-pointer">
-                4 Star
-              </Badge>
-              <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200 cursor-pointer">
-                3 Star
-              </Badge>
-              <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200 cursor-pointer">
-                2 Star
-              </Badge>
-              <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200 cursor-pointer">
-                1 Star
-              </Badge>
-              <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200 cursor-pointer">
-                With Photos
-              </Badge>
-              <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200 cursor-pointer">
-                Most Recent
-              </Badge>
-            </div>
-            
-            {/* Reviews List */}
-            <div className="space-y-6">
-              {[
-                {
-                  name: "Sarah Johnson",
-                  date: "Aug 15, 2023",
-                  rating: 5,
-                  title: "Amazing quality and sound!",
-                  comment: "This speaker exceeded my expectations! The sound quality is crystal clear, and the bass is incredible. Battery life is as advertised, and it easily connects to all my devices. Highly recommend this to anyone looking for premium audio quality.",
-                  helpful: 24,
-                  images: ["/api/placeholder/100/100", "/api/placeholder/100/100"]
-                },
-                {
-                  name: "Michael Chen",
-                  date: "Jul 28, 2023",
-                  rating: 4,
-                  title: "Great speaker with minor flaws",
-                  comment: "The sound quality and battery life are excellent. The only downside is that the Bluetooth connection sometimes drops when I move more than 8 meters away. Otherwise, it's a fantastic speaker for the price.",
-                  helpful: 18,
-                  images: []
-                },
-                {
-                  name: "Emma Williams",
-                  date: "Jun 12, 2023",
-                  rating: 5,
-                  title: "Perfect for outdoor use!",
-                  comment: "I've taken this speaker to the beach, pool, and camping - it holds up perfectly! The water resistance works as advertised, and the sound is loud enough for outdoor gatherings. Couldn't be happier with my purchase.",
-                  helpful: 32,
-                  images: ["/api/placeholder/100/100"]
-                }
-              ].map((review, idx) => (
-                <div key={idx} className="bg-white border border-gray-100 rounded-lg p-6 shadow-sm">
-                  <div className="flex justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                        {review.name.charAt(0)}
-                      </div>
+              <div className="md:col-span-2">
+                {[
+                  {
+                    author: "Sarah J.",
+                    rating: 5,
+                    date: "August 23, 2023",
+                    title: "Perfect addition to my collection!",
+                    content: "I absolutely love this product. The quality is outstanding and it looks even better in person than in the photos. Shipping was quick and the packaging was eco-friendly which I really appreciate.",
+                    helpful: 24
+                  },
+                  {
+                    author: "Michael T.",
+                    rating: 4,
+                    date: "July 15, 2023",
+                    title: "Great quality, small design flaw",
+                    content: "Overall this is an excellent product. The materials and build quality are top-notch. My only complaint is a small design issue that could be improved, but it doesn't affect the functionality. Would recommend!",
+                    helpful: 12
+                  },
+                  {
+                    author: "Emma L.",
+                    rating: 5,
+                    date: "June 30, 2023",
+                    title: "Exceeded my expectations",
+                    content: "I was hesitant to order this at first, but I'm so glad I did! The product arrived ahead of schedule and was exactly as described. The attention to detail is impressive and it fits perfectly with my existing items.",
+                    helpful: 8
+                  }
+                ].map((review, index) => (
+                  <div key={index} className="border-b pb-4 mb-4 last:border-b-0">
+                    <div className="flex justify-between items-start">
                       <div>
-                        <div className="font-medium text-gray-900">{review.name}</div>
-                        <div className="text-xs text-gray-500">{review.date}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star 
-                          key={i} 
-                          className={`w-4 h-4 ${i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} 
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <h4 className="font-medium text-gray-900 mb-2">{review.title}</h4>
-                  <p className="text-sm text-gray-600 mb-4">{review.comment}</p>
-                  
-                  {review.images.length > 0 && (
-                    <div className="flex gap-2 mb-4">
-                      {review.images.map((img, i) => (
-                        <div key={i} className="w-16 h-16 bg-gray-100 rounded-md overflow-hidden">
-                          <img src={img} alt="Review" className="w-full h-full object-cover" />
+                        <h4 className="font-medium">{review.author}</h4>
+                        <div className="flex items-center my-1 gap-1">
+                          <div className="flex">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star 
+                                key={star} 
+                                className={`w-4 h-4 ${star <= review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} 
+                              />
+                            ))}
+                          </div>
+                          <span className="text-xs text-gray-500">• {review.date}</span>
                         </div>
-                      ))}
+                      </div>
+                      <Badge variant="outline" className="bg-gray-50">Verified Purchase</Badge>
                     </div>
-                  )}
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="text-xs text-gray-500">
-                      {review.helpful} people found this helpful
+                    
+                    <h5 className="font-medium mt-2">{review.title}</h5>
+                    <p className="text-gray-600 mt-1 mb-3 text-sm">{review.content}</p>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs text-gray-500">
+                        {review.helpful} people found this helpful
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-blue-600">Helpful</Button>
                     </div>
-                    <Button variant="ghost" size="sm" className="text-blue-600">Helpful</Button>
                   </div>
+                ))}
+                
+                <div className="text-center">
+                  <Button variant="outline" className="w-full md:w-auto">Load More Reviews</Button>
                 </div>
-              ))}
-              
-              <div className="text-center">
-                <Button variant="outline" className="w-full md:w-auto">Load More Reviews</Button>
               </div>
             </div>
           </div>
         </TabsContent>
         
-        <FAQsTab />
+        <TabsContent value="faqs" className="mt-0">
+          <FAQsTab />
+        </TabsContent>
       </div>
     </Tabs>
   );
