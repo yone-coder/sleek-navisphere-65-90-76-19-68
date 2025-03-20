@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ModishGallery } from '@/components/modish/product/ModishGallery';
@@ -200,17 +199,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
   // Main layout content
   return (
     <div className="space-y-4">
-      {/* Top Banner - AliExpress style */}
-      <div className="bg-orange-50 p-2.5 rounded-lg flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <PercentCircle className="h-4 w-4 text-orange-500" />
-          <span className="text-xs font-medium text-orange-700">Limited Time Deal: Extra 15% OFF with code EXTRA15</span>
-        </div>
-        <div className="bg-orange-500 text-white text-xs px-2 py-0.5 rounded-full">
-          Ends in 02:45:30
-        </div>
-      </div>
-
+      
       {/* Enhanced Product Gallery */}
       <ModishGallery images={product.images} name={product.name} />
       
@@ -701,3 +690,4 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
     </div>
   );
 }
+</
