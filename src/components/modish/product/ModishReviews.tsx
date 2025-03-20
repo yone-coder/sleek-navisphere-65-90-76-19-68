@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { Star, ChevronRight, MessageCircle, ThumbsUp, ChevronLeft, Info } from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -21,19 +20,7 @@ type Review = {
 };
 
 export function ModishReviews({ productId }: ModishReviewsProps) {
-  // Mock data - would come from API in real app
-  const rating = 4.5;
-  const reviewCount = 120;
-
   // Mock review data
-  const ratingBreakdown = [
-    { stars: 5, percentage: 72 },
-    { stars: 4, percentage: 18 },
-    { stars: 3, percentage: 7 },
-    { stars: 2, percentage: 2 },
-    { stars: 1, percentage: 1 },
-  ];
-  
   const reviewsData = [
     {
       id: 1,
@@ -129,44 +116,10 @@ export function ModishReviews({ productId }: ModishReviewsProps) {
   return (
     <div className="space-y-6 pt-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-medium text-gray-900">Reviews ({reviewCount})</h3>
-        <button className="text-sm font-medium text-blue-600 flex items-center gap-1">
-          View All
-          <ChevronRight className="w-4 h-4" />
-        </button>
+        <h3 className="text-lg font-medium text-gray-900">Customer Reviews</h3>
       </div>
       
-      <div className="flex gap-6 flex-col md:flex-row">
-        <div className="md:w-56 p-4 bg-gray-50 rounded-lg flex flex-col items-center">
-          <div className="text-3xl font-bold text-gray-900">{rating.toFixed(1)}</div>
-          <div className="flex items-center gap-1 mt-1">
-            {[...Array(5)].map((_, index) => (
-              <Star 
-                key={index}
-                className={`w-4 h-4 ${index < Math.floor(rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
-              />
-            ))}
-          </div>
-          <div className="text-sm text-gray-500 mt-1">Based on {reviewCount} reviews</div>
-          
-          <div className="w-full space-y-2 mt-4">
-            {ratingBreakdown.map((item) => (
-              <div key={item.stars} className="flex items-center gap-2">
-                <div className="flex items-center gap-1 w-16">
-                  <span className="text-xs text-gray-700">{item.stars}</span>
-                  <Star className="w-3 h-3 text-yellow-400" />
-                </div>
-                <Progress value={item.percentage} className="flex-1 h-2" />
-                <span className="text-xs text-gray-500 w-7 text-right">{item.percentage}%</span>
-              </div>
-            ))}
-          </div>
-          
-          <button className="w-full mt-4 border border-gray-300 text-gray-700 h-10 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
-            Write a Review
-          </button>
-        </div>
-        
+      <div className="flex gap-6 flex-col">
         <div className="flex-1">
           <Card 
             className="relative overflow-hidden transition-all duration-300"
