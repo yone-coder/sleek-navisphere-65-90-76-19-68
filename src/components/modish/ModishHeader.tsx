@@ -119,7 +119,7 @@ export function ModishHeader() {
       
       {/* Category tabs - AliExpress style - only show when scrolled */}
       {scrolled && (
-        <div className="bg-white overflow-x-auto scrollbar-none">
+        <div className="bg-white overflow-x-auto scrollbar-none shadow-sm">
           <div className="flex items-center px-2 py-1.5 gap-3 min-w-max">
             <button className="flex items-center whitespace-nowrap text-xs bg-red-50 text-red-500 px-2.5 py-1 rounded-full">
               <span>All Categories</span>
