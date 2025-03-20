@@ -1,11 +1,13 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Star, ThumbsUp, Search, Filter } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 
 export function ModishReviews() {
+  const [activeFilter, setActiveFilter] = useState('all');
+  
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -41,15 +43,30 @@ export function ModishReviews() {
           <div>
             <h4 className="font-medium mb-3">Review Filters</h4>
             <div className="space-y-2">
-              <Button variant="outline" size="sm" className="w-full justify-start">
+              <Button 
+                variant={activeFilter === 'all' ? "default" : "outline"} 
+                size="sm" 
+                className="w-full justify-start"
+                onClick={() => setActiveFilter('all')}
+              >
                 <Filter className="w-4 h-4 mr-2" />
                 All Reviews
               </Button>
-              <Button variant="outline" size="sm" className="w-full justify-start">
+              <Button 
+                variant={activeFilter === 'positive' ? "default" : "outline"} 
+                size="sm" 
+                className="w-full justify-start"
+                onClick={() => setActiveFilter('positive')}
+              >
                 <ThumbsUp className="w-4 h-4 mr-2" />
                 Positive Only
               </Button>
-              <Button variant="outline" size="sm" className="w-full justify-start">
+              <Button 
+                variant={activeFilter === 'photos' ? "default" : "outline"} 
+                size="sm" 
+                className="w-full justify-start"
+                onClick={() => setActiveFilter('photos')}
+              >
                 <Star className="w-4 h-4 mr-2 fill-yellow-400 text-yellow-400" />
                 With Photos
               </Button>

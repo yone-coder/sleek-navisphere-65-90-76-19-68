@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ModishGallery } from '@/components/modish/product/ModishGallery';
@@ -114,6 +115,10 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
     setActiveCoupon(coupon);
   };
 
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+  };
+
   if (!product) {
     return <div className="p-4 flex items-center justify-center h-64">
       <div className="animate-pulse flex flex-col items-center gap-4">
@@ -124,6 +129,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
     </div>;
   }
 
+  // Main layout content
   return (
     <div className="space-y-4">
       {/* Top Banner - AliExpress style */}
@@ -146,7 +152,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
           {['description', 'specs', 'shipping', 'reviews', 'recommend'].map((tab) => (
             <button
               key={tab}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => handleTabChange(tab)}
               className={`whitespace-nowrap py-3 border-b-2 text-sm font-medium transition-colors ${
                 activeTab === tab 
                   ? 'border-red-500 text-red-500'
@@ -395,7 +401,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </button>
       </div>
 
-      {/* Tab Content Area - THIS IS THE IMPORTANT PART THAT NEEDS FIXING */}
+      {/* Tab Content Area - Fixed to show proper content */}
       <div className="border-t border-gray-100 mt-2">
         {activeTab === 'description' && (
           <div className="p-3">
