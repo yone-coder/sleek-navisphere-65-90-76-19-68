@@ -50,15 +50,15 @@ const AppStore = () => {
   const newGames = appData.filter(app => app.type === "game").slice(0, 6);
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-16">
+    <div className="min-h-screen bg-white pb-16">
       <AppStoreHeader activeTab={activeTab} setActiveTab={setActiveTab} />
       
-      <div className="pt-[108px] sm:pt-[120px] px-2 sm:px-4 max-w-7xl mx-auto">
+      <div className="pt-[90px] px-3 max-w-7xl mx-auto">
         <Tabs defaultValue={activeTab} value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsContent value="today" className="space-y-6 sm:space-y-8 mt-0">
+          <TabsContent value="today" className="space-y-5 mt-0">
             <FeaturedApps />
             
-            <div className="bg-white rounded-xl p-3 sm:p-4 shadow-sm">
+            <div className="bg-gray-50 rounded-xl p-3 shadow-sm">
               <CategoryTabs categories={categories} />
             </div>
             
@@ -70,7 +70,7 @@ const AppStore = () => {
               downloadingApps={downloadingApps}
             />
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <TopCharts type="app" />
               <TopCharts type="game" />
             </div>
@@ -85,8 +85,8 @@ const AppStore = () => {
             />
           </TabsContent>
           
-          <TabsContent value="games" className="space-y-6 sm:space-y-8 mt-0">
-            <div className="bg-white rounded-xl p-3 sm:p-4 shadow-sm mb-4 sm:mb-6">
+          <TabsContent value="games" className="space-y-5 mt-0">
+            <div className="bg-gray-50 rounded-xl p-3 shadow-sm mb-4">
               <CategoryTabs categories={categories.filter(c => ["all", "games", "arcade", "premium", "new"].includes(c.id))} />
             </div>
             
@@ -99,13 +99,13 @@ const AppStore = () => {
               downloadingApps={downloadingApps}
             />
             
-            <div className="grid grid-cols-1 gap-4 sm:gap-8">
+            <div className="grid grid-cols-1 gap-4">
               <TopCharts type="game" limit={isMobile ? 10 : 15} />
             </div>
           </TabsContent>
           
-          <TabsContent value="apps" className="space-y-6 sm:space-y-8 mt-0">
-            <div className="bg-white rounded-xl p-3 sm:p-4 shadow-sm mb-4 sm:mb-6">
+          <TabsContent value="apps" className="space-y-5 mt-0">
+            <div className="bg-gray-50 rounded-xl p-3 shadow-sm mb-4">
               <CategoryTabs categories={categories.filter(c => ["all", "apps", "premium", "new"].includes(c.id))} />
             </div>
             
@@ -118,13 +118,13 @@ const AppStore = () => {
               downloadingApps={downloadingApps}
             />
             
-            <div className="grid grid-cols-1 gap-4 sm:gap-8">
+            <div className="grid grid-cols-1 gap-4">
               <TopCharts type="app" limit={isMobile ? 10 : 15} />
             </div>
           </TabsContent>
           
-          <TabsContent value="arcade" className="space-y-6 sm:space-y-8 mt-0">
-            <div className="bg-white rounded-xl p-3 sm:p-4 shadow-sm mb-4 sm:mb-6">
+          <TabsContent value="arcade" className="space-y-5 mt-0">
+            <div className="bg-gray-50 rounded-xl p-3 shadow-sm mb-4">
               <CategoryTabs categories={categories.filter(c => ["all", "arcade", "premium", "new"].includes(c.id))} />
             </div>
             

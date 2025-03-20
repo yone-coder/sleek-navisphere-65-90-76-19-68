@@ -23,22 +23,22 @@ export function FeaturedApps() {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {featuredApps.map((app) => (
-        <Card key={app.id} className="overflow-hidden rounded-2xl shadow-sm cursor-pointer hover:shadow-md transition-shadow">
-          <div className={`bg-gradient-to-r ${app.color} p-4 text-white`}>
+        <Card key={app.id} className="overflow-hidden rounded-xl shadow-sm cursor-pointer hover:shadow-md transition-shadow border-0">
+          <div className={`bg-gradient-to-r ${app.color} p-3 text-white`}>
             <span className="text-xs font-medium">{app.title}</span>
           </div>
-          <div className="p-4 flex items-center gap-4">
-            <div className="w-16 h-16 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0">
+          <div className="p-3 flex items-center gap-3">
+            <div className="w-14 h-14 rounded-[22%] bg-gray-100 overflow-hidden flex-shrink-0">
               <img src={app.image} alt={app.name} className="w-full h-full object-cover" />
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-lg text-gray-900">{app.name}</h3>
               <p className="text-sm text-gray-500">{app.description}</p>
             </div>
-            <button className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition">
-              <ChevronRight className="w-5 h-5 text-gray-700" />
+            <button className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition flex-shrink-0">
+              <ChevronRight className="w-4 h-4 text-gray-700" />
             </button>
           </div>
         </Card>

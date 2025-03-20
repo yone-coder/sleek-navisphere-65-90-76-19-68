@@ -1,5 +1,5 @@
 
-import { ChevronRight, Download, Check, Loader2 } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { AppCard } from "./AppCard";
 import { appData } from "./data/appStoreData";
 import { App } from "./types";
@@ -27,22 +27,22 @@ export function AppSection({
   const displayApps = apps || appData.filter(app => app.type === type).slice(0, 6);
 
   return (
-    <div className="space-y-3 sm:space-y-4">
+    <div className="space-y-2.5">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg sm:text-xl font-bold text-gray-900">{title}</h2>
-          <p className="text-xs sm:text-sm text-gray-500">{subtitle}</p>
+          <h2 className="text-[20px] font-bold text-gray-900">{title}</h2>
+          <p className="text-xs text-gray-500">{subtitle}</p>
         </div>
-        <button className="flex items-center gap-1 text-blue-500 text-xs sm:text-sm font-medium">
+        <button className="flex items-center gap-1 text-blue-500 text-sm font-medium">
           See All
-          <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
+          <ChevronRight className="w-4 h-4" />
         </button>
       </div>
 
-      <div className="overflow-x-auto scrollbar-thin pb-3 sm:pb-4 -mx-2 px-2">
-        <div className="flex gap-3 sm:gap-4" style={{ minWidth: "min-content" }}>
+      <div className="overflow-x-auto scrollbar-none pb-2 -mx-3 px-3">
+        <div className="flex gap-3" style={{ minWidth: "min-content" }}>
           {displayApps.map((app) => (
-            <div key={app.id} className="min-w-[120px] max-w-[120px] sm:min-w-[140px] sm:max-w-[140px]">
+            <div key={app.id} className="min-w-[124px] max-w-[124px]">
               <AppCard 
                 app={app} 
                 onDownload={() => onAppDownload && onAppDownload(app.id)}
