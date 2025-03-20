@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
@@ -88,10 +89,9 @@ const AppContent = () => {
   const isAdminRoute = location.pathname.startsWith('/admin');
   const isModishRoute = location.pathname.startsWith('/modish');
   const isCheckoutRoute = location.pathname.includes('checkout');
-  const isAppStoreRoute = location.pathname.startsWith('/appstore');
   
-  // Hide bottom nav on specific routes
-  const shouldShowBottomNav = !isAdminRoute && !isModishRoute && !isCheckoutRoute && !isAppStoreRoute;
+  // Hide bottom nav on specific routes (removing appstore from this list)
+  const shouldShowBottomNav = !isAdminRoute && !isModishRoute && !isCheckoutRoute;
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">

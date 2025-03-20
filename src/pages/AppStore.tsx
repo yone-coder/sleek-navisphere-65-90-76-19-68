@@ -1,10 +1,8 @@
-
 import { useState } from "react";
 import { AppStoreHeader } from "@/components/appstore/AppStoreHeader";
 import { FeaturedApps } from "@/components/appstore/FeaturedApps";
 import { AppSection } from "@/components/appstore/AppSection"; 
 import { TopCharts } from "@/components/appstore/TopCharts";
-import { AppStoreTabs } from "@/components/appstore/AppStoreTabs";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { CategoryTabs } from "@/components/apps/CategoryTabs";
 import { Download, Gamepad2, Grid3X3, Sparkles, Star, Award, Gift, Zap } from "lucide-react";
@@ -39,25 +37,19 @@ const AppStore = () => {
 
   const handleAppDownload = (appId: number) => {
     setDownloadingApps(prev => [...prev, appId]);
-    // Simulate download completion after 2 seconds
     setTimeout(() => {
       setDownloadingApps(prev => prev.filter(id => id !== appId));
     }, 2000);
   };
 
-  // Count premium apps
   const premiumApps = appData.filter(app => app.price > 0);
-  // Get apps with high ratings
   const topRatedApps = [...appData].sort((a, b) => b.rating - a.rating).slice(0, 6);
-  // Get newest games by assuming lower IDs are newer in our mock data
   const newGames = appData.filter(app => app.type === "game").slice(0, 6);
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
-      {/* Fixed Header */}
       <AppStoreHeader activeTab={activeTab} setActiveTab={setActiveTab} />
       
-      {/* Main Content */}
       <div className="pt-[120px] px-4 max-w-7xl mx-auto">
         <Tabs defaultValue={activeTab} value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsContent value="today" className="space-y-8 mt-0">
@@ -143,9 +135,6 @@ const AppStore = () => {
           </TabsContent>
         </Tabs>
       </div>
-      
-      {/* Bottom Tabs */}
-      <AppStoreTabs activeTab={activeTab} setActiveTab={setActiveTab} />
     </div>
   );
 };
