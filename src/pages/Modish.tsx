@@ -2,13 +2,14 @@
 import React, { useState } from 'react';
 import { ModishHeader } from '@/components/modish/ModishHeader';
 import { ModishProductDetails } from '@/components/modish/ModishProductDetails';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { ModishFloatingActions } from '@/components/modish/ModishFloatingActions';
 import { useToast } from '@/hooks/use-toast';
 
 const Modish = () => {
   const { id } = useParams();
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   // Default to product ID 1 if none is provided
   const productId = id || '1';

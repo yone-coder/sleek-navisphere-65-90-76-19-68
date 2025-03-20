@@ -4,6 +4,7 @@ import { ArrowUp, Heart, MessageSquare, Share2, ShoppingCart, Tag, Star, Shield,
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 import { 
   Drawer,
   DrawerClose,
@@ -42,6 +43,7 @@ export function ModishFloatingActions({
   stock
 }: ModishFloatingActionsProps) {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(false);
   const [showShippingDrawer, setShowShippingDrawer] = useState(false);
   const [showReviewsDrawer, setShowReviewsDrawer] = useState(false);
@@ -100,6 +102,25 @@ export function ModishFloatingActions({
     // Simulate network request
     setTimeout(() => {
       setBuyLoading(false);
+      
+      // Create mock product data for the checkout page
+      const mockProduct = {
+        name: "Stylish Modern Product",
+        discountPrice: price,
+        originalPrice: originalPrice,
+        images: ['/lovable-uploads/7751a0aa-bb1f-47c5-b434-e63e68dbc0d0.png']
+      };
+      
+      // Navigate to checkout page with product data
+      navigate('/modish/checkout', { 
+        state: { 
+          product: mockProduct,
+          selectedColor: "Black",
+          quantity: 1
+        } 
+      });
+      
+      // Still call the original onBuyNow prop for any additional handling
       onBuyNow();
     }, 800);
   };
@@ -473,4 +494,3 @@ export function ModishFloatingActions({
     </>
   );
 }
-
