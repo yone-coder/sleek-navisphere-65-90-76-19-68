@@ -39,7 +39,8 @@ export function ProductGallery({
     const updateHeaderHeight = () => {
       const headerElement = document.querySelector('.modish-header');
       if (headerElement) {
-        setHeaderHeight(headerElement.clientHeight);
+        // Add extra padding (12px) to ensure content isn't hidden right at the edge
+        setHeaderHeight(headerElement.clientHeight + 12);
       }
     };
 
