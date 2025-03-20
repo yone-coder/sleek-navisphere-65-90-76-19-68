@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 type TabItem = {
   id: string;
@@ -20,7 +19,6 @@ type ModishTabsProps = {
 export function ModishTabs({ tabs, activeTab, onChange }: ModishTabsProps) {
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
   const tabsRef = useRef<(HTMLButtonElement | null)[]>([]);
-  const { isMobile } = useIsMobile();
   
   // Update indicator position when active tab changes
   useEffect(() => {
@@ -49,10 +47,7 @@ export function ModishTabs({ tabs, activeTab, onChange }: ModishTabsProps) {
   }, [activeTab, tabs]);
 
   return (
-    <div className={cn(
-      "relative border-b border-gray-200 bg-white",
-      isMobile ? "rounded-t-xl mx-2 mt-1" : ""
-    )}>
+    <div className="relative border-b border-gray-200">
       <div className="overflow-x-auto scrollbar-none">
         <div className="flex whitespace-nowrap py-2 px-1 min-w-max">
           {tabs.map((tab, index) => (

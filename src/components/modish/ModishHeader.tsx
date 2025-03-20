@@ -6,14 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 export function ModishHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
   const navigate = useNavigate();
-  const { isMobile } = useIsMobile();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,23 +29,19 @@ export function ModishHeader() {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-200 bg-white",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-200",
         scrolled 
-          ? "shadow-sm py-1" 
-          : "py-1"
+          ? "bg-white shadow-sm py-1" 
+          : "bg-white py-1"
       )}
-      style={{ 
-        borderBottomLeftRadius: isMobile ? '16px' : '0',
-        borderBottomRightRadius: isMobile ? '16px' : '0',
-      }}
     >
-      {/* Top navigation bar - App-like style */}
+      {/* Top navigation bar - Enhanced style */}
       <div className="px-3 py-2 flex items-center justify-between">
         {/* Left section */}
         <div className="flex items-center gap-2">
           <button 
             onClick={handleGoBack}
-            className="w-8 h-8 flex items-center justify-center text-gray-700 rounded-full hover:bg-gray-100"
+            className="w-8 h-8 flex items-center justify-center text-gray-700"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
@@ -60,7 +54,7 @@ export function ModishHeader() {
           )}
         </div>
 
-        {/* Search bar - Enhanced app-like style */}
+        {/* Search bar - Enhanced style */}
         <div 
           className={cn(
             "relative transition-all duration-200 flex items-center",
@@ -111,12 +105,12 @@ export function ModishHeader() {
           </div>
         </div>
 
-        {/* Right section - App-like style */}
+        {/* Right section - Enhanced style */}
         <div className="flex items-center gap-2">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <button className="relative w-8 h-8 flex items-center justify-center text-gray-700 rounded-full hover:bg-gray-100">
+                <button className="relative w-8 h-8 flex items-center justify-center text-gray-700">
                   <Share2 className="w-5 h-5" />
                 </button>
               </TooltipTrigger>
@@ -129,7 +123,7 @@ export function ModishHeader() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <button className="relative w-8 h-8 flex items-center justify-center text-gray-700 rounded-full hover:bg-gray-100">
+                <button className="relative w-8 h-8 flex items-center justify-center text-gray-700">
                   <Bell className="w-5 h-5" />
                   <Badge className="absolute -top-0.5 -right-0.5 h-4 w-4 p-0 flex items-center justify-center text-[10px] bg-red-500 text-white">
                     5
@@ -145,7 +139,7 @@ export function ModishHeader() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <button className="relative w-8 h-8 flex items-center justify-center text-gray-700 rounded-full hover:bg-gray-100">
+                <button className="relative w-8 h-8 flex items-center justify-center text-gray-700">
                   <ShoppingBag className="w-5 h-5" />
                   <Badge className="absolute -top-0.5 -right-0.5 h-4 w-4 p-0 flex items-center justify-center text-[10px] bg-red-500 text-white">
                     3
@@ -159,7 +153,7 @@ export function ModishHeader() {
           </TooltipProvider>
           
           <button 
-            className="w-8 h-8 flex items-center justify-center text-gray-700 rounded-full hover:bg-gray-100"
+            className="w-8 h-8 flex items-center justify-center text-gray-700"
             onClick={() => setShowCategoryMenu(!showCategoryMenu)}
           >
             <Menu className="w-5 h-5" />
@@ -167,11 +161,11 @@ export function ModishHeader() {
         </div>
       </div>
       
-      {/* Deals banner - Modern app-like style */}
+      {/* Deals banner - Enhanced style */}
       <div className="px-3 py-1.5 bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-between">
         <div className="flex items-center gap-1.5">
           <Tag className="w-4 h-4 text-white" />
-          <span className="text-xs font-medium text-white">Flash Sale</span>
+          <span className="text-xs font-medium text-white">Super Deals</span>
         </div>
         
         <div className="flex items-center gap-1.5">
@@ -180,9 +174,9 @@ export function ModishHeader() {
         </div>
       </div>
       
-      {/* Category menu - Modern app-like dropdown */}
+      {/* Category menu - Show when menu button is clicked */}
       {showCategoryMenu && (
-        <div className="absolute top-full left-0 right-0 bg-white shadow-lg z-50 p-3 grid grid-cols-4 gap-3 rounded-b-xl">
+        <div className="absolute top-full left-0 right-0 bg-white shadow-lg z-50 p-3 grid grid-cols-4 gap-3">
           {['Electronics', 'Fashion', 'Home', 'Beauty', 'Sports', 'Toys', 'Automotive', 'Books'].map((category) => (
             <Button 
               key={category}
@@ -199,32 +193,32 @@ export function ModishHeader() {
         </div>
       )}
       
-      {/* Category tabs - App-like tabs with pill design - only show when scrolled */}
+      {/* Category tabs - Enhanced style - only show when scrolled */}
       {scrolled && (
-        <div className="bg-white overflow-x-auto scrollbar-none">
+        <div className="bg-white overflow-x-auto scrollbar-none border-b border-gray-100">
           <div className="flex items-center px-2 py-1.5 gap-3 min-w-max">
-            <button className="flex items-center whitespace-nowrap text-xs bg-red-50 text-red-500 px-3 py-1.5 rounded-full font-medium">
+            <button className="flex items-center whitespace-nowrap text-xs bg-red-50 text-red-500 px-2.5 py-1 rounded-full">
               <span>All Categories</span>
               <ChevronDown className="ml-1 w-3 h-3" />
             </button>
             
-            <button className="whitespace-nowrap text-xs text-gray-700 px-3 py-1.5 rounded-full bg-gray-50 font-medium">
+            <button className="whitespace-nowrap text-xs text-gray-700 px-2.5 py-1 rounded-full">
               Top Products
             </button>
             
-            <button className="whitespace-nowrap text-xs text-gray-700 px-3 py-1.5 rounded-full bg-gray-50 font-medium">
+            <button className="whitespace-nowrap text-xs text-gray-700 px-2.5 py-1 rounded-full">
               Best Selling
             </button>
             
-            <button className="whitespace-nowrap text-xs text-gray-700 px-3 py-1.5 rounded-full bg-gray-50 font-medium">
+            <button className="whitespace-nowrap text-xs text-gray-700 px-2.5 py-1 rounded-full">
               Price
             </button>
             
-            <button className="whitespace-nowrap text-xs text-gray-700 px-3 py-1.5 rounded-full bg-gray-50 font-medium">
+            <button className="whitespace-nowrap text-xs text-gray-700 px-2.5 py-1 rounded-full">
               New Arrivals
             </button>
             
-            <button className="whitespace-nowrap text-xs text-gray-700 px-3 py-1.5 rounded-full bg-gray-50 font-medium">
+            <button className="whitespace-nowrap text-xs text-gray-700 px-2.5 py-1 rounded-full">
               Ship From
             </button>
           </div>
