@@ -33,12 +33,29 @@ const Modish = () => {
       description: "Redirecting to secure payment...",
       duration: 2000,
     });
+    
+    // Create mock product data for the checkout page
+    const mockProduct = {
+      name: "Stylish Modern Product",
+      discountPrice: productPrice,
+      originalPrice: originalPrice,
+      images: ['/lovable-uploads/7751a0aa-bb1f-47c5-b434-e63e68dbc0d0.png']
+    };
+    
+    // Navigate to checkout page with product data
+    navigate('/modish/checkout', { 
+      state: { 
+        product: mockProduct,
+        selectedColor: "Black",
+        quantity: 1
+      } 
+    });
   };
 
   return (
-    <div className="min-h-screen bg-white pb-[150px] overflow-x-hidden">
+    <div className="min-h-screen bg-gray-50 pb-[150px] overflow-x-hidden">
       <ModishHeader />
-      <div className="w-full mx-auto px-0">
+      <div className="w-full mx-auto px-0 mt-14">
         <ModishProductDetails productId={productId} />
       </div>
       <ModishFloatingActions 

@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Plus, Minus, Check } from 'lucide-react';
+import { Plus, Minus, Check, AlertCircle, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 type ColorOption = {
@@ -40,6 +39,7 @@ export function ModishOptions({
   const stockStatus = 
     stock === 0 ? 'Out of stock' :
     stock < 5 ? `Only ${stock} left` :
+    stock < 20 ? `Limited supply` :
     'In stock';
   
   const stockStatusColor = 
@@ -48,34 +48,46 @@ export function ModishOptions({
     'text-green-600 bg-green-50';
 
   return (
-    <div className="space-y-6">
-      {/* Color Selection */}
-      <div className="space-y-4">
+    <div className="space-y-5 px-3">
+      {/* Specification label */}
+      <div className="text-sm font-medium text-gray-700 pb-1 border-b border-gray-100">Specifications</div>
+      
+      {/* Color Selection - AliExpress style */}
+      <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="font-medium text-gray-900">Color</h3>
-          <span className="text-sm text-gray-500">
-            {colors.find(c => c.value === selectedColor)?.name}
-          </span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-sm font-medium text-gray-800">Color:</span>
+            <span className="text-sm text-gray-500">
+              {colors.find(c => c.value === selectedColor)?.name}
+            </span>
+          </div>
+          {!selectedColor && (
+            <div className="flex items-center text-xs text-red-500 gap-0.5">
+              <AlertCircle className="h-3 w-3" />
+              <span>Select a color</span>
+            </div>
+          )}
         </div>
         
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-2">
           {colors.map((color) => (
             <button
               key={color.value}
               className={cn(
-                "w-9 h-9 rounded-full relative transition-all duration-300",
+                "transition-all duration-200 relative overflow-hidden",
                 selectedColor === color.value 
-                  ? "ring-2 ring-offset-2 ring-black scale-110" 
-                  : "hover:scale-110"
+                  ? "ring-1 ring-black" 
+                  : "border border-gray-300",
+                "w-16 h-16 rounded-md"
               )}
               style={{ backgroundColor: color.value }}
               onClick={() => onSelectColor(color.value)}
               aria-label={`Select ${color.name}`}
             >
               {selectedColor === color.value && (
-                <span className="absolute inset-0 flex items-center justify-center">
-                  <Check className={`w-4 h-4 ${getContrastColor(color.value)}`} />
-                </span>
+                <div className="absolute bottom-0 right-0 w-5 h-5 bg-black flex items-center justify-center">
+                  <Check className="w-3 h-3 text-white" />
+                </div>
               )}
               <span className="sr-only">{color.name}</span>
             </button>
@@ -83,49 +95,58 @@ export function ModishOptions({
         </div>
       </div>
       
-      {/* Size Selection - New Feature */}
+      {/* Size Selection - AliExpress style */}
       {sizes.length > 0 && (
-        <div className="space-y-4">
+        <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="font-medium text-gray-900">Size</h3>
-            <span className="text-sm text-gray-500">
-              {selectedSize || 'Select a size'}
-            </span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm font-medium text-gray-800">Size:</span>
+              <span className="text-sm text-gray-500">
+                {selectedSize || 'Select size'}
+              </span>
+            </div>
+            {!selectedSize && (
+              <div className="flex items-center text-xs text-red-500 gap-0.5">
+                <AlertCircle className="h-3 w-3" />
+                <span>Select a size</span>
+              </div>
+            )}
           </div>
           
           <div className="flex flex-wrap gap-2">
             {sizes.map((size) => (
               <button
                 key={size.name}
-                className={cn(
-                  "h-9 min-w-[40px] px-3 rounded-md transition-all duration-200 font-medium text-sm",
-                  !size.available && "opacity-40 cursor-not-allowed",
-                  selectedSize === size.name
-                    ? "bg-gray-900 text-white" 
-                    : size.available 
-                      ? "bg-gray-100 text-gray-800 hover:bg-gray-200" 
-                      : "bg-gray-100 text-gray-400"
-                )}
                 onClick={() => size.available && onSelectSize(size.name)}
                 disabled={!size.available}
+                className={cn(
+                  "px-3 py-2 rounded border transition-all min-w-[50px]",
+                  !size.available && "opacity-50 bg-gray-100 text-gray-400 border-gray-200",
+                  selectedSize === size.name
+                    ? "border-black bg-black text-white" 
+                    : size.available 
+                      ? "border-gray-300 hover:border-gray-500" 
+                      : "border-gray-200"
+                )}
               >
-                {size.name}
+                <span className="text-sm">{size.name}</span>
               </button>
             ))}
           </div>
           
-          <p className="text-xs text-gray-500 italic">
-            {selectedSize ? 'Size selected' : 'Please select a size'}
-          </p>
+          <div className="flex items-center text-xs text-gray-500 gap-1">
+            <HelpCircle className="h-3 w-3" />
+            <span>Size guide</span>
+          </div>
         </div>
       )}
       
-      {/* Quantity Selection */}
-      <div className="space-y-4">
+      {/* Quantity Selection - AliExpress style */}
+      <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="font-medium text-gray-900">Quantity</h3>
+          <span className="text-sm font-medium text-gray-800">Quantity:</span>
           <span className={cn(
-            "text-xs font-medium px-2 py-0.5 rounded-full",
+            "text-xs px-2 py-0.5 rounded-sm",
             stockStatusColor
           )}>
             {stockStatus}
@@ -134,28 +155,46 @@ export function ModishOptions({
         
         <div className="flex items-center">
           <button
-            className="w-9 h-9 rounded-l-lg bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors disabled:opacity-50"
+            className="w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:hover:bg-white"
             onClick={() => onUpdateQuantity(Math.max(1, quantity - 1))}
             disabled={quantity <= 1}
           >
-            <Minus className="w-4 h-4" />
+            <Minus className="w-3 h-3" />
           </button>
           
-          <div className="w-12 h-9 flex items-center justify-center border-y border-gray-200 bg-white text-gray-900 font-medium">
-            {quantity}
-          </div>
+          <input
+            type="number"
+            className="w-12 h-8 border-t border-b border-gray-300 text-center text-sm outline-none"
+            value={quantity}
+            readOnly
+          />
           
           <button
-            className="w-9 h-9 rounded-r-lg bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors disabled:opacity-50"
+            className="w-8 h-8 border border-gray-300 flex items-center justify-center text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:hover:bg-white"
             onClick={() => onUpdateQuantity(Math.min(stock, quantity + 1))}
             disabled={quantity >= stock}
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-3 h-3" />
           </button>
           
-          <span className="ml-4 text-sm text-gray-500">
-            {quantity === 1 ? '1 item' : `${quantity} items`}
+          <span className="ml-3 text-xs text-gray-500">
+            {stock > 0 ? (
+              <>Available: <span className="text-gray-800">{stock}</span></>
+            ) : (
+              "Out of stock"
+            )}
           </span>
+        </div>
+      </div>
+      
+      {/* Total price - AliExpress style */}
+      <div className="pt-3 border-t border-gray-100">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium text-gray-800">Total Price:</span>
+          <div className="flex items-baseline">
+            <span className="text-xs text-red-500">US $</span>
+            <span className="text-lg font-bold text-red-500">{(discountPrice * quantity).toFixed(2)}</span>
+          </div>
         </div>
       </div>
     </div>
