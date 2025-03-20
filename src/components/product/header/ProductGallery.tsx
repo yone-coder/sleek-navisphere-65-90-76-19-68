@@ -39,9 +39,9 @@ export function ProductGallery({
     const updateHeaderHeight = () => {
       const headerElement = document.querySelector('.modish-header');
       if (headerElement) {
-        // Add extra padding (48px) to ensure content isn't hidden right at the edge
-        // Increased from 24px to 48px to provide more space for the Flash Deals banner
-        setHeaderHeight(headerElement.clientHeight + 48);
+        // Add extra padding (24px) to ensure content isn't hidden right at the edge
+        // Increased from 12px to 24px to provide more space
+        setHeaderHeight(headerElement.clientHeight + 24);
       }
     };
 
