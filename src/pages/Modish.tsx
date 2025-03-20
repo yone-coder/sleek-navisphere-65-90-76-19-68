@@ -27,7 +27,9 @@ const Modish = () => {
   return (
     <div className="min-h-screen bg-white pb-[150px]">
       <ModishHeader />
-      <ModishProductDetails productId={productId} />
+      <div className="container mx-auto px-4 max-w-4xl">
+        <ModishProductDetails productId={productId} />
+      </div>
       <ModishFloatingActions 
         price={productPrice}
         originalPrice={originalPrice}

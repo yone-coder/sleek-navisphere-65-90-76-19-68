@@ -5,7 +5,7 @@ import { DescriptionTab } from "./tabs/DescriptionTab";
 import { WarrantyTab } from "./tabs/WarrantyTab";
 import { ReviewsTab } from "./tabs/ReviewsTab";
 import { FAQsTab } from "./tabs/FAQsTab";
-import { FileText, Shield, MessageSquare, HelpCircle } from "lucide-react";
+import { FileText, Shield, MessageSquare, HelpCircle, Settings } from "lucide-react";
 
 type ProductTabsProps = {
   description: string;
@@ -22,57 +22,95 @@ export function ProductTabs({
 }: ProductTabsProps) {
   return (
     <Tabs defaultValue="description" className="w-full">
-      <div className="overflow-x-auto overflow-y-hidden -mx-6">
-        <div className="min-w-max px-6">
-          <TabsList className="flex w-max h-12 bg-gradient-to-b from-gray-50/50 to-white p-2 rounded-2xl">
-            <TabsTrigger 
-              value="description"
-              className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
-            >
-              <div className="flex items-center gap-2">
-                <FileText className="w-4 h-4" />
-                <span className="font-medium text-sm">Description</span>
-              </div>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="warranty"
-              className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
-            >
-              <div className="flex items-center gap-2">
-                <Shield className="w-4 h-4" />
-                <span className="font-medium text-sm">Warranty & Support</span>
-              </div>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="reviews"
-              className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
-            >
-              <div className="flex items-center gap-2">
-                <MessageSquare className="w-4 h-4" />
-                <span className="font-medium text-sm">Reviews</span>
-                <div className="inline-flex ml-1">
-                  <span className="inline-flex items-center justify-center h-5 min-w-5 px-1.5 text-xs font-medium bg-gradient-to-r from-violet-500 to-indigo-500 text-white rounded-full shadow-sm">
-                    {reviews}
-                  </span>
+      <div className="relative overflow-hidden -mx-6">
+        <ScrollArea className="pb-4">
+          <div className="px-6 min-w-max">
+            <TabsList className="flex w-max h-12 bg-gradient-to-b from-gray-50/50 to-white p-2 rounded-2xl">
+              <TabsTrigger 
+                value="description"
+                className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
+              >
+                <div className="flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
+                  <span className="font-medium text-sm">Description</span>
                 </div>
-              </div>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="faqs"
-              className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
-            >
-              <div className="flex items-center gap-2">
-                <HelpCircle className="w-4 h-4" />
-                <span className="font-medium text-sm">FAQs</span>
-              </div>
-            </TabsTrigger>
-          </TabsList>
-        </div>
+              </TabsTrigger>
+              
+              <TabsTrigger 
+                value="specifications"
+                className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
+              >
+                <div className="flex items-center gap-2">
+                  <Settings className="w-4 h-4" />
+                  <span className="font-medium text-sm">Specifications</span>
+                </div>
+              </TabsTrigger>
+              
+              <TabsTrigger 
+                value="warranty"
+                className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
+              >
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4" />
+                  <span className="font-medium text-sm">Warranty & Support</span>
+                </div>
+              </TabsTrigger>
+              
+              <TabsTrigger 
+                value="reviews"
+                className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
+              >
+                <div className="flex items-center gap-2">
+                  <MessageSquare className="w-4 h-4" />
+                  <span className="font-medium text-sm">Reviews</span>
+                  <div className="inline-flex ml-1">
+                    <span className="inline-flex items-center justify-center h-5 min-w-5 px-1.5 text-xs font-medium bg-gradient-to-r from-violet-500 to-indigo-500 text-white rounded-full shadow-sm">
+                      {reviews}
+                    </span>
+                  </div>
+                </div>
+              </TabsTrigger>
+              
+              <TabsTrigger 
+                value="faqs"
+                className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
+              >
+                <div className="flex items-center gap-2">
+                  <HelpCircle className="w-4 h-4" />
+                  <span className="font-medium text-sm">Q&A</span>
+                </div>
+              </TabsTrigger>
+            </TabsList>
+          </div>
+        </ScrollArea>
       </div>
 
       <div className="mt-6">
         <TabsContent value="description">
           <DescriptionTab description={description} highlights={highlights} />
+        </TabsContent>
+        <TabsContent value="specifications">
+          <div className="space-y-4 p-4 bg-gray-50/50 rounded-lg">
+            <h3 className="font-medium text-lg">Product Specifications</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-white p-3 rounded-md shadow-sm">
+                <p className="text-sm font-medium text-gray-500">Material</p>
+                <p className="font-medium">Premium Cotton Blend</p>
+              </div>
+              <div className="bg-white p-3 rounded-md shadow-sm">
+                <p className="text-sm font-medium text-gray-500">Weight</p>
+                <p className="font-medium">0.3 kg</p>
+              </div>
+              <div className="bg-white p-3 rounded-md shadow-sm">
+                <p className="text-sm font-medium text-gray-500">Dimensions</p>
+                <p className="font-medium">24 × 12 × 3 cm</p>
+              </div>
+              <div className="bg-white p-3 rounded-md shadow-sm">
+                <p className="text-sm font-medium text-gray-500">Care Instructions</p>
+                <p className="font-medium">Machine wash cold</p>
+              </div>
+            </div>
+          </div>
         </TabsContent>
         <TabsContent value="warranty">
           <WarrantyTab />
