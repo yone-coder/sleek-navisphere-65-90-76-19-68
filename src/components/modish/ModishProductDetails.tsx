@@ -1,12 +1,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { ModishCarousel } from '@/components/modish/product/ModishCarousel';
+import { ModishGallery } from '@/components/modish/product/ModishGallery';
 import { ModishInfo } from '@/components/modish/product/ModishInfo';
 import { ModishOptions } from '@/components/modish/product/ModishOptions';
 import { ModishDescription } from '@/components/modish/product/ModishDescription';
 import { Badge } from '@/components/ui/badge';
-import { Tag, Award, ShieldCheck, Clock, Truck, ChevronRight, Gift } from 'lucide-react';
+import { 
+  Tag, Award, ShieldCheck, Clock, Truck, ChevronRight, Gift,
+  Star, MessageCircle, ThumbsUp, Zap, PercentCircle, MapPin, 
+  CreditCard, Package, Users, Sparkles, TrendingUp, DollarSign 
+} from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type Product = {
   id: string;
@@ -42,6 +47,11 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [showSimilarItems, setShowSimilarItems] = useState(false);
+  const [showRecommendations, setShowRecommendations] = useState(false);
+  const [showSpecifications, setShowSpecifications] = useState(false);
+  const [activeCoupon, setActiveCoupon] = useState<string | null>(null);
+  const [selectedTab, setSelectedTab] = useState('description');
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     // Mock API call - replace with actual API endpoint
@@ -100,6 +110,10 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
     setSelectedSize(size);
   };
 
+  const handleCouponSelect = (coupon: string) => {
+    setActiveCoupon(coupon);
+  };
+
   if (!product) {
     return <div className="p-4 flex items-center justify-center h-64">
       <div className="animate-pulse flex flex-col items-center gap-4">
@@ -115,7 +129,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
       {/* Top Banner - AliExpress style */}
       <div className="bg-orange-50 p-2.5 rounded-lg flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Tag className="h-4 w-4 text-orange-500" />
+          <PercentCircle className="h-4 w-4 text-orange-500" />
           <span className="text-xs font-medium text-orange-700">Limited Time Deal: Extra 15% OFF with code EXTRA15</span>
         </div>
         <div className="bg-orange-500 text-white text-xs px-2 py-0.5 rounded-full">
@@ -123,8 +137,27 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </div>
       </div>
 
-      {/* Product Carousel */}
-      <ModishCarousel images={product.images} />
+      {/* Enhanced Product Gallery */}
+      <ModishGallery images={product.images} name={product.name} />
+
+      {/* Mobile App-like Navigation Tabs */}
+      <div className="sticky top-0 z-30 bg-white border-b border-gray-200 px-1">
+        <div className="flex overflow-x-auto scrollbar-none gap-4">
+          {['description', 'specs', 'shipping', 'reviews', 'recommend'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setSelectedTab(tab)}
+              className={`whitespace-nowrap py-3 border-b-2 text-sm font-medium transition-colors ${
+                selectedTab === tab 
+                  ? 'border-red-500 text-red-500'
+                  : 'border-transparent text-gray-500'
+              }`}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* AliExpress-style quick stats bar */}
       <div className="flex items-center justify-between px-2 py-3 bg-gray-50 rounded-lg text-xs text-gray-700">
@@ -147,16 +180,52 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </div>
       </div>
 
+      {/* Mobile App-Style Promotion Panel */}
+      <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-3 border border-purple-100">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Zap className="h-5 w-5 text-purple-500" />
+            <span className="text-sm font-medium text-purple-800">Flash Sale</span>
+          </div>
+          <div className="text-xs text-purple-700 bg-white px-2 py-1 rounded-full border border-purple-200">
+            12:45:30 left
+          </div>
+        </div>
+        <div className="mt-2 bg-white p-2 rounded-md">
+          <div className="flex items-center gap-3">
+            <div className="flex -space-x-2">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="w-6 h-6 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-[8px] text-gray-500">
+                  {i}
+                </div>
+              ))}
+            </div>
+            <div className="text-xs text-gray-600">
+              <span className="text-red-500 font-bold">28 people</span> bought in last hour
+            </div>
+          </div>
+          <div className="mt-1.5 w-full bg-gray-200 rounded-full h-1.5">
+            <div className="bg-red-500 h-1.5 rounded-full" style={{ width: '67%' }}></div>
+          </div>
+          <div className="mt-1 flex justify-between text-[10px] text-gray-500">
+            <span>67% claimed</span>
+            <span>Sale ends in 12 hours</span>
+          </div>
+        </div>
+      </div>
+
       {/* Product Tags - AliExpress style */}
-      <div className="flex gap-2 overflow-x-auto pb-1 px-1 scrollbar-hide">
-        {product.tags?.map((tag, index) => (
+      <div className="flex gap-2 overflow-x-auto pb-1 px-1 scrollbar-none">
+        {['Flash Deal 🔥', 'Top Seller 🏆', 'Free Shipping 🚚', 'New Arrival ✨', 'Best Quality ⭐'].map((tag, index) => (
           <Badge 
             key={index} 
             variant="outline" 
             className={`whitespace-nowrap px-2 py-1 text-xs font-medium ${
               index === 0 ? 'bg-red-50 text-red-600 border-red-100' : 
               index === 1 ? 'bg-orange-50 text-orange-600 border-orange-100' : 
-              'bg-blue-50 text-blue-600 border-blue-100'
+              index === 2 ? 'bg-green-50 text-green-600 border-green-100' :
+              index === 3 ? 'bg-blue-50 text-blue-600 border-blue-100' :
+              'bg-purple-50 text-purple-600 border-purple-100'
             }`}
           >
             {tag}
@@ -175,12 +244,12 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         description={product.description}
       />
 
-      {/* Shipping & Seller Info - AliExpress style */}
-      <div className="bg-gray-50 rounded-lg p-3">
-        <div className="flex items-center justify-between mb-2">
+      {/* Enhanced Shipping & Seller Info */}
+      <div className="bg-gray-50 rounded-lg p-3 space-y-3">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Truck className="h-4 w-4 text-blue-500" />
-            <span className="text-sm">Shipping from: <span className="font-medium">{product.shipFrom}</span></span>
+            <MapPin className="h-4 w-4 text-blue-500" />
+            <span className="text-sm">Ships from: <span className="font-medium">{product.shipFrom}</span></span>
           </div>
           <span className="text-xs text-gray-600">to United States</span>
         </div>
@@ -188,7 +257,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <Clock className="h-4 w-4 text-green-500" />
-            <span className="text-sm">Estimated delivery: <span className="font-medium">{product.estimatedDelivery}</span></span>
+            <span className="text-sm">Delivery: <span className="font-medium">{product.estimatedDelivery}</span></span>
           </div>
           {product.freeShipping && (
             <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
@@ -196,24 +265,86 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
             </Badge>
           )}
         </div>
+
+        <div className="pt-2 border-t border-gray-200">
+          <div className="flex justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
+                AT
+              </div>
+              <div>
+                <div className="text-sm font-medium">AudioTech Official</div>
+                <div className="flex items-center text-xs text-gray-500">
+                  <Star className="h-3 w-3 text-yellow-400 fill-current" />
+                  <span className="ml-0.5">{product.sellerRating}% Positive</span>
+                </div>
+              </div>
+            </div>
+            <button className="text-xs font-medium text-blue-500 border border-blue-200 rounded-full px-3 py-1 bg-blue-50">
+              Follow
+            </button>
+          </div>
+        </div>
         
-        <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-gray-200">
-          <span className="text-sm">Seller: <span className="font-medium">AudioTech Official Store</span></span>
-          <div className="flex items-center gap-1.5">
-            <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-100 text-xs">
-              Top Seller
-            </Badge>
-            <span className="text-xs text-green-600 font-medium">{product.sellerRating}% Positive</span>
+        <div className="flex items-center gap-2 pt-2 border-t border-gray-200">
+          <div className="flex items-center gap-1 text-xs text-gray-600">
+            <Package className="h-3 w-3" />
+            <span>Products: 342</span>
+          </div>
+          <div className="flex items-center gap-1 text-xs text-gray-600">
+            <Users className="h-3 w-3" />
+            <span>Followers: 15.2K</span>
+          </div>
+          <div className="flex items-center gap-1 text-xs text-gray-600">
+            <MessageCircle className="h-3 w-3" />
+            <span>Response: 97%</span>
           </div>
         </div>
       </div>
       
-      {/* Guarantees - AliExpress style */}
+      {/* Coupon Collection Section */}
+      <div className="flex overflow-x-auto gap-2 pb-2 px-1 scrollbar-none">
+        {[
+          { code: 'EXTRA5', discount: '$5 OFF', min: '$50', color: 'bg-gradient-to-r from-red-500 to-orange-500' },
+          { code: 'SAVE10', discount: '$10 OFF', min: '$100', color: 'bg-gradient-to-r from-blue-500 to-purple-500' },
+          { code: 'NEW15', discount: '15% OFF', min: 'New Users', color: 'bg-gradient-to-r from-green-500 to-teal-500' },
+        ].map((coupon, index) => (
+          <div 
+            key={index}
+            className="relative flex-shrink-0 w-[130px] h-[70px] rounded-lg overflow-hidden"
+          >
+            <div className={`absolute inset-0 ${coupon.color}`}></div>
+            <div className="absolute inset-0 flex flex-col justify-between p-2 text-white">
+              <div className="text-xs font-medium">{coupon.discount}</div>
+              <div className="text-[10px] opacity-90">Min. spend: {coupon.min}</div>
+              <div className="flex items-center justify-between">
+                <div className="text-[10px] font-light">Code: {coupon.code}</div>
+                <button 
+                  className="text-[10px] bg-white text-red-500 px-2 py-0.5 rounded-full font-medium"
+                  onClick={() => handleCouponSelect(coupon.code)}
+                >
+                  {activeCoupon === coupon.code ? 'Collected' : 'Collect'}
+                </button>
+              </div>
+            </div>
+            <div className="absolute right-0 top-0 bottom-0 w-4 flex items-center">
+              <div className="w-4 h-4 rounded-full bg-white"></div>
+              <div className="w-4 h-4 rounded-full bg-white"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      {/* Enhanced Guarantees Section */}
       <div className="grid grid-cols-3 gap-2">
-        {product.guarantees?.map((guarantee, index) => (
+        {[
+          { icon: <ShieldCheck className="h-5 w-5 text-blue-500" />, text: "90-Day Warranty" },
+          { icon: <ThumbsUp className="h-5 w-5 text-green-500" />, text: "Authentic Product" },
+          { icon: <CreditCard className="h-5 w-5 text-purple-500" />, text: "Buyer Protection" }
+        ].map((guarantee, index) => (
           <div key={index} className="flex flex-col items-center bg-gray-50 rounded-lg p-2 text-center">
-            <ShieldCheck className="h-5 w-5 text-blue-500 mb-1" />
-            <span className="text-xs text-gray-700">{guarantee}</span>
+            {guarantee.icon}
+            <span className="text-xs text-gray-700 mt-1">{guarantee.text}</span>
           </div>
         ))}
       </div>
@@ -232,6 +363,21 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         selectedSize={selectedSize}
         onSelectSize={handleSizeSelect}
       />
+
+      {/* Payment Methods Section */}
+      <div className="bg-gray-50 rounded-lg p-3">
+        <div className="flex items-center gap-2 mb-2">
+          <DollarSign className="h-4 w-4 text-gray-700" />
+          <span className="text-sm font-medium text-gray-800">Payment Methods</span>
+        </div>
+        <div className="grid grid-cols-5 gap-2">
+          {['Visa', 'MasterCard', 'PayPal', 'Apple Pay', 'Google Pay'].map((method, index) => (
+            <div key={index} className="flex items-center justify-center bg-white border border-gray-200 rounded p-1.5">
+              <div className="w-6 h-6 bg-gray-200 rounded"></div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Coupon Banner - AliExpress style */}
       <div className="flex items-center justify-between bg-red-50 border border-red-100 rounded-lg p-3">
@@ -252,38 +398,74 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
       {/* Product Description */}
       <ModishDescription description={product.description} />
 
-      {/* Similar items toggle - AliExpress style */}
-      <button 
-        onClick={() => setShowSimilarItems(!showSimilarItems)}
-        className="w-full flex items-center justify-between py-3 px-4 bg-white border border-gray-200 rounded-lg shadow-sm"
-      >
-        <div className="flex items-center gap-2">
-          <Award className="h-5 w-5 text-orange-500" />
-          <span className="font-medium">You May Also Like</span>
-        </div>
-        <ChevronRight className={`h-5 w-5 transition-transform ${showSimilarItems ? 'rotate-90' : ''}`} />
-      </button>
+      {/* Enhanced Recommendations Section */}
+      <div className="space-y-3">
+        <button 
+          onClick={() => setShowSimilarItems(!showSimilarItems)}
+          className="w-full flex items-center justify-between py-3 px-4 bg-white border border-gray-200 rounded-lg shadow-sm"
+        >
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-yellow-500" />
+            <span className="font-medium">You May Also Like</span>
+          </div>
+          <ChevronRight className={`h-5 w-5 transition-transform ${showSimilarItems ? 'rotate-90' : ''}`} />
+        </button>
 
-      {/* Conditionally rendered similar items */}
-      {showSimilarItems && (
-        <div className="grid grid-cols-2 gap-3">
-          {[1, 2, 3, 4].map((item) => (
-            <div key={item} className="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
-              <div className="h-32 bg-gray-100 flex items-center justify-center">
-                <img 
-                  src="/api/placeholder/200/200" 
-                  alt="Similar product" 
-                  className="h-full w-full object-cover"
-                />
+        {/* Conditionally rendered similar items */}
+        {showSimilarItems && (
+          <div className="grid grid-cols-2 gap-3">
+            {[1, 2, 3, 4].map((item) => (
+              <div key={item} className="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                <div className="h-32 bg-gray-100 flex items-center justify-center">
+                  <img 
+                    src="/api/placeholder/200/200" 
+                    alt="Similar product" 
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <div className="p-2">
+                  <div className="text-xs line-clamp-2 mb-1">Similar Bluetooth Speaker with Extra Features</div>
+                  <div className="text-red-500 text-sm font-medium">$49.99</div>
+                </div>
               </div>
-              <div className="p-2">
-                <div className="text-xs line-clamp-2 mb-1">Similar Bluetooth Speaker with Extra Features</div>
-                <div className="text-red-500 text-sm font-medium">$49.99</div>
-              </div>
+            ))}
+          </div>
+        )}
+
+        <button 
+          onClick={() => setShowRecommendations(!showRecommendations)}
+          className="w-full flex items-center justify-between py-3 px-4 bg-white border border-gray-200 rounded-lg shadow-sm"
+        >
+          <div className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5 text-blue-500" />
+            <span className="font-medium">Popular in This Category</span>
+          </div>
+          <ChevronRight className={`h-5 w-5 transition-transform ${showRecommendations ? 'rotate-90' : ''}`} />
+        </button>
+
+        {/* Conditionally rendered popular items */}
+        {showRecommendations && (
+          <div className="overflow-x-auto pb-2">
+            <div className="flex gap-3 min-w-max px-1">
+              {[1, 2, 3, 4, 5, 6].map((item) => (
+                <div key={item} className="w-32 flex-shrink-0 border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                  <div className="h-32 bg-gray-100 flex items-center justify-center">
+                    <img 
+                      src="/api/placeholder/150/150" 
+                      alt="Popular product" 
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div className="p-2">
+                    <div className="text-xs line-clamp-2 mb-1">Popular Audio Device with Amazing Quality</div>
+                    <div className="text-red-500 text-sm font-medium">$39.99</div>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
       
       {/* Shop Recommendations - AliExpress style */}
       <div className="bg-gray-50 rounded-lg p-4">
@@ -291,7 +473,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
           <h3 className="text-sm font-medium text-gray-900">From This Shop</h3>
           <button className="text-xs text-blue-600">View Shop</button>
         </div>
-        <div className="flex overflow-x-auto gap-3 pb-2 scrollbar-hide">
+        <div className="flex overflow-x-auto gap-3 pb-2 scrollbar-none">
           {[1, 2, 3, 4, 5].map((item) => (
             <div key={item} className="shrink-0 w-20">
               <div className="h-20 w-20 rounded-lg bg-white border border-gray-200 overflow-hidden">
@@ -305,6 +487,42 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Recently Viewed Section */}
+      <div className="bg-gray-50 rounded-lg p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-medium text-gray-900">Recently Viewed</h3>
+          <button className="text-xs text-blue-600">Clear</button>
+        </div>
+        <div className="flex overflow-x-auto gap-3 pb-2 scrollbar-none">
+          {[1, 2, 3].map((item) => (
+            <div key={item} className="shrink-0 w-20">
+              <div className="h-20 w-20 rounded-lg bg-white border border-gray-200 overflow-hidden">
+                <img 
+                  src="/api/placeholder/100/100" 
+                  alt="Recently viewed item" 
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="text-xs text-red-500 font-medium mt-1">$19.99</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      {/* Customer Service Banner */}
+      <div className="flex items-center justify-between bg-blue-50 border border-blue-100 rounded-lg p-3">
+        <div className="flex items-center gap-2">
+          <MessageCircle className="h-5 w-5 text-blue-500" />
+          <div>
+            <div className="text-sm font-medium text-gray-900">Customer Support</div>
+            <div className="text-xs text-gray-600">24/7 Live Chat Available</div>
+          </div>
+        </div>
+        <button className="bg-blue-500 text-white text-xs px-3 py-1.5 rounded-full">
+          Chat Now
+        </button>
       </div>
     </div>
   );
