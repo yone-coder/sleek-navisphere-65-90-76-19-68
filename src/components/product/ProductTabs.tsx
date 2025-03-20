@@ -53,77 +53,76 @@ export function ProductTabs({
       className="w-full"
     >
       <div className="sticky top-0 z-10 bg-white pb-2">
-        <ScrollArea 
-          className="w-full pb-2" 
-          orientation="horizontal"
+        <div 
+          ref={scrollRef} 
+          className="scrollbar-none overflow-x-auto pb-1"
         >
-          <div 
-            ref={scrollRef} 
-            className="scrollbar-none flex w-full overflow-x-auto pb-1 px-1"
-          >
-            <TabsList className="flex w-max h-12 bg-gradient-to-b from-gray-50/50 to-white p-2 rounded-2xl">
-              <TabsTrigger 
-                value="description"
-                data-value="description"
-                className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-300 hover:text-gray-600"
-              >
-                <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4" />
-                  <span className="font-medium text-sm whitespace-nowrap">Description</span>
+          <TabsList className="flex w-max h-12 bg-gradient-to-b from-gray-50/50 to-white p-2 rounded-2xl">
+            <TabsTrigger 
+              value="description"
+              data-value="description"
+              className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-300 hover:text-gray-600"
+            >
+              <div className="flex items-center gap-2">
+                <FileText className="w-4 h-4" />
+                <span className="font-medium text-sm whitespace-nowrap">Description</span>
+              </div>
+            </TabsTrigger>
+            
+            <TabsTrigger 
+              value="specifications"
+              data-value="specifications"
+              className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-300 hover:text-gray-600"
+            >
+              <div className="flex items-center gap-2">
+                <Clipboard className="w-4 h-4" />
+                <span className="font-medium text-sm whitespace-nowrap">Specifications</span>
+              </div>
+            </TabsTrigger>
+            
+            <TabsTrigger 
+              value="reviews"
+              data-value="reviews"
+              className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-300 hover:text-gray-600"
+            >
+              <div className="flex items-center gap-2">
+                <MessageSquare className="w-4 h-4" />
+                <span className="font-medium text-sm whitespace-nowrap">Reviews</span>
+                <div className="inline-flex ml-1">
+                  <span className="inline-flex items-center justify-center h-5 min-w-5 px-1.5 text-xs font-medium bg-gradient-to-r from-violet-500 to-indigo-500 text-white rounded-full shadow-sm">
+                    {reviews}
+                  </span>
                 </div>
-              </TabsTrigger>
-              
-              <TabsTrigger 
-                value="specifications"
-                data-value="specifications"
-                className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-300 hover:text-gray-600"
-              >
-                <div className="flex items-center gap-2">
-                  <Clipboard className="w-4 h-4" />
-                  <span className="font-medium text-sm whitespace-nowrap">Specifications</span>
-                </div>
-              </TabsTrigger>
-              
-              <TabsTrigger 
-                value="reviews"
-                data-value="reviews"
-                className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-300 hover:text-gray-600"
-              >
-                <div className="flex items-center gap-2">
-                  <MessageSquare className="w-4 h-4" />
-                  <span className="font-medium text-sm whitespace-nowrap">Reviews</span>
-                  <div className="inline-flex ml-1">
-                    <span className="inline-flex items-center justify-center h-5 min-w-5 px-1.5 text-xs font-medium bg-gradient-to-r from-violet-500 to-indigo-500 text-white rounded-full shadow-sm">
-                      {reviews}
-                    </span>
-                  </div>
-                </div>
-              </TabsTrigger>
-              
-              <TabsTrigger 
-                value="faqs"
-                data-value="faqs"
-                className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-300 hover:text-gray-600"
-              >
-                <div className="flex items-center gap-2">
-                  <HelpCircle className="w-4 h-4" />
-                  <span className="font-medium text-sm whitespace-nowrap">Q&A</span>
-                </div>
-              </TabsTrigger>
-              
-              <TabsTrigger 
-                value="warranty"
-                data-value="warranty"
-                className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-300 hover:text-gray-600"
-              >
-                <div className="flex items-center gap-2">
-                  <Shield className="w-4 h-4" />
-                  <span className="font-medium text-sm whitespace-nowrap">Warranty & Support</span>
-                </div>
-              </TabsTrigger>
-            </TabsList>
-          </div>
-        </ScrollArea>
+              </div>
+            </TabsTrigger>
+            
+            <TabsTrigger 
+              value="faqs"
+              data-value="faqs"
+              className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-300 hover:text-gray-600"
+            >
+              <div className="flex items-center gap-2">
+                <HelpCircle className="w-4 h-4" />
+                <span className="font-medium text-sm whitespace-nowrap">Q&A</span>
+              </div>
+            </TabsTrigger>
+            
+            <TabsTrigger 
+              value="warranty"
+              data-value="warranty"
+              className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-300 hover:text-gray-600"
+            >
+              <div className="flex items-center gap-2">
+                <Shield className="w-4 h-4" />
+                <span className="font-medium text-sm whitespace-nowrap">Warranty & Support</span>
+              </div>
+            </TabsTrigger>
+          </TabsList>
+        </div>
+        
+        {/* Fading edge indicators for scroll */}
+        <div className="hidden md:block absolute top-0 right-0 h-12 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+        <div className="hidden md:block absolute top-0 left-0 h-12 w-8 bg-gradient-to-r from-white to-transparent pointer-events-none" />
       </div>
 
       <div className="mt-4">
