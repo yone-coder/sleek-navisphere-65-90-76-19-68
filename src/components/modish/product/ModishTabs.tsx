@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 type TabItem = {
@@ -47,16 +46,18 @@ export function ModishTabs({ tabs, activeTab, onChange }: ModishTabsProps) {
   }, [activeTab, tabs]);
 
   return (
-    <div className="relative border-b border-gray-200">
+    <div className="relative border-b border-gray-100 bg-white">
       <div className="overflow-x-auto scrollbar-none">
-        <div className="flex whitespace-nowrap py-2 px-1 min-w-max">
+        <div className="flex whitespace-nowrap px-1 min-w-max">
           {tabs.map((tab, index) => (
             <button
               key={tab.id}
               ref={el => (tabsRef.current[index] = el)}
               className={cn(
-                "px-4 py-2 text-sm font-medium relative transition-colors",
-                activeTab === tab.id ? "text-red-500" : "text-gray-600 hover:text-gray-900"
+                "py-3 px-4 text-sm font-medium relative transition-colors",
+                activeTab === tab.id 
+                  ? "text-red-500" 
+                  : "text-gray-600 hover:text-gray-900"
               )}
               onClick={() => onChange(tab.id)}
             >
@@ -64,7 +65,7 @@ export function ModishTabs({ tabs, activeTab, onChange }: ModishTabsProps) {
                 {tab.label}
                 {tab.count !== undefined && (
                   <span className={cn(
-                    "ml-1.5 text-xs rounded-full px-1.5 py-0.5",
+                    "ml-1 text-xs rounded-full px-1.5 py-0.5",
                     activeTab === tab.id
                       ? "bg-red-50 text-red-500"
                       : "bg-gray-100 text-gray-600"
@@ -79,7 +80,7 @@ export function ModishTabs({ tabs, activeTab, onChange }: ModishTabsProps) {
         
         {/* Animated indicator */}
         <motion.div
-          className="absolute bottom-0 h-0.5 bg-red-500 rounded-full"
+          className="absolute bottom-0 h-0.5 bg-red-500"
           initial={false}
           animate={{
             left: indicatorStyle.left,
@@ -91,11 +92,6 @@ export function ModishTabs({ tabs, activeTab, onChange }: ModishTabsProps) {
             damping: 30
           }}
         />
-      </div>
-      
-      {/* Tab hints - show on scroll */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 bg-gradient-to-l from-white via-white to-transparent pr-1 pl-6 py-2 pointer-events-none">
-        <ChevronRight className="h-5 w-5 text-gray-400" />
       </div>
     </div>
   );
