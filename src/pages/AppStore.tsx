@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { AppStoreHeader } from "@/components/appstore/AppStoreHeader";
 import { FeaturedApps } from "@/components/appstore/FeaturedApps";
@@ -6,12 +5,17 @@ import { AppSection } from "@/components/appstore/AppSection";
 import { TopCharts } from "@/components/appstore/TopCharts";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { CategoryTabs } from "@/components/apps/CategoryTabs";
-import { Gamepad2, Grid3X3, Sparkles, Star, Award, Gift, Zap } from "lucide-react";
+import { Gamepad2, Grid3X3, Sparkles, Star, Award, Gift, Zap, Menu } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { apps } from "@/components/apps/data/appsData";
 import { convertPlatformAppsToAppStore } from "@/components/appstore/utils/appDataAdapter";
+import { AppSearchBar } from "@/components/appstore/AppSearchBar";
+import { CategoriesSidebar } from "@/components/appstore/CategoriesSidebar";
+import { ContinueSection } from "@/components/appstore/ContinueSection";
+import { DiscountBanner } from "@/components/appstore/DiscountBanner";
+import { EnhancedAppCard } from "@/components/appstore/EnhancedAppCard";
 
 const categoryIcons = {
   All: Grid3X3,
@@ -31,6 +35,8 @@ const AppStore = () => {
   const [activeTab, setActiveTab] = useState("today");
   const [categoryTab, setCategoryTab] = useState("all");
   const [downloadingApps, setDownloadingApps] = useState<number[]>([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState("All Apps");
   const isMobile = useIsMobile();
 
   // Create categories based on the converted apps
@@ -80,6 +86,11 @@ const AppStore = () => {
     .filter(app => app.type === "app")
     .sort(() => 0.5 - Math.random())
     .slice(0, 6);
+    
+  // Recent apps (for Continue section)
+  const recentApps = convertedApps
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 4);
 
   useEffect(() => {
     // Simulate initial load animation
@@ -97,7 +108,27 @@ const AppStore = () => {
     <div className="min-h-screen bg-white pb-16">
       <AppStoreHeader activeTab={activeTab} setActiveTab={setActiveTab} />
       
+      {/* Categories Sidebar */}
+      <CategoriesSidebar 
+        isOpen={sidebarOpen} 
+        setIsOpen={setSidebarOpen}
+        activeCategory={activeCategory}
+        setActiveCategory={setActiveCategory}
+      />
+      
       <div className="pt-[90px] px-3 max-w-7xl mx-auto">
+        <div className="flex items-center gap-3 mb-4">
+          <button 
+            onClick={() => setSidebarOpen(true)}
+            className="p-2 rounded-full hover:bg-gray-100"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+          <div className="flex-1">
+            <AppSearchBar />
+          </div>
+        </div>
+        
         <Tabs defaultValue={activeTab} value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsContent value="today" className="space-y-6 mt-0">
             <motion.div
@@ -107,6 +138,18 @@ const AppStore = () => {
             >
               <FeaturedApps />
             </motion.div>
+            
+            {/* Limited Time Offer */}
+            <DiscountBanner
+              title="Limited Time Offers"
+              subtitle="Premium apps at special prices"
+              discount="50%"
+              expiresIn="2 days"
+              background="bg-gradient-to-r from-purple-500 to-indigo-600"
+            />
+            
+            {/* Continue Section */}
+            <ContinueSection recentApps={recentApps} />
             
             <div className="bg-gray-50 rounded-xl p-3 mb-2">
               <CategoryTabs categories={categories} />

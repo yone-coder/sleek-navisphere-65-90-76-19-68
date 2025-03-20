@@ -1,16 +1,18 @@
 
 import React from "react";
 import { App } from "./types";
-import { Star } from "lucide-react";
+import { Download, Info, Star } from "lucide-react";
 import { iconComponents } from "./utils/appDataAdapter";
 import { getGradient } from "./utils/gradientUtils";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface AppRankCardProps {
   app: App;
   rank: number;
+  onDownload?: () => void;
 }
 
-export function AppRankCard({ app, rank }: AppRankCardProps) {
+export function AppRankCard({ app, rank, onDownload }: AppRankCardProps) {
   const isFree = app.price === 0;
   
   // Get the icon component
@@ -21,7 +23,7 @@ export function AppRankCard({ app, rank }: AppRankCardProps) {
   const gradientClass = getGradient(background);
 
   return (
-    <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg transition-colors">
+    <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg transition-colors group">
       <span className="text-lg font-bold text-gray-400 w-5 text-center">{rank}</span>
       
       <div className={`w-12 h-12 rounded-[20%] bg-gradient-to-br ${gradientClass} flex items-center justify-center overflow-hidden flex-shrink-0`}>
@@ -45,11 +47,37 @@ export function AppRankCard({ app, rank }: AppRankCardProps) {
             ))}
           </div>
           <span className="text-[10px] text-gray-500 ml-1">{app.rating.toFixed(1)}</span>
+          <span className="text-[10px] text-gray-400 mx-1">•</span>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center text-[10px] text-gray-500">
+                  <span>{app.size || "120 MB"}</span>
+                  <Info className="w-2.5 h-2.5 ml-0.5 text-gray-400" />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="text-xs">
+                <p>Version: 1.2.3</p>
+                <p>Last updated: {new Date().toLocaleDateString()}</p>
+                <p>Developer: {app.developer || "App Studio Inc."}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
       
-      <button className="bg-gray-100 text-xs font-semibold py-1 px-3 rounded-full text-gray-800 hover:bg-gray-200">
-        {isFree ? "GET" : `$${app.price.toFixed(2)}`}
+      <button 
+        onClick={onDownload}
+        className="bg-gray-100 text-xs font-semibold py-1 px-3 rounded-full text-gray-800 hover:bg-gray-200 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1"
+      >
+        {isFree ? (
+          <>
+            <Download className="w-3 h-3" />
+            <span>GET</span>
+          </>
+        ) : (
+          `$${app.price.toFixed(2)}`
+        )}
       </button>
     </div>
   );

@@ -1,6 +1,6 @@
 
 import { ChevronRight } from "lucide-react";
-import { AppCard } from "./AppCard";
+import { EnhancedAppCard } from "./EnhancedAppCard";
 import { App } from "./types";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { motion } from "framer-motion";
@@ -59,10 +59,12 @@ export function AppSection({
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
             >
-              <AppCard 
+              <EnhancedAppCard 
                 app={app} 
                 onDownload={() => onAppDownload && onAppDownload(typeof app.id === 'number' ? app.id : parseInt(app.id))}
                 isDownloading={downloadingApps.includes(typeof app.id === 'number' ? app.id : parseInt(app.id))}
+                showRating={true}
+                showSize={true}
               />
             </motion.div>
           ))}
