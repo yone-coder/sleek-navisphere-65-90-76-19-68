@@ -178,7 +178,7 @@ export function ModishProductDetails({ product }: ModishProductDetailsProps) {
         </div>
       </div>
       
-      {/* Options Selection - Fixed padding to match AliExpress mobile app */}
+      {/* Options Selection */}
       <div className="px-4 mt-2">
         <ModishOptions
           colors={extendedProduct.variants.colors}
@@ -237,7 +237,7 @@ export function ModishProductDetails({ product }: ModishProductDetailsProps) {
         />
       </div>
       
-      {/* Tab Content - Fixed padding to match AliExpress mobile app */}
+      {/* Tab Content */}
       <div id="tab-content" className="px-4 py-4">
         {activeTab === 'description' && (
           <DescriptionTab 
@@ -310,7 +310,7 @@ export function ModishProductDetails({ product }: ModishProductDetailsProps) {
         )}
         
         {activeTab === 'questions' && (
-          <ModishQuestions />
+          <ModishQuestions productId={product.id} />
         )}
         
         {activeTab === 'size-guide' && (
@@ -318,17 +318,17 @@ export function ModishProductDetails({ product }: ModishProductDetailsProps) {
         )}
       </div>
       
-      {/* Trending Products - Fixed padding to match AliExpress mobile app */}
+      {/* Trending Products */}
       <div className="mt-6 px-4">
         <ModishTrending />
       </div>
       
-      {/* Similar Products - Fixed padding to match AliExpress mobile app */}
+      {/* Similar Products */}
       <div className="mt-6 px-4">
         <ModishSimilar currentProductId={product.id} />
       </div>
       
-      {/* Product Actions - No padding needed as this is a fixed bottom component */}
+      {/* Product Actions */}
       <ModishActions />
     </div>
   );

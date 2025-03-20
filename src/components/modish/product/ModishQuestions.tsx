@@ -20,7 +20,11 @@ type Question = {
   };
 };
 
-export function ModishQuestions() {
+export type ModishQuestionsProps = {
+  productId?: string;
+};
+
+export function ModishQuestions({ productId }: ModishQuestionsProps) {
   const [questions, setQuestions] = useState<Question[]>([
     {
       id: "1",
@@ -131,14 +135,14 @@ export function ModishQuestions() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-medium text-gray-900">Customer Questions</h3>
         <span className="text-sm text-gray-500">{questions.length} questions</span>
       </div>
 
       {/* Ask a question form */}
-      <div className="bg-gray-50 rounded-lg p-4">
+      <div className="bg-gray-50 rounded-lg p-3">
         <h4 className="font-medium text-gray-900 mb-2">Ask a question</h4>
         <form onSubmit={handleSubmitQuestion} className="space-y-3">
           <textarea
@@ -148,8 +152,8 @@ export function ModishQuestions() {
             onChange={(e) => setNewQuestion(e.target.value)}
           />
           <div className="flex justify-end">
-            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">
-              <MessageCircle className="h-4 w-4 mr-2" />
+            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 text-sm h-auto">
+              <MessageCircle className="h-3.5 w-3.5 mr-1" />
               Submit Question
             </Button>
           </div>
@@ -157,20 +161,20 @@ export function ModishQuestions() {
       </div>
 
       {/* Search and filters */}
-      <div className="flex flex-col md:flex-row gap-3">
+      <div className="flex flex-col md:flex-row gap-2">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <input
             type="search"
             placeholder="Search in questions..."
-            className="pl-10 pr-4 py-2 w-full border rounded-md"
+            className="pl-8 pr-3 py-2 w-full border rounded-md text-sm h-9"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <div>
           <select
-            className="py-2 px-3 border rounded-md w-full md:w-auto bg-white"
+            className="py-1.5 px-3 border rounded-md w-full md:w-auto bg-white text-sm h-9"
             value={filterBy}
             onChange={(e) => setFilterBy(e.target.value)}
           >
@@ -182,18 +186,18 @@ export function ModishQuestions() {
       </div>
 
       {/* Questions list */}
-      <div className="space-y-4">
+      <div className="space-y-3">
         {filteredQuestions.length > 0 ? (
           filteredQuestions.map((item) => (
             <div key={item.id} className="border border-gray-200 rounded-lg overflow-hidden">
               <div className="bg-gray-50 p-3">
                 <div className="flex justify-between items-start">
                   <div>
-                    <div className="flex items-center gap-2">
-                      <MessageCircle className="h-4 w-4 text-blue-500" />
-                      <span className="font-medium text-gray-900">Question</span>
+                    <div className="flex items-center gap-1.5">
+                      <MessageCircle className="h-3.5 w-3.5 text-blue-500" />
+                      <span className="font-medium text-sm text-gray-900">Question</span>
                     </div>
-                    <p className="text-gray-800 mt-1">{item.question}</p>
+                    <p className="text-gray-800 mt-1 text-sm">{item.question}</p>
                   </div>
                   <div className="text-xs text-gray-500">
                     {item.user} • {item.date}
@@ -205,27 +209,27 @@ export function ModishQuestions() {
                 <div className="p-3 bg-white border-t border-gray-200">
                   <div className="flex justify-between items-start">
                     <div className="flex items-start gap-2">
-                      <Badge className="bg-blue-50 text-blue-600 border-blue-100 mt-0.5">Seller</Badge>
+                      <Badge className="bg-blue-50 text-blue-600 border-blue-100 mt-0.5 px-1.5 py-0.5 h-auto text-xs">Seller</Badge>
                       <div>
                         <div className="text-xs text-gray-500 mb-1">
                           Answered by {item.answer.user} • {item.answer.date}
                         </div>
-                        <p className={`text-gray-700 ${!expandedAnswers[item.id] && 'line-clamp-2'}`}>
+                        <p className={`text-gray-700 text-sm ${!expandedAnswers[item.id] && 'line-clamp-2'}`}>
                           {item.answer.text}
                         </p>
                         {item.answer.text.length > 100 && (
                           <button 
-                            className="text-blue-500 text-sm mt-1 flex items-center"
+                            className="text-blue-500 text-xs mt-1 flex items-center"
                             onClick={() => toggleAnswer(item.id)}
                           >
                             {expandedAnswers[item.id] ? (
                               <>
-                                <ChevronUp className="h-4 w-4 mr-1" />
+                                <ChevronUp className="h-3.5 w-3.5 mr-0.5" />
                                 Show less
                               </>
                             ) : (
                               <>
-                                <ChevronDown className="h-4 w-4 mr-1" />
+                                <ChevronDown className="h-3.5 w-3.5 mr-0.5" />
                                 Read more
                               </>
                             )}
@@ -235,19 +239,19 @@ export function ModishQuestions() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-4 mt-3">
+                  <div className="flex items-center gap-4 mt-2">
                     <button 
                       className="text-xs text-gray-500 flex items-center hover:text-blue-500"
                       onClick={() => handleHelpful(item.id, true)}
                     >
-                      <ThumbsUp className="h-3.5 w-3.5 mr-1" />
+                      <ThumbsUp className="h-3 w-3 mr-1" />
                       Helpful ({item.answer.helpful})
                     </button>
                     <button 
                       className="text-xs text-gray-500 flex items-center hover:text-red-500"
                       onClick={() => handleHelpful(item.id, false)}
                     >
-                      <ThumbsDown className="h-3.5 w-3.5 mr-1" />
+                      <ThumbsDown className="h-3 w-3 mr-1" />
                       Not helpful ({item.answer.notHelpful})
                     </button>
                   </div>
@@ -255,16 +259,16 @@ export function ModishQuestions() {
               )}
               
               {!item.answer && (
-                <div className="p-3 bg-white border-t border-gray-200 text-sm text-gray-500 italic">
+                <div className="p-3 bg-white border-t border-gray-200 text-xs text-gray-500 italic">
                   This question has not been answered yet.
                 </div>
               )}
             </div>
           ))
         ) : (
-          <div className="text-center py-6">
-            <MessageCircle className="h-10 w-10 mx-auto text-gray-300 mb-2" />
-            <p className="text-gray-500">No questions found matching your criteria</p>
+          <div className="text-center py-4">
+            <MessageCircle className="h-8 w-8 mx-auto text-gray-300 mb-2" />
+            <p className="text-gray-500 text-sm">No questions found matching your criteria</p>
           </div>
         )}
       </div>

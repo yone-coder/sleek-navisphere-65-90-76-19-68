@@ -48,16 +48,16 @@ export function ModishTabs({ tabs, activeTab, onChange }: ModishTabsProps) {
   return (
     <div className="relative border-b border-gray-100 bg-white">
       <div className="overflow-x-auto scrollbar-none">
-        <div className="flex whitespace-nowrap px-1 min-w-max">
+        <div className="flex whitespace-nowrap min-w-max">
           {tabs.map((tab, index) => (
             <button
               key={tab.id}
               ref={el => (tabsRef.current[index] = el)}
               className={cn(
-                "py-3 px-4 text-sm font-medium relative transition-colors",
+                "py-2.5 px-3 text-sm font-medium relative transition-colors",
                 activeTab === tab.id 
                   ? "text-red-500" 
-                  : "text-gray-600 hover:text-gray-900"
+                  : "text-gray-500 hover:text-gray-700"
               )}
               onClick={() => onChange(tab.id)}
             >
@@ -68,7 +68,7 @@ export function ModishTabs({ tabs, activeTab, onChange }: ModishTabsProps) {
                     "ml-1 text-xs rounded-full px-1.5 py-0.5",
                     activeTab === tab.id
                       ? "bg-red-50 text-red-500"
-                      : "bg-gray-100 text-gray-600"
+                      : "bg-gray-100 text-gray-500"
                   )}>
                     {tab.count}
                   </span>

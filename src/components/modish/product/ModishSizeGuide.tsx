@@ -31,12 +31,12 @@ export function ModishSizeGuide() {
   };
   
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-medium">Size Guide</h3>
         <div>
           <select 
-            className="text-sm border rounded p-1"
+            className="text-xs border rounded p-1"
             value={selectedRegion}
             onChange={(e) => setSelectedRegion(e.target.value)}
           >
@@ -49,66 +49,66 @@ export function ModishSizeGuide() {
       </div>
       
       <div className="bg-blue-50 p-3 rounded-md border border-blue-100 flex items-start">
-        <Info className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
-        <p className="ml-2 text-sm text-blue-700">
+        <Info className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+        <p className="ml-2 text-xs text-blue-700">
           This product has a unisex fit. For a looser fit, we recommend sizing up.
         </p>
       </div>
       
-      <Tabs defaultValue="measurements">
-        <TabsList className="w-full">
-          <TabsTrigger value="measurements" className="flex-1">Measurements</TabsTrigger>
-          <TabsTrigger value="comparison" className="flex-1">Size Comparison</TabsTrigger>
+      <Tabs defaultValue="measurements" className="w-full">
+        <TabsList className="w-full grid grid-cols-2 h-auto p-1 bg-gray-100 rounded-md">
+          <TabsTrigger value="measurements" className="text-xs py-1.5 rounded-md">Measurements</TabsTrigger>
+          <TabsTrigger value="comparison" className="text-xs py-1.5 rounded-md">Size Comparison</TabsTrigger>
         </TabsList>
         
-        <TabsContent value="measurements" className="mt-4">
+        <TabsContent value="measurements" className="mt-3">
           <div className="overflow-x-auto">
-            <table className="min-w-full border-collapse">
+            <table className="min-w-full border-collapse text-sm">
               <thead>
                 <tr className="bg-gray-50">
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 border">Size</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 border">Head Circumference</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 border">Ear Cup Height</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 border">Ear Cup Width</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 border">Size</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 border">Head Circumference</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 border">Ear Cup Height</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 border">Ear Cup Width</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="px-4 py-2 border text-sm">One Size</td>
-                  <td className="px-4 py-2 border text-sm">19-24 inches (48-61 cm)</td>
-                  <td className="px-4 py-2 border text-sm">4 inches (10 cm)</td>
-                  <td className="px-4 py-2 border text-sm">3.5 inches (9 cm)</td>
+                  <td className="px-3 py-2 border text-xs">One Size</td>
+                  <td className="px-3 py-2 border text-xs">19-24 inches (48-61 cm)</td>
+                  <td className="px-3 py-2 border text-xs">4 inches (10 cm)</td>
+                  <td className="px-3 py-2 border text-xs">3.5 inches (9 cm)</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </TabsContent>
         
-        <TabsContent value="comparison" className="mt-4">
+        <TabsContent value="comparison" className="mt-3">
           <div className="overflow-x-auto">
-            <table className="min-w-full border-collapse">
+            <table className="min-w-full border-collapse text-sm">
               <thead>
                 <tr className="bg-gray-50">
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 border">Brand</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 border">Comparable Size</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 border">Notes</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 border">Brand</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 border">Comparable Size</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 border">Notes</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="px-4 py-2 border text-sm">Sony</td>
-                  <td className="px-4 py-2 border text-sm">WH-1000XM4</td>
-                  <td className="px-4 py-2 border text-sm">Similar fit, slightly smaller ear cups</td>
+                  <td className="px-3 py-2 border text-xs">Sony</td>
+                  <td className="px-3 py-2 border text-xs">WH-1000XM4</td>
+                  <td className="px-3 py-2 border text-xs">Similar fit, slightly smaller ear cups</td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-2 border text-sm">Bose</td>
-                  <td className="px-4 py-2 border text-sm">QuietComfort 45</td>
-                  <td className="px-4 py-2 border text-sm">Similar fit, comparable ear cups</td>
+                  <td className="px-3 py-2 border text-xs">Bose</td>
+                  <td className="px-3 py-2 border text-xs">QuietComfort 45</td>
+                  <td className="px-3 py-2 border text-xs">Similar fit, comparable ear cups</td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-2 border text-sm">Apple</td>
-                  <td className="px-4 py-2 border text-sm">AirPods Max</td>
-                  <td className="px-4 py-2 border text-sm">Slightly larger ear cups</td>
+                  <td className="px-3 py-2 border text-xs">Apple</td>
+                  <td className="px-3 py-2 border text-xs">AirPods Max</td>
+                  <td className="px-3 py-2 border text-xs">Slightly larger ear cups</td>
                 </tr>
               </tbody>
             </table>
@@ -116,18 +116,18 @@ export function ModishSizeGuide() {
         </TabsContent>
       </Tabs>
       
-      <div className="bg-gray-50 p-4 rounded-md border border-gray-200 mt-6">
-        <h4 className="font-medium flex items-center">
-          <Ruler className="w-4 h-4 mr-2" />
+      <div className="bg-gray-50 p-3 rounded-md border border-gray-200 mt-4">
+        <h4 className="font-medium text-sm flex items-center">
+          <Ruler className="w-3.5 h-3.5 mr-1.5" />
           Find Your Perfect Size
         </h4>
         
         <div className="grid grid-cols-2 gap-3 mt-3">
           <div>
-            <label className="text-sm text-gray-600 block mb-1">Your Height (cm)</label>
+            <label className="text-xs text-gray-600 block mb-1">Your Height (cm)</label>
             <input
               type="number"
-              className="w-full p-2 border rounded-md"
+              className="w-full p-2 border rounded-md text-sm h-9"
               value={userHeight}
               onChange={(e) => setUserHeight(e.target.value)}
               min="140"
@@ -136,10 +136,10 @@ export function ModishSizeGuide() {
           </div>
           
           <div>
-            <label className="text-sm text-gray-600 block mb-1">Your Weight (kg)</label>
+            <label className="text-xs text-gray-600 block mb-1">Your Weight (kg)</label>
             <input
               type="number"
-              className="w-full p-2 border rounded-md"
+              className="w-full p-2 border rounded-md text-sm h-9"
               value={userWeight}
               onChange={(e) => setUserWeight(e.target.value)}
               min="40"
@@ -149,17 +149,19 @@ export function ModishSizeGuide() {
         </div>
         
         <Button 
-          className="w-full mt-3"
+          className="w-full mt-3 h-9 text-sm"
           onClick={handleFindMySize}
         >
           Find My Size
         </Button>
         
         {recommendedSize && (
-          <div className="mt-4 text-center">
-            <div className="text-sm text-gray-600">Your recommended size:</div>
-            <div className="flex items-center justify-center mt-2">
-              <Badge className="px-6 py-3 text-lg bg-green-100 text-green-800 hover:bg-green-100">{recommendedSize}</Badge>
+          <div className="mt-3 text-center">
+            <div className="text-xs text-gray-600">Your recommended size:</div>
+            <div className="flex items-center justify-center mt-1.5">
+              <Badge className="px-4 py-1.5 text-base bg-green-100 text-green-800 hover:bg-green-100 h-auto font-medium">
+                {recommendedSize}
+              </Badge>
             </div>
           </div>
         )}
