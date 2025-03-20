@@ -14,9 +14,9 @@ const Modish = () => {
   // Default to product ID 1 if none is provided
   const productId = id || '1';
 
-  // Dummy data for floating actions - these would come from product data in a real app
-  const productPrice = 79.99;  // Original price
-  const discountPrice = 39.99;  // Discounted price
+  // Product data
+  const productPrice = 199.99;  // Original price
+  const discountPrice = 149.99;  // Discounted price
   const stock = 68;
 
   const handleAddToCart = () => {
@@ -36,7 +36,7 @@ const Modish = () => {
     
     // Create mock product data for the checkout page
     const mockProduct = {
-      name: "Stylish Modern Product",
+      name: "Noise Cancelling Wireless Bluetooth Headphones with Microphone",
       discountPrice: discountPrice,
       originalPrice: productPrice,
       images: ['/lovable-uploads/7751a0aa-bb1f-47c5-b434-e63e68dbc0d0.png']
@@ -63,7 +63,7 @@ const Modish = () => {
         />
       </div>
       <ModishFloatingActions 
-        price={productPrice}
+        price={discountPrice}
         originalPrice={productPrice}
         onAddToCart={handleAddToCart}
         onBuyNow={handleBuyNow}
