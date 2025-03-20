@@ -7,10 +7,11 @@ import { TopCharts } from "@/components/appstore/TopCharts";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { CategoryTabs } from "@/components/apps/CategoryTabs";
 import { Gamepad2, Grid3X3, Sparkles, Star, Award, Gift, Zap } from "lucide-react";
-import { appData } from "@/components/appstore/data/appStoreData";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { apps } from "@/components/apps/data/appsData";
+import { convertPlatformAppsToAppStore } from "@/components/appstore/utils/appDataAdapter";
 
 const categoryIcons = {
   All: Grid3X3,
@@ -23,16 +24,8 @@ const categoryIcons = {
   New: Zap,
 };
 
-const categories = [
-  { id: "all", label: "All", icon: categoryIcons.All, count: appData.length },
-  { id: "games", label: "Games", icon: categoryIcons.Games, count: appData.filter(app => app.type === "game").length },
-  { id: "apps", label: "Apps", icon: categoryIcons.Apps, count: appData.filter(app => app.type === "app").length },
-  { id: "arcade", label: "Arcade", icon: categoryIcons.Arcade },
-  { id: "featured", label: "Featured", icon: categoryIcons.Featured },
-  { id: "editors", label: "Editor's Choice", icon: categoryIcons.Editors },
-  { id: "premium", label: "Premium", icon: categoryIcons.Premium },
-  { id: "new", label: "New", icon: categoryIcons.New },
-];
+// Convert platform apps to app store format
+const convertedApps = convertPlatformAppsToAppStore(apps);
 
 const AppStore = () => {
   const [activeTab, setActiveTab] = useState("today");
@@ -40,12 +33,24 @@ const AppStore = () => {
   const [downloadingApps, setDownloadingApps] = useState<number[]>([]);
   const isMobile = useIsMobile();
 
+  // Create categories based on the converted apps
+  const categories = [
+    { id: "all", label: "All", icon: categoryIcons.All, count: convertedApps.length },
+    { id: "games", label: "Games", icon: categoryIcons.Games, count: convertedApps.filter(app => app.type === "game").length },
+    { id: "apps", label: "Apps", icon: categoryIcons.Apps, count: convertedApps.filter(app => app.type === "app").length },
+    { id: "arcade", label: "Arcade", icon: categoryIcons.Arcade },
+    { id: "featured", label: "Featured", icon: categoryIcons.Featured },
+    { id: "editors", label: "Editor's Choice", icon: categoryIcons.Editors },
+    { id: "premium", label: "Premium", icon: categoryIcons.Premium },
+    { id: "new", label: "New", icon: categoryIcons.New },
+  ];
+
   const handleAppDownload = (appId: number) => {
     if (downloadingApps.includes(appId)) return;
     
     setDownloadingApps(prev => [...prev, appId]);
     
-    const appName = appData.find(app => app.id === appId)?.name || "App";
+    const appName = convertedApps.find(app => app.id === appId)?.name || "App";
     
     toast.info(`Downloading ${appName}...`, {
       duration: 2000,
@@ -59,18 +64,19 @@ const AppStore = () => {
     }, 2000);
   };
 
-  const premiumApps = appData.filter(app => app.price > 0);
-  const topRatedApps = [...appData].sort((a, b) => b.rating - a.rating).slice(0, 6);
-  const newGames = appData.filter(app => app.type === "game").slice(0, 6);
+  // Filter and sort apps for different sections
+  const premiumApps = convertedApps.filter(app => app.price > 0);
+  const topRatedApps = [...convertedApps].sort((a, b) => b.rating - a.rating).slice(0, 6);
+  const newGames = convertedApps.filter(app => app.type === "game").slice(0, 6);
   
-  // Today's editor's picks
-  const editorsPicks = appData
+  // Apps with "new" status for editor's picks
+  const editorsPicks = convertedApps
     .filter(app => app.rating > 4.7)
     .sort(() => 0.5 - Math.random())
     .slice(0, 6);
   
-  // Apps with updates
-  const updatedApps = appData
+  // Apps from different categories for variety
+  const updatedApps = convertedApps
     .filter(app => app.type === "app")
     .sort(() => 0.5 - Math.random())
     .slice(0, 6);

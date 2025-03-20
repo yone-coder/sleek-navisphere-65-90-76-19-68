@@ -1,10 +1,14 @@
 
 import { ChevronRight } from "lucide-react";
 import { AppCard } from "./AppCard";
-import { appData } from "./data/appStoreData";
 import { App } from "./types";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { motion } from "framer-motion";
+import { convertPlatformAppsToAppStore } from "./utils/appDataAdapter";
+import { apps } from "@/components/apps/data/appsData";
+
+// Convert platform apps to app store format
+const convertedApps = convertPlatformAppsToAppStore(apps);
 
 interface AppSectionProps {
   title: string;
@@ -26,8 +30,8 @@ export function AppSection({
   highlight = false
 }: AppSectionProps) {
   const isMobile = useIsMobile();
-  // If no custom apps are provided, filter by type
-  const displayApps = apps || appData.filter(app => app.type === type).slice(0, 6);
+  // If no custom apps are provided, filter by type from the converted apps
+  const displayApps = apps || convertedApps.filter(app => app.type === type).slice(0, 6);
 
   return (
     <motion.div 
@@ -59,8 +63,8 @@ export function AppSection({
             >
               <AppCard 
                 app={app} 
-                onDownload={() => onAppDownload && onAppDownload(app.id)}
-                isDownloading={downloadingApps.includes(app.id)}
+                onDownload={() => onAppDownload && onAppDownload(typeof app.id === 'number' ? app.id : parseInt(app.id))}
+                isDownloading={downloadingApps.includes(typeof app.id === 'number' ? app.id : parseInt(app.id))}
               />
             </motion.div>
           ))}

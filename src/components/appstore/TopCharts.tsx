@@ -1,9 +1,13 @@
 
 import { AppRankCard } from "./AppRankCard";
-import { appData } from "./data/appStoreData";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
 import { Award, TrendingUp } from "lucide-react";
+import { convertPlatformAppsToAppStore } from "./utils/appDataAdapter";
+import { apps } from "@/components/apps/data/appsData";
+
+// Convert platform apps to app store format
+const convertedApps = convertPlatformAppsToAppStore(apps);
 
 interface TopChartsProps {
   type: "app" | "game";
@@ -12,13 +16,13 @@ interface TopChartsProps {
 
 export function TopCharts({ type, limit = 10 }: TopChartsProps) {
   // Get top apps by rating
-  const topRated = appData
+  const topRated = convertedApps
     .filter(app => app.type === type)
     .sort((a, b) => b.rating - a.rating)
     .slice(0, limit);
 
   // Get top apps by downloads (mock data)
-  const topDownloaded = appData
+  const topDownloaded = convertedApps
     .filter(app => app.type === type)
     .sort((a, b) => {
       // Convert download strings to numbers for comparison

@@ -2,22 +2,30 @@
 import { ChevronRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { apps } from "@/components/apps/data/appsData";
 
 export function FeaturedApps() {
+  // Find some highlighted apps from the Apps page data
+  const appChoices = apps.filter(app => app.rating && app.rating > 4.8);
+  
+  // Pick a game and an app if possible
+  const gameApp = appChoices.find(app => app.category === "Gaming") || appChoices[0];
+  const nonGameApp = appChoices.find(app => app.category !== "Gaming") || appChoices[1] || appChoices[0];
+  
   const featuredApps = [
     {
       id: 1,
       title: "GAME OF THE DAY",
-      name: "Genshin Impact",
-      description: "Enter a vast magical world of adventure",
+      name: gameApp?.name || "Winnr",
+      description: gameApp?.description || "Compete in tournaments and win prizes",
       image: "/placeholder.svg",
       color: "from-blue-500 to-purple-600"
     },
     {
       id: 2,
       title: "APP OF THE DAY",
-      name: "Procreate Dreams",
-      description: "Create animation with intuitive tools",
+      name: nonGameApp?.name || "Shopr",
+      description: nonGameApp?.description || "Your ultimate marketplace for buying and selling",
       image: "/placeholder.svg",
       color: "from-pink-500 to-orange-500"
     }
