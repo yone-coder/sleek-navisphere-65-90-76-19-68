@@ -25,7 +25,7 @@ const Modish = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white pb-[150px]">
+    <div className="min-h-screen bg-white pb-[150px] overflow-x-hidden">
       <ModishHeader />
       <div className="container mx-auto px-2 sm:px-4 max-w-4xl">
         <ModishProductDetails productId={productId} />
@@ -42,4 +42,3 @@ const Modish = () => {
 };
 
 export default Modish;
-
