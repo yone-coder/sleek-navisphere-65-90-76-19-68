@@ -4,6 +4,8 @@ import { ModishHeader } from '@/components/modish/ModishHeader';
 import { ModishProductDetails } from '@/components/modish/ModishProductDetails';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ModishFloatingActions } from '@/components/modish/ModishFloatingActions';
+import { ModishRecentlyViewed } from '@/components/modish/ModishRecentlyViewed';
+import { ModishStoreBanner } from '@/components/modish/ModishStoreBanner';
 import { useToast } from '@/hooks/use-toast';
 
 const Modish = () => {
@@ -62,6 +64,17 @@ const Modish = () => {
           discountPrice={discountPrice}
         />
       </div>
+      
+      {/* New section for Store Banner */}
+      <div className="px-3 mt-4">
+        <ModishStoreBanner />
+      </div>
+      
+      {/* New section for Recently Viewed Products */}
+      <div className="mt-4">
+        <ModishRecentlyViewed />
+      </div>
+      
       <ModishFloatingActions 
         price={productPrice}
         originalPrice={productPrice}

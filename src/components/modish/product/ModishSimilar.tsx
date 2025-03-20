@@ -3,12 +3,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Star, ChevronRight, ChevronLeft, Heart } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 type ModishSimilarProps = {
   currentProductId: string;
 };
 
 export function ModishSimilar({ currentProductId }: ModishSimilarProps) {
+  const { toast } = useToast();
+  
   // Mock similar products data
   const similarProducts = [
     {
@@ -39,7 +42,29 @@ export function ModishSimilar({ currentProductId }: ModishSimilarProps) {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [liked, setLiked] = useState<Record<string, boolean>>({});
   const currentProduct = similarProducts[currentIndex];
+  
+  const handleLike = (productId: string) => {
+    setLiked(prev => ({ ...prev, [productId]: !prev[productId] }));
+    
+    const isCurrentlyLiked = liked[productId];
+    toast({
+      title: isCurrentlyLiked ? "Removed from wishlist" : "Added to wishlist",
+      description: isCurrentlyLiked ? 
+        "Product removed from your wishlist" : 
+        "Product added to your wishlist",
+      duration: 2000,
+    });
+  };
+  
+  const handleAddToCart = (productId: string) => {
+    toast({
+      title: "Added to cart",
+      description: "Item has been added to your cart",
+      duration: 2000,
+    });
+  };
 
   // Auto-rotate products
   useEffect(() => {
@@ -86,8 +111,16 @@ export function ModishSimilar({ currentProductId }: ModishSimilarProps) {
               alt={currentProduct.name}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 hover:scale-105"
             />
-            <button className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-gray-600 hover:text-red-500 transition-colors">
-              <Heart className="h-5 w-5" />
+            <button 
+              className={cn(
+                "absolute top-3 right-3 w-8 h-8 rounded-full backdrop-blur-sm flex items-center justify-center transition-colors",
+                liked[currentProduct.id] 
+                  ? "bg-red-50 text-red-500" 
+                  : "bg-white/80 text-gray-600 hover:text-red-500"
+              )}
+              onClick={() => handleLike(currentProduct.id)}
+            >
+              <Heart className={cn("h-5 w-5", liked[currentProduct.id] && "fill-red-500")} />
             </button>
             
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200">
@@ -111,7 +144,10 @@ export function ModishSimilar({ currentProductId }: ModishSimilarProps) {
             
             <div className="flex items-center justify-between">
               <span className="font-bold text-gray-900">${currentProduct.price.toLocaleString()}</span>
-              <button className="text-xs font-medium text-blue-600 px-3 py-1.5 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors">
+              <button 
+                className="text-xs font-medium text-blue-600 px-3 py-1.5 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors"
+                onClick={() => handleAddToCart(currentProduct.id)}
+              >
                 Add to Cart
               </button>
             </div>

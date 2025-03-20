@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ModishGallery } from '@/components/modish/product/ModishGallery';
@@ -9,14 +10,17 @@ import { ModishTrending } from '@/components/modish/product/ModishTrending';
 import { ModishSizeGuide } from '@/components/modish/product/ModishSizeGuide';
 import { ModishQuestions } from '@/components/modish/product/ModishQuestions';
 import { ModishSimilar } from '@/components/modish/product/ModishSimilar';
+import { ModishEnhancedFeatures } from '@/components/modish/product/ModishEnhancedFeatures';
+import { ModishFeatures } from '@/components/modish/product/ModishFeatures';
 import { Badge } from '@/components/ui/badge';
 import { 
   Tag, Award, ShieldCheck, Clock, Truck, ChevronRight, Gift,
   Star, MessageCircle, ThumbsUp, Zap, PercentCircle, MapPin, 
   CreditCard, Package, Users, Sparkles, TrendingUp, DollarSign,
-  Ruler, MessageSquareQuestion
+  Ruler, MessageSquareQuestion, Smartphone, Activity
 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useToast } from '@/hooks/use-toast';
 
 type Product = {
   id: string;
@@ -38,6 +42,7 @@ type Product = {
   viewCount?: number;
   tags?: string[];
   guarantees?: string[];
+  features?: { title: string; description: string; icon: string; color: string; details: string; }[];
 };
 
 type ModishProductDetailsProps = {
@@ -56,7 +61,10 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
   const [showSpecifications, setShowSpecifications] = useState(false);
   const [activeCoupon, setActiveCoupon] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('description');
+  const [realTimeViews, setRealTimeViews] = useState(34);
+  const [showRealtimeAlert, setShowRealtimeAlert] = useState(false);
   const isMobile = useIsMobile();
+  const { toast } = useToast();
 
   useEffect(() => {
     // Mock API call - replace with actual API endpoint
@@ -98,13 +106,50 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         soldCount: 1458,
         viewCount: 3892,
         tags: ["Best Seller", "Flash Deal", "New Arrival"],
-        guarantees: ["90-Day Warranty", "Authentic Product", "Buyer Protection"]
+        guarantees: ["90-Day Warranty", "Authentic Product", "Buyer Protection"],
+        features: [
+          {
+            title: "Premium Sound",
+            description: "360° immersive audio experience",
+            icon: "Design",
+            color: "blue",
+            details: "Dual 10W speakers deliver crisp highs and deep bass for a premium audio experience."
+          },
+          {
+            title: "Waterproof Design",
+            description: "Perfect for outdoor adventures",
+            icon: "Layers",
+            color: "green",
+            details: "IPX7 water resistance rating means you can use it by the pool or in light rain without worry."
+          },
+          {
+            title: "Long Battery Life",
+            description: "Enjoy music all day long",
+            icon: "ThumbsUp",
+            color: "amber",
+            details: "Built-in rechargeable battery provides up to 10 hours of continuous playback on a single charge."
+          },
+        ]
       };
 
       setProduct(mockProduct);
     };
 
     fetchProduct();
+    
+    // Simulate real-time views
+    const viewsInterval = setInterval(() => {
+      setRealTimeViews(prev => {
+        const newViews = prev + Math.floor(Math.random() * 3) + 1;
+        if (Math.random() > 0.7) {
+          setShowRealtimeAlert(true);
+          setTimeout(() => setShowRealtimeAlert(false), 3000);
+        }
+        return newViews;
+      });
+    }, 15000);
+    
+    return () => clearInterval(viewsInterval);
   }, [productId, price, discountPrice]);
 
   const handleColorSelect = (color: string) => {
@@ -133,6 +178,14 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
       tabContentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
+  
+  const handleShare = () => {
+    toast({
+      title: "Share Product",
+      description: "Sharing options would appear here in a real app",
+      duration: 2000,
+    });
+  };
 
   if (!product) {
     return <div className="p-4 flex items-center justify-center h-64">
@@ -160,6 +213,16 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
 
       {/* Enhanced Product Gallery */}
       <ModishGallery images={product.images} name={product.name} />
+      
+      {/* Real-time viewers alert */}
+      {showRealtimeAlert && (
+        <div className="fixed bottom-32 right-4 bg-white shadow-lg rounded-lg p-2 animate-fade-in border border-orange-200 z-40">
+          <div className="flex items-center gap-2">
+            <Activity className="h-4 w-4 text-orange-500" />
+            <span className="text-xs font-medium">{realTimeViews} people viewing now</span>
+          </div>
+        </div>
+      )}
 
       {/* Mobile App-like Navigation Tabs */}
       <div className="sticky top-0 z-30 bg-white border-b border-gray-200 px-1">
@@ -264,6 +327,14 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         reviewCount={product.reviewCount}
         description={product.description}
       />
+      
+      {/* Product Key Features */}
+      {product.features && (
+        <ModishFeatures features={product.features} />
+      )}
+      
+      {/* Enhanced Features Section */}
+      <ModishEnhancedFeatures productId={product.id} />
 
       {/* Size Guide */}
       <ModishSizeGuide />
@@ -421,6 +492,17 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
           Collect
         </button>
       </div>
+      
+      {/* Social Share Bar */}
+      <div className="px-3">
+        <button 
+          onClick={handleShare}
+          className="w-full py-2 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center gap-2 text-blue-600"
+        >
+          <Smartphone className="h-4 w-4" />
+          <span className="text-sm font-medium">Share This Product</span>
+        </button>
+      </div>
 
       {/* Tab Content Area - Improved with ID for scrolling */}
       <div id="tabContent" className="border-t border-gray-100 mt-2">
@@ -540,14 +622,14 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         {activeTab === 'reviews' && (
           <div className="p-3">
             <h2 className="text-lg font-medium text-gray-800 mb-4">Customer Reviews</h2>
-            <ModishReviews />
+            <ModishReviews productId={productId} />
           </div>
         )}
         
         {activeTab === 'questions' && (
           <div className="p-3">
             <h2 className="text-lg font-medium text-gray-800 mb-4">Questions & Answers</h2>
-            <ModishQuestions />
+            <ModishQuestions productId={productId} />
           </div>
         )}
         
