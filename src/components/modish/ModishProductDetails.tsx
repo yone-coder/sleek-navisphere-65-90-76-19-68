@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ModishGallery } from '@/components/modish/product/ModishGallery';
 import { ModishInfo } from '@/components/modish/product/ModishInfo';
 import { ModishOptions } from '@/components/modish/product/ModishOptions';
 import { ModishDescription } from '@/components/modish/product/ModishDescription';
+import { ModishReviews } from '@/components/modish/product/ModishReviews';
 import { Badge } from '@/components/ui/badge';
 import { 
   Tag, Award, ShieldCheck, Clock, Truck, ChevronRight, Gift,
@@ -122,6 +124,147 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
       </div>
     </div>;
   }
+
+  // Function to render tab content based on the selected tab
+  const renderTabContent = () => {
+    switch(selectedTab) {
+      case 'description':
+        return <ModishDescription description={product.description} />;
+      case 'specs':
+        return (
+          <div className="p-3 border-t border-gray-100 mt-2">
+            <h2 className="text-lg font-medium text-gray-800 mb-4">Product Specifications</h2>
+            <div className="bg-gray-50 rounded-lg p-4 divide-y divide-gray-100">
+              {[
+                { name: "Brand", value: product.brand },
+                { name: "Model", value: "BT-500" },
+                { name: "Connectivity", value: "Bluetooth 5.0" },
+                { name: "Battery Life", value: "Up to 10 hours" },
+                { name: "Charging", value: "USB-C" },
+                { name: "Water Resistance", value: "IPX7" },
+                { name: "Weight", value: "350g" },
+                { name: "Dimensions", value: "120 × 80 × 40 mm" },
+              ].map((spec, index) => (
+                <div key={index} className="flex py-3 first:pt-0 last:pb-0">
+                  <span className="text-sm text-gray-500 w-1/3">{spec.name}</span>
+                  <span className="text-sm text-gray-800 w-2/3">{spec.value}</span>
+                </div>
+              ))}
+            </div>
+            
+            <h3 className="text-base font-medium text-gray-800 mt-5 mb-3">Technical Features</h3>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { feature: "360° Sound", icon: "🔊" },
+                { feature: "Water Resistant", icon: "💧" },
+                { feature: "Voice Control", icon: "🎤" },
+                { feature: "Long Battery", icon: "🔋" },
+              ].map((item, index) => (
+                <div key={index} className="flex items-center gap-2 bg-white p-3 rounded-lg border border-gray-100">
+                  <span className="text-xl">{item.icon}</span>
+                  <span className="text-sm font-medium">{item.feature}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      case 'shipping':
+        return (
+          <div className="p-3 border-t border-gray-100 mt-2">
+            <h2 className="text-lg font-medium text-gray-800 mb-4">Shipping Information</h2>
+            
+            <div className="bg-gray-50 rounded-lg p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-blue-500" />
+                  <span className="text-sm font-medium">Ship from: {product.shipFrom}</span>
+                </div>
+                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-100">
+                  International
+                </Badge>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <Truck className="h-4 w-4 text-green-500" />
+                <span className="text-sm">Estimated delivery: <span className="font-medium">{product.estimatedDelivery}</span></span>
+              </div>
+              
+              <div className="border-t border-gray-200 pt-3">
+                <h3 className="font-medium text-sm mb-2">Shipping Options</h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center p-2 rounded-md bg-white border border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <Truck className="h-4 w-4 text-orange-500" />
+                      <div>
+                        <p className="text-sm font-medium">Standard Shipping</p>
+                        <p className="text-xs text-gray-500">7-15 business days</p>
+                      </div>
+                    </div>
+                    <p className="text-sm font-medium">{product.freeShipping ? "Free" : "$4.99"}</p>
+                  </div>
+                  
+                  <div className="flex justify-between items-center p-2 rounded-md bg-white border border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <Truck className="h-4 w-4 text-red-500" />
+                      <div>
+                        <p className="text-sm font-medium">Express Shipping</p>
+                        <p className="text-xs text-gray-500">3-7 business days</p>
+                      </div>
+                    </div>
+                    <p className="text-sm font-medium">$12.99</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="border-t border-gray-200 pt-3">
+                <h3 className="font-medium text-sm mb-2">Shipping Policies</h3>
+                <ul className="text-xs text-gray-600 space-y-1.5">
+                  <li className="flex items-start gap-1.5">
+                    <span className="text-green-500 text-lg leading-none">•</span>
+                    <span>Free standard shipping on orders over $50</span>
+                  </li>
+                  <li className="flex items-start gap-1.5">
+                    <span className="text-green-500 text-lg leading-none">•</span>
+                    <span>Processing time: 1-2 business days</span>
+                  </li>
+                  <li className="flex items-start gap-1.5">
+                    <span className="text-green-500 text-lg leading-none">•</span>
+                    <span>All orders are trackable via the provided tracking number</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        );
+      case 'reviews':
+        return <ModishReviews />;
+      case 'recommend':
+        return (
+          <div className="p-3 border-t border-gray-100 mt-2">
+            <h2 className="text-lg font-medium text-gray-800 mb-4">Recommended Products</h2>
+            <div className="grid grid-cols-2 gap-3">
+              {[1, 2, 3, 4].map((item) => (
+                <div key={item} className="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                  <div className="h-32 bg-gray-100 flex items-center justify-center">
+                    <img 
+                      src="/api/placeholder/200/200" 
+                      alt="Similar product" 
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div className="p-2">
+                    <div className="text-xs line-clamp-2 mb-1">Similar Bluetooth Speaker with Extra Features</div>
+                    <div className="text-red-500 text-sm font-medium">$49.99</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      default:
+        return <ModishDescription description={product.description} />;
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -394,8 +537,8 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </button>
       </div>
 
-      {/* Product Description */}
-      <ModishDescription description={product.description} />
+      {/* Render Tab Content */}
+      {renderTabContent()}
 
       {/* Enhanced Recommendations Section */}
       <div className="space-y-3">

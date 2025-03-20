@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { 
   Truck,
   Package,
-  Award,
+  Award, 
   BarChart4, 
   Star, 
   MessageSquare, 
@@ -22,9 +22,12 @@ import { useState } from "react";
 type ProductTabsProps = {
   description: string;
   specifications?: { name: string; value: string }[];
+  highlights?: string[];
+  rating?: number;
+  reviews?: number;
 };
 
-export function ProductTabs({ description, specifications = [] }: ProductTabsProps) {
+export function ProductTabs({ description, specifications = [], highlights = [], rating = 0, reviews = 0 }: ProductTabsProps) {
   const [activeTab, setActiveTab] = useState("description");
 
   return (
@@ -78,7 +81,7 @@ export function ProductTabs({ description, specifications = [] }: ProductTabsPro
       
       <div className="mt-6">
         <TabsContent value="description" className="mt-0">
-          <DescriptionTab description={description} />
+          <DescriptionTab description={description} highlights={highlights} />
         </TabsContent>
         
         <TabsContent value="specs" className="mt-0">
@@ -235,13 +238,13 @@ export function ProductTabs({ description, specifications = [] }: ProductTabsPro
               <div className="md:col-span-1 space-y-6">
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <div className="text-center">
-                    <h4 className="text-3xl font-bold">4.8</h4>
+                    <h4 className="text-3xl font-bold">{rating.toFixed(1)}</h4>
                     <div className="flex justify-center my-1">
                       {[1, 2, 3, 4, 5].map((star) => (
-                        <Star key={star} className={`w-4 h-4 ${star <= 4 ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300 fill-gray-300'}`} />
+                        <Star key={star} className={`w-4 h-4 ${star <= rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300 fill-gray-300'}`} />
                       ))}
                     </div>
-                    <p className="text-sm text-gray-500">Based on 128 reviews</p>
+                    <p className="text-sm text-gray-500">Based on {reviews} reviews</p>
                   </div>
                   
                   <div className="mt-4 space-y-2">
