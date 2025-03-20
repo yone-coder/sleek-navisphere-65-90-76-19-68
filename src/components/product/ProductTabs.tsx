@@ -21,7 +21,7 @@ export function ProductTabs({
   rating,
   reviews,
 }: ProductTabsProps) {
-  const isMobile = useIsMobile();
+  const { isMobile } = useIsMobile();
 
   return (
     <Tabs defaultValue="description" className="w-full max-w-full">
@@ -91,45 +91,94 @@ export function ProductTabs({
 
       {/* Tab content - contained within fixed width to prevent overflow */}
       <div className="mt-6 w-full max-w-full overflow-hidden">
-        <TabsContent value="description" className="w-full max-w-full">
-          <DescriptionTab description={description} highlights={highlights} />
-        </TabsContent>
+        <DescriptionTab description={description} highlights={highlights} />
         
         <TabsContent value="specifications" className="w-full max-w-full">
-          <div className="space-y-4 p-4 bg-gray-50/50 rounded-lg">
-            <h3 className="font-medium text-lg">Product Specifications</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-white p-3 rounded-md shadow-sm">
-                <p className="text-sm font-medium text-gray-500">Material</p>
-                <p className="font-medium">Premium Cotton Blend</p>
+          <div className="space-y-6">
+            <div className="bg-gray-50/50 rounded-lg p-6">
+              <h3 className="font-medium text-lg mb-4">Product Specifications</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-white p-4 rounded-md shadow-sm border border-gray-100">
+                  <p className="text-sm font-medium text-gray-500">Material</p>
+                  <p className="font-medium text-gray-900">Premium Cotton Blend</p>
+                </div>
+                <div className="bg-white p-4 rounded-md shadow-sm border border-gray-100">
+                  <p className="text-sm font-medium text-gray-500">Weight</p>
+                  <p className="font-medium text-gray-900">0.3 kg</p>
+                </div>
+                <div className="bg-white p-4 rounded-md shadow-sm border border-gray-100">
+                  <p className="text-sm font-medium text-gray-500">Dimensions</p>
+                  <p className="font-medium text-gray-900">24 × 12 × 3 cm</p>
+                </div>
+                <div className="bg-white p-4 rounded-md shadow-sm border border-gray-100">
+                  <p className="text-sm font-medium text-gray-500">Care Instructions</p>
+                  <p className="font-medium text-gray-900">Machine wash cold</p>
+                </div>
               </div>
-              <div className="bg-white p-3 rounded-md shadow-sm">
-                <p className="text-sm font-medium text-gray-500">Weight</p>
-                <p className="font-medium">0.3 kg</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <h4 className="font-medium text-gray-900">Technical Details</h4>
+                <div className="space-y-2">
+                  {[
+                    { label: "Product ID", value: "BT-583-2023-X" },
+                    { label: "Manufacturer", value: "AudioTech Industries" },
+                    { label: "Country of Origin", value: "Japan" },
+                    { label: "Production Date", value: "2023" },
+                    { label: "Warranty", value: "2 Years Limited" }
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex justify-between py-2 border-b border-gray-100">
+                      <span className="text-sm text-gray-500">{item.label}</span>
+                      <span className="text-sm font-medium text-gray-900">{item.value}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="bg-white p-3 rounded-md shadow-sm">
-                <p className="text-sm font-medium text-gray-500">Dimensions</p>
-                <p className="font-medium">24 × 12 × 3 cm</p>
+              
+              <div className="space-y-4">
+                <h4 className="font-medium text-gray-900">Performance Metrics</h4>
+                <div className="space-y-2">
+                  {[
+                    { label: "Battery Life", value: "Up to 15 hours" },
+                    { label: "Charging Time", value: "2.5 hours" },
+                    { label: "Bluetooth Range", value: "10 meters" },
+                    { label: "Water Resistance", value: "IPX7 Rating" },
+                    { label: "Audio Output", value: "20W RMS" }
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex justify-between py-2 border-b border-gray-100">
+                      <span className="text-sm text-gray-500">{item.label}</span>
+                      <span className="text-sm font-medium text-gray-900">{item.value}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="bg-white p-3 rounded-md shadow-sm">
-                <p className="text-sm font-medium text-gray-500">Care Instructions</p>
-                <p className="font-medium">Machine wash cold</p>
-              </div>
+            </div>
+            
+            <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
+              <h4 className="font-medium text-blue-900 mb-3">What's in the Box</h4>
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {[
+                  "1 x Main Product Unit",
+                  "1 x USB-C Charging Cable",
+                  "1 x User Manual",
+                  "1 x Quick Start Guide",
+                  "1 x Warranty Card",
+                  "1 x Travel Pouch"
+                ].map((item, idx) => (
+                  <li key={idx} className="flex items-center gap-2 text-sm text-blue-800">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </TabsContent>
         
-        <TabsContent value="warranty" className="w-full max-w-full">
-          <WarrantyTab />
-        </TabsContent>
-        
-        <TabsContent value="reviews" className="w-full max-w-full">
-          <ReviewsTab rating={rating} reviews={reviews} />
-        </TabsContent>
-        
-        <TabsContent value="faqs" className="w-full max-w-full">
-          <FAQsTab />
-        </TabsContent>
+        <WarrantyTab />
+        <ReviewsTab rating={rating} reviews={reviews} />
+        <FAQsTab />
       </div>
     </Tabs>
   );
