@@ -7,9 +7,7 @@ import { Progress } from '@/components/ui/progress';
 
 export function ModishReviews() {
   return (
-    <div className="p-3 border-t border-gray-100 mt-2">
-      <h2 className="text-lg font-medium text-gray-800 mb-4">Customer Reviews</h2>
-      
+    <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-1 space-y-6">
           <div className="bg-gray-50 p-4 rounded-lg">
@@ -30,10 +28,7 @@ export function ModishReviews() {
                   <Star className="w-3.5 h-3.5 text-gray-400" />
                   <Progress 
                     value={rating === 5 ? 75 : rating === 4 ? 18 : rating === 3 ? 5 : rating === 2 ? 2 : 0} 
-                    max={100} 
                     className="h-2 flex-1"
-                    background="bg-gray-200"
-                    fill={rating >= 4 ? "bg-green-500" : rating === 3 ? "bg-yellow-500" : "bg-red-500"}
                   />
                   <span className="text-sm text-gray-600 w-8">
                     {rating === 5 ? '75%' : rating === 4 ? '18%' : rating === 3 ? '5%' : rating === 2 ? '2%' : '0%'}
