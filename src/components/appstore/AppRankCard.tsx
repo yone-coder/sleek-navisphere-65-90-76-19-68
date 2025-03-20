@@ -3,6 +3,7 @@ import React from "react";
 import { App } from "./types";
 import { Star } from "lucide-react";
 import { iconComponents } from "./utils/appDataAdapter";
+import { getGradient } from "./utils/gradientUtils";
 
 interface AppRankCardProps {
   app: App;
@@ -15,10 +16,9 @@ export function AppRankCard({ app, rank }: AppRankCardProps) {
   // Get the icon component
   const IconComponent = iconComponents[app.icon.name as string] || iconComponents.Store;
   const background = app.icon.background || "bg-blue-500";
-  const colorFromBg = background.replace('bg-', '');
   
-  // Create a gradient based on the background color
-  const gradientClass = `from-${colorFromBg} to-${colorFromBg}/80`;
+  // Get the gradient based on the background color
+  const gradientClass = getGradient(background);
 
   return (
     <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg transition-colors">

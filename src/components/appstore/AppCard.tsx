@@ -3,6 +3,7 @@ import React from "react";
 import { App } from "./types";
 import { Download } from "lucide-react";
 import { iconComponents } from "./utils/appDataAdapter";
+import { getGradient } from "./utils/gradientUtils";
 
 interface AppCardProps {
   app: App;
@@ -17,10 +18,9 @@ export function AppCard({ app, onDownload, isDownloading = false }: AppCardProps
   // Get the icon component
   const IconComponent = iconComponents[app.icon.name as string] || iconComponents.Store;
   const background = app.icon.background || "bg-blue-500";
-  const colorFromBg = background.replace('bg-', '');
   
-  // Create a gradient based on the background color
-  const gradientClass = `from-${colorFromBg} to-${colorFromBg}/80`;
+  // Get the gradient based on the background color
+  const gradientClass = getGradient(background);
 
   return (
     <div className="space-y-1">
