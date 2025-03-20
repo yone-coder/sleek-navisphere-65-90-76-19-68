@@ -1,3 +1,4 @@
+
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { DescriptionTab } from "./tabs/DescriptionTab";
@@ -547,4 +548,22 @@ export function ProductTabs({
                   
                   <div className="flex items-center justify-between">
                     <div className="text-xs text-gray-500">
-                      {review.helpful} people found
+                      {review.helpful} people found this helpful
+                    </div>
+                    <Button variant="ghost" size="sm" className="text-blue-600">Helpful</Button>
+                  </div>
+                </div>
+              ))}
+              
+              <div className="text-center">
+                <Button variant="outline" className="w-full md:w-auto">Load More Reviews</Button>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+        
+        <FAQsTab />
+      </div>
+    </Tabs>
+  );
+}
