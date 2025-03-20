@@ -174,7 +174,7 @@ const AppStore = () => {
               title="Top Action Games" 
               subtitle="Exciting action titles for every player"
               type="game"
-              apps={appData.filter(app => app.type === "game").slice(0, 6)}
+              apps={convertedApps.filter(app => app.type === "game").slice(0, 6)}
               onAppDownload={handleAppDownload}
               downloadingApps={downloadingApps}
             />
@@ -203,7 +203,7 @@ const AppStore = () => {
               title="Essential Apps" 
               subtitle="Must-have apps for your device"
               type="app"
-              apps={appData.filter(app => app.type === "app" && app.downloads.includes("B+")).slice(0, 6)}
+              apps={convertedApps.filter(app => app.type === "app" && app.downloads.includes("M+")).slice(0, 6)}
               onAppDownload={handleAppDownload}
               downloadingApps={downloadingApps}
             />
