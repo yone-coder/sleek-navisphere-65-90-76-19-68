@@ -41,7 +41,7 @@ export const convertPlatformAppToAppStore = (platformApp: PlatformApp): AppStore
   // Get icon as string - using the app's color for better visualization
   const getIconUrl = (iconComponent: any): string => {
     // Convert icon component name to string
-    const iconName = iconComponent.name || "Store";
+    const iconName = iconComponent?.type?.name || "Store";
     
     // Use the app color to generate a gradient background
     const appColor = platformApp.color.replace('bg-', '') || "blue-500";

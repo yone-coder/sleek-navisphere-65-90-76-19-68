@@ -12,13 +12,20 @@ export function FeaturedApps() {
   const gameApp = appChoices.find(app => app.category === "Gaming") || appChoices[0];
   const nonGameApp = appChoices.find(app => app.category !== "Gaming") || appChoices[1] || appChoices[0];
   
+  // Get color values for background gradient
+  const getColorValue = (app: any) => {
+    // Extract color from the bg-color format
+    const colorClass = app?.color?.replace('bg-', '') || '';
+    return colorClass;
+  };
+  
   const featuredApps = [
     {
       id: 1,
       title: "GAME OF THE DAY",
       name: gameApp?.name || "Winnr",
       description: gameApp?.description || "Compete in tournaments and win prizes",
-      image: "/placeholder.svg",
+      image: `/placeholder.svg?color=${getColorValue(gameApp)}`,
       color: "from-blue-500 to-purple-600"
     },
     {
@@ -26,7 +33,7 @@ export function FeaturedApps() {
       title: "APP OF THE DAY",
       name: nonGameApp?.name || "Shopr",
       description: nonGameApp?.description || "Your ultimate marketplace for buying and selling",
-      image: "/placeholder.svg",
+      image: `/placeholder.svg?color=${getColorValue(nonGameApp)}`,
       color: "from-pink-500 to-orange-500"
     }
   ];
