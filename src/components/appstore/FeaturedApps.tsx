@@ -1,6 +1,5 @@
 
 import { ChevronRight } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { apps } from "@/components/apps/data/appsData";
 import { iconComponents } from "./utils/appDataAdapter";
@@ -50,13 +49,13 @@ export function FeaturedApps() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: index * 0.1 }}
         >
-          <Card className="overflow-hidden rounded-xl shadow-sm cursor-pointer hover:shadow-md transition-shadow border-0">
+          <div className="overflow-hidden rounded-xl shadow-sm cursor-pointer hover:shadow-md transition-shadow">
             <div className={`bg-gradient-to-r ${app.colorGradient} p-3 text-white relative overflow-hidden`}>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/20" />
               <span className="text-xs font-medium relative z-10 bg-white/30 px-2 py-1 rounded-full">{app.title}</span>
             </div>
-            <div className="p-3 flex items-center gap-3">
-              <div className={`w-16 h-16 rounded-[22%] ${app.color} overflow-hidden flex-shrink-0 shadow-md flex items-center justify-center`}>
+            <div className="p-3 flex items-center gap-3 bg-white">
+              <div className={`w-16 h-16 rounded-[22%] bg-gradient-to-br ${app.colorGradient} overflow-hidden flex-shrink-0 shadow-md flex items-center justify-center`}>
                 {app.icon && <app.icon className="w-8 h-8 text-white" />}
               </div>
               <div className="flex-1 min-w-0">
@@ -67,7 +66,7 @@ export function FeaturedApps() {
                 <ChevronRight className="w-4 h-4 text-gray-700" />
               </button>
             </div>
-          </Card>
+          </div>
         </motion.div>
       ))}
     </div>

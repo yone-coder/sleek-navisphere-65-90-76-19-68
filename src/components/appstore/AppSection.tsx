@@ -17,7 +17,6 @@ interface AppSectionProps {
   onAppDownload?: (appId: number) => void;
   downloadingApps?: number[];
   apps?: App[];
-  highlight?: boolean;
 }
 
 export function AppSection({ 
@@ -26,8 +25,7 @@ export function AppSection({
   type,
   onAppDownload,
   downloadingApps = [],
-  apps,
-  highlight = false
+  apps
 }: AppSectionProps) {
   const isMobile = useIsMobile();
   // If no custom apps are provided, filter by type from the converted apps
@@ -35,7 +33,7 @@ export function AppSection({
 
   return (
     <motion.div 
-      className={`space-y-2.5 rounded-xl ${highlight ? 'bg-gray-50 p-4 shadow-sm' : ''}`}
+      className="space-y-2.5"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}

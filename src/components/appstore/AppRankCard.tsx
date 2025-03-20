@@ -15,12 +15,16 @@ export function AppRankCard({ app, rank }: AppRankCardProps) {
   // Get the icon component
   const IconComponent = iconComponents[app.icon.name as string] || iconComponents.Store;
   const background = app.icon.background || "bg-blue-500";
+  const colorFromBg = background.replace('bg-', '');
+  
+  // Create a gradient based on the background color
+  const gradientClass = `from-${colorFromBg} to-${colorFromBg}/80`;
 
   return (
     <div className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg transition-colors">
       <span className="text-lg font-bold text-gray-400 w-5 text-center">{rank}</span>
       
-      <div className={`w-12 h-12 rounded-[20%] ${background.replace('bg-', 'bg-')} flex items-center justify-center overflow-hidden flex-shrink-0`}>
+      <div className={`w-12 h-12 rounded-[20%] bg-gradient-to-br ${gradientClass} flex items-center justify-center overflow-hidden flex-shrink-0`}>
         <IconComponent className="w-7 h-7 text-white" />
       </div>
       

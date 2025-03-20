@@ -17,13 +17,17 @@ export function AppCard({ app, onDownload, isDownloading = false }: AppCardProps
   // Get the icon component
   const IconComponent = iconComponents[app.icon.name as string] || iconComponents.Store;
   const background = app.icon.background || "bg-blue-500";
+  const colorFromBg = background.replace('bg-', '');
+  
+  // Create a gradient based on the background color
+  const gradientClass = `from-${colorFromBg} to-${colorFromBg}/80`;
 
   return (
     <div className="space-y-1">
       <div className="relative aspect-square rounded-xl overflow-hidden">
-        {/* App Icon with the actual Lucide component */}
+        {/* App Icon with the actual Lucide component and gradient background */}
         <div 
-          className={`w-full h-full ${background.replace('bg-', 'bg-')} flex items-center justify-center`}
+          className={`w-full h-full bg-gradient-to-br ${gradientClass} flex items-center justify-center`}
         >
           <IconComponent className="w-1/2 h-1/2 text-white" />
         </div>

@@ -36,7 +36,7 @@ export function TopCharts({ type, limit = 10 }: TopChartsProps) {
 
   return (
     <motion.div 
-      className="bg-gray-50 rounded-xl p-4 shadow-sm"
+      className="bg-white rounded-xl"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
