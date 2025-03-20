@@ -32,16 +32,33 @@ export function ProductGallery({
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentProgress, setCurrentProgress] = useState(0);
   const [showHint, setShowHint] = useState(true);
+  const [headerHeight, setHeaderHeight] = useState(0);
 
   useEffect(() => {
+    // Detect the header height to ensure the gallery respects it
+    const updateHeaderHeight = () => {
+      const headerElement = document.querySelector('.modish-header');
+      if (headerElement) {
+        setHeaderHeight(headerElement.clientHeight);
+      }
+    };
+
+    updateHeaderHeight();
+    window.addEventListener('resize', updateHeaderHeight);
+
     if (!api) return;
+    
     api.on("select", () => {
       setSelectedImage(api.selectedScrollSnap());
       setCurrentProgress((api.selectedScrollSnap() / (images.length - 1)) * 100);
     });
 
     const timer = setTimeout(() => setShowHint(false), 3000);
-    return () => clearTimeout(timer);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', updateHeaderHeight);
+    };
   }, [api, images.length]);
 
   const handleZoom = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -84,6 +101,7 @@ export function ProductGallery({
   return (
     <div 
       className="relative bg-gradient-to-b from-gray-50 to-white"
+      style={{ paddingTop: headerHeight ? `${headerHeight}px` : '0' }}
       tabIndex={0}
       onKeyDown={handleKeyDown}
     >

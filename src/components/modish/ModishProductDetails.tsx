@@ -74,8 +74,19 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
   const { toast } = useToast();
   const headerRef = useRef<HTMLDivElement>(null);
   const tabsNavRef = useRef<HTMLDivElement>(null);
+  const headerSpacerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const setHeaderSpacerHeight = () => {
+      const headerHeight = document.querySelector('.modish-header')?.clientHeight || 56;
+      if (headerSpacerRef.current) {
+        headerSpacerRef.current.style.height = `${headerHeight}px`;
+      }
+    };
+
+    setHeaderSpacerHeight();
+    window.addEventListener('resize', setHeaderSpacerHeight);
+    
     const fetchProduct = async () => {
       await new Promise(resolve => setTimeout(resolve, 500));
 
@@ -191,15 +202,14 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
       if (tabContentElement) {
         let offsetHeight = 0;
         
-        if (headerRef.current) {
-          offsetHeight += headerRef.current.clientHeight;
-        }
+        const modishHeaderHeight = document.querySelector('.modish-header')?.clientHeight || 56;
+        offsetHeight += modishHeaderHeight;
         
         if (tabsNavRef.current) {
           offsetHeight += tabsNavRef.current.clientHeight;
         }
         
-        offsetHeight += 20;
+        offsetHeight += 32;
         
         const elementPosition = tabContentElement.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.scrollY - offsetHeight;
@@ -273,6 +283,8 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
   return (
     <div className="space-y-4 pb-20">
       
+      <div ref={headerSpacerRef} className="w-full"></div>
+      
       <div ref={headerRef} className="fixed top-0 left-0 right-0 z-50 opacity-0 pointer-events-none">
         <div className="h-14"></div>
       </div>
@@ -298,7 +310,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
       )}
 
       <div className="sticky top-0 z-30 bg-white border-b border-gray-200 px-1">
-        <div className="flex overflow-x-auto scrollbar-none gap-4">
+        <div className="flex overflow-x-auto scrollbar-none gap-4 pt-2">
           {['description', 'specs', 'shipping', 'reviews', 'questions', 'similar'].map((tab) => (
             <button
               key={tab}
@@ -658,7 +670,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </button>
       </div>
 
-      <div id="tabContent" className="border-t border-gray-100 mt-2 pt-4">
+      <div id="tabContent" className="border-t border-gray-100 mt-2 pt-8">
         {activeTab === 'description' && (
           <div className="p-3">
             <h2 className="text-lg font-medium text-gray-800 mb-4">Product Description</h2>
