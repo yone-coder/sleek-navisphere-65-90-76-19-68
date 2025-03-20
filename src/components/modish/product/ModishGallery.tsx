@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Maximize2, Heart, Play, Camera, Share2, Award } from 'lucide-react';
+import { Maximize2, Heart, Play, Camera, Share2, Award } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -133,27 +132,12 @@ export function ModishGallery({ images, name }: ModishGalleryProps) {
           </button>
         </div>
         
-        {/* Image counter indicator */}
-        <div className="absolute top-3 left-3 z-10">
+        {/* Image counter indicator - MOVED TO BOTTOM RIGHT */}
+        <div className="absolute bottom-3 right-3 z-10">
           <div className="bg-black/50 backdrop-blur-sm text-white text-xs font-medium px-2 py-1 rounded-full">
             {activeIndex + 1}/{images.length + 1}
           </div>
         </div>
-        
-        {/* Navigation buttons */}
-        <button 
-          className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-sm text-gray-700 hover:bg-white transition-colors"
-          onClick={goToPrev}
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-        
-        <button 
-          className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-sm text-gray-700 hover:bg-white transition-colors"
-          onClick={goToNext}
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
         
         {/* Discount tag */}
         <div className="absolute left-0 top-0 z-10">
