@@ -14,8 +14,11 @@ export function FeaturedApps() {
   const nonGameApp = appChoices.find(app => app.category !== "Gaming") || appChoices[1] || appChoices[0];
   
   // Get the icon components for the featured apps
-  const GameIcon = gameApp?.icon?.type || null;
-  const AppIcon = nonGameApp?.icon?.type || null;
+  const gameIconName = gameApp?.icon?.name || "Gamepad2";
+  const appIconName = nonGameApp?.icon?.name || "Store";
+  
+  const GameIcon = iconComponents[gameIconName];
+  const AppIcon = iconComponents[appIconName];
   
   const featuredApps = [
     {

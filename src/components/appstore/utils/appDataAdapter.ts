@@ -48,9 +48,22 @@ export const convertPlatformAppToAppStore = (platformApp: PlatformApp): AppStore
   
   // Extract icon component name
   const getIconInfo = (iconComponent: any): { name: string, background: string } => {
-    // Convert icon component name to string
-    const iconName = iconComponent?.type?.name || "Store";
-    const background = platformApp.color || "bg-blue-500";
+    // Get icon component name from its displayName or constructor name
+    let iconName = "Store"; // Default
+    
+    if (iconComponent) {
+      // Try to get the name from the component
+      const componentName = iconComponent.displayName || 
+                            iconComponent.name || 
+                            (iconComponent.render && iconComponent.render.name);
+      
+      // If we found a name in the Lucide icons list, use it
+      if (componentName && componentName in iconComponents) {
+        iconName = componentName;
+      }
+    }
+    
+    const background = platformApp.color || getIconColor(iconName);
     
     return { name: iconName, background };
   };

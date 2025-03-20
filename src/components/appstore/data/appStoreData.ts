@@ -5,7 +5,10 @@ export const appData: App[] = [
   {
     id: 1,
     name: "Instagram",
-    icon: "/placeholder.svg",
+    icon: {
+      name: "Store",
+      background: "bg-pink-500"
+    },
     category: "Social Networking",
     description: "Connect with friends, share photos and videos",
     rating: 4.5,
@@ -21,7 +24,10 @@ export const appData: App[] = [
   {
     id: 2,
     name: "TikTok",
-    icon: "/placeholder.svg",
+    icon: {
+      name: "Store",
+      background: "bg-black"
+    },
     category: "Entertainment",
     description: "Discover short videos on any topic",
     rating: 4.7,
@@ -37,7 +43,10 @@ export const appData: App[] = [
   {
     id: 3,
     name: "Minecraft",
-    icon: "/placeholder.svg",
+    icon: {
+      name: "Gamepad2",
+      background: "bg-green-600"
+    },
     category: "Games",
     description: "Create, explore and survive!",
     rating: 4.8,
@@ -53,7 +62,10 @@ export const appData: App[] = [
   {
     id: 4,
     name: "Spotify",
-    icon: "/placeholder.svg",
+    icon: {
+      name: "Store",
+      background: "bg-green-500"
+    },
     category: "Music",
     description: "Listen to songs, podcasts, and audiobooks",
     rating: 4.8,
@@ -69,7 +81,10 @@ export const appData: App[] = [
   {
     id: 5,
     name: "Roblox",
-    icon: "/placeholder.svg",
+    icon: {
+      name: "Gamepad2",
+      background: "bg-blue-500"
+    },
     category: "Games",
     description: "Play millions of 3D online games",
     rating: 4.4,
@@ -85,7 +100,10 @@ export const appData: App[] = [
   {
     id: 6,
     name: "YouTube",
-    icon: "/placeholder.svg",
+    icon: {
+      name: "Store",
+      background: "bg-red-500"
+    },
     category: "Entertainment",
     description: "Watch videos from creators worldwide",
     rating: 4.7,
@@ -101,7 +119,10 @@ export const appData: App[] = [
   {
     id: 7,
     name: "Clash of Clans",
-    icon: "/placeholder.svg",
+    icon: {
+      name: "Gamepad2",
+      background: "bg-yellow-500"
+    },
     category: "Games",
     description: "Epic combat strategy game",
     rating: 4.6,
@@ -117,7 +138,10 @@ export const appData: App[] = [
   {
     id: 8,
     name: "Netflix",
-    icon: "/placeholder.svg",
+    icon: {
+      name: "Store",
+      background: "bg-red-600"
+    },
     category: "Entertainment",
     description: "Watch TV shows, movies and more",
     rating: 4.5,
@@ -133,7 +157,10 @@ export const appData: App[] = [
   {
     id: 9,
     name: "Among Us",
-    icon: "/placeholder.svg",
+    icon: {
+      name: "Gamepad2",
+      background: "bg-blue-600"
+    },
     category: "Games",
     description: "Find the imposter among the crew",
     rating: 4.3,
@@ -149,7 +176,10 @@ export const appData: App[] = [
   {
     id: 10,
     name: "WhatsApp",
-    icon: "/placeholder.svg",
+    icon: {
+      name: "Store",
+      background: "bg-green-600"
+    },
     category: "Social Networking",
     description: "Simple, reliable, private messaging",
     rating: 4.6,
@@ -165,7 +195,10 @@ export const appData: App[] = [
   {
     id: 11,
     name: "Candy Crush Saga",
-    icon: "/placeholder.svg",
+    icon: {
+      name: "Gamepad2",
+      background: "bg-orange-500"
+    },
     category: "Games",
     description: "Sweet match-3 puzzle game",
     rating: 4.7,
@@ -181,7 +214,10 @@ export const appData: App[] = [
   {
     id: 12,
     name: "Procreate Pocket",
-    icon: "/placeholder.svg",
+    icon: {
+      name: "Store",
+      background: "bg-indigo-500"
+    },
     category: "Graphics & Design",
     description: "Powerful sketching, painting, and illustration",
     rating: 4.8,
@@ -197,7 +233,10 @@ export const appData: App[] = [
   {
     id: 13,
     name: "Oceanhorn 2",
-    icon: "/placeholder.svg",
+    icon: {
+      name: "Gamepad2",
+      background: "bg-cyan-500"
+    },
     category: "Games",
     description: "Epic action adventure RPG",
     rating: 4.9,
@@ -213,7 +252,10 @@ export const appData: App[] = [
   {
     id: 14,
     name: "Sayonara Wild Hearts",
-    icon: "/placeholder.svg",
+    icon: {
+      name: "Gamepad2",
+      background: "bg-purple-500"
+    },
     category: "Games",
     description: "Pop album video game dreamscape",
     rating: 4.8,
