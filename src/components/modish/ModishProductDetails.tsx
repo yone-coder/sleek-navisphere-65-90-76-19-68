@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ModishGallery } from '@/components/modish/product/ModishGallery';
@@ -13,6 +12,8 @@ import { ModishSimilar } from '@/components/modish/product/ModishSimilar';
 import { ModishEnhancedFeatures } from '@/components/modish/product/ModishEnhancedFeatures';
 import { ModishFeatures } from '@/components/modish/product/ModishFeatures';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { 
   Tag, Award, ShieldCheck, Clock, Truck, ChevronRight, Gift,
   Star, MessageCircle, ThumbsUp, Zap, PercentCircle, MapPin, 
@@ -63,16 +64,19 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
   const [activeTab, setActiveTab] = useState('description');
   const [realTimeViews, setRealTimeViews] = useState(34);
   const [showRealtimeAlert, setShowRealtimeAlert] = useState(false);
+  const [showVirtualTryOn, setShowVirtualTryOn] = useState(false);
+  const [showARView, setShowARView] = useState(false);
+  const [likeCount, setLikeCount] = useState(243);
+  const [isLiked, setIsLiked] = useState(false);
+  const [lastPurchaseTime, setLastPurchaseTime] = useState<string | null>(null);
+  const [showCompareProducts, setShowCompareProducts] = useState(false);
   const isMobile = useIsMobile();
   const { toast } = useToast();
 
   useEffect(() => {
-    // Mock API call - replace with actual API endpoint
     const fetchProduct = async () => {
-      // Simulate loading
       await new Promise(resolve => setTimeout(resolve, 500));
 
-      // Mock product data
       const mockProduct: Product = {
         id: productId,
         name: "High-Quality Bluetooth Speaker",
@@ -137,7 +141,6 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
 
     fetchProduct();
     
-    // Simulate real-time views
     const viewsInterval = setInterval(() => {
       setRealTimeViews(prev => {
         const newViews = prev + Math.floor(Math.random() * 3) + 1;
@@ -149,7 +152,16 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
       });
     }, 15000);
     
-    return () => clearInterval(viewsInterval);
+    const purchaseInterval = setInterval(() => {
+      const minutes = Math.floor(Math.random() * 30) + 1;
+      setLastPurchaseTime(`${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`);
+      setTimeout(() => setLastPurchaseTime(null), 5000);
+    }, 45000);
+    
+    return () => {
+      clearInterval(viewsInterval);
+      clearInterval(purchaseInterval);
+    };
   }, [productId, price, discountPrice]);
 
   const handleColorSelect = (color: string) => {
@@ -172,19 +184,58 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     
-    // Smooth scroll to the tab content
     const tabContentElement = document.getElementById('tabContent');
     if (tabContentElement) {
       tabContentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
-  
+
   const handleShare = () => {
     toast({
       title: "Share Product",
       description: "Sharing options would appear here in a real app",
       duration: 2000,
     });
+  };
+
+  const handleLikeToggle = () => {
+    setIsLiked(!isLiked);
+    setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
+    toast({
+      title: isLiked ? "Removed from favorites" : "Added to favorites",
+      description: isLiked ? "This item has been removed from your favorites" : "This item has been added to your favorites",
+      duration: 2000,
+    });
+  };
+
+  const handleVirtualTryOn = () => {
+    setShowVirtualTryOn(true);
+    toast({
+      title: "Virtual Try-On",
+      description: "This feature would launch a virtual try-on experience in a real app",
+      duration: 2000,
+    });
+    setTimeout(() => setShowVirtualTryOn(false), 2000);
+  };
+
+  const handleARView = () => {
+    setShowARView(true);
+    toast({
+      title: "AR View",
+      description: "This feature would launch an AR view in a real app",
+      duration: 2000,
+    });
+    setTimeout(() => setShowARView(false), 2000);
+  };
+
+  const handleCompareProducts = () => {
+    setShowCompareProducts(true);
+    toast({
+      title: "Compare Products",
+      description: "This feature would show a product comparison chart in a real app",
+      duration: 2000,
+    });
+    setTimeout(() => setShowCompareProducts(false), 2000);
   };
 
   if (!product) {
@@ -197,14 +248,11 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
     </div>;
   }
 
-  // Main layout content
   return (
     <div className="space-y-4">
       
-      {/* Enhanced Product Gallery */}
       <ModishGallery images={product.images} name={product.name} />
       
-      {/* Real-time viewers alert */}
       {showRealtimeAlert && (
         <div className="fixed bottom-32 right-4 bg-white shadow-lg rounded-lg p-2 animate-fade-in border border-orange-200 z-40">
           <div className="flex items-center gap-2">
@@ -214,7 +262,15 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </div>
       )}
 
-      {/* Mobile App-like Navigation Tabs */}
+      {lastPurchaseTime && (
+        <div className="fixed bottom-44 right-4 bg-white shadow-lg rounded-lg p-2 animate-fade-in border border-green-200 z-40">
+          <div className="flex items-center gap-2">
+            <ShoppingBag className="h-4 w-4 text-green-500" />
+            <span className="text-xs font-medium">Someone purchased this {lastPurchaseTime}</span>
+          </div>
+        </div>
+      )}
+
       <div className="sticky top-0 z-30 bg-white border-b border-gray-200 px-1">
         <div className="flex overflow-x-auto scrollbar-none gap-4">
           {['description', 'specs', 'shipping', 'reviews', 'questions', 'similar'].map((tab) => (
@@ -233,7 +289,45 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </div>
       </div>
 
-      {/* AliExpress-style quick stats bar */}
+      <div className="grid grid-cols-4 gap-2">
+        <button 
+          onClick={handleVirtualTryOn}
+          className={`p-2 rounded-lg flex flex-col items-center justify-center text-center ${
+            showVirtualTryOn ? 'bg-purple-100 text-purple-700' : 'bg-gray-50 text-gray-700'
+          }`}
+        >
+          <Smartphone className="h-5 w-5 mb-1" />
+          <span className="text-xs">Virtual Try-On</span>
+        </button>
+        <button 
+          onClick={handleARView}
+          className={`p-2 rounded-lg flex flex-col items-center justify-center text-center ${
+            showARView ? 'bg-blue-100 text-blue-700' : 'bg-gray-50 text-gray-700'
+          }`}
+        >
+          <Sparkles className="h-5 w-5 mb-1" />
+          <span className="text-xs">AR View</span>
+        </button>
+        <button 
+          onClick={handleCompareProducts}
+          className={`p-2 rounded-lg flex flex-col items-center justify-center text-center ${
+            showCompareProducts ? 'bg-green-100 text-green-700' : 'bg-gray-50 text-gray-700'
+          }`}
+        >
+          <ChevronRight className="h-5 w-5 mb-1" />
+          <span className="text-xs">Compare</span>
+        </button>
+        <button 
+          onClick={handleLikeToggle}
+          className={`p-2 rounded-lg flex flex-col items-center justify-center text-center ${
+            isLiked ? 'bg-red-100 text-red-700' : 'bg-gray-50 text-gray-700'
+          }`}
+        >
+          <Heart className={`h-5 w-5 mb-1 ${isLiked ? 'fill-red-500 text-red-500' : ''}`} />
+          <span className="text-xs">{likeCount}</span>
+        </button>
+      </div>
+
       <div className="flex items-center justify-between px-2 py-3 bg-gray-50 rounded-lg text-xs text-gray-700">
         <div className="flex items-center gap-1.5">
           <span className="font-medium text-red-500">${product.discountPrice.toFixed(2)}</span>
@@ -254,7 +348,16 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </div>
       </div>
 
-      {/* Mobile App-Style Promotion Panel */}
+      <div className="bg-blue-50 border border-blue-100 rounded-lg p-2.5">
+        <div className="flex items-center gap-2">
+          <Award className="h-5 w-5 text-blue-600" />
+          <div>
+            <span className="text-sm font-medium text-blue-800">100% Satisfaction Guarantee</span>
+            <p className="text-xs text-blue-600 mt-0.5">30-day money-back guarantee if you're not completely satisfied</p>
+          </div>
+        </div>
+      </div>
+
       <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-3 border border-purple-100">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -288,7 +391,6 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </div>
       </div>
 
-      {/* Product Tags - AliExpress style */}
       <div className="flex gap-2 overflow-x-auto pb-1 px-1 scrollbar-none">
         {['Flash Deal 🔥', 'Top Seller 🏆', 'Free Shipping 🚚', 'New Arrival ✨', 'Best Quality ⭐'].map((tag, index) => (
           <Badge 
@@ -307,7 +409,6 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         ))}
       </div>
 
-      {/* Product Info */}
       <ModishInfo
         name={product.name}
         brand={product.brand}
@@ -318,18 +419,14 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         description={product.description}
       />
       
-      {/* Product Key Features */}
       {product.features && (
         <ModishFeatures features={product.features} />
       )}
       
-      {/* Enhanced Features Section */}
       <ModishEnhancedFeatures productId={product.id} />
 
-      {/* Size Guide */}
       <ModishSizeGuide />
 
-      {/* Enhanced Shipping & Seller Info */}
       <div className="bg-gray-50 rounded-lg p-3 space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -387,10 +484,10 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </div>
       </div>
       
-      {/* Trending Products Section */}
-      <ModishTrending />
+      <div className="px-3 py-4 bg-gray-50 rounded-lg">
+        <ModishTrending />
+      </div>
       
-      {/* Coupon Collection Section */}
       <div className="flex overflow-x-auto gap-2 pb-2 px-1 scrollbar-none">
         {[
           { code: 'EXTRA5', discount: '$5 OFF', min: '$50', color: 'bg-gradient-to-r from-red-500 to-orange-500' },
@@ -423,7 +520,6 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         ))}
       </div>
       
-      {/* Enhanced Guarantees Section */}
       <div className="grid grid-cols-3 gap-2">
         {[
           { icon: <ShieldCheck className="h-5 w-5 text-blue-500" />, text: "90-Day Warranty" },
@@ -437,14 +533,13 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         ))}
       </div>
 
-      {/* Product Options */}
       <ModishOptions
         colors={product.colors}
         selectedColor={selectedColor}
         onSelectColor={handleColorSelect}
         quantity={quantity}
         onUpdateQuantity={setQuantity}
-        stock={100} // Replace with actual stock
+        stock={100}
         price={product.price}
         discountPrice={product.discountPrice}
         sizes={product.sizes}
@@ -452,7 +547,38 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         onSelectSize={handleSizeSelect}
       />
 
-      {/* Payment Methods Section */}
+      <Card className="bg-gray-50 border-gray-200">
+        <CardContent className="p-3 space-y-3">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-purple-500" />
+            <h3 className="text-sm font-medium">Personalization Options</h3>
+          </div>
+          
+          <div className="space-y-2">
+            <div className="bg-white rounded-md p-2 border border-gray-100">
+              <label className="flex items-center gap-2">
+                <input type="checkbox" className="rounded text-blue-500" />
+                <span className="text-xs">Add gift wrapping (+$3.99)</span>
+              </label>
+            </div>
+            
+            <div className="bg-white rounded-md p-2 border border-gray-100">
+              <label className="flex items-center gap-2">
+                <input type="checkbox" className="rounded text-blue-500" />
+                <span className="text-xs">Include a personalized message</span>
+              </label>
+            </div>
+            
+            <div className="bg-white rounded-md p-2 border border-gray-100">
+              <label className="flex items-center gap-2">
+                <input type="checkbox" className="rounded text-blue-500" />
+                <span className="text-xs">Add extended warranty (+$9.99)</span>
+              </label>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="bg-gray-50 rounded-lg p-3">
         <div className="flex items-center gap-2 mb-2">
           <DollarSign className="h-4 w-4 text-gray-700" />
@@ -467,7 +593,20 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </div>
       </div>
 
-      {/* Coupon Banner - AliExpress style */}
+      <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-lg p-3 border border-green-100">
+        <div className="flex items-center gap-2 mb-2">
+          <CreditCard className="h-4 w-4 text-green-600" />
+          <h3 className="text-sm font-medium text-green-800">Buy Now, Pay Later</h3>
+        </div>
+        <p className="text-xs text-green-700 mb-2">
+          Split your purchase into 4 interest-free payments.
+        </p>
+        <div className="flex items-center justify-between bg-white rounded-md p-2 border border-green-100">
+          <span className="text-xs font-medium">4 payments of ${(product.discountPrice / 4).toFixed(2)}</span>
+          <span className="text-xs text-green-600">Learn more</span>
+        </div>
+      </div>
+
       <div className="flex items-center justify-between bg-red-50 border border-red-100 rounded-lg p-3">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 flex items-center justify-center bg-red-500 text-white rounded-full">
@@ -483,7 +622,6 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </button>
       </div>
       
-      {/* Social Share Bar */}
       <div className="px-3">
         <button 
           onClick={handleShare}
@@ -494,7 +632,6 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </button>
       </div>
 
-      {/* Tab Content Area - Improved with ID for scrolling */}
       <div id="tabContent" className="border-t border-gray-100 mt-2">
         {activeTab === 'description' && (
           <div className="p-3">
@@ -631,7 +768,6 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         )}
       </div>
 
-      {/* Shop Recommendations - AliExpress style */}
       <div className="bg-gray-50 rounded-lg p-4">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-sm font-medium text-gray-900">From This Shop</h3>
@@ -653,7 +789,6 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </div>
       </div>
 
-      {/* Recently Viewed Section */}
       <div className="bg-gray-50 rounded-lg p-4">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-sm font-medium text-gray-900">Recently Viewed</h3>
@@ -675,7 +810,6 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </div>
       </div>
       
-      {/* Customer Service Banner */}
       <div className="flex items-center justify-between bg-blue-50 border border-blue-100 rounded-lg p-3">
         <div className="flex items-center gap-2">
           <MessageCircle className="h-5 w-5 text-blue-500" />
