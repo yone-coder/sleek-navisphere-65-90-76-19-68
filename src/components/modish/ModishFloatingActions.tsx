@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { ArrowUp, Heart, MessageSquare, Share2, ShoppingCart, Tag, Star, Shield, Truck, DollarSign } from 'lucide-react';
+import { ArrowUp, Heart, MessageSquare, Share2, ShoppingCart, Tag, Star, Shield, Truck, DollarSign, Package, CreditCard, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -35,6 +34,8 @@ export function ModishFloatingActions({
   const [isLiked, setIsLiked] = useState(false);
   const [showShippingDrawer, setShowShippingDrawer] = useState(false);
   const [showReviewsDrawer, setShowReviewsDrawer] = useState(false);
+  const [buyLoading, setBuyLoading] = useState(false);
+  const [cartLoading, setCartLoading] = useState(false);
   
   const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
   const rating = 4.8; // Example rating
@@ -70,6 +71,26 @@ export function ModishFloatingActions({
     }
   };
 
+  const handleAddToCart = () => {
+    setCartLoading(true);
+    
+    // Simulate network request
+    setTimeout(() => {
+      setCartLoading(false);
+      onAddToCart();
+    }, 600);
+  };
+  
+  const handleBuyNow = () => {
+    setBuyLoading(true);
+    
+    // Simulate network request
+    setTimeout(() => {
+      setBuyLoading(false);
+      onBuyNow();
+    }, 800);
+  };
+
   return (
     <>
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t z-40 animate-in slide-in-from-bottom duration-300 shadow-lg">
@@ -83,9 +104,9 @@ export function ModishFloatingActions({
               <span className="text-sm line-through text-gray-500 ml-1">
                 ${originalPrice.toFixed(2)}
               </span>
-              <span className="ml-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded">
+              <Badge variant="outline" className="ml-2 text-xs px-1.5 py-0.5 bg-red-50 text-red-500 border-red-200">
                 {discount}% OFF
-              </span>
+              </Badge>
             </div>
             <div className="flex items-center">
               <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 mr-1" />
@@ -136,26 +157,48 @@ export function ModishFloatingActions({
               </button>
             </div>
             
-            {/* Action buttons */}
+            {/* Enhanced Action buttons */}
             <div className="col-span-4 h-12">
               <Button
-                onClick={onAddToCart}
-                className="w-full h-full rounded-none bg-gray-100 hover:bg-gray-200 text-gray-800"
-                disabled={stock === 0}
+                onClick={handleAddToCart}
+                className="w-full h-full rounded-none bg-gray-100 hover:bg-gray-200 text-gray-800 relative overflow-hidden group"
+                disabled={stock === 0 || cartLoading}
                 variant="outline"
               >
-                <ShoppingCart className="mr-1 h-5 w-5" />
-                CART
+                <div className="absolute inset-0 bg-gray-200 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-out"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  {cartLoading ? (
+                    <div className="h-4 w-4 border-2 border-gray-500 border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <>
+                      <Package className="mr-1 h-5 w-5 relative z-10" />
+                      <span className="relative z-10">CART</span>
+                    </>
+                  )}
+                </div>
               </Button>
             </div>
             
             <div className="col-span-8 h-12">
               <Button
-                onClick={onBuyNow}
-                className="w-full h-full rounded-none bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base"
-                disabled={stock === 0}
+                onClick={handleBuyNow}
+                className="w-full h-full rounded-none bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base relative overflow-hidden group"
+                disabled={stock === 0 || buyLoading}
               >
-                BUY NOW
+                <div className="absolute inset-0 bg-orange-600 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-out"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  {buyLoading ? (
+                    <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <>
+                      <CreditCard className="mr-1.5 h-5 w-5 relative z-10" />
+                      <span className="relative z-10">BUY NOW</span>
+                      {stock > 0 && stock < 10 && (
+                        <span className="relative z-10 ml-1 text-xs">({stock} left)</span>
+                      )}
+                    </>
+                  )}
+                </div>
               </Button>
             </div>
           </div>
@@ -402,3 +445,4 @@ export function ModishFloatingActions({
     </>
   );
 }
+
