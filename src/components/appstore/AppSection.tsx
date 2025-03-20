@@ -4,6 +4,7 @@ import { AppCard } from "./AppCard";
 import { appData } from "./data/appStoreData";
 import { App } from "./types";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { motion } from "framer-motion";
 
 interface AppSectionProps {
   title: string;
@@ -12,6 +13,7 @@ interface AppSectionProps {
   onAppDownload?: (appId: number) => void;
   downloadingApps?: number[];
   apps?: App[];
+  highlight?: boolean;
 }
 
 export function AppSection({ 
@@ -20,14 +22,20 @@ export function AppSection({
   type,
   onAppDownload,
   downloadingApps = [],
-  apps
+  apps,
+  highlight = false
 }: AppSectionProps) {
   const isMobile = useIsMobile();
   // If no custom apps are provided, filter by type
   const displayApps = apps || appData.filter(app => app.type === type).slice(0, 6);
 
   return (
-    <div className="space-y-2.5">
+    <motion.div 
+      className={`space-y-2.5 rounded-xl ${highlight ? 'bg-gray-50 p-4 shadow-sm' : ''}`}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-[20px] font-bold text-gray-900">{title}</h2>
@@ -41,17 +49,23 @@ export function AppSection({
 
       <div className="overflow-x-auto scrollbar-none pb-2 -mx-3 px-3">
         <div className="flex gap-3" style={{ minWidth: "min-content" }}>
-          {displayApps.map((app) => (
-            <div key={app.id} className="min-w-[124px] max-w-[124px]">
+          {displayApps.map((app, index) => (
+            <motion.div 
+              key={app.id} 
+              className="min-w-[124px] max-w-[124px]"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+            >
               <AppCard 
                 app={app} 
                 onDownload={() => onAppDownload && onAppDownload(app.id)}
                 isDownloading={downloadingApps.includes(app.id)}
               />
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
