@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
@@ -56,6 +55,7 @@ const StoryPage = lazy(() => import("./components/story/StoryPage"));
 const Modish = lazy(() => import("./pages/Modish"));
 const ModishCheckout = lazy(() => import("./pages/ModishCheckout"));
 const AppStore = lazy(() => import("./pages/AppStore"));
+const AppStoreSearch = lazy(() => import("./pages/AppStoreSearch"));
 
 const LoadingFallback = () => (
   <div className="min-h-screen p-8 space-y-4">
@@ -146,6 +146,7 @@ const AppContent = () => {
           <Route path="/modish/checkout" element={<ModishCheckout />} />
           
           <Route path="/appstore" element={<AppStore />} />
+          <Route path="/appsearch" element={<AppStoreSearch />} />
           
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />

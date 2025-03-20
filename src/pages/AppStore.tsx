@@ -1,21 +1,21 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { AppStoreHeader } from "@/components/appstore/AppStoreHeader";
 import { FeaturedApps } from "@/components/appstore/FeaturedApps";
 import { AppSection } from "@/components/appstore/AppSection"; 
 import { TopCharts } from "@/components/appstore/TopCharts";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { CategoryTabs } from "@/components/apps/CategoryTabs";
-import { Gamepad2, Grid3X3, Sparkles, Star, Award, Gift, Zap, Menu } from "lucide-react";
+import { Gamepad2, Grid3X3, Sparkles, Star, Award, Gift, Zap, Menu, Search } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { apps } from "@/components/apps/data/appsData";
 import { convertPlatformAppsToAppStore } from "@/components/appstore/utils/appDataAdapter";
-import { AppSearchBar } from "@/components/appstore/AppSearchBar";
 import { CategoriesSidebar } from "@/components/appstore/CategoriesSidebar";
 import { ContinueSection } from "@/components/appstore/ContinueSection";
 import { DiscountBanner } from "@/components/appstore/DiscountBanner";
-import { EnhancedAppCard } from "@/components/appstore/EnhancedAppCard";
+import { Button } from "@/components/ui/button";
 
 const categoryIcons = {
   All: Grid3X3,
@@ -32,6 +32,7 @@ const categoryIcons = {
 const convertedApps = convertPlatformAppsToAppStore(apps);
 
 const AppStore = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("today");
   const [categoryTab, setCategoryTab] = useState("all");
   const [downloadingApps, setDownloadingApps] = useState<number[]>([]);
@@ -92,6 +93,27 @@ const AppStore = () => {
     .sort(() => 0.5 - Math.random())
     .slice(0, 4);
 
+  // Trending now section - currently popular apps
+  const trendingApps = convertedApps
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 6);
+
+  // Apps that have been significantly updated
+  const majorUpdates = convertedApps
+    .filter(app => app.type === "app")
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 6);
+
+  // Quick actions to popular categories
+  const quickCategories = [
+    { name: "Games", icon: "🎮", color: "bg-red-500" },
+    { name: "Social", icon: "💬", color: "bg-blue-500" },
+    { name: "Shopping", icon: "🛍️", color: "bg-green-500" },
+    { name: "Education", icon: "📚", color: "bg-yellow-500" },
+    { name: "Music", icon: "🎵", color: "bg-purple-500" },
+    { name: "Productivity", icon: "📊", color: "bg-cyan-500" },
+  ];
+
   useEffect(() => {
     // Simulate initial load animation
     const timer = setTimeout(() => {
@@ -124,8 +146,17 @@ const AppStore = () => {
           >
             <Menu className="w-5 h-5" />
           </button>
-          <div className="flex-1">
-            <AppSearchBar />
+          
+          {/* Search icon instead of search bar */}
+          <div className="flex-1 flex justify-end">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-10 w-10 rounded-full hover:bg-gray-100"
+              onClick={() => navigate("/appsearch")}
+            >
+              <Search className="h-5 w-5" />
+            </Button>
           </div>
         </div>
         
@@ -139,6 +170,26 @@ const AppStore = () => {
               <FeaturedApps />
             </motion.div>
             
+            {/* Quick Categories */}
+            <div className="overflow-x-auto scrollbar-none -mx-3 px-3">
+              <div className="flex gap-4 py-2">
+                {quickCategories.map((category, index) => (
+                  <motion.div
+                    key={index}
+                    className="flex flex-col items-center gap-2 min-w-[60px]"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <div className={`w-12 h-12 ${category.color} rounded-full flex items-center justify-center text-xl`}>
+                      {category.icon}
+                    </div>
+                    <span className="text-xs font-medium">{category.name}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+            
             {/* Limited Time Offer */}
             <DiscountBanner
               title="Limited Time Offers"
@@ -151,10 +202,17 @@ const AppStore = () => {
             {/* Continue Section */}
             <ContinueSection recentApps={recentApps} />
             
-            <div className="bg-gray-50 rounded-xl p-3 mb-2">
-              <CategoryTabs categories={categories} />
-            </div>
+            {/* Trending Now Section */}
+            <AppSection 
+              title="Trending Now" 
+              subtitle="What everyone's downloading"
+              type="app"
+              apps={trendingApps}
+              onAppDownload={handleAppDownload}
+              downloadingApps={downloadingApps}
+            />
             
+            {/* Editor's Picks */}
             <AppSection 
               title="Today's Editor's Picks" 
               subtitle="Handpicked apps by our editors"
@@ -162,6 +220,25 @@ const AppStore = () => {
               apps={editorsPicks}
               onAppDownload={handleAppDownload}
               downloadingApps={downloadingApps}
+            />
+            
+            {/* Major Updates */}
+            <AppSection 
+              title="Major Updates" 
+              subtitle="Significant new features and improvements"
+              type="app"
+              apps={majorUpdates}
+              onAppDownload={handleAppDownload}
+              downloadingApps={downloadingApps}
+            />
+            
+            {/* Seasonal Banner */}
+            <DiscountBanner
+              title="Summer Gaming Collection"
+              subtitle="Perfect games for summer fun"
+              discount="New"
+              expiresIn="Limited collection"
+              background="bg-gradient-to-r from-orange-400 to-pink-500"
             />
             
             <AppSection 
@@ -282,6 +359,6 @@ const AppStore = () => {
       </div>
     </div>
   );
-};
+}
 
 export default AppStore;

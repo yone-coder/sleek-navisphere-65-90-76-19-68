@@ -19,7 +19,7 @@ export function EnhancedAppCard({
   onDownload, 
   isDownloading = false,
   showRating = true,
-  showSize = true
+  showSize = false // Changed default to false
 }: EnhancedAppCardProps) {
   // Determine whether the app is free or paid
   const isFree = app.price === 0;
@@ -60,35 +60,10 @@ export function EnhancedAppCard({
         <h3 className="text-xs font-semibold text-gray-800 truncate" title={app.name}>{app.name}</h3>
         <p className="text-[10px] text-gray-500 truncate">{app.category}</p>
         
-        {(showRating || showSize) && (
-          <div className="flex items-center mt-1 gap-1">
-            {showRating && (
-              <div className="flex items-center">
-                <Star className="w-2.5 h-2.5 fill-yellow-400 text-yellow-400 mr-0.5" />
-                <span className="text-[10px] text-gray-500">{app.rating.toFixed(1)}</span>
-              </div>
-            )}
-            
-            {showRating && showSize && (
-              <span className="text-[10px] text-gray-400">•</span>
-            )}
-            
-            {showSize && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div className="flex items-center text-[10px] text-gray-500">
-                      <span>{app.size || "120 MB"}</span>
-                      <Info className="w-2.5 h-2.5 ml-0.5 text-gray-400" />
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom" className="text-xs">
-                    <p>App size: {app.size || "120 MB"}</p>
-                    <p>Last updated: {new Date().toLocaleDateString()}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
+        {showRating && (
+          <div className="flex items-center mt-1">
+            <Star className="w-2.5 h-2.5 fill-yellow-400 text-yellow-400 mr-0.5" />
+            <span className="text-[10px] text-gray-500">{app.rating.toFixed(1)}</span>
           </div>
         )}
       </div>

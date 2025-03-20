@@ -1,10 +1,9 @@
 
 import React from "react";
 import { App } from "./types";
-import { Download, Info, Star } from "lucide-react";
+import { Download, Star } from "lucide-react";
 import { iconComponents } from "./utils/appDataAdapter";
 import { getGradient } from "./utils/gradientUtils";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface AppRankCardProps {
   app: App;
@@ -47,22 +46,6 @@ export function AppRankCard({ app, rank, onDownload }: AppRankCardProps) {
             ))}
           </div>
           <span className="text-[10px] text-gray-500 ml-1">{app.rating.toFixed(1)}</span>
-          <span className="text-[10px] text-gray-400 mx-1">•</span>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="flex items-center text-[10px] text-gray-500">
-                  <span>{app.size || "120 MB"}</span>
-                  <Info className="w-2.5 h-2.5 ml-0.5 text-gray-400" />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent side="right" className="text-xs">
-                <p>Version: 1.2.3</p>
-                <p>Last updated: {new Date().toLocaleDateString()}</p>
-                <p>Developer: {app.developer || "App Studio Inc."}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
         </div>
       </div>
       

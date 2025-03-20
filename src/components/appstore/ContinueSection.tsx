@@ -57,8 +57,6 @@ export function ContinueSection({ recentApps }: ContinueSectionProps) {
                 
                 <div className="mt-2 pt-2 border-t border-gray-100 flex justify-between items-center">
                   <div className="flex items-center text-xs text-gray-500">
-                    <span>{app.size || "120 MB"}</span>
-                    <span className="mx-1">•</span>
                     <span>{app.rating.toFixed(1)} ★</span>
                   </div>
                   
