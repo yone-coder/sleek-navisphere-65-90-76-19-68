@@ -19,6 +19,8 @@ type ModishOptionsProps = {
   quantity: number;
   onUpdateQuantity: (quantity: number) => void;
   stock: number;
+  price: number;
+  discountPrice: number;
   sizes?: SizeOption[];
   selectedSize?: string;
   onSelectSize?: (size: string) => void;
@@ -31,6 +33,8 @@ export function ModishOptions({
   quantity,
   onUpdateQuantity,
   stock,
+  price,
+  discountPrice,
   sizes = [],
   selectedSize = '',
   onSelectSize = () => {}

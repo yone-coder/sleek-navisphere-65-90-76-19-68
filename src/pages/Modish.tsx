@@ -15,8 +15,8 @@ const Modish = () => {
   const productId = id || '1';
 
   // Dummy data for floating actions - these would come from product data in a real app
-  const productPrice = 39.99;
-  const originalPrice = 79.99;
+  const productPrice = 79.99;  // Original price
+  const discountPrice = 39.99;  // Discounted price
   const stock = 68;
 
   const handleAddToCart = () => {
@@ -37,8 +37,8 @@ const Modish = () => {
     // Create mock product data for the checkout page
     const mockProduct = {
       name: "Stylish Modern Product",
-      discountPrice: productPrice,
-      originalPrice: originalPrice,
+      discountPrice: discountPrice,
+      originalPrice: productPrice,
       images: ['/lovable-uploads/7751a0aa-bb1f-47c5-b434-e63e68dbc0d0.png']
     };
     
@@ -56,11 +56,15 @@ const Modish = () => {
     <div className="min-h-screen bg-gray-50 pb-[150px] overflow-x-hidden">
       <ModishHeader />
       <div className="w-full mx-auto px-0 mt-14">
-        <ModishProductDetails productId={productId} />
+        <ModishProductDetails 
+          productId={productId} 
+          price={productPrice}
+          discountPrice={discountPrice}
+        />
       </div>
       <ModishFloatingActions 
         price={productPrice}
-        originalPrice={originalPrice}
+        originalPrice={productPrice}
         onAddToCart={handleAddToCart}
         onBuyNow={handleBuyNow}
         stock={stock}
