@@ -39,9 +39,8 @@ export function ProductGallery({
     const updateHeaderHeight = () => {
       const headerElement = document.querySelector('.modish-header');
       if (headerElement) {
-        // Add extra padding (24px) to ensure content isn't hidden right at the edge
-        // Increased from 12px to 24px to provide more space
-        setHeaderHeight(headerElement.clientHeight + 24);
+        // Add extra padding (12px) to ensure content isn't hidden right at the edge
+        setHeaderHeight(headerElement.clientHeight + 12);
       }
     };
 
@@ -103,11 +102,7 @@ export function ProductGallery({
   return (
     <div 
       className="relative bg-gradient-to-b from-gray-50 to-white"
-      style={{ 
-        paddingTop: headerHeight ? `${headerHeight}px` : '0',
-        // Add a class to help identify the top position for debugging
-        '--gallery-top-offset': `${headerHeight}px` 
-      } as React.CSSProperties}
+      style={{ paddingTop: headerHeight ? `${headerHeight}px` : '0' }}
       tabIndex={0}
       onKeyDown={handleKeyDown}
     >
