@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { ModishGallery } from '@/components/modish/product/ModishGallery';
 import { ModishInfo } from '@/components/modish/product/ModishInfo';
@@ -72,6 +72,8 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
   const [showCompareProducts, setShowCompareProducts] = useState(false);
   const isMobile = useIsMobile();
   const { toast } = useToast();
+  const headerRef = useRef<HTMLDivElement>(null);
+  const tabsNavRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -184,10 +186,30 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     
-    const tabContentElement = document.getElementById('tabContent');
-    if (tabContentElement) {
-      tabContentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    setTimeout(() => {
+      const tabContentElement = document.getElementById('tabContent');
+      if (tabContentElement) {
+        let offsetHeight = 0;
+        
+        if (headerRef.current) {
+          offsetHeight += headerRef.current.clientHeight;
+        }
+        
+        if (tabsNavRef.current) {
+          offsetHeight += tabsNavRef.current.clientHeight;
+        }
+        
+        offsetHeight += 20;
+        
+        const elementPosition = tabContentElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - offsetHeight;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
   };
 
   const handleShare = () => {
@@ -249,7 +271,11 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 pb-20">
+      
+      <div ref={headerRef} className="fixed top-0 left-0 right-0 z-50 opacity-0 pointer-events-none">
+        <div className="h-14"></div>
+      </div>
       
       <ModishGallery images={product.images} name={product.name} />
       
@@ -359,13 +385,13 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
       </div>
 
       <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-3 border border-purple-100">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Zap className="h-5 w-5 text-purple-500" />
+        <div className="flex items-center gap-2">
+          <Zap className="h-5 w-5 text-purple-500" />
+          <div>
             <span className="text-sm font-medium text-purple-800">Flash Sale</span>
-          </div>
-          <div className="text-xs text-purple-700 bg-white px-2 py-1 rounded-full border border-purple-200">
-            12:45:30 left
+            <div className="text-xs text-purple-700 bg-white px-2 py-1 rounded-full border border-purple-200">
+              12:45:30 left
+            </div>
           </div>
         </div>
         <div className="mt-2 bg-white p-2 rounded-md">
@@ -632,7 +658,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </button>
       </div>
 
-      <div id="tabContent" className="border-t border-gray-100 mt-2">
+      <div id="tabContent" className="border-t border-gray-100 mt-2 pt-4">
         {activeTab === 'description' && (
           <div className="p-3">
             <h2 className="text-lg font-medium text-gray-800 mb-4">Product Description</h2>
@@ -825,3 +851,4 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
     </div>
   );
 }
+
