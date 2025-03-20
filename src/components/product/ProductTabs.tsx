@@ -1,4 +1,3 @@
-
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { DescriptionTab } from "./tabs/DescriptionTab";
@@ -7,7 +6,7 @@ import { ReviewsTab } from "./tabs/ReviewsTab";
 import { FAQsTab } from "./tabs/FAQsTab";
 import { 
   FileText, Shield, MessageSquare, HelpCircle, Settings, 
-  Truck, Star, BarChart3, Calendar, Certificate, Tag
+  Truck, Star, BarChart3, Calendar, Award, Tag
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Progress } from "@/components/ui/progress";
@@ -212,7 +211,7 @@ export function ProductTabs({
               </div>
               <div className="bg-white border border-gray-100 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-shadow">
                 <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Certificate className="h-5 w-5 text-purple-600" />
+                  <Award className="h-5 w-5 text-purple-600" />
                 </div>
                 <h4 className="text-sm font-medium text-gray-900 mb-1">Guaranteed</h4>
                 <p className="text-xs text-gray-500">100% secure shipping</p>
@@ -548,22 +547,4 @@ export function ProductTabs({
                   
                   <div className="flex items-center justify-between">
                     <div className="text-xs text-gray-500">
-                      {review.helpful} people found this helpful
-                    </div>
-                    <Button variant="ghost" size="sm" className="text-blue-600">Helpful</Button>
-                  </div>
-                </div>
-              ))}
-              
-              <div className="text-center">
-                <Button variant="outline" className="w-full md:w-auto">Load More Reviews</Button>
-              </div>
-            </div>
-          </div>
-        </TabsContent>
-        
-        <FAQsTab />
-      </div>
-    </Tabs>
-  );
-}
+                      {review.helpful} people found
