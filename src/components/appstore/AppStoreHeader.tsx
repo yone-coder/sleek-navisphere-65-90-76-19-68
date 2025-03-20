@@ -1,5 +1,5 @@
 
-import { Search, User, Bell, Menu, ChevronDown, Store } from "lucide-react";
+import { Bell, ChevronDown, Menu, Search, Store, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   DropdownMenu, 
@@ -24,19 +24,20 @@ export function AppStoreHeader({ activeTab, setActiveTab }: AppStoreHeaderProps)
   ];
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-gray-50/90 backdrop-blur-md border-b border-gray-200">
-      <div className="px-2 sm:px-4 pt-2 sm:pt-4 max-w-7xl mx-auto">
-        <div className="flex justify-between items-center pb-2">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm border-b border-gray-200">
+      {/* Main Header Content */}
+      <div className="px-2 sm:px-4 py-2 sm:py-3 max-w-7xl mx-auto">
+        <div className="flex justify-between items-center">
+          {/* Left Section */}
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-1 text-sm font-medium text-gray-700">
-                  <span className="hidden sm:inline">Categories</span>
-                  <Menu className="w-5 h-5 sm:hidden" />
-                  <ChevronDown className="w-4 h-4" />
+                <button className="flex items-center gap-1 text-sm font-medium text-gray-700 hover:bg-gray-100 p-1 rounded-full">
+                  <Menu className="w-5 h-5 sm:w-5 sm:h-5" />
+                  <ChevronDown className="w-4 h-4 hidden sm:block" />
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
+              <DropdownMenuContent align="start" className="w-56">
                 <DropdownMenuItem>Games</DropdownMenuItem>
                 <DropdownMenuItem>Entertainment</DropdownMenuItem>
                 <DropdownMenuItem>Social</DropdownMenuItem>
@@ -46,59 +47,46 @@ export function AppStoreHeader({ activeTab, setActiveTab }: AppStoreHeaderProps)
               </DropdownMenuContent>
             </DropdownMenu>
             
-            <span className="hidden sm:block text-gray-300">|</span>
-            
             <div className="flex items-center gap-1.5">
-              <Store className="h-5 w-5 text-blue-500" />
-              <h1 className="text-lg sm:text-2xl font-bold text-gray-900">App Store</h1>
+              <Store className="h-6 w-6 text-blue-500" />
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900">App Store</h1>
             </div>
           </div>
           
+          {/* Right Section */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <button className="p-1.5 sm:p-2 rounded-full hover:bg-gray-100 transition relative">
-              <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" />
+            <button className="p-1.5 rounded-full hover:bg-gray-100 transition relative">
+              <Search className="w-5 h-5 text-gray-700" />
+            </button>
+            <button className="p-1.5 rounded-full hover:bg-gray-100 transition relative">
+              <Bell className="w-5 h-5 text-gray-700" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
-            <button className="p-1.5 sm:p-2 rounded-full hover:bg-gray-100 transition">
-              <Search className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" />
-            </button>
-            <Avatar className="h-7 w-7 sm:h-8 sm:w-8 border border-gray-200">
+            <Avatar className="h-8 w-8 border border-gray-200">
               <AvatarImage src="/placeholder.svg" alt="User" />
               <AvatarFallback>
-                <User className="h-4 w-4 sm:h-5 sm:w-5" />
+                <User className="h-5 w-5" />
               </AvatarFallback>
             </Avatar>
           </div>
         </div>
         
-        <div className="relative">
-          <div className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-none pt-2 pb-3 sm:pb-4">
+        {/* Tabs Navigation */}
+        <div className="mt-3">
+          <div className="flex gap-6 sm:gap-8 overflow-x-auto scrollbar-none py-1">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                className={`py-1 px-1 text-sm font-medium whitespace-nowrap ${
+                className={`whitespace-nowrap font-medium ${
                   activeTab === tab.id 
-                    ? "text-blue-500 border-b-2 border-blue-500" 
-                    : "text-gray-600 hover:text-gray-900"
+                    ? "text-blue-500 border-b-2 border-blue-500 pb-1" 
+                    : "text-gray-600 hover:text-gray-900 pb-1"
                 }`}
                 onClick={() => setActiveTab(tab.id)}
               >
                 {tab.label}
               </button>
             ))}
-          </div>
-        </div>
-      </div>
-      
-      <div className="px-2 sm:px-4 py-2 bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto">
-          <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search for apps & games"
-              className="w-full bg-gray-100 py-2 pl-10 pr-4 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-colors"
-            />
           </div>
         </div>
       </div>
