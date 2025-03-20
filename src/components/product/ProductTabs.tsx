@@ -27,7 +27,7 @@ export function ProductTabs({
     <Tabs defaultValue="description" className="w-full max-w-full">
       {/* Tab navigation */}
       <div className="relative border-b border-gray-100">
-        <ScrollArea className="pb-4 w-full" orientation="horizontal">
+        <ScrollArea className="pb-4 w-full">
           <div className="px-2 md:px-6 flex justify-start min-w-max">
             <TabsList className="flex w-max h-12 bg-gradient-to-b from-gray-50/50 to-white p-2 rounded-2xl mb-2 overflow-visible">
               <TabsTrigger 
