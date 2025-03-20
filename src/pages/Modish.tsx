@@ -5,32 +5,58 @@ import { ModishProductDetails } from '@/components/modish/ModishProductDetails';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ModishFloatingActions } from '@/components/modish/ModishFloatingActions';
 import { useToast } from '@/hooks/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Modish = () => {
   const { id } = useParams();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { isMobile } = useIsMobile();
   
   // Default to product ID 1 if none is provided
   const productId = id || '1';
-
-  // Product data
-  const productPrice = 199.99;  // Original price
-  const discountPrice = 149.99;  // Discounted price
-  const stock = 68;
 
   // Create more complete product object
   const product = {
     id: productId,
     name: "Noise Cancelling Wireless Bluetooth Headphones with Microphone",
-    price: productPrice,
-    discountPrice: discountPrice,
+    price: 199.99,
+    discountPrice: 149.99,
     brand: "AudioTech",
     description: "Experience premium sound quality with our latest noise cancelling headphones. Perfect for work, travel, or everyday use. Features include Bluetooth 5.0, 30-hour battery life, and comfortable over-ear design.",
     rating: 4.8,
     reviewCount: 1245,
-    stock: stock,
-    images: ['/lovable-uploads/7751a0aa-bb1f-47c5-b434-e63e68dbc0d0.png', '/api/placeholder/400/400', '/api/placeholder/400/400']
+    stock: 68,
+    images: ['/lovable-uploads/7751a0aa-bb1f-47c5-b434-e63e68dbc0d0.png', '/api/placeholder/400/400', '/api/placeholder/400/400'],
+    deliveryTime: "2-4 business days",
+    variants: {
+      colors: [
+        { name: "Black", value: "#000000" },
+        { name: "White", value: "#FFFFFF" },
+        { name: "Blue", value: "#0000FF" },
+        { name: "Red", value: "#FF0000" }
+      ],
+      sizes: [
+        { name: "One Size", available: true }
+      ]
+    },
+    highlights: [
+      "Active Noise Cancellation technology reduces ambient noise",
+      "30-hour battery life on a single charge",
+      "Premium memory foam ear cushions for extended comfort",
+      "Built-in microphone with voice assistant support",
+      "Fast charging - 5 minutes charge for 3 hours of playback",
+      "Bluetooth 5.0 with seamless connectivity"
+    ],
+    specifications: {
+      brand: "AudioTech",
+      model: "ATH-NC700",
+      color: "Black",
+      connectivity: "Bluetooth 5.0, 3.5mm jack",
+      batteryLife: "30 hours",
+      weight: "250g",
+      warranty: "2 years"
+    }
   };
 
   const handleAddToCart = () => {
@@ -67,17 +93,17 @@ const Modish = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-[150px] overflow-x-hidden">
+    <div className="min-h-screen bg-gray-50 pb-[80px] md:pb-[150px] overflow-x-hidden">
       <ModishHeader />
       <div className="w-full mx-auto px-0 mt-14">
         <ModishProductDetails product={product} />
       </div>
       <ModishFloatingActions 
-        price={discountPrice}
-        originalPrice={productPrice}
+        price={product.discountPrice}
+        originalPrice={product.price}
         onAddToCart={handleAddToCart}
         onBuyNow={handleBuyNow}
-        stock={stock}
+        stock={product.stock}
       />
     </div>
   );

@@ -5,30 +5,20 @@ import {
   Truck, 
   Shield, 
   Calendar, 
-  Info, 
   MessageSquare,
   Users,
   Award,
   Clock,
-  Package,
-  Ruler
+  Package
 } from 'lucide-react';
 import { ModishGallery } from '@/components/modish/product/ModishGallery';
 import { ModishInfo } from '@/components/modish/product/ModishInfo';
 import { ModishOptions } from '@/components/modish/product/ModishOptions';
-import { ModishActions } from '@/components/modish/product/ModishActions';
-import { ModishDescription } from '@/components/modish/product/ModishDescription';
-import { ModishFeatures } from '@/components/modish/product/ModishFeatures';
-import { ModishSizeGuide } from '@/components/modish/product/ModishSizeGuide';
-import { ModishReviews } from '@/components/modish/product/ModishReviews';
-import { ModishSimilar } from '@/components/modish/product/ModishSimilar';
-import { ModishTrending } from '@/components/modish/product/ModishTrending';
-import { ModishQuestions } from '@/components/modish/product/ModishQuestions';
 import { ModishTabs } from '@/components/modish/product/ModishTabs';
 import { DescriptionTab } from '@/components/product/tabs/DescriptionTab';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Define product type
 type ProductType = {
@@ -42,6 +32,13 @@ type ProductType = {
   reviewCount: number;
   stock: number;
   images: string[];
+  deliveryTime?: string;
+  variants?: {
+    colors?: { name: string; value: string }[];
+    sizes?: { name: string; available: boolean }[];
+  };
+  highlights?: string[];
+  specifications?: Record<string, string>;
 };
 
 type ModishProductDetailsProps = {
@@ -54,53 +51,12 @@ export function ModishProductDetails({ product }: ModishProductDetailsProps) {
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const { toast } = useToast();
-
-  // Extended product data - in a real app more would come from an API call
-  const extendedProduct = {
-    ...product,
-    highlights: [
-      "Active Noise Cancellation technology reduces ambient noise",
-      "30-hour battery life on a single charge",
-      "Premium memory foam ear cushions for extended comfort",
-      "Built-in microphone with voice assistant support",
-      "Fast charging - 5 minutes charge for 3 hours of playback",
-      "Bluetooth 5.0 with seamless connectivity"
-    ],
-    specifications: {
-      brand: product.brand,
-      model: "ATH-NC700",
-      color: "Black",
-      connectivity: "Bluetooth 5.0, 3.5mm jack",
-      batteryLife: "30 hours",
-      weight: "250g",
-      warranty: "2 years"
-    },
-    shipping: {
-      methods: [
-        { name: "Standard Shipping", price: 4.99, days: "3-5" },
-        { name: "Express Shipping", price: 9.99, days: "1-2" },
-        { name: "Free Shipping", price: 0, days: "5-7", minimumOrder: 50 }
-      ],
-      returns: "30-day free returns",
-      warranty: "2-year manufacturer warranty"
-    },
-    variants: {
-      colors: [
-        { name: "Black", value: "#000000" },
-        { name: "White", value: "#FFFFFF" },
-        { name: "Blue", value: "#0000FF" },
-        { name: "Red", value: "#FF0000" }
-      ],
-      sizes: [
-        { name: "One Size", available: true }
-      ]
-    }
-  };
+  const { isMobile } = useIsMobile();
 
   const tabs = [
     { id: 'description', label: 'Description' },
     { id: 'specs', label: 'Specifications' },
-    { id: 'shipping', label: 'Shipping & Returns' },
+    { id: 'shipping', label: 'Shipping' },
     { id: 'reviews', label: 'Reviews', count: product.reviewCount },
     { id: 'questions', label: 'Q&A', count: 57 },
     { id: 'size-guide', label: 'Size Guide' },
@@ -136,7 +92,7 @@ export function ModishProductDetails({ product }: ModishProductDetailsProps) {
       <ModishGallery images={product.images} name={product.name} />
       
       {/* Product Info */}
-      <div className="px-4 py-3">
+      <div className={cn("px-4 py-3", isMobile ? "bg-white rounded-xl mx-2 -mt-3 relative z-10 shadow-sm" : "")}>
         <ModishInfo 
           name={product.name}
           brand={product.brand}
@@ -179,9 +135,9 @@ export function ModishProductDetails({ product }: ModishProductDetailsProps) {
       </div>
       
       {/* Options Selection */}
-      <div className="px-4 mt-2">
+      <div className={cn("px-4 mt-2", isMobile ? "bg-white rounded-xl mx-2 mt-3 py-3 shadow-sm" : "")}>
         <ModishOptions
-          colors={extendedProduct.variants.colors}
+          colors={product.variants?.colors || []}
           selectedColor={selectedColor}
           onSelectColor={handleColorSelect}
           quantity={quantity}
@@ -189,14 +145,14 @@ export function ModishProductDetails({ product }: ModishProductDetailsProps) {
           stock={product.stock}
           price={product.price}
           discountPrice={product.discountPrice}
-          sizes={extendedProduct.variants.sizes}
+          sizes={product.variants?.sizes || []}
           selectedSize={selectedSize}
           onSelectSize={handleSizeSelect}
         />
       </div>
       
       {/* Shipping Information */}
-      <div className="px-4 mt-4">
+      <div className={cn("px-4 mt-4", isMobile ? "bg-white rounded-xl mx-2 mt-3 py-3 shadow-sm" : "")}>
         <div className="flex items-center gap-2 text-sm text-gray-700">
           <Truck className="h-4 w-4 text-gray-500" />
           <div>
@@ -229,7 +185,7 @@ export function ModishProductDetails({ product }: ModishProductDetailsProps) {
       </div>
       
       {/* Tabs Navigation */}
-      <div className="sticky top-[97px] bg-white z-10 mt-6">
+      <div className="sticky top-[97px] z-10 mt-6">
         <ModishTabs 
           tabs={tabs}
           activeTab={activeTab}
@@ -238,11 +194,11 @@ export function ModishProductDetails({ product }: ModishProductDetailsProps) {
       </div>
       
       {/* Tab Content */}
-      <div id="tab-content" className="px-4 py-4">
+      <div id="tab-content" className={cn("px-4 py-4", isMobile ? "bg-white mx-2 rounded-b-xl shadow-sm" : "")}>
         {activeTab === 'description' && (
           <DescriptionTab 
             description={product.description}
-            highlights={extendedProduct.highlights}
+            highlights={product.highlights || []}
           />
         )}
         
@@ -250,7 +206,7 @@ export function ModishProductDetails({ product }: ModishProductDetailsProps) {
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Technical Specifications</h3>
             <div className="space-y-2">
-              {Object.entries(extendedProduct.specifications).map(([key, value]) => (
+              {product.specifications && Object.entries(product.specifications).map(([key, value]) => (
                 <div key={key} className="flex border-b border-gray-100 py-2">
                   <div className="w-1/3 text-gray-500 capitalize">{key}</div>
                   <div className="w-2/3 font-medium">{value}</div>
@@ -265,7 +221,11 @@ export function ModishProductDetails({ product }: ModishProductDetailsProps) {
             <div>
               <h3 className="text-lg font-medium mb-3">Shipping Options</h3>
               <div className="space-y-3">
-                {extendedProduct.shipping.methods.map((method, index) => (
+                {[
+                  { name: "Standard Shipping", price: 4.99, days: "3-5" },
+                  { name: "Express Shipping", price: 9.99, days: "1-2" },
+                  { name: "Free Shipping", price: 0, days: "5-7", minimumOrder: 50 }
+                ].map((method, index) => (
                   <div key={index} className="flex justify-between border-b border-gray-100 pb-2">
                     <div>
                       <div className="font-medium">{method.name}</div>
@@ -289,7 +249,7 @@ export function ModishProductDetails({ product }: ModishProductDetailsProps) {
                   <Calendar className="h-5 w-5 text-gray-500 mt-0.5" />
                   <div>
                     <div className="font-medium">Returns Policy</div>
-                    <div className="text-sm text-gray-600">{extendedProduct.shipping.returns}</div>
+                    <div className="text-sm text-gray-600">30-day free returns</div>
                   </div>
                 </div>
                 
@@ -297,7 +257,7 @@ export function ModishProductDetails({ product }: ModishProductDetailsProps) {
                   <Shield className="h-5 w-5 text-gray-500 mt-0.5" />
                   <div>
                     <div className="font-medium">Warranty Information</div>
-                    <div className="text-sm text-gray-600">{extendedProduct.shipping.warranty}</div>
+                    <div className="text-sm text-gray-600">2-year manufacturer warranty</div>
                   </div>
                 </div>
               </div>
@@ -306,30 +266,30 @@ export function ModishProductDetails({ product }: ModishProductDetailsProps) {
         )}
         
         {activeTab === 'reviews' && (
-          <ModishReviews productId={product.id} />
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Customer Reviews</h3>
+            <p className="text-gray-500">Reviews are coming soon...</p>
+          </div>
         )}
         
         {activeTab === 'questions' && (
-          <ModishQuestions />
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Questions & Answers</h3>
+            <p className="text-gray-500">Q&A is coming soon...</p>
+          </div>
         )}
         
         {activeTab === 'size-guide' && (
-          <ModishSizeGuide />
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Size Guide</h3>
+            <p className="text-gray-500">Size guide is coming soon...</p>
+          </div>
         )}
       </div>
-      
-      {/* Trending Products */}
-      <div className="mt-6 px-4">
-        <ModishTrending />
-      </div>
-      
-      {/* Similar Products */}
-      <div className="mt-6 px-4">
-        <ModishSimilar currentProductId={product.id} />
-      </div>
-      
-      {/* Product Actions - Using onSubmit handlers instead of direct price props */}
-      <ModishActions />
     </div>
   );
+}
+
+function cn(...classes: (string | boolean | undefined)[]) {
+  return classes.filter(Boolean).join(' ');
 }
