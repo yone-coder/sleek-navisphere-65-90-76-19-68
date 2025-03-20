@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ModishGallery } from './product/ModishGallery';
 import { ModishInfo } from './product/ModishInfo';
@@ -8,7 +7,8 @@ import { ModishReviews } from './product/ModishReviews';
 import { ModishSimilar } from './product/ModishSimilar';
 import { ModishFeatures } from './product/ModishFeatures';
 import { Card, CardContent } from '@/components/ui/card';
-import { Clock, Eye } from 'lucide-react';
+import { AlertCircle, Clock, Eye, History, TrendingUp, Users } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Sample product data
 const products = {
@@ -116,8 +116,12 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
   const [quantity, setQuantity] = useState(1);
   const [viewCount, setViewCount] = useState(0);
   const [lastViewed, setLastViewed] = useState<string>('');
+  const [peakViewers, setPeakViewers] = useState(0);
+  const [popularity, setPopularity] = useState<string>('');
+  const [stockTrend, setStockTrend] = useState<'increasing' | 'decreasing' | 'stable'>('stable');
+  const isMobile = useIsMobile();
   
-  // Simulate view counter
+  // Simulate view counter and other dynamic data
   useEffect(() => {
     // Random number between 10-50
     const randomViewers = Math.floor(Math.random() * 40) + 10;
@@ -126,6 +130,17 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
     // Set a random time for "last viewed"
     const minutes = Math.floor(Math.random() * 30) + 1;
     setLastViewed(`${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`);
+    
+    // Set peak viewers (slightly higher than current)
+    setPeakViewers(randomViewers + Math.floor(Math.random() * 20) + 5);
+    
+    // Set popularity status
+    const popularityOptions = ['Rising fast', 'Popular choice', 'Trending'];
+    setPopularity(popularityOptions[Math.floor(Math.random() * popularityOptions.length)]);
+    
+    // Set stock trend
+    const trends: Array<'increasing' | 'decreasing' | 'stable'> = ['increasing', 'decreasing', 'stable'];
+    setStockTrend(trends[Math.floor(Math.random() * trends.length)]);
   }, []);
   
   return (
@@ -133,23 +148,56 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
       <ModishGallery images={product.images} name={product.name} />
       
       <div className="max-w-2xl mx-auto px-4 mt-6 space-y-12">
-        {/* Live activity indicator */}
+        {/* Live activity indicator - Redesigned for better mobile experience */}
         <Card className="overflow-hidden border-gray-100">
-          <CardContent className="p-0 flex items-center text-sm divide-x divide-gray-100">
-            <div className="px-3 py-2 flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-              <span className="text-gray-700">
-                <strong>{viewCount}</strong> people viewing
-              </span>
+          <CardContent className={`p-0 ${isMobile ? 'flex flex-col' : 'flex items-center'} text-sm divide-x-0 divide-y sm:divide-y-0 sm:divide-x divide-gray-100`}>
+            <div className={`${isMobile ? 'w-full' : ''} px-3 py-2 flex items-center gap-2`}>
+              <div className="min-w-5 h-5 rounded-full bg-green-50 flex items-center justify-center">
+                <Users className="w-3 h-3 text-green-600" />
+              </div>
+              <div>
+                <span className="text-gray-700 font-medium">
+                  {viewCount} people viewing
+                </span>
+                <div className="text-xs text-gray-500">Peak today: {peakViewers}</div>
+              </div>
             </div>
-            <div className="px-3 py-2 flex items-center gap-2">
-              <Eye className="w-4 h-4 text-gray-500" />
-              <span className="text-gray-700">Last viewed {lastViewed}</span>
+            
+            <div className={`${isMobile ? 'w-full' : ''} px-3 py-2 flex items-center gap-2`}>
+              <div className="min-w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center">
+                <History className="w-3 h-3 text-blue-600" />
+              </div>
+              <div>
+                <span className="text-gray-700 font-medium">Last viewed {lastViewed}</span>
+                <div className="text-xs text-gray-500">{Math.floor(Math.random() * 100) + 20} views today</div>
+              </div>
             </div>
-            <div className="px-3 py-2 flex items-center gap-2">
-              <Clock className="w-4 h-4 text-gray-500" />
-              <span className="text-gray-700">Updated today</span>
+            
+            <div className={`${isMobile ? 'w-full' : ''} px-3 py-2 flex items-center gap-2`}>
+              <div className="min-w-5 h-5 rounded-full bg-purple-50 flex items-center justify-center">
+                <TrendingUp className="w-3 h-3 text-purple-600" />
+              </div>
+              <div>
+                <span className="text-gray-700 font-medium">{popularity}</span>
+                <div className="text-xs text-gray-500">
+                  {stockTrend === 'decreasing' && 'Selling fast!'}
+                  {stockTrend === 'increasing' && 'Stock just updated'}
+                  {stockTrend === 'stable' && 'Steady availability'}
+                </div>
+              </div>
             </div>
+            
+            {product.stock < 10 && (
+              <div className={`${isMobile ? 'w-full' : ''} px-3 py-2 flex items-center gap-2`}>
+                <div className="min-w-5 h-5 rounded-full bg-amber-50 flex items-center justify-center">
+                  <AlertCircle className="w-3 h-3 text-amber-600" />
+                </div>
+                <div>
+                  <span className="text-gray-700 font-medium">Limited stock</span>
+                  <div className="text-xs text-gray-500">Only {product.stock} left</div>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       
