@@ -6,6 +6,7 @@ import { WarrantyTab } from "./tabs/WarrantyTab";
 import { ReviewsTab } from "./tabs/ReviewsTab";
 import { FAQsTab } from "./tabs/FAQsTab";
 import { FileText, Shield, MessageSquare, HelpCircle, Settings } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type ProductTabsProps = {
   description: string;
@@ -20,15 +21,17 @@ export function ProductTabs({
   rating,
   reviews,
 }: ProductTabsProps) {
+  const isMobile = useIsMobile();
+
   return (
     <Tabs defaultValue="description" className="w-full">
-      <div className="relative overflow-hidden -mx-6">
-        <ScrollArea className="pb-4">
-          <div className="px-6 min-w-max">
-            <TabsList className="flex w-max h-12 bg-gradient-to-b from-gray-50/50 to-white p-2 rounded-2xl">
+      <div className="relative overflow-hidden mx-auto">
+        <ScrollArea className="pb-4 w-full">
+          <div className="px-2 md:px-6 min-w-max flex justify-center">
+            <TabsList className="flex w-max h-12 bg-gradient-to-b from-gray-50/50 to-white p-2 rounded-2xl mx-auto">
               <TabsTrigger 
                 value="description"
-                className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
+                className="relative h-full px-3 md:px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
               >
                 <div className="flex items-center gap-2">
                   <FileText className="w-4 h-4" />
@@ -38,32 +41,32 @@ export function ProductTabs({
               
               <TabsTrigger 
                 value="specifications"
-                className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
+                className="relative h-full px-3 md:px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
               >
                 <div className="flex items-center gap-2">
                   <Settings className="w-4 h-4" />
-                  <span className="font-medium text-sm">Specifications</span>
+                  <span className="font-medium text-sm">{isMobile ? "Specs" : "Specifications"}</span>
                 </div>
               </TabsTrigger>
               
               <TabsTrigger 
                 value="warranty"
-                className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
+                className="relative h-full px-3 md:px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
               >
                 <div className="flex items-center gap-2">
                   <Shield className="w-4 h-4" />
-                  <span className="font-medium text-sm">Warranty & Support</span>
+                  <span className="font-medium text-sm">{isMobile ? "Support" : "Warranty & Support"}</span>
                 </div>
               </TabsTrigger>
               
               <TabsTrigger 
                 value="reviews"
-                className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
+                className="relative h-full px-3 md:px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
               >
                 <div className="flex items-center gap-2">
                   <MessageSquare className="w-4 h-4" />
                   <span className="font-medium text-sm">Reviews</span>
-                  <div className="inline-flex ml-1">
+                  <div className="inline-flex">
                     <span className="inline-flex items-center justify-center h-5 min-w-5 px-1.5 text-xs font-medium bg-gradient-to-r from-violet-500 to-indigo-500 text-white rounded-full shadow-sm">
                       {reviews}
                     </span>
@@ -73,7 +76,7 @@ export function ProductTabs({
               
               <TabsTrigger 
                 value="faqs"
-                className="relative h-full px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
+                className="relative h-full px-3 md:px-4 text-gray-400 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-xl bg-transparent data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:shadow-gray-200/50 transition-all duration-500 hover:text-gray-600"
               >
                 <div className="flex items-center gap-2">
                   <HelpCircle className="w-4 h-4" />
@@ -125,3 +128,4 @@ export function ProductTabs({
     </Tabs>
   );
 }
+
