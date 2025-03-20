@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ModishGallery } from '@/components/modish/product/ModishGallery';
@@ -6,11 +5,16 @@ import { ModishInfo } from '@/components/modish/product/ModishInfo';
 import { ModishOptions } from '@/components/modish/product/ModishOptions';
 import { ModishDescription } from '@/components/modish/product/ModishDescription';
 import { ModishReviews } from '@/components/modish/product/ModishReviews';
+import { ModishTrending } from '@/components/modish/product/ModishTrending';
+import { ModishSizeGuide } from '@/components/modish/product/ModishSizeGuide';
+import { ModishQuestions } from '@/components/modish/product/ModishQuestions';
+import { ModishSimilar } from '@/components/modish/product/ModishSimilar';
 import { Badge } from '@/components/ui/badge';
 import { 
   Tag, Award, ShieldCheck, Clock, Truck, ChevronRight, Gift,
   Star, MessageCircle, ThumbsUp, Zap, PercentCircle, MapPin, 
-  CreditCard, Package, Users, Sparkles, TrendingUp, DollarSign 
+  CreditCard, Package, Users, Sparkles, TrendingUp, DollarSign,
+  Ruler, MessageSquareQuestion
 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -113,10 +117,21 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
 
   const handleCouponSelect = (coupon: string) => {
     setActiveCoupon(coupon);
+    toast({
+      title: "Coupon collected",
+      description: `Coupon ${coupon} has been applied to your cart`,
+      duration: 2000,
+    });
   };
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
+    
+    // Smooth scroll to the tab content
+    const tabContentElement = document.getElementById('tabContent');
+    if (tabContentElement) {
+      tabContentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   if (!product) {
@@ -149,7 +164,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
       {/* Mobile App-like Navigation Tabs */}
       <div className="sticky top-0 z-30 bg-white border-b border-gray-200 px-1">
         <div className="flex overflow-x-auto scrollbar-none gap-4">
-          {['description', 'specs', 'shipping', 'reviews', 'recommend'].map((tab) => (
+          {['description', 'specs', 'shipping', 'reviews', 'questions', 'similar'].map((tab) => (
             <button
               key={tab}
               onClick={() => handleTabChange(tab)}
@@ -159,7 +174,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
                   : 'border-transparent text-gray-500'
               }`}
             >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {tab === 'questions' ? 'Q&A' : tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
           ))}
         </div>
@@ -250,6 +265,9 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         description={product.description}
       />
 
+      {/* Size Guide */}
+      <ModishSizeGuide />
+
       {/* Enhanced Shipping & Seller Info */}
       <div className="bg-gray-50 rounded-lg p-3 space-y-3">
         <div className="flex items-center justify-between">
@@ -307,6 +325,9 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
           </div>
         </div>
       </div>
+      
+      {/* Trending Products Section */}
+      <ModishTrending />
       
       {/* Coupon Collection Section */}
       <div className="flex overflow-x-auto gap-2 pb-2 px-1 scrollbar-none">
@@ -401,8 +422,8 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </button>
       </div>
 
-      {/* Tab Content Area - Fixed to show proper content */}
-      <div className="border-t border-gray-100 mt-2">
+      {/* Tab Content Area - Improved with ID for scrolling */}
+      <div id="tabContent" className="border-t border-gray-100 mt-2">
         {activeTab === 'description' && (
           <div className="p-3">
             <h2 className="text-lg font-medium text-gray-800 mb-4">Product Description</h2>
@@ -523,99 +544,21 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
           </div>
         )}
         
-        {activeTab === 'recommend' && (
+        {activeTab === 'questions' && (
           <div className="p-3">
-            <h2 className="text-lg font-medium text-gray-800 mb-4">Recommended Products</h2>
-            <div className="grid grid-cols-2 gap-3">
-              {[1, 2, 3, 4].map((item) => (
-                <div key={item} className="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
-                  <div className="h-32 bg-gray-100 flex items-center justify-center">
-                    <img 
-                      src="/api/placeholder/200/200" 
-                      alt="Similar product" 
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                  <div className="p-2">
-                    <div className="text-xs line-clamp-2 mb-1">Similar Bluetooth Speaker with Extra Features</div>
-                    <div className="text-red-500 text-sm font-medium">$49.99</div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <h2 className="text-lg font-medium text-gray-800 mb-4">Questions & Answers</h2>
+            <ModishQuestions />
+          </div>
+        )}
+        
+        {activeTab === 'similar' && (
+          <div className="p-3">
+            <h2 className="text-lg font-medium text-gray-800 mb-4">Similar Products</h2>
+            <ModishSimilar currentProductId={productId} />
           </div>
         )}
       </div>
 
-      {/* Enhanced Recommendations Section */}
-      <div className="space-y-3">
-        <button 
-          onClick={() => setShowSimilarItems(!showSimilarItems)}
-          className="w-full flex items-center justify-between py-3 px-4 bg-white border border-gray-200 rounded-lg shadow-sm"
-        >
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-yellow-500" />
-            <span className="font-medium">You May Also Like</span>
-          </div>
-          <ChevronRight className={`h-5 w-5 transition-transform ${showSimilarItems ? 'rotate-90' : ''}`} />
-        </button>
-
-        {/* Conditionally rendered similar items */}
-        {showSimilarItems && (
-          <div className="grid grid-cols-2 gap-3">
-            {[1, 2, 3, 4].map((item) => (
-              <div key={item} className="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
-                <div className="h-32 bg-gray-100 flex items-center justify-center">
-                  <img 
-                    src="/api/placeholder/200/200" 
-                    alt="Similar product" 
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <div className="p-2">
-                  <div className="text-xs line-clamp-2 mb-1">Similar Bluetooth Speaker with Extra Features</div>
-                  <div className="text-red-500 text-sm font-medium">$49.99</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        <button 
-          onClick={() => setShowRecommendations(!showRecommendations)}
-          className="w-full flex items-center justify-between py-3 px-4 bg-white border border-gray-200 rounded-lg shadow-sm"
-        >
-          <div className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-blue-500" />
-            <span className="font-medium">Popular in This Category</span>
-          </div>
-          <ChevronRight className={`h-5 w-5 transition-transform ${showRecommendations ? 'rotate-90' : ''}`} />
-        </button>
-
-        {/* Conditionally rendered popular items */}
-        {showRecommendations && (
-          <div className="overflow-x-auto pb-2">
-            <div className="flex gap-3 min-w-max px-1">
-              {[1, 2, 3, 4, 5, 6].map((item) => (
-                <div key={item} className="w-32 flex-shrink-0 border border-gray-200 rounded-lg overflow-hidden shadow-sm">
-                  <div className="h-32 bg-gray-100 flex items-center justify-center">
-                    <img 
-                      src="/api/placeholder/150/150" 
-                      alt="Popular product" 
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                  <div className="p-2">
-                    <div className="text-xs line-clamp-2 mb-1">Popular Audio Device with Amazing Quality</div>
-                    <div className="text-red-500 text-sm font-medium">$39.99</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-      
       {/* Shop Recommendations - AliExpress style */}
       <div className="bg-gray-50 rounded-lg p-4">
         <div className="flex items-center justify-between mb-3">
