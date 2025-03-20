@@ -2,7 +2,10 @@
 export interface App {
   id: number | string;
   name: string;
-  icon: string;
+  icon: {
+    name: string;
+    background: string;
+  };
   category: string;
   description: string;
   rating: number;
