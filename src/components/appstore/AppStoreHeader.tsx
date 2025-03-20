@@ -1,5 +1,5 @@
 
-import { Search, User, Bell, Menu, ChevronDown } from "lucide-react";
+import { Search, User, Bell, Menu, ChevronDown, Store } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   DropdownMenu, 
@@ -7,6 +7,7 @@ import {
   DropdownMenuItem, 
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface AppStoreHeaderProps {
   activeTab: string;
@@ -14,6 +15,7 @@ interface AppStoreHeaderProps {
 }
 
 export function AppStoreHeader({ activeTab, setActiveTab }: AppStoreHeaderProps) {
+  const isMobile = useIsMobile();
   const tabs = [
     { id: "today", label: "Today" },
     { id: "games", label: "Games" },
@@ -23,7 +25,7 @@ export function AppStoreHeader({ activeTab, setActiveTab }: AppStoreHeaderProps)
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-gray-50/90 backdrop-blur-md border-b border-gray-200">
-      <div className="px-4 pt-4 max-w-7xl mx-auto">
+      <div className="px-2 sm:px-4 pt-2 sm:pt-4 max-w-7xl mx-auto">
         <div className="flex justify-between items-center pb-2">
           <div className="flex items-center gap-2">
             <DropdownMenu>
@@ -46,28 +48,31 @@ export function AppStoreHeader({ activeTab, setActiveTab }: AppStoreHeaderProps)
             
             <span className="hidden sm:block text-gray-300">|</span>
             
-            <h1 className="text-2xl font-bold text-gray-900 sm:ml-2">App Store</h1>
+            <div className="flex items-center gap-1.5">
+              <Store className="h-5 w-5 text-blue-500" />
+              <h1 className="text-lg sm:text-2xl font-bold text-gray-900">App Store</h1>
+            </div>
           </div>
           
-          <div className="flex items-center gap-3">
-            <button className="p-2 rounded-full hover:bg-gray-100 transition relative">
-              <Bell className="w-5 h-5 text-gray-700" />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button className="p-1.5 sm:p-2 rounded-full hover:bg-gray-100 transition relative">
+              <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
-            <button className="p-2 rounded-full hover:bg-gray-100 transition">
-              <Search className="w-5 h-5 text-gray-700" />
+            <button className="p-1.5 sm:p-2 rounded-full hover:bg-gray-100 transition">
+              <Search className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" />
             </button>
-            <Avatar className="h-8 w-8 border border-gray-200">
+            <Avatar className="h-7 w-7 sm:h-8 sm:w-8 border border-gray-200">
               <AvatarImage src="/placeholder.svg" alt="User" />
               <AvatarFallback>
-                <User className="h-5 w-5" />
+                <User className="h-4 w-4 sm:h-5 sm:w-5" />
               </AvatarFallback>
             </Avatar>
           </div>
         </div>
         
         <div className="relative">
-          <div className="flex gap-6 overflow-x-auto scrollbar-none pt-2 pb-4">
+          <div className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-none pt-2 pb-3 sm:pb-4">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -85,7 +90,7 @@ export function AppStoreHeader({ activeTab, setActiveTab }: AppStoreHeaderProps)
         </div>
       </div>
       
-      <div className="px-4 py-2 bg-white shadow-sm">
+      <div className="px-2 sm:px-4 py-2 bg-white shadow-sm">
         <div className="max-w-7xl mx-auto">
           <div className="relative">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
