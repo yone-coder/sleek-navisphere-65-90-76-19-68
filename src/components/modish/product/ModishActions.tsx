@@ -81,7 +81,7 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
   const [liked, setLiked] = useState(false);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [showCardDetails, setShowCardDetails] = useState(false);
+  // Removed showCardDetails state since we're keeping all cards expanded by default now
   const navigate = useNavigate();
   
   // Sample counters for social interactions
@@ -92,13 +92,11 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
   // Effect to cycle through benefit cards every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!showCardDetails) {
-        setCurrentCardIndex((prevIndex) => (prevIndex + 1) % benefitCards.length);
-      }
+      setCurrentCardIndex((prevIndex) => (prevIndex + 1) % benefitCards.length);
     }, 5000);
     
     return () => clearInterval(interval);
-  }, [showCardDetails]);
+  }, []);
   
   const handleLikeToggle = () => {
     setLiked(prev => !prev);
@@ -142,10 +140,6 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
 
   const goToPrevCard = () => {
     setCurrentCardIndex((prevIndex) => (prevIndex - 1 + benefitCards.length) % benefitCards.length);
-  };
-
-  const toggleCardDetails = () => {
-    setShowCardDetails(prev => !prev);
   };
 
   const handleActionClick = (actionLink: string) => {
@@ -199,18 +193,15 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
         Buy Now · ${(product.discountPrice * quantity).toLocaleString()}
       </button>
       
-      {/* Significantly reduced-height benefit card with horizontal icon/title layout */}
+      {/* Modified benefit card to always show details */}
       <div className="pt-2">
-        <Card className={`relative overflow-hidden transition-all duration-300 ${showCardDetails ? 'min-h-[130px]' : 'min-h-[90px]'}`}>
+        <Card className="relative overflow-hidden min-h-[130px]">
           <div className={`absolute top-0 left-0 right-0 h-1 ${currentCard.accent} transition-all duration-300`}></div>
           
-          {/* Info/Details toggle button */}
-          <button 
-            onClick={toggleCardDetails}
-            className="absolute top-2 left-2 z-10 w-6 h-6 rounded-full bg-white/90 flex items-center justify-center shadow-sm border border-gray-100 hover:bg-white transition-colors"
-          >
+          {/* Info icon (kept for consistency but no longer toggles) */}
+          <div className="absolute top-2 left-2 z-10 w-6 h-6 rounded-full bg-white/90 flex items-center justify-center shadow-sm border border-gray-100">
             <Info className="w-3.5 h-3.5" />
-          </button>
+          </div>
           
           {/* Card counter indicator */}
           <div className="absolute top-2 right-2 text-xs font-medium bg-white/90 rounded-full px-2 py-0.5 shadow-sm border border-gray-100">
@@ -219,7 +210,7 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
           
           <CardContent className={`p-0 ${currentCard.bgColor} transition-all duration-300`}>
             <div className="p-4 pb-10 text-center">
-              {/* Redesigned - Icon and title on the same horizontal line */}
+              {/* Icon and title on the same horizontal line */}
               <div className="flex items-center justify-center gap-2 mb-1">
                 <div className={`w-7 h-7 rounded-full ${currentCard.iconBg} flex items-center justify-center`}>
                   {React.cloneElement(currentCard.icon, { className: 'w-4 h-4' })}
@@ -229,18 +220,16 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
               
               <p className="text-sm text-gray-600 mb-1">{description}</p>
               
-              {/* Expanded content */}
-              {showCardDetails && (
-                <div className="animate-fade-in mt-1">
-                  <p className="text-xs text-gray-700 mb-1.5">{currentCard.details}</p>
-                  <button 
-                    onClick={() => handleActionClick(currentCard.actionLink)}
-                    className={`text-xs font-medium ${currentCard.accentColor} underline`}
-                  >
-                    {currentCard.actionLabel}
-                  </button>
-                </div>
-              )}
+              {/* Always show expanded content */}
+              <div className="mt-1">
+                <p className="text-xs text-gray-700 mb-1.5">{currentCard.details}</p>
+                <button 
+                  onClick={() => handleActionClick(currentCard.actionLink)}
+                  className={`text-xs font-medium ${currentCard.accentColor} underline`}
+                >
+                  {currentCard.actionLabel}
+                </button>
+              </div>
             </div>
             
             {/* Navigation buttons at bottom right */}
