@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ArrowUp, Heart, MessageSquare, Share2, ShoppingCart, Tag, Star, Shield, Truck, DollarSign, Package, CreditCard, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -23,6 +24,16 @@ interface ModishFloatingActionsProps {
   stock: number;
 }
 
+// Helper function to format number with k/m suffix
+const formatCount = (count: number): string => {
+  if (count >= 1000000) {
+    return `${(count / 1000000).toFixed(1)}m`;
+  } else if (count >= 1000) {
+    return `${(count / 1000).toFixed(1)}k`;
+  }
+  return count.toString();
+};
+
 export function ModishFloatingActions({
   price,
   originalPrice,
@@ -39,7 +50,9 @@ export function ModishFloatingActions({
   
   const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
   const rating = 4.8; // Example rating
-  const reviewCount = 128; // Example review count
+  const reviewCount = 1280; // Example review count
+  const wishlistCount = 427; // Example wishlist count
+  const shareCount = 89; // Example share count
   
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -111,7 +124,7 @@ export function ModishFloatingActions({
             <div className="flex items-center">
               <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 mr-1" />
               <span className="text-sm font-medium">{rating}</span>
-              <span className="text-xs text-gray-500 ml-1">({reviewCount})</span>
+              <span className="text-xs text-gray-500 ml-1">({formatCount(reviewCount)})</span>
               {stock < 20 && (
                 <Badge variant="outline" className="ml-2 bg-red-50 text-red-500 border-red-200">
                   <span className="text-xs">Only {stock} left</span>
@@ -124,16 +137,26 @@ export function ModishFloatingActions({
           <div className="grid grid-cols-12 gap-0">
             {/* Social actions */}
             <div className="col-span-3 border-t border-r h-14 flex items-center justify-center" onClick={handleLike}>
-              <button className="flex flex-col items-center justify-center w-full h-full">
+              <button className="flex flex-col items-center justify-center w-full h-full relative">
                 <Heart className={`h-5 w-5 ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-500'}`} />
                 <span className="text-[10px] mt-1 text-gray-500">Wishlist</span>
+                {wishlistCount > 0 && (
+                  <div className="absolute -top-1 -right-1 text-[9px] bg-gray-200 text-gray-700 rounded-full px-1 min-w-[16px] h-4 flex items-center justify-center">
+                    {formatCount(wishlistCount)}
+                  </div>
+                )}
               </button>
             </div>
             
             <div className="col-span-3 border-t border-r h-14 flex items-center justify-center" onClick={handleShare}>
-              <button className="flex flex-col items-center justify-center w-full h-full">
+              <button className="flex flex-col items-center justify-center w-full h-full relative">
                 <Share2 className="h-5 w-5 text-gray-500" />
                 <span className="text-[10px] mt-1 text-gray-500">Share</span>
+                {shareCount > 0 && (
+                  <div className="absolute -top-1 -right-1 text-[9px] bg-gray-200 text-gray-700 rounded-full px-1 min-w-[16px] h-4 flex items-center justify-center">
+                    {formatCount(shareCount)}
+                  </div>
+                )}
               </button>
             </div>
             
@@ -141,9 +164,14 @@ export function ModishFloatingActions({
               className="col-span-3 border-t border-r h-14 flex items-center justify-center"
               onClick={() => setShowReviewsDrawer(true)}
             >
-              <button className="flex flex-col items-center justify-center w-full h-full">
+              <button className="flex flex-col items-center justify-center w-full h-full relative">
                 <Star className="h-5 w-5 text-gray-500" />
                 <span className="text-[10px] mt-1 text-gray-500">Reviews</span>
+                {reviewCount > 0 && (
+                  <div className="absolute -top-1 -right-1 text-[9px] bg-gray-200 text-gray-700 rounded-full px-1 min-w-[16px] h-4 flex items-center justify-center">
+                    {formatCount(reviewCount)}
+                  </div>
+                )}
               </button>
             </div>
             
