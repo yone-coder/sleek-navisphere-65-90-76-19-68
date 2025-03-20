@@ -84,11 +84,10 @@ const queryClient = new QueryClient({
 const AppContent = () => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
-  const isModishCheckout = location.pathname === '/modish/checkout';
-  const isModishPage = location.pathname.startsWith('/modish');
+  const isModishRoute = location.pathname.startsWith('/modish');
   
-  // Show bottom nav on all routes except admin, modish checkout and modish pages
-  const shouldShowBottomNav = !isAdminRoute && !isModishCheckout && !isModishPage;
+  // Show bottom nav on all routes except admin and modish
+  const shouldShowBottomNav = !isAdminRoute && !isModishRoute;
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
