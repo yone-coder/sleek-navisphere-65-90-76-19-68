@@ -6,17 +6,48 @@ import { Store, Gamepad2, BookOpen, Wallet, PiggyBank, Briefcase, Search,
   UserPlus, Shirt } from "lucide-react";
 
 /**
+ * Maps Lucide icon components to appropriate image colors
+ */
+const getIconColor = (iconName: string): string => {
+  const colorMap: Record<string, string> = {
+    Store: "bg-blue-500",
+    Gamepad2: "bg-purple-500",
+    BookOpen: "bg-green-500",
+    Wallet: "bg-amber-500",
+    PiggyBank: "bg-pink-500",
+    Briefcase: "bg-indigo-500",
+    Search: "bg-cyan-500",
+    Ticket: "bg-rose-500",
+    Calendar: "bg-teal-500",
+    Bitcoin: "bg-yellow-500",
+    Globe: "bg-sky-500",
+    Heart: "bg-red-500",
+    Building: "bg-gray-600",
+    Presentation: "bg-violet-500",
+    UserPlus: "bg-emerald-500",
+    Shirt: "bg-orange-500"
+  };
+  
+  return colorMap[iconName] || "bg-blue-500";
+};
+
+/**
  * Converts platform app data format to app store format
  */
 export const convertPlatformAppToAppStore = (platformApp: PlatformApp): AppStoreApp => {
   // Map category to most appropriate app store category
   let category = platformApp.category;
   
-  // Get icon as string
+  // Get icon as string - using the app's color for better visualization
   const getIconUrl = (iconComponent: any): string => {
-    // Since we can't directly convert Lucide icons to image URLs,
-    // we'll use placeholder images with different colors based on the app's color
-    return "/placeholder.svg";
+    // Convert icon component name to string
+    const iconName = iconComponent.name || "Store";
+    
+    // Use the app color to generate a gradient background
+    const appColor = platformApp.color.replace('bg-', '') || "blue-500";
+    
+    // Return placeholder with color parameter
+    return `/placeholder.svg?color=${appColor}`;
   };
   
   // Determine app type based on category
@@ -38,11 +69,14 @@ export const convertPlatformAppToAppStore = (platformApp: PlatformApp): AppStore
       ? `${parseInt(platformApp.users) * 10}K+`
       : `${parseInt(platformApp.users.replace("K+", "")) / 100}M+`
     : `${Math.floor(Math.random() * 900) + 100}K+`;
+
+  // Generate colorful app icon based on the app's color
+  const iconUrl = getIconUrl(platformApp.icon);
   
   return {
     id: platformApp.name.toLowerCase().replace(/\s+/g, '-'),
     name: platformApp.name,
-    icon: getIconUrl(platformApp.icon),
+    icon: iconUrl,
     category: category,
     description: platformApp.description,
     rating: rating,
