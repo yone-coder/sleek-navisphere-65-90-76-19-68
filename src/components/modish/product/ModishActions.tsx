@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, Share2, MessageCircle, CreditCard, Truck, RefreshCw, Clock, ChevronLeft, ChevronRight, ShieldCheck, Info, Tag } from 'lucide-react';
+import { Heart, Share2, MessageCircle, CreditCard, Truck, RefreshCw, Clock, ChevronLeft, ChevronRight, ShieldCheck, Info, Tag, Copy, Facebook, Twitter, Bookmark, Mail } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
 import ModishCommentPanel from './ModishCommentPanel';
@@ -11,6 +11,7 @@ type ModishActionsProps = {
   product: any;
   selectedColor: string;
   quantity: number;
+  selectedSize?: string;
 };
 
 // Enhanced benefit card data with more details
@@ -77,10 +78,20 @@ const benefitCards = [
   }
 ];
 
-export function ModishActions({ product, selectedColor, quantity }: ModishActionsProps) {
+// Share options for the new share drawer
+const shareOptions = [
+  { icon: <Copy className="w-5 h-5" />, label: "Copy Link", action: "copy" },
+  { icon: <Facebook className="w-5 h-5 text-blue-600" />, label: "Facebook", action: "facebook" },
+  { icon: <Twitter className="w-5 h-5 text-blue-400" />, label: "Twitter", action: "twitter" },
+  { icon: <Mail className="w-5 h-5 text-orange-500" />, label: "Email", action: "email" }
+];
+
+export function ModishActions({ product, selectedColor, quantity, selectedSize }: ModishActionsProps) {
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
+  const [isShareDrawerOpen, setIsShareDrawerOpen] = useState(false);
   const [liked, setLiked] = useState(false);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [isSaved, setIsSaved] = useState(false);
   // Removed showCardDetails state since we're keeping all cards expanded by default now
   const navigate = useNavigate();
   
@@ -102,13 +113,39 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
     setLiked(prev => !prev);
   };
 
-  const handleShare = () => {
+  const handleSaveToggle = () => {
+    setIsSaved(prev => !prev);
+    toast.success(isSaved ? 'Removed from wishlist' : 'Added to wishlist');
+  };
+
+  const handleShare = (option = 'default') => {
+    if (option === 'default') {
+      setIsShareDrawerOpen(true);
+      return;
+    }
+    
+    if (option === 'copy') {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        toast.success('Link copied to clipboard');
+      });
+      return;
+    }
+
+    // Handle other share options
+    const shareData = {
+      title: product.name,
+      text: `Check out this ${product.name} from MODISH`,
+      url: window.location.href,
+    };
+
+    if (option === 'email') {
+      window.location.href = `mailto:?subject=${encodeURIComponent(shareData.title)}&body=${encodeURIComponent(shareData.text + '\n\n' + shareData.url)}`;
+      return;
+    }
+
+    // Default share for other platforms
     if (navigator.share) {
-      navigator.share({
-        title: product.name,
-        text: `Check out this ${product.name} from MODISH`,
-        url: window.location.href,
-      }).catch(err => {
+      navigator.share(shareData).catch(err => {
         toast.error('Failed to share');
       });
     } else {
@@ -122,7 +159,8 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
       state: { 
         product, 
         selectedColor, 
-        quantity 
+        quantity,
+        selectedSize
       } 
     });
   };
@@ -176,12 +214,46 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
           </DrawerContent>
         </Drawer>
         
+        <Drawer open={isShareDrawerOpen} onOpenChange={setIsShareDrawerOpen}>
+          <DrawerTrigger asChild>
+            <button 
+              onClick={() => handleShare()}
+              className="flex-1 bg-gray-50 border border-gray-200 text-gray-700 h-12 rounded-full font-medium flex items-center justify-center gap-2 hover:bg-gray-100 transition-colors"
+            >
+              <Share2 className="w-5 h-5" />
+              <span>{shareCount}</span>
+            </button>
+          </DrawerTrigger>
+          <DrawerContent className="rounded-t-[20px]">
+            <div className="p-4">
+              <h3 className="text-lg font-semibold mb-4 text-center">Share this product</h3>
+              <div className="grid grid-cols-2 gap-3">
+                {shareOptions.map((option) => (
+                  <button 
+                    key={option.action}
+                    onClick={() => handleShare(option.action)}
+                    className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:bg-gray-50"
+                  >
+                    {option.icon}
+                    <span>{option.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </DrawerContent>
+        </Drawer>
+        
+        {/* Save to wishlist button */}
         <button 
-          onClick={handleShare}
-          className="flex-1 bg-gray-50 border border-gray-200 text-gray-700 h-12 rounded-full font-medium flex items-center justify-center gap-2 hover:bg-gray-100 transition-colors"
+          onClick={handleSaveToggle}
+          className={cn(
+            "h-12 w-12 rounded-full flex items-center justify-center transition-colors border",
+            isSaved 
+              ? "bg-blue-50 border-blue-200 text-blue-600" 
+              : "bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
+          )}
         >
-          <Share2 className="w-5 h-5" />
-          <span>{shareCount}</span>
+          <Bookmark className={cn("w-5 h-5", isSaved && "fill-blue-600")} />
         </button>
       </div>
       

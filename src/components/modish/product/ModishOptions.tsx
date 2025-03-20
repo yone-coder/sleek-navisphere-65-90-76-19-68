@@ -8,6 +8,11 @@ type ColorOption = {
   value: string;
 };
 
+type SizeOption = {
+  name: string;
+  available: boolean;
+};
+
 type ModishOptionsProps = {
   colors: ColorOption[];
   selectedColor: string;
@@ -15,6 +20,9 @@ type ModishOptionsProps = {
   quantity: number;
   onUpdateQuantity: (quantity: number) => void;
   stock: number;
+  sizes?: SizeOption[];
+  selectedSize?: string;
+  onSelectSize?: (size: string) => void;
 };
 
 export function ModishOptions({
@@ -23,7 +31,10 @@ export function ModishOptions({
   onSelectColor,
   quantity,
   onUpdateQuantity,
-  stock
+  stock,
+  sizes = [],
+  selectedSize = '',
+  onSelectSize = () => {}
 }: ModishOptionsProps) {
   // Determine stock status
   const stockStatus = 
@@ -38,6 +49,7 @@ export function ModishOptions({
 
   return (
     <div className="space-y-6">
+      {/* Color Selection */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="font-medium text-gray-900">Color</h3>
@@ -71,6 +83,44 @@ export function ModishOptions({
         </div>
       </div>
       
+      {/* Size Selection - New Feature */}
+      {sizes.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="font-medium text-gray-900">Size</h3>
+            <span className="text-sm text-gray-500">
+              {selectedSize || 'Select a size'}
+            </span>
+          </div>
+          
+          <div className="flex flex-wrap gap-2">
+            {sizes.map((size) => (
+              <button
+                key={size.name}
+                className={cn(
+                  "h-9 min-w-[40px] px-3 rounded-md transition-all duration-200 font-medium text-sm",
+                  !size.available && "opacity-40 cursor-not-allowed",
+                  selectedSize === size.name
+                    ? "bg-gray-900 text-white" 
+                    : size.available 
+                      ? "bg-gray-100 text-gray-800 hover:bg-gray-200" 
+                      : "bg-gray-100 text-gray-400"
+                )}
+                onClick={() => size.available && onSelectSize(size.name)}
+                disabled={!size.available}
+              >
+                {size.name}
+              </button>
+            ))}
+          </div>
+          
+          <p className="text-xs text-gray-500 italic">
+            {selectedSize ? 'Size selected' : 'Please select a size'}
+          </p>
+        </div>
+      )}
+      
+      {/* Quantity Selection */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="font-medium text-gray-900">Quantity</h3>
