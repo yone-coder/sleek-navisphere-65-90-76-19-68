@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Heart, Share2, MessageCircle, CreditCard, Truck, RefreshCw, Clock, ChevronLeft, ChevronRight, ShieldCheck, Info, Tag } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
@@ -7,8 +6,6 @@ import ModishCommentPanel from './ModishCommentPanel';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 type ModishActionsProps = {
   product: any;
@@ -52,8 +49,7 @@ const benefitCards = [
     bgColor: "bg-purple-50",
     accent: "border-purple-300",
     accentColor: "text-purple-700",
-    iconBg: "bg-purple-100",
-    expanded: true // Mark this card as expanded by default
+    iconBg: "bg-purple-100"
   },
   {
     icon: <ShieldCheck className="w-5 h-5 text-orange-600" />,
@@ -84,8 +80,8 @@ const benefitCards = [
 export function ModishActions({ product, selectedColor, quantity }: ModishActionsProps) {
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
   const [liked, setLiked] = useState(false);
-  const [currentCardIndex, setCurrentCardIndex] = useState(2); // Set index to Fast Delivery card
-  const [showCardDetails, setShowCardDetails] = useState(true); // Start with details shown
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [showCardDetails, setShowCardDetails] = useState(false);
   const navigate = useNavigate();
   
   // Sample counters for social interactions
@@ -139,6 +135,19 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
     ? currentCard.description(product) 
     : currentCard.description;
 
+  // Handle manual card navigation
+  const goToNextCard = () => {
+    setCurrentCardIndex((prevIndex) => (prevIndex + 1) % benefitCards.length);
+  };
+
+  const goToPrevCard = () => {
+    setCurrentCardIndex((prevIndex) => (prevIndex - 1 + benefitCards.length) % benefitCards.length);
+  };
+
+  const toggleCardDetails = () => {
+    setShowCardDetails(prev => !prev);
+  };
+
   const handleActionClick = (actionLink: string) => {
     // In a real app, this would navigate to the specific policy or action page
     toast.info(`Navigating to ${actionLink.replace('#', '')}`);
@@ -190,13 +199,26 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
         Buy Now · ${(product.discountPrice * quantity).toLocaleString()}
       </button>
       
-      {/* Fixed delivery info card with preset open state */}
+      {/* Significantly reduced-height benefit card with horizontal icon/title layout */}
       <div className="pt-2">
-        <Card className="overflow-hidden">
+        <Card className={`relative overflow-hidden transition-all duration-300 ${showCardDetails ? 'min-h-[130px]' : 'min-h-[90px]'}`}>
           <div className={`absolute top-0 left-0 right-0 h-1 ${currentCard.accent} transition-all duration-300`}></div>
           
+          {/* Info/Details toggle button */}
+          <button 
+            onClick={toggleCardDetails}
+            className="absolute top-2 left-2 z-10 w-6 h-6 rounded-full bg-white/90 flex items-center justify-center shadow-sm border border-gray-100 hover:bg-white transition-colors"
+          >
+            <Info className="w-3.5 h-3.5" />
+          </button>
+          
+          {/* Card counter indicator */}
+          <div className="absolute top-2 right-2 text-xs font-medium bg-white/90 rounded-full px-2 py-0.5 shadow-sm border border-gray-100">
+            {currentCardIndex + 1}/{benefitCards.length}
+          </div>
+          
           <CardContent className={`p-0 ${currentCard.bgColor} transition-all duration-300`}>
-            <div className="p-4 pb-5 text-center">
+            <div className="p-4 pb-10 text-center">
               {/* Redesigned - Icon and title on the same horizontal line */}
               <div className="flex items-center justify-center gap-2 mb-1">
                 <div className={`w-7 h-7 rounded-full ${currentCard.iconBg} flex items-center justify-center`}>
@@ -205,18 +227,45 @@ export function ModishActions({ product, selectedColor, quantity }: ModishAction
                 <h3 className={`text-base font-semibold ${currentCard.accentColor}`}>{currentCard.title}</h3>
               </div>
               
-              <p className="text-sm text-gray-600 mb-2">{description}</p>
+              <p className="text-sm text-gray-600 mb-1">{description}</p>
               
-              {/* Always show details for Fast Delivery */}
-              <div className="mt-1">
-                <p className="text-xs text-gray-700 mb-1.5">{currentCard.details}</p>
-                <button 
-                  onClick={() => handleActionClick(currentCard.actionLink)}
-                  className={`text-xs font-medium ${currentCard.accentColor} underline`}
-                >
-                  {currentCard.actionLabel}
-                </button>
-              </div>
+              {/* Expanded content */}
+              {showCardDetails && (
+                <div className="animate-fade-in mt-1">
+                  <p className="text-xs text-gray-700 mb-1.5">{currentCard.details}</p>
+                  <button 
+                    onClick={() => handleActionClick(currentCard.actionLink)}
+                    className={`text-xs font-medium ${currentCard.accentColor} underline`}
+                  >
+                    {currentCard.actionLabel}
+                  </button>
+                </div>
+              )}
+            </div>
+            
+            {/* Navigation buttons at bottom right */}
+            <div className="absolute bottom-2 right-2 flex gap-1 z-10">
+              <button 
+                onClick={goToPrevCard} 
+                className="w-6 h-6 rounded-full bg-white/80 flex items-center justify-center shadow-md hover:bg-white transition-all duration-200"
+              >
+                <ChevronLeft className="w-3 h-3" />
+              </button>
+              
+              <button 
+                onClick={goToNextCard} 
+                className="w-6 h-6 rounded-full bg-white/80 flex items-center justify-center shadow-md hover:bg-white transition-all duration-200"
+              >
+                <ChevronRight className="w-3 h-3" />
+              </button>
+            </div>
+            
+            {/* Progress bar */}
+            <div className="w-full h-1 bg-gray-200 overflow-hidden">
+              <div 
+                className="h-full bg-gray-700 transition-all duration-300" 
+                style={{ width: `${((currentCardIndex + 1) / benefitCards.length) * 100}%` }}
+              />
             </div>
           </CardContent>
         </Card>
