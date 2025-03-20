@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowUp, Heart, MessageSquare, Share2, ShoppingCart, Clock, Shield, DollarSign, CreditCard, Tag, Truck } from 'lucide-react';
+import { ArrowUp, Heart, MessageSquare, Share2, ShoppingCart, Tag, Star, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -32,12 +32,12 @@ export function ModishFloatingActions({
 }: ModishFloatingActionsProps) {
   const { toast } = useToast();
   const [isLiked, setIsLiked] = useState(false);
-  const [showCouponDrawer, setShowCouponDrawer] = useState(false);
   const [showShippingDrawer, setShowShippingDrawer] = useState(false);
-  const [selectedInstallment, setSelectedInstallment] = useState('none');
+  const [showReviewsDrawer, setShowReviewsDrawer] = useState(false);
   
   const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
-  const limitedTimeLeft = Math.floor(Math.random() * 24) + 1; // Random hours left for demo
+  const rating = 4.8; // Example rating
+  const reviewCount = 128; // Example review count
   
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -71,22 +71,34 @@ export function ModishFloatingActions({
 
   return (
     <>
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t z-40 animate-in slide-in-from-bottom duration-300">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t z-40 animate-in slide-in-from-bottom duration-300 shadow-lg">
         <div className="flex flex-col px-0 pt-2 pb-safe">
-          {/* Price section with discount */}
-          <div className="flex items-baseline mb-3 px-3">
-            <span className="text-xl font-bold text-red-500">
-              ${price.toFixed(2)}
-            </span>
-            <span className="text-sm line-through text-gray-500 ml-1">
-              ${originalPrice.toFixed(2)}
-            </span>
-            <span className="ml-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded">
-              {discount}% OFF
-            </span>
+          {/* Price section with discount and rating */}
+          <div className="flex items-center justify-between mb-3 px-3">
+            <div className="flex items-baseline">
+              <span className="text-xl font-bold text-red-500">
+                ${price.toFixed(2)}
+              </span>
+              <span className="text-sm line-through text-gray-500 ml-1">
+                ${originalPrice.toFixed(2)}
+              </span>
+              <span className="ml-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded">
+                {discount}% OFF
+              </span>
+            </div>
+            <div className="flex items-center">
+              <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 mr-1" />
+              <span className="text-sm font-medium">{rating}</span>
+              <span className="text-xs text-gray-500 ml-1">({reviewCount})</span>
+              {stock < 20 && (
+                <Badge variant="outline" className="ml-2 bg-red-50 text-red-500 border-red-200">
+                  <span className="text-xs">Only {stock} left</span>
+                </Badge>
+              )}
+            </div>
           </div>
           
-          {/* Action buttons - Reorganized layout */}
+          {/* Action buttons - Enhanced layout */}
           <div className="grid grid-cols-12 gap-0">
             {/* Social actions */}
             <div className="col-span-3 border-t border-r h-14 flex items-center justify-center" onClick={handleLike}>
@@ -103,28 +115,48 @@ export function ModishFloatingActions({
               </button>
             </div>
             
-            <div className="col-span-3 border-t border-r h-14 flex items-center justify-center">
-              <button className="flex flex-col items-center justify-center w-full h-full">
-                <MessageSquare className="h-5 w-5 text-gray-500" />
-                <span className="text-[10px] mt-1 text-gray-500">Chat</span>
-              </button>
-            </div>
-            
-            <div className="col-span-3 border-t h-14 flex items-center justify-center" onClick={onAddToCart}>
-              <button className="flex flex-col items-center justify-center w-full h-full">
-                <ShoppingCart className="h-5 w-5 text-gray-500" />
-                <span className="text-[10px] mt-1 text-gray-500">Cart</span>
-              </button>
-            </div>
-            
-            {/* Buy button - Full width */}
-            <Button
-              onClick={onBuyNow}
-              className="col-span-12 h-12 rounded-none bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base"
-              disabled={stock === 0}
+            <div 
+              className="col-span-3 border-t border-r h-14 flex items-center justify-center"
+              onClick={() => setShowReviewsDrawer(true)}
             >
-              BUY NOW
-            </Button>
+              <button className="flex flex-col items-center justify-center w-full h-full">
+                <Star className="h-5 w-5 text-gray-500" />
+                <span className="text-[10px] mt-1 text-gray-500">Reviews</span>
+              </button>
+            </div>
+            
+            <div 
+              className="col-span-3 border-t h-14 flex items-center justify-center" 
+              onClick={() => setShowShippingDrawer(true)}
+            >
+              <button className="flex flex-col items-center justify-center w-full h-full">
+                <Shield className="h-5 w-5 text-gray-500" />
+                <span className="text-[10px] mt-1 text-gray-500">Shipping</span>
+              </button>
+            </div>
+            
+            {/* Action buttons */}
+            <div className="col-span-4 h-12">
+              <Button
+                onClick={onAddToCart}
+                className="w-full h-full rounded-none bg-gray-100 hover:bg-gray-200 text-gray-800"
+                disabled={stock === 0}
+                variant="outline"
+              >
+                <ShoppingCart className="mr-1 h-5 w-5" />
+                CART
+              </Button>
+            </div>
+            
+            <div className="col-span-8 h-12">
+              <Button
+                onClick={onBuyNow}
+                className="w-full h-full rounded-none bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base"
+                disabled={stock === 0}
+              >
+                BUY NOW
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -188,7 +220,7 @@ export function ModishFloatingActions({
                     <div className="flex flex-col items-center border rounded p-2">
                       <svg viewBox="0 0 48 48" className="h-6 w-6 mb-1">
                         <rect width="48" height="48" fill="#1565C0"/>
-                        <path d="M32 24v-4h4v-4h-4v-4h-4v4h-4v4h4v4h4z" fill="#FFF"/>
+                        <path d="M32 24v-4h4v-4h-4v-4h-4v4h-4v4h4h4z" fill="#FFF"/>
                         <path d="M20 12v4h-8v4h4v4h4v-4h4v-4h-4v-4h-4z" fill="#FFF"/>
                       </svg>
                       <span className="text-[10px]">Credit Card</span>
@@ -239,6 +271,125 @@ export function ModishFloatingActions({
                 </div>
               </TabsContent>
             </Tabs>
+          </div>
+          <DrawerFooter>
+            <DrawerClose asChild>
+              <Button variant="outline">Close</Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+
+      {/* Reviews Drawer */}
+      <Drawer open={showReviewsDrawer} onOpenChange={setShowReviewsDrawer}>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Customer Reviews</DrawerTitle>
+            <DrawerDescription>
+              <div className="flex items-center mt-1">
+                <div className="flex items-center mr-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      className={`h-4 w-4 ${star <= Math.floor(rating) ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`}
+                    />
+                  ))}
+                </div>
+                <span className="font-medium">{rating}</span>
+                <span className="text-sm text-gray-500 ml-1">({reviewCount} reviews)</span>
+              </div>
+            </DrawerDescription>
+          </DrawerHeader>
+          <div className="px-4 pb-4">
+            <div className="space-y-4">
+              {/* Review rating distribution */}
+              <div className="space-y-2">
+                {[5, 4, 3, 2, 1].map((star) => (
+                  <div key={star} className="flex items-center">
+                    <span className="text-sm w-8">{star} star</span>
+                    <div className="flex-1 mx-2 bg-gray-200 h-2 rounded-full overflow-hidden">
+                      <div 
+                        className="bg-yellow-500 h-full rounded-full"
+                        style={{ 
+                          width: `${star === 5 ? 75 : star === 4 ? 18 : star === 3 ? 5 : star === 2 ? 1.5 : 0.5}%` 
+                        }}
+                      ></div>
+                    </div>
+                    <span className="text-xs text-gray-500 w-8">
+                      {star === 5 ? 75 : star === 4 ? 18 : star === 3 ? 5 : star === 2 ? 1.5 : 0.5}%
+                    </span>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Review highlights */}
+              <div className="pt-2">
+                <h4 className="text-sm font-medium mb-2">Review Highlights</h4>
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="secondary" className="bg-gray-100">Great quality</Badge>
+                  <Badge variant="secondary" className="bg-gray-100">Fast shipping</Badge>
+                  <Badge variant="secondary" className="bg-gray-100">As described</Badge>
+                  <Badge variant="secondary" className="bg-gray-100">Value for money</Badge>
+                </div>
+              </div>
+              
+              {/* Sample reviews */}
+              <div className="space-y-3 pt-2 max-h-[300px] overflow-y-auto">
+                <div className="border-b pb-3">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="font-medium text-sm">Sarah J.</span>
+                    <span className="text-xs text-gray-500">2 days ago</span>
+                  </div>
+                  <div className="flex items-center mb-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={`h-3 w-3 ${star <= 5 ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-sm text-gray-700">Absolutely love this product! It arrived earlier than expected and the quality is amazing for the price.</p>
+                </div>
+                
+                <div className="border-b pb-3">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="font-medium text-sm">Michael T.</span>
+                    <span className="text-xs text-gray-500">1 week ago</span>
+                  </div>
+                  <div className="flex items-center mb-1">
+                    {[1, 2, 3, 4].map((star) => (
+                      <Star
+                        key={star}
+                        className={`h-3 w-3 ${star <= 4 ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`}
+                      />
+                    ))}
+                    {[5].map((star) => (
+                      <Star
+                        key={star}
+                        className="h-3 w-3 text-gray-300"
+                      />
+                    ))}
+                  </div>
+                  <p className="text-sm text-gray-700">Good product overall. Would've given 5 stars but shipping took a bit longer than expected.</p>
+                </div>
+                
+                <div className="pb-3">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="font-medium text-sm">Jessica M.</span>
+                    <span className="text-xs text-gray-500">2 weeks ago</span>
+                  </div>
+                  <div className="flex items-center mb-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={`h-3 w-3 ${star <= 5 ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-sm text-gray-700">Perfect fit and excellent quality! I'm ordering another one in a different color.</p>
+                </div>
+              </div>
+            </div>
           </div>
           <DrawerFooter>
             <DrawerClose asChild>

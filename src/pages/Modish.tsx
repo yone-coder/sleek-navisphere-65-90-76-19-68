@@ -1,12 +1,14 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ModishHeader } from '@/components/modish/ModishHeader';
 import { ModishProductDetails } from '@/components/modish/ModishProductDetails';
 import { useParams } from 'react-router-dom';
 import { ModishFloatingActions } from '@/components/modish/ModishFloatingActions';
+import { useToast } from '@/hooks/use-toast';
 
 const Modish = () => {
   const { id } = useParams();
+  const { toast } = useToast();
   
   // Default to product ID 1 if none is provided
   const productId = id || '1';
@@ -17,11 +19,19 @@ const Modish = () => {
   const stock = 68;
 
   const handleAddToCart = () => {
-    console.log('Added to cart');
+    toast({
+      title: "Added to cart",
+      description: "Item has been added to your cart",
+      duration: 2000,
+    });
   };
 
   const handleBuyNow = () => {
-    console.log('Buy now clicked');
+    toast({
+      title: "Proceeding to checkout",
+      description: "Redirecting to secure payment...",
+      duration: 2000,
+    });
   };
 
   return (
