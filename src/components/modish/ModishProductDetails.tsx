@@ -17,7 +17,7 @@ import {
   Tag, Award, ShieldCheck, Clock, Truck, ChevronRight, Gift,
   Star, MessageCircle, ThumbsUp, Zap, PercentCircle, MapPin, 
   CreditCard, Package, Users, Sparkles, TrendingUp, DollarSign,
-  Ruler, MessageSquareQuestion, Smartphone, Activity
+  Ruler, MessageSquare, Smartphone, Activity
 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';

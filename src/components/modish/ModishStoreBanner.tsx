@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Shop, Star, ThumbsUp, Users, Medal, Clock, TrendingUp } from 'lucide-react';
+import { ShoppingBag, Star, ThumbsUp, Users, Medal, Clock, TrendingUp } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
