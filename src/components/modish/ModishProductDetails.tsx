@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import { ModishGallery } from './product/ModishGallery';
 import { ModishInfo } from './product/ModishInfo';
 import { ModishOptions } from './product/ModishOptions';
@@ -8,9 +9,14 @@ import { ModishSimilar } from './product/ModishSimilar';
 import { ModishFeatures } from './product/ModishFeatures';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { AlertCircle, Clock, Eye, History, Shield, Star, TrendingUp, Truck, Users } from 'lucide-react';
+import { 
+  AlertCircle, Box, Check, Clock, Eye, Gift, Globe, Heart, 
+  History, Info, Lock, MessageCircle, Package, Percent, RefreshCw, 
+  Shield, ShieldCheck, Star, Truck, TrendingUp, Users, Zap
+} from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { toast } from 'sonner';
+import { Progress } from '@/components/ui/progress';
 
 const products = {
   '1': {
@@ -123,7 +129,42 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
   const [recentPurchases, setRecentPurchases] = useState<number>(0);
   const [showShippingInfo, setShowShippingInfo] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>("description");
+  const [showAllFeatures, setShowAllFeatures] = useState<boolean>(false);
+  const [salesCount, setSalesCount] = useState<number>(0);
+  const [bundleDiscount, setBundleDiscount] = useState<number>(15);
+  const [showBundleOptions, setShowBundleOptions] = useState<boolean>(false);
+  const [wishlistCount, setWishlistCount] = useState<number>(0);
+  const [isWishlisted, setIsWishlisted] = useState<boolean>(false);
+  const [sellerRating, setSellerRating] = useState<number>(0);
+  const [hasFrequentlyBought, setHasFrequentlyBought] = useState<boolean>(true);
+  const [showReviewImageModal, setShowReviewImageModal] = useState<boolean>(false);
+  const [selectedReviewImage, setSelectedReviewImage] = useState<string | null>(null);
+  const [showQuickLogin, setShowQuickLogin] = useState<boolean>(false);
+  const [showCouponModal, setShowCouponModal] = useState<boolean>(false);
   const isMobile = useIsMobile();
+  const productSectionRef = useRef<HTMLDivElement>(null);
+  
+  // Newly added states
+  const [loyaltyPoints, setLoyaltyPoints] = useState<number>(0);
+  const [questionCount, setQuestionCount] = useState<number>(0);
+  const [estimatedDelivery, setEstimatedDelivery] = useState<string>('');
+  const [shippingDiscount, setShippingDiscount] = useState<number>(0);
+  const [showSizeGuide, setShowSizeGuide] = useState<boolean>(false);
+  const [installmentOptions, setInstallmentOptions] = useState<boolean>(false);
+  const [buyerProtectionDays, setBuyerProtectionDays] = useState<number>(60);
+  const [flashSale, setFlashSale] = useState<{active: boolean, endsIn: string, discount: number}>({
+    active: true,
+    endsIn: '03:45:12',
+    discount: 30
+  });
+  const [soldProgress, setSoldProgress] = useState<number>(65);
+  const [similarItemsCount, setSimilarItemsCount] = useState<number>(0);
+  const [returns, setReturns] = useState<{free: boolean, days: number}>({
+    free: true,
+    days: 15
+  });
+  const [sellerSince, setSellerSince] = useState<string>('');
+  const [showReturnPolicy, setShowReturnPolicy] = useState<boolean>(false);
   
   useEffect(() => {
     const randomViewers = Math.floor(Math.random() * 40) + 10;
@@ -141,6 +182,27 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
     setStockTrend(trends[Math.floor(Math.random() * trends.length)]);
     
     setRecentPurchases(Math.floor(Math.random() * 200) + 50);
+    
+    setSalesCount(Math.floor(Math.random() * 5000) + 1000);
+    setWishlistCount(Math.floor(Math.random() * 300) + 50);
+    setSellerRating(4 + Math.random());
+    setLoyaltyPoints(Math.floor(quantity * product.discountPrice * 0.05));
+    setQuestionCount(Math.floor(Math.random() * 50) + 5);
+    
+    // Random delivery date between 7-21 days from now
+    const deliveryDays = Math.floor(Math.random() * 14) + 7;
+    const deliveryDate = new Date();
+    deliveryDate.setDate(deliveryDate.getDate() + deliveryDays);
+    setEstimatedDelivery(`${deliveryDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(deliveryDate.getTime() + 3*86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`);
+    
+    setShippingDiscount(Math.floor(Math.random() * 5) + 3);
+    setSimilarItemsCount(Math.floor(Math.random() * 40) + 15);
+    
+    // Random date between 1-5 years ago
+    const years = Math.floor(Math.random() * 4) + 1;
+    const sellerStartDate = new Date();
+    sellerStartDate.setFullYear(sellerStartDate.getFullYear() - years);
+    setSellerSince(sellerStartDate.getFullYear().toString());
     
     const timerInterval = setInterval(() => {
       const now = new Date();
@@ -160,7 +222,7 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
     }, 1000);
     
     return () => clearInterval(timerInterval);
-  }, [couponExpiry]);
+  }, [couponExpiry, quantity, product.discountPrice]);
   
   useEffect(() => {
     const activityInterval = setInterval(() => {
@@ -169,7 +231,12 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
           `Someone in New York just purchased this item`,
           `${Math.floor(Math.random() * 5) + 1} people added this to cart in the last hour`,
           `${Math.floor(Math.random() * 3) + 1} people bought this together with another item`,
-          `This item was just added to ${Math.floor(Math.random() * 7) + 2} wishlists`
+          `This item was just added to ${Math.floor(Math.random() * 7) + 2} wishlists`,
+          `New review: "Great quality, fast shipping!"`,
+          `Someone in Tokyo is viewing this right now`,
+          `This item is trending in your region!`,
+          `Only ${Math.floor(Math.random() * 8) + 3} left at this price!`,
+          `${Math.floor(Math.random() * 20) + 10} people have this in their cart`
         ];
         
         const randomActivity = activities[Math.floor(Math.random() * activities.length)];
@@ -187,17 +254,69 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
     setShowShippingInfo(prev => !prev);
   };
   
+  const toggleBundleOptions = () => {
+    setShowBundleOptions(prev => !prev);
+  };
+  
+  const handleWishlist = () => {
+    setIsWishlisted(prev => !prev);
+    if (!isWishlisted) {
+      setWishlistCount(prev => prev + 1);
+      toast.success("Added to your Wishlist!");
+    } else {
+      setWishlistCount(prev => prev - 1);
+      toast("Removed from your Wishlist");
+    }
+  };
+  
+  const toggleReturnPolicy = () => {
+    setShowReturnPolicy(prev => !prev);
+  };
+  
+  const toggleSizeGuide = () => {
+    setShowSizeGuide(prev => !prev);
+  };
+  
+  const toggleInstallmentOptions = () => {
+    setInstallmentOptions(prev => !prev);
+  };
+  
   const formatMoney = (amount: number) => {
     return `US $${amount.toFixed(2)}`;
   };
   
+  const handleScrollToReviews = () => {
+    setActiveTab("reviews");
+    setTimeout(() => {
+      if (productSectionRef.current) {
+        const reviewsSection = document.getElementById('reviews-section');
+        if (reviewsSection) {
+          reviewsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    }, 100);
+  };
+  
   return (
-    <div className="pb-28 min-h-screen bg-white">
+    <div className="pb-28 min-h-screen bg-white" ref={productSectionRef}>
       <div className="bg-gray-50 pb-4">
         <ModishGallery images={product.images} name={product.name} />
       </div>
       
       <div className="max-w-2xl mx-auto px-4 py-4 relative -mt-8">
+        {/* Flash Sale Indicator */}
+        {flashSale.active && (
+          <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white p-2 rounded-t-lg mb-2 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Zap className="w-4 h-4" />
+              <span className="text-sm font-bold">FLASH SALE</span>
+            </div>
+            <div className="text-xs">
+              Ends in: <span className="font-mono font-bold">{flashSale.endsIn}</span>
+            </div>
+          </div>
+        )}
+        
         <div className="bg-[#ea384c] text-white p-3 rounded-t-lg shadow-md mb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-baseline gap-2">
@@ -211,6 +330,16 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
               {Math.round(((product.price - product.discountPrice) / product.price) * 100)}% OFF
             </div>
           </div>
+          
+          {/* Sale Progress Indicator */}
+          <div className="mt-2">
+            <div className="flex items-center justify-between mb-1">
+              <div className="text-xs opacity-90">Almost gone! {soldProgress}% sold</div>
+              <div className="text-xs opacity-90">{product.stock} left</div>
+            </div>
+            <Progress value={soldProgress} className="h-1.5 bg-white/20" indicatorClassName="bg-yellow-400" />
+          </div>
+          
           <div className="flex items-center justify-between mt-2">
             <div className="text-xs opacity-90">Limited time offer • {product.stock < 10 ? 'Almost gone!' : 'In high demand'}</div>
             <div className="text-xs bg-black/20 px-2 py-0.5 rounded flex items-center gap-1">
@@ -220,8 +349,20 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
           </div>
         </div>
         
+        {/* Loyalty Points */}
+        <div className="flex items-center gap-2 bg-yellow-50 border border-yellow-200 rounded-md p-2 mb-4">
+          <div className="text-amber-600">
+            <Star className="w-4 h-4" />
+          </div>
+          <div className="flex-1">
+            <div className="text-xs font-medium text-gray-700">Earn {loyaltyPoints} coins</div>
+            <div className="text-xs text-gray-500">Use for future purchases</div>
+          </div>
+        </div>
+        
+        {/* Coupons */}
         <div className="flex items-center gap-2 bg-orange-50 border border-orange-200 rounded-md p-2 mb-4">
-          <div className="relative">
+          <div className="relative min-w-16">
             <div className="w-16 h-10 bg-orange-500 flex items-center justify-center text-white font-bold rounded-l-md after:content-[''] after:absolute after:right-0 after:top-0 after:bottom-0 after:border-r-[6px] after:border-r-white after:border-y-transparent after:border-y-[20px]">
               <span className="text-lg">-$10</span>
             </div>
@@ -231,32 +372,79 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
             <div className="text-xs text-gray-500">Min. spend: ${(product.discountPrice * 1.5).toFixed(0)}</div>
           </div>
           <button className="bg-orange-500 text-white text-xs font-medium px-3 py-1 rounded-full" 
-            onClick={() => toast.success("Coupon applied!")}>
+            onClick={() => {
+              setShowCouponModal(true);
+              toast.success("Coupon applied!");
+            }}>
             Get
           </button>
         </div>
         
+        {/* Store Promotions */}
+        <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-md p-2 mb-4">
+          <div className="text-blue-600">
+            <Percent className="w-4 h-4" />
+          </div>
+          <div className="flex-1">
+            <div className="text-xs font-medium text-gray-700">Store Promotion</div>
+            <div className="text-xs text-gray-500">Buy 2 items, get 5% off • Buy 3, get {bundleDiscount}% off</div>
+          </div>
+          <button 
+            className="text-blue-600 text-xs font-medium"
+            onClick={toggleBundleOptions}
+          >
+            {showBundleOptions ? "Hide" : "View"}
+          </button>
+        </div>
+        
+        {showBundleOptions && (
+          <div className="border border-blue-100 rounded-md p-2 mb-4 bg-blue-50/50">
+            <div className="text-xs font-medium text-gray-700 mb-2">Bundle offers:</div>
+            <div className="grid grid-cols-1 gap-2">
+              <div className="flex items-center justify-between border-b border-blue-100 pb-2">
+                <div className="flex items-center gap-2">
+                  <input type="radio" name="bundle" id="bundle-2" />
+                  <label htmlFor="bundle-2" className="text-xs">2 items: 5% off</label>
+                </div>
+                <span className="text-xs font-medium text-blue-600">Save ${((product.discountPrice * 2) * 0.05).toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <input type="radio" name="bundle" id="bundle-3" defaultChecked />
+                  <label htmlFor="bundle-3" className="text-xs">3 items: {bundleDiscount}% off</label>
+                </div>
+                <span className="text-xs font-medium text-blue-600">Save ${((product.discountPrice * 3) * (bundleDiscount/100)).toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Product Activity Card */}
         <Card className="overflow-hidden border border-gray-200 mb-4 rounded-md shadow-sm">
           <CardContent className={`p-0 ${isMobile ? 'flex flex-col' : 'flex items-center'} text-xs divide-x-0 divide-y sm:divide-y-0 sm:divide-x divide-gray-100`}>
             <div className={`${isMobile ? 'w-full' : ''} px-3 py-2 flex items-center gap-2`}>
               <div className="min-w-5 h-5 rounded-full bg-red-50 flex items-center justify-center">
-                <Users className="w-3 h-3 text-[#ea384c]" />
+                <Eye className="w-3 h-3 text-[#ea384c]" />
               </div>
               <div>
                 <span className="text-gray-700 font-medium">
-                  {viewCount} people viewing now
+                  {viewCount} people viewing
                 </span>
                 <div className="text-xs text-gray-500">Peak today: {peakViewers}</div>
               </div>
             </div>
             
             <div className={`${isMobile ? 'w-full' : ''} px-3 py-2 flex items-center gap-2`}>
-              <div className="min-w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center">
-                <History className="w-3 h-3 text-blue-600" />
+              <div className="min-w-5 h-5 rounded-full bg-green-50 flex items-center justify-center">
+                <Box className="w-3 h-3 text-green-600" />
               </div>
               <div>
-                <span className="text-gray-700 font-medium">Last viewed {lastViewed}</span>
-                <div className="text-xs text-gray-500">{Math.floor(Math.random() * 100) + 20} views today</div>
+                <span className="text-gray-700 font-medium">{salesCount} sold</span>
+                <div className="text-xs text-gray-500">
+                  <button onClick={handleScrollToReviews} className="text-blue-600">
+                    {product.rating} ★ ({product.reviewCount} reviews)
+                  </button>
+                </div>
               </div>
             </div>
             
@@ -274,20 +462,26 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
               </div>
             </div>
             
-            {product.stock < 10 && (
-              <div className={`${isMobile ? 'w-full' : ''} px-3 py-2 flex items-center gap-2`}>
-                <div className="min-w-5 h-5 rounded-full bg-amber-50 flex items-center justify-center">
-                  <AlertCircle className="w-3 h-3 text-amber-600" />
-                </div>
-                <div>
-                  <span className="text-gray-700 font-medium">Limited stock</span>
-                  <div className="text-xs text-gray-500">Only {product.stock} left</div>
+            <div className={`${isMobile ? 'w-full' : ''} px-3 py-2 flex items-center gap-2`}>
+              <div className="min-w-5 h-5 rounded-full bg-purple-50 flex items-center justify-center">
+                <Heart className="w-3 h-3 text-purple-600" />
+              </div>
+              <div>
+                <span className="text-gray-700 font-medium">{wishlistCount} wishlist</span>
+                <div className="text-xs text-gray-500">
+                  <button 
+                    className={isWishlisted ? "text-red-500" : "text-blue-600"} 
+                    onClick={handleWishlist}
+                  >
+                    {isWishlisted ? "Added ❤" : "Add to wishlist"}
+                  </button>
                 </div>
               </div>
-            )}
+            </div>
           </CardContent>
         </Card>
         
+        {/* Recent Purchases Indicator */}
         <div className="bg-green-50 border border-green-100 rounded-md p-2 mb-4 flex items-center gap-2">
           <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
             <Star className="w-3 h-3 text-white" />
@@ -296,6 +490,39 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
             <span className="font-medium text-green-700">{recentPurchases}+ bought</span> in the past month
           </div>
         </div>
+        
+        {/* Free Returns Banner */}
+        {returns.free && (
+          <div className="bg-blue-50 border border-blue-100 rounded-md p-2 mb-4 flex items-center gap-2">
+            <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
+              <RefreshCw className="w-3 h-3 text-white" />
+            </div>
+            <div className="flex-1 text-xs text-gray-700">
+              <span className="font-medium text-blue-700">Free Returns</span> within {returns.days} days
+            </div>
+            <button 
+              className="text-blue-600 text-xs font-medium" 
+              onClick={toggleReturnPolicy}
+            >
+              More
+            </button>
+          </div>
+        )}
+        
+        {showReturnPolicy && (
+          <div className="border border-blue-100 rounded-md p-3 mb-4 bg-blue-50/50 text-xs space-y-2">
+            <h4 className="font-medium text-gray-800">Return Policy</h4>
+            <p className="text-gray-600">Return for refund within {returns.days} days, buyer pays return shipping.</p>
+            <div className="flex items-start gap-2 mt-2">
+              <Check className="w-4 h-4 text-green-500 mt-0.5" />
+              <p className="text-gray-600 flex-1">Item must be returned in the same condition as received.</p>
+            </div>
+            <div className="flex items-start gap-2">
+              <Check className="w-4 h-4 text-green-500 mt-0.5" />
+              <p className="text-gray-600 flex-1">Contact seller within 7 days of receiving item to initiate return.</p>
+            </div>
+          </div>
+        )}
       
         <ModishInfo
           name={product.name}
@@ -307,6 +534,28 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
           description={product.description}
         />
         
+        {/* Seller Info */}
+        <div className="mt-4 border border-gray-200 rounded-md mb-4">
+          <div className="p-3 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 overflow-hidden">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Seller" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <div className="text-sm font-medium text-gray-800">{product.brand} Official Store</div>
+                <div className="text-xs text-gray-500 flex items-center gap-1">
+                  <span>Seller since {sellerSince}</span> • 
+                  <span className="flex items-center">{sellerRating.toFixed(1)} <Star className="w-3 h-3 text-yellow-400 ml-0.5" /></span>
+                </div>
+              </div>
+            </div>
+            <button className="text-xs text-blue-600 border border-blue-600 rounded-full px-3 py-1">
+              Visit Store
+            </button>
+          </div>
+        </div>
+        
+        {/* Shipping Section */}
         <div className="mt-4 border border-gray-200 rounded-md divide-y">
           <div className="p-3 flex items-center justify-between" onClick={toggleShippingInfo}>
             <div className="flex items-center gap-3">
@@ -315,6 +564,7 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
                 <div className="text-sm font-medium text-gray-800">Shipping</div>
                 <div className="text-xs text-gray-500">
                   {product.freeShipping ? 'Free Shipping' : `$${(Math.random() * 10 + 5).toFixed(2)} Standard Shipping`}
+                  <span className="ml-1 text-blue-600">to United States</span>
                 </div>
               </div>
             </div>
@@ -325,11 +575,18 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
           
           {showShippingInfo && (
             <div className="p-3 bg-gray-50">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-medium">Estimated delivery:</span>
+                <span className="text-xs font-medium">{estimatedDelivery}</span>
+              </div>
               <div className="text-xs mb-2 font-medium">Shipping options:</div>
               <div className="flex items-center justify-between py-1.5 border-b border-gray-100">
                 <div className="flex items-center gap-2">
                   <input type="radio" name="shipping" id="shipping-standard" defaultChecked />
-                  <label htmlFor="shipping-standard" className="text-xs">Standard Shipping</label>
+                  <label htmlFor="shipping-standard" className="text-xs flex flex-col">
+                    <span>Standard Shipping</span>
+                    <span className="text-gray-500">10-20 days</span>
+                  </label>
                 </div>
                 <div className="text-xs font-medium text-gray-700">
                   {product.freeShipping ? 'Free' : `$${(Math.random() * 10 + 5).toFixed(2)}`}
@@ -338,31 +595,100 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
               <div className="flex items-center justify-between py-1.5 border-b border-gray-100">
                 <div className="flex items-center gap-2">
                   <input type="radio" name="shipping" id="shipping-express" />
-                  <label htmlFor="shipping-express" className="text-xs">Express Shipping</label>
+                  <label htmlFor="shipping-express" className="text-xs flex flex-col">
+                    <span>Express Shipping</span>
+                    <span className="text-gray-500">5-8 days</span>
+                  </label>
                 </div>
                 <div className="text-xs font-medium text-gray-700">
                   ${(Math.random() * 15 + 10).toFixed(2)}
                 </div>
               </div>
-              <div className="text-xs text-gray-500 mt-2">
-                Estimated delivery: {product.deliveryTime}
+              <div className="flex items-center justify-between py-1.5">
+                <div className="flex items-center gap-2">
+                  <input type="radio" name="shipping" id="shipping-priority" />
+                  <label htmlFor="shipping-priority" className="text-xs flex flex-col">
+                    <span>Priority Shipping</span>
+                    <span className="text-gray-500">3-5 days</span>
+                  </label>
+                </div>
+                <div className="text-xs font-medium text-gray-700">
+                  ${(Math.random() * 25 + 20).toFixed(2)}
+                </div>
+              </div>
+              
+              {/* International Shipping Note */}
+              <div className="mt-3 pt-3 border-t border-gray-200">
+                <div className="flex items-start gap-2">
+                  <Globe className="w-4 h-4 text-gray-500 mt-0.5" />
+                  <div className="text-xs text-gray-500">
+                    <span className="font-medium block">International shipping</span>
+                    Ships to 200+ countries with tracking number
+                  </div>
+                </div>
               </div>
             </div>
           )}
           
+          {/* Buyer Protection */}
           <div className="p-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Shield className="w-5 h-5 text-gray-500" />
+              <ShieldCheck className="w-5 h-5 text-gray-500" />
               <div>
                 <div className="text-sm font-medium text-gray-800">Buyer Protection</div>
                 <div className="text-xs text-gray-500">
-                  Money back guarantee • 30 day returns
+                  Full refund if item is not as described • {buyerProtectionDays}-day buyer protection
                 </div>
               </div>
             </div>
           </div>
+          
+          {/* Payment Methods */}
+          <div className="p-3 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Lock className="w-5 h-5 text-gray-500" />
+              <div>
+                <div className="text-sm font-medium text-gray-800">Payment Options</div>
+                <div className="flex gap-2 mt-1">
+                  <img src="https://cdn-icons-png.flaticon.com/128/196/196578.png" alt="Visa" className="h-5 w-auto" />
+                  <img src="https://cdn-icons-png.flaticon.com/128/196/196561.png" alt="MasterCard" className="h-5 w-auto" />
+                  <img src="https://cdn-icons-png.flaticon.com/128/196/196565.png" alt="PayPal" className="h-5 w-auto" />
+                  <img src="https://cdn-icons-png.flaticon.com/128/196/196539.png" alt="American Express" className="h-5 w-auto" />
+                  <button 
+                    className="text-xs text-blue-600"
+                    onClick={toggleInstallmentOptions}
+                  >
+                    + Installment plans
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {installmentOptions && (
+            <div className="p-3 bg-gray-50">
+              <div className="text-xs mb-2 font-medium">Installment payment options:</div>
+              <div className="grid grid-cols-1 gap-2">
+                <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                  <div className="flex items-center gap-2">
+                    <input type="radio" name="installment" id="pay-4" defaultChecked />
+                    <label htmlFor="pay-4" className="text-xs">Pay in 4 interest-free installments</label>
+                  </div>
+                  <span className="text-xs font-medium">${(product.discountPrice / 4).toFixed(2)}/payment</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <input type="radio" name="installment" id="monthly" />
+                    <label htmlFor="monthly" className="text-xs">Monthly payments with credit</label>
+                  </div>
+                  <span className="text-xs font-medium">From ${(product.discountPrice / 12).toFixed(2)}/mo</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         
+        {/* Product Options */}
         <ModishOptions
           colors={product.colors}
           selectedColor={selectedColor}
@@ -374,6 +700,93 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
           selectedSize={selectedSize}
           onSelectSize={setSelectedSize}
         />
+        
+        {/* Size Guide Button */}
+        {product.sizes && product.sizes.length > 0 && (
+          <div className="mt-2 mb-4">
+            <button 
+              className="text-xs text-blue-600 flex items-center gap-1"
+              onClick={toggleSizeGuide}
+            >
+              <Info className="w-3 h-3" /> Size Guide
+            </button>
+          </div>
+        )}
+        
+        {showSizeGuide && (
+          <div className="border border-gray-200 rounded-md p-3 mb-4 text-xs">
+            <h4 className="font-medium text-gray-800 mb-2">Size Chart</h4>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Size</th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chest (in)</th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waist (in)</th>
+                    <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Length (in)</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  <tr>
+                    <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">S</td>
+                    <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">36-38</td>
+                    <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">28-30</td>
+                    <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">27</td>
+                  </tr>
+                  <tr>
+                    <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">M</td>
+                    <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">38-40</td>
+                    <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">30-32</td>
+                    <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">28</td>
+                  </tr>
+                  <tr>
+                    <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">L</td>
+                    <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">40-42</td>
+                    <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">32-34</td>
+                    <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">29</td>
+                  </tr>
+                  <tr>
+                    <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">XL</td>
+                    <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">42-44</td>
+                    <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">34-36</td>
+                    <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-700">30</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="mt-2 text-gray-500">Measurements may vary by 1-2 inches</div>
+          </div>
+        )}
+        
+        {/* Buy It With */}
+        {hasFrequentlyBought && (
+          <div className="mt-6 border border-gray-200 rounded-md p-3 mb-4">
+            <h3 className="text-sm font-medium text-gray-900 mb-3">Frequently bought together</h3>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="relative w-16 h-16 border border-gray-200 rounded-md overflow-hidden">
+                <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
+                <div className="absolute top-0 right-0 bg-green-500 text-white text-[8px] px-1">Selected</div>
+              </div>
+              <div className="text-lg font-bold text-gray-400">+</div>
+              <div className="relative w-16 h-16 border border-gray-200 rounded-md overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&auto=format&fit=crop" alt="Cushion" className="w-full h-full object-cover" />
+                <input type="checkbox" className="absolute top-1 left-1" defaultChecked />
+              </div>
+              <div className="text-lg font-bold text-gray-400">+</div>
+              <div className="relative w-16 h-16 border border-gray-200 rounded-md overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1596162954151-cdcb4c0f70a8?w=800&auto=format&fit=crop" alt="Side Table" className="w-full h-full object-cover" />
+                <input type="checkbox" className="absolute top-1 left-1" defaultChecked />
+              </div>
+            </div>
+            <div className="flex justify-between items-center mb-2">
+              <div className="text-sm">Price for all: <span className="font-bold text-[#ea384c]">US ${(product.discountPrice * 2.7).toFixed(2)}</span></div>
+              <div className="text-xs text-gray-500">Save US ${(product.discountPrice * 0.3).toFixed(2)}</div>
+            </div>
+            <button className="bg-[#ea384c] text-white w-full py-2 rounded-full text-sm font-medium">
+              Add 3 items to cart
+            </button>
+          </div>
+        )}
         
         <ModishActions
           product={product}
@@ -388,6 +801,7 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
               <TabsTrigger value="description" className="flex-1 text-xs">Description</TabsTrigger>
               <TabsTrigger value="specs" className="flex-1 text-xs">Specifications</TabsTrigger>
               <TabsTrigger value="reviews" className="flex-1 text-xs">Reviews</TabsTrigger>
+              <TabsTrigger value="questions" className="flex-1 text-xs">Q&A</TabsTrigger>
             </TabsList>
             
             <TabsContent value="description">
@@ -397,7 +811,20 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
                   {product.description} Experience the pinnacle of design and craftsmanship with our premium furniture piece.
                   Built to last and designed for comfort, this item will elevate any space with its elegant aesthetics and functional excellence.
                 </p>
-                <ModishFeatures features={product.features} />
+                <div className="relative overflow-hidden" style={{ maxHeight: showAllFeatures ? 'none' : '300px' }}>
+                  <ModishFeatures features={product.features} />
+                  {!showAllFeatures && (
+                    <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent"></div>
+                  )}
+                </div>
+                {!showAllFeatures && (
+                  <button 
+                    className="w-full text-center py-2 text-sm text-blue-600"
+                    onClick={() => setShowAllFeatures(true)}
+                  >
+                    Show more
+                  </button>
+                )}
               </div>
             </TabsContent>
             
@@ -415,8 +842,69 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
               </div>
             </TabsContent>
             
-            <TabsContent value="reviews">
+            <TabsContent value="reviews" id="reviews-section">
               <ModishReviews rating={product.rating} reviewCount={product.reviewCount} />
+            </TabsContent>
+            
+            <TabsContent value="questions">
+              <div className="space-y-3 mt-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-base font-medium text-gray-900">Questions & Answers</h3>
+                  <span className="text-sm text-gray-500">{questionCount} questions</span>
+                </div>
+                
+                <div className="bg-gray-50 p-3 rounded-md">
+                  <form className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      placeholder="Ask a question about this product..."
+                      className="flex-1 text-sm border border-gray-300 rounded-md px-3 py-2"
+                    />
+                    <button className="bg-[#ea384c] text-white px-3 py-2 rounded-md text-sm">Ask</button>
+                  </form>
+                </div>
+                
+                <div className="space-y-4">
+                  {/* Sample Q&A */}
+                  <div className="border-b border-gray-100 pb-4">
+                    <div className="flex items-start gap-2 mb-2">
+                      <MessageCircle className="w-4 h-4 text-blue-600 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-800">Is this suitable for outdoor use?</p>
+                        <p className="text-xs text-gray-500">Asked 2 months ago</p>
+                      </div>
+                    </div>
+                    <div className="ml-6 bg-gray-50 p-2 rounded-md">
+                      <p className="text-sm text-gray-800">This item is designed for indoor use only. For outdoor options, please check our garden furniture collection.</p>
+                      <div className="flex items-center justify-between mt-1">
+                        <p className="text-xs text-gray-500">Seller response • 1 month ago</p>
+                        <div className="text-xs text-gray-500">Helpful? (12)</div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="border-b border-gray-100 pb-4">
+                    <div className="flex items-start gap-2 mb-2">
+                      <MessageCircle className="w-4 h-4 text-blue-600 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-800">Does this come with assembly instructions?</p>
+                        <p className="text-xs text-gray-500">Asked 3 weeks ago</p>
+                      </div>
+                    </div>
+                    <div className="ml-6 bg-gray-50 p-2 rounded-md">
+                      <p className="text-sm text-gray-800">Yes, detailed assembly instructions are included in the box. There's also a QR code for video instructions.</p>
+                      <div className="flex items-center justify-between mt-1">
+                        <p className="text-xs text-gray-500">Seller response • 2 weeks ago</p>
+                        <div className="text-xs text-gray-500">Helpful? (8)</div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <button className="w-full text-center py-2 text-sm text-blue-600 border border-blue-600 rounded-md">
+                    See all {questionCount} questions
+                  </button>
+                </div>
+              </div>
             </TabsContent>
           </Tabs>
         </div>
@@ -459,6 +947,26 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
         </div>
         
         <ModishSimilar currentProductId={product.id} />
+        
+        {/* Recently Viewed Section */}
+        <div className="space-y-4 pt-6 border-t border-gray-100 mt-6">
+          <h3 className="text-base font-medium text-gray-900">Recently Viewed</h3>
+          <div className="flex gap-3 overflow-x-auto pb-3 hide-scrollbar">
+            {recentlyViewedProducts.concat(recentlyViewedProducts).map((product, index) => (
+              <div key={`${product.id}-${index}`} className="min-w-[120px] max-w-[120px]">
+                <div className="aspect-square overflow-hidden rounded-md relative">
+                  <img 
+                    src={product.image} 
+                    alt={product.name} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h4 className="text-xs text-gray-900 mt-1 line-clamp-1">{product.name}</h4>
+                <div className="text-xs text-[#ea384c] font-medium">US ${product.price.toFixed(2)}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
       
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex items-center p-2 z-10 shadow-[0_-4px_12px_-6px_rgba(0,0,0,0.1)]">
@@ -475,8 +983,11 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
             </svg>
             <span className="text-[10px] text-gray-600 mt-1">Chat</span>
           </button>
-          <button className="flex flex-col items-center justify-center p-2 w-1/4">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-gray-600">
+          <button 
+            className="flex flex-col items-center justify-center p-2 w-1/4"
+            onClick={handleWishlist}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={isWishlisted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`w-5 h-5 ${isWishlisted ? "text-red-500" : "text-gray-600"}`}>
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
             <span className="text-[10px] text-gray-600 mt-1">Wishlist</span>
@@ -505,6 +1016,17 @@ export function ModishProductDetails({ productId }: ModishProductDetailsProps) {
           </button>
         </div>
       </div>
+
+      {/* Quick style for hiding scrollbars */}
+      <style jsx>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </div>
   );
 }
