@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { ModishGallery } from '@/components/modish/product/ModishGallery';
@@ -86,16 +85,6 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
   const headerSpacerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const setHeaderSpacerHeight = () => {
-      const headerHeight = document.querySelector('.modish-header')?.clientHeight || 56;
-      if (headerSpacerRef.current) {
-        headerSpacerRef.current.style.height = `${headerHeight}px`;
-      }
-    };
-
-    setHeaderSpacerHeight();
-    window.addEventListener('resize', setHeaderSpacerHeight);
-    
     const fetchProduct = async () => {
       await new Promise(resolve => setTimeout(resolve, 500));
 
@@ -291,8 +280,6 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
 
   return (
     <div className="space-y-4 pb-20">
-      
-      <div ref={headerSpacerRef} className="w-full"></div>
       
       <div ref={headerRef} className="fixed top-0 left-0 right-0 z-50 opacity-0 pointer-events-none">
         <div className="h-14"></div>
