@@ -39,9 +39,7 @@ export function ProductGallery({
     const updateHeaderHeight = () => {
       const headerElement = document.querySelector('.modish-header');
       if (headerElement) {
-        // Add extra padding (48px) to ensure content isn't hidden right at the edge
-        // Increased from 24px to 48px to provide more space for the Flash Deals banner
-        setHeaderHeight(headerElement.clientHeight + 48);
+        setHeaderHeight(headerElement.clientHeight);
       }
     };
 
@@ -103,11 +101,7 @@ export function ProductGallery({
   return (
     <div 
       className="relative bg-gradient-to-b from-gray-50 to-white"
-      style={{ 
-        paddingTop: headerHeight ? `${headerHeight}px` : '0',
-        // Add a class to help identify the top position for debugging
-        '--gallery-top-offset': `${headerHeight}px` 
-      } as React.CSSProperties}
+      style={{ paddingTop: headerHeight ? `${headerHeight}px` : '0' }}
       tabIndex={0}
       onKeyDown={handleKeyDown}
     >
