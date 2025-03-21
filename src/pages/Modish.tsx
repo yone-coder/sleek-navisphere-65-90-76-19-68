@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { ModishHeader } from '@/components/modish/ModishHeader';
 import { ModishProductDetails } from '@/components/modish/ModishProductDetails';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -57,7 +57,9 @@ const Modish = () => {
   return (
     <div className="min-h-screen bg-gray-50 pb-[150px] overflow-x-hidden">
       <ModishHeader />
-      <div className="w-full mx-auto px-0">
+      
+      {/* Add padding to the top to account for the fixed header */}
+      <div className="pt-[120px] w-full mx-auto px-0">
         <ModishProductDetails 
           productId={productId} 
           price={productPrice}
