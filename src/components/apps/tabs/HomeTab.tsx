@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
-import { Heart, X, Search, Settings, Plus, User, Bell, LogOut, Wifi, Cloud } from 'lucide-react';
+import { Heart, X, Search, Settings, Plus } from 'lucide-react';
+import { ProfileCard } from '@/components/apps/ProfileCard';
 
 export function HomeTab() {
   // App data with name, icon color, and letter representation
@@ -19,7 +20,6 @@ export function HomeTab() {
   const [searchMode, setSearchMode] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [editMode, setEditMode] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
 
   // Filter for favorites and by search term if active
   const filteredApps = apps.filter(app => 
@@ -48,68 +48,8 @@ export function HomeTab() {
   return (
     <div className="flex flex-col h-full bg-white max-w-md mx-auto overflow-hidden">
 
-      {/* Ultra-clean Apple-style Profile Section (no card) */}
-      <div className="px-6 py-5 bg-gray-50">
-        {/* Profile Header */}
-        <div className="flex items-center mb-2">
-          <div className="w-14 h-14 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
-            <span className="text-white text-xl font-semibold">AJ</span>
-          </div>
-          <div className="ml-4 flex-grow">
-            <h2 className="text-lg font-semibold text-gray-800">Alex Johnson</h2>
-            <p className="text-sm text-gray-500">Apple ID, iCloud+</p>
-          </div>
-          <button 
-            onClick={() => setShowProfile(!showProfile)}
-            className="text-blue-500 text-sm font-medium"
-          >
-            {showProfile ? 'Done' : 'Profile'}
-          </button>
-        </div>
-        
-        {/* Profile Expanded Details (conditionally rendered) */}
-        {showProfile && (
-          <div className="pt-2">
-            <div className="py-2">
-              <div className="flex items-center py-2">
-                <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mr-3">
-                  <User size={16} className="text-red-500" />
-                </div>
-                <div className="flex-grow">
-                  <p className="text-sm font-medium text-gray-800">Apple ID</p>
-                  <p className="text-xs text-gray-500">alex.johnson@icloud.com</p>
-                </div>
-                <div className="text-blue-500">
-                  <Search size={16} />
-                </div>
-              </div>
-            </div>
-            
-            <div className="py-2 border-t border-gray-200">
-              <div className="flex items-center py-2">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center mr-3">
-                  <Bell size={16} className="text-gray-600" />
-                </div>
-                <span className="text-sm text-gray-800">Notifications</span>
-              </div>
-              <div className="flex items-center py-2">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center mr-3">
-                  <Settings size={16} className="text-gray-600" />
-                </div>
-                <span className="text-sm text-gray-800">Settings</span>
-              </div>
-            </div>
-            
-            <div className="py-2 border-t border-gray-200">
-              <div className="flex justify-center">
-                <button className="text-sm text-red-500 py-1">
-                  Sign Out
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      {/* Use ProfileCard component instead of the custom profile section */}
+      <ProfileCard />
 
       {/* Header - Clean, no card */}
       <div className="border-b border-gray-200">
@@ -198,8 +138,6 @@ export function HomeTab() {
           </div>
         )}
       </div>
-
-      {/* No bottom navigation */}
     </div>
   );
 }
