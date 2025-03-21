@@ -4,7 +4,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HomeTab } from "@/components/apps/tabs/HomeTab";
 import { FeedsTab } from "@/components/apps/tabs/FeedsTab";
 import { ExploreTab } from "@/components/apps/tabs/ExploreTab";
-import { AppsHeader } from "@/components/apps/AppsHeader";
 import { SplashScreen } from "@/components/apps/SplashScreen";
 import { toast } from "@/hooks/use-toast";
 import { apps } from "@/components/apps/data/appsData";
@@ -63,8 +62,6 @@ export default function Apps() {
       {showSplash && <SplashScreen onDismiss={handleDismissSplash} />}
       
       <div className="flex-1 overflow-y-auto">
-        <AppsHeader />
-        
         <div className="h-full flex flex-col">
           <div className="px-4 py-2">
             <Tabs defaultValue="home" value={activeTab} onValueChange={setActiveTab} className="w-full">
