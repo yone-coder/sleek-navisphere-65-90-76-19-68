@@ -5,7 +5,7 @@ import { AppGrid } from '@/components/apps/AppGrid';
 import { SuggestionsSection } from '@/components/apps/SuggestionsSection';
 import { CategoryTabs } from '@/components/apps/CategoryTabs';
 import { AppControls } from '@/components/apps/AppControls';
-import { apps, appCategories } from '@/components/apps/data/appsData';
+import { apps, appCategories, categories } from '@/components/apps/data/appsData';
 import type { App, AppCategory } from '@/components/apps/types';
 
 export function ExploreTab() {
@@ -58,7 +58,7 @@ export function ExploreTab() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div className="flex-1 min-w-0">
               <CategoryTabs 
-                categories={appCategories}
+                categories={categories}
               />
             </div>
 
