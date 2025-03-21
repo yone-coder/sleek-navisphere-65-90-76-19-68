@@ -1,21 +1,31 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Search, Filter, Menu, Package, Download, Bell, Grid, List, ArrowUpDown, RefreshCw, Clock } from "lucide-react";
+import { motion } from "framer-motion";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { FavoritesSection } from "@/components/apps/FavoritesSection";
+import { SuggestionsSection } from "@/components/apps/SuggestionsSection";
 import { AppGrid } from "@/components/apps/AppGrid";
 import { SearchOverlay } from "@/components/search/SearchOverlay";
-import { AppControls } from "@/components/apps/AppControls";
-import { SuggestionsSection } from "@/components/apps/SuggestionsSection";
-import { ProfileCard } from "@/components/apps/ProfileCard";
-import { apps, categories, appCategories } from "@/components/apps/data/appsData";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import { Download, Star, Bell, BarChart2, TrendingUp, Award, Gift, Clock, Calendar, Globe, ShoppingBag, Smartphone, Headphones, Search, Filter, ChevronDown, ChevronRight, RefreshCw, CheckCircle, Settings, Zap, FileText, Package } from "lucide-react";
+import { apps, appCategories } from "@/components/apps/data/appsData";
+import { toast } from "@/hooks/use-toast";
 import type { App, AppCategory } from "@/components/apps/types";
-import { useToast } from "@/hooks/use-toast";
 
 interface ExploreTabProps {
   favorites: string[];
@@ -37,7 +47,7 @@ export function ExploreTab({
   setIsSearchOpen
 }: ExploreTabProps) {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState<AppCategory>("All");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -45,22 +55,8 @@ export function ExploreTab({
   const [showUpdatesOnly, setShowUpdatesOnly] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [installingApps, setInstallingApps] = useState<string[]>([]);
-  const [featuredApp, setFeaturedApp] = useState(apps[Math.floor(Math.random() * apps.length)]);
 
-  // Trending categories
-  const trendingCategories = [
-    { name: "Entertainment", icon: Headphones, color: "bg-pink-500" },
-    { name: "Shopping", icon: ShoppingBag, color: "bg-indigo-500" },
-    { name: "Productivity", icon: Calendar, color: "bg-amber-500" },
-    { name: "Travel", icon: Globe, color: "bg-teal-500" },
-    { name: "Games", icon: Smartphone, color: "bg-purple-500" },
-  ];
-
-  // Latest updates (mock data)
-  const latestUpdates = apps
-    .filter(app => app.updates && app.updates > 0)
-    .slice(0, 3);
-
+  // Filter apps based on current filters
   const filteredApps = apps.filter(app => {
     if (showUpdatesOnly) return app.updates > 0;
     if (activeTab === "favorites") return favorites.includes(app.name);
@@ -110,331 +106,306 @@ export function ExploreTab({
     }, 2000);
   };
 
-  useEffect(() => {
-    // Change featured app every 30 seconds
-    const interval = setInterval(() => {
-      setFeaturedApp(apps[Math.floor(Math.random() * apps.length)]);
-    }, 30000);
-    
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <div className="pb-24">
-      <div>
-        <ProfileCard />
-        
-        <div className="max-w-7xl mx-auto px-4">
-          {/* Featured App Banner */}
-          <motion.div 
-            className="mb-6 rounded-xl overflow-hidden shadow-md"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className={`bg-gradient-to-r from-${featuredApp.color.replace('bg-', '')} to-${featuredApp.color.replace('bg-', '')}/80 p-4 text-white`}>
-              <div className="flex items-center">
-                <div className="mr-4">
-                  <div className="h-16 w-16 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                    <span className="text-3xl font-bold">{featuredApp.name.charAt(0)}</span>
-                  </div>
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center">
-                    <h3 className="text-xl font-bold">{featuredApp.name}</h3>
-                    <Badge className="ml-2 bg-white/20 text-white">Featured</Badge>
-                  </div>
-                  <p className="text-sm opacity-90 mt-1">{featuredApp.description}</p>
-                  <div className="flex items-center mt-2">
-                    <div className="flex items-center">
-                      <Star className="h-4 w-4 fill-white text-white" />
-                      <span className="text-xs ml-1">{featuredApp.rating?.toFixed(1) || '4.5'}</span>
-                    </div>
-                    <span className="mx-2 text-white/40">•</span>
-                    <span className="text-xs">{featuredApp.users || '1M+ users'}</span>
-                  </div>
-                </div>
-                <Button 
-                  className="bg-white text-gray-800 hover:bg-white/90"
-                  onClick={() => handleInstallApp(featuredApp.name)}
-                  disabled={installingApps.includes(featuredApp.name)}
-                >
-                  {installingApps.includes(featuredApp.name) ? (
-                    <div className="flex items-center">
-                      <RefreshCw className="h-4 w-4 mr-1 animate-spin" />
-                      <span>Installing...</span>
-                    </div>
-                  ) : "Get"}
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Latest Updates Section */}
-          {latestUpdates.length > 0 && (
-            <div className="mb-6">
-              <div className="flex justify-between items-center mb-3">
-                <h2 className="text-lg font-bold text-gray-900">Latest Updates</h2>
-                {updatesCount > 3 && (
-                  <Button variant="ghost" size="sm" className="text-blue-500">
-                    See All ({updatesCount}) <ChevronRight className="h-4 w-4 ml-1" />
-                  </Button>
-                )}
-              </div>
-              
-              <div className="space-y-3">
-                {latestUpdates.map(app => (
-                  <motion.div 
-                    key={app.name} 
-                    className="bg-gray-50 rounded-xl p-3 shadow-sm hover:shadow-md transition-shadow"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="flex items-start">
-                      <div className={`${app.color} w-12 h-12 rounded-xl flex items-center justify-center mr-3`}>
-                        <span className="text-white text-xl font-bold">{app.name.charAt(0)}</span>
-                      </div>
+    <motion.div 
+      className="pb-24"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
+      {/* Header Section */}
+      <div className="flex items-center justify-between mb-4 px-1">
+        <h2 className="text-xl font-bold">Explore Apps</h2>
+        <div className="flex gap-2">
+          <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+            <DrawerTrigger asChild>
+              <Button variant="outline" size="icon" className="rounded-full">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <div className="mx-auto w-full max-w-sm">
+                <DrawerHeader>
+                  <DrawerTitle>App Categories</DrawerTitle>
+                  <DrawerDescription>
+                    Browse apps by category or use filters to find what you need.
+                  </DrawerDescription>
+                </DrawerHeader>
+                <div className="px-4">
+                  <ScrollArea className="h-[50vh] px-1">
+                    <div className="space-y-1">
+                      <Button
+                        variant={selectedCategory === "All" ? "default" : "ghost"}
+                        className="w-full justify-start"
+                        onClick={() => {
+                          setSelectedCategory("All");
+                          setIsDrawerOpen(false);
+                        }}
+                      >
+                        <Package className="mr-2 h-4 w-4" />
+                        All Apps
+                        <Badge className="ml-auto">{apps.length}</Badge>
+                      </Button>
                       
-                      <div className="flex-1">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <div className="flex items-center">
-                              <h3 className="font-medium">{app.name}</h3>
-                              <Badge className="ml-2 bg-red-500 text-white text-xs">Update</Badge>
-                            </div>
-                            <p className="text-xs text-gray-500 mt-1">Version {Math.floor(Math.random() * 10)}.{Math.floor(Math.random() * 10)}.{Math.floor(Math.random() * 10)}</p>
-                          </div>
-                          
-                          <Button 
-                            size="sm" 
-                            className="text-xs h-8"
-                            onClick={() => handleInstallApp(app.name)}
-                            disabled={installingApps.includes(app.name)}
-                          >
-                            {installingApps.includes(app.name) ? (
-                              <RefreshCw className="h-3 w-3 animate-spin" />
-                            ) : "Update"}
-                          </Button>
-                        </div>
-                        
-                        <div className="mt-2">
-                          <p className="text-xs text-gray-700">• Bug fixes and performance improvements</p>
-                          <p className="text-xs text-gray-700">• New features and enhanced user interface</p>
-                        </div>
+                      {appCategories.map((category) => (
+                        <Button
+                          key={category}
+                          variant={selectedCategory === category ? "default" : "ghost"}
+                          className="w-full justify-start"
+                          onClick={() => {
+                            setSelectedCategory(category);
+                            setIsDrawerOpen(false);
+                          }}
+                        >
+                          <Package className="mr-2 h-4 w-4" />
+                          {category}
+                          <Badge className="ml-auto">
+                            {apps.filter(app => app.category === category).length}
+                          </Badge>
+                        </Button>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                  
+                  <div className="mt-4 space-y-3">
+                    <div className="border-t pt-4">
+                      <h4 className="mb-2 text-sm font-medium">Sort Apps</h4>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant={sortBy === "name" ? "default" : "outline"} 
+                          size="sm" 
+                          onClick={() => setSortBy("name")}
+                          className="flex-1"
+                        >
+                          Name
+                        </Button>
+                        <Button 
+                          variant={sortBy === "rating" ? "default" : "outline"} 
+                          size="sm" 
+                          onClick={() => setSortBy("rating")}
+                          className="flex-1"
+                        >
+                          Rating
+                        </Button>
+                        <Button 
+                          variant={sortBy === "users" ? "default" : "outline"} 
+                          size="sm" 
+                          onClick={() => setSortBy("users")}
+                          className="flex-1"
+                        >
+                          Popular
+                        </Button>
                       </div>
                     </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Trending Categories */}
-          <div className="mb-8">
-            <h2 className="text-lg font-bold text-gray-900 mb-3">Trending Categories</h2>
-            <div className="flex overflow-x-auto space-x-3 pb-2 -mx-1 px-1 scrollbar-none">
-              {trendingCategories.map((category, index) => (
-                <motion.div
-                  key={category.name}
-                  className="flex-none"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Button 
-                    variant="outline" 
-                    className="h-auto py-3 border-gray-200 hover:bg-gray-50"
-                    onClick={() => setSelectedCategory(category.name as AppCategory)}
+                    
+                    <div className="border-t pt-4">
+                      <h4 className="mb-2 text-sm font-medium">View Mode</h4>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant={viewMode === "grid" ? "default" : "outline"} 
+                          size="sm" 
+                          onClick={() => setViewMode("grid")}
+                          className="flex-1"
+                        >
+                          <Grid className="mr-2 h-4 w-4" />
+                          Grid
+                        </Button>
+                        <Button 
+                          variant={viewMode === "list" ? "default" : "outline"} 
+                          size="sm" 
+                          onClick={() => setViewMode("list")}
+                          className="flex-1"
+                        >
+                          <List className="mr-2 h-4 w-4" />
+                          List
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <div className="border-t pt-4">
+                      <Button 
+                        variant={showUpdatesOnly ? "default" : "outline"} 
+                        size="sm" 
+                        onClick={() => setShowUpdatesOnly(!showUpdatesOnly)}
+                        className="w-full"
+                      >
+                        <Bell className="mr-2 h-4 w-4" />
+                        {showUpdatesOnly ? "Showing Updates Only" : "Show Updates Only"}
+                        {updatesCount > 0 && (
+                          <Badge variant="secondary" className="ml-2">{updatesCount}</Badge>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                <DrawerFooter>
+                  <Button
+                    onClick={handleRefresh}
+                    disabled={isRefreshing}
+                    className="w-full"
                   >
-                    <div className="flex flex-col items-center">
-                      <div className={`${category.color} w-10 h-10 rounded-full flex items-center justify-center mb-2`}>
-                        <category.icon className="h-5 w-5 text-white" />
-                      </div>
-                      <span className="text-xs">{category.name}</span>
-                    </div>
+                    <RefreshCw className={`mr-2 h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
+                    {isRefreshing ? "Refreshing..." : "Refresh App List"}
                   </Button>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          <FavoritesSection favoriteApps={favoriteApps} />
-            
-          <SuggestionsSection suggestedApps={suggestedApps} />
-          
-          {/* Quick Stats Section */}
-          <motion.div 
-            className="grid grid-cols-3 gap-3 mb-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <Card className="bg-blue-50 border-blue-100">
-              <CardContent className="p-3 flex flex-col items-center">
-                <Package className="h-6 w-6 text-blue-500 mb-1" />
-                <span className="text-lg font-bold text-gray-800">{apps.length}</span>
-                <span className="text-xs text-gray-600">Total Apps</span>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-green-50 border-green-100">
-              <CardContent className="p-3 flex flex-col items-center">
-                <Download className="h-6 w-6 text-green-500 mb-1" />
-                <span className="text-lg font-bold text-gray-800">{favorites.length}</span>
-                <span className="text-xs text-gray-600">Installed</span>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-amber-50 border-amber-100">
-              <CardContent className="p-3 flex flex-col items-center">
-                <Zap className="h-6 w-6 text-amber-500 mb-1" />
-                <span className="text-lg font-bold text-gray-800">{updatesCount}</span>
-                <span className="text-xs text-gray-600">Updates</span>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <div className="flex-1 min-w-0">
-              <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid grid-cols-4 w-full">
-                  {categories.map(category => (
-                    <TabsTrigger key={category.id} value={category.id} className="flex items-center gap-1">
-                      <category.icon className="w-4 h-4" />
-                      <span>{category.label}</span>
-                      {category.count && <span className="text-xs bg-gray-100 px-1.5 py-0.5 rounded-full">{category.count}</span>}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
-            </div>
-
-            <div className="flex-shrink-0 flex gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="text-xs h-8"
-                onClick={handleRefresh}
-                disabled={isRefreshing}
-              >
-                <RefreshCw className={`h-3 w-3 mr-1 ${isRefreshing ? 'animate-spin' : ''}`} />
-                {isRefreshing ? 'Refreshing...' : 'Refresh'}
-              </Button>
-              
-              <div className="flex-shrink-0">
-                <AppControls
-                  selectedCategory={selectedCategory}
-                  viewMode={viewMode}
-                  showUpdatesOnly={showUpdatesOnly}
-                  updatesCount={updatesCount}
-                  categories={appCategories}
-                  onCategoryChange={(category: AppCategory) => setSelectedCategory(category)}
-                  onSortChange={setSortBy}
-                  onViewModeChange={setViewMode}
-                  onUpdatesToggle={() => setShowUpdatesOnly(!showUpdatesOnly)}
-                />
+                  <DrawerClose asChild>
+                    <Button variant="outline">Close</Button>
+                  </DrawerClose>
+                </DrawerFooter>
               </div>
-            </div>
-          </div>
+            </DrawerContent>
+          </Drawer>
           
-          {/* Search Bar */}
-          <div className="mb-4 relative">
-            <div 
-              className="bg-gray-100 rounded-lg p-2 flex items-center cursor-pointer"
-              onClick={() => setIsSearchOpen(true)}
-            >
-              <Search className="h-5 w-5 text-gray-500 ml-1 mr-2" />
-              <span className="text-gray-500 text-sm flex-1">Search all apps and games...</span>
-              <Badge variant="outline" className="bg-white flex items-center gap-1 border-gray-200">
-                <Filter className="h-3 w-3" />
-                <span className="text-xs">Filters</span>
-                <ChevronDown className="h-3 w-3" />
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="rounded-full"
+            onClick={() => setIsSearchOpen(true)}
+          >
+            <Search className="h-5 w-5" />
+          </Button>
+          
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="rounded-full relative"
+          >
+            <Bell className="h-5 w-5" />
+            {updatesCount > 0 && (
+              <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
+                {updatesCount}
               </Badge>
-            </div>
-          </div>
+            )}
+          </Button>
+        </div>
+      </div>
 
-          {/* Custom Header for App Grid */}
-          <div className="bg-gray-50 rounded-lg p-3 mb-4 flex justify-between items-center">
-            <div>
-              <h2 className="font-medium text-gray-900">
-                {showUpdatesOnly ? "Apps with Updates" : 
-                 activeTab === "favorites" ? "Your Favorites" : 
-                 activeTab === "popular" ? "Popular Apps" : 
-                 activeTab === "recent" ? "Recently Added" : 
-                 selectedCategory !== "All" ? `${selectedCategory} Apps` : "All Applications"}
-              </h2>
-              <p className="text-xs text-gray-500">
-                {filteredApps.length} {filteredApps.length === 1 ? 'app' : 'apps'} found
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button 
-                variant="ghost" 
-                size="sm"
-                className="text-xs h-8 text-gray-600"
-                onClick={() => setSortBy('name')}
-              >
-                <span className={sortBy === 'name' ? 'text-blue-500 font-medium' : ''}>A-Z</span>
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                className="text-xs h-8 text-gray-600"
-                onClick={() => setSortBy('rating')}
-              >
-                <span className={sortBy === 'rating' ? 'text-blue-500 font-medium' : ''}>Rating</span>
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                className="text-xs h-8 text-gray-600"
-                onClick={() => setSortBy('users')}
-              >
-                <span className={sortBy === 'users' ? 'text-blue-500 font-medium' : ''}>Popular</span>
-              </Button>
-            </div>
-          </div>
+      {/* App Stats Summary */}
+      <div className="grid grid-cols-3 gap-3 mb-6">
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center p-3">
+            <Package className="h-5 w-5 text-blue-500 mb-1" />
+            <span className="text-lg font-bold">{apps.length}</span>
+            <span className="text-xs text-gray-500">All Apps</span>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center p-3">
+            <Download className="h-5 w-5 text-green-500 mb-1" />
+            <span className="text-lg font-bold">{favorites.length}</span>
+            <span className="text-xs text-gray-500">Installed</span>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center p-3">
+            <Clock className="h-5 w-5 text-amber-500 mb-1" />
+            <span className="text-lg font-bold">{updatesCount}</span>
+            <span className="text-xs text-gray-500">Updates</span>
+          </CardContent>
+        </Card>
+      </div>
 
+      {/* Favorites Section */}
+      {favoriteApps.length > 0 && (
+        <FavoritesSection favoriteApps={favoriteApps} />
+      )}
+      
+      {/* Suggestions Section */}
+      <SuggestionsSection suggestedApps={suggestedApps} />
+      
+      {/* Tab Navigation */}
+      <div className="sticky top-16 z-10 bg-white py-2 mb-4">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid grid-cols-4 w-full">
+            <TabsTrigger value="all">All</TabsTrigger>
+            <TabsTrigger value="popular">Popular</TabsTrigger>
+            <TabsTrigger value="recent">Recent</TabsTrigger>
+            <TabsTrigger value="favorites">Favorites</TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
+      
+      {/* Search Bar (Clickable to open search overlay) */}
+      <div 
+        className="relative mb-4 mx-1"
+        onClick={() => setIsSearchOpen(true)}
+      >
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <Input 
+          className="pl-10 bg-gray-50 border-gray-200" 
+          placeholder="Search apps..." 
+          readOnly 
+        />
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="absolute right-1 top-1/2 transform -translate-y-1/2 h-7"
+        >
+          <Filter className="h-4 w-4 mr-1" />
+          <span className="text-xs">Filters</span>
+        </Button>
+      </div>
+
+      {/* Current Category or Filter Label */}
+      <div className="flex justify-between items-center mb-4 mx-1">
+        <h3 className="text-lg font-medium">
+          {showUpdatesOnly ? "Apps with Updates" : 
+           activeTab === "favorites" ? "Your Favorites" : 
+           activeTab === "popular" ? "Popular Apps" : 
+           activeTab === "recent" ? "Recently Added" : 
+           selectedCategory !== "All" ? `${selectedCategory} Apps` : "All Apps"}
+        </h3>
+        <div className="flex items-center text-sm text-gray-500">
+          <span>{filteredApps.length} apps</span>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-8 w-8 ml-1"
+            onClick={() => {
+              const nextSortOption = sortBy === "name" ? "rating" : sortBy === "rating" ? "users" : "name";
+              setSortBy(nextSortOption);
+            }}
+          >
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
+      {/* App Grid */}
+      <div className="mx-1">
+        {filteredApps.length > 0 ? (
           <AppGrid 
             apps={filteredApps}
             favorites={favorites}
             onToggleFavorite={onToggleFavorite}
             viewMode={viewMode}
           />
-          
-          {/* Action Buttons */}
-          <div className="fixed bottom-20 right-4 flex flex-col gap-2">
-            <motion.button 
-              className="bg-blue-500 text-white h-12 w-12 rounded-full flex items-center justify-center shadow-lg hover:bg-blue-600"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        ) : (
+          <div className="py-8 text-center">
+            <p className="text-gray-500">No apps found matching your criteria.</p>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="mt-2"
+              onClick={() => {
+                setSelectedCategory("All");
+                setActiveTab("all");
+                setShowUpdatesOnly(false);
+              }}
             >
-              <BarChart2 className="h-5 w-5" />
-            </motion.button>
-            
-            <motion.button 
-              className="bg-purple-500 text-white h-12 w-12 rounded-full flex items-center justify-center shadow-lg hover:bg-purple-600"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => toast({
-                title: "App Settings",
-                description: "Settings panel will open here",
-                duration: 2000,
-              })}
-            >
-              <Settings className="h-5 w-5" />
-            </motion.button>
+              Reset Filters
+            </Button>
           </div>
-        </div>
+        )}
       </div>
 
+      {/* Search Overlay */}
       <SearchOverlay 
         isOpen={isSearchOpen} 
         onClose={() => setIsSearchOpen(false)} 
         apps={apps}
       />
-    </div>
+    </motion.div>
   );
 }
