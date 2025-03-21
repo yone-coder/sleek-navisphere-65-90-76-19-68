@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ModishHeader } from '@/components/modish/ModishHeader';
 import { ModishProductDetails } from '@/components/modish/ModishProductDetails';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -12,6 +12,8 @@ const Modish = () => {
   const { id } = useParams();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const headerHeightRef = useRef<number>(0);
+  const headerObserverRef = useRef<ResizeObserver | null>(null);
   
   // Default to product ID 1 if none is provided
   const productId = id || '1';
@@ -20,6 +22,44 @@ const Modish = () => {
   const productPrice = 79.99;  // Original price
   const discountPrice = 39.99;  // Discounted price
   const stock = 68;
+
+  // Setup header height measurement
+  useEffect(() => {
+    const measureHeaderHeight = () => {
+      const headerElement = document.querySelector('.modish-header');
+      if (headerElement) {
+        const height = headerElement.getBoundingClientRect().height;
+        headerHeightRef.current = height;
+      }
+    };
+
+    // Measure immediately
+    measureHeaderHeight();
+    
+    // Measure after a brief delay to catch any post-render adjustments
+    const timeoutId = setTimeout(measureHeaderHeight, 200);
+    
+    // Setup resize observer for dynamic height changes
+    if (!headerObserverRef.current) {
+      headerObserverRef.current = new ResizeObserver(measureHeaderHeight);
+      const headerElement = document.querySelector('.modish-header');
+      if (headerElement) {
+        headerObserverRef.current.observe(headerElement);
+      }
+    }
+    
+    // Also measure on window resize
+    window.addEventListener('resize', measureHeaderHeight);
+    
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', measureHeaderHeight);
+      
+      if (headerObserverRef.current) {
+        headerObserverRef.current.disconnect();
+      }
+    };
+  }, []);
 
   const handleAddToCart = () => {
     toast({
@@ -57,7 +97,11 @@ const Modish = () => {
   return (
     <div className="min-h-screen bg-gray-50 pb-[150px] overflow-x-hidden">
       <ModishHeader />
-      <div className="w-full mx-auto px-0 mt-14">
+      
+      <div 
+        className="w-full mx-auto px-0"
+        style={{ paddingTop: `${headerHeightRef.current || 120}px` }}
+      >
         <ModishProductDetails 
           productId={productId} 
           price={productPrice}
@@ -65,12 +109,12 @@ const Modish = () => {
         />
       </div>
       
-      {/* New section for Store Banner */}
+      {/* Store Banner Section */}
       <div className="px-3 mt-4">
         <ModishStoreBanner />
       </div>
       
-      {/* New section for Recently Viewed Products */}
+      {/* Recently Viewed Products Section */}
       <div className="mt-4">
         <ModishRecentlyViewed />
       </div>
