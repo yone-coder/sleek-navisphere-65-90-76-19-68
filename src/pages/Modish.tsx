@@ -59,7 +59,7 @@ const Modish = () => {
       <ModishHeader />
       
       {/* Add padding to the top to account for the fixed header */}
-      <div className="pt-[73px] w-full mx-auto px-0">
+      <div className="pt-[60px] w-full mx-auto px-0">
         <ModishProductDetails 
           productId={productId} 
           price={productPrice}
