@@ -57,14 +57,14 @@ export const RecentActivitySection = ({ activities, className = "" }: RecentActi
             return (
               <motion.div 
                 key={activity.id} 
-                className="bg-white rounded-xl p-3 flex items-center justify-between shadow-sm border border-gray-100"
+                className="bg-white rounded-xl p-2 flex items-center justify-between shadow-sm border border-gray-100"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
                 whileHover={{ x: 5 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                   <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
                     transaction.subtype === "received" ? "bg-green-100" : "bg-red-100"
                   }`}>
@@ -97,14 +97,14 @@ export const RecentActivitySection = ({ activities, className = "" }: RecentActi
             return (
               <motion.div 
                 key={activity.id} 
-                className="bg-white rounded-xl p-3 flex items-center shadow-sm border border-gray-100"
+                className="bg-white rounded-xl p-2 flex items-center shadow-sm border border-gray-100"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
                 whileHover={{ x: 5 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className={`${app.color} w-10 h-10 rounded-lg flex items-center justify-center mr-3 shadow-sm`}>
+                <div className={`${app.color} w-10 h-10 rounded-lg flex items-center justify-center mr-2 shadow-sm`}>
                   <span className="text-white text-lg font-bold">{app.letter}</span>
                 </div>
                 <div className="flex-1">

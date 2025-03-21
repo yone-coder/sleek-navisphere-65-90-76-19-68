@@ -33,7 +33,7 @@ export const SuggestedAppsSection = ({ title, description, apps, className = "" 
         </Button>
       </div>
       
-      <div className="flex space-x-3 overflow-x-auto pb-1 scrollbar-thin">
+      <div className="flex space-x-2 overflow-x-auto pb-1 scrollbar-thin">
         {apps.map((app, index) => {
           const Icon = app.icon;
           
@@ -48,7 +48,7 @@ export const SuggestedAppsSection = ({ title, description, apps, className = "" 
               whileTap={{ scale: 0.97 }}
             >
               <div className="flex flex-col items-center">
-                <div className={`${app.color} w-full aspect-square rounded-xl flex items-center justify-center shadow-md mb-2`}>
+                <div className={`${app.color} w-full aspect-square rounded-xl flex items-center justify-center shadow-md mb-1`}>
                   {Icon ? (
                     <Icon className="h-7 w-7 text-white" />
                   ) : (

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass, Bell, BookOpen, Activity, Zap, Layout, Send, Download, TrendingUp, ChevronRight, Clock, Star, MoreHorizontal, Bookmark, User, ArrowDownLeft, ArrowUpRight, Sparkles, Package, Trophy, Headphones, Palette, Sunrise, Coffee, FileText, Briefcase, Wifi, Cpu, Archive, Layers, Play, Gamepad2, CheckSquare } from 'lucide-react';
 import { ProfileCard } from '@/components/apps/ProfileCard';
@@ -260,7 +259,7 @@ export function HomeTab() {
       <ProfileCard />
 
       <motion.div 
-        className="flex-1 overflow-y-auto px-1 pt-2 pb-20 no-horizontal-overflow"
+        className="flex-1 overflow-y-auto pt-1 pb-20 no-horizontal-overflow"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
@@ -270,17 +269,17 @@ export function HomeTab() {
             title={`Good ${currentTime.getHours() < 12 ? 'Morning' : currentTime.getHours() < 18 ? 'Afternoon' : 'Evening'}`}
             description="Apps you might need right now"
             apps={suggestedApps}
-            className="mb-5 px-1"
+            className="mb-4 px-2"
           />
         )}
 
-        <div className="mb-5 px-1">
+        <div className="mb-4 px-2">
           <h2 className="text-sm font-semibold text-gray-800 mb-2">Quick Actions</h2>
           <QuickActionsGrid actions={quickActions} />
         </div>
 
-        <div className="mb-5 px-1">
-          <div className="flex justify-between items-center mb-3">
+        <div className="mb-4 px-2">
+          <div className="flex justify-between items-center mb-2">
             <h2 className="text-sm font-semibold text-gray-800">Activity & Notifications</h2>
             <Button variant="ghost" size="sm" className="text-xs text-blue-500">
               See all <ChevronRight className="h-3 w-3 ml-1" />
@@ -288,22 +287,22 @@ export function HomeTab() {
           </div>
           
           <ScrollArea className="w-full" type="scroll">
-            <div className="flex space-x-4 pb-4 pr-4">
+            <div className="flex space-x-3 pb-3 pr-3">
               <RecentActivitySection activities={recentActivities.slice(0, 4)} className="min-w-[280px]" />
               <NotificationsSection notifications={notifications} className="min-w-[280px]" />
             </div>
           </ScrollArea>
         </div>
 
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-3">
+        <div className="mb-4 px-2">
+          <div className="flex justify-between items-center mb-2">
             <h2 className="text-sm font-semibold text-gray-800">Smart Collections</h2>
             <Button variant="ghost" size="sm" className="text-xs text-blue-500">
               Edit <ChevronRight className="h-3 w-3 ml-1" />
             </Button>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2">
             {smartSuggestions.map((collection) => (
               <motion.div
                 key={collection.id}
@@ -335,9 +334,9 @@ export function HomeTab() {
           </div>
         </div>
 
-        <div className="mb-6">
-          <h2 className="text-sm font-semibold text-gray-800 mb-3">Pinned</h2>
-          <div className="grid grid-cols-4 gap-4">
+        <div className="mb-4 px-2">
+          <h2 className="text-sm font-semibold text-gray-800 mb-2">Pinned</h2>
+          <div className="grid grid-cols-4 gap-3">
             {pinnedApps.map(app => (
               <motion.div
                 key={app.id}
@@ -361,10 +360,10 @@ export function HomeTab() {
           </div>
         </div>
 
-        <div className="mb-4">
-          <div className="flex justify-between items-center mb-3">
+        <div className="mb-4 px-2">
+          <div className="flex justify-between items-center mb-2">
             <h1 className="text-base font-semibold text-gray-800">Favorites</h1>
-            <div className="flex space-x-4">
+            <div className="flex space-x-3">
               {searchMode ? (
                 <button 
                   onClick={clearSearch}
@@ -428,7 +427,7 @@ export function HomeTab() {
         </div>
 
         {!searchMode && activeCategory === 'recent' && (
-          <div className="mb-4">
+          <div className="mb-4 px-2">
             <h2 className="text-xs font-medium text-gray-600 mb-2">Recently Used</h2>
             <div className="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
               {recentApps.map(app => (
@@ -452,14 +451,16 @@ export function HomeTab() {
           </div>
         )}
 
-        <FavoritesGrid 
-          apps={filteredApps}
-          editMode={editMode}
-          onToggleFavorite={toggleFavorite}
-          onAppTap={handleAppTap}
-          onAppLongPress={handleAppLongPress}
-          activeAppId={activeAppId}
-        />
+        <div className="px-2">
+          <FavoritesGrid 
+            apps={filteredApps}
+            editMode={editMode}
+            onToggleFavorite={toggleFavorite}
+            onAppTap={handleAppTap}
+            onAppLongPress={handleAppLongPress}
+            activeAppId={activeAppId}
+          />
+        </div>
       </motion.div>
       
       <div className="fixed bottom-0 left-0 right-0 px-3 pt-2 pb-safe bg-white border-t border-gray-200 shadow-lg z-20">

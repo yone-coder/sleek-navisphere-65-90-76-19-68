@@ -35,14 +35,14 @@ export const NotificationsSection = ({ notifications, className = "" }: Notifica
         {notifications.map((notification, index) => (
           <motion.div 
             key={notification.id} 
-            className="bg-white rounded-xl p-3 flex items-center shadow-sm border border-gray-100"
+            className="bg-white rounded-xl p-2 flex items-center shadow-sm border border-gray-100"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 }}
             whileHover={{ x: 5 }}
             whileTap={{ scale: 0.98 }}
           >
-            <div className={`${notification.color} w-10 h-10 rounded-lg flex items-center justify-center mr-3 shadow-sm`}>
+            <div className={`${notification.color} w-10 h-10 rounded-lg flex items-center justify-center mr-2 shadow-sm`}>
               <Bell size={18} className="text-white" />
             </div>
             <div className="flex-1">
