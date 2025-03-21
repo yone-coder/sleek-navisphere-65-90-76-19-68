@@ -6,11 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import { FavoritesSection } from "@/components/apps/FavoritesSection";
-import { SuggestionsSection } from "@/components/apps/SuggestionsSection";
 import { apps } from "@/components/apps/data/appsData";
 import { ExploreFilters } from "@/components/apps/explore/ExploreFilters";
-import { ExploreStats } from "@/components/apps/explore/ExploreStats";
 import { ExploreHeader } from "@/components/apps/explore/ExploreHeader";
 import { ExploreTabNav } from "@/components/apps/explore/ExploreTabNav";
 import { ExploreSearchBar } from "@/components/apps/explore/ExploreSearchBar";
@@ -91,33 +88,6 @@ export function ExploreTab({
     }, 1500);
   };
 
-  const handleInstallApp = (appName: string) => {
-    if (installingApps.includes(appName)) return;
-    
-    setInstallingApps(prev => [...prev, appName]);
-    
-    // Simulate installation delay
-    setTimeout(() => {
-      setInstallingApps(prev => prev.filter(name => name !== appName));
-      
-      toast({
-        title: "Installation Complete",
-        description: `${appName} has been installed successfully`,
-        duration: 2000,
-      });
-    }, 2000);
-  };
-
-  const toggleExpandedView = () => {
-    setExpandedView(prev => !prev);
-    
-    toast({
-      title: expandedView ? "Compact View" : "Expanded View",
-      description: expandedView ? "Switched to compact view" : "Switched to expanded view",
-      duration: 1500,
-    });
-  };
-
   return (
     <motion.div 
       className={`pb-24 ${hasScrolled ? 'pt-2' : 'pt-0'}`}
@@ -125,36 +95,6 @@ export function ExploreTab({
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      {/* Header with Actions */}
-      <ExploreHeader 
-        updatesCount={updatesCount}
-        setIsSearchOpen={setIsSearchOpen}
-        setIsDrawerOpen={setIsDrawerOpen}
-      />
-
-      {/* App Stats Summary */}
-      <ExploreStats appsCount={apps.length} favoritesCount={favorites.length} updatesCount={updatesCount} />
-
-      {/* Favorites Section */}
-      {favoriteApps.length > 0 && activeTab !== "favorites" && (
-        <FavoritesSection favoriteApps={favoriteApps} />
-      )}
-      
-      {/* Suggestions Section */}
-      {activeTab === "all" && (
-        <SuggestionsSection suggestedApps={suggestedApps} />
-      )}
-      
-      {/* Tab Navigation with Enhanced Features */}
-      <ExploreTabNav 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
-        favoriteCount={favoriteApps.length}
-        updateCount={updatesCount}
-        expandView={expandedView}
-        onToggleView={toggleExpandedView}
-      />
-      
       {/* Search Bar */}
       <ExploreSearchBar onSearchOpen={() => setIsSearchOpen(true)} />
 
@@ -180,7 +120,6 @@ export function ExploreTab({
             favorites={favorites}
             onToggleFavorite={onToggleFavorite}
             viewMode={viewMode}
-            expandedView={expandedView}
           />
         ) : (
           <div className="py-8 text-center">
