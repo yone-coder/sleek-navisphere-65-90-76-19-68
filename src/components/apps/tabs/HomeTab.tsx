@@ -1,12 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
-import { Heart, X, Search, Settings, Plus, Sun, Cloud, CloudRain, Zap, Wind, Layout, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass, Bell, BookOpen, Activity, Coffee, Star } from 'lucide-react';
+import { Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass, Bell, BookOpen, Activity, Zap, Layout, Send, Download, TrendingUp, ChevronRight, Clock, Star, MoreHorizontal, Bookmark, User } from 'lucide-react';
 import { ProfileCard } from '@/components/apps/ProfileCard';
 import { apps } from '@/components/apps/data/appsData';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { QuickActions } from '@/components/apps/QuickActions';
+import { Button } from "@/components/ui/button";
 import { useToast } from '@/hooks/use-toast';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Card, CardContent } from "@/components/ui/card";
 
 export function HomeTab() {
   // Get actual apps from the appsData
@@ -27,6 +29,8 @@ export function HomeTab() {
   const [editMode, setEditMode] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [showRecentlyUsed, setShowRecentlyUsed] = useState(true);
+  const [activeAppId, setActiveAppId] = useState<number | null>(null);
 
   // Update time every minute
   useEffect(() => {
@@ -68,6 +72,27 @@ export function HomeTab() {
     setSearchMode(false);
   };
 
+  // Tap and hold to activate edit mode
+  const handleAppLongPress = (id) => {
+    setActiveAppId(id);
+    setTimeout(() => {
+      setEditMode(true);
+      setActiveAppId(null);
+    }, 500);
+  }
+
+  // Handle app tap
+  const handleAppTap = (id) => {
+    if (!editMode) {
+      const app = favoriteApps.find(app => app.id === id);
+      toast({
+        title: `Opening ${app.name}`,
+        description: "Starting application...",
+        duration: 1500,
+      });
+    }
+  }
+
   // Quick actions for the home screen
   const quickActions = [
     { name: 'Wi-Fi', icon: Zap, color: 'bg-blue-600', description: 'Connect' },
@@ -77,18 +102,6 @@ export function HomeTab() {
     { name: 'Music', icon: Music, color: 'bg-pink-500', description: 'Play Tunes' },
     { name: 'News', icon: BookOpen, color: 'bg-amber-500', description: 'Latest Updates' },
   ];
-
-  // Weather data (mock)
-  const weather = {
-    temp: 72,
-    condition: 'Partly Cloudy',
-    icon: Cloud,
-    high: 75,
-    low: 65,
-    location: 'New York',
-    humidity: '65%',
-    windSpeed: '8 mph',
-  };
 
   // App categories
   const categories = [
@@ -113,7 +126,7 @@ export function HomeTab() {
     if (hour >= 6 && hour < 10) {
       return [
         { id: 201, name: 'News', color: 'bg-amber-500', letter: 'N', reason: 'Morning briefing' },
-        { id: 202, name: 'Coffee', icon: Coffee, color: 'bg-yellow-700', letter: 'C', reason: 'Start your day' },
+        { id: 202, name: 'Coffee', icon: Activity, color: 'bg-yellow-700', letter: 'C', reason: 'Start your day' },
       ];
     } else if (hour >= 12 && hour < 14) {
       return [
@@ -146,33 +159,6 @@ export function HomeTab() {
       {/* Use ProfileCard component */}
       <ProfileCard />
 
-      {/* Weather widget with more details */}
-      <div className="mx-3 mb-3 mt-2 bg-gradient-to-r from-blue-400 to-blue-600 rounded-xl p-3 text-white shadow-md">
-        <div className="flex justify-between items-center">
-          <div>
-            <h3 className="text-lg font-semibold">{weather.location}</h3>
-            <p className="text-3xl font-bold">{weather.temp}°</p>
-            <p className="text-sm opacity-90">{weather.condition}</p>
-            <div className="flex space-x-2 mt-1 text-xs opacity-90">
-              <span>H: {weather.high}° L: {weather.low}°</span>
-            </div>
-          </div>
-          <div className="flex flex-col items-center">
-            <weather.icon size={40} className="mb-1" />
-            <div className="text-xs">
-              <div className="flex items-center gap-1">
-                <Wind size={12} />
-                <span>{weather.windSpeed}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <CloudRain size={12} />
-                <span>{weather.humidity}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Time-based suggestions */}
       {suggestedApps.length > 0 && (
         <div className="px-3 mb-2">
@@ -195,22 +181,34 @@ export function HomeTab() {
         </div>
       )}
 
-      {/* Quick Actions */}
+      {/* Quick Actions with Animation */}
       <div className="px-3 mb-3">
-        <h2 className="text-xs font-medium text-gray-600 mb-2">Quick Actions</h2>
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="text-xs font-medium text-gray-600">Quick Actions</h2>
+          <Button variant="ghost" size="sm" className="text-xs text-blue-500 h-6 px-2">
+            Edit <ChevronRight className="h-3 w-3 ml-1" />
+          </Button>
+        </div>
         <div className="grid grid-cols-6 gap-2">
-          {quickActions.map(action => (
-            <div key={action.name} className="flex flex-col items-center">
+          {quickActions.map((action, index) => (
+            <motion.div
+              key={index}
+              className="flex flex-col items-center"
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+            >
               <div className={`${action.color} w-10 h-10 rounded-full flex items-center justify-center shadow-sm`}>
                 <action.icon size={18} className="text-white" />
               </div>
               <span className="mt-1 text-xs text-center">{action.name}</span>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
 
-      {/* Notifications section */}
+      {/* Notifications section with Animation */}
       {notifications.length > 0 && (
         <div className="px-3 mb-3">
           <div className="flex justify-between items-center mb-2">
@@ -218,8 +216,14 @@ export function HomeTab() {
             <span className="text-xs text-blue-500">See all</span>
           </div>
           <div className="space-y-2">
-            {notifications.map(notification => (
-              <div key={notification.id} className="bg-gray-50 rounded-lg p-2 flex items-center">
+            {notifications.map((notification, index) => (
+              <motion.div 
+                key={notification.id} 
+                className="bg-gray-50 rounded-lg p-2 flex items-center"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
                 <div className={`${notification.color} w-8 h-8 rounded-lg flex items-center justify-center mr-2`}>
                   <Bell size={16} className="text-white" />
                 </div>
@@ -228,7 +232,45 @@ export function HomeTab() {
                   <p className="text-xs text-gray-500">{notification.message}</p>
                 </div>
                 <span className="text-xs text-gray-400">{notification.time}</span>
-              </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Most Used (Enhanced) */}
+      {showRecentlyUsed && (
+        <div className="px-3 mb-3">
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="text-xs font-medium text-gray-600">Most Used</h2>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-xs text-blue-500 h-6 px-2"
+              onClick={() => setShowRecentlyUsed(false)}
+            >
+              Hide <ChevronRight className="h-3 w-3 ml-1" />
+            </Button>
+          </div>
+          <div className="flex space-x-2">
+            {recentApps.map((app, index) => (
+              <motion.div 
+                key={app.id} 
+                className="flex-1 bg-gray-50 rounded-lg p-2"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <div className="flex flex-col items-center">
+                  <div className={`${app.color} w-12 h-12 rounded-xl flex items-center justify-center mb-1`}>
+                    <span className="text-white text-lg font-bold">{app.letter}</span>
+                  </div>
+                  <p className="text-xs font-medium">{app.name}</p>
+                  <p className="text-[10px] text-gray-500">{app.time}</p>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -321,36 +363,57 @@ export function HomeTab() {
           </div>
         )}
 
-        {/* Favorites Grid */}
+        {/* Favorites Grid with Animations */}
         {filteredApps.length > 0 ? (
           <div className="grid grid-cols-4 gap-3">
             {filteredApps.map(app => (
-              <div key={app.id} className="relative flex flex-col items-center">
+              <motion.div 
+                key={app.id} 
+                className="relative flex flex-col items-center"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                animate={{ 
+                  scale: activeAppId === app.id ? 1.1 : 1,
+                  boxShadow: activeAppId === app.id ? "0 10px 25px rgba(0,0,0,0.2)" : "none" 
+                }}
+                onTapStart={() => handleAppLongPress(app.id)}
+                onTap={() => handleAppTap(app.id)}
+              >
                 <div className={`${app.color} w-14 h-14 rounded-xl flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 active:scale-95`}>
                   <span className="text-white text-xl font-bold">{app.letter}</span>
                 </div>
                 <span className="mt-1 text-xs text-center truncate w-full">{app.name}</span>
                 
-                {/* Edit mode buttons */}
-                {editMode && (
-                  <button 
-                    onClick={() => toggleFavorite(app.id)}
-                    className="absolute -top-1 -left-1 bg-red-500 rounded-full p-1 shadow-md transition-transform hover:scale-110"
-                  >
-                    <X size={10} className="text-white" />
-                  </button>
-                )}
-              </div>
+                {/* Edit mode buttons with animations */}
+                <AnimatePresence>
+                  {editMode && (
+                    <motion.button 
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.5 }}
+                      onClick={() => toggleFavorite(app.id)}
+                      className="absolute -top-1 -left-1 bg-red-500 rounded-full p-1 shadow-md transition-transform hover:scale-110"
+                    >
+                      <X size={10} className="text-white" />
+                    </motion.button>
+                  )}
+                </AnimatePresence>
+              </motion.div>
             ))}
             
             {/* Add button (only in edit mode) */}
             {editMode && (
-              <div className="flex flex-col items-center">
+              <motion.div 
+                className="flex flex-col items-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
                 <div className="w-14 h-14 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-all duration-200">
                   <Plus size={20} className="text-gray-400" />
                 </div>
                 <span className="mt-1 text-xs text-gray-500">Add</span>
-              </div>
+              </motion.div>
             )}
           </div>
         ) : (
@@ -362,6 +425,28 @@ export function HomeTab() {
             )}
           </div>
         )}
+      </div>
+      
+      {/* App Actions Menu */}
+      <div className="px-3 pt-2 pb-3 bg-gray-50 border-t border-gray-200">
+        <div className="flex justify-around">
+          <Button variant="ghost" size="sm" className="flex flex-col items-center h-16 w-16">
+            <Bookmark className="h-5 w-5 mb-1 text-blue-500" />
+            <span className="text-xs">Favorites</span>
+          </Button>
+          <Button variant="ghost" size="sm" className="flex flex-col items-center h-16 w-16">
+            <Clock className="h-5 w-5 mb-1 text-green-500" />
+            <span className="text-xs">Recent</span>
+          </Button>
+          <Button variant="ghost" size="sm" className="flex flex-col items-center h-16 w-16">
+            <Star className="h-5 w-5 mb-1 text-amber-500" />
+            <span className="text-xs">Popular</span>
+          </Button>
+          <Button variant="ghost" size="sm" className="flex flex-col items-center h-16 w-16">
+            <User className="h-5 w-5 mb-1 text-purple-500" />
+            <span className="text-xs">Profile</span>
+          </Button>
+        </div>
       </div>
     </div>
   );
