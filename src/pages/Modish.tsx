@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ModishHeader } from '@/components/modish/ModishHeader';
 import { ModishProductDetails } from '@/components/modish/ModishProductDetails';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ const Modish = () => {
   const { id } = useParams();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const headerRef = useRef<HTMLDivElement>(null);
   
   // Default to product ID 1 if none is provided
   const productId = id || '1';
@@ -20,6 +21,25 @@ const Modish = () => {
   const productPrice = 79.99;  // Original price
   const discountPrice = 39.99;  // Discounted price
   const stock = 68;
+
+  // Handle header spacing
+  const [headerHeight, setHeaderHeight] = useState(0);
+
+  useEffect(() => {
+    const updateHeaderHeight = () => {
+      const headerElement = document.querySelector('.modish-header');
+      if (headerElement) {
+        setHeaderHeight(headerElement.clientHeight);
+      }
+    };
+
+    updateHeaderHeight();
+    window.addEventListener('resize', updateHeaderHeight);
+    
+    return () => {
+      window.removeEventListener('resize', updateHeaderHeight);
+    };
+  }, []);
 
   const handleAddToCart = () => {
     toast({
@@ -57,7 +77,10 @@ const Modish = () => {
   return (
     <div className="min-h-screen bg-gray-50 pb-[150px] overflow-x-hidden">
       <ModishHeader />
-      <div className="w-full mx-auto px-0 mt-14">
+      <div 
+        className="w-full mx-auto px-0"
+        style={{ paddingTop: `${headerHeight}px` }} // Dynamic padding based on header height
+      >
         <ModishProductDetails 
           productId={productId} 
           price={productPrice}
