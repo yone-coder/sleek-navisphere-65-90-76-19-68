@@ -77,6 +77,10 @@ export function HomeTab() {
     }
   }
 
+  const handleAppLongPress = (id: number) => {
+    console.log('Long press detected on app:', id);
+  };
+
   const quickActions = [
     { 
       icon: Send, 
@@ -332,3 +336,4 @@ export function HomeTab() {
     </div>
   );
 }
+
