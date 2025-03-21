@@ -1,18 +1,30 @@
-
-import { RefreshCw, Package, Grid, List, Bell } from "lucide-react";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import {
+  SlidersHorizontal,
+  LayoutList,
+  LayoutGrid,
+  Check,
+  X,
+  RotateCw,
+  Star,
+  Users,
+  Type,
+} from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetFooter,
+} from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
-import { apps, appCategories } from "@/components/apps/data/appsData";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import type { AppCategory } from "@/components/apps/types";
 
 interface ExploreFiltersProps {
@@ -21,14 +33,16 @@ interface ExploreFiltersProps {
   selectedCategory: AppCategory;
   setSelectedCategory: (category: AppCategory) => void;
   sortBy: "name" | "rating" | "users";
-  setSortBy: (sort: "name" | "rating" | "users") => void;
+  setSortBy: (sortBy: "name" | "rating" | "users") => void;
   viewMode: "grid" | "list";
-  setViewMode: (mode: "grid" | "list") => void;
+  setViewMode: (viewMode: "grid" | "list") => void;
   showUpdatesOnly: boolean;
-  setShowUpdatesOnly: (show: boolean) => void;
+  setShowUpdatesOnly: (showUpdatesOnly: boolean) => void;
   isRefreshing: boolean;
   onRefresh: () => void;
   updatesCount: number;
+  expandedView: boolean;
+  setExpandedView: (expandedView: boolean) => void;
 }
 
 export function ExploreFilters({
@@ -44,140 +58,185 @@ export function ExploreFilters({
   setShowUpdatesOnly,
   isRefreshing,
   onRefresh,
-  updatesCount
+  updatesCount,
+  expandedView,
+  setExpandedView,
 }: ExploreFiltersProps) {
+  const categories: AppCategory[] = [
+    "All",
+    "Shopping",
+    "Gaming",
+    "Education",
+    "Finance",
+    "Productivity",
+    "Utilities",
+    "Entertainment",
+  ];
+
+  const handleCategoryClick = (category: AppCategory) => {
+    setSelectedCategory(category);
+  };
+
+  const handleSortByClick = (sortByOption: "name" | "rating" | "users") => {
+    setSortBy(sortByOption);
+  };
+
+  const handleViewModeClick = (viewModeOption: "grid" | "list") => {
+    setViewMode(viewModeOption);
+  };
+
+  const handleToggleUpdatesOnly = () => {
+    setShowUpdatesOnly((prev) => !prev);
+  };
+
+  const handleResetFilters = () => {
+    setSelectedCategory("All");
+    setSortBy("name");
+    setViewMode("grid");
+    setShowUpdatesOnly(false);
+    setExpandedView(false);
+  };
+
   return (
-    <Drawer open={isOpen} onOpenChange={setIsOpen}>
-      <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
-          <DrawerHeader>
-            <DrawerTitle>App Categories</DrawerTitle>
-            <DrawerDescription>
-              Browse apps by category or use filters to find what you need.
-            </DrawerDescription>
-          </DrawerHeader>
-          <div className="px-4">
-            <ScrollArea className="h-[50vh] px-1">
-              <div className="space-y-1">
-                <Button
-                  variant={selectedCategory === "All" ? "default" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => {
-                    setSelectedCategory("All");
-                    setIsOpen(false);
-                  }}
-                >
-                  <Package className="mr-2 h-4 w-4" />
-                  All Apps
-                  <Badge className="ml-auto">{apps.length}</Badge>
-                </Button>
-                
-                {appCategories.map((category) => (
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <SheetContent side="right" className="w-full sm:w-[400px] border-l-2">
+        <SheetHeader className="space-y-2.5">
+          <SheetTitle>Filters</SheetTitle>
+          <SheetDescription>
+            Customize your app discovery experience.
+          </SheetDescription>
+        </SheetHeader>
+
+        <ScrollArea className="h-[calc(100vh-160px)]">
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <h4 className="font-medium">Category</h4>
+              <div className="flex flex-wrap gap-2">
+                {categories.map((category) => (
                   <Button
                     key={category}
-                    variant={selectedCategory === category ? "default" : "ghost"}
-                    className="w-full justify-start"
-                    onClick={() => {
-                      setSelectedCategory(category);
-                      setIsOpen(false);
-                    }}
+                    variant={selectedCategory === category ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => handleCategoryClick(category)}
                   >
-                    <Package className="mr-2 h-4 w-4" />
                     {category}
-                    <Badge className="ml-auto">
-                      {apps.filter(app => app.category === category).length}
-                    </Badge>
                   </Button>
                 ))}
               </div>
-            </ScrollArea>
-            
-            <div className="mt-4 space-y-3">
-              <div className="border-t pt-4">
-                <h4 className="mb-2 text-sm font-medium">Sort Apps</h4>
-                <div className="flex gap-2">
-                  <Button 
-                    variant={sortBy === "name" ? "default" : "outline"} 
-                    size="sm" 
-                    onClick={() => setSortBy("name")}
-                    className="flex-1"
-                  >
-                    Name
-                  </Button>
-                  <Button 
-                    variant={sortBy === "rating" ? "default" : "outline"} 
-                    size="sm" 
-                    onClick={() => setSortBy("rating")}
-                    className="flex-1"
-                  >
-                    Rating
-                  </Button>
-                  <Button 
-                    variant={sortBy === "users" ? "default" : "outline"} 
-                    size="sm" 
-                    onClick={() => setSortBy("users")}
-                    className="flex-1"
-                  >
-                    Popular
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="border-t pt-4">
-                <h4 className="mb-2 text-sm font-medium">View Mode</h4>
-                <div className="flex gap-2">
-                  <Button 
-                    variant={viewMode === "grid" ? "default" : "outline"} 
-                    size="sm" 
-                    onClick={() => setViewMode("grid")}
-                    className="flex-1"
-                  >
-                    <Grid className="mr-2 h-4 w-4" />
-                    Grid
-                  </Button>
-                  <Button 
-                    variant={viewMode === "list" ? "default" : "outline"} 
-                    size="sm" 
-                    onClick={() => setViewMode("list")}
-                    className="flex-1"
-                  >
-                    <List className="mr-2 h-4 w-4" />
-                    List
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="border-t pt-4">
-                <Button 
-                  variant={showUpdatesOnly ? "default" : "outline"} 
-                  size="sm" 
-                  onClick={() => setShowUpdatesOnly(!showUpdatesOnly)}
-                  className="w-full"
+            </div>
+
+            <Separator />
+
+            <div className="space-y-2">
+              <h4 className="font-medium">Sort By</h4>
+              <div className="flex flex-col gap-2">
+                <Button
+                  variant={sortBy === "name" ? "default" : "outline"}
+                  size="sm"
+                  className="justify-start"
+                  onClick={() => handleSortByClick("name")}
                 >
-                  <Bell className="mr-2 h-4 w-4" />
-                  {showUpdatesOnly ? "Showing Updates Only" : "Show Updates Only"}
-                  {updatesCount > 0 && (
-                    <Badge variant="secondary" className="ml-2">{updatesCount}</Badge>
-                  )}
+                  <Type className="mr-2 h-4 w-4" />
+                  Name
+                </Button>
+                <Button
+                  variant={sortBy === "rating" ? "default" : "outline"}
+                  size="sm"
+                  className="justify-start"
+                  onClick={() => handleSortByClick("rating")}
+                >
+                  <Star className="mr-2 h-4 w-4" />
+                  Rating
+                </Button>
+                <Button
+                  variant={sortBy === "users" ? "default" : "outline"}
+                  size="sm"
+                  className="justify-start"
+                  onClick={() => handleSortByClick("users")}
+                >
+                  <Users className="mr-2 h-4 w-4" />
+                  Popularity
                 </Button>
               </div>
             </div>
+
+            <Separator />
+
+            <div className="space-y-2">
+              <h4 className="font-medium">View Mode</h4>
+              <div className="flex gap-2">
+                <Button
+                  variant={viewMode === "grid" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => handleViewModeClick("grid")}
+                >
+                  <LayoutGrid className="mr-2 h-4 w-4" />
+                  Grid
+                </Button>
+                <Button
+                  variant={viewMode === "list" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => handleViewModeClick("list")}
+                >
+                  <LayoutList className="mr-2 h-4 w-4" />
+                  List
+                </Button>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <h4 className="font-medium">Show Updates Only</h4>
+                {updatesCount > 0 && (
+                  <Badge variant="secondary">{updatesCount}</Badge>
+                )}
+              </div>
+              <Button
+                variant={showUpdatesOnly ? "default" : "outline"}
+                size="sm"
+                className="w-full justify-start"
+                onClick={handleToggleUpdatesOnly}
+                disabled={updatesCount === 0}
+              >
+                {showUpdatesOnly ? (
+                  <>
+                    <Check className="mr-2 h-4 w-4" />
+                    Showing Apps with Updates
+                  </>
+                ) : (
+                  <>
+                    <X className="mr-2 h-4 w-4" />
+                    Show Apps with Updates
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
-          <DrawerFooter>
-            <Button
-              onClick={onRefresh}
-              disabled={isRefreshing}
-              className="w-full"
-            >
-              <RefreshCw className={`mr-2 h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
-              {isRefreshing ? "Refreshing..." : "Refresh App List"}
+        </ScrollArea>
+
+        <SheetFooter>
+          <div className="flex justify-between">
+            <Button variant="ghost" onClick={handleResetFilters}>
+              Reset Filters
             </Button>
-            <DrawerClose asChild>
-              <Button variant="outline">Close</Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </div>
-      </DrawerContent>
-    </Drawer>
+            <Button onClick={onRefresh} disabled={isRefreshing}>
+              {isRefreshing ? (
+                <>
+                  <RotateCw className="mr-2 h-4 w-4 animate-spin" />
+                  Refreshing...
+                </>
+              ) : (
+                <>
+                  <SlidersHorizontal className="mr-2 h-4 w-4" />
+                  Apply Filters
+                </>
+              )}
+            </Button>
+          </div>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 }

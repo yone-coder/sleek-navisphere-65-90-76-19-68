@@ -41,10 +41,22 @@ export function ExploreTab({
   const [activeTab, setActiveTab] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState<AppCategory>("All");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [expandedView, setExpandedView] = useState(false);
   const [sortBy, setSortBy] = useState<"name" | "rating" | "users">("name");
   const [showUpdatesOnly, setShowUpdatesOnly] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [installingApps, setInstallingApps] = useState<string[]>([]);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  // Add scroll detection for UI enhancements
+  useEffect(() => {
+    const handleScroll = () => {
+      setHasScrolled(window.scrollY > 20);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Filter apps based on current filters
   const filteredApps = apps.filter(app => {
@@ -96,9 +108,19 @@ export function ExploreTab({
     }, 2000);
   };
 
+  const toggleExpandedView = () => {
+    setExpandedView(prev => !prev);
+    
+    toast({
+      title: expandedView ? "Compact View" : "Expanded View",
+      description: expandedView ? "Switched to compact view" : "Switched to expanded view",
+      duration: 1500,
+    });
+  };
+
   return (
     <motion.div 
-      className="pb-24"
+      className={`pb-24 ${hasScrolled ? 'pt-2' : 'pt-0'}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
@@ -114,15 +136,24 @@ export function ExploreTab({
       <ExploreStats appsCount={apps.length} favoritesCount={favorites.length} updatesCount={updatesCount} />
 
       {/* Favorites Section */}
-      {favoriteApps.length > 0 && (
+      {favoriteApps.length > 0 && activeTab !== "favorites" && (
         <FavoritesSection favoriteApps={favoriteApps} />
       )}
       
       {/* Suggestions Section */}
-      <SuggestionsSection suggestedApps={suggestedApps} />
+      {activeTab === "all" && (
+        <SuggestionsSection suggestedApps={suggestedApps} />
+      )}
       
-      {/* Tab Navigation */}
-      <ExploreTabNav activeTab={activeTab} setActiveTab={setActiveTab} />
+      {/* Tab Navigation with Enhanced Features */}
+      <ExploreTabNav 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        favoriteCount={favoriteApps.length}
+        updateCount={updatesCount}
+        expandView={expandedView}
+        onToggleView={toggleExpandedView}
+      />
       
       {/* Search Bar */}
       <ExploreSearchBar onSearchOpen={() => setIsSearchOpen(true)} />
@@ -149,6 +180,7 @@ export function ExploreTab({
             favorites={favorites}
             onToggleFavorite={onToggleFavorite}
             viewMode={viewMode}
+            expandedView={expandedView}
           />
         ) : (
           <div className="py-8 text-center">
@@ -191,6 +223,8 @@ export function ExploreTab({
         isRefreshing={isRefreshing}
         onRefresh={handleRefresh}
         updatesCount={updatesCount}
+        expandedView={expandedView}
+        setExpandedView={setExpandedView}
       />
     </motion.div>
   );
