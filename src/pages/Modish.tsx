@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { ModishHeader } from '@/components/modish/ModishHeader';
 import { ModishProductDetails } from '@/components/modish/ModishProductDetails';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -12,8 +12,6 @@ const Modish = () => {
   const { id } = useParams();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const headerHeightRef = useRef<number>(0);
-  const headerRef = useRef<HTMLDivElement>(null);
   
   // Default to product ID 1 if none is provided
   const productId = id || '1';
@@ -22,31 +20,6 @@ const Modish = () => {
   const productPrice = 79.99;  // Original price
   const discountPrice = 39.99;  // Discounted price
   const stock = 68;
-
-  // Setup header height measurement
-  useEffect(() => {
-    const measureHeaderHeight = () => {
-      const headerElement = headerRef.current;
-      if (headerElement) {
-        const height = headerElement.getBoundingClientRect().height;
-        headerHeightRef.current = height;
-      }
-    };
-
-    // Measure immediately and after a delay to catch any post-render adjustments
-    measureHeaderHeight();
-    
-    // Also measure after a brief delay
-    const timeoutId = setTimeout(measureHeaderHeight, 100);
-    
-    // Also measure on window resize
-    window.addEventListener('resize', measureHeaderHeight);
-    
-    return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener('resize', measureHeaderHeight);
-    };
-  }, []);
 
   const handleAddToCart = () => {
     toast({
@@ -83,25 +56,21 @@ const Modish = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-[150px] overflow-x-hidden">
-      <div ref={headerRef}>
-        <ModishHeader />
-      </div>
-      
-      <div className="w-full mx-auto px-0">
+      <ModishHeader />
+      <div className="w-full mx-auto px-0 mt-14">
         <ModishProductDetails 
           productId={productId} 
           price={productPrice}
           discountPrice={discountPrice}
-          headerHeight={headerHeightRef.current}
         />
       </div>
       
-      {/* Store Banner Section */}
+      {/* New section for Store Banner */}
       <div className="px-3 mt-4">
         <ModishStoreBanner />
       </div>
       
-      {/* Recently Viewed Products Section */}
+      {/* New section for Recently Viewed Products */}
       <div className="mt-4">
         <ModishRecentlyViewed />
       </div>
