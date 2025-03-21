@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Store, Trophy, BookOpen, Wallet, PiggyBank, Mail, Calendar, Clock, Camera, Music, Settings, Map, Calculator, Weather, Phone, Search } from 'lucide-react';
+import { Store, Trophy, BookOpen, Wallet, PiggyBank, Mail, Calendar, Clock, Camera, Music, Settings, Map, Calculator, Cloud, Phone, Search } from 'lucide-react';
 
 export function HomeTab() {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ export function HomeTab() {
     // Row 4
     [
       { name: 'Calculator', icon: Calculator, color: 'bg-orange-500', route: '/calculator' },
-      { name: 'Weather', icon: Weather, color: 'bg-blue-300', route: '/weather' },
+      { name: 'Weather', icon: Cloud, color: 'bg-blue-300', route: '/weather' },
       { name: 'Phone', icon: Phone, color: 'bg-green-500', route: '/phone' },
       { name: 'Modish', icon: Store, color: 'bg-red-500', route: '/modish' },
     ],

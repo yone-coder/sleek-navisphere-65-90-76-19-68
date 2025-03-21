@@ -58,8 +58,7 @@ export function ExploreTab() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div className="flex-1 min-w-0">
               <CategoryTabs 
-                activeTab={activeTab} 
-                onTabChange={setActiveTab} 
+                categories={appCategories}
               />
             </div>
 
