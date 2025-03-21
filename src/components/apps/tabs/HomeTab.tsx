@@ -1,7 +1,8 @@
 
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
-import { Star } from "lucide-react";
+import { Star, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { apps } from "../data/appsData";
 import type { App } from "../types";
@@ -59,6 +60,44 @@ export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
         </div>
       </div>
       
+      {/* Sign In Section */}
+      <div className="mb-6 mx-2">
+        <Card className="bg-white shadow-sm p-4 rounded-2xl">
+          <button 
+            className="group flex items-center gap-3 w-full py-2 hover:bg-muted/60 transition-all duration-200 rounded-lg"
+            onClick={() => navigate('/login')}
+          >
+            <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center">
+              <User className="h-5 w-5 text-gray-500" />
+            </div>
+            <div className="flex flex-col items-start min-w-0">
+              <span className="text-sm font-medium truncate">Sign in</span>
+              <span className="text-xs text-muted-foreground">
+                Access your account and data
+              </span>
+            </div>
+            <div className="ml-auto">
+              <svg 
+                width="24" 
+                height="24" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-muted-foreground/70"
+              >
+                <path 
+                  d="M9 18L15 12L9 6" 
+                  stroke="currentColor" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </button>
+        </Card>
+      </div>
+      
       {/* Weather Widget */}
       <div className="mb-6 mx-2">
         <Card className="bg-gradient-to-r from-blue-400 to-blue-600 text-white p-4 rounded-2xl">
@@ -84,7 +123,11 @@ export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
               onClick={() => handleAppClick(app)}
             >
               <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
-                <app.icon className="w-7 h-7 text-white" />
+                {React.isValidElement(app.icon) ? (
+                  app.icon
+                ) : (
+                  <app.icon className="w-7 h-7 text-white" />
+                )}
                 {app.updates > 0 && (
                   <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
                     {app.updates}
@@ -108,7 +151,11 @@ export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
                 onClick={() => handleAppClick(app)}
               >
                 <div className={`w-14 h-14 rounded-[22px] ${app.color} flex items-center justify-center relative shadow-sm`}>
-                  <app.icon className="w-7 h-7 text-white" />
+                  {React.isValidElement(app.icon) ? (
+                    app.icon
+                  ) : (
+                    <app.icon className="w-7 h-7 text-white" />
+                  )}
                   {app.updates > 0 && (
                     <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
                       {app.updates}
@@ -145,7 +192,11 @@ export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
                 onClick={() => handleAppClick(app)}
               >
                 <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
-                  <app.icon className="w-7 h-7 text-white" />
+                  {React.isValidElement(app.icon) ? (
+                    app.icon
+                  ) : (
+                    <app.icon className="w-7 h-7 text-white" />
+                  )}
                   {app.updates > 0 && (
                     <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
                       {app.updates}
