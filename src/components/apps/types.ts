@@ -1,11 +1,10 @@
-
 import { LucideIcon } from "lucide-react";
 
 // Make AppCategory a string literal union type
 export type AppCategory = 
   | "All" 
   | "Shopping" 
-  | "Fashion"  // Added Fashion here
+  | "Fashion"
   | "Finance" 
   | "Entertainment" 
   | "Gaming" 
@@ -21,7 +20,9 @@ export type AppCategory =
   | "Food" 
   | "Services" 
   | "Real Estate"
-  | "Sellers";
+  | "Sellers"
+  | "Productivity"
+  | "Utilities";
 
 export type IconComponent = LucideIcon;
 
@@ -51,7 +52,7 @@ export interface AppControlsProps {
   viewMode: "grid" | "list";
   showUpdatesOnly: boolean;
   updatesCount: number;
-  categories: readonly AppCategory[]; // Updated to accept readonly array
+  categories: readonly AppCategory[];
   onCategoryChange: (category: AppCategory) => void;
   onSortChange: (sort: "name" | "rating" | "users") => void;
   onViewModeChange: (mode: "grid" | "list") => void;

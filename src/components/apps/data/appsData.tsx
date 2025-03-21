@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Grid2X2, ShoppingCart, ActivitySquare, Gamepad2, Trophy, CreditCard, Users, Gift, Settings, Mail, Bell, Clock, Star, Store, BookOpen, Wallet, PiggyBank, Briefcase, Search, Ticket, Calendar, Bitcoin, Globe, Heart, Building, Presentation, UserPlus, Shirt } from "lucide-react";
 import type { App, AppCategory } from "../types";
@@ -431,7 +432,9 @@ export const appCategories = [
   "Food",
   "Services",
   "Real Estate",
-  "Sellers"
+  "Sellers",
+  "Productivity",
+  "Utilities"
 ] as const;
 
 export const categories = [
