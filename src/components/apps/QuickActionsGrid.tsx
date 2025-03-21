@@ -23,7 +23,8 @@ export const QuickActionsGrid = ({ actions }: QuickActionsGridProps) => {
         <motion.button
           key={index}
           className="flex flex-col items-center gap-1.5 p-2 rounded-xl transition-all duration-300"
-          whileTap={{ scale: 0.95 }}
+          whileHover={{ y: -3 }}
+          whileTap={{ scale: 0.92 }}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.05 }}
@@ -32,7 +33,7 @@ export const QuickActionsGrid = ({ actions }: QuickActionsGridProps) => {
           <div className={`h-12 w-12 rounded-full ${action.color} flex items-center justify-center mb-1 shadow-md`}>
             <action.icon className="h-5 w-5 text-white" />
           </div>
-          <span className="text-xs text-gray-700">{action.label}</span>
+          <span className="text-xs text-gray-700 font-medium">{action.label}</span>
         </motion.button>
       ))}
     </div>

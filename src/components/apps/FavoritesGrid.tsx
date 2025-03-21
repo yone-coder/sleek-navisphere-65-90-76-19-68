@@ -1,8 +1,7 @@
 
-import React, { useState } from 'react';
-import { X, Plus, Heart } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { AnimatePresence, motion } from 'framer-motion';
+import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X } from 'lucide-react';
 
 interface FavoriteApp {
   id: number;
@@ -15,83 +14,84 @@ interface FavoriteApp {
 interface FavoritesGridProps {
   apps: FavoriteApp[];
   editMode: boolean;
+  activeAppId: number | null;
   onToggleFavorite: (id: number) => void;
   onAppTap: (id: number) => void;
   onAppLongPress: (id: number) => void;
-  activeAppId: number | null;
 }
 
 export const FavoritesGrid = ({ 
   apps, 
   editMode, 
+  activeAppId,
   onToggleFavorite, 
-  onAppTap, 
-  onAppLongPress,
-  activeAppId
+  onAppTap,
+  onAppLongPress
 }: FavoritesGridProps) => {
-  const { toast } = useToast();
-
   if (apps.length === 0) {
     return (
-      <div className="h-full flex flex-col items-center justify-center text-gray-500">
-        <Heart size={48} />
-        <p className="mt-4 text-center">No favorite apps found</p>
-        <p className="text-sm text-center mt-2">Try adding some apps to favorites</p>
+      <div className="flex flex-col items-center justify-center py-8 text-center">
+        <div className="bg-gray-100 w-16 h-16 rounded-full flex items-center justify-center mb-3">
+          <span className="text-gray-400 text-2xl">?</span>
+        </div>
+        <p className="text-sm text-gray-600 mb-1">No favorites found</p>
+        <p className="text-xs text-gray-500 max-w-xs">
+          Your favorite apps will appear here. Browse and mark apps as favorites to add them.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-4 gap-3">
-      {apps.map(app => (
-        <motion.div 
-          key={app.id} 
-          className="relative flex flex-col items-center"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          animate={{ 
-            scale: activeAppId === app.id ? 1.1 : 1,
-            boxShadow: activeAppId === app.id ? "0 10px 25px rgba(0,0,0,0.2)" : "none" 
-          }}
-          onTapStart={() => onAppLongPress(app.id)}
-          onTap={() => onAppTap(app.id)}
-        >
-          <div className={`${app.color} w-16 h-16 rounded-xl flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 active:scale-95`}>
-            <span className="text-white text-xl font-bold">{app.letter}</span>
-          </div>
-          <span className="mt-2 text-xs text-center truncate w-full">{app.name}</span>
-          
-          <AnimatePresence>
+    <div className="grid grid-cols-4 gap-4">
+      <AnimatePresence>
+        {apps.map((app) => (
+          <motion.div
+            key={app.id}
+            layout
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ 
+              opacity: 1, 
+              scale: activeAppId === app.id ? 1.1 : 1,
+              rotate: editMode ? [-2, 2, -2] : 0,
+            }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ 
+              layout: { type: "spring", stiffness: 200, damping: 20 },
+              rotate: { repeat: editMode ? Infinity : 0, duration: 0.3 }
+            }}
+            className="relative flex flex-col items-center"
+            whileHover={{ scale: editMode ? 1 : 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onTouchStart={() => {
+              const timer = setTimeout(() => onAppLongPress(app.id), 500);
+              return () => clearTimeout(timer);
+            }}
+            onClick={() => onAppTap(app.id)}
+          >
+            <div className={`${app.color} w-14 h-14 rounded-xl flex items-center justify-center shadow-md mb-1`}>
+              <span className="text-white text-xl font-bold">{app.letter}</span>
+            </div>
+            
             {editMode && (
-              <motion.button 
-                initial={{ opacity: 0, scale: 0.5 }}
+              <motion.button
+                className="absolute -top-2 -right-2 bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-md border-2 border-white"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleFavorite(app.id);
+                }}
+                initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.5 }}
-                onClick={() => onToggleFavorite(app.id)}
-                className="absolute -top-1 -right-1 bg-red-500 rounded-full p-1 shadow-md transition-transform hover:scale-110"
+                exit={{ opacity: 0, scale: 0 }}
               >
-                <X size={10} className="text-white" />
+                <X size={14} />
               </motion.button>
             )}
-          </AnimatePresence>
-        </motion.div>
-      ))}
-      
-      {/* Add button (only in edit mode) */}
-      {editMode && (
-        <motion.div 
-          className="flex flex-col items-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          whileHover={{ scale: 1.05 }}
-        >
-          <div className="w-16 h-16 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-all duration-200">
-            <Plus size={24} className="text-gray-400" />
-          </div>
-          <span className="mt-2 text-xs text-gray-500">Add</span>
-        </motion.div>
-      )}
+            
+            <span className="text-xs text-center line-clamp-1 w-full">{app.name}</span>
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 };

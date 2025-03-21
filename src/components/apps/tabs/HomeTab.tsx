@@ -11,7 +11,6 @@ import { Card } from "@/components/ui/card";
 import { QuickActionsGrid, QuickAction } from '@/components/apps/QuickActionsGrid';
 import { SuggestedAppsSection, SuggestedApp } from '@/components/apps/SuggestedAppsSection';
 import { NotificationsSection, Notification } from '@/components/apps/NotificationsSection';
-import { FavoritesGrid } from '@/components/apps/FavoritesGrid';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { RecentActivitySection, RecentApp, Transaction, ActivityItem } from '@/components/apps/RecentActivitySection';
 
@@ -259,207 +258,206 @@ export function HomeTab() {
       <ProfileCard />
 
       <motion.div 
-        className="flex-1 overflow-y-auto"
+        className="flex-1 overflow-y-auto px-4 pt-2 pb-20 no-horizontal-overflow"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="px-4 pt-2 pb-20">
-          {suggestedApps.length > 0 && (
-            <SuggestedAppsSection 
-              title={`Good ${currentTime.getHours() < 12 ? 'Morning' : currentTime.getHours() < 18 ? 'Afternoon' : 'Evening'}`}
-              description="Apps you might need right now"
-              apps={suggestedApps}
-            />
-          )}
+        {suggestedApps.length > 0 && (
+          <SuggestedAppsSection 
+            title={`Good ${currentTime.getHours() < 12 ? 'Morning' : currentTime.getHours() < 18 ? 'Afternoon' : 'Evening'}`}
+            description="Apps you might need right now"
+            apps={suggestedApps}
+            className="mb-6"
+          />
+        )}
 
-          <div className="mb-5">
-            <h2 className="text-sm font-semibold text-gray-800 mb-3">Quick Actions</h2>
-            <QuickActionsGrid actions={quickActions} />
+        <div className="mb-6">
+          <h2 className="text-sm font-semibold text-gray-800 mb-3">Quick Actions</h2>
+          <QuickActionsGrid actions={quickActions} />
+        </div>
+
+        <div className="mb-6">
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="text-sm font-semibold text-gray-800">Activity & Notifications</h2>
+            <Button variant="ghost" size="sm" className="text-xs text-blue-500">
+              See all <ChevronRight className="h-3 w-3 ml-1" />
+            </Button>
+          </div>
+          
+          <ScrollArea className="w-full" type="scroll">
+            <div className="flex space-x-4 pb-4 pr-4">
+              <RecentActivitySection activities={recentActivities.slice(0, 4)} className="min-w-[280px]" />
+              <NotificationsSection notifications={notifications} className="min-w-[280px]" />
+            </div>
+          </ScrollArea>
+        </div>
+
+        <div className="mb-6">
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="text-sm font-semibold text-gray-800">Smart Collections</h2>
+            <Button variant="ghost" size="sm" className="text-xs text-blue-500">
+              Edit <ChevronRight className="h-3 w-3 ml-1" />
+            </Button>
           </div>
 
-          <div className="mb-5">
-            <div className="flex justify-between items-center mb-2">
-              <h2 className="text-sm font-semibold text-gray-800">Activity & Notifications</h2>
-              <Button variant="ghost" size="sm" className="text-xs text-blue-500">
-                See all <ChevronRight className="h-3 w-3 ml-1" />
-              </Button>
-            </div>
-            
-            <ScrollArea className="w-full" type="scroll" orientation="horizontal">
-              <div className="flex space-x-4 pb-4 pr-4">
-                <RecentActivitySection activities={recentActivities.slice(0, 4)} />
-                <NotificationsSection notifications={notifications} />
-              </div>
-            </ScrollArea>
-          </div>
-
-          <div className="mb-5">
-            <div className="flex justify-between items-center mb-3">
-              <h2 className="text-sm font-semibold text-gray-800">Smart Collections</h2>
-              <Button variant="ghost" size="sm" className="text-xs text-blue-500">
-                Edit <ChevronRight className="h-3 w-3 ml-1" />
-              </Button>
-            </div>
-
-            <div className="space-y-3">
-              {smartSuggestions.map((collection) => (
-                <motion.div
-                  key={collection.id}
-                  className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm"
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="flex justify-between items-center mb-2">
-                    <div>
-                      <h3 className="text-sm font-medium">{collection.title}</h3>
-                      <p className="text-xs text-gray-500">{collection.time}</p>
-                    </div>
-                    <Button variant="outline" size="sm" className="h-7 text-xs border-gray-200">
-                      Launch All
-                    </Button>
-                  </div>
-                  <div className="flex gap-2">
-                    {collection.apps.map((app) => (
-                      <div key={app.id} className="flex flex-col items-center">
-                        <div className={`${app.color} w-10 h-10 rounded-lg flex items-center justify-center shadow-sm mb-1`}>
-                          <span className="text-white text-sm font-bold">{app.letter}</span>
-                        </div>
-                        <span className="text-xs">{app.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mb-5">
-            <h2 className="text-sm font-semibold text-gray-800 mb-3">Pinned</h2>
-            <div className="grid grid-cols-4 gap-4">
-              {pinnedApps.map(app => (
-                <motion.div
-                  key={app.id}
-                  className="flex flex-col items-center"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <div className="relative">
-                    <div className={`${app.color} w-14 h-14 rounded-xl flex items-center justify-center shadow-md mb-1`}>
-                      <app.icon className="h-6 w-6 text-white" />
-                    </div>
-                    {app.notification > 0 && (
-                      <Badge className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center px-1">
-                        {app.notification}
-                      </Badge>
-                    )}
-                  </div>
-                  <span className="text-xs text-center">{app.name}</span>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          <div className="sticky top-0 z-10 bg-white pt-2 pb-2">
-            <div className="flex justify-between items-center mb-2">
-              <h1 className="text-base font-semibold text-gray-800">Favorites</h1>
-              <div className="flex space-x-4">
-                {searchMode ? (
-                  <button 
-                    onClick={clearSearch}
-                    className="text-blue-500"
-                  >
-                    <X size={18} />
-                  </button>
-                ) : (
-                  <button 
-                    onClick={() => setSearchMode(true)}
-                    className="text-blue-500"
-                  >
-                    <Search size={18} />
-                  </button>
-                )}
-                <button 
-                  onClick={() => setEditMode(!editMode)}
-                  className={`${editMode ? 'text-red-500' : 'text-blue-500'} text-xs font-medium`}
-                >
-                  {editMode ? 'Done' : 'Edit'}
-                </button>
-              </div>
-            </div>
-
-            <div className="mb-3">
-              <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
-                <TabsList className="bg-white rounded-full border border-gray-200 p-0.5 shadow-sm">
-                  {categories.map(category => (
-                    <TabsTrigger 
-                      key={category.id} 
-                      value={category.id}
-                      className="py-1 px-3 text-xs rounded-full data-[state=active]:bg-blue-500 data-[state=active]:text-white"
-                    >
-                      {category.label}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
-            </div>
-
-            {searchMode && (
-              <motion.div 
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                className="mb-3"
+          <div className="space-y-3">
+            {smartSuggestions.map((collection) => (
+              <motion.div
+                key={collection.id}
+                className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm"
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search favorites..."
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    className="w-full p-2 bg-white rounded-lg pl-8 text-sm border border-gray-200 shadow-sm"
-                    autoFocus
-                  />
-                  <Search size={16} className="absolute left-2 top-2.5 text-gray-400" />
+                <div className="flex justify-between items-center mb-2">
+                  <div>
+                    <h3 className="text-sm font-medium">{collection.title}</h3>
+                    <p className="text-xs text-gray-500">{collection.time}</p>
+                  </div>
+                  <Button variant="outline" size="sm" className="h-7 text-xs border-gray-200">
+                    Launch All
+                  </Button>
+                </div>
+                <div className="flex gap-2">
+                  {collection.apps.map((app) => (
+                    <div key={app.id} className="flex flex-col items-center">
+                      <div className={`${app.color} w-10 h-10 rounded-lg flex items-center justify-center shadow-sm mb-1`}>
+                        <span className="text-white text-sm font-bold">{app.letter}</span>
+                      </div>
+                      <span className="text-xs">{app.name}</span>
+                    </div>
+                  ))}
                 </div>
               </motion.div>
-            )}
+            ))}
+          </div>
+        </div>
+
+        <div className="mb-6">
+          <h2 className="text-sm font-semibold text-gray-800 mb-3">Pinned</h2>
+          <div className="grid grid-cols-4 gap-4">
+            {pinnedApps.map(app => (
+              <motion.div
+                key={app.id}
+                className="flex flex-col items-center"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <div className="relative">
+                  <div className={`${app.color} w-14 h-14 rounded-xl flex items-center justify-center shadow-md mb-1`}>
+                    <app.icon className="h-6 w-6 text-white" />
+                  </div>
+                  {app.notification > 0 && (
+                    <Badge className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center px-1">
+                      {app.notification}
+                    </Badge>
+                  )}
+                </div>
+                <span className="text-xs text-center">{app.name}</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <div className="flex justify-between items-center mb-3">
+            <h1 className="text-base font-semibold text-gray-800">Favorites</h1>
+            <div className="flex space-x-4">
+              {searchMode ? (
+                <button 
+                  onClick={clearSearch}
+                  className="text-blue-500"
+                >
+                  <X size={18} />
+                </button>
+              ) : (
+                <button 
+                  onClick={() => setSearchMode(true)}
+                  className="text-blue-500"
+                >
+                  <Search size={18} />
+                </button>
+              )}
+              <button 
+                onClick={() => setEditMode(!editMode)}
+                className={`${editMode ? 'text-red-500' : 'text-blue-500'} text-xs font-medium`}
+              >
+                {editMode ? 'Done' : 'Edit'}
+              </button>
+            </div>
           </div>
 
-          {!searchMode && activeCategory === 'recent' && (
-            <div className="mb-4">
-              <h2 className="text-xs font-medium text-gray-600 mb-2">Recently Used</h2>
-              <div className="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
-                {recentApps.map(app => (
-                  <motion.div 
-                    key={app.id} 
-                    className="flex items-center p-2 hover:bg-gray-50 rounded-lg"
-                    whileHover={{ x: 5 }}
-                    whileTap={{ scale: 0.98 }}
+          <div className="mb-3">
+            <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
+              <TabsList className="bg-white rounded-full border border-gray-200 p-0.5 shadow-sm w-full">
+                {categories.map(category => (
+                  <TabsTrigger 
+                    key={category.id} 
+                    value={category.id}
+                    className="py-1 px-3 text-xs rounded-full data-[state=active]:bg-blue-500 data-[state=active]:text-white flex-1"
                   >
-                    <div className={`${app.color} w-10 h-10 rounded-xl flex items-center justify-center mr-3 shadow-sm`}>
-                      <span className="text-white text-lg font-bold">{app.letter}</span>
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium">{app.name}</p>
-                      <p className="text-xs text-gray-500">{app.time}</p>
-                    </div>
-                    <Badge variant="outline" className="text-xs bg-gray-100">Open</Badge>
-                  </motion.div>
+                    {category.label}
+                  </TabsTrigger>
                 ))}
-              </div>
-            </div>
-          )}
+              </TabsList>
+            </Tabs>
+          </div>
 
-          <FavoritesGrid 
-            apps={filteredApps}
-            editMode={editMode}
-            onToggleFavorite={toggleFavorite}
-            onAppTap={handleAppTap}
-            onAppLongPress={handleAppLongPress}
-            activeAppId={activeAppId}
-          />
+          {searchMode && (
+            <motion.div 
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="mb-3"
+            >
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search favorites..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  className="w-full p-2 bg-white rounded-lg pl-8 text-sm border border-gray-200 shadow-sm"
+                  autoFocus
+                />
+                <Search size={16} className="absolute left-2 top-2.5 text-gray-400" />
+              </div>
+            </motion.div>
+          )}
         </div>
+
+        {!searchMode && activeCategory === 'recent' && (
+          <div className="mb-4">
+            <h2 className="text-xs font-medium text-gray-600 mb-2">Recently Used</h2>
+            <div className="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+              {recentApps.map(app => (
+                <motion.div 
+                  key={app.id} 
+                  className="flex items-center p-2 hover:bg-gray-50 rounded-lg"
+                  whileHover={{ x: 5 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div className={`${app.color} w-10 h-10 rounded-xl flex items-center justify-center mr-3 shadow-sm`}>
+                    <span className="text-white text-lg font-bold">{app.letter}</span>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">{app.name}</p>
+                    <p className="text-xs text-gray-500">{app.time}</p>
+                  </div>
+                  <Badge variant="outline" className="text-xs bg-gray-100">Open</Badge>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <FavoritesGrid 
+          apps={filteredApps}
+          editMode={editMode}
+          onToggleFavorite={toggleFavorite}
+          onAppTap={handleAppTap}
+          onAppLongPress={handleAppLongPress}
+          activeAppId={activeAppId}
+        />
       </motion.div>
       
       <div className="fixed bottom-0 left-0 right-0 px-3 pt-2 pb-safe bg-white border-t border-gray-200 shadow-lg z-20">

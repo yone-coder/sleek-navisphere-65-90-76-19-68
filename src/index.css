@@ -35,6 +35,22 @@
     max-width: 100%;
     overflow-x: hidden;
   }
+
+  .glass-effect {
+    @apply backdrop-blur-lg bg-white/70 border border-white/10;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-md hover:-translate-y-1;
+  }
+  
+  .icon-bounce {
+    @apply hover:animate-bounce;
+  }
+  
+  .soft-shadow {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
 }
 
 @layer base {
@@ -112,4 +128,29 @@
 
 .pb-safe {
   padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
+
+/* Animation utilities */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+/* Add smooth transitions */
+.smooth-transition {
+  @apply transition-all duration-300 ease-in-out;
 }

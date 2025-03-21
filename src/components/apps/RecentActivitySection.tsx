@@ -3,6 +3,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight, ArrowDownLeft, ArrowUpRight, Bell, Play } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 export interface RecentApp {
   id: number;
@@ -40,7 +42,7 @@ export const RecentActivitySection = ({ activities, className = "" }: RecentActi
   if (activities.length === 0) return null;
   
   return (
-    <div className={`min-w-[280px] flex-shrink-0 ${className}`}>
+    <div className={cn("flex-shrink-0", className)}>
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-sm font-semibold text-gray-800">Recent Activity</h2>
         <Button variant="ghost" size="sm" className="text-xs text-blue-500">
@@ -59,6 +61,7 @@ export const RecentActivitySection = ({ activities, className = "" }: RecentActi
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
+                whileHover={{ x: 5 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <div className="flex items-center gap-3">
@@ -72,7 +75,7 @@ export const RecentActivitySection = ({ activities, className = "" }: RecentActi
                     )}
                   </div>
                   <div>
-                    <p className="font-medium text-sm">
+                    <p className="font-medium text-sm line-clamp-1">
                       {transaction.subtype === "received" ? transaction.sender : transaction.recipient}
                     </p>
                     <p className="text-xs text-gray-400">
@@ -80,8 +83,8 @@ export const RecentActivitySection = ({ activities, className = "" }: RecentActi
                     </p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className={`font-semibold ${
+                <div className="text-right ml-2">
+                  <p className={`font-semibold whitespace-nowrap ${
                     transaction.subtype === "received" ? "text-green-600" : "text-red-600"
                   }`}>
                     {transaction.subtype === "received" ? "+" : "-"}${transaction.amount}
@@ -98,6 +101,7 @@ export const RecentActivitySection = ({ activities, className = "" }: RecentActi
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
+                whileHover={{ x: 5 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <div className={`${app.color} w-10 h-10 rounded-lg flex items-center justify-center mr-3 shadow-sm`}>
@@ -107,7 +111,7 @@ export const RecentActivitySection = ({ activities, className = "" }: RecentActi
                   <p className="text-sm font-medium">{app.name}</p>
                   <p className="text-xs text-gray-500">Used {app.time}</p>
                 </div>
-                <Button variant="ghost" size="sm" className="h-8 w-8 rounded-full p-0">
+                <Button variant="ghost" size="sm" className="h-8 w-8 rounded-full p-0 ml-2">
                   <Play size={14} className="text-gray-500" />
                 </Button>
               </motion.div>
