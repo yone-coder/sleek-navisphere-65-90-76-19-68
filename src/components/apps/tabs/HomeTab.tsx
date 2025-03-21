@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
@@ -170,4 +171,169 @@ export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
       <div className="fixed inset-0 bg-black/60 z-40 flex flex-col">
         <div className="flex justify-between items-center p-4">
           <Button
-
+            variant="ghost"
+            size="icon"
+            className="text-white"
+            onClick={() => setIsControlCenterOpen(!isControlCenterOpen)}
+          >
+            <Settings className="h-6 w-6" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-white"
+            onClick={handleLockScreen}
+          >
+            <Lock className="h-6 w-6" />
+          </Button>
+        </div>
+        
+        {/* Weather widget */}
+        <div className="mx-4 mb-6 p-4 bg-black/30 backdrop-blur-sm rounded-xl text-white">
+          <div className="flex justify-between items-start">
+            <div>
+              <h3 className="text-2xl font-light">Port-au-Prince</h3>
+              <p className="text-sm opacity-80">Partly Cloudy</p>
+            </div>
+            <div className="text-3xl font-light">31°</div>
+          </div>
+          <div className="mt-4 flex justify-between">
+            <div className="text-center">
+              <p className="text-xs">Now</p>
+              <p className="font-medium">31°</p>
+            </div>
+            <div className="text-center">
+              <p className="text-xs">12PM</p>
+              <p className="font-medium">33°</p>
+            </div>
+            <div className="text-center">
+              <p className="text-xs">1PM</p>
+              <p className="font-medium">34°</p>
+            </div>
+            <div className="text-center">
+              <p className="text-xs">2PM</p>
+              <p className="font-medium">34°</p>
+            </div>
+            <div className="text-center">
+              <p className="text-xs">3PM</p>
+              <p className="font-medium">33°</p>
+            </div>
+          </div>
+        </div>
+        
+        {/* Search bar */}
+        <div className="mx-4 mb-6">
+          <div 
+            className="flex items-center bg-white/20 backdrop-blur-md rounded-xl px-4 py-2 text-white"
+            onClick={() => navigate('/search')}
+          >
+            <Search className="w-5 h-5 mr-2 opacity-80" />
+            <span className="opacity-80">Search apps, contacts, web...</span>
+          </div>
+        </div>
+        
+        {/* Edit mode toggle */}
+        <div className="px-4 mb-4 flex justify-end">
+          <Button
+            variant={isEditMode ? "secondary" : "ghost"}
+            size="sm"
+            className={`text-white ${isEditMode ? 'bg-white/30' : 'bg-transparent'}`}
+            onClick={() => setIsEditMode(!isEditMode)}
+          >
+            <Edit className="h-4 w-4 mr-2" />
+            {isEditMode ? "Done" : "Edit"}
+          </Button>
+        </div>
+        
+        {/* Wallpaper selector */}
+        {isEditMode && (
+          <div className="px-4 mb-4">
+            <p className="text-white text-sm mb-2">Choose Wallpaper</p>
+            <div className="flex gap-2 overflow-x-auto pb-2">
+              {wallpapers.map((wallpaper, index) => (
+                <button
+                  key={index}
+                  className={`w-12 h-12 rounded-lg ${wallpaper} border-2 flex-shrink-0 ${selectedWallpaper === index ? 'border-white' : 'border-transparent'}`}
+                  onClick={() => setSelectedWallpaper(index)}
+                ></button>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {/* App Grid */}
+        <ScrollArea className="flex-grow px-4">
+          <div className="grid grid-cols-4 gap-4 mb-8">
+            {appRows.map((row, rowIndex) => (
+              <React.Fragment key={rowIndex}>
+                {row.map((app) => (
+                  <div
+                    key={app.name}
+                    className="relative flex flex-col items-center"
+                    onClick={() => handleAppClick(app)}
+                  >
+                    {isEditMode && (
+                      <button
+                        className="absolute -right-1 -top-1 z-10 bg-red-500 rounded-full w-5 h-5 flex items-center justify-center text-white text-xs"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Remove app logic would go here
+                        }}
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    )}
+                    <div className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${
+                      app.color ? app.color : 'from-blue-500 to-indigo-600'
+                    } flex items-center justify-center ${isEditMode ? 'animate-wiggle' : ''}`}>
+                      {app.icon || <AppWindow className="w-8 h-8 text-white" />}
+                    </div>
+                    <p className="mt-1 text-xs text-center text-white font-medium">
+                      {app.name}
+                    </p>
+                    <button
+                      className={`mt-1 ${favorites.some(fav => fav.name === app.name) ? 'text-yellow-400' : 'text-white/60'}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onToggleFavorite(app.name);
+                      }}
+                    >
+                      <Star className="w-4 h-4 fill-current" />
+                    </button>
+                  </div>
+                ))}
+              </React.Fragment>
+            ))}
+          </div>
+        </ScrollArea>
+        
+        {/* Bottom Dock */}
+        <div className="fixed bottom-8 inset-x-0 flex justify-center">
+          <div className="bg-white/20 backdrop-blur-md rounded-2xl p-2 mx-4 w-full max-w-xs">
+            <div className="grid grid-cols-4 gap-2">
+              {mostUsedApps.map((app) => (
+                <div
+                  key={app.name}
+                  className="flex flex-col items-center"
+                  onClick={() => handleAppClick(app)}
+                >
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${
+                    app.color ? app.color : 'from-blue-500 to-indigo-600'
+                  } flex items-center justify-center`}>
+                    {app.icon || <AppWindow className="w-8 h-8 text-white" />}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <style>
+        {`.animate-wiggle {
+          animation: wiggle 1s ease-in-out infinite;
+        }`}
+      </style>
+    </div>
+  );
+}
