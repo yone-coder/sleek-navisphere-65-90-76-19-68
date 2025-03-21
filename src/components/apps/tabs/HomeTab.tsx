@@ -2,8 +2,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
-import { User, Camera, Headphones, Image, Film, Music, Play, Tv } from "lucide-react";
+import { User, Camera, Headphones, Image, Film, Music, Play, Tv, Shirt, Store, Wallet, Gamepad2, Ticket, Shopping } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import type { App } from "@/components/apps/types";
 
 interface HomeTabProps {
   favorites: App[];
@@ -13,42 +14,13 @@ interface HomeTabProps {
 export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
   const navigate = useNavigate();
   
-  // Media apps data
-  const mediaApps = [
-    { name: "Camera", icon: Camera, color: "bg-gray-200", route: "/camera" },
-    { name: "Disney+", icon: () => (
-      <div className="text-white text-xl font-bold">D+</div>
-    ), color: "bg-blue-900", route: "/disney" },
-    { name: "Google TV", icon: Tv, color: "bg-white", route: "/google-tv" },
-    { name: "Headphones", icon: Headphones, color: "bg-amber-200", route: "/headphones" },
-    { name: "Musixmatch", icon: Music, color: "bg-red-400", route: "/musixmatch" },
-    { name: "Netflix", icon: Film, color: "bg-black", route: "/netflix" },
-    { name: "Photos", icon: Image, color: "bg-white", route: "/photos" },
-    { name: "Resplash", icon: () => (
-      <div className="flex items-center">
-        <div className="h-3 w-3 bg-black rounded-full mr-1"></div>
-        <div className="h-4 w-4 bg-black rounded-full"></div>
-      </div>
-    ), color: "bg-white", route: "/resplash" },
-    { name: "Snapseed", icon: () => (
-      <div className="text-white text-sm">
-        <div className="flex items-center">
-          <div className="h-3 w-3 bg-lime-400 mr-1"></div>
-          <div className="h-3 w-3 bg-gray-700"></div>
-        </div>
-      </div>
-    ), color: "bg-gray-800", route: "/snapseed" },
-    { name: "Spotify", icon: () => (
-      <div className="text-white text-sm">
-        <div className="h-4 w-4 bg-green-500 rounded-full flex items-center justify-center">
-          <div className="h-2 w-2 border-t-2 border-r-2 border-white transform rotate-45"></div>
-        </div>
-      </div>
-    ), color: "bg-black", route: "/spotify" },
-    { name: "Tabs", icon: () => (
-      <div className="text-black text-sm font-bold">G</div>
-    ), color: "bg-yellow-400", route: "/tabs" },
-    { name: "YouTube", icon: Play, color: "bg-white", route: "/youtube" }
+  // Filtered list of apps available on the page
+  const availableApps = [
+    { name: "Modish", icon: Shirt, color: "bg-slate-800", route: "/modish" },
+    { name: "Wallet", icon: Wallet, color: "bg-purple-600", route: "/wallet" },
+    { name: "Games", icon: Gamepad2, color: "bg-green-600", route: "/games-pages" },
+    { name: "Borlette", icon: Ticket, color: "bg-zinc-800", route: "/borlette" },
+    { name: "Shopping", icon: Shopping, color: "bg-emerald-500", route: "/marketplace" }
   ];
   
   const handleAppClick = (route: string) => {
@@ -104,11 +76,11 @@ export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
         </Card>
       </div>
       
-      {/* Media Apps Grid Section */}
-      <div className="px-4">
-        <h2 className="text-2xl font-bold mb-4 text-white">Media</h2>
-        <div className="grid grid-cols-4 gap-4">
-          {mediaApps.map((app, index) => (
+      {/* Apps Grid Section - Full width with minimal padding */}
+      <div className="px-2">
+        <h2 className="text-2xl font-bold mb-4">My Apps</h2>
+        <div className="grid grid-cols-4 gap-3">
+          {availableApps.map((app, index) => (
             <div 
               key={index} 
               className="flex flex-col items-center"
@@ -118,10 +90,10 @@ export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
                 {React.isValidElement(app.icon) ? (
                   app.icon
                 ) : (
-                  <app.icon className="w-8 h-8 text-gray-800" />
+                  <app.icon className="w-8 h-8 text-white" />
                 )}
               </div>
-              <span className="text-xs text-white">{app.name}</span>
+              <span className="text-xs text-gray-800">{app.name}</span>
             </div>
           ))}
         </div>
