@@ -63,7 +63,7 @@ export default function Apps() {
       {showSplash && <SplashScreen onDismiss={handleDismissSplash} />}
       
       <div className="flex-1 overflow-y-auto">
-        <AppsHeader onOpenSearch={() => setIsSearchOpen(true)} />
+        <AppsHeader />
         
         <div className="h-full flex flex-col">
           <div className="px-4 py-2">
