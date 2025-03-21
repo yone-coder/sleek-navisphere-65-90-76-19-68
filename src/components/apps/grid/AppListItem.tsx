@@ -1,7 +1,8 @@
 
-import { Star } from "lucide-react";
+import { Star, Download } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import type { App } from "../types";
 
 interface AppListItemProps {
@@ -59,12 +60,16 @@ export const AppListItem = ({ app, isFavorite, onToggleFavorite, onClick }: AppL
   };
 
   return (
-    <div className="relative w-full p-3 hover:bg-gray-50 rounded-lg transition-colors" onClick={onClick}>
+    <motion.div 
+      className="relative w-full p-3 hover:bg-gray-50 rounded-lg transition-colors" 
+      onClick={onClick}
+      whileHover={{ backgroundColor: "rgba(0,0,0,0.03)" }}
+    >
       <div className="flex items-center gap-4">
-        <div className={`w-12 h-12 rounded-xl bg-gradient-to-tr ${getGradient(app.color)} flex items-center justify-center relative flex-shrink-0`}>
+        <div className={`w-12 h-12 rounded-xl bg-gradient-to-tr ${getGradient(app.color)} flex items-center justify-center relative flex-shrink-0 shadow-md`}>
           <app.icon className="w-6 h-6 text-white" />
           {app.updates > 0 && (
-            <Badge className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5">
+            <Badge className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5 px-1.5">
               {app.updates}
             </Badge>
           )}
@@ -83,8 +88,9 @@ export const AppListItem = ({ app, isFavorite, onToggleFavorite, onClick }: AppL
         </div>
         <div className="flex items-center gap-3">
           {app.users && (
-            <Badge variant="secondary" className="text-[10px]">
-              {app.users} users
+            <Badge variant="outline" className="text-[10px] flex items-center">
+              <Download className="w-3 h-3 mr-1" />
+              {app.users}
             </Badge>
           )}
           <Button
@@ -101,6 +107,6 @@ export const AppListItem = ({ app, isFavorite, onToggleFavorite, onClick }: AppL
           </Button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };

@@ -1,7 +1,8 @@
 
-import { Star, Clock } from "lucide-react";
+import { Star, Clock, Download } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import type { App } from "../types";
 
 interface AppGridItemProps {
@@ -59,17 +60,22 @@ export const AppGridItem = ({ app, isFavorite, onToggleFavorite, onClick }: AppG
   };
 
   return (
-    <div className="relative w-full overflow-hidden" onClick={onClick}>
+    <motion.div 
+      className="relative w-full overflow-hidden" 
+      onClick={onClick}
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.2 }}
+    >
       <div className="relative flex flex-col items-center gap-2 p-4 h-auto w-full">
-        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-tr ${getGradient(app.color)} flex items-center justify-center relative`}>
-          <app.icon className="w-7 h-7 text-white" />
+        <div className={`w-16 h-16 rounded-xl bg-gradient-to-tr ${getGradient(app.color)} flex items-center justify-center relative shadow-md`}>
+          <app.icon className="w-8 h-8 text-white" />
           {app.updates > 0 && (
             <Badge className="absolute -top-2 -right-2 bg-red-500 text-[10px] h-5">
-              {app.updates} NEW
+              {app.updates}
             </Badge>
           )}
         </div>
-        <div className="text-center w-full overflow-hidden">
+        <div className="text-center w-full overflow-hidden mt-2">
           <div className="flex items-center justify-center gap-1 mb-1">
             <span className="text-sm font-medium text-gray-700 truncate max-w-[120px]">{app.name}</span>
             {app.rating && (
@@ -88,23 +94,28 @@ export const AppGridItem = ({ app, isFavorite, onToggleFavorite, onClick }: AppG
           )}
         </div>
       </div>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute top-2 right-2 h-7 w-7 rounded-full hover:bg-gray-200"
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          onToggleFavorite(app.name);
-        }}
-      >
-        <Star className={`w-4 h-4 ${isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
-      </Button>
+      <div className="absolute top-0 right-0 left-0 flex justify-end p-2">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-7 w-7 rounded-full hover:bg-white/80 backdrop-blur-sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            onToggleFavorite(app.name);
+          }}
+        >
+          <Star className={`w-4 h-4 ${isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
+        </Button>
+      </div>
       {app.users && (
-        <Badge variant="secondary" className="absolute bottom-2 right-2 text-[10px]">
-          {app.users} users
-        </Badge>
+        <div className="absolute bottom-0 right-0 left-0 flex justify-end p-2">
+          <Badge variant="outline" className="text-[10px] bg-white/80 backdrop-blur-sm">
+            <Download className="w-3 h-3 mr-1" />
+            {app.users}
+          </Badge>
+        </div>
       )}
-    </div>
+    </motion.div>
   );
 };
