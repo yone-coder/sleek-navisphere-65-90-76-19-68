@@ -42,7 +42,7 @@ export const RecentActivitySection = ({ activities, className = "" }: RecentActi
   if (activities.length === 0) return null;
   
   return (
-    <div className={cn("flex-shrink-0", className)}>
+    <div className={cn("flex-shrink-0 px-1", className)}>
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-sm font-semibold text-gray-800">Recent Activity</h2>
         <Button variant="ghost" size="sm" className="text-xs text-blue-500">

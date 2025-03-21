@@ -23,7 +23,7 @@ export const NotificationsSection = ({ notifications, className = "" }: Notifica
   if (notifications.length === 0) return null;
   
   return (
-    <div className={cn("flex-shrink-0", className)}>
+    <div className={cn("flex-shrink-0 px-1", className)}>
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-sm font-semibold text-gray-800">Notifications</h2>
         <Button variant="ghost" size="sm" className="text-xs text-blue-500">

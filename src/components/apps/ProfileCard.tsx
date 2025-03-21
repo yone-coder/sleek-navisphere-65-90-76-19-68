@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 export const ProfileCard = () => {
   return (
     <motion.div 
-      className="w-full p-4 flex items-center justify-between"
+      className="w-full px-1 py-2 flex items-center justify-between"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
