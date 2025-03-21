@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass, Bell, BookOpen, Activity, Zap, Layout, Send, Download, TrendingUp, ChevronRight, Clock, Star, MoreHorizontal, Bookmark, User, ArrowDownLeft, ArrowUpRight } from 'lucide-react';
+import { Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass, Bell, BookOpen, Activity, Zap, Layout, Send, Download, TrendingUp, ChevronRight, Clock, Star, MoreHorizontal, Bookmark, User, ArrowDownLeft, ArrowUpRight, Sparkles, Package, Trophy, Headphones, Palette, Sunrise, Coffee, FileText, Briefcase, Wifi, Cpu, Archive, Layers, Play, Gamepad2, CheckSquare } from 'lucide-react';
 import { ProfileCard } from '@/components/apps/ProfileCard';
 import { apps } from '@/components/apps/data/appsData';
 import { Badge } from '@/components/ui/badge';
@@ -13,6 +12,7 @@ import { QuickActionsGrid } from '@/components/apps/QuickActionsGrid';
 import { SuggestedAppsSection } from '@/components/apps/SuggestedAppsSection';
 import { NotificationsSection } from '@/components/apps/NotificationsSection';
 import { FavoritesGrid } from '@/components/apps/FavoritesGrid';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export function HomeTab() {
   // Get actual apps from the appsData
@@ -124,25 +124,25 @@ export function HomeTab() {
       }
     },
     { 
-      icon: Layout, 
-      label: 'Files', 
+      icon: Calendar, 
+      label: 'Events', 
       color: 'bg-purple-500',
       action: () => {
         toast({
-          title: "Files action",
-          description: "Opening file manager...",
+          title: "Events action",
+          description: "Opening calendar...",
           duration: 1500,
         });
       }
     },
     { 
-      icon: Calendar, 
-      label: 'Calendar', 
+      icon: Bookmark, 
+      label: 'Saved', 
       color: 'bg-amber-500',
       action: () => {
         toast({
-          title: "Calendar action",
-          description: "Opening calendar...",
+          title: "Saved items",
+          description: "Opening saved items...",
           duration: 1500,
         });
       }
@@ -161,7 +161,7 @@ export function HomeTab() {
     },
   ];
 
-  // App categories
+  // App categories for filters
   const categories = [
     { id: 'all', label: 'All' },
     { id: 'recent', label: 'Recent' },
@@ -184,22 +184,26 @@ export function HomeTab() {
     if (hour >= 6 && hour < 10) {
       return [
         { id: 201, name: 'News', color: 'bg-amber-500', letter: 'N', reason: 'Morning briefing' },
-        { id: 202, name: 'Coffee', icon: Activity, color: 'bg-yellow-700', letter: 'C', reason: 'Start your day' },
+        { id: 202, name: 'Coffee', icon: Coffee, color: 'bg-yellow-700', letter: 'C', reason: 'Start your day' },
+        { id: 203, name: 'Journal', icon: FileText, color: 'bg-blue-600', letter: 'J', reason: 'Morning reflection' },
       ];
     } else if (hour >= 12 && hour < 14) {
       return [
         { id: 203, name: 'Food', color: 'bg-orange-500', letter: 'F', reason: 'Lunch time' },
         { id: 204, name: 'Wallet', color: 'bg-green-500', letter: 'W', reason: 'Check balance' },
+        { id: 205, name: 'Break', icon: Coffee, color: 'bg-indigo-500', letter: 'B', reason: 'Take a break' },
       ];
     } else if (hour >= 18 && hour < 22) {
       return [
         { id: 205, name: 'Music', icon: Music, color: 'bg-pink-500', letter: 'M', reason: 'Evening relaxation' },
         { id: 206, name: 'Video', icon: Video, color: 'bg-red-500', letter: 'V', reason: 'Watch something' },
+        { id: 207, name: 'Games', icon: Gamepad2, color: 'bg-violet-500', letter: 'G', reason: 'Evening entertainment' },
       ];
     } else {
       return [
         { id: 207, name: 'Calendar', icon: Calendar, color: 'bg-blue-500', letter: 'C', reason: 'Upcoming events' },
         { id: 208, name: 'Social', color: 'bg-purple-500', letter: 'S', reason: 'Connect with friends' },
+        { id: 209, name: 'Tasks', icon: CheckSquare, color: 'bg-emerald-500', letter: 'T', reason: 'Plan your day' },
       ];
     }
   };
@@ -210,22 +214,78 @@ export function HomeTab() {
   const notifications = [
     { id: 301, app: 'Email', message: '3 new messages', time: '10 min ago', color: 'bg-blue-500' },
     { id: 302, app: 'Calendar', message: 'Meeting in 30 minutes', time: '25 min ago', color: 'bg-red-500' },
+    { id: 303, app: 'Updates', message: '2 apps need updating', time: '1 hour ago', color: 'bg-green-500' },
   ];
 
   // Recent transactions (mock)
   const recentTransactions = [
     { id: 1, type: "sent", amount: 230, recipient: "John Doe", date: "Today", time: "14:32" },
     { id: 2, type: "received", amount: 1250, sender: "PayRoll Inc", date: "Yesterday", time: "09:15" },
+    { id: 3, type: "sent", amount: 45, recipient: "Coffee Shop", date: "Today", time: "08:30" },
+  ];
+
+  // Recent activities (combining transactions, notifications, and app usage)
+  const recentActivities = [
+    ...recentTransactions.map(t => ({
+      id: `tx-${t.id}`,
+      type: 'transaction',
+      data: t,
+      time: new Date(currentTime.setHours(parseInt(t.time.split(':')[0]), parseInt(t.time.split(':')[1]))).getTime()
+    })),
+    ...notifications.map(n => ({
+      id: `notif-${n.id}`,
+      type: 'notification',
+      data: n,
+      time: Date.now() - (n.time.includes('min') ? parseInt(n.time) * 60 * 1000 : 60 * 60 * 1000)
+    })),
+    ...recentApps.map(a => ({
+      id: `app-${a.id}`,
+      type: 'app-usage',
+      data: a,
+      time: Date.now() - (a.time.includes('mins') ? parseInt(a.time) * 60 * 1000 : (a.time.includes('hour') ? parseInt(a.time) * 60 * 60 * 1000 : 24 * 60 * 60 * 1000))
+    }))
+  ].sort((a, b) => b.time - a.time);
+
+  // New features
+  const [pinnedApps, setPinnedApps] = useState([
+    { id: 301, name: 'Messages', icon: Mail, color: 'bg-blue-500', notification: 3 },
+    { id: 302, name: 'Photos', icon: Image, color: 'bg-pink-500', notification: 0 },
+    { id: 303, name: 'Files', icon: FileText, color: 'bg-amber-500', notification: 2 },
+    { id: 304, name: 'Work', icon: Briefcase, color: 'bg-purple-500', notification: 0 },
+  ]);
+
+  // Smart suggestions based on time, location, and usage
+  const smartSuggestions = [
+    { 
+      id: 401, 
+      title: "Morning Routine", 
+      time: "Weekdays, 7-9am",
+      apps: [
+        { id: 4011, name: "News", color: "bg-blue-500", letter: "N" },
+        { id: 4012, name: "Calendar", color: "bg-amber-500", letter: "C" },
+        { id: 4013, name: "Coffee", color: "bg-yellow-700", letter: "C" },
+      ]
+    },
+    { 
+      id: 402, 
+      title: "Work Productivity", 
+      time: "Weekdays, 9am-5pm",
+      apps: [
+        { id: 4021, name: "Docs", color: "bg-indigo-500", letter: "D" },
+        { id: 4022, name: "Email", color: "bg-red-500", letter: "E" },
+        { id: 4023, name: "Tasks", color: "bg-green-500", letter: "T" },
+      ]
+    }
   ];
 
   return (
-    <div className="flex flex-col h-full bg-gray-50 w-full overflow-hidden">
+    <div className="flex flex-col h-full w-full overflow-hidden">
       {/* Use ProfileCard component */}
       <ProfileCard />
 
       {/* Main scrollable content */}
       <motion.div 
-        className="flex-1 px-4 py-3 overflow-y-auto"
+        className="flex-1 overflow-y-auto"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
@@ -240,64 +300,183 @@ export function HomeTab() {
         )}
 
         {/* Quick Actions */}
-        <div className="mb-6">
+        <div className="px-4 mb-5">
           <h2 className="text-sm font-semibold text-gray-800 mb-3">Quick Actions</h2>
           <QuickActionsGrid actions={quickActions} />
         </div>
 
-        {/* Recent Transactions */}
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-2">
+        {/* Combined Activity and Notifications */}
+        <div className="mb-5">
+          <div className="px-4 flex justify-between items-center mb-2">
             <h2 className="text-sm font-semibold text-gray-800">Recent Activity</h2>
             <Button variant="ghost" size="sm" className="text-xs text-blue-500">
-              View All <ChevronRight className="h-3 w-3 ml-1" />
+              See all <ChevronRight className="h-3 w-3 ml-1" />
+            </Button>
+          </div>
+          
+          <ScrollArea className="w-full" type="scroll">
+            <div className="flex px-4 space-x-4 pb-2">
+              {recentActivities.slice(0, 8).map((activity, index) => {
+                if (activity.type === 'transaction') {
+                  const transaction = activity.data;
+                  return (
+                    <motion.div 
+                      key={activity.id} 
+                      className="min-w-[270px] flex-shrink-0 flex items-center justify-between p-3 bg-white rounded-xl border border-gray-100 shadow-sm"
+                      whileHover={{ y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
+                          transaction.type === "received" ? "bg-green-100" : "bg-red-100"
+                        }`}>
+                          {transaction.type === "received" ? (
+                            <ArrowDownLeft className="h-5 w-5 text-green-600" />
+                          ) : (
+                            <ArrowUpRight className="h-5 w-5 text-red-600" />
+                          )}
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm">
+                            {transaction.type === "received" ? transaction.sender : transaction.recipient}
+                          </p>
+                          <p className="text-xs text-gray-400">
+                            {transaction.date} • {transaction.time}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className={`font-semibold ${
+                          transaction.type === "received" ? "text-green-600" : "text-red-600"
+                        }`}>
+                          {transaction.type === "received" ? "+" : "-"}${transaction.amount}
+                        </p>
+                      </div>
+                    </motion.div>
+                  );
+                } else if (activity.type === 'notification') {
+                  const notification = activity.data;
+                  return (
+                    <motion.div 
+                      key={activity.id} 
+                      className="min-w-[250px] flex-shrink-0 bg-white rounded-xl p-3 flex items-center shadow-sm border border-gray-100"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <div className={`${notification.color} w-10 h-10 rounded-lg flex items-center justify-center mr-3`}>
+                        <Bell size={18} className="text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">{notification.app}</p>
+                        <p className="text-xs text-gray-500">{notification.message}</p>
+                      </div>
+                      <span className="text-xs text-gray-400">{notification.time}</span>
+                    </motion.div>
+                  );
+                } else {
+                  const app = activity.data;
+                  return (
+                    <motion.div 
+                      key={activity.id} 
+                      className="min-w-[220px] flex-shrink-0 bg-white rounded-xl p-3 flex items-center shadow-sm border border-gray-100"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <div className={`${app.color} w-10 h-10 rounded-lg flex items-center justify-center mr-3 shadow-sm`}>
+                        <span className="text-white text-lg font-bold">{app.letter}</span>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">{app.name}</p>
+                        <p className="text-xs text-gray-500">Used {app.time}</p>
+                      </div>
+                      <Button variant="ghost" size="sm" className="h-8 w-8 rounded-full p-0">
+                        <Play size={14} className="text-gray-500" />
+                      </Button>
+                    </motion.div>
+                  );
+                }
+              })}
+            </div>
+          </ScrollArea>
+        </div>
+
+        {/* Smart Suggestions */}
+        <div className="px-4 mb-5">
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="text-sm font-semibold text-gray-800">Smart Collections</h2>
+            <Button variant="ghost" size="sm" className="text-xs text-blue-500">
+              Edit <ChevronRight className="h-3 w-3 ml-1" />
             </Button>
           </div>
 
-          <div className="space-y-2">
-            {recentTransactions.map(transaction => (
-              <motion.div 
-                key={transaction.id} 
-                className="flex items-center justify-between p-3 bg-white rounded-xl border border-gray-100 shadow-sm"
+          <div className="space-y-3">
+            {smartSuggestions.map((collection) => (
+              <motion.div
+                key={collection.id}
+                className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm"
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className="flex items-center gap-3">
-                  <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
-                    transaction.type === "received" ? "bg-green-100" : "bg-red-100"
-                  }`}>
-                    {transaction.type === "received" ? (
-                      <ArrowDownLeft className="h-5 w-5 text-green-600" />
-                    ) : (
-                      <ArrowUpRight className="h-5 w-5 text-red-600" />
-                    )}
-                  </div>
+                <div className="flex justify-between items-center mb-2">
                   <div>
-                    <p className="font-medium text-sm">
-                      {transaction.type === "received" ? transaction.sender : transaction.recipient}
-                    </p>
-                    <p className="text-xs text-gray-400">
-                      {transaction.date} • {transaction.time}
-                    </p>
+                    <h3 className="text-sm font-medium">{collection.title}</h3>
+                    <p className="text-xs text-gray-500">{collection.time}</p>
                   </div>
+                  <Button variant="outline" size="sm" className="h-7 text-xs border-gray-200">
+                    Launch All
+                  </Button>
                 </div>
-                <div className="text-right">
-                  <p className={`font-semibold ${
-                    transaction.type === "received" ? "text-green-600" : "text-red-600"
-                  }`}>
-                    {transaction.type === "received" ? "+" : "-"}${transaction.amount}
-                  </p>
+                <div className="flex gap-2">
+                  {collection.apps.map((app) => (
+                    <div key={app.id} className="flex flex-col items-center">
+                      <div className={`${app.color} w-10 h-10 rounded-lg flex items-center justify-center shadow-sm mb-1`}>
+                        <span className="text-white text-sm font-bold">{app.letter}</span>
+                      </div>
+                      <span className="text-xs">{app.name}</span>
+                    </div>
+                  ))}
                 </div>
               </motion.div>
             ))}
           </div>
         </div>
 
-        {/* Notifications section */}
-        <NotificationsSection notifications={notifications} />
+        {/* Pinned Apps */}
+        <div className="px-4 mb-5">
+          <h2 className="text-sm font-semibold text-gray-800 mb-3">Pinned</h2>
+          <div className="grid grid-cols-4 gap-4">
+            {pinnedApps.map(app => (
+              <motion.div
+                key={app.id}
+                className="flex flex-col items-center"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <div className="relative">
+                  <div className={`${app.color} w-14 h-14 rounded-xl flex items-center justify-center shadow-md mb-1`}>
+                    <app.icon className="h-6 w-6 text-white" />
+                  </div>
+                  {app.notification > 0 && (
+                    <Badge className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center px-1">
+                      {app.notification}
+                    </Badge>
+                  )}
+                </div>
+                <span className="text-xs text-center">{app.name}</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
 
         {/* Favorites Header */}
-        <div className="sticky top-0 z-10 bg-gray-50 pt-2 pb-2">
+        <div className="px-4 sticky top-0 z-10 bg-white pt-2 pb-2">
           <div className="flex justify-between items-center mb-2">
             <h1 className="text-base font-semibold text-gray-800">Favorites</h1>
             <div className="flex space-x-4">
@@ -366,7 +545,7 @@ export function HomeTab() {
         </div>
 
         {/* App grid with Favorites component */}
-        <div className="mb-20"> {/* Add bottom padding for the bottom nav */}
+        <div className="px-4 mb-20"> {/* Add bottom padding for the bottom nav */}
           {/* Recently Used Section (only show if not searching) */}
           {!searchMode && activeCategory === 'recent' && (
             <div className="mb-4">
