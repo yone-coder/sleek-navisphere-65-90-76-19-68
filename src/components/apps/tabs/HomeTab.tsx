@@ -1,9 +1,7 @@
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Card } from "@/components/ui/card";
 import { User, Shirt, Wallet, Gamepad2, Ticket, ShoppingCart } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import type { App } from "@/components/apps/types";
 
 interface HomeTabProps {
@@ -38,42 +36,40 @@ export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
         </div>
       </div>
       
-      {/* Sign In Section */}
-      <div className="mb-6 mx-2">
-        <Card className="bg-white shadow-sm p-4 rounded-2xl">
-          <button 
-            className="group flex items-center gap-3 w-full py-2 hover:bg-muted/60 transition-all duration-200 rounded-lg"
-            onClick={() => navigate('/login')}
-          >
-            <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center">
-              <User className="h-5 w-5 text-gray-500" />
-            </div>
-            <div className="flex flex-col items-start min-w-0">
-              <span className="text-sm font-medium truncate">Sign in</span>
-              <span className="text-xs text-muted-foreground">
-                Access your account and data
-              </span>
-            </div>
-            <div className="ml-auto">
-              <svg 
-                width="24" 
-                height="24" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-muted-foreground/70"
-              >
-                <path 
-                  d="M9 18L15 12L9 6" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          </button>
-        </Card>
+      {/* Sign In Section - Removed Card wrapper, using minimal padding */}
+      <div className="mb-6 px-2">
+        <button 
+          className="group flex items-center gap-3 w-full py-2 hover:bg-muted/60 transition-all duration-200 rounded-lg"
+          onClick={() => navigate('/login')}
+        >
+          <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center">
+            <User className="h-5 w-5 text-gray-500" />
+          </div>
+          <div className="flex flex-col items-start min-w-0">
+            <span className="text-sm font-medium truncate">Sign in</span>
+            <span className="text-xs text-muted-foreground">
+              Access your account and data
+            </span>
+          </div>
+          <div className="ml-auto">
+            <svg 
+              width="24" 
+              height="24" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 text-muted-foreground/70"
+            >
+              <path 
+                d="M9 18L15 12L9 6" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+        </button>
       </div>
       
       {/* Apps Grid Section - Full width with minimal padding */}
