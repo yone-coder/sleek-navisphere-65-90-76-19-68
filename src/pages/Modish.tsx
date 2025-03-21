@@ -7,6 +7,7 @@ import { ModishFloatingActions } from '@/components/modish/ModishFloatingActions
 import { ModishRecentlyViewed } from '@/components/modish/ModishRecentlyViewed';
 import { ModishStoreBanner } from '@/components/modish/ModishStoreBanner';
 import { useToast } from '@/hooks/use-toast';
+import { ModishCategoryTabs } from '@/components/modish/header/ModishCategoryTabs';
 
 const Modish = () => {
   const { id } = useParams();
@@ -58,8 +59,13 @@ const Modish = () => {
     <div className="min-h-screen bg-gray-50 pb-[150px] overflow-x-hidden">
       <ModishHeader />
       
-      {/* Add padding to the top to account for the fixed header */}
-      <div className="pt-[120px] w-full mx-auto px-0">
+      {/* Category tabs positioned below the header */}
+      <div className="fixed top-[73px] left-0 right-0 z-40 bg-white">
+        <ModishCategoryTabs scrolled={true} />
+      </div>
+      
+      {/* Add padding to the top to account for the fixed header and tabs */}
+      <div className="pt-[100px] w-full mx-auto px-0">
         <ModishProductDetails 
           productId={productId} 
           price={productPrice}

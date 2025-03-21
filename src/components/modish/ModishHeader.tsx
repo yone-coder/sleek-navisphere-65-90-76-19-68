@@ -65,9 +65,6 @@ export function ModishHeader() {
       
       {/* Deals banner */}
       <ModishDealsBanner />
-      
-      {/* Category tabs */}
-      <ModishCategoryTabs scrolled={scrolled} />
     </header>
   );
 }
