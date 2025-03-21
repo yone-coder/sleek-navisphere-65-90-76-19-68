@@ -62,7 +62,7 @@ export default function Apps() {
     <div className="fixed inset-0 flex flex-col overflow-hidden">
       {showSplash && <SplashScreen onDismiss={handleDismissSplash} />}
       
-      <div className="flex-1 overflow-y-auto bg-gradient-to-b from-gray-50 to-white">
+      <div className="flex-1 overflow-y-auto">
         <AppsHeader onOpenSearch={() => setIsSearchOpen(true)} />
         
         <div className="h-full flex flex-col">
@@ -74,7 +74,7 @@ export default function Apps() {
                 <TabsTrigger value="explore">Explore</TabsTrigger>
               </TabsList>
               
-              <TabsContent value="home" className="mt-0">
+              <TabsContent value="home" className="mt-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 rounded-lg">
                 <HomeTab favorites={favoriteApps} onToggleFavorite={handleToggleFavorite} />
               </TabsContent>
               

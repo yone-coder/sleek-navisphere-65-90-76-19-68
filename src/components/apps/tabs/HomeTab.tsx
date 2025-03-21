@@ -2,13 +2,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
-import { Star, User } from "lucide-react";
+import { User, Camera, Headphones, Image, Film, Music, Play, Tv } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { apps } from "../data/appsData";
-import type { App } from "../types";
-import { FavoritesSection } from "../FavoritesSection";
-import { SuggestionsSection } from "../SuggestionsSection";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface HomeTabProps {
   favorites: App[];
@@ -18,30 +13,46 @@ interface HomeTabProps {
 export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
   const navigate = useNavigate();
   
-  // Get the most used apps (we'll use favorites for this example)
-  const mostUsedApps = [...favorites].slice(0, 8);
+  // Media apps data
+  const mediaApps = [
+    { name: "Camera", icon: Camera, color: "bg-gray-200", route: "/camera" },
+    { name: "Disney+", icon: () => (
+      <div className="text-white text-xl font-bold">D+</div>
+    ), color: "bg-blue-900", route: "/disney" },
+    { name: "Google TV", icon: Tv, color: "bg-white", route: "/google-tv" },
+    { name: "Headphones", icon: Headphones, color: "bg-amber-200", route: "/headphones" },
+    { name: "Musixmatch", icon: Music, color: "bg-red-400", route: "/musixmatch" },
+    { name: "Netflix", icon: Film, color: "bg-black", route: "/netflix" },
+    { name: "Photos", icon: Image, color: "bg-white", route: "/photos" },
+    { name: "Resplash", icon: () => (
+      <div className="flex items-center">
+        <div className="h-3 w-3 bg-black rounded-full mr-1"></div>
+        <div className="h-4 w-4 bg-black rounded-full"></div>
+      </div>
+    ), color: "bg-white", route: "/resplash" },
+    { name: "Snapseed", icon: () => (
+      <div className="text-white text-sm">
+        <div className="flex items-center">
+          <div className="h-3 w-3 bg-lime-400 mr-1"></div>
+          <div className="h-3 w-3 bg-gray-700"></div>
+        </div>
+      </div>
+    ), color: "bg-gray-800", route: "/snapseed" },
+    { name: "Spotify", icon: () => (
+      <div className="text-white text-sm">
+        <div className="h-4 w-4 bg-green-500 rounded-full flex items-center justify-center">
+          <div className="h-2 w-2 border-t-2 border-r-2 border-white transform rotate-45"></div>
+        </div>
+      </div>
+    ), color: "bg-black", route: "/spotify" },
+    { name: "Tabs", icon: () => (
+      <div className="text-black text-sm font-bold">G</div>
+    ), color: "bg-yellow-400", route: "/tabs" },
+    { name: "YouTube", icon: Play, color: "bg-white", route: "/youtube" }
+  ];
   
-  // Fill with popular apps if we don't have enough most used
-  const popularApps = apps
-    .filter(app => app.status === "popular" && !favorites.some(fav => fav.name === app.name))
-    .slice(0, 8 - mostUsedApps.length);
-  
-  const displayedMostUsedApps = [...mostUsedApps, ...popularApps];
-  
-  // Get suggestions based on rating
-  const suggestedApps = apps
-    .filter(app => app.rating && app.rating >= 4.5 && !favorites.some(fav => fav.name === app.name))
-    .slice(0, 8);
-  
-  const handleAppClick = (app: App) => {
-    if (app.name === "Chess") {
-      navigate('/games/chess');
-    } else if (app.category === "Gaming") {
-      const gameId = app.name.toLowerCase().replace(/\s+/g, '-');
-      navigate(`/games/${gameId}`);
-    } else {
-      navigate(app.route);
-    }
+  const handleAppClick = (route: string) => {
+    navigate(route);
   };
   
   return (
@@ -93,87 +104,26 @@ export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
         </Card>
       </div>
       
-      {/* Weather Widget */}
-      <div className="mb-6 mx-2">
-        <Card className="bg-gradient-to-r from-blue-400 to-blue-600 text-white p-4 rounded-2xl">
-          <div className="flex justify-between items-center">
-            <div>
-              <h3 className="text-lg font-semibold">New York</h3>
-              <p className="text-3xl font-bold">68°</p>
-              <p className="text-sm opacity-90">Partly Cloudy</p>
+      {/* Media Apps Grid Section */}
+      <div className="px-4">
+        <h2 className="text-2xl font-bold mb-4 text-white">Media</h2>
+        <div className="grid grid-cols-4 gap-4">
+          {mediaApps.map((app, index) => (
+            <div 
+              key={index} 
+              className="flex flex-col items-center"
+              onClick={() => handleAppClick(app.route)}
+            >
+              <div className={`w-16 h-16 ${app.color} rounded-2xl flex items-center justify-center shadow-md mb-1`}>
+                {React.isValidElement(app.icon) ? (
+                  app.icon
+                ) : (
+                  <app.icon className="w-8 h-8 text-gray-800" />
+                )}
+              </div>
+              <span className="text-xs text-white">{app.name}</span>
             </div>
-            <div className="text-6xl">⛅</div>
-          </div>
-        </Card>
-      </div>
-      
-      {/* Most Used Apps Section */}
-      <div className="mb-8">
-        <div className="px-4 mb-3 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-700">Most Used</h3>
-          <Button variant="ghost" size="sm" className="text-xs text-blue-500">
-            See All
-          </Button>
-        </div>
-        <ScrollArea className="w-full pb-2">
-          <div className="flex space-x-4 px-4">
-            {displayedMostUsedApps.map((app) => (
-              <div
-                key={app.name}
-                className="flex-none w-[70px] flex flex-col items-center cursor-pointer"
-                onClick={() => handleAppClick(app)}
-              >
-                <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative mb-1 shadow-sm`}>
-                  {React.isValidElement(app.icon) ? (
-                    app.icon
-                  ) : (
-                    <app.icon className="w-7 h-7 text-white" />
-                  )}
-                  {app.updates > 0 && (
-                    <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                      {app.updates}
-                    </div>
-                  )}
-                </div>
-                <span className="text-xs font-medium text-center truncate w-full">{app.name}</span>
-              </div>
-            ))}
-          </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-      </div>
-      
-      {/* Favorites Section */}
-      <FavoritesSection favoriteApps={favorites} />
-      
-      {/* Suggestions Section */}
-      <SuggestionsSection suggestedApps={suggestedApps} />
-      
-      {/* Dock */}
-      <div className="fixed bottom-16 left-0 right-0 mx-auto w-[90%] max-w-md">
-        <div className="bg-white/30 backdrop-blur-xl rounded-3xl p-4 shadow-lg border border-white/30">
-          <div className="flex justify-around">
-            {apps.slice(0, 4).map((app, index) => (
-              <div 
-                key={index} 
-                className="flex flex-col items-center cursor-pointer"
-                onClick={() => handleAppClick(app)}
-              >
-                <div className={`w-14 h-14 rounded-2xl ${app.color} flex items-center justify-center relative`}>
-                  {React.isValidElement(app.icon) ? (
-                    app.icon
-                  ) : (
-                    <app.icon className="w-7 h-7 text-white" />
-                  )}
-                  {app.updates > 0 && (
-                    <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                      {app.updates}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+          ))}
         </div>
       </div>
     </div>

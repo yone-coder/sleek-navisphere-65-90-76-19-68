@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -75,6 +76,9 @@ export default {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.3s ease-out",
+      },
+      backgroundImage: {
+        'media-gradient': 'linear-gradient(to right, #23074d, #cc5333)',
       },
     },
   },
