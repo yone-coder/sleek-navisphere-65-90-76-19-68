@@ -63,10 +63,6 @@ export const FavoritesGrid = ({
             className="relative flex flex-col items-center"
             whileHover={{ scale: editMode ? 1 : 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onTouchStart={() => {
-              const timer = setTimeout(() => onAppLongPress(app.id), 500);
-              return () => clearTimeout(timer);
-            }}
             onClick={() => onAppTap(app.id)}
           >
             <div className={`${app.color} w-14 h-14 rounded-xl flex items-center justify-center shadow-md mb-1`}>

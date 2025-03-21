@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass, Bell, BookOpen, Activity, Zap, Layout, Send, Download, TrendingUp, ChevronRight, Clock, Star, MoreHorizontal, Bookmark, User, ArrowDownLeft, ArrowUpRight, Sparkles, Package, Trophy, Headphones, Palette, Sunrise, Coffee, FileText, Briefcase, Wifi, Cpu, Archive, Layers, Play, Gamepad2, CheckSquare, List, ListMusic, ListVideo, Home } from 'lucide-react';
 import { ProfileCard } from '@/components/apps/ProfileCard';
@@ -66,14 +65,6 @@ export function HomeTab() {
     setSearchTerm('');
     setSearchMode(false);
   };
-
-  const handleAppLongPress = (id) => {
-    setActiveAppId(id);
-    setTimeout(() => {
-      setEditMode(true);
-      setActiveAppId(null);
-    }, 500);
-  }
 
   const handleAppTap = (id) => {
     if (!editMode) {
@@ -178,7 +169,6 @@ export function HomeTab() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        {/* Added mt-6 for spacing between ProfileCard and QuickActions */}
         <div className="mb-4 px-2 mt-6">
           <h2 className="text-sm font-semibold text-gray-800 mb-2">Quick Actions</h2>
           <QuickActionsGrid actions={quickActions} />
