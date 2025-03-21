@@ -10,14 +10,14 @@ export function useHeaderHeight(): number {
     
     // Set the initial header height
     if (headerElement) {
-      setHeaderHeight((headerElement as HTMLElement).offsetHeight);
+      setHeaderHeight(headerElement.offsetHeight);
     }
 
     // Create a resize observer to update the header height when it changes
     const resizeObserver = new ResizeObserver(entries => {
       for (const entry of entries) {
         if (entry.target === headerElement) {
-          setHeaderHeight((entry.target as HTMLElement).offsetHeight);
+          setHeaderHeight(entry.target.offsetHeight);
         }
       }
     });
