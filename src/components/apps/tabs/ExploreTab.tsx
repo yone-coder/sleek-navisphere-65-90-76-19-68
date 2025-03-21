@@ -110,27 +110,27 @@ export function ExploreTab({
 
   return (
     <motion.div 
-      className="pb-24 bg-slate-900 text-gray-100 min-h-screen"
+      className="pb-24 min-h-screen"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
       {/* Header Section */}
-      <div className="bg-gradient-to-b from-slate-800 to-slate-900 px-4 py-6">
+      <div className="px-4 py-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-white">App Library</h2>
+          <h2 className="text-2xl font-bold">App Library</h2>
           <div className="flex gap-2">
             <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
               <DrawerTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full text-gray-300 hover:text-white">
+                <Button variant="ghost" size="icon" className="rounded-full">
                   <Menu className="h-5 w-5" />
                 </Button>
               </DrawerTrigger>
-              <DrawerContent className="bg-slate-800 text-gray-100 border-slate-700">
+              <DrawerContent>
                 <div className="mx-auto w-full max-w-sm">
                   <DrawerHeader>
-                    <DrawerTitle className="text-white">App Categories</DrawerTitle>
-                    <DrawerDescription className="text-gray-400">
+                    <DrawerTitle>App Categories</DrawerTitle>
+                    <DrawerDescription>
                       Browse apps by category or use filters to find what you need.
                     </DrawerDescription>
                   </DrawerHeader>
@@ -139,7 +139,7 @@ export function ExploreTab({
                       <div className="space-y-1">
                         <Button
                           variant={selectedCategory === "All" ? "default" : "ghost"}
-                          className="w-full justify-start text-gray-100"
+                          className="w-full justify-start"
                           onClick={() => {
                             setSelectedCategory("All");
                             setIsDrawerOpen(false);
@@ -147,14 +147,14 @@ export function ExploreTab({
                         >
                           <Package className="mr-2 h-4 w-4" />
                           All Apps
-                          <Badge className="ml-auto bg-slate-700 text-gray-100">{apps.length}</Badge>
+                          <Badge className="ml-auto">{apps.length}</Badge>
                         </Button>
                         
                         {appCategories.map((category) => (
                           <Button
                             key={category}
                             variant={selectedCategory === category ? "default" : "ghost"}
-                            className="w-full justify-start text-gray-100"
+                            className="w-full justify-start"
                             onClick={() => {
                               setSelectedCategory(category);
                               setIsDrawerOpen(false);
@@ -162,7 +162,7 @@ export function ExploreTab({
                           >
                             <Package className="mr-2 h-4 w-4" />
                             {category}
-                            <Badge className="ml-auto bg-slate-700 text-gray-100">
+                            <Badge className="ml-auto">
                               {apps.filter(app => app.category === category).length}
                             </Badge>
                           </Button>
@@ -171,14 +171,14 @@ export function ExploreTab({
                     </ScrollArea>
                     
                     <div className="mt-4 space-y-3">
-                      <div className="border-t border-slate-700 pt-4">
-                        <h4 className="mb-2 text-sm font-medium text-gray-300">Sort Apps</h4>
+                      <div className="border-t border-gray-200 pt-4">
+                        <h4 className="mb-2 text-sm font-medium">Sort Apps</h4>
                         <div className="flex gap-2">
                           <Button 
                             variant={sortBy === "name" ? "default" : "outline"} 
                             size="sm" 
                             onClick={() => setSortBy("name")}
-                            className="flex-1 bg-slate-700 border-slate-600 text-gray-100"
+                            className="flex-1"
                           >
                             Name
                           </Button>
@@ -186,7 +186,7 @@ export function ExploreTab({
                             variant={sortBy === "rating" ? "default" : "outline"} 
                             size="sm" 
                             onClick={() => setSortBy("rating")}
-                            className="flex-1 bg-slate-700 border-slate-600 text-gray-100"
+                            className="flex-1"
                           >
                             Rating
                           </Button>
@@ -194,21 +194,21 @@ export function ExploreTab({
                             variant={sortBy === "users" ? "default" : "outline"} 
                             size="sm" 
                             onClick={() => setSortBy("users")}
-                            className="flex-1 bg-slate-700 border-slate-600 text-gray-100"
+                            className="flex-1"
                           >
                             Popular
                           </Button>
                         </div>
                       </div>
                       
-                      <div className="border-t border-slate-700 pt-4">
-                        <h4 className="mb-2 text-sm font-medium text-gray-300">View Mode</h4>
+                      <div className="border-t border-gray-200 pt-4">
+                        <h4 className="mb-2 text-sm font-medium">View Mode</h4>
                         <div className="flex gap-2">
                           <Button 
                             variant={viewMode === "grid" ? "default" : "outline"} 
                             size="sm" 
                             onClick={() => setViewMode("grid")}
-                            className="flex-1 bg-slate-700 border-slate-600 text-gray-100"
+                            className="flex-1"
                           >
                             <Grid className="mr-2 h-4 w-4" />
                             Grid
@@ -217,7 +217,7 @@ export function ExploreTab({
                             variant={viewMode === "folder" ? "default" : "outline"} 
                             size="sm" 
                             onClick={() => setViewMode("folder")}
-                            className="flex-1 bg-slate-700 border-slate-600 text-gray-100"
+                            className="flex-1"
                           >
                             <LayoutGrid className="mr-2 h-4 w-4" />
                             Folder
@@ -225,12 +225,12 @@ export function ExploreTab({
                         </div>
                       </div>
                       
-                      <div className="border-t border-slate-700 pt-4">
+                      <div className="border-t border-gray-200 pt-4">
                         <Button 
                           variant={showUpdatesOnly ? "default" : "outline"} 
                           size="sm" 
                           onClick={() => setShowUpdatesOnly(!showUpdatesOnly)}
-                          className="w-full bg-slate-700 border-slate-600 text-gray-100"
+                          className="w-full"
                         >
                           <Bell className="mr-2 h-4 w-4" />
                           {showUpdatesOnly ? "Showing Updates Only" : "Show Updates Only"}
@@ -241,17 +241,17 @@ export function ExploreTab({
                       </div>
                     </div>
                   </div>
-                  <DrawerFooter className="border-t border-slate-700">
+                  <DrawerFooter>
                     <Button
                       onClick={handleRefresh}
                       disabled={isRefreshing}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                      className="w-full"
                     >
                       <RefreshCw className={`mr-2 h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
                       {isRefreshing ? "Refreshing..." : "Refresh App List"}
                     </Button>
                     <DrawerClose asChild>
-                      <Button variant="outline" className="border-slate-600 text-gray-100">Close</Button>
+                      <Button variant="outline">Close</Button>
                     </DrawerClose>
                   </DrawerFooter>
                 </div>
@@ -261,7 +261,7 @@ export function ExploreTab({
             <Button 
               variant="ghost" 
               size="icon" 
-              className="rounded-full text-gray-300 hover:text-white"
+              className="rounded-full"
               onClick={() => setIsSearchOpen(true)}
             >
               <Search className="h-5 w-5" />
@@ -270,7 +270,7 @@ export function ExploreTab({
             <Button 
               variant="ghost" 
               size="icon" 
-              className="rounded-full text-gray-300 hover:text-white relative"
+              className="rounded-full relative"
             >
               <Bell className="h-5 w-5" />
               {updatesCount > 0 && (
@@ -284,26 +284,26 @@ export function ExploreTab({
 
         {/* App Stats Summary */}
         <div className="grid grid-cols-3 gap-3 mb-6">
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card>
             <CardContent className="flex flex-col items-center justify-center p-3">
               <Package className="h-5 w-5 text-blue-400 mb-1" />
-              <span className="text-lg font-bold text-white">{apps.length}</span>
+              <span className="text-lg font-bold">{apps.length}</span>
               <span className="text-xs text-gray-400">All Apps</span>
             </CardContent>
           </Card>
           
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card>
             <CardContent className="flex flex-col items-center justify-center p-3">
               <Download className="h-5 w-5 text-green-400 mb-1" />
-              <span className="text-lg font-bold text-white">{favorites.length}</span>
+              <span className="text-lg font-bold">{favorites.length}</span>
               <span className="text-xs text-gray-400">Installed</span>
             </CardContent>
           </Card>
           
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card>
             <CardContent className="flex flex-col items-center justify-center p-3">
               <Clock className="h-5 w-5 text-amber-400 mb-1" />
-              <span className="text-lg font-bold text-white">{updatesCount}</span>
+              <span className="text-lg font-bold">{updatesCount}</span>
               <span className="text-xs text-gray-400">Updates</span>
             </CardContent>
           </Card>
@@ -311,7 +311,7 @@ export function ExploreTab({
 
         {/* iOS-style search bar */}
         <div 
-          className="bg-slate-800/60 rounded-xl flex items-center px-3 py-2.5"
+          className="bg-gray-100 rounded-xl flex items-center px-3 py-2.5"
           onClick={() => setIsSearchOpen(true)}
         >
           <Search className="h-4 w-4 text-gray-400 mr-2" />
@@ -320,20 +320,20 @@ export function ExploreTab({
       </div>
       
       {/* Tab Navigation */}
-      <div className="px-4 pt-4 pb-2 sticky top-0 z-10 bg-slate-900">
+      <div className="px-4 pt-4 pb-2">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-4 w-full bg-slate-800/50 p-0.5">
-            <TabsTrigger value="all" className="text-sm py-1.5 data-[state=active]:bg-blue-600">All</TabsTrigger>
-            <TabsTrigger value="popular" className="text-sm py-1.5 data-[state=active]:bg-blue-600">Popular</TabsTrigger>
-            <TabsTrigger value="recent" className="text-sm py-1.5 data-[state=active]:bg-blue-600">New</TabsTrigger>
-            <TabsTrigger value="favorites" className="text-sm py-1.5 data-[state=active]:bg-blue-600">Favorites</TabsTrigger>
+          <TabsList className="grid grid-cols-4 w-full">
+            <TabsTrigger value="all" className="text-sm py-1.5">All</TabsTrigger>
+            <TabsTrigger value="popular" className="text-sm py-1.5">Popular</TabsTrigger>
+            <TabsTrigger value="recent" className="text-sm py-1.5">New</TabsTrigger>
+            <TabsTrigger value="favorites" className="text-sm py-1.5">Favorites</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
       
       {/* Current Category or Filter Label */}
       <div className="flex justify-between items-center px-4 py-3">
-        <h3 className="text-lg font-medium text-white">
+        <h3 className="text-lg font-medium">
           {showUpdatesOnly ? "Apps with Updates" : 
            activeTab === "favorites" ? "Your Favorites" : 
            activeTab === "popular" ? "Popular Apps" : 
@@ -380,7 +380,7 @@ export function ExploreTab({
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="mt-2 border-slate-700 text-gray-300"
+                className="mt-2"
                 onClick={() => {
                   setSelectedCategory("All");
                   setActiveTab("all");
