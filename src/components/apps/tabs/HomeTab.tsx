@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass, Bell, BookOpen, Activity, Zap, Layout, Send, Download, TrendingUp, ChevronRight, Clock, Star, MoreHorizontal, Bookmark, User, ArrowDownLeft, ArrowUpRight, Sparkles, Package, Trophy, Headphones, Palette, Sunrise, Coffee, FileText, Briefcase, Wifi, Cpu, Archive, Layers, Play, Gamepad2, CheckSquare } from 'lucide-react';
 import { ProfileCard } from '@/components/apps/ProfileCard';
@@ -11,8 +10,6 @@ import { useToast } from '@/hooks/use-toast';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Card } from "@/components/ui/card";
 import { QuickActionsGrid, QuickAction } from '@/components/apps/QuickActionsGrid';
-import { SuggestedAppsSection, SuggestedApp } from '@/components/apps/SuggestedAppsSection';
-import { NotificationsSection, Notification } from '@/components/apps/NotificationsSection';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { RecentActivitySection, RecentApp, Transaction, ActivityItem } from '@/components/apps/RecentActivitySection';
 
@@ -166,69 +163,6 @@ export function HomeTab() {
     { id: 103, name: 'Chat', color: 'bg-green-500', letter: 'C', time: '3 hours ago', type: 'app-usage' },
   ];
 
-  const getSuggestedApps = (): SuggestedApp[] => {
-    const hour = currentTime.getHours();
-    
-    if (hour >= 6 && hour < 10) {
-      return [
-        { id: 201, name: 'News', color: 'bg-amber-500', letter: 'N', reason: '' },
-        { id: 202, name: 'Coffee', icon: Coffee, color: 'bg-yellow-700', letter: 'C', reason: '' },
-        { id: 203, name: 'Journal', icon: FileText, color: 'bg-blue-600', letter: 'J', reason: '' },
-        { id: 204, name: 'Weather', icon: Sunrise, color: 'bg-cyan-500', letter: 'W', reason: '' },
-      ];
-    } else if (hour >= 12 && hour < 14) {
-      return [
-        { id: 203, name: 'Food', color: 'bg-orange-500', letter: 'F', reason: '' },
-        { id: 204, name: 'Wallet', color: 'bg-green-500', letter: 'W', reason: '' },
-        { id: 205, name: 'Break', icon: Coffee, color: 'bg-indigo-500', letter: 'B', reason: '' },
-        { id: 206, name: 'Social', icon: Globe, color: 'bg-blue-500', letter: 'S', reason: '' },
-      ];
-    } else if (hour >= 18 && hour < 22) {
-      return [
-        { id: 205, name: 'Music', icon: Music, color: 'bg-pink-500', letter: 'M', reason: '' },
-        { id: 206, name: 'Video', icon: Video, color: 'bg-red-500', letter: 'V', reason: '' },
-        { id: 207, name: 'Games', icon: Gamepad2, color: 'bg-violet-500', letter: 'G', reason: '' },
-        { id: 208, name: 'Social', icon: Globe, color: 'bg-blue-500', letter: 'S', reason: '' },
-      ];
-    } else {
-      return [
-        { id: 207, name: 'Calendar', icon: Calendar, color: 'bg-blue-500', letter: 'C', reason: '' },
-        { id: 208, name: 'Social', color: 'bg-purple-500', letter: 'S', reason: '' },
-        { id: 209, name: 'Tasks', icon: CheckSquare, color: 'bg-emerald-500', letter: 'T', reason: '' },
-        { id: 210, name: 'Notes', icon: FileText, color: 'bg-yellow-500', letter: 'N', reason: '' },
-      ];
-    }
-  };
-
-  const suggestedApps = getSuggestedApps();
-
-  const notifications: Notification[] = [
-    { id: 301, app: 'Email', message: '3 new messages', time: '10 min ago', color: 'bg-blue-500' },
-    { id: 302, app: 'Calendar', message: 'Meeting in 30 minutes', time: '25 min ago', color: 'bg-red-500' },
-    { id: 303, app: 'Updates', message: '2 apps need updating', time: '1 hour ago', color: 'bg-green-500' },
-  ];
-
-  const recentTransactions: Transaction[] = [
-    { id: 1, type: 'transaction', subtype: "sent", amount: 230, recipient: "John Doe", date: "Today", time: "14:32" },
-    { id: 2, type: 'transaction', subtype: "received", amount: 1250, sender: "PayRoll Inc", date: "Yesterday", time: "09:15" },
-    { id: 3, type: 'transaction', subtype: "sent", amount: 45, recipient: "Coffee Shop", date: "Today", time: "08:30" },
-  ];
-
-  const recentActivities: ActivityItem[] = [
-    ...recentTransactions.map(t => ({
-      id: `tx-${t.id}`,
-      type: 'transaction' as const,
-      data: t,
-      time: new Date(currentTime.setHours(parseInt(t.time.split(':')[0]), parseInt(t.time.split(':')[1]))).getTime()
-    })),
-    ...recentApps.map(a => ({
-      id: `app-${a.id}`,
-      type: 'app-usage' as const,
-      data: a,
-      time: Date.now() - (a.time.includes('mins') ? parseInt(a.time) * 60 * 1000 : (a.time.includes('hour') ? parseInt(a.time) * 60 * 60 * 1000 : 24 * 60 * 60 * 1000))
-    }))
-  ].sort((a, b) => b.time - a.time);
-
   const pinnedApps = [
     { id: 301, name: 'Messages', icon: Mail, color: 'bg-blue-500', notification: 3 },
     { id: 302, name: 'Photos', icon: Image, color: 'bg-pink-500', notification: 0 },
@@ -246,15 +180,6 @@ export function HomeTab() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        {suggestedApps.length > 0 && (
-          <SuggestedAppsSection 
-            title={`Good ${currentTime.getHours() < 12 ? 'Morning' : currentTime.getHours() < 18 ? 'Afternoon' : 'Evening'}`}
-            description=""
-            apps={suggestedApps}
-            className="mb-4 px-2"
-          />
-        )}
-
         <div className="mb-4 px-2">
           <h2 className="text-sm font-semibold text-gray-800 mb-2">Quick Actions</h2>
           <QuickActionsGrid actions={quickActions} />
