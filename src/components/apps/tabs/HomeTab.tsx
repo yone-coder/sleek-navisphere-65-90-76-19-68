@@ -260,7 +260,7 @@ export function HomeTab() {
       <ProfileCard />
 
       <motion.div 
-        className="flex-1 overflow-y-auto px-4 pt-2 pb-20 no-horizontal-overflow"
+        className="flex-1 overflow-y-auto px-1 pt-2 pb-20 no-horizontal-overflow"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
@@ -270,16 +270,16 @@ export function HomeTab() {
             title={`Good ${currentTime.getHours() < 12 ? 'Morning' : currentTime.getHours() < 18 ? 'Afternoon' : 'Evening'}`}
             description="Apps you might need right now"
             apps={suggestedApps}
-            className="mb-6"
+            className="mb-5 px-1"
           />
         )}
 
-        <div className="mb-6">
-          <h2 className="text-sm font-semibold text-gray-800 mb-3">Quick Actions</h2>
+        <div className="mb-5 px-1">
+          <h2 className="text-sm font-semibold text-gray-800 mb-2">Quick Actions</h2>
           <QuickActionsGrid actions={quickActions} />
         </div>
 
-        <div className="mb-6">
+        <div className="mb-5 px-1">
           <div className="flex justify-between items-center mb-3">
             <h2 className="text-sm font-semibold text-gray-800">Activity & Notifications</h2>
             <Button variant="ghost" size="sm" className="text-xs text-blue-500">

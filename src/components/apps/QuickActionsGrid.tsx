@@ -18,11 +18,11 @@ interface QuickActionsGridProps {
 
 export const QuickActionsGrid = ({ actions }: QuickActionsGridProps) => {
   return (
-    <div className="grid grid-cols-5 gap-2">
+    <div className="grid grid-cols-5 gap-1">
       {actions.map((action, index) => (
         <motion.button
           key={index}
-          className="flex flex-col items-center gap-1.5 p-2 rounded-xl transition-all duration-300"
+          className="flex flex-col items-center gap-1 p-1 rounded-xl transition-all duration-300"
           whileHover={{ y: -3 }}
           whileTap={{ scale: 0.92 }}
           initial={{ opacity: 0, y: 10 }}
