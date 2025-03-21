@@ -29,7 +29,6 @@ export const SuggestedAppsSection = ({ title, description, apps, className = "" 
       <div className="flex justify-between items-center mb-2 px-1">
         <div>
           <h2 className="text-sm font-semibold text-gray-800">{title}</h2>
-          <p className="text-xs text-gray-500">{description}</p>
         </div>
         <Button variant="ghost" size="sm" className="text-xs text-blue-500">
           See all <ChevronRight className="h-3 w-3 ml-1" />
@@ -60,7 +59,6 @@ export const SuggestedAppsSection = ({ title, description, apps, className = "" 
                 </div>
                 <div className="text-center">
                   <p className="text-xs font-medium line-clamp-1">{app.name}</p>
-                  <p className="text-[10px] text-gray-500 line-clamp-1">{app.reason}</p>
                 </div>
               </div>
             </motion.div>
