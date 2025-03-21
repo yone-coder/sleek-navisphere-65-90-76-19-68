@@ -7,6 +7,7 @@ import { CategoryTabs } from '@/components/apps/CategoryTabs';
 import { AppControls } from '@/components/apps/AppControls';
 import { apps, appCategories, categories } from '@/components/apps/data/appsData';
 import type { App, AppCategory } from '@/components/apps/types';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export function ExploreTab() {
   const [activeTab, setActiveTab] = useState("all");
@@ -57,9 +58,14 @@ export function ExploreTab() {
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div className="flex-1 min-w-0">
-              <CategoryTabs 
-                categories={categories}
-              />
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <TabsList className="w-full">
+                  <TabsTrigger value="all">All</TabsTrigger>
+                  <TabsTrigger value="favorites">Favorites</TabsTrigger>
+                  <TabsTrigger value="popular">Popular</TabsTrigger>
+                  <TabsTrigger value="recent">New</TabsTrigger>
+                </TabsList>
+              </Tabs>
             </div>
 
             <div className="flex-shrink-0">
@@ -77,12 +83,18 @@ export function ExploreTab() {
             </div>
           </div>
 
-          <AppGrid 
-            apps={filteredApps}
-            favorites={favorites}
-            onToggleFavorite={handleToggleFavorite}
-            viewMode={viewMode}
+          <CategoryTabs 
+            categories={categories}
           />
+
+          <div className="mt-6">
+            <AppGrid 
+              apps={filteredApps}
+              favorites={favorites}
+              onToggleFavorite={handleToggleFavorite}
+              viewMode={viewMode}
+            />
+          </div>
         </div>
       </div>
     </div>
