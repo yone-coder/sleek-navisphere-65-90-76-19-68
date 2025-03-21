@@ -12,7 +12,6 @@ const Modish = () => {
   const { id } = useParams();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const headerRef = useRef<HTMLDivElement>(null);
   
   // Default to product ID 1 if none is provided
   const productId = id || '1';
@@ -22,24 +21,38 @@ const Modish = () => {
   const discountPrice = 39.99;  // Discounted price
   const stock = 68;
 
-  // Handle header spacing
+  // Handle header spacing with a more reliable approach
   const [headerHeight, setHeaderHeight] = useState(0);
-
+  
   useEffect(() => {
-    const updateHeaderHeight = () => {
-      const headerElement = document.querySelector('.modish-header');
-      if (headerElement) {
-        setHeaderHeight(headerElement.clientHeight);
-      }
-    };
-
+    // Initial measurement
     updateHeaderHeight();
+    
+    // Set up a more robust measurement approach with multiple triggers
     window.addEventListener('resize', updateHeaderHeight);
+    window.addEventListener('load', updateHeaderHeight);
+    
+    // Use a timeout to ensure measurement after all content is rendered
+    const timeoutId = setTimeout(updateHeaderHeight, 100);
+    
+    // Also measure after a longer delay to catch any late layout shifts
+    const longTimeoutId = setTimeout(updateHeaderHeight, 500);
     
     return () => {
       window.removeEventListener('resize', updateHeaderHeight);
+      window.removeEventListener('load', updateHeaderHeight);
+      clearTimeout(timeoutId);
+      clearTimeout(longTimeoutId);
     };
   }, []);
+  
+  const updateHeaderHeight = () => {
+    const headerElement = document.querySelector('.modish-header');
+    if (headerElement) {
+      const height = headerElement.clientHeight;
+      setHeaderHeight(height);
+    }
+  };
 
   const handleAddToCart = () => {
     toast({
@@ -79,7 +92,9 @@ const Modish = () => {
       <ModishHeader />
       <div 
         className="w-full mx-auto px-0"
-        style={{ paddingTop: `${headerHeight}px` }} // Dynamic padding based on header height
+        style={{ 
+          paddingTop: headerHeight ? `${headerHeight}px` : '120px' // Fixed fallback height if measurement fails
+        }}
       >
         <ModishProductDetails 
           productId={productId} 

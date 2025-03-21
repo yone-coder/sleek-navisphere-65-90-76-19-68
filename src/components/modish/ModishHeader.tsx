@@ -26,9 +26,9 @@ export function ModishHeader() {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-200 modish-header", // Added modish-header class
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-200 modish-header", 
         scrolled 
-          ? "bg-white shadow-md py-1" // Added shadow-md for better visibility
+          ? "bg-white shadow-md py-1" 
           : "bg-white py-1"
       )}
     >

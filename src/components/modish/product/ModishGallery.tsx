@@ -24,25 +24,6 @@ export function ModishGallery({ images, name, hasVideo = true, hasAR = true }: M
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
   const zoomFactor = 1.8;
 
-  // Get header height for proper spacing
-  const [headerHeight, setHeaderHeight] = useState(0);
-  
-  useEffect(() => {
-    const updateHeaderHeight = () => {
-      const headerElement = document.querySelector('.modish-header');
-      if (headerElement) {
-        setHeaderHeight(headerElement.clientHeight);
-      }
-    };
-
-    updateHeaderHeight();
-    window.addEventListener('resize', updateHeaderHeight);
-    
-    return () => {
-      window.removeEventListener('resize', updateHeaderHeight);
-    };
-  }, []);
-
   // Tracking touch/mouse position
   const handleZoomMove = (e: React.MouseEvent | React.TouchEvent) => {
     if (!imageRefs.current[currentIndex] || !isZoomed) return;
@@ -142,7 +123,7 @@ export function ModishGallery({ images, name, hasVideo = true, hasAR = true }: M
   };
 
   return (
-    <div className="relative bg-white" style={{ marginTop: headerHeight ? '8px' : '70px' }}>
+    <div className="relative bg-white">
       {/* Main gallery container */}
       <div 
         ref={containerRef}
