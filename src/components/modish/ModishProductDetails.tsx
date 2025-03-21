@@ -1,12 +1,12 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ModishGallery } from './product/ModishGallery';
 import { ModishInfo } from './product/ModishInfo';
 import { ModishOptions } from './product/ModishOptions';
 import { ModishActions } from './product/ModishActions';
 import { ModishDescription } from './product/ModishDescription';
 import { ModishReviews } from './product/ModishReviews';
-import { ModishCommentPanel } from './product/ModishCommentPanel';
+import ModishCommentPanel from './product/ModishCommentPanel';
 import { ModishSimilar } from './product/ModishSimilar';
 import { ModishQuestions } from './product/ModishQuestions';
 import { Separator } from '@/components/ui/separator';
@@ -22,6 +22,7 @@ const productData = {
   rating: 4.5,
   reviewCount: 1245,
   storeName: 'Modern Luxe Furniture Store',
+  brand: 'Modern Luxe', // Add brand for ModishInfo
   storeRating: 97.5,
   productSold: 5423,
   shipping: 'Free Shipping',
@@ -32,8 +33,18 @@ const productData = {
     '/lovable-uploads/44c5c93d-ace1-4feb-a49b-db4a8a02f987.png',
     '/lovable-uploads/9e449bdb-9bc8-4c07-833d-aba77900c9c6.png',
   ],
-  colors: ['Black', 'White', 'Gray', 'Blue', 'Green'],
-  sizes: ['Small', 'Medium', 'Large'],
+  colors: [
+    { name: 'Black', value: '#000000' },
+    { name: 'White', value: '#FFFFFF' },
+    { name: 'Gray', value: '#808080' },
+    { name: 'Blue', value: '#0000FF' },
+    { name: 'Green', value: '#008000' }
+  ],
+  sizes: [
+    { name: 'Small', available: true },
+    { name: 'Medium', available: true },
+    { name: 'Large', available: true }
+  ],
   description: 'This elegant accent chair combines comfort and style with its minimalist design. Perfect for modern homes, it features premium upholstery and sturdy construction to enhance any room decor. The ergonomic design provides excellent back support.',
   specifications: [
     { name: 'Material', value: 'Premium Polyester Fabric' },
@@ -66,6 +77,12 @@ export function ModishProductDetails({
     ...(price !== undefined && { price }),
     ...(discountPrice !== undefined && { discountPrice }),
   };
+
+  // State for ModishOptions component
+  const [selectedColor, setSelectedColor] = useState(product.colors[0].value);
+  const [selectedSize, setSelectedSize] = useState('');
+  const [quantity, setQuantity] = useState(1);
+  const [showCommentPanel, setShowCommentPanel] = useState(false);
   
   return (
     <div style={{ paddingTop: `${headerHeight}px` }}>
@@ -77,53 +94,61 @@ export function ModishProductDetails({
       <div className="px-3 mt-3">
         <ModishInfo 
           name={product.name}
+          brand={product.brand}
           price={product.price}
           discountPrice={product.discountPrice}
-          discountPercentage={product.discountPercentage}
           rating={product.rating}
           reviewCount={product.reviewCount}
-          productSold={product.productSold}
-          shipping={product.shipping}
-          deliveryDate={product.deliveryDate}
+          description={product.description}
         />
         
         <Separator className="my-4" />
         
         <ModishOptions 
           colors={product.colors}
-          sizes={product.sizes}
+          selectedColor={selectedColor}
+          onSelectColor={setSelectedColor}
+          quantity={quantity}
+          onUpdateQuantity={setQuantity}
           stock={product.stock}
+          price={product.price}
+          discountPrice={product.discountPrice}
+          sizes={product.sizes}
+          selectedSize={selectedSize}
+          onSelectSize={setSelectedSize}
         />
         
         <Separator className="my-4" />
         
-        <ModishActions />
+        <ModishActions 
+          product={product}
+          selectedColor={selectedColor}
+          quantity={quantity}
+        />
         
         <Separator className="my-4" />
         
         <ModishDescription 
           description={product.description}
-          specifications={product.specifications}
         />
         
         <Separator className="my-4" />
         
-        <ModishReviews 
-          rating={product.rating}
-          reviewCount={product.reviewCount}
-        />
+        <ModishReviews />
         
         <Separator className="my-4" />
         
-        <ModishQuestions />
+        <ModishQuestions productId={product.id} />
         
         <Separator className="my-4" />
         
-        <ModishSimilar />
+        <ModishSimilar currentProductId={product.id} />
         
         <Separator className="my-4" />
         
-        <ModishCommentPanel />
+        {showCommentPanel && (
+          <ModishCommentPanel onClose={() => setShowCommentPanel(false)} />
+        )}
       </div>
     </div>
   );
