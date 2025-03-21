@@ -3,7 +3,7 @@ import { Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface AppsHeaderProps {
-  onOpenSearch: () => void;
+  onOpenSearch?: () => void;
 }
 
 export const AppsHeader = ({ onOpenSearch }: AppsHeaderProps) => {

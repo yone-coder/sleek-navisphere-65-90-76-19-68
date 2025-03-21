@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass, Bell, BookOpen, Activity, Zap, Layout, Send, Download, TrendingUp, ChevronRight, Clock, Star, MoreHorizontal, Bookmark, User, ArrowDownLeft, ArrowUpRight, Sparkles, Package, Trophy, Headphones, Palette, Sunrise, Coffee, FileText, Briefcase, Wifi, Cpu, Archive, Layers, Play, Gamepad2, CheckSquare } from 'lucide-react';
 import { ProfileCard } from '@/components/apps/ProfileCard';
@@ -30,7 +31,6 @@ export function HomeTab() {
   const [editMode, setEditMode] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [showRecentlyUsed, setShowRecentlyUsed] = useState(true);
   const [activeAppId, setActiveAppId] = useState<number | null>(null);
 
   useEffect(() => {
@@ -157,17 +157,17 @@ export function HomeTab() {
     { id: 'entertainment', label: 'Media' },
   ];
 
-  const recentApps: RecentApp[] = [
-    { id: 101, name: 'Modish', color: 'bg-purple-500', letter: 'M', time: '2 mins ago', type: 'app-usage' },
-    { id: 102, name: 'Maps', color: 'bg-blue-500', letter: 'M', time: '1 hour ago', type: 'app-usage' },
-    { id: 103, name: 'Chat', color: 'bg-green-500', letter: 'C', time: '3 hours ago', type: 'app-usage' },
-  ];
-
   const pinnedApps = [
     { id: 301, name: 'Messages', icon: Mail, color: 'bg-blue-500', notification: 3 },
     { id: 302, name: 'Photos', icon: Image, color: 'bg-pink-500', notification: 0 },
     { id: 303, name: 'Files', icon: FileText, color: 'bg-amber-500', notification: 2 },
     { id: 304, name: 'Work', icon: Briefcase, color: 'bg-purple-500', notification: 0 },
+  ];
+
+  const recentApps: RecentApp[] = [
+    { id: 101, name: 'Modish', color: 'bg-purple-500', letter: 'M', time: '2 mins ago', type: 'app-usage' },
+    { id: 102, name: 'Maps', color: 'bg-blue-500', letter: 'M', time: '1 hour ago', type: 'app-usage' },
+    { id: 103, name: 'Chat', color: 'bg-green-500', letter: 'C', time: '3 hours ago', type: 'app-usage' },
   ];
 
   return (
