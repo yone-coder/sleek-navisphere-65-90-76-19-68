@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ZoomIn, PlayCircle, Smartphone } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -124,7 +123,7 @@ export function ModishGallery({ images, name, hasVideo = true, hasAR = true }: M
   };
 
   return (
-    <div className="relative bg-white">
+    <div className="relative bg-white pt-2">
       {/* Main gallery container */}
       <div 
         ref={containerRef}

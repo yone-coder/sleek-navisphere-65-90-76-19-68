@@ -50,9 +50,10 @@ type ModishProductDetailsProps = {
   productId: string;
   price: number;
   discountPrice: number;
+  headerHeight?: number;
 };
 
-export function ModishProductDetails({ productId, price, discountPrice }: ModishProductDetailsProps) {
+export function ModishProductDetails({ productId, price, discountPrice, headerHeight = 0 }: ModishProductDetailsProps) {
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
@@ -281,7 +282,10 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
   }
 
   return (
-    <div className="space-y-4 pb-20">
+    <div 
+      className="pb-20"
+      style={{ paddingTop: `${headerHeight}px` }}
+    >
       
       <div ref={headerSpacerRef} className="w-full"></div>
       
@@ -289,7 +293,10 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         <div className="h-14"></div>
       </div>
       
-      <ModishGallery images={product.images} name={product.name} />
+      <ModishGallery 
+        images={product.images}
+        name={product.name}
+      />
       
       {showRealtimeAlert && (
         <div className="fixed bottom-32 right-4 bg-white shadow-lg rounded-lg p-2 animate-fade-in border border-orange-200 z-40">
@@ -787,7 +794,11 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         {activeTab === 'reviews' && (
           <div className="p-3">
             <h2 className="text-lg font-medium text-gray-800 mb-4">Customer Reviews</h2>
-            <ModishReviews productId={productId} />
+            <ModishReviews 
+              productId={productId}
+              rating={product.rating} 
+              reviewCount={product.reviewCount} 
+            />
           </div>
         )}
         
@@ -863,4 +874,3 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
     </div>
   );
 }
-
