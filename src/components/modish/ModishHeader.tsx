@@ -26,9 +26,9 @@ export function ModishHeader() {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-200 modish-header", 
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-200",
         scrolled 
-          ? "bg-white shadow-md py-1" 
+          ? "bg-white shadow-sm py-1" 
           : "bg-white py-1"
       )}
     >
@@ -119,7 +119,7 @@ export function ModishHeader() {
       
       {/* Category tabs - AliExpress style - only show when scrolled */}
       {scrolled && (
-        <div className="bg-white overflow-x-auto scrollbar-none shadow-sm">
+        <div className="bg-white overflow-x-auto scrollbar-none">
           <div className="flex items-center px-2 py-1.5 gap-3 min-w-max">
             <button className="flex items-center whitespace-nowrap text-xs bg-red-50 text-red-500 px-2.5 py-1 rounded-full">
               <span>All Categories</span>

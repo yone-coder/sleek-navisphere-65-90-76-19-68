@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ZoomIn, PlayCircle, Smartphone } from 'lucide-react';
 import { cn } from '@/lib/utils';
