@@ -15,13 +15,14 @@ export interface Notification {
 
 interface NotificationsSectionProps {
   notifications: Notification[];
+  className?: string;
 }
 
-export const NotificationsSection = ({ notifications }: NotificationsSectionProps) => {
+export const NotificationsSection = ({ notifications, className = "" }: NotificationsSectionProps) => {
   if (notifications.length === 0) return null;
   
   return (
-    <div className="mb-4">
+    <div className={`min-w-[280px] flex-shrink-0 ${className}`}>
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-sm font-semibold text-gray-800">Notifications</h2>
         <Button variant="ghost" size="sm" className="text-xs text-blue-500">

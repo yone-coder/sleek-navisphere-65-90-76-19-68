@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass, Bell, BookOpen, Activity, Zap, Layout, Send, Download, TrendingUp, ChevronRight, Clock, Star, MoreHorizontal, Bookmark, User, ArrowDownLeft, ArrowUpRight, Sparkles, Package, Trophy, Headphones, Palette, Sunrise, Coffee, FileText, Briefcase, Wifi, Cpu, Archive, Layers, Play, Gamepad2, CheckSquare } from 'lucide-react';
 import { ProfileCard } from '@/components/apps/ProfileCard';
@@ -8,45 +7,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { useToast } from '@/hooks/use-toast';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Card, CardContent } from "@/components/ui/card";
-import { QuickActionsGrid } from '@/components/apps/QuickActionsGrid';
-import { SuggestedAppsSection } from '@/components/apps/SuggestedAppsSection';
+import { Card } from "@/components/ui/card";
+import { QuickActionsGrid, QuickAction } from '@/components/apps/QuickActionsGrid';
+import { SuggestedAppsSection, SuggestedApp } from '@/components/apps/SuggestedAppsSection';
 import { NotificationsSection, Notification } from '@/components/apps/NotificationsSection';
 import { FavoritesGrid } from '@/components/apps/FavoritesGrid';
 import { ScrollArea } from '@/components/ui/scroll-area';
-
-// Define types for different activities
-interface RecentApp {
-  id: number;
-  name: string;
-  color: string;
-  letter: string;
-  time: string;
-  type: 'app-usage';
-}
-
-interface Transaction {
-  id: number;
-  type: 'transaction';
-  subtype: 'sent' | 'received';
-  amount: number;
-  recipient?: string;
-  sender?: string;
-  date: string;
-  time: string;
-}
-
-interface ActivityItem {
-  id: string;
-  type: 'transaction' | 'notification' | 'app-usage';
-  data: Transaction | Notification | RecentApp;
-  time: number;
-}
+import { RecentActivitySection, RecentApp, Transaction, ActivityItem } from '@/components/apps/RecentActivitySection';
 
 export function HomeTab() {
-  // Get actual apps from the appsData
   const [favoriteApps, setFavoriteApps] = useState(() => {
-    // Take the first 12 apps from the data source
     return apps.slice(0, 12).map((app, index) => ({
       id: index + 1,
       name: app.name,
@@ -65,7 +35,6 @@ export function HomeTab() {
   const [showRecentlyUsed, setShowRecentlyUsed] = useState(true);
   const [activeAppId, setActiveAppId] = useState<number | null>(null);
 
-  // Update time every minute
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -73,19 +42,16 @@ export function HomeTab() {
     return () => clearInterval(timer);
   }, []);
 
-  // Filter for favorites and by search term if active
   const filteredApps = favoriteApps.filter(app => 
     app.favorite && 
     (!searchMode || app.name.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  // Toggle favorite status
   const toggleFavorite = (id) => {
     setFavoriteApps(favoriteApps.map(app => 
       app.id === id ? { ...app, favorite: !app.favorite } : app
     ));
 
-    // Show toast notification
     const app = favoriteApps.find(app => app.id === id);
     toast({
       title: `${app.name} removed from favorites`,
@@ -94,18 +60,15 @@ export function HomeTab() {
     });
   };
 
-  // Handle search input change
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  // Reset search
   const clearSearch = () => {
     setSearchTerm('');
     setSearchMode(false);
   };
 
-  // Tap and hold to activate edit mode
   const handleAppLongPress = (id) => {
     setActiveAppId(id);
     setTimeout(() => {
@@ -114,7 +77,6 @@ export function HomeTab() {
     }, 500);
   }
 
-  // Handle app tap
   const handleAppTap = (id) => {
     if (!editMode) {
       const app = favoriteApps.find(app => app.id === id);
@@ -126,7 +88,6 @@ export function HomeTab() {
     }
   }
 
-  // Quick actions with handlers
   const quickActions = [
     { 
       icon: Send, 
@@ -190,7 +151,6 @@ export function HomeTab() {
     },
   ];
 
-  // App categories for filters
   const categories = [
     { id: 'all', label: 'All' },
     { id: 'recent', label: 'Recent' },
@@ -199,14 +159,12 @@ export function HomeTab() {
     { id: 'entertainment', label: 'Media' },
   ];
 
-  // Recently used apps (mock)
   const recentApps: RecentApp[] = [
     { id: 101, name: 'Modish', color: 'bg-purple-500', letter: 'M', time: '2 mins ago', type: 'app-usage' },
     { id: 102, name: 'Maps', color: 'bg-blue-500', letter: 'M', time: '1 hour ago', type: 'app-usage' },
     { id: 103, name: 'Chat', color: 'bg-green-500', letter: 'C', time: '3 hours ago', type: 'app-usage' },
   ];
 
-  // Suggested apps based on current time and usage
   const getSuggestedApps = () => {
     const hour = currentTime.getHours();
     
@@ -239,33 +197,24 @@ export function HomeTab() {
 
   const suggestedApps = getSuggestedApps();
 
-  // Notifications (mock)
   const notifications: Notification[] = [
     { id: 301, app: 'Email', message: '3 new messages', time: '10 min ago', color: 'bg-blue-500' },
     { id: 302, app: 'Calendar', message: 'Meeting in 30 minutes', time: '25 min ago', color: 'bg-red-500' },
     { id: 303, app: 'Updates', message: '2 apps need updating', time: '1 hour ago', color: 'bg-green-500' },
   ];
 
-  // Recent transactions (mock)
   const recentTransactions: Transaction[] = [
     { id: 1, type: 'transaction', subtype: "sent", amount: 230, recipient: "John Doe", date: "Today", time: "14:32" },
     { id: 2, type: 'transaction', subtype: "received", amount: 1250, sender: "PayRoll Inc", date: "Yesterday", time: "09:15" },
     { id: 3, type: 'transaction', subtype: "sent", amount: 45, recipient: "Coffee Shop", date: "Today", time: "08:30" },
   ];
 
-  // Recent activities (combining transactions, notifications, and app usage)
   const recentActivities: ActivityItem[] = [
     ...recentTransactions.map(t => ({
       id: `tx-${t.id}`,
       type: 'transaction' as const,
       data: t,
       time: new Date(currentTime.setHours(parseInt(t.time.split(':')[0]), parseInt(t.time.split(':')[1]))).getTime()
-    })),
-    ...notifications.map(n => ({
-      id: `notif-${n.id}`,
-      type: 'notification' as const,
-      data: n,
-      time: Date.now() - (n.time.includes('min') ? parseInt(n.time) * 60 * 1000 : 60 * 60 * 1000)
     })),
     ...recentApps.map(a => ({
       id: `app-${a.id}`,
@@ -275,15 +224,13 @@ export function HomeTab() {
     }))
   ].sort((a, b) => b.time - a.time);
 
-  // New features
-  const [pinnedApps, setPinnedApps] = useState([
+  const pinnedApps = [
     { id: 301, name: 'Messages', icon: Mail, color: 'bg-blue-500', notification: 3 },
     { id: 302, name: 'Photos', icon: Image, color: 'bg-pink-500', notification: 0 },
     { id: 303, name: 'Files', icon: FileText, color: 'bg-amber-500', notification: 2 },
     { id: 304, name: 'Work', icon: Briefcase, color: 'bg-purple-500', notification: 0 },
-  ]);
+  ];
 
-  // Smart suggestions based on time, location, and usage
   const smartSuggestions = [
     { 
       id: 401, 
@@ -309,273 +256,176 @@ export function HomeTab() {
 
   return (
     <div className="flex flex-col h-full w-full overflow-hidden">
-      {/* Use ProfileCard component */}
       <ProfileCard />
 
-      {/* Main scrollable content */}
       <motion.div 
         className="flex-1 overflow-y-auto"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        {/* Time-based suggestions */}
-        {suggestedApps.length > 0 && (
-          <SuggestedAppsSection 
-            title={`Good ${currentTime.getHours() < 12 ? 'Morning' : currentTime.getHours() < 18 ? 'Afternoon' : 'Evening'}`}
-            description="Apps you might need right now"
-            apps={suggestedApps}
-          />
-        )}
+        <div className="px-4 pt-2 pb-20">
+          {suggestedApps.length > 0 && (
+            <SuggestedAppsSection 
+              title={`Good ${currentTime.getHours() < 12 ? 'Morning' : currentTime.getHours() < 18 ? 'Afternoon' : 'Evening'}`}
+              description="Apps you might need right now"
+              apps={suggestedApps}
+            />
+          )}
 
-        {/* Quick Actions */}
-        <div className="px-4 mb-5">
-          <h2 className="text-sm font-semibold text-gray-800 mb-3">Quick Actions</h2>
-          <QuickActionsGrid actions={quickActions} />
-        </div>
-
-        {/* Combined Activity and Notifications */}
-        <div className="mb-5">
-          <div className="px-4 flex justify-between items-center mb-2">
-            <h2 className="text-sm font-semibold text-gray-800">Recent Activity</h2>
-            <Button variant="ghost" size="sm" className="text-xs text-blue-500">
-              See all <ChevronRight className="h-3 w-3 ml-1" />
-            </Button>
+          <div className="mb-5">
+            <h2 className="text-sm font-semibold text-gray-800 mb-3">Quick Actions</h2>
+            <QuickActionsGrid actions={quickActions} />
           </div>
-          
-          <ScrollArea className="w-full" type="scroll">
-            <div className="flex px-4 space-x-4 pb-2">
-              {recentActivities.slice(0, 8).map((activity, index) => {
-                if (activity.type === 'transaction') {
-                  const transaction = activity.data as Transaction;
-                  return (
-                    <motion.div 
-                      key={activity.id} 
-                      className="min-w-[270px] flex-shrink-0 flex items-center justify-between p-3 bg-white rounded-xl border border-gray-100 shadow-sm"
-                      whileHover={{ y: -2 }}
-                      whileTap={{ scale: 0.98 }}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
-                          transaction.subtype === "received" ? "bg-green-100" : "bg-red-100"
-                        }`}>
-                          {transaction.subtype === "received" ? (
-                            <ArrowDownLeft className="h-5 w-5 text-green-600" />
-                          ) : (
-                            <ArrowUpRight className="h-5 w-5 text-red-600" />
-                          )}
-                        </div>
-                        <div>
-                          <p className="font-medium text-sm">
-                            {transaction.subtype === "received" ? transaction.sender : transaction.recipient}
-                          </p>
-                          <p className="text-xs text-gray-400">
-                            {transaction.date} • {transaction.time}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className={`font-semibold ${
-                          transaction.subtype === "received" ? "text-green-600" : "text-red-600"
-                        }`}>
-                          {transaction.subtype === "received" ? "+" : "-"}${transaction.amount}
-                        </p>
-                      </div>
-                    </motion.div>
-                  );
-                } else if (activity.type === 'notification') {
-                  const notification = activity.data as Notification;
-                  return (
-                    <motion.div 
-                      key={activity.id} 
-                      className="min-w-[250px] flex-shrink-0 bg-white rounded-xl p-3 flex items-center shadow-sm border border-gray-100"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <div className={`${notification.color} w-10 h-10 rounded-lg flex items-center justify-center mr-3`}>
-                        <Bell size={18} className="text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">{notification.app}</p>
-                        <p className="text-xs text-gray-500">{notification.message}</p>
-                      </div>
-                      <span className="text-xs text-gray-400">{notification.time}</span>
-                    </motion.div>
-                  );
-                } else {
-                  const app = activity.data as RecentApp;
-                  return (
-                    <motion.div 
-                      key={activity.id} 
-                      className="min-w-[220px] flex-shrink-0 bg-white rounded-xl p-3 flex items-center shadow-sm border border-gray-100"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <div className={`${app.color} w-10 h-10 rounded-lg flex items-center justify-center mr-3 shadow-sm`}>
-                        <span className="text-white text-lg font-bold">{app.letter}</span>
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">{app.name}</p>
-                        <p className="text-xs text-gray-500">Used {app.time}</p>
-                      </div>
-                      <Button variant="ghost" size="sm" className="h-8 w-8 rounded-full p-0">
-                        <Play size={14} className="text-gray-500" />
-                      </Button>
-                    </motion.div>
-                  );
-                }
-              })}
+
+          <div className="mb-5">
+            <div className="flex justify-between items-center mb-2">
+              <h2 className="text-sm font-semibold text-gray-800">Activity & Notifications</h2>
+              <Button variant="ghost" size="sm" className="text-xs text-blue-500">
+                See all <ChevronRight className="h-3 w-3 ml-1" />
+              </Button>
             </div>
-          </ScrollArea>
-        </div>
-
-        {/* Smart Suggestions */}
-        <div className="px-4 mb-5">
-          <div className="flex justify-between items-center mb-3">
-            <h2 className="text-sm font-semibold text-gray-800">Smart Collections</h2>
-            <Button variant="ghost" size="sm" className="text-xs text-blue-500">
-              Edit <ChevronRight className="h-3 w-3 ml-1" />
-            </Button>
+            
+            <ScrollArea className="w-full" type="scroll" orientation="horizontal">
+              <div className="flex space-x-4 pb-4 pr-4">
+                <RecentActivitySection activities={recentActivities.slice(0, 4)} />
+                <NotificationsSection notifications={notifications} />
+              </div>
+            </ScrollArea>
           </div>
 
-          <div className="space-y-3">
-            {smartSuggestions.map((collection) => (
-              <motion.div
-                key={collection.id}
-                className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm"
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <div className="flex justify-between items-center mb-2">
-                  <div>
-                    <h3 className="text-sm font-medium">{collection.title}</h3>
-                    <p className="text-xs text-gray-500">{collection.time}</p>
-                  </div>
-                  <Button variant="outline" size="sm" className="h-7 text-xs border-gray-200">
-                    Launch All
-                  </Button>
-                </div>
-                <div className="flex gap-2">
-                  {collection.apps.map((app) => (
-                    <div key={app.id} className="flex flex-col items-center">
-                      <div className={`${app.color} w-10 h-10 rounded-lg flex items-center justify-center shadow-sm mb-1`}>
-                        <span className="text-white text-sm font-bold">{app.letter}</span>
-                      </div>
-                      <span className="text-xs">{app.name}</span>
+          <div className="mb-5">
+            <div className="flex justify-between items-center mb-3">
+              <h2 className="text-sm font-semibold text-gray-800">Smart Collections</h2>
+              <Button variant="ghost" size="sm" className="text-xs text-blue-500">
+                Edit <ChevronRight className="h-3 w-3 ml-1" />
+              </Button>
+            </div>
+
+            <div className="space-y-3">
+              {smartSuggestions.map((collection) => (
+                <motion.div
+                  key={collection.id}
+                  className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div className="flex justify-between items-center mb-2">
+                    <div>
+                      <h3 className="text-sm font-medium">{collection.title}</h3>
+                      <p className="text-xs text-gray-500">{collection.time}</p>
                     </div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
+                    <Button variant="outline" size="sm" className="h-7 text-xs border-gray-200">
+                      Launch All
+                    </Button>
+                  </div>
+                  <div className="flex gap-2">
+                    {collection.apps.map((app) => (
+                      <div key={app.id} className="flex flex-col items-center">
+                        <div className={`${app.color} w-10 h-10 rounded-lg flex items-center justify-center shadow-sm mb-1`}>
+                          <span className="text-white text-sm font-bold">{app.letter}</span>
+                        </div>
+                        <span className="text-xs">{app.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Pinned Apps */}
-        <div className="px-4 mb-5">
-          <h2 className="text-sm font-semibold text-gray-800 mb-3">Pinned</h2>
-          <div className="grid grid-cols-4 gap-4">
-            {pinnedApps.map(app => (
-              <motion.div
-                key={app.id}
-                className="flex flex-col items-center"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+          <div className="mb-5">
+            <h2 className="text-sm font-semibold text-gray-800 mb-3">Pinned</h2>
+            <div className="grid grid-cols-4 gap-4">
+              {pinnedApps.map(app => (
+                <motion.div
+                  key={app.id}
+                  className="flex flex-col items-center"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <div className="relative">
+                    <div className={`${app.color} w-14 h-14 rounded-xl flex items-center justify-center shadow-md mb-1`}>
+                      <app.icon className="h-6 w-6 text-white" />
+                    </div>
+                    {app.notification > 0 && (
+                      <Badge className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center px-1">
+                        {app.notification}
+                      </Badge>
+                    )}
+                  </div>
+                  <span className="text-xs text-center">{app.name}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <div className="sticky top-0 z-10 bg-white pt-2 pb-2">
+            <div className="flex justify-between items-center mb-2">
+              <h1 className="text-base font-semibold text-gray-800">Favorites</h1>
+              <div className="flex space-x-4">
+                {searchMode ? (
+                  <button 
+                    onClick={clearSearch}
+                    className="text-blue-500"
+                  >
+                    <X size={18} />
+                  </button>
+                ) : (
+                  <button 
+                    onClick={() => setSearchMode(true)}
+                    className="text-blue-500"
+                  >
+                    <Search size={18} />
+                  </button>
+                )}
+                <button 
+                  onClick={() => setEditMode(!editMode)}
+                  className={`${editMode ? 'text-red-500' : 'text-blue-500'} text-xs font-medium`}
+                >
+                  {editMode ? 'Done' : 'Edit'}
+                </button>
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
+                <TabsList className="bg-white rounded-full border border-gray-200 p-0.5 shadow-sm">
+                  {categories.map(category => (
+                    <TabsTrigger 
+                      key={category.id} 
+                      value={category.id}
+                      className="py-1 px-3 text-xs rounded-full data-[state=active]:bg-blue-500 data-[state=active]:text-white"
+                    >
+                      {category.label}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+            </div>
+
+            {searchMode && (
+              <motion.div 
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="mb-3"
               >
                 <div className="relative">
-                  <div className={`${app.color} w-14 h-14 rounded-xl flex items-center justify-center shadow-md mb-1`}>
-                    <app.icon className="h-6 w-6 text-white" />
-                  </div>
-                  {app.notification > 0 && (
-                    <Badge className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center px-1">
-                      {app.notification}
-                    </Badge>
-                  )}
+                  <input
+                    type="text"
+                    placeholder="Search favorites..."
+                    value={searchTerm}
+                    onChange={handleSearch}
+                    className="w-full p-2 bg-white rounded-lg pl-8 text-sm border border-gray-200 shadow-sm"
+                    autoFocus
+                  />
+                  <Search size={16} className="absolute left-2 top-2.5 text-gray-400" />
                 </div>
-                <span className="text-xs text-center">{app.name}</span>
               </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* Favorites Header */}
-        <div className="px-4 sticky top-0 z-10 bg-white pt-2 pb-2">
-          <div className="flex justify-between items-center mb-2">
-            <h1 className="text-base font-semibold text-gray-800">Favorites</h1>
-            <div className="flex space-x-4">
-              {searchMode ? (
-                <button 
-                  onClick={clearSearch}
-                  className="text-blue-500"
-                >
-                  <X size={18} />
-                </button>
-              ) : (
-                <button 
-                  onClick={() => setSearchMode(true)}
-                  className="text-blue-500"
-                >
-                  <Search size={18} />
-                </button>
-              )}
-              <button 
-                onClick={() => setEditMode(!editMode)}
-                className={`${editMode ? 'text-red-500' : 'text-blue-500'} text-xs font-medium`}
-              >
-                {editMode ? 'Done' : 'Edit'}
-              </button>
-            </div>
+            )}
           </div>
 
-          {/* App Categories */}
-          <div className="mb-3">
-            <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
-              <TabsList className="bg-white rounded-full border border-gray-200 p-0.5 shadow-sm">
-                {categories.map(category => (
-                  <TabsTrigger 
-                    key={category.id} 
-                    value={category.id}
-                    className="py-1 px-3 text-xs rounded-full data-[state=active]:bg-blue-500 data-[state=active]:text-white"
-                  >
-                    {category.label}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
-          </div>
-
-          {/* Search bar */}
-          {searchMode && (
-            <motion.div 
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="mb-3"
-            >
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search favorites..."
-                  value={searchTerm}
-                  onChange={handleSearch}
-                  className="w-full p-2 bg-white rounded-lg pl-8 text-sm border border-gray-200 shadow-sm"
-                  autoFocus
-                />
-                <Search size={16} className="absolute left-2 top-2.5 text-gray-400" />
-              </div>
-            </motion.div>
-          )}
-        </div>
-
-        {/* App grid with Favorites component */}
-        <div className="px-4 mb-20"> {/* Add bottom padding for the bottom nav */}
-          {/* Recently Used Section (only show if not searching) */}
           {!searchMode && activeCategory === 'recent' && (
             <div className="mb-4">
               <h2 className="text-xs font-medium text-gray-600 mb-2">Recently Used</h2>
@@ -601,7 +451,6 @@ export function HomeTab() {
             </div>
           )}
 
-          {/* Favorites Grid */}
           <FavoritesGrid 
             apps={filteredApps}
             editMode={editMode}
@@ -613,7 +462,6 @@ export function HomeTab() {
         </div>
       </motion.div>
       
-      {/* App Actions Menu - Bottom Navbar */}
       <div className="fixed bottom-0 left-0 right-0 px-3 pt-2 pb-safe bg-white border-t border-gray-200 shadow-lg z-20">
         <div className="flex justify-around">
           <Button variant="ghost" size="sm" className="flex flex-col items-center h-16 w-16">
