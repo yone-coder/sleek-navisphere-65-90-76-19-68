@@ -123,7 +123,7 @@ export function ModishGallery({ images, name, hasVideo = true, hasAR = true }: M
   };
 
   return (
-    <div className="relative bg-white pt-1">
+    <div className="relative bg-white">
       {/* Main gallery container */}
       <div 
         ref={containerRef}
