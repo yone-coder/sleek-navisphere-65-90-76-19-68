@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass, Bell, BookOpen, Activity, Zap, Layout, Send, Download, TrendingUp, ChevronRight, Clock, Star, MoreHorizontal, Bookmark, User, ArrowDownLeft, ArrowUpRight, Sparkles, Package, Trophy, Headphones, Palette, Sunrise, Coffee, FileText, Briefcase, Wifi, Cpu, Archive, Layers, Play, Gamepad2, CheckSquare } from 'lucide-react';
 import { ProfileCard } from '@/components/apps/ProfileCard';
@@ -165,32 +166,36 @@ export function HomeTab() {
     { id: 103, name: 'Chat', color: 'bg-green-500', letter: 'C', time: '3 hours ago', type: 'app-usage' },
   ];
 
-  const getSuggestedApps = () => {
+  const getSuggestedApps = (): SuggestedApp[] => {
     const hour = currentTime.getHours();
     
     if (hour >= 6 && hour < 10) {
       return [
-        { id: 201, name: 'News', color: 'bg-amber-500', letter: 'N', reason: 'Morning briefing' },
-        { id: 202, name: 'Coffee', icon: Coffee, color: 'bg-yellow-700', letter: 'C', reason: 'Start your day' },
-        { id: 203, name: 'Journal', icon: FileText, color: 'bg-blue-600', letter: 'J', reason: 'Morning reflection' },
+        { id: 201, name: 'News', color: 'bg-amber-500', letter: 'N', reason: '' },
+        { id: 202, name: 'Coffee', icon: Coffee, color: 'bg-yellow-700', letter: 'C', reason: '' },
+        { id: 203, name: 'Journal', icon: FileText, color: 'bg-blue-600', letter: 'J', reason: '' },
+        { id: 204, name: 'Weather', icon: Sunrise, color: 'bg-cyan-500', letter: 'W', reason: '' },
       ];
     } else if (hour >= 12 && hour < 14) {
       return [
-        { id: 203, name: 'Food', color: 'bg-orange-500', letter: 'F', reason: 'Lunch time' },
-        { id: 204, name: 'Wallet', color: 'bg-green-500', letter: 'W', reason: 'Check balance' },
-        { id: 205, name: 'Break', icon: Coffee, color: 'bg-indigo-500', letter: 'B', reason: 'Take a break' },
+        { id: 203, name: 'Food', color: 'bg-orange-500', letter: 'F', reason: '' },
+        { id: 204, name: 'Wallet', color: 'bg-green-500', letter: 'W', reason: '' },
+        { id: 205, name: 'Break', icon: Coffee, color: 'bg-indigo-500', letter: 'B', reason: '' },
+        { id: 206, name: 'Social', icon: Globe, color: 'bg-blue-500', letter: 'S', reason: '' },
       ];
     } else if (hour >= 18 && hour < 22) {
       return [
-        { id: 205, name: 'Music', icon: Music, color: 'bg-pink-500', letter: 'M', reason: 'Evening relaxation' },
-        { id: 206, name: 'Video', icon: Video, color: 'bg-red-500', letter: 'V', reason: 'Watch something' },
-        { id: 207, name: 'Games', icon: Gamepad2, color: 'bg-violet-500', letter: 'G', reason: 'Evening entertainment' },
+        { id: 205, name: 'Music', icon: Music, color: 'bg-pink-500', letter: 'M', reason: '' },
+        { id: 206, name: 'Video', icon: Video, color: 'bg-red-500', letter: 'V', reason: '' },
+        { id: 207, name: 'Games', icon: Gamepad2, color: 'bg-violet-500', letter: 'G', reason: '' },
+        { id: 208, name: 'Social', icon: Globe, color: 'bg-blue-500', letter: 'S', reason: '' },
       ];
     } else {
       return [
-        { id: 207, name: 'Calendar', icon: Calendar, color: 'bg-blue-500', letter: 'C', reason: 'Upcoming events' },
-        { id: 208, name: 'Social', color: 'bg-purple-500', letter: 'S', reason: 'Connect with friends' },
-        { id: 209, name: 'Tasks', icon: CheckSquare, color: 'bg-emerald-500', letter: 'T', reason: 'Plan your day' },
+        { id: 207, name: 'Calendar', icon: Calendar, color: 'bg-blue-500', letter: 'C', reason: '' },
+        { id: 208, name: 'Social', color: 'bg-purple-500', letter: 'S', reason: '' },
+        { id: 209, name: 'Tasks', icon: CheckSquare, color: 'bg-emerald-500', letter: 'T', reason: '' },
+        { id: 210, name: 'Notes', icon: FileText, color: 'bg-yellow-500', letter: 'N', reason: '' },
       ];
     }
   };
@@ -231,29 +236,6 @@ export function HomeTab() {
     { id: 304, name: 'Work', icon: Briefcase, color: 'bg-purple-500', notification: 0 },
   ];
 
-  const smartSuggestions = [
-    { 
-      id: 401, 
-      title: "Morning Routine", 
-      time: "Weekdays, 7-9am",
-      apps: [
-        { id: 4011, name: "News", color: "bg-blue-500", letter: "N" },
-        { id: 4012, name: "Calendar", color: "bg-amber-500", letter: "C" },
-        { id: 4013, name: "Coffee", color: "bg-yellow-700", letter: "C" },
-      ]
-    },
-    { 
-      id: 402, 
-      title: "Work Productivity", 
-      time: "Weekdays, 9am-5pm",
-      apps: [
-        { id: 4021, name: "Docs", color: "bg-indigo-500", letter: "D" },
-        { id: 4022, name: "Email", color: "bg-red-500", letter: "E" },
-        { id: 4023, name: "Tasks", color: "bg-green-500", letter: "T" },
-      ]
-    }
-  ];
-
   return (
     <div className="flex flex-col h-full w-full overflow-hidden">
       <ProfileCard />
@@ -267,7 +249,7 @@ export function HomeTab() {
         {suggestedApps.length > 0 && (
           <SuggestedAppsSection 
             title={`Good ${currentTime.getHours() < 12 ? 'Morning' : currentTime.getHours() < 18 ? 'Afternoon' : 'Evening'}`}
-            description="Apps you might need right now"
+            description=""
             apps={suggestedApps}
             className="mb-4 px-2"
           />
@@ -280,62 +262,11 @@ export function HomeTab() {
 
         <div className="mb-4 px-2">
           <div className="flex justify-between items-center mb-2">
-            <h2 className="text-sm font-semibold text-gray-800">Activity & Notifications</h2>
-            <Button variant="ghost" size="sm" className="text-xs text-blue-500">
-              See all <ChevronRight className="h-3 w-3 ml-1" />
-            </Button>
-          </div>
-          
-          <ScrollArea className="w-full" type="scroll">
-            <div className="flex space-x-3 pb-3 pr-3">
-              <RecentActivitySection activities={recentActivities.slice(0, 4)} className="min-w-[280px]" />
-              <NotificationsSection notifications={notifications} className="min-w-[280px]" />
-            </div>
-          </ScrollArea>
-        </div>
-
-        <div className="mb-4 px-2">
-          <div className="flex justify-between items-center mb-2">
-            <h2 className="text-sm font-semibold text-gray-800">Smart Collections</h2>
+            <h2 className="text-sm font-semibold text-gray-800">Pinned</h2>
             <Button variant="ghost" size="sm" className="text-xs text-blue-500">
               Edit <ChevronRight className="h-3 w-3 ml-1" />
             </Button>
           </div>
-
-          <div className="space-y-2">
-            {smartSuggestions.map((collection) => (
-              <motion.div
-                key={collection.id}
-                className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm"
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <div className="flex justify-between items-center mb-2">
-                  <div>
-                    <h3 className="text-sm font-medium">{collection.title}</h3>
-                    <p className="text-xs text-gray-500">{collection.time}</p>
-                  </div>
-                  <Button variant="outline" size="sm" className="h-7 text-xs border-gray-200">
-                    Launch All
-                  </Button>
-                </div>
-                <div className="flex gap-2">
-                  {collection.apps.map((app) => (
-                    <div key={app.id} className="flex flex-col items-center">
-                      <div className={`${app.color} w-10 h-10 rounded-lg flex items-center justify-center shadow-sm mb-1`}>
-                        <span className="text-white text-sm font-bold">{app.letter}</span>
-                      </div>
-                      <span className="text-xs">{app.name}</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mb-4 px-2">
-          <h2 className="text-sm font-semibold text-gray-800 mb-2">Pinned</h2>
           <div className="grid grid-cols-4 gap-3">
             {pinnedApps.map(app => (
               <motion.div
