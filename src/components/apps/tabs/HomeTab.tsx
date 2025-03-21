@@ -20,7 +20,7 @@ export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
   // Fill with popular apps if we don't have enough favorites
   if (mostUsedApps.length < 4) {
     const popularApps = apps
-      .filter(app => app.status === "popular" && !favorites.includes(app.name))
+      .filter(app => app.status === "popular" && !favorites.some(fav => fav.name === app.name))
       .slice(0, 4 - mostUsedApps.length);
     
     mostUsedApps.push(...popularApps);
@@ -126,7 +126,7 @@ export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
                     onToggleFavorite(app.name);
                   }}
                 >
-                  <Star className={`w-3 h-3 ${favorites.includes(app.name) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
+                  <Star className={`w-3 h-3 ${favorites.some(fav => fav.name === app.name) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
                 </Button>
               </div>
             ))}

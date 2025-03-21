@@ -7,6 +7,7 @@ import { ExploreTab } from "@/components/apps/tabs/ExploreTab";
 import { AppsHeader } from "@/components/apps/AppsHeader";
 import { toast } from "@/hooks/use-toast";
 import { apps } from "@/components/apps/data/appsData";
+import type { App } from "@/components/apps/types";
 
 export default function Apps() {
   const [activeTab, setActiveTab] = useState("home");
@@ -28,7 +29,7 @@ export default function Apps() {
     );
     
     toast({
-      title: prev => prev.includes(appName) ? "Removed from favorites" : "Added to favorites",
+      title: favorites.includes(appName) ? "Removed from favorites" : "Added to favorites",
       description: appName,
       duration: 2000,
     });
