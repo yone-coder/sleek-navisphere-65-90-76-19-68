@@ -7,7 +7,6 @@ import { ExploreTab } from "@/components/apps/tabs/ExploreTab";
 import { SplashScreen } from "@/components/apps/SplashScreen";
 import { toast } from "@/hooks/use-toast";
 import { apps } from "@/components/apps/data/appsData";
-import type { App } from "@/components/apps/types";
 
 export default function Apps() {
   const [activeTab, setActiveTab] = useState("home");

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Star, Clock, Fire, Package, Maximize, Minimize } from "lucide-react";
+import { Star, Clock, Flame, Package, Maximize, Minimize } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -30,7 +30,7 @@ export function ExploreTabNav({
   // Set tabs configuration
   const tabs = [
     { id: "all", label: "All", icon: Package },
-    { id: "popular", label: "Popular", icon: Fire },
+    { id: "popular", label: "Popular", icon: Flame },
     { id: "recent", label: "Recent", icon: Clock },
     { id: "favorites", label: "Favorites", icon: Star, count: favoriteCount }
   ];
