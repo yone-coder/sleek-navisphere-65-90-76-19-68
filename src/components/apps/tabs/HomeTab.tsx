@@ -1,6 +1,6 @@
 
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Star, Settings, Wifi, Battery, Signal, Search, X, AppWindow, Edit, Grid3x3, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -286,7 +286,7 @@ export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
                     <div className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${
                       app.color ? app.color : 'from-blue-500 to-indigo-600'
                     } flex items-center justify-center ${isEditMode ? 'animate-wiggle' : ''}`}>
-                      {app.icon || <AppWindow className="w-8 h-8 text-white" />}
+                      {app.icon && React.isValidElement(app.icon) ? app.icon : <AppWindow className="w-8 h-8 text-white" />}
                     </div>
                     <p className="mt-1 text-xs text-center text-white font-medium">
                       {app.name}
@@ -320,7 +320,7 @@ export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
                   <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${
                     app.color ? app.color : 'from-blue-500 to-indigo-600'
                   } flex items-center justify-center`}>
-                    {app.icon || <AppWindow className="w-8 h-8 text-white" />}
+                    {app.icon && React.isValidElement(app.icon) ? app.icon : <AppWindow className="w-8 h-8 text-white" />}
                   </div>
                 </div>
               ))}
