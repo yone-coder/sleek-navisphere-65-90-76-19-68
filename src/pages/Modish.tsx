@@ -13,7 +13,7 @@ const Modish = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const headerHeightRef = useRef<number>(0);
-  const headerObserverRef = useRef<ResizeObserver | null>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
   
   // Default to product ID 1 if none is provided
   const productId = id || '1';
@@ -26,27 +26,18 @@ const Modish = () => {
   // Setup header height measurement
   useEffect(() => {
     const measureHeaderHeight = () => {
-      const headerElement = document.querySelector('.modish-header');
+      const headerElement = headerRef.current;
       if (headerElement) {
         const height = headerElement.getBoundingClientRect().height;
         headerHeightRef.current = height;
       }
     };
 
-    // Measure immediately
+    // Measure immediately and after a delay to catch any post-render adjustments
     measureHeaderHeight();
     
-    // Measure after a brief delay to catch any post-render adjustments
-    const timeoutId = setTimeout(measureHeaderHeight, 200);
-    
-    // Setup resize observer for dynamic height changes
-    if (!headerObserverRef.current) {
-      headerObserverRef.current = new ResizeObserver(measureHeaderHeight);
-      const headerElement = document.querySelector('.modish-header');
-      if (headerElement) {
-        headerObserverRef.current.observe(headerElement);
-      }
-    }
+    // Also measure after a brief delay
+    const timeoutId = setTimeout(measureHeaderHeight, 100);
     
     // Also measure on window resize
     window.addEventListener('resize', measureHeaderHeight);
@@ -54,10 +45,6 @@ const Modish = () => {
     return () => {
       clearTimeout(timeoutId);
       window.removeEventListener('resize', measureHeaderHeight);
-      
-      if (headerObserverRef.current) {
-        headerObserverRef.current.disconnect();
-      }
     };
   }, []);
 
@@ -96,16 +83,16 @@ const Modish = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-[150px] overflow-x-hidden">
-      <ModishHeader />
+      <div ref={headerRef}>
+        <ModishHeader />
+      </div>
       
-      <div 
-        className="w-full mx-auto px-0"
-        style={{ paddingTop: `${headerHeightRef.current || 120}px` }}
-      >
+      <div className="w-full mx-auto px-0">
         <ModishProductDetails 
           productId={productId} 
           price={productPrice}
           discountPrice={discountPrice}
+          headerHeight={headerHeightRef.current}
         />
       </div>
       
