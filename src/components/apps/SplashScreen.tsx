@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Palette, Components, BatteryMedium } from "lucide-react";
+import { Palette, Component, BatteryMedium } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const splashMessages = [
@@ -11,7 +11,7 @@ const splashMessages = [
     colors: ["from-purple-600", "to-amber-500"],
   },
   {
-    icon: Components,
+    icon: Component,
     text: "Expand your device's capabilities beyond system defaults",
     colors: ["from-amber-400", "to-violet-600"],
   },
