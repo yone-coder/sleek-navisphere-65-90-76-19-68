@@ -2,10 +2,21 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
-import { Star, User } from "lucide-react";
+import { 
+  Star, 
+  User, 
+  Gamepad2, 
+  ShoppingCart, 
+  Wallet, 
+  GraduationCap,
+  Globe,
+  MessageSquare
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { apps } from "../data/appsData";
-import type { App } from "../types";
+import { Separator } from "@/components/ui/separator";
+import { apps, appCategories } from "../data/appsData";
+import type { App, AppCategory } from "../types";
+import { HomeCategorySection } from "./sections/HomeCategorySection";
 
 interface HomeTabProps {
   favorites: App[];
@@ -27,16 +38,21 @@ export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
     mostUsedApps.push(...popularApps);
   }
   
-  // Use the main apps list, but arrange in a grid pattern
-  const arrangedApps = [...apps]
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .slice(0, 24);
+  // Group apps by category for the sectioned view
+  const getAppsByCategory = (category: AppCategory) => {
+    return apps.filter(app => 
+      category === "All" ? true : app.category === category
+    ).slice(0, 6);
+  };
   
-  // Group apps into rows of 4 for the iOS-style grid
-  const appRows = [];
-  for (let i = 0; i < arrangedApps.length; i += 4) {
-    appRows.push(arrangedApps.slice(i, i + 4));
-  }
+  // Get important categories with their respective icons
+  const featuredCategories: {category: AppCategory, icon: React.ReactNode}[] = [
+    { category: "Gaming", icon: <Gamepad2 className="h-6 w-6 text-white" /> },
+    { category: "Shopping", icon: <ShoppingCart className="h-6 w-6 text-white" /> },
+    { category: "Finance", icon: <Wallet className="h-6 w-6 text-white" /> },
+    { category: "Education", icon: <GraduationCap className="h-6 w-6 text-white" /> },
+    { category: "Social", icon: <MessageSquare className="h-6 w-6 text-white" /> },
+  ];
   
   const handleAppClick = (app: App) => {
     if (app.name === "Chess") {
@@ -140,46 +156,47 @@ export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
         </div>
       </div>
       
-      {/* All Apps Grid (iOS style) */}
-      <div className="px-1">
-        {appRows.map((row, rowIndex) => (
-          <div key={rowIndex} className="flex justify-around mb-8">
-            {row.map((app, colIndex) => (
-              <div 
-                key={`${rowIndex}-${colIndex}`} 
-                className="flex flex-col items-center gap-1 w-20"
-                onClick={() => handleAppClick(app)}
-              >
-                <div className={`w-14 h-14 rounded-[22px] ${app.color} flex items-center justify-center relative shadow-sm`}>
-                  {React.isValidElement(app.icon) ? (
-                    app.icon
-                  ) : (
-                    <app.icon className="w-7 h-7 text-white" />
-                  )}
-                  {app.updates > 0 && (
-                    <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                      {app.updates}
-                    </div>
-                  )}
-                </div>
-                <span className="text-xs font-medium text-center truncate w-full">{app.name}</span>
-                
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute top-1 right-1 h-6 w-6 rounded-full opacity-0 hover:opacity-100 hover:bg-gray-100/50"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onToggleFavorite(app.name);
-                  }}
-                >
-                  <Star className={`w-3 h-3 ${favorites.some(fav => fav.name === app.name) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
-                </Button>
+      {/* Featured Categories Section */}
+      <div className="px-6 mb-6">
+        <h3 className="text-lg font-semibold mb-3 text-gray-700">Categories</h3>
+        <div className="grid grid-cols-5 gap-3">
+          {featuredCategories.map((item, index) => (
+            <div 
+              key={index} 
+              className="flex flex-col items-center gap-1 cursor-pointer"
+              onClick={() => navigate(`/apps?category=${item.category}`)}
+            >
+              <div className={`w-12 h-12 rounded-full ${
+                item.category === "Gaming" ? "bg-indigo-500" : 
+                item.category === "Shopping" ? "bg-emerald-500" :
+                item.category === "Finance" ? "bg-purple-500" :
+                item.category === "Education" ? "bg-blue-500" :
+                "bg-pink-500"
+              } flex items-center justify-center`}>
+                {item.icon}
               </div>
-            ))}
-          </div>
-        ))}
+              <span className="text-xs font-medium text-center">{item.category}</span>
+            </div>
+          ))}
+        </div>
       </div>
+      
+      {/* Separator */}
+      <div className="px-6 mb-4">
+        <Separator className="bg-gray-200" />
+      </div>
+      
+      {/* Apps by Category */}
+      {featuredCategories.map((categoryInfo, index) => (
+        <HomeCategorySection
+          key={index}
+          category={categoryInfo.category}
+          apps={getAppsByCategory(categoryInfo.category)}
+          onAppClick={handleAppClick}
+          onToggleFavorite={onToggleFavorite}
+          favorites={favorites}
+        />
+      ))}
       
       {/* Dock */}
       <div className="fixed bottom-16 left-0 right-0 mx-auto w-[90%] max-w-md">
