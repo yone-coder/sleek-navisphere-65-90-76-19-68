@@ -63,23 +63,29 @@ export default function Apps() {
       
       <div className="flex-1 overflow-y-auto">
         <div className="h-full flex flex-col">
-          <div className="px-4 py-2">
+          {/* Make the tabs section sticky */}
+          <div className="sticky top-0 z-10 bg-white px-4 py-2 shadow-sm">
             <Tabs defaultValue="home" value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid grid-cols-3 w-full mb-2">
                 <TabsTrigger value="home">Home</TabsTrigger>
                 <TabsTrigger value="feeds">Feeds</TabsTrigger>
                 <TabsTrigger value="explore">Explore</TabsTrigger>
               </TabsList>
-              
-              <TabsContent value="home" className="mt-0">
+            </Tabs>
+          </div>
+          
+          {/* Content area */}
+          <div className="flex-1 px-4">
+            <Tabs defaultValue="home" value={activeTab} className="w-full">
+              <TabsContent value="home" className="mt-0 p-0">
                 <HomeTab />
               </TabsContent>
               
-              <TabsContent value="feeds" className="mt-0">
+              <TabsContent value="feeds" className="mt-0 p-0">
                 <FeedsTab />
               </TabsContent>
               
-              <TabsContent value="explore" className="mt-0">
+              <TabsContent value="explore" className="mt-0 p-0">
                 <ExploreTab 
                   favorites={favorites} 
                   onToggleFavorite={handleToggleFavorite} 
