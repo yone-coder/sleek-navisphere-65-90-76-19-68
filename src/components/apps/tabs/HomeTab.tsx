@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass, Bell, BookOpen, Activity, Zap, Layout, Send, Download, TrendingUp, ChevronRight, Clock, Star, MoreHorizontal, Bookmark, User, ArrowDownLeft, ArrowUpRight, Sparkles, Package, Trophy, Headphones, Palette, Sunrise, Coffee, FileText, Briefcase, Wifi, Cpu, Archive, Layers, Play, Gamepad2, CheckSquare } from 'lucide-react';
 import { ProfileCard } from '@/components/apps/ProfileCard';
@@ -10,9 +11,37 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Card, CardContent } from "@/components/ui/card";
 import { QuickActionsGrid } from '@/components/apps/QuickActionsGrid';
 import { SuggestedAppsSection } from '@/components/apps/SuggestedAppsSection';
-import { NotificationsSection } from '@/components/apps/NotificationsSection';
+import { NotificationsSection, Notification } from '@/components/apps/NotificationsSection';
 import { FavoritesGrid } from '@/components/apps/FavoritesGrid';
 import { ScrollArea } from '@/components/ui/scroll-area';
+
+// Define types for different activities
+interface RecentApp {
+  id: number;
+  name: string;
+  color: string;
+  letter: string;
+  time: string;
+  type: 'app-usage';
+}
+
+interface Transaction {
+  id: number;
+  type: 'transaction';
+  subtype: 'sent' | 'received';
+  amount: number;
+  recipient?: string;
+  sender?: string;
+  date: string;
+  time: string;
+}
+
+interface ActivityItem {
+  id: string;
+  type: 'transaction' | 'notification' | 'app-usage';
+  data: Transaction | Notification | RecentApp;
+  time: number;
+}
 
 export function HomeTab() {
   // Get actual apps from the appsData
@@ -171,10 +200,10 @@ export function HomeTab() {
   ];
 
   // Recently used apps (mock)
-  const recentApps = [
-    { id: 101, name: 'Modish', color: 'bg-purple-500', letter: 'M', time: '2 mins ago' },
-    { id: 102, name: 'Maps', color: 'bg-blue-500', letter: 'M', time: '1 hour ago' },
-    { id: 103, name: 'Chat', color: 'bg-green-500', letter: 'C', time: '3 hours ago' },
+  const recentApps: RecentApp[] = [
+    { id: 101, name: 'Modish', color: 'bg-purple-500', letter: 'M', time: '2 mins ago', type: 'app-usage' },
+    { id: 102, name: 'Maps', color: 'bg-blue-500', letter: 'M', time: '1 hour ago', type: 'app-usage' },
+    { id: 103, name: 'Chat', color: 'bg-green-500', letter: 'C', time: '3 hours ago', type: 'app-usage' },
   ];
 
   // Suggested apps based on current time and usage
@@ -211,36 +240,36 @@ export function HomeTab() {
   const suggestedApps = getSuggestedApps();
 
   // Notifications (mock)
-  const notifications = [
+  const notifications: Notification[] = [
     { id: 301, app: 'Email', message: '3 new messages', time: '10 min ago', color: 'bg-blue-500' },
     { id: 302, app: 'Calendar', message: 'Meeting in 30 minutes', time: '25 min ago', color: 'bg-red-500' },
     { id: 303, app: 'Updates', message: '2 apps need updating', time: '1 hour ago', color: 'bg-green-500' },
   ];
 
   // Recent transactions (mock)
-  const recentTransactions = [
-    { id: 1, type: "sent", amount: 230, recipient: "John Doe", date: "Today", time: "14:32" },
-    { id: 2, type: "received", amount: 1250, sender: "PayRoll Inc", date: "Yesterday", time: "09:15" },
-    { id: 3, type: "sent", amount: 45, recipient: "Coffee Shop", date: "Today", time: "08:30" },
+  const recentTransactions: Transaction[] = [
+    { id: 1, type: 'transaction', subtype: "sent", amount: 230, recipient: "John Doe", date: "Today", time: "14:32" },
+    { id: 2, type: 'transaction', subtype: "received", amount: 1250, sender: "PayRoll Inc", date: "Yesterday", time: "09:15" },
+    { id: 3, type: 'transaction', subtype: "sent", amount: 45, recipient: "Coffee Shop", date: "Today", time: "08:30" },
   ];
 
   // Recent activities (combining transactions, notifications, and app usage)
-  const recentActivities = [
+  const recentActivities: ActivityItem[] = [
     ...recentTransactions.map(t => ({
       id: `tx-${t.id}`,
-      type: 'transaction',
+      type: 'transaction' as const,
       data: t,
       time: new Date(currentTime.setHours(parseInt(t.time.split(':')[0]), parseInt(t.time.split(':')[1]))).getTime()
     })),
     ...notifications.map(n => ({
       id: `notif-${n.id}`,
-      type: 'notification',
+      type: 'notification' as const,
       data: n,
       time: Date.now() - (n.time.includes('min') ? parseInt(n.time) * 60 * 1000 : 60 * 60 * 1000)
     })),
     ...recentApps.map(a => ({
       id: `app-${a.id}`,
-      type: 'app-usage',
+      type: 'app-usage' as const,
       data: a,
       time: Date.now() - (a.time.includes('mins') ? parseInt(a.time) * 60 * 1000 : (a.time.includes('hour') ? parseInt(a.time) * 60 * 60 * 1000 : 24 * 60 * 60 * 1000))
     }))
@@ -318,7 +347,7 @@ export function HomeTab() {
             <div className="flex px-4 space-x-4 pb-2">
               {recentActivities.slice(0, 8).map((activity, index) => {
                 if (activity.type === 'transaction') {
-                  const transaction = activity.data;
+                  const transaction = activity.data as Transaction;
                   return (
                     <motion.div 
                       key={activity.id} 
@@ -331,9 +360,9 @@ export function HomeTab() {
                     >
                       <div className="flex items-center gap-3">
                         <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
-                          transaction.type === "received" ? "bg-green-100" : "bg-red-100"
+                          transaction.subtype === "received" ? "bg-green-100" : "bg-red-100"
                         }`}>
-                          {transaction.type === "received" ? (
+                          {transaction.subtype === "received" ? (
                             <ArrowDownLeft className="h-5 w-5 text-green-600" />
                           ) : (
                             <ArrowUpRight className="h-5 w-5 text-red-600" />
@@ -341,7 +370,7 @@ export function HomeTab() {
                         </div>
                         <div>
                           <p className="font-medium text-sm">
-                            {transaction.type === "received" ? transaction.sender : transaction.recipient}
+                            {transaction.subtype === "received" ? transaction.sender : transaction.recipient}
                           </p>
                           <p className="text-xs text-gray-400">
                             {transaction.date} • {transaction.time}
@@ -350,15 +379,15 @@ export function HomeTab() {
                       </div>
                       <div className="text-right">
                         <p className={`font-semibold ${
-                          transaction.type === "received" ? "text-green-600" : "text-red-600"
+                          transaction.subtype === "received" ? "text-green-600" : "text-red-600"
                         }`}>
-                          {transaction.type === "received" ? "+" : "-"}${transaction.amount}
+                          {transaction.subtype === "received" ? "+" : "-"}${transaction.amount}
                         </p>
                       </div>
                     </motion.div>
                   );
                 } else if (activity.type === 'notification') {
-                  const notification = activity.data;
+                  const notification = activity.data as Notification;
                   return (
                     <motion.div 
                       key={activity.id} 
@@ -379,7 +408,7 @@ export function HomeTab() {
                     </motion.div>
                   );
                 } else {
-                  const app = activity.data;
+                  const app = activity.data as RecentApp;
                   return (
                     <motion.div 
                       key={activity.id} 

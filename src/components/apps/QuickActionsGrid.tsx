@@ -3,9 +3,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { useToast } from '@/hooks/use-toast';
+import { LucideIcon } from 'lucide-react';
 
-interface QuickAction {
-  icon: any;
+export interface QuickAction {
+  icon: LucideIcon;
   label: string;
   color: string;
   action: () => void;

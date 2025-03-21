@@ -3,13 +3,14 @@ import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
+import { LucideIcon } from 'lucide-react';
 
-interface SuggestedApp {
+export interface SuggestedApp {
   id: number;
   name: string;
   color: string;
   letter: string;
-  icon?: any;
+  icon?: LucideIcon;
   reason: string;
 }
 
