@@ -21,13 +21,17 @@ import { ModishShippingInfo } from '@/components/modish/product/ModishShippingIn
 import { ModishCoupons } from '@/components/modish/product/ModishCoupons';
 import { ModishGuaranteesGrid } from '@/components/modish/product/ModishGuaranteesGrid';
 import { ModishShareButton } from '@/components/modish/product/ModishShareButton';
+import { ModishPaymentMethods } from '@/components/modish/product/ModishPaymentMethods';
+import { ModishBuyNowPayLater } from '@/components/modish/product/ModishBuyNowPayLater';
+import { ModishStoreCoupon } from '@/components/modish/product/ModishStoreCoupon';
+import { ModishPersonalizationOptions } from '@/components/modish/product/ModishPersonalizationOptions';
+import { ModishProductTabContent } from '@/components/modish/product/ModishProductTabContent';
+import { ModishTabsNavigation } from '@/components/modish/product/ModishTabsNavigation';
+import { ModishShopSection } from '@/components/modish/product/ModishShopSection';
+import { ModishRecentlyViewed } from '@/components/modish/product/ModishRecentlyViewed';
+import { ModishCustomerSupport } from '@/components/modish/product/ModishCustomerSupport';
 import { Card, CardContent } from '@/components/ui/card';
-import { 
-  MessageCircle, Activity, ShoppingBag, 
-  Gift, DollarSign, Sparkles,
-  CreditCard, MapPin, Truck
-} from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Activity, ShoppingBag } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
 
@@ -314,23 +318,11 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </div>
       )}
 
-      <div className="sticky top-0 z-30 bg-white border-b border-gray-200 px-1">
-        <div className="flex overflow-x-auto scrollbar-none gap-4 pt-2" ref={tabsNavRef}>
-          {['description', 'specs', 'shipping', 'reviews', 'questions', 'similar'].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => handleTabChange(tab)}
-              className={`whitespace-nowrap py-3 border-b-2 text-sm font-medium transition-colors ${
-                activeTab === tab 
-                  ? 'border-red-500 text-red-500'
-                  : 'border-transparent text-gray-500'
-              }`}
-            >
-              {tab === 'questions' ? 'Q&A' : tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </button>
-          ))}
-        </div>
-      </div>
+      <ModishTabsNavigation 
+        activeTab={activeTab} 
+        onTabChange={handleTabChange} 
+        ref={tabsNavRef} 
+      />
 
       <ModishActionButtons 
         onVirtualTryOn={handleVirtualTryOn}
@@ -404,273 +396,27 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         onSelectSize={handleSizeSelect}
       />
 
-      <Card className="bg-gray-50 border-gray-200">
-        <CardContent className="p-3 space-y-3">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-purple-500" />
-            <h3 className="text-sm font-medium">Personalization Options</h3>
-          </div>
-          
-          <div className="space-y-2">
-            <div className="bg-white rounded-md p-2 border border-gray-100">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="rounded text-blue-500" />
-                <span className="text-xs">Add gift wrapping (+$3.99)</span>
-              </label>
-            </div>
-            
-            <div className="bg-white rounded-md p-2 border border-gray-100">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="rounded text-blue-500" />
-                <span className="text-xs">Include a personalized message</span>
-              </label>
-            </div>
-            
-            <div className="bg-white rounded-md p-2 border border-gray-100">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="rounded text-blue-500" />
-                <span className="text-xs">Add extended warranty (+$9.99)</span>
-              </label>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <ModishPersonalizationOptions />
 
-      <div className="bg-gray-50 rounded-lg p-3">
-        <div className="flex items-center gap-2 mb-2">
-          <DollarSign className="h-4 w-4 text-gray-700" />
-          <span className="text-sm font-medium text-gray-800">Payment Methods</span>
-        </div>
-        <div className="grid grid-cols-5 gap-2">
-          {['Visa', 'MasterCard', 'PayPal', 'Apple Pay', 'Google Pay'].map((method, index) => (
-            <div key={index} className="flex items-center justify-center bg-white border border-gray-200 rounded p-1.5">
-              <div className="w-6 h-6 bg-gray-200 rounded"></div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <ModishPaymentMethods />
 
-      <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-lg p-3 border border-green-100">
-        <div className="flex items-center gap-2 mb-2">
-          <CreditCard className="h-4 w-4 text-green-600" />
-          <h3 className="text-sm font-medium text-green-800">Buy Now, Pay Later</h3>
-        </div>
-        <p className="text-xs text-green-700 mb-2">
-          Split your purchase into 4 interest-free payments.
-        </p>
-        <div className="flex items-center justify-between bg-white rounded-md p-2 border border-green-100">
-          <span className="text-xs font-medium">4 payments of ${(product.discountPrice / 4).toFixed(2)}</span>
-          <span className="text-xs text-green-600">Learn more</span>
-        </div>
-      </div>
+      <ModishBuyNowPayLater price={product.discountPrice} />
 
-      <div className="flex items-center justify-between bg-red-50 border border-red-100 rounded-lg p-3">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 flex items-center justify-center bg-red-500 text-white rounded-full">
-            <Gift className="h-5 w-5" />
-          </div>
-          <div>
-            <div className="text-sm font-medium text-gray-900">Store Coupon</div>
-            <div className="text-xs text-gray-600">$5 OFF orders over $50</div>
-          </div>
-        </div>
-        <button className="bg-red-500 text-white text-xs px-3 py-1.5 rounded-full">
-          Collect
-        </button>
-      </div>
+      <ModishStoreCoupon />
       
       <ModishShareButton onShare={handleShare} />
 
-      <div id="tabContent" className="border-t border-gray-100 mt-2 pt-8">
-        {activeTab === 'description' && (
-          <div className="p-3">
-            <h2 className="text-lg font-medium text-gray-800 mb-4">Product Description</h2>
-            <ModishDescription description={product.description} />
-          </div>
-        )}
-        
-        {activeTab === 'specs' && (
-          <div className="p-3">
-            <h2 className="text-lg font-medium text-gray-800 mb-4">Product Specifications</h2>
-            <div className="bg-gray-50 rounded-lg p-4 divide-y divide-gray-100">
-              {[
-                { name: "Brand", value: product.brand },
-                { name: "Model", value: "BT-500" },
-                { name: "Connectivity", value: "Bluetooth 5.0" },
-                { name: "Battery Life", value: "Up to 10 hours" },
-                { name: "Charging", value: "USB-C" },
-                { name: "Water Resistance", value: "IPX7" },
-                { name: "Weight", value: "350g" },
-                { name: "Dimensions", value: "120 × 80 × 40 mm" },
-              ].map((spec, index) => (
-                <div key={index} className="flex py-3 first:pt-0 last:pb-0">
-                  <span className="text-sm text-gray-500 w-1/3">{spec.name}</span>
-                  <span className="text-sm text-gray-800 w-2/3">{spec.value}</span>
-                </div>
-              ))}
-            </div>
-            
-            <h3 className="text-base font-medium text-gray-800 mt-5 mb-3">Technical Features</h3>
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { feature: "360° Sound", icon: "🔊" },
-                { feature: "Water Resistant", icon: "💧" },
-                { feature: "Voice Control", icon: "🎤" },
-                { feature: "Long Battery", icon: "🔋" },
-              ].map((item, index) => (
-                <div key={index} className="flex items-center gap-2 bg-white p-3 rounded-lg border border-gray-100">
-                  <span className="text-xl">{item.icon}</span>
-                  <span className="text-sm font-medium">{item.feature}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-        
-        {activeTab === 'shipping' && (
-          <div className="p-3">
-            <h2 className="text-lg font-medium text-gray-800 mb-4">Shipping Information</h2>
-            
-            <div className="bg-gray-50 rounded-lg p-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-blue-500" />
-                  <span className="text-sm font-medium">Ship from: {product.shipFrom}</span>
-                </div>
-                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-100">
-                  International
-                </Badge>
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <Truck className="h-4 w-4 text-green-500" />
-                <span className="text-sm">Estimated delivery: <span className="font-medium">{product.estimatedDelivery}</span></span>
-              </div>
-              
-              <div className="border-t border-gray-200 pt-3">
-                <h3 className="font-medium text-sm mb-2">Shipping Options</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center p-2 rounded-md bg-white border border-gray-100">
-                    <div className="flex items-center gap-2">
-                      <Truck className="h-4 w-4 text-orange-500" />
-                      <div>
-                        <p className="text-sm font-medium">Standard Shipping</p>
-                        <p className="text-xs text-gray-500">7-15 business days</p>
-                      </div>
-                    </div>
-                    <p className="text-sm font-medium">{product.freeShipping ? "Free" : "$4.99"}</p>
-                  </div>
-                  
-                  <div className="flex justify-between items-center p-2 rounded-md bg-white border border-gray-100">
-                    <div className="flex items-center gap-2">
-                      <Truck className="h-4 w-4 text-red-500" />
-                      <div>
-                        <p className="text-sm font-medium">Express Shipping</p>
-                        <p className="text-xs text-gray-500">3-7 business days</p>
-                      </div>
-                    </div>
-                    <p className="text-sm font-medium">$12.99</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="border-t border-gray-200 pt-3">
-                <h3 className="font-medium text-sm mb-2">Shipping Policies</h3>
-                <ul className="text-xs text-gray-600 space-y-1.5">
-                  <li className="flex items-start gap-1.5">
-                    <span className="text-green-500 text-lg leading-none">•</span>
-                    <span>Free standard shipping on orders over $50</span>
-                  </li>
-                  <li className="flex items-start gap-1.5">
-                    <span className="text-green-500 text-lg leading-none">•</span>
-                    <span>Processing time: 1-2 business days</span>
-                  </li>
-                  <li className="flex items-start gap-1.5">
-                    <span className="text-green-500 text-lg leading-none">•</span>
-                    <span>All orders are trackable via the provided tracking number</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {activeTab === 'reviews' && (
-          <div className="p-3">
-            <h2 className="text-lg font-medium text-gray-800 mb-4">Customer Reviews</h2>
-            <ModishReviews productId={productId} />
-          </div>
-        )}
-        
-        {activeTab === 'questions' && (
-          <div className="p-3">
-            <h2 className="text-lg font-medium text-gray-800 mb-4">Questions & Answers</h2>
-            <ModishQuestions productId={productId} />
-          </div>
-        )}
-        
-        {activeTab === 'similar' && (
-          <div className="p-3">
-            <h2 className="text-lg font-medium text-gray-800 mb-4">Similar Products</h2>
-            <ModishSimilar currentProductId={productId} />
-          </div>
-        )}
-      </div>
+      <ModishProductTabContent 
+        activeTab={activeTab} 
+        productId={productId} 
+        product={product} 
+      />
 
-      <div className="bg-gray-50 rounded-lg p-4">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-medium text-gray-900">From This Shop</h3>
-          <button className="text-xs text-blue-600">View Shop</button>
-        </div>
-        <div className="flex overflow-x-auto gap-3 pb-2 scrollbar-none">
-          {[1, 2, 3, 4, 5].map((item) => (
-            <div key={item} className="shrink-0 w-20">
-              <div className="h-20 w-20 rounded-lg bg-white border border-gray-200 overflow-hidden">
-                <img 
-                  src="/api/placeholder/100/100" 
-                  alt="Shop item" 
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="text-xs text-red-500 font-medium mt-1">$29.99</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="bg-gray-50 rounded-lg p-4">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-medium text-gray-900">Recently Viewed</h3>
-          <button className="text-xs text-blue-600">Clear</button>
-        </div>
-        <div className="flex overflow-x-auto gap-3 pb-2 scrollbar-none">
-          {[1, 2, 3].map((item) => (
-            <div key={item} className="shrink-0 w-20">
-              <div className="h-20 w-20 rounded-lg bg-white border border-gray-200 overflow-hidden">
-                <img 
-                  src="/api/placeholder/100/100" 
-                  alt="Recently viewed item" 
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="text-xs text-red-500 font-medium mt-1">$19.99</div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <ModishShopSection />
       
-      <div className="flex items-center justify-between bg-blue-50 border border-blue-100 rounded-lg p-3">
-        <div className="flex items-center gap-2">
-          <MessageCircle className="h-5 w-5 text-blue-500" />
-          <div>
-            <div className="text-sm font-medium text-gray-900">Customer Support</div>
-            <div className="text-xs text-gray-600">24/7 Live Chat Available</div>
-          </div>
-        </div>
-        <button className="bg-blue-500 text-white text-xs px-3 py-1.5 rounded-full">
-          Chat Now
-        </button>
-      </div>
+      <ModishRecentlyViewed />
+      
+      <ModishCustomerSupport />
     </div>
   );
 }
