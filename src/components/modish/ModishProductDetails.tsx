@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { ModishGallery } from '@/components/modish/product/ModishGallery';
@@ -23,8 +24,10 @@ import { ModishShareButton } from '@/components/modish/product/ModishShareButton
 import { Card, CardContent } from '@/components/ui/card';
 import { 
   MessageCircle, Activity, ShoppingBag, 
-  Gift, DollarSign, Sparkles 
+  Gift, DollarSign, Sparkles,
+  CreditCard, MapPin, Truck
 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
 
