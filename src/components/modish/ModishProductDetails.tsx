@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
-import { useMediaQuery } from '@/hooks/use-media-query';
+import { useParams } from 'next/navigation';
 import { useHeaderHeight } from '@/hooks/use-header-height';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
