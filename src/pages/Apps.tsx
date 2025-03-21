@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { AppsHeader } from "@/components/apps/AppsHeader";
 import { SearchOverlay } from "@/components/search/SearchOverlay";
@@ -32,13 +31,26 @@ export default function Apps() {
 
   return (
     <div className="fixed inset-0 flex flex-col overflow-hidden">
-      <div className="flex-1 overflow-y-auto bg-gradient-to-b from-gray-50 to-white">
-        {activeTab === 'explore' && <AppsHeader onOpenSearch={() => setIsSearchOpen(true)} />}
+      <div className="pt-safe bg-gradient-to-b from-gray-50 to-white">
+        {/* Top Tab Navigation */}
+        <AppsTabNavigation 
+          activeTab={activeTab} 
+          onTabChange={(tab) => setActiveTab(tab as 'home' | 'feeds' | 'explore')} 
+          position="top" 
+        />
         
+        {activeTab === 'explore' && <AppsHeader onOpenSearch={() => setIsSearchOpen(true)} />}
+      </div>
+      
+      <div className="flex-1 overflow-y-auto">
         {renderTabContent()}
       </div>
 
-      <AppsTabNavigation activeTab={activeTab} onTabChange={(tab) => setActiveTab(tab as 'home' | 'feeds' | 'explore')} />
+      {/* Bottom Tab Navigation - Keeping for reference but can be removed */}
+      {/* <AppsTabNavigation 
+        activeTab={activeTab} 
+        onTabChange={(tab) => setActiveTab(tab as 'home' | 'feeds' | 'explore')} 
+      /> */}
 
       <SearchOverlay 
         isOpen={isSearchOpen} 
