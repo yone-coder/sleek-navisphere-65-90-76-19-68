@@ -11,14 +11,19 @@ import { ModishQuestions } from '@/components/modish/product/ModishQuestions';
 import { ModishSimilar } from '@/components/modish/product/ModishSimilar';
 import { ModishEnhancedFeatures } from '@/components/modish/product/ModishEnhancedFeatures';
 import { ModishFeatures } from '@/components/modish/product/ModishFeatures';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { ModishProductStats } from '@/components/modish/product/ModishProductStats';
+import { ModishGuarantee } from '@/components/modish/product/ModishGuarantee';
+import { ModishFlashSale } from '@/components/modish/product/ModishFlashSale';
+import { ModishProductBadges } from '@/components/modish/product/ModishProductBadges';
+import { ModishActionButtons } from '@/components/modish/product/ModishActionButtons';
+import { ModishShippingInfo } from '@/components/modish/product/ModishShippingInfo';
+import { ModishCoupons } from '@/components/modish/product/ModishCoupons';
+import { ModishGuaranteesGrid } from '@/components/modish/product/ModishGuaranteesGrid';
+import { ModishShareButton } from '@/components/modish/product/ModishShareButton';
 import { Card, CardContent } from '@/components/ui/card';
 import { 
-  Tag, Award, ShieldCheck, Clock, Truck, ChevronRight, Gift,
-  Star, MessageCircle, ThumbsUp, Zap, PercentCircle, MapPin, 
-  CreditCard, Package, Users, Sparkles, TrendingUp, DollarSign,
-  Ruler, MessageSquare, Smartphone, Activity, Heart, ShoppingBag
+  MessageCircle, Activity, ShoppingBag, 
+  Gift, DollarSign, Sparkles 
 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
@@ -57,9 +62,6 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [showSimilarItems, setShowSimilarItems] = useState(false);
-  const [showRecommendations, setShowRecommendations] = useState(false);
-  const [showSpecifications, setShowSpecifications] = useState(false);
   const [activeCoupon, setActiveCoupon] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('description');
   const [realTimeViews, setRealTimeViews] = useState(34);
@@ -310,7 +312,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
       )}
 
       <div className="sticky top-0 z-30 bg-white border-b border-gray-200 px-1">
-        <div className="flex overflow-x-auto scrollbar-none gap-4 pt-2">
+        <div className="flex overflow-x-auto scrollbar-none gap-4 pt-2" ref={tabsNavRef}>
           {['description', 'specs', 'shipping', 'reviews', 'questions', 'similar'].map((tab) => (
             <button
               key={tab}
@@ -327,125 +329,30 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-2">
-        <button 
-          onClick={handleVirtualTryOn}
-          className={`p-2 rounded-lg flex flex-col items-center justify-center text-center ${
-            showVirtualTryOn ? 'bg-purple-100 text-purple-700' : 'bg-gray-50 text-gray-700'
-          }`}
-        >
-          <Smartphone className="h-5 w-5 mb-1" />
-          <span className="text-xs">Virtual Try-On</span>
-        </button>
-        <button 
-          onClick={handleARView}
-          className={`p-2 rounded-lg flex flex-col items-center justify-center text-center ${
-            showARView ? 'bg-blue-100 text-blue-700' : 'bg-gray-50 text-gray-700'
-          }`}
-        >
-          <Sparkles className="h-5 w-5 mb-1" />
-          <span className="text-xs">AR View</span>
-        </button>
-        <button 
-          onClick={handleCompareProducts}
-          className={`p-2 rounded-lg flex flex-col items-center justify-center text-center ${
-            showCompareProducts ? 'bg-green-100 text-green-700' : 'bg-gray-50 text-gray-700'
-          }`}
-        >
-          <ChevronRight className="h-5 w-5 mb-1" />
-          <span className="text-xs">Compare</span>
-        </button>
-        <button 
-          onClick={handleLikeToggle}
-          className={`p-2 rounded-lg flex flex-col items-center justify-center text-center ${
-            isLiked ? 'bg-red-100 text-red-700' : 'bg-gray-50 text-gray-700'
-          }`}
-        >
-          <Heart className={`h-5 w-5 mb-1 ${isLiked ? 'fill-red-500 text-red-500' : ''}`} />
-          <span className="text-xs">{likeCount}</span>
-        </button>
-      </div>
+      <ModishActionButtons 
+        onVirtualTryOn={handleVirtualTryOn}
+        onARView={handleARView}
+        onCompare={handleCompareProducts}
+        onLikeToggle={handleLikeToggle}
+        showVirtualTryOn={showVirtualTryOn}
+        showARView={showARView}
+        showCompareProducts={showCompareProducts}
+        isLiked={isLiked}
+        likeCount={likeCount}
+      />
 
-      <div className="flex items-center justify-between px-2 py-3 bg-gray-50 rounded-lg text-xs text-gray-700">
-        <div className="flex items-center gap-1.5">
-          <span className="font-medium text-red-500">${product.discountPrice.toFixed(2)}</span>
-          <span className="line-through">${product.price.toFixed(2)}</span>
-          <Badge variant="outline" className="bg-red-50 border-red-100 text-red-500 text-[10px] px-1">
-            -{Math.round(((product.price - product.discountPrice) / product.price) * 100)}%
-          </Badge>
-        </div>
-        <div className="flex items-center gap-3">
-          <div>
-            <span className="text-gray-600">Sold: </span>
-            <span className="font-medium">{product.soldCount}</span>
-          </div>
-          <div>
-            <span className="text-gray-600">Views: </span>
-            <span className="font-medium">{product.viewCount}</span>
-          </div>
-        </div>
-      </div>
+      <ModishProductStats 
+        price={product.price}
+        discountPrice={product.discountPrice}
+        soldCount={product.soldCount}
+        viewCount={product.viewCount}
+      />
 
-      <div className="bg-blue-50 border border-blue-100 rounded-lg p-2.5">
-        <div className="flex items-center gap-2">
-          <Award className="h-5 w-5 text-blue-600" />
-          <div>
-            <span className="text-sm font-medium text-blue-800">100% Satisfaction Guarantee</span>
-            <p className="text-xs text-blue-600 mt-0.5">30-day money-back guarantee if you're not completely satisfied</p>
-          </div>
-        </div>
-      </div>
+      <ModishGuarantee />
 
-      <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-3 border border-purple-100">
-        <div className="flex items-center gap-2">
-          <Zap className="h-5 w-5 text-purple-500" />
-          <div>
-            <span className="text-sm font-medium text-purple-800">Flash Sale</span>
-            <div className="text-xs text-purple-700 bg-white px-2 py-1 rounded-full border border-purple-200">
-              12:45:30 left
-            </div>
-          </div>
-        </div>
-        <div className="mt-2 bg-white p-2 rounded-md">
-          <div className="flex items-center gap-3">
-            <div className="flex -space-x-2">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="w-6 h-6 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-[8px] text-gray-500">
-                  {i}
-                </div>
-              ))}
-            </div>
-            <div className="text-xs text-gray-600">
-              <span className="text-red-500 font-bold">28 people</span> bought in last hour
-            </div>
-          </div>
-          <div className="mt-1.5 w-full bg-gray-200 rounded-full h-1.5">
-            <div className="bg-red-500 h-1.5 rounded-full" style={{ width: '67%' }}></div>
-          </div>
-          <div className="mt-1 flex justify-between text-[10px] text-gray-500">
-            <span>67% claimed</span>
-            <span>Sale ends in 12 hours</span>
-          </div>
-        </div>
-      </div>
+      <ModishFlashSale />
 
-      <div className="flex gap-2 overflow-x-auto pb-1 px-1 scrollbar-none">
-        {['Flash Deal 🔥', 'Top Seller 🏆', 'Free Shipping 🚚', 'New Arrival ✨', 'Best Quality ⭐'].map((tag, index) => (
-          <Badge 
-            key={index} 
-            variant="outline" 
-            className={`whitespace-nowrap px-2 py-1 text-xs font-medium ${
-              index === 0 ? 'bg-red-50 text-red-600 border-red-100' : 
-              index === 1 ? 'bg-orange-50 text-orange-600 border-orange-100' : 
-              index === 2 ? 'bg-green-50 text-green-600 border-green-100' :
-              index === 3 ? 'bg-blue-50 text-blue-600 border-blue-100' :
-              'bg-purple-50 text-purple-600 border-purple-100'
-            }`}
-          >
-            {tag}
-          </Badge>
-        ))}
-      </div>
+      <ModishProductBadges />
 
       <ModishInfo
         name={product.name}
@@ -465,111 +372,20 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
 
       <ModishSizeGuide />
 
-      <div className="bg-gray-50 rounded-lg p-3 space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-blue-500" />
-            <span className="text-sm">Ships from: <span className="font-medium">{product.shipFrom}</span></span>
-          </div>
-          <span className="text-xs text-gray-600">to United States</span>
-        </div>
-        
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <Clock className="h-4 w-4 text-green-500" />
-            <span className="text-sm">Delivery: <span className="font-medium">{product.estimatedDelivery}</span></span>
-          </div>
-          {product.freeShipping && (
-            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-              Free Shipping
-            </Badge>
-          )}
-        </div>
-
-        <div className="pt-2 border-t border-gray-200">
-          <div className="flex justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
-                AT
-              </div>
-              <div>
-                <div className="text-sm font-medium">AudioTech Official</div>
-                <div className="flex items-center text-xs text-gray-500">
-                  <Star className="h-3 w-3 text-yellow-400 fill-current" />
-                  <span className="ml-0.5">{product.sellerRating}% Positive</span>
-                </div>
-              </div>
-            </div>
-            <button className="text-xs font-medium text-blue-500 border border-blue-200 rounded-full px-3 py-1 bg-blue-50">
-              Follow
-            </button>
-          </div>
-        </div>
-        
-        <div className="flex items-center gap-2 pt-2 border-t border-gray-200">
-          <div className="flex items-center gap-1 text-xs text-gray-600">
-            <Package className="h-3 w-3" />
-            <span>Products: 342</span>
-          </div>
-          <div className="flex items-center gap-1 text-xs text-gray-600">
-            <Users className="h-3 w-3" />
-            <span>Followers: 15.2K</span>
-          </div>
-          <div className="flex items-center gap-1 text-xs text-gray-600">
-            <MessageCircle className="h-3 w-3" />
-            <span>Response: 97%</span>
-          </div>
-        </div>
-      </div>
+      <ModishShippingInfo 
+        shipFrom={product.shipFrom || ""}
+        estimatedDelivery={product.estimatedDelivery || ""}
+        freeShipping={product.freeShipping || false}
+        sellerRating={product.sellerRating || 0}
+      />
       
       <div className="px-3 py-4 bg-gray-50 rounded-lg">
         <ModishTrending />
       </div>
       
-      <div className="flex overflow-x-auto gap-2 pb-2 px-1 scrollbar-none">
-        {[
-          { code: 'EXTRA5', discount: '$5 OFF', min: '$50', color: 'bg-gradient-to-r from-red-500 to-orange-500' },
-          { code: 'SAVE10', discount: '$10 OFF', min: '$100', color: 'bg-gradient-to-r from-blue-500 to-purple-500' },
-          { code: 'NEW15', discount: '15% OFF', min: 'New Users', color: 'bg-gradient-to-r from-green-500 to-teal-500' },
-        ].map((coupon, index) => (
-          <div 
-            key={index}
-            className="relative flex-shrink-0 w-[130px] h-[70px] rounded-lg overflow-hidden"
-          >
-            <div className={`absolute inset-0 ${coupon.color}`}></div>
-            <div className="absolute inset-0 flex flex-col justify-between p-2 text-white">
-              <div className="text-xs font-medium">{coupon.discount}</div>
-              <div className="text-[10px] opacity-90">Min. spend: {coupon.min}</div>
-              <div className="flex items-center justify-between">
-                <div className="text-[10px] font-light">Code: {coupon.code}</div>
-                <button 
-                  className="text-[10px] bg-white text-red-500 px-2 py-0.5 rounded-full font-medium"
-                  onClick={() => handleCouponSelect(coupon.code)}
-                >
-                  {activeCoupon === coupon.code ? 'Collected' : 'Collect'}
-                </button>
-              </div>
-            </div>
-            <div className="absolute right-0 top-0 bottom-0 w-4 flex items-center">
-              <div className="w-4 h-4 rounded-full bg-white"></div>
-              <div className="w-4 h-4 rounded-full bg-white"></div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <ModishCoupons activeCoupon={activeCoupon} onCouponSelect={handleCouponSelect} />
       
-      <div className="grid grid-cols-3 gap-2">
-        {[
-          { icon: <ShieldCheck className="h-5 w-5 text-blue-500" />, text: "90-Day Warranty" },
-          { icon: <ThumbsUp className="h-5 w-5 text-green-500" />, text: "Authentic Product" },
-          { icon: <CreditCard className="h-5 w-5 text-purple-500" />, text: "Buyer Protection" }
-        ].map((guarantee, index) => (
-          <div key={index} className="flex flex-col items-center bg-gray-50 rounded-lg p-2 text-center">
-            {guarantee.icon}
-            <span className="text-xs text-gray-700 mt-1">{guarantee.text}</span>
-          </div>
-        ))}
-      </div>
+      <ModishGuaranteesGrid />
 
       <ModishOptions
         colors={product.colors}
@@ -660,15 +476,7 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
         </button>
       </div>
       
-      <div className="px-3">
-        <button 
-          onClick={handleShare}
-          className="w-full py-2 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center gap-2 text-blue-600"
-        >
-          <Smartphone className="h-4 w-4" />
-          <span className="text-sm font-medium">Share This Product</span>
-        </button>
-      </div>
+      <ModishShareButton onShare={handleShare} />
 
       <div id="tabContent" className="border-t border-gray-100 mt-2 pt-8">
         {activeTab === 'description' && (
@@ -863,4 +671,3 @@ export function ModishProductDetails({ productId, price, discountPrice }: Modish
     </div>
   );
 }
-
