@@ -74,8 +74,8 @@ export default function Apps() {
                 <TabsTrigger value="explore">Explore</TabsTrigger>
               </TabsList>
               
-              <TabsContent value="home" className="mt-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 rounded-lg">
-                <HomeTab favorites={favoriteApps} onToggleFavorite={handleToggleFavorite} />
+              <TabsContent value="home" className="mt-0">
+                <HomeTab />
               </TabsContent>
               
               <TabsContent value="feeds" className="mt-0">
