@@ -2,7 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
-import { User, Camera, Headphones, Image, Film, Music, Play, Tv, Shirt, Store, Wallet, Gamepad2, Ticket, Shopping } from "lucide-react";
+import { User, Shirt, Wallet, Gamepad2, Ticket, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { App } from "@/components/apps/types";
 
@@ -20,7 +20,7 @@ export function HomeTab({ favorites, onToggleFavorite }: HomeTabProps) {
     { name: "Wallet", icon: Wallet, color: "bg-purple-600", route: "/wallet" },
     { name: "Games", icon: Gamepad2, color: "bg-green-600", route: "/games-pages" },
     { name: "Borlette", icon: Ticket, color: "bg-zinc-800", route: "/borlette" },
-    { name: "Shopping", icon: Shopping, color: "bg-emerald-500", route: "/marketplace" }
+    { name: "Shopping", icon: ShoppingCart, color: "bg-emerald-500", route: "/marketplace" }
   ];
   
   const handleAppClick = (route: string) => {
