@@ -1,11 +1,12 @@
 
-import React, { useState } from 'react';
-import { Heart, X, Search, Settings, Plus, Sun, Cloud, CloudRain, Zap, Wind, Layout, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Heart, X, Search, Settings, Plus, Sun, Cloud, CloudRain, Zap, Wind, Layout, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass, Bell, BookOpen, Activity, Coffee, Star } from 'lucide-react';
 import { ProfileCard } from '@/components/apps/ProfileCard';
 import { apps } from '@/components/apps/data/appsData';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { QuickActions } from '@/components/apps/QuickActions';
+import { useToast } from '@/hooks/use-toast';
 
 export function HomeTab() {
   // Get actual apps from the appsData
@@ -20,10 +21,20 @@ export function HomeTab() {
     }));
   });
 
+  const { toast } = useToast();
   const [searchMode, setSearchMode] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  // Update time every minute
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Filter for favorites and by search term if active
   const filteredApps = favoriteApps.filter(app => 
@@ -36,6 +47,14 @@ export function HomeTab() {
     setFavoriteApps(favoriteApps.map(app => 
       app.id === id ? { ...app, favorite: !app.favorite } : app
     ));
+
+    // Show toast notification
+    const app = favoriteApps.find(app => app.id === id);
+    toast({
+      title: `${app.name} removed from favorites`,
+      description: "You can add it back anytime",
+      duration: 2000,
+    });
   };
 
   // Handle search input change
@@ -55,6 +74,8 @@ export function HomeTab() {
     { name: 'Files', icon: Layout, color: 'bg-green-600', description: 'Browse & Share' },
     { name: 'Email', icon: Mail, color: 'bg-purple-600', description: 'Check Mail' },
     { name: 'Calendar', icon: Calendar, color: 'bg-red-500', description: 'Appointments' },
+    { name: 'Music', icon: Music, color: 'bg-pink-500', description: 'Play Tunes' },
+    { name: 'News', icon: BookOpen, color: 'bg-amber-500', description: 'Latest Updates' },
   ];
 
   // Weather data (mock)
@@ -65,6 +86,8 @@ export function HomeTab() {
     high: 75,
     low: 65,
     location: 'New York',
+    humidity: '65%',
+    windSpeed: '8 mph',
   };
 
   // App categories
@@ -83,58 +106,157 @@ export function HomeTab() {
     { id: 103, name: 'Chat', color: 'bg-green-500', letter: 'C', time: '3 hours ago' },
   ];
 
+  // Suggested apps based on current time and usage
+  const getSuggestedApps = () => {
+    const hour = currentTime.getHours();
+    
+    if (hour >= 6 && hour < 10) {
+      return [
+        { id: 201, name: 'News', color: 'bg-amber-500', letter: 'N', reason: 'Morning briefing' },
+        { id: 202, name: 'Coffee', icon: Coffee, color: 'bg-yellow-700', letter: 'C', reason: 'Start your day' },
+      ];
+    } else if (hour >= 12 && hour < 14) {
+      return [
+        { id: 203, name: 'Food', color: 'bg-orange-500', letter: 'F', reason: 'Lunch time' },
+        { id: 204, name: 'Wallet', color: 'bg-green-500', letter: 'W', reason: 'Check balance' },
+      ];
+    } else if (hour >= 18 && hour < 22) {
+      return [
+        { id: 205, name: 'Music', icon: Music, color: 'bg-pink-500', letter: 'M', reason: 'Evening relaxation' },
+        { id: 206, name: 'Video', icon: Video, color: 'bg-red-500', letter: 'V', reason: 'Watch something' },
+      ];
+    } else {
+      return [
+        { id: 207, name: 'Calendar', icon: Calendar, color: 'bg-blue-500', letter: 'C', reason: 'Upcoming events' },
+        { id: 208, name: 'Social', color: 'bg-purple-500', letter: 'S', reason: 'Connect with friends' },
+      ];
+    }
+  };
+
+  const suggestedApps = getSuggestedApps();
+
+  // Notifications (mock)
+  const notifications = [
+    { id: 301, app: 'Email', message: '3 new messages', time: '10 min ago', color: 'bg-blue-500' },
+    { id: 302, app: 'Calendar', message: 'Meeting in 30 minutes', time: '25 min ago', color: 'bg-red-500' },
+  ];
+
   return (
     <div className="flex flex-col h-full bg-white w-full overflow-hidden">
       {/* Use ProfileCard component */}
       <ProfileCard />
 
-      {/* Weather widget */}
-      <div className="mx-3 mb-4 mt-2 bg-gradient-to-r from-blue-400 to-blue-600 rounded-xl p-4 text-white shadow-md">
+      {/* Weather widget with more details */}
+      <div className="mx-3 mb-3 mt-2 bg-gradient-to-r from-blue-400 to-blue-600 rounded-xl p-3 text-white shadow-md">
         <div className="flex justify-between items-center">
           <div>
             <h3 className="text-lg font-semibold">{weather.location}</h3>
             <p className="text-3xl font-bold">{weather.temp}°</p>
             <p className="text-sm opacity-90">{weather.condition}</p>
+            <div className="flex space-x-2 mt-1 text-xs opacity-90">
+              <span>H: {weather.high}° L: {weather.low}°</span>
+            </div>
           </div>
           <div className="flex flex-col items-center">
             <weather.icon size={40} className="mb-1" />
-            <div className="flex space-x-2 text-xs">
-              <span>H: {weather.high}°</span>
-              <span>L: {weather.low}°</span>
+            <div className="text-xs">
+              <div className="flex items-center gap-1">
+                <Wind size={12} />
+                <span>{weather.windSpeed}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <CloudRain size={12} />
+                <span>{weather.humidity}</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Time-based suggestions */}
+      {suggestedApps.length > 0 && (
+        <div className="px-3 mb-2">
+          <h2 className="text-xs font-medium text-gray-600 mb-2">Suggested for {currentTime.getHours() < 12 ? 'Morning' : currentTime.getHours() < 18 ? 'Afternoon' : 'Evening'}</h2>
+          <div className="flex space-x-2">
+            {suggestedApps.map(app => (
+              <div key={app.id} className="flex-1 bg-gray-50 rounded-lg p-2 hover:bg-gray-100">
+                <div className="flex items-center">
+                  <div className={`${app.color} w-9 h-9 rounded-lg flex items-center justify-center mr-2`}>
+                    {app.icon ? <app.icon size={18} className="text-white" /> : <span className="text-white text-lg font-bold">{app.letter}</span>}
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium">{app.name}</p>
+                    <p className="text-xs text-gray-500">{app.reason}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Quick Actions */}
-      <div className="px-3 mb-4">
-        <h2 className="text-sm font-medium text-gray-700 mb-2">Quick Actions</h2>
-        <QuickActions actions={quickActions} />
+      <div className="px-3 mb-3">
+        <h2 className="text-xs font-medium text-gray-600 mb-2">Quick Actions</h2>
+        <div className="grid grid-cols-6 gap-2">
+          {quickActions.map(action => (
+            <div key={action.name} className="flex flex-col items-center">
+              <div className={`${action.color} w-10 h-10 rounded-full flex items-center justify-center shadow-sm`}>
+                <action.icon size={18} className="text-white" />
+              </div>
+              <span className="mt-1 text-xs text-center">{action.name}</span>
+            </div>
+          ))}
+        </div>
       </div>
+
+      {/* Notifications section */}
+      {notifications.length > 0 && (
+        <div className="px-3 mb-3">
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="text-xs font-medium text-gray-600">Notifications</h2>
+            <span className="text-xs text-blue-500">See all</span>
+          </div>
+          <div className="space-y-2">
+            {notifications.map(notification => (
+              <div key={notification.id} className="bg-gray-50 rounded-lg p-2 flex items-center">
+                <div className={`${notification.color} w-8 h-8 rounded-lg flex items-center justify-center mr-2`}>
+                  <Bell size={16} className="text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-xs font-medium">{notification.app}</p>
+                  <p className="text-xs text-gray-500">{notification.message}</p>
+                </div>
+                <span className="text-xs text-gray-400">{notification.time}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Favorites Header */}
       <div className="border-b border-gray-200 mx-2">
         <div className="flex justify-between items-center px-3 py-2">
-          <h1 className="text-xl font-semibold text-gray-800">Favorites</h1>
+          <h1 className="text-base font-semibold text-gray-800">Favorites</h1>
           <div className="flex space-x-4">
             {searchMode ? (
               <button 
                 onClick={clearSearch}
                 className="text-blue-500"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             ) : (
               <button 
                 onClick={() => setSearchMode(true)}
                 className="text-blue-500"
               >
-                <Search size={20} />
+                <Search size={18} />
               </button>
             )}
             <button 
               onClick={() => setEditMode(!editMode)}
-              className={`${editMode ? 'text-red-500' : 'text-blue-500'} text-sm font-medium`}
+              className={`${editMode ? 'text-red-500' : 'text-blue-500'} text-xs font-medium`}
             >
               {editMode ? 'Done' : 'Edit'}
             </button>
@@ -149,7 +271,7 @@ export function HomeTab() {
                 <TabsTrigger 
                   key={category.id} 
                   value={category.id}
-                  className="py-1 px-3 text-xs"
+                  className="py-1 px-2 text-xs"
                 >
                   {category.label}
                 </TabsTrigger>
@@ -168,6 +290,7 @@ export function HomeTab() {
                 value={searchTerm}
                 onChange={handleSearch}
                 className="w-full p-2 bg-gray-200 rounded-lg pl-8 text-sm"
+                autoFocus
               />
               <Search size={16} className="absolute left-2 top-2.5 text-gray-500" />
             </div>
@@ -180,11 +303,11 @@ export function HomeTab() {
         {/* Recently Used Section (only show if not searching) */}
         {!searchMode && activeCategory === 'recent' && (
           <div className="mb-4">
-            <h2 className="text-sm font-medium text-gray-700 px-2 mb-2">Recently Used</h2>
+            <h2 className="text-xs font-medium text-gray-600 px-2 mb-2">Recently Used</h2>
             <div className="bg-gray-50 rounded-xl p-2">
               {recentApps.map(app => (
                 <div key={app.id} className="flex items-center p-2 hover:bg-gray-100 rounded-lg">
-                  <div className={`${app.color} w-10 h-10 rounded-xl flex items-center justify-center mr-3`}>
+                  <div className={`${app.color} w-10 h-10 rounded-xl flex items-center justify-center mr-3 shadow-sm`}>
                     <span className="text-white text-lg font-bold">{app.letter}</span>
                   </div>
                   <div className="flex-1">
@@ -203,7 +326,7 @@ export function HomeTab() {
           <div className="grid grid-cols-4 gap-3">
             {filteredApps.map(app => (
               <div key={app.id} className="relative flex flex-col items-center">
-                <div className={`${app.color} w-14 h-14 rounded-xl flex items-center justify-center shadow-md`}>
+                <div className={`${app.color} w-14 h-14 rounded-xl flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 active:scale-95`}>
                   <span className="text-white text-xl font-bold">{app.letter}</span>
                 </div>
                 <span className="mt-1 text-xs text-center truncate w-full">{app.name}</span>
@@ -212,7 +335,7 @@ export function HomeTab() {
                 {editMode && (
                   <button 
                     onClick={() => toggleFavorite(app.id)}
-                    className="absolute -top-1 -left-1 bg-red-500 rounded-full p-1 shadow-md"
+                    className="absolute -top-1 -left-1 bg-red-500 rounded-full p-1 shadow-md transition-transform hover:scale-110"
                   >
                     <X size={10} className="text-white" />
                   </button>
@@ -223,7 +346,7 @@ export function HomeTab() {
             {/* Add button (only in edit mode) */}
             {editMode && (
               <div className="flex flex-col items-center">
-                <div className="w-14 h-14 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center">
+                <div className="w-14 h-14 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-all duration-200">
                   <Plus size={20} className="text-gray-400" />
                 </div>
                 <span className="mt-1 text-xs text-gray-500">Add</span>
