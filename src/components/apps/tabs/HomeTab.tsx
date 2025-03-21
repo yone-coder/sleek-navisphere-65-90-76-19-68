@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass, Bell, BookOpen, Activity, Zap, Layout, Send, Download, TrendingUp, ChevronRight, Clock, Star, MoreHorizontal, Bookmark, User, ArrowDownLeft, ArrowUpRight, Sparkles, Package, Trophy, Headphones, Palette, Sunrise, Coffee, FileText, Briefcase, Wifi, Cpu, Archive, Layers, Play, Gamepad2, CheckSquare } from 'lucide-react';
+import { Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass, Bell, BookOpen, Activity, Zap, Layout, Send, Download, TrendingUp, ChevronRight, Clock, Star, MoreHorizontal, Bookmark, User, ArrowDownLeft, ArrowUpRight, Sparkles, Package, Trophy, Headphones, Palette, Sunrise, Coffee, FileText, Briefcase, Wifi, Cpu, Archive, Layers, Play, Gamepad2, CheckSquare, List, ListMusic, ListVideo, Home } from 'lucide-react';
 import { ProfileCard } from '@/components/apps/ProfileCard';
 import { FavoritesGrid } from '@/components/apps/FavoritesGrid';
 import { apps } from '@/components/apps/data/appsData';
@@ -150,11 +150,9 @@ export function HomeTab() {
   ];
 
   const categories = [
-    { id: 'all', label: 'All' },
-    { id: 'recent', label: 'Recent' },
-    { id: 'social', label: 'Social' },
-    { id: 'productivity', label: 'Work' },
-    { id: 'entertainment', label: 'Media' },
+    { id: 'all', label: 'All', icon: List },
+    { id: 'recent', label: 'Recent', icon: Clock },
+    { id: 'frequent', label: 'Frequent', icon: Star },
   ];
 
   const pinnedApps = [
@@ -180,7 +178,8 @@ export function HomeTab() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="mb-4 px-2">
+        {/* Added mt-6 for spacing between ProfileCard and QuickActions */}
+        <div className="mb-4 px-2 mt-6">
           <h2 className="text-sm font-semibold text-gray-800 mb-2">Quick Actions</h2>
           <QuickActionsGrid actions={quickActions} />
         </div>
@@ -251,8 +250,9 @@ export function HomeTab() {
                   <TabsTrigger 
                     key={category.id} 
                     value={category.id}
-                    className="py-1 px-3 text-xs rounded-full data-[state=active]:bg-blue-500 data-[state=active]:text-white flex-1"
+                    className="py-1 px-3 text-xs rounded-full data-[state=active]:bg-blue-500 data-[state=active]:text-white flex-1 flex items-center justify-center gap-1.5"
                   >
+                    <category.icon className="h-3.5 w-3.5" />
                     {category.label}
                   </TabsTrigger>
                 ))}
@@ -322,8 +322,8 @@ export function HomeTab() {
       <div className="fixed bottom-0 left-0 right-0 px-3 pt-2 pb-safe bg-white border-t border-gray-200 shadow-lg z-20">
         <div className="flex justify-around">
           <Button variant="ghost" size="sm" className="flex flex-col items-center h-16 w-16">
-            <Bookmark className="h-5 w-5 mb-1 text-blue-500" />
-            <span className="text-xs">Favorites</span>
+            <Home className="h-5 w-5 mb-1 text-blue-500" />
+            <span className="text-xs">Home</span>
           </Button>
           <Button variant="ghost" size="sm" className="flex flex-col items-center h-16 w-16">
             <Clock className="h-5 w-5 mb-1 text-green-500" />
