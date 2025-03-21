@@ -100,8 +100,7 @@ export function ProductGallery({
 
   return (
     <div 
-      className="relative bg-gradient-to-b from-gray-50 to-white"
-      style={{ paddingTop: headerHeight ? `${headerHeight}px` : '0' }}
+      className="relative bg-gradient-to-b from-gray-50 to-white pt-24"
       tabIndex={0}
       onKeyDown={handleKeyDown}
     >
