@@ -5,6 +5,7 @@ import { HomeTab } from "@/components/apps/tabs/HomeTab";
 import { FeedsTab } from "@/components/apps/tabs/FeedsTab";
 import { ExploreTab } from "@/components/apps/tabs/ExploreTab";
 import { AppsHeader } from "@/components/apps/AppsHeader";
+import { SplashScreen } from "@/components/apps/SplashScreen";
 import { toast } from "@/hooks/use-toast";
 import { apps } from "@/components/apps/data/appsData";
 import type { App } from "@/components/apps/types";
@@ -12,14 +13,30 @@ import type { App } from "@/components/apps/types";
 export default function Apps() {
   const [activeTab, setActiveTab] = useState("home");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [showSplash, setShowSplash] = useState(false);
   const [favorites, setFavorites] = useState<string[]>(() => {
     const saved = localStorage.getItem("favoriteApps");
     return saved ? JSON.parse(saved) : [];
   });
 
   useEffect(() => {
+    // Check if the user has seen the splash screen before
+    const hasSeenSplash = localStorage.getItem("hasSeenSplashScreen");
+    if (!hasSeenSplash) {
+      setShowSplash(true);
+    }
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem("favoriteApps", JSON.stringify(favorites));
   }, [favorites]);
+
+  const handleDismissSplash = () => {
+    // Animate the splash screen away
+    setShowSplash(false);
+    // Remember that the user has seen the splash screen
+    localStorage.setItem("hasSeenSplashScreen", "true");
+  };
 
   const handleToggleFavorite = (appName: string) => {
     setFavorites(prev => 
@@ -43,6 +60,8 @@ export default function Apps() {
 
   return (
     <div className="fixed inset-0 flex flex-col overflow-hidden">
+      {showSplash && <SplashScreen onDismiss={handleDismissSplash} />}
+      
       <div className="flex-1 overflow-y-auto bg-gradient-to-b from-gray-50 to-white">
         <AppsHeader onOpenSearch={() => setIsSearchOpen(true)} />
         
