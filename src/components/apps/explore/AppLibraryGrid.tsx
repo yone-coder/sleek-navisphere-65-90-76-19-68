@@ -1,7 +1,6 @@
-
 import { AppGrid } from "@/components/apps/AppGrid";
-import type { App } from "@/components/apps/types";
 import { AppList } from "@/components/apps/AppList";
+import type { App } from "@/components/apps/types";
 
 interface AppLibraryGridProps {
   apps: App[];
@@ -20,7 +19,7 @@ export function AppLibraryGrid({
 }: AppLibraryGridProps) {
   if (viewMode === "list") {
     return (
-      <AppList
+      <AppList 
         apps={apps}
         favorites={favorites}
         onToggleFavorite={onToggleFavorite}

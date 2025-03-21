@@ -62,20 +62,15 @@ export function ExploreFilters({
   expandedView,
   setExpandedView,
 }: ExploreFiltersProps) {
-  // Using only valid AppCategory values from the types file
   const categories: AppCategory[] = [
     "All",
     "Shopping",
-    "Fashion",
-    "Finance",
-    "Entertainment",
     "Gaming",
     "Education",
+    "Finance",
     "Productivity",
     "Utilities",
-    "Social",
-    "Work",
-    "Business"
+    "Entertainment",
   ];
 
   const handleCategoryClick = (category: AppCategory) => {
@@ -91,8 +86,7 @@ export function ExploreFilters({
   };
 
   const handleToggleUpdatesOnly = () => {
-    // Fix: Pass a boolean directly instead of a function
-    setShowUpdatesOnly(!showUpdatesOnly);
+    setShowUpdatesOnly((prev) => !prev);
   };
 
   const handleResetFilters = () => {
