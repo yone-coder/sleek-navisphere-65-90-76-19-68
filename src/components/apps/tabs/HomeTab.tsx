@@ -170,7 +170,7 @@ export function HomeTab() {
           id: index + 1,
           name: app.name,
           color: app.color,
-          favorite: true,
+          favorite: true
         };
       });
   }
