@@ -1,4 +1,3 @@
-
 import { Rss, Bell, Newspaper, Calendar, ChevronRight, ShoppingBag, Trophy, Gamepad, Mail, MessageSquare, Music, Video, Clock, Heart, PiggyBank, Briefcase, BookOpen, Ticket, Store, Bitcoin, Users, Building, Wallet, CreditCard } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -69,8 +68,8 @@ export function FeedsTab() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      {/* Header section - starts normal but becomes fixed on scroll */}
-      <div className={`${headerShouldBeFixed ? 'fixed top-0 left-0 right-0 z-50' : ''} bg-white py-3 px-1 border-b border-gray-100 shadow-sm`}>
+      {/* Always visible header - this will be shown initially */}
+      <div className={`${headerShouldBeFixed ? 'fixed top-0 left-0 right-0 z-50' : ''} bg-white py-3 px-4 border-b border-gray-100 shadow-sm`}>
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold">Feeds</h2>
           <div className="flex gap-2">
@@ -89,7 +88,7 @@ export function FeedsTab() {
       {headerShouldBeFixed && <div className="h-14"></div>}
 
       {/* Content starts here */}
-      <div className="pt-3">
+      <div className="px-4 pt-3">
         {/* Modish - Shopping */}
         <FeedSection title="Modish Shopping" icon={<ShoppingBag className="h-5 w-5 text-pink-500" />}>
           <div className="overflow-x-auto pb-2 -mx-2 px-2">
