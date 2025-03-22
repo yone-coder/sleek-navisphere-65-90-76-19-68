@@ -12,6 +12,8 @@ export default function Apps() {
   const [activeTab, setActiveTab] = useState("home");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showSplash, setShowSplash] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [showHeader, setShowHeader] = useState(true);
   const [favorites, setFavorites] = useState<string[]>(() => {
     const saved = localStorage.getItem("favoriteApps");
     return saved ? JSON.parse(saved) : [];
@@ -24,6 +26,28 @@ export default function Apps() {
       setShowSplash(true);
     }
   }, []);
+
+  useEffect(() => {
+    // Handle scroll to show/hide header
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > 50) {
+        if (currentScrollY > lastScrollY) {
+          setShowHeader(false); // Scrolling down, hide header
+        } else {
+          setShowHeader(true); // Scrolling up, show header
+        }
+      } else {
+        setShowHeader(true); // At the top, always show header
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   useEffect(() => {
     localStorage.setItem("favoriteApps", JSON.stringify(favorites));
@@ -62,8 +86,12 @@ export default function Apps() {
       
       <div className="flex-1 overflow-y-auto">
         <div className="h-full flex flex-col">
-          {/* Reduced padding and adjusted styling for the sticky header */}
-          <div className="sticky top-0 z-10 bg-white px-4 py-1 shadow-sm">
+          {/* Main tabs - hidden for Feeds tab */}
+          <div 
+            className={`sticky top-0 z-10 bg-white px-4 py-1 shadow-sm transition-transform duration-300 ${
+              !showHeader ? 'transform -translate-y-full' : 'transform translate-y-0'
+            } ${activeTab === 'feeds' ? 'hidden' : ''}`}
+          >
             <Tabs defaultValue="home" value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid grid-cols-3 w-full">
                 <TabsTrigger value="home">Home</TabsTrigger>
@@ -74,7 +102,7 @@ export default function Apps() {
           </div>
           
           {/* Content area */}
-          <div className="flex-1 px-4">
+          <div className={`flex-1 ${activeTab !== 'feeds' ? 'px-4' : 'px-0'}`}>
             <Tabs defaultValue="home" value={activeTab} className="w-full">
               <TabsContent value="home" className="mt-0 p-0">
                 <HomeTab />
