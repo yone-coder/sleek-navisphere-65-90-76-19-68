@@ -89,33 +89,74 @@ export const FavoritesGrid: React.FC<FavoritesGridProps> = ({
     }
   };
 
-  // Custom app icon component
-  const AppIcon = ({ name }: { name: string }) => {
-    // Based on the screenshot, use specific cube-style icons for most apps
-    return (
-      <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
-        {/* Default cube icon similar to what's in the screenshot */}
-        <path 
-          fill="currentColor" 
-          d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.236l6 3.317v7.882l-6 3.333-6-3.333V7.553l6-3.317z"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-        />
-        {name === "Borlette" && (
-          <path 
-            fill="currentColor" 
-            d="M8 12a1 1 0 011-1h6a1 1 0 110 2H9a1 1 0 01-1-1z"
-          />
-        )}
-      </svg>
-    );
+  // App-specific icons based on name
+  const getAppIcon = (appName: string) => {
+    switch (appName) {
+      case "Chess":
+        return (
+          <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
+            <path fill="currentColor" d="M12,3c0.55,0,1,0.45,1,1s-0.45,1-1,1s-1-0.45-1-1S11.45,3,12,3 M12,17c-0.55,0-1-0.45-1-1s0.45-1,1-1s1,0.45,1,1 S12.55,17,12,17 M12,10c-0.55,0-1-0.45-1-1s0.45-1,1-1s1,0.45,1,1S12.55,10,12,10 M18,10c-0.55,0-1-0.45-1-1s0.45-1,1-1 s1,0.45,1,1S18.55,10,18,10 M18,17c-0.55,0-1-0.45-1-1s0.45-1,1-1s1,0.45,1,1S18.55,17,18,17 M6,10c-0.55,0-1-0.45-1-1 s0.45-1,1-1s1,0.45,1,1S6.55,10,6,10 M6,17c-0.55,0-1-0.45-1-1s0.45-1,1-1s1,0.45,1,1S6.55,17,6,17" />
+            <path fill="currentColor" d="M18,6h-3.5l-1-1.5L12,6H6l1.5,3L6,15h12l-1.5-6L18,6z" />
+          </svg>
+        );
+      case "Borlette":
+        return (
+          <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
+            <path fill="currentColor" d="M13 7.5h5v2h-5zm0 7h5v2h-5zM19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM11 6H6v5h5V6zm-1 4H7V7h3v3zm1 3H6v5h5v-5zm-1 4H7v-3h3v3z" />
+          </svg>
+        );
+      case "Boltz":
+        return (
+          <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
+            <path fill="currentColor" d="M12,2L4,5v6.09c0,5.05,3.41,9.76,8,10.91c4.59-1.15,8-5.86,8-10.91V5L12,2z M15.5,14.09l-1.41,1.41L12,13.42L9.91,15.5 L8.5,14.09L10.59,12L8.5,9.91L9.91,8.5L12,10.59l2.09-2.09l1.41,1.41L13.42,12L15.5,14.09z" />
+          </svg>
+        );
+      case "Domus":
+        return (
+          <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
+            <path fill="currentColor" d="M17,16h2V4h-8v2h6V16z M13,15l-1-4H9.5v2H7.5v-2H6v-1h1.5V8h2v1.5H11l1,4H13z M3,14V8h2v6H3z M19,20v2h-1h-5v-2H8v2H3 v-2H2V3h1v2h5V3h5v2h5V3h1v17H19z" />
+          </svg>
+        );
+      case "Evnto":
+        return (
+          <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
+            <path fill="currentColor" d="M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z" />
+          </svg>
+        );
+      case "Careo":
+        return (
+          <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
+            <path fill="currentColor" d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z" />
+          </svg>
+        );
+      case "Druck":
+        return (
+          <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
+            <path fill="currentColor" d="M19,8H5V6H19M16,19H8V14H16M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z" />
+          </svg>
+        );
+      case "Activity":
+        return (
+          <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
+            <path fill="currentColor" d="M3.5,18.49L9.5,12.48L13.5,16.48L22,6.92L20.59,5.51L13.5,13.48L9.5,9.48L2,16.99L3.5,18.49Z" />
+          </svg>
+        );
+      default:
+        // Fallback to hexagon icon
+        return (
+          <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
+            <path 
+              fill="currentColor" 
+              d="M12,2L3,7v10l9,5l9-5V7L12,2z M12,4.236l6,3.317v7.882l-6,3.333l-6-3.333V7.553l6-3.317z"
+            />
+          </svg>
+        );
+    }
   };
 
   return (
     <div className="grid grid-cols-4 gap-6">
       {apps.map((app) => {
-        // Always use the custom icon style to match screenshot
         return (
           <div key={app.id} className="flex flex-col items-center">
             <motion.div 
@@ -131,7 +172,7 @@ export const FavoritesGrid: React.FC<FavoritesGridProps> = ({
                 onTouchStart={() => handleTouchStart(app.id)}
                 onTouchEnd={handleTouchEnd}
               >
-                <AppIcon name={app.name} />
+                {getAppIcon(app.name)}
               </motion.div>
               
               {editMode && (

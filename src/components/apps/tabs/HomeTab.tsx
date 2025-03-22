@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, 
@@ -24,6 +25,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { RecentActivitySection, RecentApp, Transaction, ActivityItem } from '@/components/apps/RecentActivitySection';
 import { App } from '@/components/apps/types';
 
+// App icons mapping for consistency with the Explore tab
 const appIconsMap = {
   "Messages": Mail,
   "Calendar": Calendar,
@@ -43,7 +45,7 @@ const appIconsMap = {
   "Files": Archive,
   "Music": Music,
   "Podcasts": Headphones,
-  "Games": Play,
+  "Games": Gamepad,
   "News": FileText,
   "TV": Monitor,
   "Shopping": ShoppingCart,
@@ -126,10 +128,12 @@ const appIconsMap = {
   "Healr": Heart,
   "DinoPlay": Gamepad,
   "EatsNow": Utensils,
-  "Careo": Package,
-  "Evnto": Package,
+  "Careo": Heart,
+  "Evnto": Calendar,
   "Druck": Package,
-  "Activity": Activity
+  "Activity": Activity,
+  "Boltz": Truck,
+  "Chess": Gamepad
 };
 
 export function HomeTab() {
