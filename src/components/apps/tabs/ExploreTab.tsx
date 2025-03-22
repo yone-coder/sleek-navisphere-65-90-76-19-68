@@ -11,6 +11,7 @@ import { SearchOverlay } from "@/components/search/SearchOverlay";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { App, AppCategory } from "@/components/apps/types";
+import { useNavigate } from "react-router-dom";
 
 interface ExploreTabProps {
   favorites: string[];
@@ -32,6 +33,7 @@ export function ExploreTab({
   setIsSearchOpen
 }: ExploreTabProps) {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState<AppCategory>("All");
@@ -104,6 +106,10 @@ export function ExploreTab({
     }, 1500);
   };
 
+  const handleOpenAppStore = () => {
+    navigate("/appstore");
+  };
+
   return (
     <motion.div 
       className="pb-24"
@@ -131,9 +137,17 @@ export function ExploreTab({
               variant="ghost" 
               size="icon" 
               className="rounded-full" 
-              onClick={() => setIsDrawerOpen(true)}
+              onClick={handleOpenAppStore}
             >
               <Store className="h-5 w-5" />
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="rounded-full" 
+              onClick={() => setIsDrawerOpen(true)}
+            >
+              <Filter className="h-5 w-5" />
             </Button>
           </div>
         </div>
@@ -141,24 +155,24 @@ export function ExploreTab({
         {/* Main Tabs Navigation */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid grid-cols-4 w-full bg-gray-100/80 p-0.5 h-auto">
-            <TabsTrigger value="all" className="flex items-center gap-1.5">
+            <TabsTrigger value="all" className="flex items-center justify-center gap-1.5 px-3 py-2">
               <Package className="h-4 w-4" />
               <span>All</span>
             </TabsTrigger>
-            <TabsTrigger value="popular" className="flex items-center gap-1.5">
+            <TabsTrigger value="popular" className="flex items-center justify-center gap-1.5 px-3 py-2">
               <TrendingUp className="h-4 w-4" />
               <span>Popular</span>
             </TabsTrigger>
-            <TabsTrigger value="recent" className="flex items-center gap-1.5">
+            <TabsTrigger value="recent" className="flex items-center justify-center gap-1.5 px-3 py-2">
               <Clock className="h-4 w-4" />
               <span>Recent</span>
               {updatesCount > 0 && (
-                <Badge variant="destructive" className="ml-1 h-4 w-4 p-0 flex items-center justify-center text-[10px]">
+                <Badge variant="destructive" className="ml-1 h-5 w-5 p-0 flex items-center justify-center text-[10px]">
                   {updatesCount}
                 </Badge>
               )}
             </TabsTrigger>
-            <TabsTrigger value="favorites" className="flex items-center gap-1.5">
+            <TabsTrigger value="favorites" className="flex items-center justify-center gap-1.5 px-3 py-2">
               <Star className="h-4 w-4" />
               <span>Favorites</span>
               {favorites.length > 0 && (
