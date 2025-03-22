@@ -1,3 +1,4 @@
+
 import { Rss, Bell, Newspaper, Calendar, ChevronRight, ShoppingBag, Trophy, Gamepad, Mail, MessageSquare, Music, Video, Clock, Heart, PiggyBank, Briefcase, BookOpen, Ticket, Store, Bitcoin, Users, Building, Wallet, CreditCard, Package, Filter, TrendingUp, Star } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -621,3 +622,84 @@ export function FeedsTab() {
                     <CarouselItem key={item} className="basis-4/5 sm:basis-1/2 md:basis-1/3">
                       <Card className="overflow-hidden">
                         <div className="h-32 bg-gray-100">
+                          <img 
+                            src={`/api/placeholder/300/200?text=News${item}`}
+                            alt={`News ${item}`}
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                        <div className="p-3">
+                          <Badge variant="outline" className="mb-2 text-xs">Technology</Badge>
+                          <h4 className="font-medium text-sm mb-1 line-clamp-2">This is a news headline about something interesting</h4>
+                          <p className="text-xs text-gray-500">2 hours ago</p>
+                        </div>
+                      </Card>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
+            </FeedSection>
+          </>
+        )}
+        
+        {/* Frequent tab */}
+        {showFrequentSections && (
+          <>
+            <div className="py-2 px-3 mb-4 bg-gray-50 text-gray-700 text-sm rounded-md flex items-center">
+              <TrendingUp className="h-4 w-4 mr-2" />
+              <span>Your most frequently used apps and services</span>
+            </div>
+            
+            <FeedSection title="Frequently Used Apps" icon={<Star className="h-5 w-5 text-yellow-500" />}>
+              <div className="grid grid-cols-4 gap-4">
+                {apps.slice(0, 8).map((app, index) => (
+                  <div key={index} className="flex flex-col items-center">
+                    <div className="h-14 w-14 rounded-xl bg-gray-100 flex items-center justify-center mb-1">
+                      {app.icon}
+                    </div>
+                    <p className="text-xs text-center font-medium">{app.name}</p>
+                  </div>
+                ))}
+              </div>
+            </FeedSection>
+            
+            <FeedSection title="Quick Access" icon={<Clock className="h-5 w-5 text-blue-500" />}>
+              <div className="space-y-3">
+                {[1, 2, 3].map((item) => (
+                  <Card key={item} className="p-3 border border-gray-200">
+                    <div className="flex items-center gap-3">
+                      <div className="h-12 w-12 rounded-lg flex-shrink-0 overflow-hidden bg-gray-100 flex items-center justify-center">
+                        {item === 1 ? <ShoppingBag className="h-6 w-6 text-pink-500" /> : 
+                         item === 2 ? <Briefcase className="h-6 w-6 text-blue-500" /> : 
+                                      <Wallet className="h-6 w-6 text-purple-500" />}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-sm font-medium">{item === 1 ? 'Recent Order' : item === 2 ? 'Work Project' : 'Payment Method'}</h4>
+                          <Badge variant="outline" className="text-xs bg-gray-50">
+                            {item === 1 ? '2 days ago' : item === 2 ? 'Active' : 'Default'}
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-0.5">{item === 1 ? 'Order #1234' : item === 2 ? 'Design System' : 'Visa •••• 4242'}</p>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </FeedSection>
+            
+            <FeedSection title="Recent Searches" icon={<Filter className="h-5 w-5 text-gray-500" />}>
+              <div className="flex flex-wrap gap-2">
+                {['Flutter UI', 'React Components', 'Tailwind Examples', 'Startup Ideas', 'Productivity Tools', 'App Design'].map((term, index) => (
+                  <Badge key={index} variant="outline" className="py-1.5 px-3">
+                    {term}
+                  </Badge>
+                ))}
+              </div>
+            </FeedSection>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
