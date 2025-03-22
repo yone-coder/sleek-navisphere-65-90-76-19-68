@@ -115,10 +115,7 @@ export function ExploreTab({
       <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-sm pt-2 pb-3 px-2 border-b border-gray-100">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mr-3 shadow-md">
-              <Store className="w-5 h-5 text-white" />
-            </div>
-            <h1 className="text-xl font-bold">App Store</h1>
+            <h1 className="text-xl font-bold">All Apps</h1>
           </div>
           
           <div className="flex items-center gap-2">
@@ -136,7 +133,7 @@ export function ExploreTab({
               className="rounded-full" 
               onClick={() => setIsDrawerOpen(true)}
             >
-              <Filter className="h-5 w-5" />
+              <Store className="h-5 w-5" />
             </Button>
           </div>
         </div>
