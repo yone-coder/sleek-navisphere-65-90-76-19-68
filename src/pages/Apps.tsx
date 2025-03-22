@@ -62,8 +62,8 @@ export default function Apps() {
       
       <div className="flex-1 overflow-y-auto">
         <div className="h-full flex flex-col">
-          {/* Reduced padding and adjusted styling for the sticky header */}
-          <div className="sticky top-0 z-10 bg-white px-4 py-1 shadow-sm">
+          {/* Sticky tabs navigation - only show when not on 'feeds' tab */}
+          <div className={`sticky top-0 z-10 bg-white px-4 py-1 shadow-sm ${activeTab === 'feeds' ? 'hidden' : ''}`}>
             <Tabs defaultValue="home" value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid grid-cols-3 w-full">
                 <TabsTrigger value="home">Home</TabsTrigger>
