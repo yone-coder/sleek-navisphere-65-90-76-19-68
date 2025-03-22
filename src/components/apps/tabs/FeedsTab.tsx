@@ -1,3 +1,4 @@
+
 import { Rss, Bell, Newspaper, Calendar, ChevronRight, ShoppingBag, Trophy, Gamepad, Mail, MessageSquare, Music, Video, Clock, Heart, PiggyBank, Briefcase, BookOpen, Ticket, Store, Bitcoin, Users, Building, Wallet, CreditCard } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -50,8 +51,8 @@ export function FeedsTab() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      {/* Sticky header section */}
-      <div className="sticky top-0 z-10 bg-white py-3 px-1 border-b border-gray-100 shadow-sm">
+      {/* Sticky header section - with higher z-index to appear above main header */}
+      <div className="sticky top-0 z-50 bg-white py-3 px-1 border-b border-gray-100 shadow-sm">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold">Feeds</h2>
           <div className="flex gap-2">
@@ -288,5 +289,18 @@ export function FeedsTab() {
                     />
                     <div className="absolute top-2 left-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
                       {new Date(Date.now() + item * 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                   
-
+                    </div>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-sm font-medium">Event Title {item}</p>
+                    <p className="text-xs text-gray-500">Downtown Arena</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </FeedSection>
+      </div>
+    </motion.div>
+  );
+}
