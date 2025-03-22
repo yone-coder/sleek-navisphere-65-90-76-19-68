@@ -16,6 +16,8 @@ export default function Apps() {
     const saved = localStorage.getItem("favoriteApps");
     return saved ? JSON.parse(saved) : [];
   });
+  const [showHeader, setShowHeader] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     // Check if the user has seen the splash screen before
@@ -28,6 +30,28 @@ export default function Apps() {
   useEffect(() => {
     localStorage.setItem("favoriteApps", JSON.stringify(favorites));
   }, [favorites]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        // Scrolling down and past initial threshold
+        setShowHeader(false);
+      } else {
+        // Scrolling up
+        setShowHeader(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [lastScrollY]);
 
   const handleDismissSplash = () => {
     // Animate the splash screen away
@@ -62,8 +86,12 @@ export default function Apps() {
       
       <div className="flex-1 overflow-y-auto">
         <div className="h-full flex flex-col">
-          {/* Sticky tabs navigation - only show when not on 'feeds' tab */}
-          <div className={`sticky top-0 z-10 bg-white px-4 py-1 shadow-sm ${activeTab === 'feeds' ? 'hidden' : ''}`}>
+          {/* Sticky tabs navigation - only show when not on 'feeds' tab and controlled by scroll */}
+          <div 
+            className={`sticky top-0 z-10 bg-white px-4 py-1 shadow-sm transition-transform duration-300 ${
+              activeTab === 'feeds' ? 'hidden' : showHeader ? 'translate-y-0' : '-translate-y-full'
+            }`}
+          >
             <Tabs defaultValue="home" value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid grid-cols-3 w-full">
                 <TabsTrigger value="home">Home</TabsTrigger>
