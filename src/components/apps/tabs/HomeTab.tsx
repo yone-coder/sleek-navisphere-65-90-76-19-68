@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass, Bell, BookOpen, Activity, Zap, Layout, Send, Download, TrendingUp, ChevronRight, Clock, Star, MoreHorizontal, Bookmark, User, ArrowDownLeft, ArrowUpRight, Sparkles, Package, Trophy, Headphones, Palette, Sunrise, Coffee, FileText, Briefcase, Wifi, Cpu, Archive, Layers, Play, Gamepad2, CheckSquare, List, ListMusic, ListVideo, Home } from 'lucide-react';
 import { ProfileCard } from '@/components/apps/ProfileCard';
@@ -12,17 +13,53 @@ import { Card } from "@/components/ui/card";
 import { QuickActionsGrid, QuickAction } from '@/components/apps/QuickActionsGrid';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { RecentActivitySection, RecentApp, Transaction, ActivityItem } from '@/components/apps/RecentActivitySection';
+import { App } from '@/components/apps/types';
 
 export function HomeTab() {
-  const [favoriteApps, setFavoriteApps] = useState(() => {
-    return apps.slice(0, 12).map((app, index) => ({
-      id: index + 1,
-      name: app.name,
-      color: app.color,
-      letter: app.name.charAt(0),
-      favorite: true,
-    }));
+  // Get favorites from localStorage
+  const [favoriteAppNames, setFavoriteAppNames] = useState<string[]>(() => {
+    const saved = localStorage.getItem("favoriteApps");
+    return saved ? JSON.parse(saved) : [];
   });
+  
+  const [favoriteApps, setFavoriteApps] = useState(() => {
+    // Convert the favorite app names to the format expected by FavoritesGrid
+    return convertAppsToFavoriteFormat(apps, favoriteAppNames);
+  });
+
+  useEffect(() => {
+    // Update favorites when localStorage changes
+    const handleStorageChange = () => {
+      const saved = localStorage.getItem("favoriteApps");
+      const newFavorites = saved ? JSON.parse(saved) : [];
+      setFavoriteAppNames(newFavorites);
+      setFavoriteApps(convertAppsToFavoriteFormat(apps, newFavorites));
+    };
+
+    // Listen for storage events (when other tabs update localStorage)
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also check periodically in case the current tab updates localStorage
+    const interval = setInterval(handleStorageChange, 1000);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Function to convert apps array to the format needed by FavoritesGrid
+  function convertAppsToFavoriteFormat(allApps: App[], favoriteNames: string[]) {
+    return allApps
+      .filter(app => favoriteNames.includes(app.name))
+      .map((app, index) => ({
+        id: index + 1,
+        name: app.name,
+        color: app.color,
+        letter: app.name.charAt(0),
+        favorite: true,
+      }));
+  }
 
   const { toast } = useToast();
   const [searchMode, setSearchMode] = useState(false);
@@ -44,12 +81,22 @@ export function HomeTab() {
     (!searchMode || app.name.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  const toggleFavorite = (id) => {
-    setFavoriteApps(favoriteApps.map(app => 
-      app.id === id ? { ...app, favorite: !app.favorite } : app
-    ));
-
+  const toggleFavorite = (id: number) => {
     const app = favoriteApps.find(app => app.id === id);
+    if (!app) return;
+    
+    // Get current favorites from localStorage
+    const saved = localStorage.getItem("favoriteApps");
+    const currentFavorites: string[] = saved ? JSON.parse(saved) : [];
+    
+    // Remove this app from favorites
+    const newFavorites = currentFavorites.filter(name => name !== app.name);
+    
+    // Update localStorage and state
+    localStorage.setItem("favoriteApps", JSON.stringify(newFavorites));
+    setFavoriteAppNames(newFavorites);
+    setFavoriteApps(convertAppsToFavoriteFormat(apps, newFavorites));
+    
     toast({
       title: `${app.name} removed from favorites`,
       description: "You can add it back anytime",
@@ -209,72 +256,74 @@ export function HomeTab() {
           </div>
         </div>
 
-        <div className="mb-4 px-2">
-          <div className="flex justify-between items-center mb-2">
-            <h1 className="text-base font-semibold text-gray-800">Favorites</h1>
-            <div className="flex space-x-3">
-              {searchMode ? (
-                <button 
-                  onClick={clearSearch}
-                  className="text-blue-500"
-                >
-                  <X size={18} />
-                </button>
-              ) : (
-                <button 
-                  onClick={() => setSearchMode(true)}
-                  className="text-blue-500"
-                >
-                  <Search size={18} />
-                </button>
-              )}
-              <button 
-                onClick={() => setEditMode(!editMode)}
-                className={`${editMode ? 'text-red-500' : 'text-blue-500'} text-xs font-medium`}
-              >
-                {editMode ? 'Done' : 'Edit'}
-              </button>
-            </div>
-          </div>
-
-          <div className="mb-3">
-            <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
-              <TabsList className="bg-white rounded-full border border-gray-200 p-0.5 shadow-sm w-full">
-                {categories.map(category => (
-                  <TabsTrigger 
-                    key={category.id} 
-                    value={category.id}
-                    className="py-1 px-3 text-xs rounded-full data-[state=active]:bg-blue-500 data-[state=active]:text-white flex-1 flex items-center justify-center gap-1.5"
+        {filteredApps.length > 0 && (
+          <div className="mb-4 px-2">
+            <div className="flex justify-between items-center mb-2">
+              <h1 className="text-base font-semibold text-gray-800">Favorites</h1>
+              <div className="flex space-x-3">
+                {searchMode ? (
+                  <button 
+                    onClick={clearSearch}
+                    className="text-blue-500"
                   >
-                    <category.icon className="h-3.5 w-3.5" />
-                    {category.label}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
-          </div>
-
-          {searchMode && (
-            <motion.div 
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="mb-3"
-            >
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search favorites..."
-                  value={searchTerm}
-                  onChange={handleSearch}
-                  className="w-full p-2 bg-white rounded-lg pl-8 text-sm border border-gray-200 shadow-sm"
-                  autoFocus
-                />
-                <Search size={16} className="absolute left-2 top-2.5 text-gray-400" />
+                    <X size={18} />
+                  </button>
+                ) : (
+                  <button 
+                    onClick={() => setSearchMode(true)}
+                    className="text-blue-500"
+                  >
+                    <Search size={18} />
+                  </button>
+                )}
+                <button 
+                  onClick={() => setEditMode(!editMode)}
+                  className={`${editMode ? 'text-red-500' : 'text-blue-500'} text-xs font-medium`}
+                >
+                  {editMode ? 'Done' : 'Edit'}
+                </button>
               </div>
-            </motion.div>
-          )}
-        </div>
+            </div>
+
+            <div className="mb-3">
+              <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
+                <TabsList className="bg-white rounded-full border border-gray-200 p-0.5 shadow-sm w-full">
+                  {categories.map(category => (
+                    <TabsTrigger 
+                      key={category.id} 
+                      value={category.id}
+                      className="py-1 px-3 text-xs rounded-full data-[state=active]:bg-blue-500 data-[state=active]:text-white flex-1 flex items-center justify-center gap-1.5"
+                    >
+                      <category.icon className="h-3.5 w-3.5" />
+                      {category.label}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+            </div>
+
+            {searchMode && (
+              <motion.div 
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="mb-3"
+              >
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search favorites..."
+                    value={searchTerm}
+                    onChange={handleSearch}
+                    className="w-full p-2 bg-white rounded-lg pl-8 text-sm border border-gray-200 shadow-sm"
+                    autoFocus
+                  />
+                  <Search size={16} className="absolute left-2 top-2.5 text-gray-400" />
+                </div>
+              </motion.div>
+            )}
+          </div>
+        )}
 
         {!searchMode && activeCategory === 'recent' && (
           <div className="mb-4 px-2">
@@ -301,16 +350,43 @@ export function HomeTab() {
           </div>
         )}
 
-        <div className="px-2 pb-16">
-          <FavoritesGrid 
-            apps={filteredApps}
-            editMode={editMode}
-            onToggleFavorite={toggleFavorite}
-            onAppTap={handleAppTap}
-            onAppLongPress={handleAppLongPress}
-            activeAppId={activeAppId}
-          />
-        </div>
+        {filteredApps.length > 0 && (
+          <div className="px-2 pb-16">
+            <FavoritesGrid 
+              apps={filteredApps}
+              editMode={editMode}
+              onToggleFavorite={toggleFavorite}
+              onAppTap={handleAppTap}
+              onAppLongPress={handleAppLongPress}
+              activeAppId={activeAppId}
+            />
+          </div>
+        )}
+        
+        {filteredApps.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-12 px-2">
+            <div className="bg-gray-100 w-16 h-16 rounded-full flex items-center justify-center mb-3">
+              <Star className="text-gray-400 h-8 w-8" />
+            </div>
+            <p className="text-sm text-gray-600 mb-1">No favorite apps yet</p>
+            <p className="text-xs text-gray-500 max-w-xs text-center mb-4">
+              Go to the Explore tab and tap the star on apps you want to add to favorites.
+            </p>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-blue-500 border-blue-200"
+              onClick={() => {
+                const appTabsElement = document.querySelector('[value="explore"]');
+                if (appTabsElement) {
+                  (appTabsElement as HTMLElement).click();
+                }
+              }}
+            >
+              Browse Apps
+            </Button>
+          </div>
+        )}
       </motion.div>
       
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-20">
