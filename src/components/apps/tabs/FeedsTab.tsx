@@ -9,6 +9,7 @@ import { ModishRecentlyViewed } from "@/components/modish/product/ModishRecently
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { motion } from "framer-motion";
 import { apps } from "@/components/apps/data/appsData";
+import { useState, useEffect } from "react";
 
 interface FeedSectionProps {
   title: string;
@@ -44,6 +45,23 @@ export function FeedsTab() {
   const socialApps = apps.filter(app => app.category === "Social");
   const realEstateApps = apps.filter(app => app.category === "Real Estate");
   
+  // State to track scroll position for header behavior
+  const [scrollY, setScrollY] = useState(0);
+  
+  // Update scroll position when scrolling
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  
+  // Calculate if header should be fixed based on scroll position
+  // We'll stick the header once we've scrolled past a certain point
+  const headerShouldBeFixed = scrollY > 50;
+  
   return (
     <motion.div 
       className="pb-20"
@@ -51,8 +69,8 @@ export function FeedsTab() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      {/* Sticky header section - with higher z-index to appear above main header */}
-      <div className="sticky top-0 z-50 bg-white py-3 px-1 border-b border-gray-100 shadow-sm">
+      {/* Header section - starts normal but becomes fixed on scroll */}
+      <div className={`${headerShouldBeFixed ? 'fixed top-0 left-0 right-0 z-50' : ''} bg-white py-3 px-1 border-b border-gray-100 shadow-sm`}>
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold">Feeds</h2>
           <div className="flex gap-2">
@@ -66,6 +84,9 @@ export function FeedsTab() {
           </div>
         </div>
       </div>
+
+      {/* Add padding top when header is fixed to prevent content jump */}
+      {headerShouldBeFixed && <div className="h-14"></div>}
 
       {/* Content starts here */}
       <div className="pt-3">
