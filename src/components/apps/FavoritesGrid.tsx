@@ -89,65 +89,89 @@ export const FavoritesGrid: React.FC<FavoritesGridProps> = ({
     }
   };
 
-  // App-specific icons based on name
+  // App-specific icons based on name - Updated to match Explore tab icons
   const getAppIcon = (appName: string) => {
-    switch (appName) {
-      case "Chess":
+    switch (appName.toLowerCase()) {
+      case "chess":
         return (
           <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
-            <path fill="currentColor" d="M12,3c0.55,0,1,0.45,1,1s-0.45,1-1,1s-1-0.45-1-1S11.45,3,12,3 M12,17c-0.55,0-1-0.45-1-1s0.45-1,1-1s1,0.45,1,1 S12.55,17,12,17 M12,10c-0.55,0-1-0.45-1-1s0.45-1,1-1s1,0.45,1,1S12.55,10,12,10 M18,10c-0.55,0-1-0.45-1-1s0.45-1,1-1 s1,0.45,1,1S18.55,10,18,10 M18,17c-0.55,0-1-0.45-1-1s0.45-1,1-1s1,0.45,1,1S18.55,17,18,17 M6,10c-0.55,0-1-0.45-1-1 s0.45-1,1-1s1,0.45,1,1S6.55,10,6,10 M6,17c-0.55,0-1-0.45-1-1s0.45-1,1-1s1,0.45,1,1S6.55,17,6,17" />
-            <path fill="currentColor" d="M18,6h-3.5l-1-1.5L12,6H6l1.5,3L6,15h12l-1.5-6L18,6z" />
+            <path fill="currentColor" d="M19,22H5V20H19V22M17,10C15.58,10 14.26,10.77 13.55,12H13V7H16V5H13V2H11V5H8V7H11V12H10.45C9.74,10.77 8.42,10 7,10A5,5 0 0,0 2,15A5,5 0 0,0 7,20H17A5,5 0 0,0 22,15A5,5 0 0,0 17,10Z" />
           </svg>
         );
-      case "Borlette":
+      case "borlette":
         return (
           <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
-            <path fill="currentColor" d="M13 7.5h5v2h-5zm0 7h5v2h-5zM19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM11 6H6v5h5V6zm-1 4H7V7h3v3zm1 3H6v5h5v-5zm-1 4H7v-3h3v3z" />
+            <path fill="currentColor" d="M4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H16L12,22L8,18H4A2,2 0 0,1 2,16V4A2,2 0 0,1 4,2M4,4V16H8.83L12,19.17L15.17,16H20V4H4M6,7H18V9H6V7M6,11H16V13H6V11Z" />
           </svg>
         );
-      case "Boltz":
+      case "boltz":
         return (
           <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
-            <path fill="currentColor" d="M12,2L4,5v6.09c0,5.05,3.41,9.76,8,10.91c4.59-1.15,8-5.86,8-10.91V5L12,2z M15.5,14.09l-1.41,1.41L12,13.42L9.91,15.5 L8.5,14.09L10.59,12L8.5,9.91L9.91,8.5L12,10.59l2.09-2.09l1.41,1.41L13.42,12L15.5,14.09z" />
+            <path fill="currentColor" d="M11,15H6L13,1V9H18L11,23V15Z" />
           </svg>
         );
-      case "Domus":
+      case "domus":
         return (
           <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
-            <path fill="currentColor" d="M17,16h2V4h-8v2h6V16z M13,15l-1-4H9.5v2H7.5v-2H6v-1h1.5V8h2v1.5H11l1,4H13z M3,14V8h2v6H3z M19,20v2h-1h-5v-2H8v2H3 v-2H2V3h1v2h5V3h5v2h5V3h1v17H19z" />
+            <path fill="currentColor" d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" />
           </svg>
         );
-      case "Evnto":
+      case "evnto":
         return (
           <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
             <path fill="currentColor" d="M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z" />
           </svg>
         );
-      case "Careo":
+      case "careo":
         return (
           <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
             <path fill="currentColor" d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z" />
           </svg>
         );
-      case "Druck":
+      case "druck":
         return (
           <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
-            <path fill="currentColor" d="M19,8H5V6H19M16,19H8V14H16M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z" />
+            <path fill="currentColor" d="M5,3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3M7,5A2,2 0 0,0 5,7A2,2 0 0,0 7,9A2,2 0 0,0 9,7A2,2 0 0,0 7,5M17,15A2,2 0 0,0 15,17A2,2 0 0,0 17,19A2,2 0 0,0 19,17A2,2 0 0,0 17,15M17,5A2,2 0 0,0 15,7A2,2 0 0,0 17,9A2,2 0 0,0 19,7A2,2 0 0,0 17,5M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10M7,15A2,2 0 0,0 5,17A2,2 0 0,0 7,19A2,2 0 0,0 9,17A2,2 0 0,0 7,15Z" />
           </svg>
         );
-      case "Activity":
+      case "activity":
         return (
           <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
-            <path fill="currentColor" d="M3.5,18.49L9.5,12.48L13.5,16.48L22,6.92L20.59,5.51L13.5,13.48L9.5,9.48L2,16.99L3.5,18.49Z" />
+            <path fill="currentColor" d="M20.2,4.9C19,3.8 17.5,3.2 16,3.2C14.5,3.2 13,3.8 11.8,4.9L11,5.6L10.2,4.9C9,3.8 7.5,3.2 6,3.2C4.5,3.2 3,3.8 1.8,4.9C0.6,6 0,7.5 0,9C0,10.5 0.6,12 1.8,13.1L11,21.7L20.2,13.1C21.4,12 22,10.5 22,9C22,7.5 21.4,6 20.2,4.9M14.5,9C14.5,10.4 13.4,11.5 12,11.5C10.6,11.5 9.5,10.4 9.5,9C9.5,7.6 10.6,6.5 12,6.5C13.4,6.5 14.5,7.6 14.5,9Z" />
           </svg>
         );
+      case "lernx":
+        return (
+          <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
+            <path fill="currentColor" d="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z" />
+          </svg>
+        );
+      case "modish":
+        return (
+          <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
+            <path fill="currentColor" d="M16,21H8A1,1 0 0,1 7,20V12.07L5.7,13.07C5.31,13.46 4.68,13.46 4.29,13.07L1.46,10.29C1.07,9.9 1.07,9.27 1.46,8.88L7.34,3H9C9,4.1 10.34,5 12,5C13.66,5 15,4.1 15,3H16.66L22.54,8.88C22.93,9.27 22.93,9.9 22.54,10.29L19.71,13.12C19.32,13.5 18.69,13.5 18.3,13.12L17,12.12V20A1,1 0 0,1 16,21" />
+          </svg>
+        );
+      case "skilt":
+        return (
+          <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
+            <path fill="currentColor" d="M4,6H20V16H4M20,18A2,2 0 0,0 22,16V6C22,4.89 21.1,4 20,4H4C2.89,4 2,4.89 2,6V16A2,2 0 0,0 4,18H0V20H24V18H20Z" />
+          </svg>
+        );
+      case "healr":
+        return (
+          <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
+            <path fill="currentColor" d="M10.5,15.97L10.91,18.41C10.65,18.55 10.23,18.68 9.67,18.8C9.1,18.93 8.43,19 7.66,19C5.45,18.96 3.79,18.3 2.68,17.04C1.56,15.77 1,14.16 1,12.21C1.05,9.9 1.72,8 3,6.5C4.32,5 6.16,4.25 8.5,4.25C10.24,4.25 11.64,4.79 12.68,5.87C13.76,6.94 14.32,8.35 14.38,10.11C14.38,12.08 13.78,13.64 12.58,14.79C11.38,15.93 10.12,15.97 10.5,15.97M8.5,6.25C7.1,6.25 6,6.74 5.18,7.69C4.32,8.64 3.87,9.75 3.87,11.03C3.87,12.47 4.26,13.67 5.03,14.62C5.8,15.57 6.9,16.04 8.32,16.04C9.5,16.04 10.35,15.56 10.88,14.63C11.41,13.69 11.68,12.46 11.68,10.97C11.68,9.52 11.25,8.36 10.41,7.47C9.56,6.59 8.5,6.25 8.5,6.25M21,11.5C21,12.39 20.39,13 19.5,13H17V15.5C17,16.39 16.39,17 15.5,17C14.61,17 14,16.39 14,15.5V13H11.5C10.61,13 10,12.39 10,11.5C10,10.61 10.61,10 11.5,10H14V7.5C14,6.61 14.61,6 15.5,6C16.39,6 17,6.61 17,7.5V10H19.5C20.39,10 21,10.61 21,11.5Z" />
+          </svg>
+        );
+      // Add more app-specific icons as needed
       default:
-        // Fallback to hexagon icon
+        // Default icon for apps without specific icons
         return (
           <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
             <path 
               fill="currentColor" 
-              d="M12,2L3,7v10l9,5l9-5V7L12,2z M12,4.236l6,3.317v7.882l-6,3.333l-6-3.333V7.553l6-3.317z"
+              d="M12,2L4,5V11.1C4,16.6 7.1,21.7 12,23C16.9,21.7 20,16.6 20,11.1V5L12,2M15.5,14.5L12,18L8.5,14.5H10V10.5H14V14.5H15.5Z"
             />
           </svg>
         );

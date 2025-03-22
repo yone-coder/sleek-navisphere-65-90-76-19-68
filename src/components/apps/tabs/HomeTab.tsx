@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, 
@@ -25,7 +24,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { RecentActivitySection, RecentApp, Transaction, ActivityItem } from '@/components/apps/RecentActivitySection';
 import { App } from '@/components/apps/types';
 
-// App icons mapping for consistency with the Explore tab
 const appIconsMap = {
   "Messages": Mail,
   "Calendar": Calendar,
@@ -168,13 +166,10 @@ export function HomeTab() {
     return allApps
       .filter(app => favoriteNames.includes(app.name))
       .map((app, index) => {
-        const IconComponent = appIconsMap[app.name] || Package;
-        
         return {
           id: index + 1,
           name: app.name,
           color: app.color,
-          icon: IconComponent,
           favorite: true,
         };
       });
