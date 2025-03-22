@@ -6,7 +6,9 @@ import {
   ArrowUpRight, Sparkles, Package, Trophy, Headphones, Palette, Sunrise, Coffee, FileText, 
   Briefcase, Wifi, Cpu, Archive, Layers, Play, CheckSquare, List, ListMusic, ListVideo, 
   Home, Phone, MessageCircle, Cloud, Shield, Lock, Mic, Calculator, Map, Car, Utensils, 
-  Moon, Baby, Ticket, Building, CreditCard, Stethoscope, Share2, Languages
+  Moon, Baby, Ticket, Building, CreditCard, Stethoscope, Share2, Languages, 
+  Code, Monitor, Users, Plane, Book, GraduationCap, HelpCircle, 
+  Bed, Flower, Truck, ShoppingBag, Bitcoin, Gift, Gamepad, Camera
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { ProfileCard } from '@/components/apps/ProfileCard';
@@ -27,8 +29,8 @@ const appIconsMap = {
   "Messages": Mail,
   "Calendar": Calendar,
   "Photos": Image,
-  "Camera": Video,
-  "Maps": Globe,
+  "Camera": Camera,
+  "Maps": Map,
   "Weather": Sunrise,
   "Clock": Clock,
   "Notes": FileText,
@@ -91,17 +93,11 @@ const appIconsMap = {
   "Video Chat": Video,
   "Email Client": Mail,
   "News Reader": FileText,
-  "Maps": Map,
   "Ride Sharing": Car,
   "Food Delivery": Utensils,
   "Streaming": Play,
-  "Sports": Trophy,
   "Gaming": Gamepad,
-  "Fitness": Activity,
   "Meditation": Moon,
-  "Medical": Stethoscope,
-  "Education": GraduationCap,
-  "Language Learning": Languages,
   "Quiz": HelpCircle,
   "Kids": Baby,
   "Parenting": Users,
@@ -112,7 +108,6 @@ const appIconsMap = {
   "Home Services": Home,
   "Job Search": Briefcase,
   "Networking": Users,
-  "Productivity": Clock,
   "To-Do": CheckSquare,
   "Modish": ShoppingBag,
   "LernX": BookOpen,
@@ -133,12 +128,6 @@ const appIconsMap = {
   "DinoPlay": Gamepad,
   "EatsNow": Utensils
 };
-
-// Import additional icons that were missing
-import { 
-  Code, Monitor, Users, Plane, Book, GraduationCap, HelpCircle, 
-  Bed, Flower, Truck, ShoppingBag, Bitcoin, Gift, Gamepad
-} from 'lucide-react';
 
 export function HomeTab() {
   const [favoriteAppNames, setFavoriteAppNames] = useState<string[]>(() => {
