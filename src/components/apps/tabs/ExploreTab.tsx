@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -45,7 +44,6 @@ export function ExploreTab({
   const [installingApps, setInstallingApps] = useState<string[]>([]);
   const [hasScrolled, setHasScrolled] = useState(false);
 
-  // Add scroll detection for UI enhancements
   useEffect(() => {
     const handleScroll = () => {
       setHasScrolled(window.scrollY > 20);
@@ -55,7 +53,6 @@ export function ExploreTab({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Filter apps based on current filters
   const filteredApps = apps.filter(app => {
     if (showUpdatesOnly) return app.updates > 0;
     if (activeTab === "favorites") return favorites.includes(app.name);
@@ -77,7 +74,6 @@ export function ExploreTab({
   const handleRefresh = () => {
     setIsRefreshing(true);
     
-    // Simulate refresh delay
     setTimeout(() => {
       setIsRefreshing(false);
       toast({
@@ -93,7 +89,6 @@ export function ExploreTab({
     
     setInstallingApps(prev => [...prev, appName]);
     
-    // Simulate installation
     setTimeout(() => {
       setInstallingApps(prev => prev.filter(name => name !== appName));
       onToggleFavorite(appName);
@@ -112,13 +107,12 @@ export function ExploreTab({
 
   return (
     <motion.div 
-      className="pb-24"
+      className="pb-24 w-full"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      {/* App Store Header */}
-      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-sm pt-2 pb-3 px-2 border-b border-gray-100">
+      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-sm pt-2 pb-3 px-2 border-b border-gray-100 w-full">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center">
             <h1 className="text-xl font-bold">All Apps</h1>
@@ -152,40 +146,52 @@ export function ExploreTab({
           </div>
         </div>
         
-        {/* Main Tabs Navigation */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-4 w-full bg-gray-100/80 p-0.5 h-auto">
-            <TabsTrigger value="all" className="flex items-center justify-center gap-1.5 px-3 py-2">
-              <Package className="h-4 w-4" />
-              <span>All</span>
-            </TabsTrigger>
-            <TabsTrigger value="popular" className="flex items-center justify-center gap-1.5 px-3 py-2">
-              <TrendingUp className="h-4 w-4" />
-              <span>Popular</span>
-            </TabsTrigger>
-            <TabsTrigger value="recent" className="flex items-center justify-center gap-1.5 px-3 py-2">
-              <Clock className="h-4 w-4" />
-              <span>Recent</span>
-              {updatesCount > 0 && (
-                <Badge variant="destructive" className="ml-1 h-5 w-5 p-0 flex items-center justify-center text-[10px]">
-                  {updatesCount}
-                </Badge>
-              )}
-            </TabsTrigger>
-            <TabsTrigger value="favorites" className="flex items-center justify-center gap-1.5 px-3 py-2">
-              <Star className="h-4 w-4" />
-              <span>Favorites</span>
-              {favorites.length > 0 && (
-                <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-[10px]">
-                  {favorites.length}
-                </Badge>
-              )}
-            </TabsTrigger>
+          <TabsList className="w-full bg-gray-100/80 p-0.5 h-auto">
+            <div className="flex w-full">
+              <TabsTrigger 
+                value="all" 
+                className="flex-1 flex items-center justify-center gap-1.5 px-1 py-2.5 text-sm"
+              >
+                <Package className="h-4 w-4" />
+                <span>All</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="popular" 
+                className="flex-1 flex items-center justify-center gap-1.5 px-1 py-2.5 text-sm"
+              >
+                <TrendingUp className="h-4 w-4" />
+                <span>Popular</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="recent" 
+                className="flex-1 flex items-center justify-center gap-1.5 px-1 py-2.5 text-sm"
+              >
+                <Clock className="h-4 w-4" />
+                <span>Recent</span>
+                {updatesCount > 0 && (
+                  <Badge variant="destructive" className="ml-1 h-5 w-5 p-0 flex items-center justify-center text-[10px]">
+                    {updatesCount}
+                  </Badge>
+                )}
+              </TabsTrigger>
+              <TabsTrigger 
+                value="favorites" 
+                className="flex-1 flex items-center justify-center gap-1.5 px-1 py-2.5 text-sm"
+              >
+                <Star className="h-4 w-4" />
+                <span>Favorites</span>
+                {favorites.length > 0 && (
+                  <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-[10px]">
+                    {favorites.length}
+                  </Badge>
+                )}
+              </TabsTrigger>
+            </div>
           </TabsList>
         </Tabs>
       </div>
 
-      {/* View Controls */}
       <div className="flex justify-between items-center mb-4 mt-4 mx-2">
         <h3 className="text-lg font-medium">
           {showUpdatesOnly ? "Apps with Updates" : 
@@ -229,7 +235,6 @@ export function ExploreTab({
         </div>
       </div>
 
-      {/* App Grid with Optimized Rendering */}
       <div className="mx-2">
         {filteredApps.length > 0 ? (
           <AppLibraryGrid 
@@ -257,7 +262,6 @@ export function ExploreTab({
         )}
       </div>
 
-      {/* Featured App - Display on top of the list when in "all" tab */}
       {activeTab === "all" && !showUpdatesOnly && selectedCategory === "All" && (
         <div className="mx-2 mt-6 mb-8">
           <h3 className="text-base font-medium mb-2">Featured App</h3>
@@ -283,14 +287,12 @@ export function ExploreTab({
         </div>
       )}
 
-      {/* Search Overlay */}
       <SearchOverlay 
         isOpen={isSearchOpen} 
         onClose={() => setIsSearchOpen(false)} 
         apps={apps}
       />
       
-      {/* Filters Drawer */}
       <ExploreFilters 
         isOpen={isDrawerOpen}
         setIsOpen={setIsDrawerOpen}
