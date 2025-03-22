@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -56,7 +57,7 @@ export function ExploreTab({
   const filteredApps = apps.filter(app => {
     if (showUpdatesOnly) return app.updates > 0;
     if (activeTab === "favorites") return favorites.includes(app.name);
-    if (activeTab === "popular") return app.status === "popular";
+    if (activeTab === "frequent") return app.status === "popular";
     if (activeTab === "recent") return app.status === "new";
     if (selectedCategory !== "All") return app.category === selectedCategory;
     return true;
@@ -151,21 +152,14 @@ export function ExploreTab({
             <div className="flex w-full">
               <TabsTrigger 
                 value="all" 
-                className="flex-1 flex items-center justify-center gap-1.5 px-1 py-2.5 text-sm"
+                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-3 text-sm font-medium"
               >
                 <Package className="h-4 w-4" />
                 <span>All</span>
               </TabsTrigger>
               <TabsTrigger 
-                value="popular" 
-                className="flex-1 flex items-center justify-center gap-1.5 px-1 py-2.5 text-sm"
-              >
-                <TrendingUp className="h-4 w-4" />
-                <span>Popular</span>
-              </TabsTrigger>
-              <TabsTrigger 
                 value="recent" 
-                className="flex-1 flex items-center justify-center gap-1.5 px-1 py-2.5 text-sm"
+                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-3 text-sm font-medium"
               >
                 <Clock className="h-4 w-4" />
                 <span>Recent</span>
@@ -176,16 +170,11 @@ export function ExploreTab({
                 )}
               </TabsTrigger>
               <TabsTrigger 
-                value="favorites" 
-                className="flex-1 flex items-center justify-center gap-1.5 px-1 py-2.5 text-sm"
+                value="frequent" 
+                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-3 text-sm font-medium"
               >
-                <Star className="h-4 w-4" />
-                <span>Favorites</span>
-                {favorites.length > 0 && (
-                  <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-[10px]">
-                    {favorites.length}
-                  </Badge>
-                )}
+                <TrendingUp className="h-4 w-4" />
+                <span>Frequent</span>
               </TabsTrigger>
             </div>
           </TabsList>
@@ -196,7 +185,7 @@ export function ExploreTab({
         <h3 className="text-lg font-medium">
           {showUpdatesOnly ? "Apps with Updates" : 
            activeTab === "favorites" ? "Your Favorites" : 
-           activeTab === "popular" ? "Popular Apps" : 
+           activeTab === "frequent" ? "Frequently Used" : 
            activeTab === "recent" ? "Recently Added" : 
            selectedCategory !== "All" ? `${selectedCategory} Apps` : "All Apps"}
         </h3>
