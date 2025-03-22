@@ -22,6 +22,11 @@ export const CategorySlider = ({ slides }: CategorySliderProps) => {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
 
+  // If no slides are provided, return null
+  if (!slides || slides.length === 0) {
+    return null;
+  }
+
   useEffect(() => {
     if (!api) return;
 

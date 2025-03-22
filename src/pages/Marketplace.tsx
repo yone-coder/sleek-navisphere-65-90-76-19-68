@@ -23,7 +23,9 @@ const Marketplace = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  const currentSlides = categorySlides[selectedCategory as keyof typeof categorySlides];
+  // Ensure the category exists in the slides data, otherwise default to 'all'
+  const categoryKey = selectedCategory in categorySlides ? selectedCategory : 'all';
+  const currentSlides = categorySlides[categoryKey as keyof typeof categorySlides];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -48,7 +50,7 @@ const Marketplace = () => {
       </header>
 
       <main className="pt-24 pb-20">
-        <CategorySlider slides={currentSlides} />
+        {currentSlides && <CategorySlider slides={currentSlides} />}
           
         <div className="w-full bg-gray-50 border-y border-gray-200">
           <div className="max-w-7xl mx-auto px-4">
