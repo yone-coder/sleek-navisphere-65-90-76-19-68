@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, 
@@ -350,7 +351,7 @@ export function HomeTab() {
                 whileTap={{ scale: 0.95 }}
               >
                 <div className="relative">
-                  <div className={`${app.color} w-14 h-14 rounded-xl flex items-center justify-center shadow-md mb-1`}>
+                  <div className={`bg-gradient-to-tr from-${app.color.replace('bg-', '')}-400 via-${app.color.replace('bg-', '')}-500 to-${app.color.replace('bg-', '')}-600 w-14 h-14 rounded-xl flex items-center justify-center shadow-md mb-1`}>
                     <app.icon className="h-6 w-6 text-white" />
                   </div>
                   {app.notification > 0 && (
