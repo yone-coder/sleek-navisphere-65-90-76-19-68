@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, 
@@ -24,6 +23,7 @@ import { QuickActionsGrid, QuickAction } from '@/components/apps/QuickActionsGri
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { RecentActivitySection, RecentApp, Transaction, ActivityItem } from '@/components/apps/RecentActivitySection';
 import { App } from '@/components/apps/types';
+import { iconComponents } from '@/components/appstore/utils/appDataAdapter';
 
 const appIconsMap = {
   "Messages": Mail,
@@ -309,15 +309,12 @@ export function HomeTab() {
     { id: 'frequent', label: 'Frequent', icon: Star },
   ];
 
-  // Use real app data for pinned apps instead of hardcoded data
   const getPinnedApps = () => {
-    // Select specific popular apps from the apps array to display as pinned
     const targetAppNames = ['Messages', 'Flora', 'Stash', 'Shopr'];
     
     return apps
       .filter(app => targetAppNames.includes(app.name))
       .map((app, index) => {
-        // Get random notification count (0-5) for a more realistic UI
         const notificationCount = Math.floor(Math.random() * 6);
         
         return {
@@ -337,6 +334,12 @@ export function HomeTab() {
     { id: 102, name: 'Maps', color: 'bg-blue-500', letter: 'M', time: '1 hour ago', type: 'app-usage' },
     { id: 103, name: 'Chat', color: 'bg-green-500', letter: 'C', time: '3 hours ago', type: 'app-usage' },
   ];
+
+  const getAppIcon = (appName: string) => {
+    const app = apps.find(a => a.name === appName);
+    if (!app) return null;
+    return app.icon;
+  };
 
   return (
     <div className="flex flex-col h-full w-full overflow-hidden">
