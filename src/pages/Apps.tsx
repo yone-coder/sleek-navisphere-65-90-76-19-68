@@ -62,8 +62,8 @@ export default function Apps() {
       
       <div className="flex-1 overflow-y-auto">
         <div className="h-full flex flex-col">
-          {/* Sticky tabs navigation - hide on 'feeds' tab because it has its own header */}
-          <div className={`sticky top-0 z-40 bg-white px-4 py-1 shadow-sm ${activeTab === 'feeds' ? 'hidden' : ''}`}>
+          {/* Reduced padding and adjusted styling for the sticky header */}
+          <div className="sticky top-0 z-10 bg-white px-4 py-1 shadow-sm">
             <Tabs defaultValue="home" value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid grid-cols-3 w-full">
                 <TabsTrigger value="home">Home</TabsTrigger>
@@ -73,8 +73,8 @@ export default function Apps() {
             </Tabs>
           </div>
           
-          {/* Content area - remove padding for feeds tab */}
-          <div className={`flex-1 ${activeTab !== 'feeds' ? 'px-4' : ''}`}>
+          {/* Content area */}
+          <div className="flex-1 px-4">
             <Tabs defaultValue="home" value={activeTab} className="w-full">
               <TabsContent value="home" className="mt-0 p-0">
                 <HomeTab />
