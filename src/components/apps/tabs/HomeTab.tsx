@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, 
@@ -308,12 +309,28 @@ export function HomeTab() {
     { id: 'frequent', label: 'Frequent', icon: Star },
   ];
 
-  const pinnedApps = [
-    { id: 301, name: 'Messages', icon: Mail, color: 'bg-blue-500', notification: 3 },
-    { id: 302, name: 'Photos', icon: Image, color: 'bg-pink-500', notification: 0 },
-    { id: 303, name: 'Files', icon: FileText, color: 'bg-amber-500', notification: 2 },
-    { id: 304, name: 'Work', icon: Briefcase, color: 'bg-purple-500', notification: 0 },
-  ];
+  // Use real app data for pinned apps instead of hardcoded data
+  const getPinnedApps = () => {
+    // Select specific popular apps from the apps array to display as pinned
+    const targetAppNames = ['Messages', 'Flora', 'Stash', 'Shopr'];
+    
+    return apps
+      .filter(app => targetAppNames.includes(app.name))
+      .map((app, index) => {
+        // Get random notification count (0-5) for a more realistic UI
+        const notificationCount = Math.floor(Math.random() * 6);
+        
+        return {
+          id: 300 + index,
+          name: app.name,
+          icon: app.icon,
+          color: app.color,
+          notification: notificationCount
+        };
+      });
+  };
+
+  const pinnedApps = getPinnedApps();
 
   const recentApps: RecentApp[] = [
     { id: 101, name: 'Modish', color: 'bg-purple-500', letter: 'M', time: '2 mins ago', type: 'app-usage' },
@@ -344,26 +361,30 @@ export function HomeTab() {
             </Button>
           </div>
           <div className="grid grid-cols-4 gap-3">
-            {pinnedApps.map(app => (
-              <motion.div
-                key={app.id}
-                className="flex flex-col items-center"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <div className="relative">
-                  <div className={`bg-gradient-to-tr from-${app.color.replace('bg-', '')}-400 via-${app.color.replace('bg-', '')}-500 to-${app.color.replace('bg-', '')}-600 w-14 h-14 rounded-xl flex items-center justify-center shadow-md mb-1`}>
-                    <app.icon className="h-6 w-6 text-white" />
+            {pinnedApps.map(app => {
+              const IconComponent = app.icon;
+              
+              return (
+                <motion.div
+                  key={app.id}
+                  className="flex flex-col items-center"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <div className="relative">
+                    <div className={`bg-gradient-to-tr from-${app.color.replace('bg-', '')}-400 via-${app.color.replace('bg-', '')}-500 to-${app.color.replace('bg-', '')}-600 w-14 h-14 rounded-xl flex items-center justify-center shadow-md mb-1`}>
+                      {IconComponent && <IconComponent className="h-6 w-6 text-white" />}
+                    </div>
+                    {app.notification > 0 && (
+                      <Badge className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center px-1">
+                        {app.notification}
+                      </Badge>
+                    )}
                   </div>
-                  {app.notification > 0 && (
-                    <Badge className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center px-1">
-                      {app.notification}
-                    </Badge>
-                  )}
-                </div>
-                <span className="text-xs text-center">{app.name}</span>
-              </motion.div>
-            ))}
+                  <span className="text-xs text-center">{app.name}</span>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
 
@@ -524,4 +545,3 @@ export function HomeTab() {
     </div>
   );
 }
-
