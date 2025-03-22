@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, Image, Globe, Compass, Bell, BookOpen, Activity, Zap, Layout, Send, Download, TrendingUp, ChevronRight, Clock, Star, MoreHorizontal, Bookmark, User, ArrowDownLeft, ArrowUpRight, Sparkles, Package, Trophy, Headphones, Palette, Sunrise, Coffee, FileText, Briefcase, Wifi, Cpu, Archive, Layers, Play, Gamepad2, CheckSquare, List, ListMusic, ListVideo, Home } from 'lucide-react';
 import { ProfileCard } from '@/components/apps/ProfileCard';
@@ -8,27 +7,155 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { useToast } from '@/hooks/use-toast';
-import { AnimatePresence, motion } from 'framer-motion';
 import { Card } from "@/components/ui/card";
 import { QuickActionsGrid, QuickAction } from '@/components/apps/QuickActionsGrid';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { RecentActivitySection, RecentApp, Transaction, ActivityItem } from '@/components/apps/RecentActivitySection';
 import { App } from '@/components/apps/types';
 
+const appIconsMap: Record<string, React.ElementType> = {
+  "Messages": Mail,
+  "Calendar": Calendar,
+  "Photos": Image,
+  "Camera": Video,
+  "Maps": Globe,
+  "Weather": Sunrise,
+  "Clock": Clock,
+  "Notes": FileText,
+  "Reminders": CheckSquare,
+  "Stocks": TrendingUp,
+  "Books": BookOpen,
+  "App Store": Layers,
+  "Health": Activity,
+  "Wallet": Wallet,
+  "Settings": Settings,
+  "Files": Archive,
+  "Music": Music,
+  "Podcasts": Headphones,
+  "Games": Gamepad2,
+  "News": Newspaper,
+  "TV": Tv,
+  "Shopping": ShoppingCart,
+  "Social": Users,
+  "Fitness": Heart,
+  "Finance": PiggyBank,
+  "Education": BookOpen,
+  "Travel": Plane,
+  "Food": Coffee,
+  "Entertainment": Play,
+  "Work": Briefcase,
+  "Utilities": Tool,
+  "Productivity": Zap,
+  "Developer": Code,
+  "Business": Building,
+  "Graphics": Palette,
+  "Videos": Video,
+  "Audio": Music,
+  "Books": BookOpen,
+  "Reference": Book,
+  "Medical": Stethoscope,
+  "Lifestyle": User,
+  "Sports": Trophy,
+  "Navigation": Compass,
+  "Search": Search,
+  "Phone": Phone,
+  "Email": Mail,
+  "Browser": Globe,
+  "Chat": MessageSquare,
+  "Photo Editor": Image,
+  "Video Editor": Video,
+  "Document Editor": FileText,
+  "Spreadsheet": FileSpreadsheet,
+  "Presentation": FilePresentation,
+  "Cloud Storage": Cloud,
+  "VPN": Shield,
+  "Password Manager": Lock,
+  "Recorder": Mic,
+  "Calculator": Calculator,
+  "Translator": Languages,
+  "Scanner": ScanLine,
+  "Rewards": Gift,
+  "Banking": CreditCard,
+  "Investing": TrendingUp,
+  "Crypto": Bitcoin,
+  "Social Media": Share2,
+  "Dating": Heart,
+  "Forums": Users,
+  "Messaging": MessageCircle,
+  "Video Chat": VideoIcon,
+  "Email Client": Mail,
+  "Browser": Globe,
+  "News Reader": Newspaper,
+  "Weather": Cloud,
+  "Maps": Map,
+  "Navigation": Compass,
+  "Ride Sharing": Car,
+  "Food Delivery": Utensils,
+  "Streaming": Play,
+  "Sports": Trophy,
+  "Gaming": Gamepad2,
+  "Shopping": ShoppingCart,
+  "Fitness": Activity,
+  "Meditation": Moon,
+  "Health": Heart,
+  "Medical": Stethoscope,
+  "Education": GraduationCap,
+  "Language Learning": Languages,
+  "Quiz": HelpCircle,
+  "Kids": Baby,
+  "Parenting": Users,
+  "Travel": Plane,
+  "Hotels": BedDouble,
+  "Events": Calendar,
+  "Tickets": Ticket,
+  "Real Estate": Home,
+  "Home Services": Tool,
+  "Job Search": Briefcase,
+  "Networking": Users,
+  "Productivity": Clock,
+  "Notes": FileText,
+  "To-Do": CheckSquare,
+  "Calendar": Calendar,
+  "Modish": ShoppingBag,
+  "LernX": BookOpen,
+  "Borlette": Ticket,
+  "Rise": TrendingUp,
+  "Winnr": Trophy,
+  "Matches": Activity,
+  "Skilt": Briefcase,
+  "GoTix": Ticket,
+  "Flora": Flower,
+  "Tribr": Users,
+  "Domus": Building,
+  "VaultX": Lock,
+  "Meteo": Cloud,
+  "PicShare": Camera,
+  "Courier": Truck,
+  "Healr": Heart,
+  "DinoPlay": Gamepad2,
+  "EatsNow": Utensils
+};
+
+import { 
+  Wallet, Newspaper, Tv, Users, PiggyBank, Plane, Tool, Code, 
+  Building, Book, Stethoscope, Phone, MessageSquare, FileSpreadsheet, 
+  FilePresentation, Cloud, Shield, Lock, Mic, Calculator, Languages, 
+  ScanLine, Gift, CreditCard, Bitcoin, Share2, MessageCircle, VideoIcon, 
+  Map, Car, Utensils, Moon, GraduationCap, Baby, BedDouble, Ticket,
+  Flower, Truck
+} from 'lucide-react';
+
 export function HomeTab() {
-  // Get favorites from localStorage
   const [favoriteAppNames, setFavoriteAppNames] = useState<string[]>(() => {
     const saved = localStorage.getItem("favoriteApps");
     return saved ? JSON.parse(saved) : [];
   });
   
   const [favoriteApps, setFavoriteApps] = useState(() => {
-    // Convert the favorite app names to the format expected by FavoritesGrid
     return convertAppsToFavoriteFormat(apps, favoriteAppNames);
   });
 
   useEffect(() => {
-    // Update favorites when localStorage changes
     const handleStorageChange = () => {
       const saved = localStorage.getItem("favoriteApps");
       const newFavorites = saved ? JSON.parse(saved) : [];
@@ -36,10 +163,8 @@ export function HomeTab() {
       setFavoriteApps(convertAppsToFavoriteFormat(apps, newFavorites));
     };
 
-    // Listen for storage events (when other tabs update localStorage)
     window.addEventListener('storage', handleStorageChange);
     
-    // Also check periodically in case the current tab updates localStorage
     const interval = setInterval(handleStorageChange, 1000);
     
     return () => {
@@ -48,17 +173,20 @@ export function HomeTab() {
     };
   }, []);
 
-  // Function to convert apps array to the format needed by FavoritesGrid
   function convertAppsToFavoriteFormat(allApps: App[], favoriteNames: string[]) {
     return allApps
       .filter(app => favoriteNames.includes(app.name))
-      .map((app, index) => ({
-        id: index + 1,
-        name: app.name,
-        color: app.color,
-        letter: app.name.charAt(0),
-        favorite: true,
-      }));
+      .map((app, index) => {
+        const IconComponent = appIconsMap[app.name] || Package;
+        
+        return {
+          id: index + 1,
+          name: app.name,
+          color: app.color,
+          icon: IconComponent,
+          favorite: true,
+        };
+      });
   }
 
   const { toast } = useToast();
@@ -85,14 +213,11 @@ export function HomeTab() {
     const app = favoriteApps.find(app => app.id === id);
     if (!app) return;
     
-    // Get current favorites from localStorage
     const saved = localStorage.getItem("favoriteApps");
     const currentFavorites: string[] = saved ? JSON.parse(saved) : [];
     
-    // Remove this app from favorites
     const newFavorites = currentFavorites.filter(name => name !== app.name);
     
-    // Update localStorage and state
     localStorage.setItem("favoriteApps", JSON.stringify(newFavorites));
     setFavoriteAppNames(newFavorites);
     setFavoriteApps(convertAppsToFavoriteFormat(apps, newFavorites));
@@ -359,6 +484,7 @@ export function HomeTab() {
               onAppTap={handleAppTap}
               onAppLongPress={handleAppLongPress}
               activeAppId={activeAppId}
+              showIcons={true}
             />
           </div>
         )}
