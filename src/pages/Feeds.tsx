@@ -1,4 +1,3 @@
-
 import { useLanguage } from "@/contexts/LanguageContext";
 import { PostCard } from "@/components/posts/PostCard";
 
@@ -53,11 +52,9 @@ export default function Feeds() {
   const { t } = useLanguage();
 
   return (
-    <div className="min-h-screen pt-20 animate-fade-in">
-      <h1 className="text-4xl font-bold mb-8">{t('nav.feeds')}</h1>
-      
+    <div className="min-h-screen animate-fade-in">
       {/* Stories Section */}
-      <div className="w-full px-4 mb-8">
+      <div className="w-full px-4 mt-4 mb-8">
         <div className="overflow-x-auto no-scrollbar">
           <div className="flex space-x-3 min-w-min pb-2">
             {/* Story 1 - Your Story */}
