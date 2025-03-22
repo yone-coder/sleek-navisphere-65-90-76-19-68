@@ -85,13 +85,15 @@ const SimpleDepositPage: React.FC = () => {
       // Step 3: Set payment URL and redirect
       setPaymentUrl(paymentData.paymentUrl);
       if (autoRedirect) {
-        window.open(paymentData.paymentUrl, '_blank'); // Opens payment URL in a new tab
+        // Redirect in the same tab instead of opening a new one
+        window.location.href = paymentData.paymentUrl;
+      } else {
+        toast({
+          title: "Payment Ready",
+          description: "Click the button to complete your payment",
+        });
+        setShowReceipt(true);
       }
-      toast({
-        title: "Payment Ready",
-        description: autoRedirect ? "Payment window opened in a new tab" : "Click the button to complete your payment",
-      });
-      setShowReceipt(true);
     } catch (err: any) {
       setError(err.message || 'An error occurred while processing the payment');
       toast({
@@ -127,6 +129,14 @@ const SimpleDepositPage: React.FC = () => {
     setError(null);
     setPaymentUrl('');
     setShowReceipt(false);
+  };
+
+  // Function to handle direct navigation to payment URL
+  const handleNavigateToPayment = () => {
+    if (paymentUrl) {
+      // Navigate in the same tab/window
+      window.location.href = paymentUrl;
+    }
   };
 
   return (
@@ -348,14 +358,16 @@ const SimpleDepositPage: React.FC = () => {
                         <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 mr-3 flex-shrink-0" />
                         <div className="flex-1">
                           <h4 className="font-medium text-green-400 text-sm">Payment URL Generated</h4>
-                          <p className="text-xs text-gray-400 mt-1">Your payment has been prepared. {autoRedirect ? 'A new tab should have opened to complete your transaction.' : 'Click the button below to proceed with payment.'}</p>
+                          <p className="text-xs text-gray-400 mt-1">Your payment has been prepared. {autoRedirect ? 'You will be redirected to complete your transaction.' : 'Click the button below to proceed with payment.'}</p>
                           <div className="mt-2 bg-black/50 p-2 rounded border border-gray-800 flex items-center">
                             <div className="flex-1 truncate">
                               <a 
                                 href={paymentUrl} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
                                 className="text-xs text-blue-400 hover:text-blue-300 hover:underline truncate block"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleNavigateToPayment();
+                                }}
                               >
                                 {paymentUrl.length > 50 ? `${paymentUrl.substring(0, 50)}...` : paymentUrl}
                               </a>
@@ -374,7 +386,7 @@ const SimpleDepositPage: React.FC = () => {
                               variant="default"
                               size="sm"
                               className="text-xs bg-green-600 hover:bg-green-700 border-0"
-                              onClick={() => window.open(paymentUrl, '_blank')}
+                              onClick={handleNavigateToPayment}
                             >
                               <ExternalLink className="h-3 w-3 mr-1" /> Complete Payment
                             </Button>
