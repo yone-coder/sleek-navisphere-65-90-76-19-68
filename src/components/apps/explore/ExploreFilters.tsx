@@ -86,7 +86,7 @@ export function ExploreFilters({
   };
 
   const handleToggleUpdatesOnly = () => {
-    setShowUpdatesOnly((prev) => !prev);
+    setShowUpdatesOnly(!showUpdatesOnly);
   };
 
   const handleResetFilters = () => {

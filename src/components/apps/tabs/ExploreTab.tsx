@@ -1,16 +1,9 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search, Menu, Bell, Package, Download, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { toast } from "@/hooks/use-toast";
 import { apps } from "@/components/apps/data/appsData";
 import { ExploreFilters } from "@/components/apps/explore/ExploreFilters";
-import { ExploreHeader } from "@/components/apps/explore/ExploreHeader";
-import { ExploreTabNav } from "@/components/apps/explore/ExploreTabNav";
-import { ExploreSearchBar } from "@/components/apps/explore/ExploreSearchBar";
 import { AppLibraryGrid } from "@/components/apps/explore/AppLibraryGrid";
 import { SearchOverlay } from "@/components/search/SearchOverlay";
 import type { App, AppCategory } from "@/components/apps/types";
@@ -74,30 +67,13 @@ export function ExploreTab({
     }
   });
 
-  const handleRefresh = () => {
-    setIsRefreshing(true);
-    
-    // Simulate refresh delay
-    setTimeout(() => {
-      setIsRefreshing(false);
-      toast({
-        title: "Refreshed",
-        description: "App list has been updated",
-        duration: 2000,
-      });
-    }, 1500);
-  };
-
   return (
     <motion.div 
-      className={`pb-24 ${hasScrolled ? 'pt-2' : 'pt-0'}`}
+      className="pb-24"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      {/* Search Bar */}
-      <ExploreSearchBar onSearchOpen={() => setIsSearchOpen(true)} />
-
       {/* Current Category or Filter Label */}
       <div className="flex justify-between items-center mb-4 mx-1">
         <h3 className="text-lg font-medium">
@@ -160,7 +136,14 @@ export function ExploreTab({
         showUpdatesOnly={showUpdatesOnly}
         setShowUpdatesOnly={setShowUpdatesOnly}
         isRefreshing={isRefreshing}
-        onRefresh={handleRefresh}
+        onRefresh={() => {
+          setIsRefreshing(true);
+          
+          // Simulate refresh delay
+          setTimeout(() => {
+            setIsRefreshing(false);
+          }, 1500);
+        }}
         updatesCount={updatesCount}
         expandedView={expandedView}
         setExpandedView={setExpandedView}

@@ -5,7 +5,7 @@ import { LucideIcon } from "lucide-react";
 export type AppCategory = 
   | "All" 
   | "Shopping" 
-  | "Fashion"  // Added Fashion here
+  | "Fashion"
   | "Finance" 
   | "Entertainment" 
   | "Gaming" 
@@ -21,7 +21,9 @@ export type AppCategory =
   | "Food" 
   | "Services" 
   | "Real Estate"
-  | "Sellers";
+  | "Sellers"
+  | "Productivity"
+  | "Utilities";
 
 export type IconComponent = LucideIcon;
 
