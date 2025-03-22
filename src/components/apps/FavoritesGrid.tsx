@@ -89,13 +89,33 @@ export const FavoritesGrid: React.FC<FavoritesGridProps> = ({
     }
   };
 
+  // Custom app icon component
+  const AppIcon = ({ name }: { name: string }) => {
+    // Based on the screenshot, use specific cube-style icons for most apps
+    return (
+      <svg viewBox="0 0 24 24" className="w-8 h-8 text-white">
+        {/* Default cube icon similar to what's in the screenshot */}
+        <path 
+          fill="currentColor" 
+          d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.236l6 3.317v7.882l-6 3.333-6-3.333V7.553l6-3.317z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1.5}
+        />
+        {name === "Borlette" && (
+          <path 
+            fill="currentColor" 
+            d="M8 12a1 1 0 011-1h6a1 1 0 110 2H9a1 1 0 01-1-1z"
+          />
+        )}
+      </svg>
+    );
+  };
+
   return (
     <div className="grid grid-cols-4 gap-6">
       {apps.map((app) => {
-        // Determine if we should use the icon or letter
-        const useIcon = showIcons && app.icon;
-        const IconComponent = app.icon;
-        
+        // Always use the custom icon style to match screenshot
         return (
           <div key={app.id} className="flex flex-col items-center">
             <motion.div 
@@ -111,11 +131,7 @@ export const FavoritesGrid: React.FC<FavoritesGridProps> = ({
                 onTouchStart={() => handleTouchStart(app.id)}
                 onTouchEnd={handleTouchEnd}
               >
-                {useIcon && IconComponent ? (
-                  <IconComponent className="h-8 w-8 text-white" />
-                ) : (
-                  <span className="text-xl font-bold text-white">{app.letter || app.name.charAt(0)}</span>
-                )}
+                <AppIcon name={app.name} />
               </motion.div>
               
               {editMode && (

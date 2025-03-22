@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Heart, X, Search, Settings, Plus, Mail, Calendar, Music, Video, ShoppingCart, 
@@ -25,7 +24,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { RecentActivitySection, RecentApp, Transaction, ActivityItem } from '@/components/apps/RecentActivitySection';
 import { App } from '@/components/apps/types';
 
-// Create a mapping of app names to their respective Lucide icons
 const appIconsMap = {
   "Messages": Mail,
   "Calendar": Calendar,
@@ -127,7 +125,11 @@ const appIconsMap = {
   "Courier": Truck,
   "Healr": Heart,
   "DinoPlay": Gamepad,
-  "EatsNow": Utensils
+  "EatsNow": Utensils,
+  "Careo": Package,
+  "Evnto": Package,
+  "Druck": Package,
+  "Activity": Activity
 };
 
 export function HomeTab() {
@@ -523,3 +525,4 @@ export function HomeTab() {
     </div>
   );
 }
+
