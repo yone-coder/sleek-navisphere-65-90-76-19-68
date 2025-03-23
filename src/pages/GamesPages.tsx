@@ -1,6 +1,5 @@
 
 import React, { useState } from "react";
-import { View, StyleSheet, Platform } from 'react-native';
 import { useNavigate, Routes, Route } from "react-router-dom";
 import { GameSearchOverlay } from "@/components/search/GameSearchOverlay";
 import { GamesBottomNav } from "@/components/games/GamesBottomNav";
@@ -34,7 +33,7 @@ export default function GamesPages() {
   }, []);
 
   const MainContent = () => (
-    <View style={styles.mainContent}>
+    <div className="pt-4 pb-24">
       <EventsSection events={gameEvents} isLoading={isLoading} />
       <SponsoredGames games={sponsoredGames} isLoading={isLoading} />
       <CategorySection 
@@ -50,11 +49,11 @@ export default function GamesPages() {
       <PopularGames games={popularGames} isLoading={isLoading} />
       <CategorySection title="Suggested For You" games={games} isLoading={isLoading} />
       <TopFreeGames games={games} isLoading={isLoading} />
-    </View>
+    </div>
   );
 
   return (
-    <View style={styles.container}>
+    <div className="min-h-screen bg-white">
       <Routes>
         <Route path="/" element={
           <>
@@ -84,17 +83,6 @@ export default function GamesPages() {
         isOpen={isSearchOpen} 
         onClose={() => setIsSearchOpen(false)} 
       />
-    </View>
+    </div>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    minHeight: '100%',
-    backgroundColor: 'white',
-  },
-  mainContent: {
-    paddingTop: 16,
-    paddingBottom: 96,
-  }
-});
