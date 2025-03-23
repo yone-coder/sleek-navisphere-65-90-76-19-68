@@ -1,10 +1,12 @@
 
 import React, { useEffect, useState } from 'react';
-import { CalendarIcon, Users, Trophy, DollarSign, Heart, Share2, GiftIcon, Globe } from 'lucide-react';
+import { CalendarIcon, Users, Trophy, DollarSign, Heart, Share2, Globe } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 
 interface Tournament {
   id: string;
@@ -26,7 +28,6 @@ interface TournamentCardProps {
 
 export const TournamentCard = ({ className, tournament }: TournamentCardProps) => {
   const [countdown, setCountdown] = useState('');
-  const [isHovered, setIsHovered] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const navigate = useNavigate();
   const targetDate = tournament ? new Date(tournament.start_date).getTime() : new Date('2025-02-12T17:45:00').getTime();
@@ -61,9 +62,10 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
     }
   };
 
-  const getProgressBarColor = (current: number, max: number) => {
-    const remainingPercentage = ((max - current) / max) * 100;
-    return remainingPercentage < 50 ? '#ea384c' : 'rgb(37 99 235)';
+  const formatDateRange = (startDate: string, endDate: string) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    return `${format(start, 'MMM dd')} - ${format(end, 'MMM dd')}, ${format(end, 'yyyy')}`;
   };
 
   const handleShare = async () => {
@@ -116,170 +118,149 @@ export const TournamentCard = ({ className, tournament }: TournamentCardProps) =
     return () => clearInterval(interval);
   }, [targetDate]);
 
-  const formatDateRange = (startDate: string, endDate: string) => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    return `${format(start, 'MMM dd')} - ${format(end, 'MMM dd')}, ${format(end, 'yyyy')}`;
-  };
-
   return (
-    <div 
-      className={cn(
-        "group overflow-hidden rounded-xl shadow-md bg-white dark:bg-gray-800",
-        "transition-all duration-300 ease-in-out transform",
-        "hover:shadow-xl hover:-translate-y-1",
-        "dark:hover:shadow-2xl dark:hover:shadow-blue-500/10",
-        className
-      )}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="relative h-32 overflow-hidden">
-        <img
-          src={tournament?.banner_url || "https://storage.googleapis.com/a1aa/image/1KrFqMU9yacw7XaUF67L6MaKLpXyjGHzZqDa24FBdig.jpg"}
-          alt="Tournament banner"
-          className={cn(
-            "w-full h-full object-cover transition-transform duration-700 ease-in-out",
-            isHovered && "scale-110"
-          )}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        
-        {/* Quick Action Buttons */}
-        <div className="absolute top-2 right-2 flex items-center space-x-2">
-          <button 
-            onClick={handleLike}
-            className={cn(
-              "p-1.5 rounded-full backdrop-blur-sm transition-all duration-300 transform hover:scale-110",
-              isLiked ? "bg-red-500 text-white" : "bg-black/50 text-white hover:bg-red-500/80"
-            )}
-          >
-            <Heart className="h-3.5 w-3.5" fill={isLiked ? "white" : "none"} />
-          </button>
-          <button 
-            onClick={handleShare}
-            className="p-1.5 rounded-full bg-black/50 text-white backdrop-blur-sm transition-all duration-300 transform hover:scale-110 hover:bg-blue-500/80"
-          >
-            <Share2 className="h-3.5 w-3.5" />
-          </button>
+    <Card className={cn(
+      "overflow-hidden border border-gray-200 shadow-sm transition-all duration-300 hover:shadow-md",
+      className
+    )}>
+      <div className="relative">
+        {/* Banner image */}
+        <div className="h-48 w-full overflow-hidden">
+          <img
+            src={tournament?.banner_url || "https://storage.googleapis.com/a1aa/image/1KrFqMU9yacw7XaUF67L6MaKLpXyjGHzZqDa24FBdig.jpg"}
+            alt="Tournament banner"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         </div>
 
-        {/* Status Tags */}
-        <div className="absolute top-2 left-2 flex flex-col gap-2">
-          <div className="bg-red-600 text-white px-2 py-0.5 rounded-full text-xs animate-pulse">
+        {/* Status badges */}
+        <div className="absolute top-3 left-3 flex flex-col gap-2">
+          <Badge variant="secondary" className="px-2 py-1 font-medium text-xs bg-black/70 text-white backdrop-blur-sm animate-pulse">
             {countdown}
-          </div>
-          <div className={cn(
-            "text-white px-2 py-0.5 rounded-full text-xs",
-            "transform transition-transform duration-300 ease-bounce",
+          </Badge>
+          <Badge className={cn(
+            "px-2 py-1 font-medium text-xs text-white backdrop-blur-sm",
             getStatusColor(tournament?.status)
           )}>
             {getStatusText(tournament?.status)}
-          </div>
+          </Badge>
         </div>
 
-        {/* Tournament Info Tags */}
-        <div className="absolute bottom-2 left-2 flex items-center space-x-2">
-          <div className="flex items-center space-x-1">
+        {/* Quick actions */}
+        <div className="absolute top-3 right-3 flex items-center space-x-2">
+          <button 
+            onClick={handleLike}
+            className={cn(
+              "p-1.5 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110",
+              isLiked ? "bg-red-500 text-white" : "bg-black/50 text-white hover:bg-red-500/80"
+            )}
+          >
+            <Heart className="h-4 w-4" fill={isLiked ? "white" : "none"} />
+          </button>
+          <button 
+            onClick={handleShare}
+            className="p-1.5 rounded-full bg-black/50 text-white backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-blue-500/80"
+          >
+            <Share2 className="h-4 w-4" />
+          </button>
+        </div>
+
+        {/* Game badge */}
+        <div className="absolute bottom-3 left-3 flex items-center gap-1.5">
+          <div className="flex items-center gap-1 bg-black/70 px-2 py-1 rounded-full backdrop-blur-sm">
             <img
               src="https://storage.googleapis.com/a1aa/image/RW76eSv1bI06GoXLZPNVQlLvVFuloRbfcxmSiTYAc8E.jpg"
               alt="Game icon"
-              className="w-6 h-6 rounded-full border-2 border-white/50 group-hover:border-white transition-all duration-300"
+              className="w-4 h-4 rounded-full"
             />
-            <div className="bg-black/50 px-2 py-0.5 rounded backdrop-blur-sm group-hover:bg-black/70 transition-colors duration-300">
-              <span className="text-white text-xs">{tournament?.game || "Chess"}</span>
-            </div>
+            <span className="text-white text-xs font-medium">{tournament?.game || "Chess"}</span>
           </div>
-          <div className="flex items-center space-x-1">
-            <Globe className="w-4 h-4 text-white" />
-            <div className="bg-black/50 px-2 py-0.5 rounded backdrop-blur-sm">
-              <span className="text-white text-xs">Online</span>
-            </div>
+          <div className="flex items-center gap-1 bg-black/70 px-2 py-1 rounded-full backdrop-blur-sm">
+            <Globe className="w-3 h-3 text-white" />
+            <span className="text-white text-xs">Online</span>
           </div>
-        </div>
-
-        {/* Sponsored Tag */}
-        <div className="absolute bottom-2 right-2 bg-gradient-to-r from-blue-600 to-blue-400 text-white px-2 py-0.5 rounded-full text-xs transform transition-all duration-300 hover:scale-105 flex items-center gap-1">
-          <GiftIcon className="w-3 h-3" />
-          <span>Sponsored</span>
         </div>
       </div>
 
-      <div className="p-3 transform transition-all duration-300 group-hover:bg-gray-50 dark:group-hover:bg-gray-800/80">
-        <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1 transition-colors duration-300 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+      <div className="p-4">
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2 line-clamp-1">
           {tournament?.title || "2025 Summer Championship"}
         </h3>
 
-        <div className="space-y-2 mb-2">
-          <div className="flex items-center text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300">
-            <CalendarIcon className="h-3 w-3 text-blue-500 mr-1 group-hover:scale-110 transition-transform duration-300" />
-            <span className="text-xs">
+        <div className="space-y-3">
+          {/* Date */}
+          <div className="flex items-center text-gray-600 dark:text-gray-300">
+            <CalendarIcon className="h-4 w-4 text-blue-500 mr-2" />
+            <span className="text-sm">
               {tournament 
                 ? formatDateRange(tournament.start_date, tournament.end_date)
                 : "Feb 12 - May 01, 2025"}
             </span>
           </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300">
-              <Users className="h-3 w-3 text-blue-500 mr-1 group-hover:scale-110 transition-transform duration-300" />
-              <span className="text-xs">
+
+          {/* Participants */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center text-gray-600 dark:text-gray-300">
+                <Users className="h-4 w-4 text-blue-500 mr-2" />
+                <span className="text-sm">
+                  Participants: {tournament 
+                    ? `${tournament.current_participants}/${tournament.max_participants}`
+                    : "128/256"}
+                </span>
+              </div>
+              <span className="text-sm text-blue-600 dark:text-blue-400 font-medium">
                 {tournament 
-                  ? `${tournament.current_participants}/${tournament.max_participants}`
-                  : "128/256"}
+                  ? `${tournament.max_participants - tournament.current_participants} slots left`
+                  : "128 slots left"}
               </span>
             </div>
-            <span className="text-xs text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors duration-300">
-              {tournament 
-                ? `${tournament.max_participants - tournament.current_participants} left`
-                : "128 left"}
-            </span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700 overflow-hidden">
-            <div 
-              className="h-1.5 rounded-full transition-all duration-700 ease-in-out transform origin-left"
-              style={{ 
-                width: tournament 
-                  ? `${(tournament.current_participants / tournament.max_participants) * 100}%`
-                  : "50%",
-                backgroundColor: tournament 
-                  ? getProgressBarColor(tournament.current_participants, tournament.max_participants)
-                  : 'rgb(37 99 235)'
-              }}
-            ></div>
-          </div>
-        </div>
-
-        <div className="flex justify-between mb-2 text-xs">
-          <div className="flex items-center space-x-1 group-hover:scale-105 transition-transform duration-300">
-            <Trophy className="h-3 w-3 text-yellow-500 animate-pulse" />
-            <div>
-              <span className="text-gray-500 dark:text-gray-400">Prize</span>
-              <p className="font-semibold text-gray-800 dark:text-white">
-                ${tournament ? tournament.prize_pool.toLocaleString() : "10,000"}
-              </p>
+            
+            <div className="w-full bg-gray-100 rounded-full h-2 dark:bg-gray-700">
+              <div 
+                className="h-2 rounded-full bg-blue-600 transition-all duration-500"
+                style={{ 
+                  width: tournament 
+                    ? `${(tournament.current_participants / tournament.max_participants) * 100}%`
+                    : "50%"
+                }}
+              ></div>
             </div>
           </div>
-          <div className="flex items-center space-x-1 group-hover:scale-105 transition-transform duration-300">
-            <DollarSign className="h-3 w-3 text-green-500 animate-pulse" />
-            <div>
-              <span className="text-gray-500 dark:text-gray-400">Entry</span>
-              <p className="font-semibold text-gray-800 dark:text-white">$75</p>
+
+          {/* Prize & Entry */}
+          <div className="flex justify-between py-2 border-t border-gray-100 dark:border-gray-800">
+            <div className="flex items-center space-x-2">
+              <Trophy className="h-4 w-4 text-amber-500" />
+              <div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">Prize Pool</div>
+                <div className="font-semibold">${tournament ? tournament.prize_pool.toLocaleString() : "10,000"}</div>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <DollarSign className="h-4 w-4 text-green-500" />
+              <div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">Entry Fee</div>
+                <div className="font-semibold">$75</div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex space-x-2 text-xs opacity-90 group-hover:opacity-100 transition-opacity duration-300">
-          <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-2 rounded-md transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25">
-            Register
-          </button>
-          <button 
-            onClick={() => navigate(`/tournament/${tournament?.id || '1'}`)}
-            className="flex-1 bg-transparent hover:bg-blue-50 text-blue-600 dark:text-blue-400 font-medium py-1 px-2 border border-blue-600 rounded-md transition-all duration-300 transform hover:scale-105 hover:shadow-lg dark:hover:bg-gray-700 dark:border-blue-400"
-          >
-            Details
-          </button>
+          {/* Action buttons */}
+          <div className="flex gap-3 pt-1">
+            <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-3 rounded-md text-sm transition-colors">
+              Register
+            </button>
+            <button 
+              onClick={() => navigate(`/tournament/${tournament?.id || '1'}`)}
+              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded-md text-sm transition-colors dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white"
+            >
+              Details
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 };
