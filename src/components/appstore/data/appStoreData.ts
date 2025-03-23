@@ -1,4 +1,3 @@
-
 import { App } from "../types";
 
 export const appData: App[] = [
@@ -268,7 +267,6 @@ export const appData: App[] = [
     downloads: "500K+",
     inAppPurchases: false
   },
-  // Adding more apps below
   {
     id: 15,
     name: "Twitter",
@@ -647,6 +645,386 @@ export const appData: App[] = [
     developer: "Gameloft SE",
     type: "game",
     downloads: "100M+",
+    inAppPurchases: true
+  },
+  {
+    id: 35,
+    name: "Adobe Photoshop",
+    icon: {
+      name: "Store",
+      background: "bg-blue-800"
+    },
+    category: "Photography",
+    description: "Professional photo editing software",
+    rating: 4.6,
+    reviews: 985000,
+    size: "543.7 MB",
+    age: "12+",
+    price: 9.99,
+    developer: "Adobe Inc.",
+    type: "app",
+    downloads: "100M+",
+    inAppPurchases: true
+  },
+  {
+    id: 36,
+    name: "LinkedIn",
+    icon: {
+      name: "Store",
+      background: "bg-blue-600"
+    },
+    category: "Business",
+    description: "Professional networking platform",
+    rating: 4.5,
+    reviews: 3850000,
+    size: "164.2 MB",
+    age: "17+",
+    price: 0,
+    developer: "LinkedIn Corporation",
+    type: "app",
+    downloads: "500M+",
+    inAppPurchases: true
+  },
+  {
+    id: 37,
+    name: "Slack",
+    icon: {
+      name: "Store",
+      background: "bg-purple-600"
+    },
+    category: "Business",
+    description: "Team communication and collaboration",
+    rating: 4.7,
+    reviews: 1250000,
+    size: "192.8 MB",
+    age: "4+",
+    price: 0,
+    developer: "Slack Technologies, Inc.",
+    type: "app",
+    downloads: "100M+",
+    inAppPurchases: true
+  },
+  {
+    id: 38,
+    name: "TikTok",
+    icon: {
+      name: "Store",
+      background: "bg-black"
+    },
+    category: "Social Networking",
+    description: "Short-form, video-sharing app",
+    rating: 4.7,
+    reviews: 32500000,
+    size: "287.5 MB",
+    age: "12+",
+    price: 0,
+    developer: "TikTok Pte. Ltd.",
+    type: "app",
+    downloads: "1B+",
+    inAppPurchases: true
+  },
+  {
+    id: 39,
+    name: "Airbnb",
+    icon: {
+      name: "Store",
+      background: "bg-red-500"
+    },
+    category: "Travel",
+    description: "Vacation rentals and experiences",
+    rating: 4.8,
+    reviews: 6750000,
+    size: "178.5 MB",
+    age: "17+",
+    price: 0,
+    developer: "Airbnb, Inc.",
+    type: "app",
+    downloads: "100M+",
+    inAppPurchases: false
+  },
+  {
+    id: 40,
+    name: "SoundCloud",
+    icon: {
+      name: "Store",
+      background: "bg-orange-500"
+    },
+    category: "Music",
+    description: "Music streaming platform",
+    rating: 4.6,
+    reviews: 3250000,
+    size: "97.8 MB",
+    age: "12+",
+    price: 0,
+    developer: "SoundCloud Global Limited & Co. KG",
+    type: "app",
+    downloads: "100M+",
+    inAppPurchases: true
+  },
+  {
+    id: 41,
+    name: "Waze",
+    icon: {
+      name: "Store",
+      background: "bg-blue-400"
+    },
+    category: "Navigation",
+    description: "Community-based GPS navigation app",
+    rating: 4.8,
+    reviews: 9650000,
+    size: "145.3 MB",
+    age: "4+",
+    price: 0,
+    developer: "Waze Inc.",
+    type: "app",
+    downloads: "100M+",
+    inAppPurchases: false
+  },
+  {
+    id: 42,
+    name: "Dropbox",
+    icon: {
+      name: "Store",
+      background: "bg-blue-500"
+    },
+    category: "Productivity",
+    description: "Cloud storage and file synchronization",
+    rating: 4.7,
+    reviews: 4250000,
+    size: "176.2 MB",
+    age: "4+",
+    price: 0,
+    developer: "Dropbox, Inc.",
+    type: "app",
+    downloads: "1B+",
+    inAppPurchases: true
+  },
+  {
+    id: 43,
+    name: "Tinder",
+    icon: {
+      name: "Store",
+      background: "bg-pink-600"
+    },
+    category: "Lifestyle",
+    description: "Dating and social networking app",
+    rating: 4.2,
+    reviews: 5750000,
+    size: "158.7 MB",
+    age: "17+",
+    price: 0,
+    developer: "Match Group, LLC",
+    type: "app",
+    downloads: "100M+",
+    inAppPurchases: true
+  },
+  {
+    id: 44,
+    name: "Headspace",
+    icon: {
+      name: "Store",
+      background: "bg-orange-400"
+    },
+    category: "Health & Fitness",
+    description: "Meditation and mindfulness app",
+    rating: 4.9,
+    reviews: 1850000,
+    size: "125.6 MB",
+    age: "4+",
+    price: 0,
+    developer: "Headspace Inc.",
+    type: "app",
+    downloads: "10M+",
+    inAppPurchases: true
+  },
+  {
+    id: 45,
+    name: "Notion",
+    icon: {
+      name: "Store",
+      background: "bg-gray-900"
+    },
+    category: "Productivity",
+    description: "All-in-one workspace for notes and tasks",
+    rating: 4.8,
+    reviews: 2250000,
+    size: "98.5 MB",
+    age: "4+",
+    price: 0,
+    developer: "Notion Labs, Inc.",
+    type: "app",
+    downloads: "10M+",
+    inAppPurchases: true
+  },
+  {
+    id: 46,
+    name: "DoorDash",
+    icon: {
+      name: "Store",
+      background: "bg-red-600"
+    },
+    category: "Food & Drink",
+    description: "Food delivery service",
+    rating: 4.7,
+    reviews: 5650000,
+    size: "187.3 MB",
+    age: "12+",
+    price: 0,
+    developer: "DoorDash, Inc.",
+    type: "app",
+    downloads: "50M+",
+    inAppPurchases: false
+  },
+  {
+    id: 47,
+    name: "Venmo",
+    icon: {
+      name: "Store",
+      background: "bg-blue-500"
+    },
+    category: "Finance",
+    description: "Mobile payment service",
+    rating: 4.8,
+    reviews: 7850000,
+    size: "132.6 MB",
+    age: "17+",
+    price: 0,
+    developer: "PayPal, Inc.",
+    type: "app",
+    downloads: "50M+",
+    inAppPurchases: false
+  },
+  {
+    id: 48,
+    name: "Evernote",
+    icon: {
+      name: "Store",
+      background: "bg-green-600"
+    },
+    category: "Productivity",
+    description: "Note-taking and organization app",
+    rating: 4.6,
+    reviews: 3250000,
+    size: "154.8 MB",
+    age: "4+",
+    price: 0,
+    developer: "Evernote Corporation",
+    type: "app",
+    downloads: "100M+",
+    inAppPurchases: true
+  },
+  {
+    id: 49,
+    name: "Pandora",
+    icon: {
+      name: "Store",
+      background: "bg-blue-700"
+    },
+    category: "Music",
+    description: "Music streaming service",
+    rating: 4.7,
+    reviews: 4850000,
+    size: "112.3 MB",
+    age: "12+",
+    price: 0,
+    developer: "Pandora Media, LLC",
+    type: "app",
+    downloads: "100M+",
+    inAppPurchases: true
+  },
+  {
+    id: 50,
+    name: "Candy Crush Soda",
+    icon: {
+      name: "Gamepad2",
+      background: "bg-purple-500"
+    },
+    category: "Games",
+    description: "Match-3 puzzle game sequel",
+    rating: 4.6,
+    reviews: 7950000,
+    size: "235.7 MB",
+    age: "4+",
+    price: 0,
+    developer: "King",
+    type: "game",
+    downloads: "500M+",
+    inAppPurchases: true
+  },
+  {
+    id: 51,
+    name: "Clash Royale",
+    icon: {
+      name: "Gamepad2",
+      background: "bg-blue-500"
+    },
+    category: "Games",
+    description: "Real-time multiplayer card battle game",
+    rating: 4.5,
+    reviews: 9250000,
+    size: "278.6 MB",
+    age: "9+",
+    price: 0,
+    developer: "Supercell",
+    type: "game",
+    downloads: "500M+",
+    inAppPurchases: true
+  },
+  {
+    id: 52,
+    name: "Subway Surfers",
+    icon: {
+      name: "Gamepad2",
+      background: "bg-yellow-500"
+    },
+    category: "Games",
+    description: "Endless runner mobile game",
+    rating: 4.7,
+    reviews: 15750000,
+    size: "187.3 MB",
+    age: "9+",
+    price: 0,
+    developer: "SYBO Games",
+    type: "game",
+    downloads: "1B+",
+    inAppPurchases: true
+  },
+  {
+    id: 53,
+    name: "Angry Birds 2",
+    icon: {
+      name: "Gamepad2",
+      background: "bg-red-500"
+    },
+    category: "Games",
+    description: "Slingshot puzzle game",
+    rating: 4.4,
+    reviews: 6350000,
+    size: "215.8 MB",
+    age: "9+",
+    price: 0,
+    developer: "Rovio Entertainment Corporation",
+    type: "game",
+    downloads: "100M+",
+    inAppPurchases: true
+  },
+  {
+    id: 54,
+    name: "8 Ball Pool",
+    icon: {
+      name: "Gamepad2",
+      background: "bg-green-700"
+    },
+    category: "Games",
+    description: "Online pool game",
+    rating: 4.5,
+    reviews: 12850000,
+    size: "156.4 MB",
+    age: "12+",
+    price: 0,
+    developer: "Miniclip.com",
+    type: "game",
+    downloads: "500M+",
     inAppPurchases: true
   }
 ];
