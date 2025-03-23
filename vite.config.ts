@@ -1,3 +1,4 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -17,6 +18,13 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      'react-native': 'react-native-web',
     },
+    extensions: ['.web.js', '.web.jsx', '.web.ts', '.web.tsx', '.js', '.jsx', '.ts', '.tsx'],
+  },
+  define: {
+    // Fix for Vite + React Native issue
+    __DEV__: JSON.stringify(mode === 'development'),
+    Platform: JSON.stringify({ OS: 'web' }),
   },
 }));
