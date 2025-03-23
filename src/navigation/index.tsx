@@ -4,14 +4,14 @@ import { Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Gamepad2, Trophy, User, Wallet, ShoppingCart } from 'lucide-react';
+import { Gamepad2, Trophy, User, Wallet as WalletIcon, ShoppingCart } from 'lucide-react';
 
 // Import your screens
 import Apps from '../pages/Apps';
 import Login from '../pages/Login';
 import Tournaments from '../pages/Tournaments';
 import Profile from '../pages/Profile';
-import Wallet from '../pages/Wallet';
+import WalletScreen from '../pages/Wallet';
 import Marketplace from '../pages/Marketplace';
 
 // Create navigators
@@ -22,6 +22,7 @@ const Tab = createBottomTabNavigator();
 const BottomTabs = () => {
   return (
     <Tab.Navigator
+      id="bottom-tabs"
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
@@ -56,9 +57,9 @@ const BottomTabs = () => {
       />
       <Tab.Screen
         name="Wallet"
-        component={Wallet}
+        component={WalletScreen}
         options={{
-          tabBarIcon: ({ color, size }) => <Wallet color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => <WalletIcon color={color} size={size} />,
         }}
       />
       <Tab.Screen
@@ -76,7 +77,7 @@ const BottomTabs = () => {
 export const Navigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Main">
+      <Stack.Navigator id="main-stack" initialRouteName="Main">
         <Stack.Screen
           name="Main"
           component={BottomTabs}
