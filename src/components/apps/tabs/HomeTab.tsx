@@ -375,8 +375,8 @@ export function HomeTab() {
                   whileTap={{ scale: 0.95 }}
                 >
                   <div className="relative">
-                    <div className={`${app.color} w-14 h-14 rounded-xl flex items-center justify-center shadow-md mb-1`}>
-                      {IconComponent && <IconComponent className="h-6 w-6 text-white" />}
+                    <div className={`${app.color} w-16 h-16 rounded-xl flex items-center justify-center shadow-md mb-1`}>
+                      {IconComponent && <IconComponent className="h-8 w-8 text-white" />}
                     </div>
                     {app.notification > 0 && (
                       <Badge className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center px-1">
