@@ -1,3 +1,4 @@
+
 import { Rss, Bell, Newspaper, Calendar, ChevronRight, ShoppingBag, Trophy, Gamepad, Mail, MessageSquare, Music, Video, Clock, Heart, PiggyBank, Briefcase, BookOpen, Ticket, Store, Bitcoin, Users, Building, Wallet, CreditCard } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -115,29 +116,44 @@ export function FeedsTab() {
         </div>
       </FeedSection>
 
-      {/* Winnr - Tournaments */}
+      {/* Winnr - Tournaments - Updated to match FundX style */}
       <FeedSection title="Winnr Tournaments" icon={<Trophy className="h-5 w-5 text-amber-500" />}>
         <div className="overflow-x-auto pb-2 -mx-2 px-2">
           <div className="flex gap-3">
-            {[1, 2, 3, 4].map((item) => (
-              <Card key={item} className="shrink-0 w-56 p-3 border border-gray-200">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                    <Gamepad className="h-5 w-5 text-blue-500" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-medium">Tournament {item}</h4>
-                    <p className="text-xs text-gray-500">32 players</p>
-                  </div>
-                </div>
-                <div className="h-1 w-full bg-gray-100 rounded-full overflow-hidden mb-2">
-                  <div className="h-full bg-green-500 rounded-full" style={{ width: `${25 * item}%` }}></div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <Badge variant="outline" className="text-xs bg-gray-50">
-                    {item === 1 ? 'Live Now' : `Starts in ${item}h`}
+            {[1, 2, 3].map((item) => (
+              <Card key={item} className="shrink-0 w-64 p-3 border border-gray-200">
+                <div className="relative h-32 w-full rounded-lg bg-gray-100 overflow-hidden mb-3">
+                  <img 
+                    src={`/api/placeholder/300/180?text=Tournament${item}`}
+                    alt={`Tournament ${item}`}
+                    className="h-full w-full object-cover"
+                  />
+                  <Badge className="absolute top-2 left-2 bg-amber-500">
+                    {item === 1 ? 'Live Now' : item === 2 ? 'Starting Soon' : 'Last Chance'}
                   </Badge>
-                  <p className="text-xs text-gray-500">Prize: $1,000</p>
+                </div>
+                <h4 className="text-sm font-medium mb-1">
+                  {item === 1 ? 'Pro Gaming Championship' : item === 2 ? 'Amateur Tournament' : 'Weekly Challenge Cup'}
+                </h4>
+                <p className="text-xs text-gray-500 mb-2 line-clamp-2">
+                  {item === 1 
+                    ? 'Compete against the best players worldwide in this exclusive tournament with amazing prizes.'
+                    : item === 2 
+                    ? 'Perfect for beginners and casual players looking to test their skills in a competitive environment.'
+                    : 'Weekly competition with new challenges every time. Join now before registration closes!'}
+                </p>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-500">Players</span>
+                    <span className="font-medium">{(item * 32)}/{(item * 64)} Registered</span>
+                  </div>
+                  <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-amber-500 rounded-full" style={{ width: `${(item * 15) + 20}%` }}></div>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-500">{(item * 15) + 20}% filled</span>
+                    <span className="text-gray-500">{item * 2 + 1} days left</span>
+                  </div>
                 </div>
               </Card>
             ))}
