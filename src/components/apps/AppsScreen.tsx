@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { View, Text, ScrollView, Platform } from 'react-native';
+import { View, Text, ScrollView, Platform, StyleSheet } from 'react-native';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HomeTab } from "@/components/apps/tabs/HomeTab";
 import { FeedsTab } from "@/components/apps/tabs/FeedsTab";
@@ -69,25 +69,13 @@ export default function AppsScreen() {
     .slice(0, 8);
 
   return (
-    <View style={{ flex: 1, overflow: 'hidden' }}>
+    <View style={styles.container}>
       {showSplash && <SplashScreen onDismiss={handleDismissSplash} />}
       
-      <ScrollView style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>
-          {/* Platform-specific styling for the header */}
-          <View style={{ 
-            position: 'sticky', 
-            top: 0, 
-            zIndex: 10, 
-            backgroundColor: '#fff',
-            paddingHorizontal: 16,
-            paddingVertical: 4, 
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: 0.1,
-            shadowRadius: 1,
-            elevation: 1
-          }}>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.content}>
+          {/* Header with tabs - platform specific styling */}
+          <View style={styles.headerContainer}>
             <Tabs defaultValue="home" value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid grid-cols-3 w-full">
                 <TabsTrigger value="home">Home</TabsTrigger>
@@ -98,7 +86,7 @@ export default function AppsScreen() {
           </View>
           
           {/* Content area */}
-          <View style={{ flex: 1, paddingHorizontal: 16 }}>
+          <View style={styles.tabContent}>
             <Tabs defaultValue="home" value={activeTab}>
               <TabsContent value="home" className="mt-0 p-0">
                 <HomeTab />
@@ -126,3 +114,44 @@ export default function AppsScreen() {
     </View>
   );
 }
+
+// Platform-specific styles
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    overflow: 'hidden',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    flex: 1,
+  },
+  headerContainer: {
+    // We need to handle "sticky" differently for web and mobile
+    ...(Platform.OS === 'web' 
+      ? { 
+          // For web, we can use CSS properties in the style element
+          position: 'sticky' as any, // Type assertion to work around TypeScript restrictions
+          top: 0,
+        } 
+      : {
+          // For mobile, use a regular absolute position
+          position: 'relative',
+        }
+    ),
+    zIndex: 10,
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+    paddingVertical: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1,
+    elevation: 1,
+  },
+  tabContent: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+});
