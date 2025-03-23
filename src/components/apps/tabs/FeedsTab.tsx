@@ -1,4 +1,3 @@
-
 import { Rss, Bell, Newspaper, Calendar, ChevronRight, ShoppingBag, Trophy, Gamepad, Mail, MessageSquare, Music, Video, Clock, Heart, PiggyBank, Briefcase, BookOpen, Ticket, Store, Bitcoin, Users, Building, Wallet, CreditCard } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -167,6 +166,164 @@ export function FeedsTab() {
                       <div className="h-full bg-blue-500 rounded-full" style={{ width: `${20 * item}%` }}></div>
                     </div>
                     <span className="text-xs text-gray-500 ml-2">{20 * item}%</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </FeedSection>
+
+      {/* TrdeX - Crypto Trading */}
+      <FeedSection title="TrdeX Trading" icon={<Bitcoin className="h-5 w-5 text-orange-500" />}>
+        <div className="overflow-x-auto pb-2 -mx-2 px-2">
+          <div className="flex gap-3">
+            {[1, 2, 3, 4].map((item) => (
+              <Card key={item} className="shrink-0 w-56 p-3 border border-gray-200">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center">
+                    <Bitcoin className="h-5 w-5 text-orange-500" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium">Crypto {item === 1 ? 'Bitcoin' : item === 2 ? 'Ethereum' : item === 3 ? 'Solana' : 'Cardano'}</h4>
+                    <p className="text-xs text-gray-500">Market Cap: ${(item * 200 + 100).toFixed(2)}B</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="flex-1">
+                    <div className="flex justify-between">
+                      <p className="text-xs text-gray-500">24h Change</p>
+                      <p className={`text-xs font-medium ${item % 2 === 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        {item % 2 === 0 ? '+' : '-'}{(item * 1.2).toFixed(2)}%
+                      </p>
+                    </div>
+                    <div className="h-1 w-full bg-gray-100 rounded-full overflow-hidden mt-1">
+                      <div 
+                        className={`h-full ${item % 2 === 0 ? 'bg-green-500' : 'bg-red-500'} rounded-full`} 
+                        style={{ width: `${item * 20}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p className="text-sm font-medium">${(item * 10000 + 20000).toLocaleString()}</p>
+                  <Badge variant={item === 1 ? "default" : "outline"} className="text-xs">
+                    {item === 1 ? 'Popular' : 'Trading'}
+                  </Badge>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </FeedSection>
+
+      {/* FundX - Crowdfunding */}
+      <FeedSection title="FundX Projects" icon={<PiggyBank className="h-5 w-5 text-rose-500" />}>
+        <div className="overflow-x-auto pb-2 -mx-2 px-2">
+          <div className="flex gap-3">
+            {[1, 2, 3].map((item) => (
+              <Card key={item} className="shrink-0 w-64 p-3 border border-gray-200">
+                <div className="relative h-32 w-full rounded-lg bg-gray-100 overflow-hidden mb-3">
+                  <img 
+                    src={`/api/placeholder/300/180?text=Project${item}`}
+                    alt={`Project ${item}`}
+                    className="h-full w-full object-cover"
+                  />
+                  <Badge className="absolute top-2 left-2 bg-rose-500">
+                    {item === 1 ? 'New' : item === 2 ? 'Trending' : 'Almost Funded'}
+                  </Badge>
+                </div>
+                <h4 className="text-sm font-medium mb-1">
+                  {item === 1 ? 'Eco-Friendly Water Bottle' : item === 2 ? 'Smart Home Assistant' : 'Portable Solar Charger'}
+                </h4>
+                <p className="text-xs text-gray-500 mb-2 line-clamp-2">
+                  {item === 1 
+                    ? 'A reusable water bottle made from sustainable materials that tracks your hydration.'
+                    : item === 2 
+                    ? 'Voice-activated assistant with multi-room capabilities and privacy features.'
+                    : 'Compact solar panel that can charge your devices anywhere, anytime.'}
+                </p>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-500">Funded</span>
+                    <span className="font-medium">${(item * 10000).toLocaleString()} of ${(item * 15000).toLocaleString()}</span>
+                  </div>
+                  <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-rose-500 rounded-full" style={{ width: `${(item * 20) + 30}%` }}></div>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-500">{(item * 20) + 30}% funded</span>
+                    <span className="text-gray-500">{item * 5 + 10} days left</span>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </FeedSection>
+
+      {/* Stash - Study Notes */}
+      <FeedSection title="Stash Study Notes" icon={<BookOpen className="h-5 w-5 text-emerald-500" />}>
+        <div className="overflow-x-auto pb-2 -mx-2 px-2">
+          <div className="flex gap-3">
+            {[1, 2, 3, 4].map((item) => (
+              <Card key={item} className="shrink-0 w-56 p-3 border border-gray-200">
+                <div className="flex justify-between items-center mb-2">
+                  <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 text-xs">
+                    {item === 1 ? 'Computer Science' : item === 2 ? 'Business' : item === 3 ? 'Medicine' : 'Engineering'}
+                  </Badge>
+                  <div className="flex items-center">
+                    <span className="text-yellow-400 text-xs mr-1">★</span>
+                    <span className="text-xs text-gray-500">{4.5 + (item * 0.1)}</span>
+                  </div>
+                </div>
+                <h4 className="text-sm font-medium mb-1">
+                  {item === 1 ? 'Data Structures & Algorithms' : item === 2 ? 'Marketing Fundamentals' : item === 3 ? 'Anatomy Notes' : 'Circuit Analysis'}
+                </h4>
+                <p className="text-xs text-gray-500 mb-2 line-clamp-2">
+                  Comprehensive study notes with diagrams, examples, and practice problems.
+                </p>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-1.5">
+                    <div className="h-6 w-6 rounded-full bg-gray-200">
+                      <img 
+                        src={`/api/placeholder/30/30?text=U${item}`}
+                        alt="User avatar"
+                        className="h-full w-full object-cover rounded-full"
+                      />
+                    </div>
+                    <span className="text-xs text-gray-700">by Student{item}</span>
+                  </div>
+                  <span className="text-xs font-medium text-emerald-600">${(item * 3) + 4.99}</span>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </FeedSection>
+
+      {/* Druck - Print Products */}
+      <FeedSection title="Druck Custom Prints" icon={<Store className="h-5 w-5 text-cyan-500" />}>
+        <div className="overflow-x-auto pb-2 -mx-2 px-2">
+          <div className="flex gap-3">
+            {[1, 2, 3, 4].map((item) => (
+              <div key={item} className="shrink-0 w-40">
+                <div className="h-40 w-40 rounded-lg bg-white border border-gray-200 overflow-hidden">
+                  <img 
+                    src={`/api/placeholder/160/160?text=Print${item}`}
+                    alt={`Print product ${item}`}
+                    className="h-full w-full object-contain p-2"
+                  />
+                </div>
+                <div className="mt-2">
+                  <p className="text-sm font-medium line-clamp-1">
+                    {item === 1 ? 'Custom T-Shirt' : item === 2 ? 'Business Cards' : item === 3 ? 'Canvas Print' : 'Sticker Pack'}
+                  </p>
+                  <div className="flex items-center justify-between mt-1">
+                    <p className="text-sm text-cyan-600 font-medium">
+                      From ${(item * 5) + 9.99}
+                    </p>
+                    <p className="text-xs text-gray-500">{item * 100}+ sold</p>
                   </div>
                 </div>
               </div>
