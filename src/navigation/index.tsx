@@ -22,6 +22,7 @@ const Tab = createBottomTabNavigator();
 const BottomTabs = () => {
   return (
     <Tab.Navigator
+      id="bottom-tabs"
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
@@ -76,7 +77,10 @@ const BottomTabs = () => {
 export const Navigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Main">
+      <Stack.Navigator 
+        id="main-stack"
+        initialRouteName="Main"
+      >
         <Stack.Screen
           name="Main"
           component={BottomTabs}
